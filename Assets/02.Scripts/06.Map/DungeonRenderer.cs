@@ -73,8 +73,19 @@ public class DungeonRenderer : MonoBehaviour
     // 완성된 mapData를 바탕으로 실제 타일맵에 타일을 렌더링합니다.
     public void RenderTilemap(int[,] mapData, int mapWidth, int mapHeight, int currentFloor)
     {
-        if (floorTilemap != null) floorTilemap.ClearAllTiles();
-        if (wallTilemap != null) wallTilemap.ClearAllTiles();
+        if (floorTilemap != null) 
+        {
+            floorTilemap.ClearAllTiles();
+            TilemapRenderer floorRenderer = floorTilemap.GetComponent<TilemapRenderer>();
+            if (floorRenderer != null) floorRenderer.sortingOrder = 0; // 바닥은 맨 아래
+        }
+        
+        if (wallTilemap != null) 
+        {
+            wallTilemap.ClearAllTiles();
+            TilemapRenderer wallRenderer = wallTilemap.GetComponent<TilemapRenderer>();
+            if (wallRenderer != null) wallRenderer.sortingOrder = 1; // 벽은 바닥보다 위
+        }
 
         // 타일 캐싱 (성능 최적화: 스프라이트당 하나의 Tile 객체만 생성하여 재사용)
         Dictionary<Sprite, Tile> tileCache = new Dictionary<Sprite, Tile>();

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 
 public class MinimapController : MonoBehaviour
@@ -56,8 +57,19 @@ public class MinimapController : MonoBehaviour
             RefreshMinimap();
         }
 
-        // 플레이어 그리드 좌표 계산 (Tilemap 단위가 1x1 기준일 때)
-        Vector3Int cellPos = new Vector3Int(Mathf.FloorToInt(playerTransform.position.x), Mathf.FloorToInt(playerTransform.position.y), 0);
+        // 플레이어 그리드 좌표 계산 (Tilemap 오프셋이 존재할 경우를 고려해 WorldToCell 사용)
+        Vector3Int cellPos = Vector3Int.zero;
+        Tilemap tilemap = GetComponent<Tilemap>();
+        if (tilemap == null) tilemap = FindFirstObjectByType<Tilemap>();
+        
+        if (tilemap != null)
+        {
+            cellPos = tilemap.WorldToCell(playerTransform.position);
+        }
+        else
+        {
+            cellPos = new Vector3Int(Mathf.FloorToInt(playerTransform.position.x), Mathf.FloorToInt(playerTransform.position.y), 0);
+        }
         Vector2Int currentGridPos = new Vector2Int(cellPos.x, cellPos.y);
 
         // 플레이어 아이콘 UI 실시간 이동

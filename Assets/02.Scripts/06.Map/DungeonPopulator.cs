@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 
 public class DungeonPopulator : MonoBehaviour
@@ -101,7 +102,7 @@ public class DungeonPopulator : MonoBehaviour
         return entrances;
     }
 
-    public void GenerateTraps(int[,] mapData, List<Room> generatedRooms)
+    public void GenerateTraps(int[,] mapData, List<Room> generatedRooms, Tilemap floorTilemap = null)
     {
         if (trapPrefab == null) return;
 
@@ -135,11 +136,25 @@ public class DungeonPopulator : MonoBehaviour
                 // 선택된 좌표가 1. 방(1)이고, 2. 다른 함정이 없다면 생성!
                 if (mapData[randomX, randomY] == 1 && !occupiedPositions.Contains(spawnPos))
                 {
-                    // 월드 좌표는 타일맵 중앙이 기준이므로 +0.5f 씩 보정해 줍니다.
-                    // (만약 함정 스프라이트의 중심축(Pivot)이 정중앙(Center)이라면 이렇게 해야 칸 중앙에 예쁘게 놓입니다.)
-                    Vector3 worldPos = new Vector3(randomX + 0.5f, randomY + 0.5f, 0f);
+                    // 그리드 좌표를 실제 월드 좌표로 변환 (타일맵 오프셋 반영)
+                    Vector3 localPos = new Vector3(randomX + 0.5f, randomY + 0.5f, 0f);
+                    Vector3 worldPos;
+                    if (floorTilemap != null)
+                    {
+                        worldPos = floorTilemap.transform.TransformPoint(localPos);
+                    }
+                    else
+                    {
+                        worldPos = localPos;
+                    }
                     
-                    Instantiate(trapPrefab, worldPos, Quaternion.identity);
+                    GameObject trapObj = Instantiate(trapPrefab, worldPos, Quaternion.identity);
+                    
+                    // 타일맵 하위로 종속시켜 오프셋/스케일 변경 시 함께 유지되도록 설정
+                    if (floorTilemap != null)
+                    {
+                        trapObj.transform.SetParent(floorTilemap.transform);
+                    }
                     
                     occupiedPositions.Add(spawnPos);
                     spawnedCount++;
@@ -154,21 +169,35 @@ public class DungeonPopulator : MonoBehaviour
         // TODO: Boss 방이나 특수 위치에 다음 층으로 가는 계단 배치
     }
 
-    public void SpawnMonsters(int[,] mapData, List<Room> generatedRooms)
+    public void SpawnMonsters(int[,] mapData, List<Room> generatedRooms, Tilemap floorTilemap = null)
     {
         // 몬스터 생성 대신, 각 방의 크기에 맞는 투명한 트리거 구역(RoomController)을 맵에 생성합니다.
         // 몬스터 스폰이나 기타 기능은 다른 개발자분이 RoomController의 OnPlayerEnterRoom 이벤트에 연결하여 사용할 수 있습니다.
         
         GameObject roomsParent = new GameObject("RoomControllers");
+        if (floorTilemap != null)
+        {
+            roomsParent.transform.SetParent(floorTilemap.layoutGrid.transform);
+        }
 
         foreach (Room room in generatedRooms)
         {
-            // 방의 정중앙 좌표 계산 (Tilemap 기준이므로 +0.5f 보정 없이 정확한 bounds.center 사용)
-            Vector3 centerPos = new Vector3(room.bounds.center.x, room.bounds.center.y, 0f);
+            // 방의 정중앙 좌표 계산 후 월드 좌표 변환 (Tilemap 기준이므로 +0.5f 보정 없이 정확한 bounds.center 사용)
+            Vector3 localPos = new Vector3(room.bounds.center.x, room.bounds.center.y, 0f);
+            Vector3 worldPos;
+
+            if (floorTilemap != null)
+            {
+                worldPos = floorTilemap.transform.TransformPoint(localPos);
+            }
+            else
+            {
+                worldPos = localPos;
+            }
             
             // 각 방마다 빈 게임 오브젝트 생성
             GameObject roomObj = new GameObject($"Room_{room.type}");
-            roomObj.transform.position = centerPos;
+            roomObj.transform.position = worldPos;
             roomObj.transform.SetParent(roomsParent.transform);
 
             // 트리거 충돌체 세팅

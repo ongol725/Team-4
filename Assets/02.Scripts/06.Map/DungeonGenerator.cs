@@ -61,6 +61,24 @@ public class DungeonGenerator : MonoBehaviour
         if (dungeonRenderer == null) dungeonRenderer = GetComponent<DungeonRenderer>();
         if (dungeonPopulator == null) dungeonPopulator = GetComponent<DungeonPopulator>();
 
+        // 플레이어 트랜스폼이 할당되지 않은 경우 자동으로 검색
+        if (playerTransform == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                playerTransform = playerObj.transform;
+            }
+            else
+            {
+                PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
+                if (playerMovement != null)
+                {
+                    playerTransform = playerMovement.transform;
+                }
+            }
+        }
+
         GenerateDungeon();
     }
 
@@ -121,9 +139,10 @@ public class DungeonGenerator : MonoBehaviour
         //타일맵 렌더링 후 함정 및 추가 요소 배치
         if (dungeonPopulator != null)
         {
-            dungeonPopulator.GenerateTraps(mapData, generatedRooms);
+            Tilemap floorMap = (dungeonRenderer != null) ? dungeonRenderer.floorTilemap : null;
+            dungeonPopulator.GenerateTraps(mapData, generatedRooms, floorMap);
             dungeonPopulator.GenerateStairs(generatedRooms);
-            dungeonPopulator.SpawnMonsters(mapData, generatedRooms);
+            dungeonPopulator.SpawnMonsters(mapData, generatedRooms, floorMap);
         }
         
         if (minimapController != null)
@@ -156,23 +175,74 @@ public class DungeonGenerator : MonoBehaviour
             Debug.LogError($"[DungeonGenerator] Failed to save debug map: {ex.Message}");
         }
 
-        // 4. '진짜' Start 방을 찾아서 카메라와 플레이어 순간이동
+        // 4. '진짜' Start 방을 찾고, 없으면 첫 번째 방을 시작 방으로 임시 설정하여 카메라와 플레이어 순간이동
         Room actualStartRoom = generatedRooms.Find(r => r.type == RoomType.Start);
+        if (actualStartRoom == null && generatedRooms.Count > 0)
+        {
+            Debug.LogWarning("Start 방을 찾지 못해 첫 번째 생성된 방을 시작 위치로 설정합니다.");
+            actualStartRoom = generatedRooms[0];
+            actualStartRoom.type = RoomType.Start;
+        }
         
         if (actualStartRoom != null)
         {
-            // 방의 정중앙 좌표 계산
+            // 방의 중앙 근처에서 실제 바닥 타일(mapData == 1)인 좌표 검색 (L자 방 등에서 벽 내부 스폰 차단)
+            Vector2Int spawnGridPos = new Vector2Int(
+                Mathf.FloorToInt(actualStartRoom.bounds.center.x),
+                Mathf.FloorToInt(actualStartRoom.bounds.center.y)
+            );
+            
+            bool foundFloor = false;
+            float minDistance = float.MaxValue;
             Vector2 center = actualStartRoom.bounds.center;
             
+            for (int x = actualStartRoom.bounds.xMin; x < actualStartRoom.bounds.xMax; x++)
+            {
+                for (int y = actualStartRoom.bounds.yMin; y < actualStartRoom.bounds.yMax; y++)
+                {
+                    if (mapData[x, y] == 1) // 바닥 타일인 경우
+                    {
+                        float dist = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), center);
+                        if (dist < minDistance)
+                        {
+                            minDistance = dist;
+                            spawnGridPos = new Vector2Int(x, y);
+                            foundFloor = true;
+                        }
+                    }
+                }
+            }
+
+            // 그리드 좌표를 실제 타일맵 월드 좌표로 변환 (타일맵의 위치/스케일 오프셋 반영)
+            Vector3 worldPos;
+            if (dungeonRenderer != null && dungeonRenderer.floorTilemap != null)
+            {
+                worldPos = dungeonRenderer.floorTilemap.GetCellCenterWorld(new Vector3Int(spawnGridPos.x, spawnGridPos.y, 0));
+            }
+            else
+            {
+                worldPos = new Vector3(spawnGridPos.x + 0.5f, spawnGridPos.y + 0.5f, 0f);
+            }
+            
             if (Camera.main != null)
-                Camera.main.transform.position = new Vector3(center.x, center.y, -10f);
+                Camera.main.transform.position = new Vector3(worldPos.x, worldPos.y, -10f);
 
             if (playerTransform != null)
-                playerTransform.position = new Vector3(center.x, center.y, 0f);
+            {
+                playerTransform.position = new Vector3(worldPos.x, worldPos.y, 0f);
+                
+                // Rigidbody2D가 있을 경우 물리 연산 오버라이드를 위해 위치를 강제 동기화하고 속도를 초기화
+                Rigidbody2D rb = playerTransform.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.position = new Vector2(worldPos.x, worldPos.y);
+                    rb.linearVelocity = Vector2.zero;
+                }
+            }
         }
         else
         {
-            Debug.LogError("맵 생성 오류: Start 방을 찾을 수 없습니다!");
+            Debug.LogError("맵 생성 오류: 생성된 방이 하나도 없어 시작 위치를 설정할 수 없습니다!");
         }
     }
 
