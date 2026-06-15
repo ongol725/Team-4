@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b67114c1ce0f79438995e960a7b26c9, type: 3}
+  m_Name: MonsterData_1016_tiger
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterData
+  index: 1016
+  monsterName: "\uD638\uB791\uC774"
+  englishName: tiger
+  grade: 1
+  maxHP: 2000
+  attack: 110
+  defense: 50
+  attackStyle: 0
+  attackPattern: 0
+  moveSpeed: 6
+  movePattern: 0
+  kbResist: 0.4
+  kbCooldown: 0
+  spawnType: 2
+  spawnInterval: 0
+  spawnCount: 0
+  dropItemID: Item_003
+  dropItemValue: 4
+  prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Tiger.prefab
