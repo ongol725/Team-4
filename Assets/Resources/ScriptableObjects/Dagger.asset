@@ -12,7 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Dagger
   m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
-  itemName: 
+  itemID: WPN_001
+  itemName: Dagger
+  itemDescription: "\uBC94\uC704\uC548\uC5D0 1\uC778 \uACF5\uACA9"
   itemImage: {fileID: 0}
-  blockSize: {x: 0, y: 0}
-  attackPower: 0
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  rarity: 0
+  grade: 1
+  attackPower: 1
+  attackSpeed: 0
+  cost: 1
+  synergies: 030000000200000003000000
+  projectile: {fileID: 0}
