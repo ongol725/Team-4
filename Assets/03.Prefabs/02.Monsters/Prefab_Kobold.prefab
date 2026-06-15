@@ -170,3 +170,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: 3096a29e6c2fea547a68f26ddcc26818, type: 2}
+  hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}

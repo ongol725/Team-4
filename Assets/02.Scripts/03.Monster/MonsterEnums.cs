@@ -10,8 +10,10 @@ namespace BagSurvivor.Monster
     /// </summary>
     public enum MonsterGrade
     {
-        Normal,      // 일반 몬스터
-        MiddleBoss   // 중간 보스
+        Normal     = 0,  // 일반 몬스터
+        Elite      = 1,  // 정예 몬스터
+        MiddleBoss = 2,  // 중간 보스
+        Boss       = 3   // 보스
     }
 
     /// <summary>

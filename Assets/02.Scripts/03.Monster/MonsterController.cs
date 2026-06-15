@@ -20,6 +20,10 @@ namespace BagSurvivor.Monster
         [Tooltip("이 몬스터의 ScriptableObject 데이터")]
         public MonsterData monsterData;
 
+        [Header("HP 바")]
+        [Tooltip("이 몬스터 위에 표시할 추적형 HP바 프리팹 (Monster_HpBar)")]
+        public GameObject hpBarPrefab;
+
         [Header("충돌 데미지 설정")]
         [Tooltip("접촉 데미지 판정 간격 (초)")]
         private const float CONTACT_DAMAGE_INTERVAL = 0.5f;
@@ -52,6 +56,10 @@ namespace BagSurvivor.Monster
 
         // 사망 처리 중 플래그
         private bool isDying = false;
+
+        // HP바 (오브젝트 풀링 대응: 인스턴스 1개를 생성 후 재사용)
+        private GameObject hpBarInstance;
+        private BagSurvivor.UI.MonsterHpBar hpBar;
 
         // 특수 기믹에서 이동을 제어하기 위한 플래그
         private bool isMovementPaused = false;
@@ -94,6 +102,7 @@ namespace BagSurvivor.Monster
         {
             // 오브젝트 풀에서 재활성화될 때마다 초기화
             InitializeMonster();
+            ShowHpBar();
         }
 
         private void OnDisable()
@@ -105,6 +114,39 @@ namespace BagSurvivor.Monster
             isPlayerInContact = false;
             isDying = false;
             isMovementPaused = false;
+            HideHpBar();
+        }
+
+        private void OnDestroy()
+        {
+            // 풀에서 완전히 제거될 때 HP바도 함께 정리
+            if (hpBarInstance != null) Destroy(hpBarInstance);
+        }
+
+        // ==========================================
+        // HP바 (자동 생성/재사용)
+        // ==========================================
+
+        /// <summary>HP바를 생성(최초 1회)하거나 재사용하여 표시하고 이 몬스터에 연결합니다.</summary>
+        private void ShowHpBar()
+        {
+            if (hpBarPrefab == null) return;
+
+            if (hpBarInstance == null)
+            {
+                Transform parent = BagSurvivor.UI.MonsterHpBarRoot.GetParent();
+                hpBarInstance = Instantiate(hpBarPrefab, parent);
+                hpBar = hpBarInstance.GetComponent<BagSurvivor.UI.MonsterHpBar>();
+            }
+
+            hpBarInstance.SetActive(true);
+            if (hpBar != null) hpBar.SetTarget(this);
+        }
+
+        /// <summary>풀 반환 시 HP바를 숨깁니다 (인스턴스는 재사용 위해 유지).</summary>
+        private void HideHpBar()
+        {
+            if (hpBarInstance != null) hpBarInstance.SetActive(false);
         }
 
         /// <summary>
