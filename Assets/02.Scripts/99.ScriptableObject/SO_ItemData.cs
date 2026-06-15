@@ -9,6 +9,15 @@ public abstract class SO_ItemData : ScriptableObject
     [TextArea(2, 5)] public string itemDescription;
     public Sprite itemImage;
 
+    [Header("등급 및 상점")]
+    public ItemRarity rarity;
+    public ItemGrade grade;
+    public int cost;
+
+    [Header("시너지")]
+    [Tooltip("최대 3개까지 설정 가능")]
+    public SynergyType[] synergies = new SynergyType[3];
+
     [Header("블록 형태")]
     [Tooltip("아이템이 차지하는 셀 목록.\n좌상단 = (0,0), x = 행(아래 증가), y = 열(오른쪽 증가)\n예) ㄱ자: (0,0)(0,1)(1,1)")]
     public Vector2Int[] cells;
@@ -40,37 +49,22 @@ public abstract class SO_ItemData : ScriptableObject
     }
 }
 
-public enum WeaponRarity { Common, Rare, Epic, Legendary }
-public enum WeaponGrade { Grade1 = 1, Grade2, Grade3, Grade4, Grade5 }
-public enum SynergyType { None, Fire, Ice, Lightning, Poison, Holy, Dark }
-
-// 2. 부모를 상속받는 자식 클래스들
-[CreateAssetMenu(fileName = "NewWeapon", menuName = "Items/Weapon")]
-public class SO_WeaponData : SO_ItemData
+public enum ItemRarity { Common, Rare, Epic, Legendary }
+public enum ItemGrade { Grade1 = 1, Grade2, Grade3, Grade4, Grade5 }
+public enum SynergyType
 {
-    [Header("무기 식별")]
-    public WeaponRarity rarity;
-    public WeaponGrade grade;
-
-    [Header("무기 스탯")]
-    public int attackPower;
-    public float attackSpeed;
-
-    [Header("상점")]
-    public int cost;
-
-    [Header("시너지")]
-    [Tooltip("최대 3개까지 설정 가능")]
-    public SynergyType[] synergies = new SynergyType[3];
-
-    [Header("투사체")]
-    [Tooltip("원거리 무기일 경우 발사체 프리팹 연결. 근거리면 비워두세요.")]
-    public GameObject projectile;
-}
-
-[CreateAssetMenu(fileName = "NewArmor", menuName = "Items/Armor")]
-public class SO_ArmorData : SO_ItemData
-{
-    [Header("방어구 전용 데이터")]
-    public int defense;
+    None = 0,
+    Assassin = 1,       // 암살단
+    SwordMaster = 2,    // 소드마스터
+    HolyKnight = 3,     // 성기사단
+    DemonLord = 4,      // 마왕
+    BloodBerserker = 5, // 피의광전사
+    Tycoon = 6,         // 대부호
+    Executioner = 7,    // 처형자
+    SpiritMage = 8,     // 정령술사
+    GearShift = 9,      // 기어시프트
+    Pinball = 10,       // 핀볼
+    Overload = 11,      // 과부화
+    Electro = 12,       // 일렉트로
+    Impregnable = 13    // 난공불락
 }

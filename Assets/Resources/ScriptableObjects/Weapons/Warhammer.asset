@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: Warhammer
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_029
+  itemName: "\uC6CC\uD574\uBA38"
+  itemDescription: "\uC6D0\uD615 \uD68C\uC804"
+  itemImage: {fileID: 0}
+  rarity: 3
+  grade: 1
+  cost: 4
+  synergies: 0b0000000600000005000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackPower: 0
+  attackSpeed: 0
+  projectile: {fileID: 0}
+  projectileSpeed: 0
+  range: 1
+  attackStyle: "\uC6D0\uD615 \uD68C\uC804"
+  maxTargets: 0
+  lv5AttackStyle: "\uBC94\uC704 1.5\uBC30\xB7\uC18D\uB3C4 \uC800\uD558"

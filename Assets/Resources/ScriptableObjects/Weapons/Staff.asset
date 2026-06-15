@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: Staff
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_011
+  itemName: "\uC9C0\uD321\uC774"
+  itemDescription: "\uC5D0\uB108\uC9C0 \uBCFC \uBC1C\uC0AC"
+  itemImage: {fileID: 0}
+  rarity: 1
+  grade: 1
+  cost: 2
+  synergies: 0c0000000800000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackPower: 0
+  attackSpeed: 0
+  projectile: {fileID: 0}
+  projectileSpeed: 10
+  range: 5
+  attackStyle: "\uC5D0\uB108\uC9C0 \uBCFC \uBC1C\uC0AC"
+  maxTargets: 0
+  lv5AttackStyle: "\uC801 \uC218 +2"
