@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (moveAction != null) moveAction.action.Enable();
     }
 
     void Update()

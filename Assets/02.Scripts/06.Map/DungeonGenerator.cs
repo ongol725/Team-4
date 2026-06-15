@@ -4,13 +4,15 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 public enum RoomType { Normal, Start, Shop, Elite, MiniBoss, Boss }
-public enum RoomShape { Rectangle, Octagon, Cross, Parthenon, L_Shape, Reverse_L_Shape }
+public enum RoomShape { Rectangle, Octagon, Cross, Parthenon }
 
 public class Room
 {
     public RectInt bounds;
     public RoomType type;
     public RoomShape shape;
+    public Vector2Int entranceGridPos = new Vector2Int(-1, -1); // 입구 타일 그리드 좌표
+    public int entranceDir = -1; // 방 기준 입구 방향: 0=북(위), 1=동(우), 2=남(아래), 3=서(좌)
 }
 
 public class DungeonGenerator : MonoBehaviour
@@ -79,6 +81,32 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
+        // GameManager가 있으면 현재 층수를 동기화
+        if (GameManager.Instance != null)
+            currentFloor = GameManager.Instance.currentFloor;
+
+        GenerateDungeon();
+    }
+
+    // 같은 씬에서 맵을 초기화하고 다시 생성합니다.
+    public void RegenerateDungeon()
+    {
+        // 1. RoomControllers 및 하위 오브젝트 (문, 계단) 제거
+        GameObject roomControllers = GameObject.Find("RoomControllers");
+        if (roomControllers != null) Destroy(roomControllers);
+
+        // 2. floorTilemap 자식 오브젝트 제거 (함정 등)
+        if (dungeonRenderer != null && dungeonRenderer.floorTilemap != null)
+        {
+            Transform t = dungeonRenderer.floorTilemap.transform;
+            for (int i = t.childCount - 1; i >= 0; i--)
+                Destroy(t.GetChild(i).gameObject);
+        }
+
+        // 3. 층수 동기화 후 재생성
+        if (GameManager.Instance != null)
+            currentFloor = GameManager.Instance.currentFloor;
+
         GenerateDungeon();
     }
 
@@ -140,8 +168,9 @@ public class DungeonGenerator : MonoBehaviour
         if (dungeonPopulator != null)
         {
             Tilemap floorMap = (dungeonRenderer != null) ? dungeonRenderer.floorTilemap : null;
+            dungeonPopulator.corridorWidth = corridorWidth;
             dungeonPopulator.GenerateTraps(mapData, generatedRooms, floorMap);
-            dungeonPopulator.GenerateStairs(generatedRooms);
+            dungeonPopulator.GenerateStairs(generatedRooms, floorMap);
             dungeonPopulator.SpawnMonsters(mapData, generatedRooms, floorMap);
         }
         
@@ -253,7 +282,7 @@ public class DungeonGenerator : MonoBehaviour
         int corLen = Random.Range(minCorridorLength, maxCorridorLength + 1);
         int newW = Random.Range(minRoomSize, maxRoomSize + 1);
         int newH = Random.Range(minRoomSize, maxRoomSize + 1);
-        RoomShape newShape = (RoomShape)Random.Range(0, 6);
+        RoomShape newShape = (RoomShape)Random.Range(0, 4);
 
         RectInt corridor = new RectInt();
         RectInt newRoom = new RectInt();
@@ -307,10 +336,32 @@ public class DungeonGenerator : MonoBehaviour
             WriteRect(corridor, 1);
             
             Room newGeneratedRoom = new Room { bounds = newRoom, type = RoomType.Normal };
-            newGeneratedRoom.shape = (RoomShape)Random.Range(0, 6); 
-            
+            newGeneratedRoom.shape = (RoomShape)Random.Range(0, 6);
+
+            // 입구 정보 저장: 복도가 새 방 경계에 닿는 타일 중앙 좌표 + 방 기준 입구 방향
+            if (dir == 0) // 복도가 위로 뻗음 → 새 방 남쪽이 입구
+            {
+                newGeneratedRoom.entranceGridPos = new Vector2Int(corridor.xMin + corridorWidth / 2, newRoom.yMin);
+                newGeneratedRoom.entranceDir = 2;
+            }
+            else if (dir == 1) // 복도가 오른쪽 → 새 방 서쪽이 입구
+            {
+                newGeneratedRoom.entranceGridPos = new Vector2Int(newRoom.xMin, corridor.yMin + corridorWidth / 2);
+                newGeneratedRoom.entranceDir = 3;
+            }
+            else if (dir == 2) // 복도가 아래 → 새 방 북쪽이 입구
+            {
+                newGeneratedRoom.entranceGridPos = new Vector2Int(corridor.xMin + corridorWidth / 2, newRoom.yMax - 1);
+                newGeneratedRoom.entranceDir = 0;
+            }
+            else // 복도가 왼쪽 → 새 방 동쪽이 입구
+            {
+                newGeneratedRoom.entranceGridPos = new Vector2Int(newRoom.xMax - 1, corridor.yMin + corridorWidth / 2);
+                newGeneratedRoom.entranceDir = 1;
+            }
+
             DrawRoom(newGeneratedRoom);
-            
+
             generatedRooms.Add(newGeneratedRoom);
             return true;
         }
@@ -371,21 +422,6 @@ public class DungeonGenerator : MonoBehaviour
             min = 3;
             max = w - 4;
         }
-        else if (shape == RoomShape.L_Shape)
-        {
-            if (dir == 0) // 위로 나갈 때: 파이지 않은 왼쪽 다리 구간
-            {
-                max = w - (w / 2) - 1;
-            }
-        }
-        else if (shape == RoomShape.Reverse_L_Shape)
-        {
-            if (dir == 2) // 아래로 나갈 때: 파이지 않은 오른쪽 다리 구간
-            {
-                min = w / 2;
-            }
-        }
-
         int margin = 1; // 복도가 방의 모서리에 딱 붙지 않도록 최소 1칸의 벽(여백)을 확보
 
         // 복도가 파인 공간을 침범하거나 너무 모서리에 붙지 않도록 안전 마진 계산
@@ -416,21 +452,6 @@ public class DungeonGenerator : MonoBehaviour
             min = 3;
             max = h - 4;
         }
-        else if (shape == RoomShape.L_Shape)
-        {
-            if (dir == 1) // 오른쪽으로 나갈 때: 파이지 않은 아래쪽 다리 구간
-            {
-                max = h - (h / 2) - 1;
-            }
-        }
-        else if (shape == RoomShape.Reverse_L_Shape)
-        {
-            if (dir == 3) // 왼쪽으로 나갈 때: 파이지 않은 위쪽 다리 구간
-            {
-                min = h / 2;
-            }
-        }
-
         int margin = 1; // 복도가 방의 모서리에 딱 붙지 않도록 최소 1칸의 벽(여백)을 확보
 
         int minOffset = min + margin + corridorWidth / 2;
@@ -542,33 +563,6 @@ case RoomShape.Parthenon:
                         }
                         break;
 
-                    case RoomShape.L_Shape:
-                        // ㄴ 모양 방: 우측 상단 사각형을 파냄 (방이 6x6 이상일 때)
-                        if (w >= 6 && h >= 6)
-                        {
-                            int carveW = w / 2; // 가로의 절반
-                            int carveH = h / 2; // 세로의 절반
-                            // 우측 상단 구역에 해당하면 바닥을 칠하지 않음
-                            if (localX >= w - carveW && localY >= h - carveH)
-                            {
-                                drawFloor = false;
-                            }
-                        }
-                        break;
-
-                    case RoomShape.Reverse_L_Shape:
-                        // ㄱ 모양 방: 좌측 하단 사각형을 파냄 (방이 6x6 이상일 때)
-                        if (w >= 6 && h >= 6)
-                        {
-                            int carveW = w / 2; // 가로의 절반
-                            int carveH = h / 2; // 세로의 절반
-                            // 좌측 하단 구역에 해당하면 바닥을 칠하지 않음
-                            if (localX < carveW && localY < carveH)
-                            {
-                                drawFloor = false;
-                            }
-                        }
-                        break;
                 }
 
                 // 깎이지 않은 부분만 바닥으로 칠함

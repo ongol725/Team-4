@@ -1,0 +1,66 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    private static GameManager _instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject go = new GameObject("GameManager");
+                _instance = go.AddComponent<GameManager>();
+                DontDestroyOnLoad(go);
+            }
+            return _instance;
+        }
+    }
+
+    [HideInInspector] public int currentFloor = 1;
+
+    [Header("층 전환 방식")]
+    [Tooltip("false = 같은 씬에서 맵 재생성 (프로토타입)\ntrue  = 층별 씬 전환 (정식 버전)")]
+    public bool useSceneTransition = false;
+
+    [Header("씬 전환 설정 (useSceneTransition = true 일 때 사용)")]
+    [Tooltip("1층부터 순서대로 씬 이름 입력 (마지막이 보스 씬)")]
+    public string[] floorSceneNames = { "02.Floor1", "03.Floor2", "04.Floor3", "05.Floor4", "06.Floor5_Boss" };
+
+    void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public void GoToNextFloor()
+    {
+        currentFloor++;
+        Debug.Log($"[GameManager] {currentFloor}층으로 이동합니다.");
+
+        if (!useSceneTransition)
+        {
+            // 같은 씬에서 맵 재생성
+            DungeonGenerator generator = FindFirstObjectByType<DungeonGenerator>();
+            if (generator != null)
+                generator.RegenerateDungeon();
+            else
+                Debug.LogError("[GameManager] DungeonGenerator를 찾을 수 없습니다.");
+        }
+        else
+        {
+            // 층 번호에 맞는 씬으로 전환
+            int idx = currentFloor - 1;
+            if (idx >= 0 && idx < floorSceneNames.Length)
+                SceneManager.LoadScene(floorSceneNames[idx]);
+            else
+                Debug.LogError($"[GameManager] {currentFloor}층에 해당하는 씬 이름이 없습니다. floorSceneNames 배열을 확인하세요.");
+        }
+    }
+}
