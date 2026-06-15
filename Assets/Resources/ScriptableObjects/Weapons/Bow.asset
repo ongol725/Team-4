@@ -23,8 +23,17 @@ MonoBehaviour:
   cells:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
-  attackPower: 0
-  attackSpeed: 0
+  gradeStats:
+  - attackPower: 48
+    attackSpeed: 1.2
+  - attackPower: 62
+    attackSpeed: 1.11
+  - attackPower: 80
+    attackSpeed: 1.05
+  - attackPower: 100
+    attackSpeed: 1
+  - attackPower: 110
+    attackSpeed: 0.86
   projectile: {fileID: 0}
   projectileSpeed: 16
   range: 5

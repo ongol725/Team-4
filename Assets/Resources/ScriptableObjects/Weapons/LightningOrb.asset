@@ -22,8 +22,17 @@ MonoBehaviour:
   synergies: 0c000000080000000b000000
   cells:
   - {x: 0, y: 0}
-  attackPower: 0
-  attackSpeed: 0
+  gradeStats:
+  - attackPower: 12
+    attackSpeed: 0.6
+  - attackPower: 16
+    attackSpeed: 0.55
+  - attackPower: 20
+    attackSpeed: 0.5
+  - attackPower: 24
+    attackSpeed: 0.45
+  - attackPower: 29
+    attackSpeed: 0.4
   projectile: {fileID: 0}
   projectileSpeed: 0
   range: 0

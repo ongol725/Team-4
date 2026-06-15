@@ -25,8 +25,17 @@ MonoBehaviour:
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   - {x: 2, y: 1}
-  attackPower: 0
-  attackSpeed: 0
+  gradeStats:
+  - attackPower: 60
+    attackSpeed: 1.5
+  - attackPower: 78
+    attackSpeed: 1.39
+  - attackPower: 100
+    attackSpeed: 1.32
+  - attackPower: 125
+    attackSpeed: 1.25
+  - attackPower: 147
+    attackSpeed: 1.15
   projectile: {fileID: 0}
   projectileSpeed: 0
   range: 1
