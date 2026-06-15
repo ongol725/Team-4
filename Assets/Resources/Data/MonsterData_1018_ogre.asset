@@ -15,7 +15,7 @@ MonoBehaviour:
   index: 1018
   monsterName: "\uC624\uC6B0\uAC70"
   englishName: ogre
-  grade: 1
+  grade: 2
   maxHP: 2800
   attack: 100
   defense: 90

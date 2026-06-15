@@ -15,7 +15,7 @@ MonoBehaviour:
   index: 1016
   monsterName: "\uD638\uB791\uC774"
   englishName: tiger
-  grade: 1
+  grade: 2
   maxHP: 2000
   attack: 110
   defense: 50

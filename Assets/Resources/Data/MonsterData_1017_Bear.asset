@@ -15,7 +15,7 @@ MonoBehaviour:
   index: 1017
   monsterName: "\uACF0"
   englishName: Bear
-  grade: 1
+  grade: 2
   maxHP: 2500
   attack: 80
   defense: 80
