@@ -14,7 +14,7 @@ namespace BagSurvivor.UI
     {
         [Header("재화")]
         public Text goldText;
-        public Text enhanceStoneText;
+        // 강화석 표시는 제거됨(해당 슬롯은 "체력" 라벨로 대체). enhanceStoneText 필드 삭제.
 
         [Header("체력")]
         [Tooltip("Filled(Horizontal) 타입 Image")]
@@ -28,7 +28,6 @@ namespace BagSurvivor.UI
         [Header("Mock 데이터 (백엔드 연동 전 임시)")]
         public bool useMockData = true;
         public int mockGold = 1234;
-        public int mockEnhanceStone = 56;
         public int mockMaxHP = 100;
         public int mockCurrentHP = 100;
 
@@ -37,7 +36,6 @@ namespace BagSurvivor.UI
             if (useMockData)
             {
                 SetGold(mockGold);
-                SetEnhanceStone(mockEnhanceStone);
                 SetHealth(mockCurrentHP, mockMaxHP);
             }
         }
@@ -45,11 +43,6 @@ namespace BagSurvivor.UI
         public void SetGold(int value)
         {
             if (goldText != null) goldText.text = value.ToString("N0");
-        }
-
-        public void SetEnhanceStone(int value)
-        {
-            if (enhanceStoneText != null) enhanceStoneText.text = value.ToString("N0");
         }
 
         public void SetHealth(int current, int max)
