@@ -84,12 +84,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 704516478429198040, guid: 08b4eeeb62a9c084ca20e055a76e892f, type: 3}
+  m_Sprite: {fileID: -2034940823092696110, guid: a2ee574efe52474489ace8b7a8f816ed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.06, y: 0.71}
+  m_Size: {x: 1.2, y: 0.79}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -171,3 +171,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: 46bff9c7a5c732349b645961ecb5b3c9, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  sortingOrder: 10
+  stopDistance: 0
+  approachOverlap: 0.4

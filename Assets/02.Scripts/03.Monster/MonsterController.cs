@@ -56,6 +56,7 @@ namespace BagSurvivor.Monster
         private Rigidbody2D rb;
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
+        private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
 
         // 넉백 관련
         private float kbCooldownTimer = 0f;
@@ -131,6 +132,7 @@ namespace BagSurvivor.Monster
             rb = GetComponent<Rigidbody2D>();
             col = GetComponent<Collider2D>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null) baseColor = spriteRenderer.color;
 
             // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
             if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
@@ -230,8 +232,12 @@ namespace BagSurvivor.Monster
             // 콜라이더 활성화
             if (col != null) col.enabled = true;
 
-            // 타일맵 위에 보이도록 정렬 순서 적용 (피격 시 색상 복구를 위해 원본 색은 유지)
-            if (spriteRenderer != null) spriteRenderer.sortingOrder = sortingOrder;
+            // 타일맵 위에 보이도록 정렬 순서 적용 + 색 복구(풀 재사용 시 사망 페이드/피격 잔색 제거)
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sortingOrder = sortingOrder;
+                spriteRenderer.color = baseColor;
+            }
 
             // 플레이어 찾기 (태그 기반)
             GameObject player = GameObject.FindGameObjectWithTag("Player");
