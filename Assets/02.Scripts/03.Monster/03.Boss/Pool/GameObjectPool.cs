@@ -80,6 +80,7 @@ namespace BagSurvivor.Monster
 
             sourceOf[go] = prefab;
             go.transform.SetPositionAndRotation(position, rotation);
+            go.transform.localScale = prefab.transform.localScale; // 재사용 시 스케일 초기화(LeapBlast 등에서 키운 값 잔존 방지)
 
             // 자가 반환용 출처 풀 주입 (있을 때만)
             PooledObject po = go.GetComponent<PooledObject>();
