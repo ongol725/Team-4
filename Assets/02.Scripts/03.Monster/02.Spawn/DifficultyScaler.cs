@@ -25,8 +25,8 @@ namespace BagSurvivor.Monster
         public float maxAttackMultiplier = 4f;
 
         [Header("옵션")]
-        [Tooltip("씬 전환(층 이동) 후에도 경과시간을 유지")]
-        public bool persistAcrossScenes = true;
+        [Tooltip("씬 전환 후에도 경과시간을 유지(DontDestroyOnLoad). 주의: 같은 GameObject의 스포너/풀까지 함께 유지되어 재시작 시 문제가 됩니다. 기본 false 권장. 층 간 시간 누적은 GameManager 등 별도 보관으로 처리하세요.")]
+        public bool persistAcrossScenes = false;
 
         private float runStartTime;
 
