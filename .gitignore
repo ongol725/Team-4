@@ -89,3 +89,5 @@ GEMINI.md
 # 던전 생성 디버그 덤프 (런타임 생성)
 /[Aa]ssets/map_debug.txt
 /[Aa]ssets/map_debug.txt.meta
+# 개인 PC 전용 MCP 설정(경로가 사용자별이라 공유 금지)
+.mcp.json
