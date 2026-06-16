@@ -57,9 +57,9 @@ namespace BagSurvivor.UI
             if (cam != null)
                 rt.position = cam.WorldToScreenPoint(target.transform.position + worldOffset);
 
-            int max = target.monsterData != null ? target.monsterData.maxHP : 1;
+            int max = target.MaxHP > 0 ? target.MaxHP : 1;
             if (fill != null)
-                fill.fillAmount = max > 0 ? (float)target.CurrentHP / max : 0f;
+                fill.fillAmount = (float)target.CurrentHP / max;
         }
     }
 }
