@@ -110,14 +110,27 @@ namespace BagSurvivor.Monster
             stack.Push(mc);
         }
 
-        /// <summary>지정 프리팹을 미리 생성해 풀을 예열합니다. (선택: 로딩 중 호출 권장)</summary>
+        /// <summary>지정 프리팹을 미리 생성해 풀을 예열합니다(풀 보유량을 count까지 채움). 로딩 중 호출 권장.</summary>
         public void Prewarm(GameObject prefab, int count)
         {
             if (prefab == null || count <= 0) return;
-            for (int i = 0; i < count; i++)
+
+            if (!pools.TryGetValue(prefab, out Stack<MonsterController> stack))
             {
-                MonsterController mc = Get(prefab, poolRoot != null ? poolRoot.position : Vector3.zero);
-                if (mc != null) Return(mc);
+                stack = new Stack<MonsterController>();
+                pools[prefab] = stack;
+            }
+
+            // Get/Return 반복은 같은 인스턴스를 재사용하므로, 부족한 만큼 직접 생성해 풀에 적재한다.
+            int need = count - stack.Count;
+            for (int i = 0; i < need; i++)
+            {
+                GameObject go = Instantiate(prefab, poolRoot);
+                go.SetActive(false);
+                MonsterController mc = go.GetComponent<MonsterController>();
+                if (mc == null) { Destroy(go); continue; }
+                sourceOf[mc] = prefab;
+                stack.Push(mc);
             }
         }
     }
