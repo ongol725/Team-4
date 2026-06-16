@@ -11,21 +11,27 @@ public class ShopSlotUI : MonoBehaviour
     [SerializeField] private Text           _nameText;
     [SerializeField] private Text           _costText;
     [SerializeField] private Text           _rarityText;
-    [SerializeField] private Text           _synergiesText;     // 시너지 태그 표시
+    [SerializeField] private Text           _synergiesText;
     [SerializeField] private Button         _buyButton;
     [SerializeField] private Text           _buyButtonText;
-    [SerializeField] private RectTransform  _previewContainer;  // 셀 형태 미리보기 부모
+    [SerializeField] private RectTransform  _previewContainer;
     [SerializeField] private Image          _slotBackground;
 
     private static readonly Color[] RarityColors =
     {
-        new Color(0.75f, 0.75f, 0.75f),  // Common   - 회색
-        new Color(0.30f, 0.55f, 1.00f),  // Rare     - 파랑
-        new Color(0.65f, 0.25f, 0.95f),  // Epic     - 보라
-        new Color(1.00f, 0.80f, 0.10f),  // Legendary- 금색
+        new Color(0.75f, 0.75f, 0.75f),  // Common
+        new Color(0.30f, 0.55f, 1.00f),  // Rare
+        new Color(0.65f, 0.25f, 0.95f),  // Epic
+        new Color(1.00f, 0.80f, 0.10f),  // Legendary
     };
 
     private static readonly string[] RarityLabels = { "일반", "희귀", "영웅", "전설" };
+
+    // 상점 등급(1~7)별 2등급 아이템 등장 확률(%)
+    private static readonly int[] Grade2Rates    = { 8, 10, 12, 14, 16, 18, 20 };
+
+    // 상점 등급(1~7)별 할인율(%)
+    private static readonly int[] DiscountRates  = { 12, 15, 18, 21, 24, 27, 30 };
 
     private static readonly System.Collections.Generic.Dictionary<SynergyType, string> SynergyNames =
         new System.Collections.Generic.Dictionary<SynergyType, string>
@@ -48,12 +54,14 @@ public class ShopSlotUI : MonoBehaviour
     private const float MiniCellSize = 11f;
     private const float MiniCellGap  = 1f;
 
-    private SO_ItemData _item;
-    private Action<SO_ItemData, ShopSlotUI> _onBuy;
+    private SO_ItemData                      _item;
+    private int                              _displayGradeIndex;
+    private bool                             _isDiscounted;
+    private Action<ItemInstance, ShopSlotUI> _onBuy;
 
     // ─────────────────────────────────────────────────────────────
 
-    public void SetItem(SO_ItemData item, Action<SO_ItemData, ShopSlotUI> onBuy)
+    public void SetItem(SO_ItemData item, Action<ItemInstance, ShopSlotUI> onBuy, int shopGrade = 1)
     {
         _item  = item;
         _onBuy = onBuy;
@@ -66,11 +74,22 @@ public class ShopSlotUI : MonoBehaviour
 
         gameObject.SetActive(true);
 
+        // 2등급 롤: 등급 있는 아이템(무기/방어구)에만 적용
+        _displayGradeIndex = 0;
+        bool hasGrades = item is SO_WeaponData || item is SO_ArmorData;
+        if (hasGrades)
+        {
+            int rateIdx = Mathf.Clamp(shopGrade - 1, 0, Grade2Rates.Length - 1);
+            if (UnityEngine.Random.Range(0, 100) < Grade2Rates[rateIdx])
+                _displayGradeIndex = 1;
+        }
+
+        // 색상 결정
         Color color;
         string rarityLabel;
         if (item is SO_InventoryBlockData)
         {
-            color      = new Color(0.25f, 0.80f, 0.35f); // 인벤토리 확장 전용 초록색
+            color      = new Color(0.25f, 0.80f, 0.35f);
             rarityLabel = "확장";
         }
         else
@@ -81,7 +100,11 @@ public class ShopSlotUI : MonoBehaviour
         }
 
         _nameText.text    = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
-        _costText.text    = $"{item.cost} G";
+        int discountIdx  = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
+        _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
+        int baseCost     = item.cost * (_displayGradeIndex > 0 ? 2 : 1);
+        int finalCost    = _isDiscounted ? Mathf.Max(1, Mathf.FloorToInt(baseCost * 0.5f)) : baseCost;
+        _costText.text   = $"{finalCost} G";
         _rarityText.text  = rarityLabel;
         _rarityText.color = color;
 
@@ -118,6 +141,12 @@ public class ShopSlotUI : MonoBehaviour
 
         foreach (var cell in cells)
             CreateMiniCell(cell, color);
+
+        if (_displayGradeIndex > 0)
+            AddGrade2Arrow();
+
+        if (_isDiscounted)
+            AddDiscountArrow();
     }
 
     private void CreateMiniCell(Vector2Int cell, Color color)
@@ -134,6 +163,52 @@ public class ShopSlotUI : MonoBehaviour
             -cell.x * (MiniCellSize + MiniCellGap));
 
         go.GetComponent<Image>().color = color;
+    }
+
+    private void AddGrade2Arrow()
+    {
+        var go = new GameObject("grade2_arrow", typeof(RectTransform), typeof(Text));
+        go.transform.SetParent(_previewContainer, false);
+
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin        = new Vector2(1f, 1f);
+        rt.anchorMax        = new Vector2(1f, 1f);
+        rt.pivot            = new Vector2(1f, 1f);
+        rt.anchoredPosition = new Vector2(0f, 0f);
+        rt.sizeDelta        = new Vector2(14f, 14f);
+
+        var txt = go.GetComponent<Text>();
+        txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+        txt.text      = "↑";
+        txt.fontSize  = 12;
+        txt.fontStyle = FontStyle.Bold;
+        txt.alignment = TextAnchor.UpperRight;
+        txt.color     = new Color(0.25f, 0.90f, 0.35f);
+        txt.raycastTarget = false;
+    }
+
+    private void AddDiscountArrow()
+    {
+        var go = new GameObject("discount_arrow", typeof(RectTransform), typeof(Text));
+        go.transform.SetParent(_previewContainer, false);
+
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin        = new Vector2(0f, 0f);
+        rt.anchorMax        = new Vector2(0f, 0f);
+        rt.pivot            = new Vector2(0f, 0f);
+        rt.anchoredPosition = new Vector2(0f, 0f);
+        rt.sizeDelta        = new Vector2(14f, 14f);
+
+        var txt = go.GetComponent<Text>();
+        txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+        txt.text      = "↓";
+        txt.fontSize  = 12;
+        txt.fontStyle = FontStyle.Bold;
+        txt.alignment = TextAnchor.LowerLeft;
+        txt.color     = new Color(1f, 0.25f, 0.25f);
+        txt.raycastTarget = false;
     }
 
     private void RefreshSynergies(SO_ItemData item)
@@ -156,5 +231,8 @@ public class ShopSlotUI : MonoBehaviour
         _synergiesText.text = sb.ToString();
     }
 
-    private void OnBuyClicked() => _onBuy?.Invoke(_item, this);
+    private void OnBuyClicked()
+    {
+        _onBuy?.Invoke(new ItemInstance { data = _item, gradeIndex = _displayGradeIndex }, this);
+    }
 }

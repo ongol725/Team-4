@@ -28,8 +28,24 @@ public class ShopUI : MonoBehaviour
     // 각 등급에서 다음 등급으로 오르는 데 필요한 리롤 횟수 (인덱스 0 = 1등급 → 2등급)
     private static readonly int[] GradeThresholds = { 10, 15, 20, 25, 30, 35 };
 
-    private int _shopGrade              = 1;
-    private int _rerollsInCurrentGrade  = 0;
+    // ShopSlotUI · ShopManager 와 동일한 값 — 스탯 박스 표시용
+    private static readonly int[]   Grade2Rates   = { 8,  10, 12, 14, 16, 18, 20 };
+    private static readonly int[]   DiscountRates  = { 12, 15, 18, 21, 24, 27, 30 };
+    private static readonly int[,]  RarityWeights  =
+    {
+        { 90, 10,  0,  0 },
+        { 80, 10, 10,  0 },
+        { 65, 20, 10,  5 },
+        { 55, 20, 15, 10 },
+        { 40, 30, 15, 15 },
+        { 30, 30, 20, 20 },
+        { 20, 30, 25, 25 },
+    };
+
+    private int _shopGrade             = 1;
+    private int _rerollsInCurrentGrade = 0;
+
+    private Text _statsText;
 
     // ─────────────────────────────────────────────────────────────
 
@@ -39,13 +55,15 @@ public class ShopUI : MonoBehaviour
         if (_rerollCostText != null)
             _rerollCostText.text = $"리롤 ({_rerollCost}G)";
 
-        PopulateSlots(); // 초기 상품 생성 (리롤 카운트 미포함)
+        if (_gradeText != null)
+            CreateStatsPanel();
+
+        PopulateSlots();
         UpdateGradeUI();
     }
 
     // ─────────────────────────────────────────────────────────────
 
-    /// <summary>리롤 버튼 클릭 시 호출. 현재 등급 내 리롤 횟수를 누적하고 등급을 갱신한다.</summary>
     public void Reroll()
     {
         _rerollsInCurrentGrade++;
@@ -71,14 +89,14 @@ public class ShopUI : MonoBehaviour
         for (int i = 0; i < _slots.Length; i++)
         {
             var item = i < items.Length ? items[i] : null;
-            _slots[i].SetItem(item, OnItemBought);
+            _slots[i].SetItem(item, OnItemBought, _shopGrade);
         }
     }
 
     private void UpdateGrade()
     {
         int thresholdIdx = _shopGrade - 1;
-        if (thresholdIdx >= GradeThresholds.Length) return; // 최고 등급 도달
+        if (thresholdIdx >= GradeThresholds.Length) return;
 
         if (_rerollsInCurrentGrade < GradeThresholds[thresholdIdx]) return;
 
@@ -91,13 +109,74 @@ public class ShopUI : MonoBehaviour
     {
         if (_gradeText != null)
             _gradeText.text = $"상점 Lv.{_shopGrade}";
+
+        UpdateStatsPanel();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 스탯 박스 생성 (런타임, _gradeText 바로 아래)
+
+    private void CreateStatsPanel()
+    {
+        var gradeRt = _gradeText.GetComponent<RectTransform>();
+
+        // 배경 박스
+        var boxGo = new GameObject("ShopStatsPanel", typeof(RectTransform), typeof(Image));
+        boxGo.transform.SetParent(_gradeText.transform.parent, false);
+
+        var boxRt = boxGo.GetComponent<RectTransform>();
+        boxRt.anchorMin        = gradeRt.anchorMin;
+        boxRt.anchorMax        = gradeRt.anchorMax;
+        boxRt.pivot            = new Vector2(0f, 1f);
+        boxRt.anchoredPosition = new Vector2(
+            gradeRt.anchoredPosition.x + gradeRt.sizeDelta.x * 0.5f + 8f,
+            gradeRt.anchoredPosition.y);
+        boxRt.sizeDelta = new Vector2(230f, 52f);
+
+        var bg = boxGo.GetComponent<Image>();
+        bg.color = new Color(0.08f, 0.08f, 0.12f, 0.92f);
+
+        // 텍스트
+        var textGo = new GameObject("StatsText", typeof(RectTransform), typeof(Text));
+        textGo.transform.SetParent(boxGo.transform, false);
+
+        var textRt = textGo.GetComponent<RectTransform>();
+        textRt.anchorMin = Vector2.zero;
+        textRt.anchorMax = Vector2.one;
+        textRt.offsetMin = new Vector2(6f, 4f);
+        textRt.offsetMax = new Vector2(-6f, -4f);
+
+        _statsText = textGo.GetComponent<Text>();
+        _statsText.font               = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+                                   ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+        _statsText.fontSize           = 10;
+        _statsText.color              = new Color(0.85f, 0.85f, 0.85f);
+        _statsText.lineSpacing        = 1.3f;
+        _statsText.horizontalOverflow = HorizontalWrapMode.Overflow;
+        _statsText.verticalOverflow   = VerticalWrapMode.Overflow;
+        _statsText.raycastTarget      = false;
+    }
+
+    private void UpdateStatsPanel()
+    {
+        if (_statsText == null) return;
+
+        int idx      = Mathf.Clamp(_shopGrade - 1, 0, 6);
+        int normal   = RarityWeights[idx, 0];
+        int rare     = RarityWeights[idx, 1];
+        int epic     = RarityWeights[idx, 2];
+        int legend   = RarityWeights[idx, 3];
+
+        _statsText.text =
+            $"할인 확률  : {DiscountRates[idx]}%   2등급 확률 : {Grade2Rates[idx]}%\n" +
+            $"일반 {normal}%  희귀 {rare}%  영웅 {epic}%  전설 {legend}%";
     }
 
     // ─────────────────────────────────────────────────────────────
 
-    private void OnItemBought(SO_ItemData item, ShopSlotUI slot)
+    private void OnItemBought(ItemInstance inst, ShopSlotUI slot)
     {
         slot.SetSoldOut();
-        _inventoryGridUI.BeginPlaceFromShop(new ItemInstance { data = item, gradeIndex = 0 });
+        _inventoryGridUI.BeginPlaceFromShop(inst);
     }
 }
