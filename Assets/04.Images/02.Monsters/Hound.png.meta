@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 08b4eeeb62a9c084ca20e055a76e892f
+guid: a2ee574efe52474489ace8b7a8f816ed
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 704516478429198040
-    second: Hound_0
+      213: -2034940823092696110
+    second: Hound 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Hound_0
+      name: Hound 1_0
       rect:
         serializedVersion: 2
-        x: 12
-        y: 25
-        width: 106
-        height: 71
+        x: 5
+        y: 23
+        width: 120
+        height: 79
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8d67e232102f6c900800000000000000
-      internalID: 704516478429198040
+      spriteID: 2db6e9c5a1072c3e0800000000000000
+      internalID: -2034940823092696110
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Hound_0: 704516478429198040
+      Hound 1_0: -2034940823092696110
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
