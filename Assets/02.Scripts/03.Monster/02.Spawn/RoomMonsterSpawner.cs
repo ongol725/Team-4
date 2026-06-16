@@ -101,6 +101,11 @@ namespace BagSurvivor.Monster
         private GameObject lastRoomsContainer;
         private float rescanTimer;
 
+        // 현재 스폰되어 활성 상태인 몬스터들 (복도 진입 시 일괄 디스폰용)
+        private readonly List<MonsterController> activeMonsters = new List<MonsterController>();
+        private Transform playerTf;
+        private bool wasInRoom = true;
+
         private IEnumerator Start()
         {
             if (dungeonGenerator == null)
@@ -127,6 +132,10 @@ namespace BagSurvivor.Monster
         // 이를 감지해 타일맵을 재캐시하고 새 방들을 다시 구독한다. (1초 주기로만 검사 — 부하 최소화)
         private void Update()
         {
+            // 매 프레임: 방 밖(복도)으로 나가면 활성 몬스터 전부 디스폰
+            CheckCorridorDespawn();
+
+            // 1초 주기: 던전 재생성(층 이동) 감지 → 재구독
             rescanTimer += Time.unscaledDeltaTime;
             if (rescanTimer < 1f) return;
             rescanTimer = 0f;
@@ -140,6 +149,48 @@ namespace BagSurvivor.Monster
                 CacheTilemaps();
                 RescanRooms();
             }
+        }
+
+        // 플레이어가 방 안에 있다가 어떤 방에도 속하지 않게 되면(=복도 진입) 활성 몬스터 일괄 디스폰.
+        private void CheckCorridorDespawn()
+        {
+            bool inRoom = IsPlayerInAnyRoom();
+            if (wasInRoom && !inRoom && activeMonsters.Count > 0)
+                DespawnAllMonsters();
+            wasInRoom = inRoom;
+        }
+
+        /// <summary>플레이어가 구독된 방 콜라이더 중 하나라도 안에 있는지.</summary>
+        private bool IsPlayerInAnyRoom()
+        {
+            if (playerTf == null)
+            {
+                GameObject p = GameObject.FindGameObjectWithTag("Player");
+                if (p != null) playerTf = p.transform;
+                else return wasInRoom; // 플레이어 못 찾으면 직전 상태 유지
+            }
+
+            Vector2 pos = playerTf.position;
+            foreach (RoomController rc in subscribed)
+            {
+                if (rc == null) continue;
+                Collider2D col = rc.GetComponent<Collider2D>();
+                if (col != null && col.OverlapPoint(pos)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>현재 활성 몬스터를 모두 풀로 반환합니다. (사망이 아닌 디스폰이라 방 클리어는 통지하지 않음)</summary>
+        public void DespawnAllMonsters()
+        {
+            for (int i = activeMonsters.Count - 1; i >= 0; i--)
+            {
+                MonsterController m = activeMonsters[i];
+                if (m == null) continue;
+                m.SetDeathCallback(null);   // 디스폰이므로 사망 콜백 차단
+                if (pool != null) pool.Return(m);
+            }
+            activeMonsters.Clear();
         }
 
         private void EnsurePool()
@@ -275,13 +326,16 @@ namespace BagSurvivor.Monster
             MonsterController mc = pool.Get(prefab, pos, hpMul, atkMul);
             if (mc == null) return;
 
+            activeMonsters.Add(mc);
+
             // 방에 등록 (특수방의 문 잠금/클리어 카운트와 연동)
             rc.RegisterMonster();
 
-            // 사망 시: 방에 클리어 통지 + 풀 반환
+            // 사망 시: 활성 목록에서 제거 + 방에 클리어 통지 + 풀 반환
             RoomController room = rc;
             mc.SetDeathCallback(m =>
             {
+                activeMonsters.Remove(m);
                 room.NotifyMonsterDead();
                 pool.Return(m);
             });
