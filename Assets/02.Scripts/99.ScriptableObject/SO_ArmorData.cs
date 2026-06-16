@@ -7,10 +7,8 @@ using UnityEngine;
 public class ArmorGradeStats
 {
     [Header("기본 스탯")]
-    public int defense;
-
-    [Header("고유 능력")]
-    [TextArea(2, 4)] public string ability;
+    public int hpBonus;  // 체력 상승
+    public int hpRegen;  // 10초당 체력 재생량
 }
 
 [CreateAssetMenu(fileName = "NewArmor", menuName = "Items/Armor")]

@@ -324,12 +324,21 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     private void BuildVisuals()
     {
         var cells = InventoryGrid.GetCells(_instance.data);
-        int rarityIdx  = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
-        float bright   = 1f + _instance.gradeIndex * 0.12f; // 등급이 높을수록 밝아짐
-        var baseColor  = new Color(
-            Mathf.Clamp01(RarityColors[rarityIdx].r * bright),
-            Mathf.Clamp01(RarityColors[rarityIdx].g * bright),
-            Mathf.Clamp01(RarityColors[rarityIdx].b * bright));
+
+        Color baseColor;
+        if (_instance.data is SO_InventoryBlockData)
+        {
+            baseColor = new Color(0.25f, 0.80f, 0.35f); // 인벤토리 확장 전용 초록색
+        }
+        else
+        {
+            int rarityIdx = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
+            float bright  = 1f + _instance.gradeIndex * 0.12f;
+            baseColor = new Color(
+                Mathf.Clamp01(RarityColors[rarityIdx].r * bright),
+                Mathf.Clamp01(RarityColors[rarityIdx].g * bright),
+                Mathf.Clamp01(RarityColors[rarityIdx].b * bright));
+        }
 
         bool labelPlaced = false;
         foreach (var cell in cells)

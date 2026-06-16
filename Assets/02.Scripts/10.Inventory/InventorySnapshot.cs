@@ -14,7 +14,8 @@ public class InventorySnapshot
     // ── 스탯 합산 ─────────────────────────────────────────────────
     public int   TotalAttackPower;
     public float TotalAttackSpeed;
-    public int   TotalDefense;
+    public int   TotalHpBonus;
+    public int   TotalHpRegen;
 
     // ── 시너지 카운트 (SynergyType → 고유 아이템 종류 수) ─────────
     public readonly Dictionary<SynergyType, int> SynergyCounts = new();
@@ -43,7 +44,10 @@ public class InventorySnapshot
                 Armors.Add(inst);
                 var armStat = inst.CurrentArmorStats;
                 if (armStat != null)
-                    TotalDefense += armStat.defense;
+                {
+                    TotalHpBonus += armStat.hpBonus;
+                    TotalHpRegen += armStat.hpRegen;
+                }
                 break;
 
             case SO_AccessoryData _:

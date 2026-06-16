@@ -66,12 +66,23 @@ public class ShopSlotUI : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        var rarityIdx = Mathf.Clamp((int)item.rarity, 0, RarityColors.Length - 1);
-        var color     = RarityColors[rarityIdx];
+        Color color;
+        string rarityLabel;
+        if (item is SO_InventoryBlockData)
+        {
+            color      = new Color(0.25f, 0.80f, 0.35f); // 인벤토리 확장 전용 초록색
+            rarityLabel = "확장";
+        }
+        else
+        {
+            var rarityIdx = Mathf.Clamp((int)item.rarity, 0, RarityColors.Length - 1);
+            color         = RarityColors[rarityIdx];
+            rarityLabel   = RarityLabels[rarityIdx];
+        }
 
-        _nameText.text   = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
-        _costText.text   = $"{item.cost} G";
-        _rarityText.text  = RarityLabels[rarityIdx];
+        _nameText.text    = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
+        _costText.text    = $"{item.cost} G";
+        _rarityText.text  = rarityLabel;
         _rarityText.color = color;
 
         RefreshSynergies(item);

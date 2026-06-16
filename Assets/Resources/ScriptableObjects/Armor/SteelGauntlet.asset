@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 3}
-  m_Name: WoodBuckler
+  m_Name: SteelGauntlet
   m_EditorClassIdentifier: Assembly-CSharp::SO_ArmorData
-  itemID: ARM_001
-  itemName: "나무 버클러"
+  itemID: ARM_006
+  itemName: "강철 건틀릿"
   itemDescription:
   itemImage: {fileID: 0}
-  rarity: 0
+  rarity: 1
   grade: 1
-  cost: 2
+  cost: 4
   synergies: 000000000000000000000000
   cells:
   - {x: 0, y: 0}
+  - {x: 0, y: 1}
   gradeStats:
-  - hpBonus: 100
-    hpRegen: 1
-  - hpBonus: 150
-    hpRegen: 2
-  - hpBonus: 225
+  - hpBonus: 180
     hpRegen: 3
-  - hpBonus: 150
-    hpRegen: 4
-  - hpBonus: 225
-    hpRegen: 6
+  - hpBonus: 270
+    hpRegen: 5
+  - hpBonus: 405
+    hpRegen: 8
+  - hpBonus: 270
+    hpRegen: 12
+  - hpBonus: 405
+    hpRegen: 18
