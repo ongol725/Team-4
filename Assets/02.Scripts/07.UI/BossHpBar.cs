@@ -27,11 +27,11 @@ namespace BagSurvivor.UI
         public float delayBeforeCatch = 0.2f;
         public float catchDuration = 0.4f;
 
-        [Header("체력 증가 (회복)")]
-        [Tooltip("이 간격(초)마다 체력이 오릅니다.")]
-        public float regenInterval = 5f;
-        [Tooltip("한 번에 오르는 체력 수치.")]
-        public int regenAmount = 1;
+        [Header("최대 체력 증가")]
+        [Tooltip("이 간격(초)마다 최대 체력이 오릅니다.")]
+        public float growInterval = 5f;
+        [Tooltip("한 번에 오르는 최대 체력 수치.")]
+        public int growAmount = 1;
 
         [Header("보스 미연결 시 표시용 기본 체력")]
         public int standaloneMaxHP = 1000;
@@ -43,7 +43,7 @@ namespace BagSurvivor.UI
         private float catchTimer;
         private float catchFrom = 1f;
         private float lastCur = 1f;
-        private float regenTimer;
+        private float growTimer;
 
         /// <summary>보스 몬스터 연결.</summary>
         public void SetTarget(MonsterController mc, string bossName)
@@ -55,7 +55,7 @@ namespace BagSurvivor.UI
             lastCur = n;
             displayedDelayed = n;
             catchFrom = n;
-            regenTimer = 0f;
+            growTimer = 0f;
             SetMain(n);
             SetDelayed(n);
             RefreshHpText();
@@ -63,15 +63,22 @@ namespace BagSurvivor.UI
 
         private void Update()
         {
-            // 체력 증가(회복): regenInterval초마다 regenAmount씩 상승
-            if (regenInterval > 0f && regenAmount != 0)
+            // 최대 체력 증가: growInterval초마다 growAmount씩 최대 체력 상승(현재 체력도 같이 증가)
+            if (growInterval > 0f && growAmount != 0)
             {
-                regenTimer += Time.deltaTime;
-                while (regenTimer >= regenInterval)
+                growTimer += Time.deltaTime;
+                while (growTimer >= growInterval)
                 {
-                    regenTimer -= regenInterval;
-                    if (target != null && !target.IsDead) target.Heal(regenAmount);
-                    else standaloneCurHP = Mathf.Clamp(standaloneCurHP + regenAmount, 0, standaloneMaxHP);
+                    growTimer -= growInterval;
+                    if (target != null && !target.IsDead)
+                    {
+                        target.IncreaseMaxHP(growAmount);
+                    }
+                    else
+                    {
+                        standaloneMaxHP = Mathf.Max(1, standaloneMaxHP + growAmount);
+                        standaloneCurHP = Mathf.Clamp(standaloneCurHP + growAmount, 0, standaloneMaxHP);
+                    }
                 }
             }
 

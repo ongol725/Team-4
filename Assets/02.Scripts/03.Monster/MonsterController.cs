@@ -211,11 +211,19 @@ namespace BagSurvivor.Monster
             attackMultiplier = attackMul <= 0f ? 1f : attackMul;
         }
 
-        /// <summary>체력을 회복합니다(최대 체력 한도). 보스 HP 재생 등에서 사용.</summary>
+        /// <summary>체력을 회복합니다(최대 체력 한도). </summary>
         public void Heal(int amount)
         {
             if (isDying || amount <= 0) return;
             currentHP = Mathf.Min(runtimeMaxHP, currentHP + amount);
+        }
+
+        /// <summary>최대 체력을 늘립니다(현재 체력도 같이 증가). 보스가 시간에 따라 강해지는 용도.</summary>
+        public void IncreaseMaxHP(int amount)
+        {
+            if (isDying || amount == 0) return;
+            runtimeMaxHP = Mathf.Max(1, runtimeMaxHP + amount);
+            currentHP = Mathf.Clamp(currentHP + amount, 0, runtimeMaxHP);
         }
 
         /// <summary>
