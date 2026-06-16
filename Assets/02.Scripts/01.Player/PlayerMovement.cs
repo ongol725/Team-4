@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
+        if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         if (moveAction != null) moveAction.action.Enable();
     }
 

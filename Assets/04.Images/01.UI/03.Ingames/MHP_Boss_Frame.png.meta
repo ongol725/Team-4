@@ -129,10 +129,10 @@ TextureImporter:
       name: MHP_Boss_Frame_0
       rect:
         serializedVersion: 2
-        x: 17
-        y: 60
-        width: 537
-        height: 198
+        x: 52
+        y: 183
+        width: 1608
+        height: 591
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

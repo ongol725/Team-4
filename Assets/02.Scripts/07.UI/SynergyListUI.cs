@@ -17,8 +17,8 @@ namespace BagSurvivor.UI
         public GameObject entryPrefab;     // SynergyEntry 프리팹
         public SynergyTooltip tooltip;     // L5 툴팁
 
-        [Header("툴팁 위치 오프셋(스크린 px)")]
-        public Vector2 tooltipOffset = new Vector2(160f, 0f);
+        [Header("툴팁 위치 오프셋(시너지 항목 아래 끝 기준, 스크린 px)")]
+        public Vector2 tooltipOffset = new Vector2(0f, -6f);
 
         [Header("Mock 데이터 (시스템 연결 전)")]
         public bool useMock = true;
@@ -104,7 +104,21 @@ namespace BagSurvivor.UI
         public void ShowTooltip(SynergyEntry e)
         {
             if (tooltip == null || e == null) return;
-            tooltip.Show(e.Info, e.transform.position + (Vector3)tooltipOffset);
+
+            // 시너지 항목(마우스 판정 영역)의 '아래쪽 끝 중앙'을 기준점으로 잡아 그 밑으로 설명을 펼친다.
+            Vector3 anchor;
+            var er = e.transform as RectTransform;
+            if (er != null)
+            {
+                var corners = new Vector3[4];
+                er.GetWorldCorners(corners); // 0:좌하 1:좌상 2:우상 3:우하
+                anchor = (corners[0] + corners[3]) * 0.5f;     // 아래쪽 끝 중앙
+            }
+            else
+            {
+                anchor = e.transform.position;
+            }
+            tooltip.Show(e.Info, anchor + (Vector3)tooltipOffset);
         }
 
         public void HideTooltip()

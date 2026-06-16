@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e45ed18a7e35c5c45befa13d30f5b0cb
+guid: b2bd68e5e9fb82f448caf5bc9e15839c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1176415873443479487
-    second: MHP_Boss_Frame_Effect_0
+      213: -7485415606213293452
+    second: Gold_4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MHP_Boss_Frame_Effect_0
+      name: Gold_4_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 8
-        width: 775
-        height: 148
+        y: 0
+        width: 126
+        height: 138
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 140454bfef78cafe0800000000000000
-      internalID: -1176415873443479487
+      spriteID: 47acd736a267e1890800000000000000
+      internalID: -7485415606213293452
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MHP_Boss_Frame_Effect_0: -1176415873443479487
+      Gold_4_0: -7485415606213293452
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

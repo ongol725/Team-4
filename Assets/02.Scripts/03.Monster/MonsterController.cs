@@ -24,6 +24,17 @@ namespace BagSurvivor.Monster
         [Tooltip("이 몬스터 위에 표시할 추적형 HP바 프리팹 (Monster_HpBar)")]
         public GameObject hpBarPrefab;
 
+        [Header("렌더 정렬")]
+        [Tooltip("타일맵(바닥=0/벽=1) 위에 보이도록 하는 스프라이트 정렬 순서")]
+        public int sortingOrder = 10;
+
+        [Header("추적 정지")]
+        [Tooltip("0이면 콜라이더 크기에 맞춰 자동 접근(아래 '접근 겹침' 사용). 0보다 크면 이 중심거리에서 정지(원거리 몬스터 등 수동 지정)")]
+        public float stopDistance = 0f;
+
+        [Tooltip("자동 접근 시 플레이어와 겹치는 정도(월드 단위). 클수록 더 바짝 붙음")]
+        public float approachOverlap = 0.4f;
+
         [Header("충돌 데미지 설정")]
         [Tooltip("접촉 데미지 판정 간격 (초)")]
         private const float CONTACT_DAMAGE_INTERVAL = 0.5f;
@@ -45,6 +56,7 @@ namespace BagSurvivor.Monster
         private Rigidbody2D rb;
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
+        private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
 
         // 넉백 관련
         private float kbCooldownTimer = 0f;
@@ -57,12 +69,26 @@ namespace BagSurvivor.Monster
         // 사망 처리 중 플래그
         private bool isDying = false;
 
+        // 콜라이더 크기 기반 자동 정지 거리(중심간). InitializeMonster에서 계산.
+        private float autoStopDistance = 0.3f;
+
         // HP바 (오브젝트 풀링 대응: 인스턴스 1개를 생성 후 재사용)
         private GameObject hpBarInstance;
         private BagSurvivor.UI.MonsterHpBar hpBar;
 
         // 특수 기믹에서 이동을 제어하기 위한 플래그
         private bool isMovementPaused = false;
+
+        // 사망 통지 콜백 (스폰 주체가 주입: 방 클리어 통지·풀 반환 위임). null이면 자체 비활성화.
+        private System.Action<MonsterController> deathCallback;
+
+        // 난이도(층/시간) 스탯 배율. 스폰 시 주입되며, 베이스 스탯에 곱해 런타임 스탯을 산출.
+        private float hpMultiplier = 1f;
+        private float attackMultiplier = 1f;
+
+        // 배율이 적용된 런타임 스탯 (SO 원본은 수정하지 않음)
+        private int runtimeMaxHP;
+        private int runtimeAttack;
 
         // ==========================================
         // 프로퍼티 (외부 접근용)
@@ -72,6 +98,16 @@ namespace BagSurvivor.Monster
         /// 현재 HP (읽기 전용)
         /// </summary>
         public int CurrentHP => currentHP;
+
+        /// <summary>
+        /// 배율이 적용된 최대 HP (HP바·비율 계산용)
+        /// </summary>
+        public int MaxHP => runtimeMaxHP;
+
+        /// <summary>
+        /// 배율이 적용된 공격력 (접촉/투사체 데미지용)
+        /// </summary>
+        public int Attack => runtimeAttack;
 
         /// <summary>
         /// 현재 FSM 상태 (읽기 전용)
@@ -96,6 +132,10 @@ namespace BagSurvivor.Monster
             rb = GetComponent<Rigidbody2D>();
             col = GetComponent<Collider2D>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null) baseColor = spriteRenderer.color;
+
+            // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
+            if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
 
         private void OnEnable()
@@ -114,6 +154,9 @@ namespace BagSurvivor.Monster
             isPlayerInContact = false;
             isDying = false;
             isMovementPaused = false;
+            deathCallback = null;
+            hpMultiplier = 1f;
+            attackMultiplier = 1f;
             HideHpBar();
         }
 
@@ -150,6 +193,40 @@ namespace BagSurvivor.Monster
         }
 
         /// <summary>
+        /// 스폰 주체가 사망 처리 콜백을 주입합니다(방 클리어 통지·풀 반환 위임).
+        /// 스폰할 때마다 새로 설정하며, 풀 반환(OnDisable) 시 자동 해제됩니다.
+        /// </summary>
+        public void SetDeathCallback(System.Action<MonsterController> callback)
+        {
+            deathCallback = callback;
+        }
+
+        /// <summary>
+        /// 난이도(층·경과시간) 스탯 배율을 주입합니다.
+        /// 반드시 활성화(SetActive(true)) 전에 호출해야 OnEnable의 초기화에 반영됩니다.
+        /// </summary>
+        public void SetStatMultiplier(float hpMul, float attackMul)
+        {
+            hpMultiplier = hpMul <= 0f ? 1f : hpMul;
+            attackMultiplier = attackMul <= 0f ? 1f : attackMul;
+        }
+
+        /// <summary>체력을 회복합니다(최대 체력 한도). </summary>
+        public void Heal(int amount)
+        {
+            if (isDying || amount <= 0) return;
+            currentHP = Mathf.Min(runtimeMaxHP, currentHP + amount);
+        }
+
+        /// <summary>최대 체력을 늘립니다(현재 체력도 같이 증가). 보스가 시간에 따라 강해지는 용도.</summary>
+        public void IncreaseMaxHP(int amount)
+        {
+            if (isDying || amount == 0) return;
+            runtimeMaxHP = Mathf.Max(1, runtimeMaxHP + amount);
+            currentHP = Mathf.Clamp(currentHP + amount, 0, runtimeMaxHP);
+        }
+
+        /// <summary>
         /// 몬스터 초기 상태로 리셋합니다.
         /// 오브젝트 풀에서 꺼낼 때 자동 호출됩니다.
         /// </summary>
@@ -157,7 +234,11 @@ namespace BagSurvivor.Monster
         {
             if (monsterData == null) return;
 
-            currentHP = monsterData.maxHP;
+            // 배율 적용 런타임 스탯 산출 (SO 원본 불변)
+            runtimeMaxHP = Mathf.Max(1, Mathf.RoundToInt(monsterData.maxHP * hpMultiplier));
+            runtimeAttack = Mathf.Max(0, Mathf.RoundToInt(monsterData.attack * attackMultiplier));
+
+            currentHP = runtimeMaxHP;
             currentState = MonsterState.Tracking;
             kbCooldownTimer = 0f;
             isDying = false;
@@ -166,9 +247,42 @@ namespace BagSurvivor.Monster
             // 콜라이더 활성화
             if (col != null) col.enabled = true;
 
+            // 타일맵 위에 보이도록 정렬 순서 적용 + 색 복구(풀 재사용 시 사망 페이드/피격 잔색 제거)
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sortingOrder = sortingOrder;
+                spriteRenderer.color = baseColor;
+            }
+
             // 플레이어 찾기 (태그 기반)
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null) playerTransform = player.transform;
+
+            ComputeAutoStopDistance();
+        }
+
+        /// <summary>몬스터·플레이어 콜라이더 크기에서 자동 정지 거리를 계산합니다(겹침만큼 더 가까이).</summary>
+        private void ComputeAutoStopDistance()
+        {
+            float monsterR = 0.25f;
+            if (col != null)
+            {
+                Vector3 e = col.bounds.extents;
+                monsterR = (e.x + e.y) * 0.5f;
+            }
+
+            float playerR = 0.25f;
+            if (playerTransform != null)
+            {
+                Collider2D pc = playerTransform.GetComponent<Collider2D>();
+                if (pc != null)
+                {
+                    Vector3 e = pc.bounds.extents;
+                    playerR = (e.x + e.y) * 0.5f;
+                }
+            }
+
+            autoStopDistance = Mathf.Max(0.05f, monsterR + playerR - approachOverlap);
         }
 
         // ==========================================
@@ -230,14 +344,26 @@ namespace BagSurvivor.Monster
         {
             if (playerTransform == null) return;
 
-            Vector2 direction = ((Vector2)playerTransform.position - (Vector2)transform.position).normalized;
-            rb.linearVelocity = direction * monsterData.moveSpeed;
+            Vector2 toPlayer = (Vector2)playerTransform.position - (Vector2)transform.position;
+            float dist = toPlayer.magnitude;
 
-            // 이동 방향에 따른 스프라이트 좌우 반전
-            if (spriteRenderer != null && direction.x != 0)
+            // 바라보는 방향에 따른 좌우 반전 (멈춰 있어도 방향 유지)
+            if (spriteRenderer != null && toPlayer.x != 0f)
             {
-                spriteRenderer.flipX = direction.x < 0;
+                spriteRenderer.flipX = toPlayer.x < 0f;
             }
+
+            // 정지 거리 안이면 더 파고들지 않고 정지.
+            // stopDistance>0이면 수동 지정값, 아니면 콜라이더 기반 자동값(approachOverlap만큼 겹쳐 접근).
+            // 플레이어 중심까지 추적하며 방향이 매 프레임 뒤집혀 떨리는 현상을 방지한다.
+            float stop = stopDistance > 0f ? stopDistance : autoStopDistance;
+            if (dist <= Mathf.Max(stop, 0.0001f))
+            {
+                rb.linearVelocity = Vector2.zero;
+                return;
+            }
+
+            rb.linearVelocity = (toPlayer / dist) * monsterData.moveSpeed;
         }
 
         // ==========================================
@@ -378,9 +504,13 @@ namespace BagSurvivor.Monster
             // 3. 드롭 아이템 스폰
             SpawnDropItem();
 
-            // 4. 오브젝트 풀 반환 (현재는 비활성화로 대체)
-            // TODO: ObjectPool.Return(gameObject) 로 교체
-            gameObject.SetActive(false);
+            // 4. 사망 통지 / 오브젝트 풀 반환
+            //    스폰 주체(RoomMonsterSpawner)가 콜백을 주입한 경우: 방 클리어 통지 + 풀 반환을 위임.
+            //    콜백이 없으면 기존 동작(비활성화)으로 폴백.
+            if (deathCallback != null)
+                deathCallback.Invoke(this);
+            else
+                gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -388,12 +518,11 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void SpawnDropItem()
         {
-            if (monsterData == null) return;
-            if (string.IsNullOrEmpty(monsterData.dropItemID) || monsterData.dropItemValue <= 0) return;
+            if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
-            // TODO: 드롭 아이템 시스템과 연동
-            // 예시: DropManager.Instance.SpawnDrop(monsterData.dropItemID, monsterData.dropItemValue, transform.position);
-            Debug.Log($"[Monster] {monsterData.monsterName} 사망 - 드롭: {monsterData.dropItemID} x{monsterData.dropItemValue}");
+            // 드롭 수치(Drop_Item_Value)만큼 골드를 떨어뜨림
+            if (BagSurvivor.Items.GoldDropManager.Instance != null)
+                BagSurvivor.Items.GoldDropManager.Instance.Drop(transform.position, monsterData.dropItemValue);
         }
 
         // ==========================================
@@ -428,11 +557,13 @@ namespace BagSurvivor.Monster
         /// </summary>
         private IEnumerator ContactDamageCoroutine(Collider2D playerCollider)
         {
+            PlayerHealth playerHealth = playerCollider != null ? playerCollider.GetComponentInParent<PlayerHealth>() : null;
+
             while (isPlayerInContact && !isDying)
             {
-                // TODO: 플레이어 데미지 시스템과 연동
-                // 예시: playerCollider.GetComponent<PlayerHealth>()?.TakeDamage(monsterData.attack);
-                Debug.Log($"[Monster] {monsterData.monsterName}이(가) 플레이어에게 {monsterData.attack} 데미지!");
+                // 시간 배율이 적용된 공격력으로 플레이어에게 접촉 데미지
+                if (playerHealth != null && !playerHealth.IsDead)
+                    playerHealth.TakeDamage(runtimeAttack);
 
                 yield return new WaitForSeconds(CONTACT_DAMAGE_INTERVAL);
             }

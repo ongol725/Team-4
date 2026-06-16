@@ -34,7 +34,6 @@ Transform:
   - {fileID: 8400219790311706783}
   - {fileID: 4694135623857607240}
   - {fileID: 6316687266543530615}
-  - {fileID: 7149465607746760720}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2029471399400040739
@@ -345,85 +344,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1 &5660897090480104591
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7149465607746760720}
-  - component: {fileID: 719489938204169829}
-  - component: {fileID: 5310608791046694169}
-  m_Layer: 0
-  m_Name: EventSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7149465607746760720
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5660897090480104591}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7759191961305611622}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &719489938204169829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5660897090480104591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
---- !u!114 &5310608791046694169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5660897090480104591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.UI.InputSystemUIInputModule
-  m_SendPointerHoverToParent: 1
-  m_MoveRepeatDelay: 0.5
-  m_MoveRepeatRate: 0.1
-  m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: 0}
-  m_PointAction: {fileID: 0}
-  m_MoveAction: {fileID: 0}
-  m_SubmitAction: {fileID: 0}
-  m_CancelAction: {fileID: 0}
-  m_LeftClickAction: {fileID: 0}
-  m_MiddleClickAction: {fileID: 0}
-  m_RightClickAction: {fileID: 0}
-  m_ScrollWheelAction: {fileID: 0}
-  m_TrackedDevicePositionAction: {fileID: 0}
-  m_TrackedDeviceOrientationAction: {fileID: 0}
-  m_DeselectOnBackgroundClick: 1
-  m_PointerBehavior: 0
-  m_CursorLockBehavior: 0
-  m_ScrollDeltaPerTick: 6
 --- !u!1 &8178631734718919111
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,6 +666,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: ResultPopup
       objectReference: {fileID: 0}
+    - target: {fileID: 2211111376988220748, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 2964976291014632506, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 3501347730358971280, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 3706708553307382429, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 5838376078650956269, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 5910252601743650402, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     - target: {fileID: 6955188916607318111, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -826,6 +770,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7648814256013628030, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 7899122432935594118, guid: c6f22c341a9683a45b896007870ccc14, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -844,6 +796,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8400219790311706783}
     m_Modifications:
+    - target: {fileID: 4338747618056762296, guid: baaa71814975e9341aba4273bff73dc1, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     - target: {fileID: 5822006117968143917, guid: baaa71814975e9341aba4273bff73dc1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -924,6 +880,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6078528892076454091, guid: baaa71814975e9341aba4273bff73dc1, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 7832586043335547195, guid: baaa71814975e9341aba4273bff73dc1, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     - target: {fileID: 7983032177952384648, guid: baaa71814975e9341aba4273bff73dc1, type: 3}
       propertyPath: m_Name
       value: Synergy_Tooltip
@@ -1064,6 +1028,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2893967303094336981}
     m_Modifications:
+    - target: {fileID: 94891405520464340, guid: be64078c83e835948af9e21e1e207a02, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     - target: {fileID: 694578868095590070, guid: be64078c83e835948af9e21e1e207a02, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1144,6 +1112,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 922674733586913330, guid: be64078c83e835948af9e21e1e207a02, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     - target: {fileID: 6078305549498929742, guid: be64078c83e835948af9e21e1e207a02, type: 3}
       propertyPath: m_Name
       value: Boss_HpBar
@@ -1166,6 +1138,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1901468848743109936}
     m_Modifications:
+    - target: {fileID: 795559816562706800, guid: 634335ba41ecd5342ae7811c8812edde, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     - target: {fileID: 1043371024520187767, guid: 634335ba41ecd5342ae7811c8812edde, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1250,6 +1226,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_State
       objectReference: {fileID: 0}
+    - target: {fileID: 6987781645998401187, guid: 634335ba41ecd5342ae7811c8812edde, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 7946854725936331647, guid: 634335ba41ecd5342ae7811c8812edde, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1276,6 +1260,22 @@ PrefabInstance:
       propertyPath: settingPopup
       value: 
       objectReference: {fileID: 1075914859087286143}
+    - target: {fileID: 3202630916390918313, guid: 218db2022d75e6a438e493ad45f8c094, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 3563142636358235888, guid: 218db2022d75e6a438e493ad45f8c094, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 4932907331386143794, guid: 218db2022d75e6a438e493ad45f8c094, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
+    - target: {fileID: 5377533136425137320, guid: 218db2022d75e6a438e493ad45f8c094, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
     - target: {fileID: 7533292862545483932, guid: 218db2022d75e6a438e493ad45f8c094, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

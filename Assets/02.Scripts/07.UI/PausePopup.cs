@@ -8,6 +8,7 @@
 // ============================================================
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -28,6 +29,13 @@ namespace BagSurvivor.UI
         [Header("설정 팝업 (선택)")]
         public GameObject settingPopup;
 
+        [Header("로비 이동 확인 모달")]
+        public GameObject lobbyConfirmPanel;       // 확인 모달 패널(딤+박스)
+        public Button lobbyConfirmYesButton;       // 나가기(확인)
+        public Button lobbyConfirmNoButton;        // 취소
+        [Tooltip("로비(메인) 씬 이름 — Build Settings에 등록돼 있어야 함")]
+        public string lobbySceneName = "01.Lobby";
+
         [Header("연출")]
         public float punchTime = 0.18f;
 
@@ -44,9 +52,12 @@ namespace BagSurvivor.UI
             if (continueButton != null) continueButton.onClick.AddListener(Close);
             if (settingButton != null) settingButton.onClick.AddListener(OpenSetting);
             if (lobbyButton != null) lobbyButton.onClick.AddListener(OnLobby);
+            if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnLobbyConfirm);
+            if (lobbyConfirmNoButton != null) lobbyConfirmNoButton.onClick.AddListener(OnLobbyCancel);
 
             if (pausePanel != null) pausePanel.SetActive(false);
             if (settingPopup != null) settingPopup.SetActive(false);
+            if (lobbyConfirmPanel != null) lobbyConfirmPanel.SetActive(false);
         }
 
         private void SetLabel(Button b, int code)
@@ -80,6 +91,7 @@ namespace BagSurvivor.UI
         {
             isPaused = false;
             if (settingPopup != null) settingPopup.SetActive(false);
+            if (lobbyConfirmPanel != null) lobbyConfirmPanel.SetActive(false);
             if (pausePanel != null) pausePanel.SetActive(false);
             Time.timeScale = 1f; // 재개
         }
@@ -91,9 +103,21 @@ namespace BagSurvivor.UI
 
         private void OnLobby()
         {
-            // TODO: 탈주/포기 방지 2차 확인 모달 -> 로비(메인) 씬 로드
-            Time.timeScale = 1f;
-            Debug.Log("[PausePopup] 로비 이동 요청 (2차 확인 모달/씬 로드 미구현)");
+            // 2차 확인 모달 표시 (게임은 계속 일시정지 유지)
+            if (lobbyConfirmPanel != null) lobbyConfirmPanel.SetActive(true);
+            else OnLobbyConfirm(); // 모달이 없으면 바로 이동
+        }
+
+        private void OnLobbyCancel()
+        {
+            // 모달만 닫고 일시정지 화면으로 복귀 (게임 재개 안 함)
+            if (lobbyConfirmPanel != null) lobbyConfirmPanel.SetActive(false);
+        }
+
+        private void OnLobbyConfirm()
+        {
+            Time.timeScale = 1f; // 다음 씬이 멈춘 채 시작하지 않도록 복구
+            SceneManager.LoadScene(lobbySceneName);
         }
 
         // timeScale=0 상태이므로 unscaled 시간 사용
