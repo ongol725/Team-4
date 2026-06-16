@@ -10,6 +10,7 @@
 // 이 드라이버가 자동으로 수집해 굴린다.
 // ============================================================
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -37,11 +38,20 @@ namespace BagSurvivor.Monster
         [Tooltip("패턴을 못 고른 동안(추적 중) 재시도 간격")]
         public float decisionInterval = 0.2f;
 
+        [Header("디버그(검증용)")]
+        [Tooltip("켜면 자동 패턴 선택을 멈추고, 숫자키(1~N)로 패턴을 직접 발동. 쿨다운·확률·사거리 무시.")]
+        public bool debugManualMode = false;
+
+        [Tooltip("디버그 키 매핑 범례를 화면 좌상단에 표시")]
+        public bool debugShowLegend = true;
+
         private MonsterController controller;
         private readonly List<BossPatternBase> basics = new List<BossPatternBase>();
         private readonly List<BossPatternBase> specials = new List<BossPatternBase>();
+        private readonly List<BossPatternBase> all = new List<BossPatternBase>(); // 디버그 키 인덱싱용(부착 순서)
         private Coroutine loop;
-        private bool aggroed; // 한 번 인식범위에 진입하면 유지(보스룸 입장 후 퇴장 불가)
+        private bool aggroed;   // 한 번 인식범위에 진입하면 유지(보스룸 입장 후 퇴장 불가)
+        private bool executing; // 패턴 실행 중(수동/자동 공용 가드)
 
         private void Awake()
         {
@@ -54,9 +64,11 @@ namespace BagSurvivor.Monster
         {
             basics.Clear();
             specials.Clear();
+            all.Clear();
             var patterns = GetComponents<BossPatternBase>();
             foreach (var p in patterns)
             {
+                all.Add(p);
                 if (p.IsSpecial) specials.Add(p);
                 else basics.Add(p);
             }
@@ -81,6 +93,13 @@ namespace BagSurvivor.Monster
             while (true)
             {
                 if (controller == null || controller.IsDead)
+                {
+                    yield return waitDecision;
+                    continue;
+                }
+
+                // 디버그 수동 모드: 자동 선택 중지(추적만 유지). 발동은 Update의 숫자키가 담당.
+                if (debugManualMode)
                 {
                     yield return waitDecision;
                     continue;
@@ -117,14 +136,80 @@ namespace BagSurvivor.Monster
                 }
 
                 // 패턴 실행: 추적 정지 → 실행 → 추적 재개 → 그룹 간격 대기
+                executing = true;
                 controller.PauseMovement();
                 yield return chosen.Execute();
+                executing = false;
 
                 if (controller == null || controller.IsDead) yield break;
                 controller.ResumeMovement();
 
                 yield return new WaitForSeconds(chosen.IsSpecial ? specialGap : basicGap);
             }
+        }
+
+        // ==========================================
+        // 디버그: 숫자키로 패턴 강제 발동
+        // ==========================================
+        private void Update()
+        {
+            if (!debugManualMode || executing) return;
+            var kb = Keyboard.current;
+            if (kb == null) return;
+
+            int n = Mathf.Min(all.Count, 9);
+            for (int i = 0; i < n; i++)
+            {
+                if (DigitPressed(kb, i))
+                {
+                    StartCoroutine(RunForced(all[i]));
+                    break;
+                }
+            }
+        }
+
+        /// <summary>디버그 강제 발동: 쿨다운·확률·사거리 무시하고 즉시 실행.</summary>
+        private IEnumerator RunForced(BossPatternBase p)
+        {
+            if (p == null || controller == null || controller.IsDead) yield break;
+
+            executing = true;
+            controller.PauseMovement();
+            yield return p.Execute();
+            executing = false;
+
+            if (controller != null && !controller.IsDead) controller.ResumeMovement();
+        }
+
+        /// <summary>i번째 숫자키(0→Digit1 … 8→Digit9)가 이번 프레임에 눌렸는지.</summary>
+        private static bool DigitPressed(Keyboard kb, int i)
+        {
+            switch (i)
+            {
+                case 0: return kb.digit1Key.wasPressedThisFrame;
+                case 1: return kb.digit2Key.wasPressedThisFrame;
+                case 2: return kb.digit3Key.wasPressedThisFrame;
+                case 3: return kb.digit4Key.wasPressedThisFrame;
+                case 4: return kb.digit5Key.wasPressedThisFrame;
+                case 5: return kb.digit6Key.wasPressedThisFrame;
+                case 6: return kb.digit7Key.wasPressedThisFrame;
+                case 7: return kb.digit8Key.wasPressedThisFrame;
+                case 8: return kb.digit9Key.wasPressedThisFrame;
+                default: return false;
+            }
+        }
+
+        private void OnGUI()
+        {
+            if (!debugManualMode || !debugShowLegend) return;
+
+            int n = Mathf.Min(all.Count, 9);
+            GUILayout.BeginArea(new Rect(10, 10, 320, 24 + n * 20 + (executing ? 22 : 0)));
+            GUILayout.Label("[디버그] 숫자키로 패턴 발동");
+            for (int i = 0; i < n; i++)
+                GUILayout.Label($"  {i + 1} : {all[i].patternName}{(all[i].IsSpecial ? " (특수)" : "")}");
+            if (executing) GUILayout.Label("  ▶ 실행 중...");
+            GUILayout.EndArea();
         }
 
         /// <summary>그룹에서 실행 가능한 패턴을 확률 가중치로 하나 뽑습니다. 없으면 null.</summary>
