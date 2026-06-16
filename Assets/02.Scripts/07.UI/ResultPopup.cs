@@ -7,6 +7,7 @@
 // ============================================================
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace BagSurvivor.UI
 {
@@ -37,6 +38,12 @@ namespace BagSurvivor.UI
         [Header("클리어/실패 색")]
         public Color clearColor = new Color(0.16f, 0.38f, 0.62f, 0.98f);
         public Color failColor = new Color(0.45f, 0.14f, 0.14f, 0.98f);
+
+        [Header("씬 이름 (Build Settings 등록 필요)")]
+        [Tooltip("다시하기 시 로드할 인게임 시작 씬 (층마다 다른 씬이라 항상 첫 인게임 씬으로 재시작)")]
+        public string ingameSceneName = "02.Ingame";
+        [Tooltip("로비 이동 시 로드할 씬")]
+        public string lobbySceneName = "01.Lobby";
 
         private void Awake()
         {
@@ -79,16 +86,25 @@ namespace BagSurvivor.UI
 
         private void OnLobby()
         {
-            // TODO: 로딩 후 메인(로비) 씬 로드
             Time.timeScale = 1f;
-            Debug.Log("[ResultPopup] 로비 이동 (씬 로드 미구현)");
+            SceneManager.LoadScene(lobbySceneName);
         }
 
         private void OnRetry()
         {
-            // TODO: 현재 스테이지 재시작
+            // 층마다 씬이 다르므로, 다시하기는 항상 첫 인게임 씬(02.Ingame)부터 = 1층 새 런으로 재시작
             Time.timeScale = 1f;
-            Debug.Log("[ResultPopup] 다시하기 (재시작 미구현)");
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.currentFloor = 1;
+                GameManager.Instance.ResetGold(); // 새 런이므로 골드 초기화
+            }
+
+            // 시간 비례 난이도 타이머 초기화 (DontDestroyOnLoad로 유지되므로 명시적 리셋)
+            if (BagSurvivor.Monster.DifficultyScaler.Instance != null)
+                BagSurvivor.Monster.DifficultyScaler.Instance.ResetTimer();
+
+            SceneManager.LoadScene(ingameSceneName);
         }
     }
 }
