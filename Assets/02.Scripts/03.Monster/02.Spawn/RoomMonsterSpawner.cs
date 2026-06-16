@@ -87,6 +87,10 @@ namespace BagSurvivor.Monster
         [Tooltip("바닥 타일을 찾기 위한 위치 재시도 횟수")]
         public int maxPositionAttempts = 25;
 
+        [Header("풀 예열 (Prewarm)")]
+        [Tooltip("현재 층 등장 몬스터를 종류별로 미리 생성해 풀에 적재(첫 스폰 끊김 방지). 0이면 끄기")]
+        public int prewarmPerType = 8;
+
         [Header("타일맵 직접 지정 (선택: 미지정 시 DungeonGenerator에서 자동 참조)")]
         [Tooltip("바닥 타일맵 직접 지정 (테스트/특수 상황용)")]
         public Tilemap floorTilemapOverride;
@@ -104,7 +108,7 @@ namespace BagSurvivor.Monster
         // 현재 스폰되어 활성 상태인 몬스터들 (복도 진입 시 일괄 디스폰용)
         private readonly List<MonsterController> activeMonsters = new List<MonsterController>();
         private Transform playerTf;
-        private bool wasInRoom = true;
+        private RoomController currentNormalRoom; // 플레이어가 현재 들어가 있는 일반방
 
         private IEnumerator Start()
         {
@@ -125,6 +129,7 @@ namespace BagSurvivor.Monster
             if (floorTilemap == null) CacheTilemaps();
 
             RescanRooms();
+            PrewarmPool();
             lastRoomsContainer = GameObject.Find("RoomControllers");
         }
 
@@ -132,10 +137,10 @@ namespace BagSurvivor.Monster
         // 이를 감지해 타일맵을 재캐시하고 새 방들을 다시 구독한다. (1초 주기로만 검사 — 부하 최소화)
         private void Update()
         {
-            // 매 프레임: 방 밖(복도)으로 나가면 활성 몬스터 전부 디스폰
-            CheckCorridorDespawn();
+            // 매 프레임: 일반방 진입/이탈 추적 → 진입 시 (재)스폰, 이탈(복도 등) 시 디스폰
+            CheckRoomPresence();
 
-            // 1초 주기: 던전 재생성(층 이동) 감지 → 재구독
+            // 1초 주기: 던전 재생성(층 이동) 감지 → 정리 후 재구독·재예열
             rescanTimer += Time.unscaledDeltaTime;
             if (rescanTimer < 1f) return;
             rescanTimer = 0f;
@@ -146,38 +151,69 @@ namespace BagSurvivor.Monster
                 lastRoomsContainer = container;
                 floorTilemap = null;
                 wallTilemap = null;
+                DespawnAllMonsters();       // 이전 층 몬스터 정리
+                currentNormalRoom = null;
+                subscribed.Clear();         // 파괴된 이전 방 구독 정리
                 CacheTilemaps();
                 RescanRooms();
+                PrewarmPool();
             }
         }
 
-        // 플레이어가 방 안에 있다가 어떤 방에도 속하지 않게 되면(=복도 진입) 활성 몬스터 일괄 디스폰.
-        private void CheckCorridorDespawn()
+        // 일반방 진입/이탈 추적: 일반방을 떠나면 디스폰, (다시) 들어오면 재스폰.
+        // → 복도로 나갔다 돌아오면 몬스터가 다시 나옴. (특수방은 OnPlayerEnterRoom 1회 스폰 유지)
+        private void CheckRoomPresence()
         {
-            bool inRoom = IsPlayerInAnyRoom();
-            if (wasInRoom && !inRoom && activeMonsters.Count > 0)
-                DespawnAllMonsters();
-            wasInRoom = inRoom;
+            RoomController room = GetPlayerNormalRoom();
+            if (room == currentNormalRoom) return;
+
+            if (currentNormalRoom != null) DespawnAllMonsters(); // 일반방 이탈 → 디스폰
+            if (room != null) SpawnForRoom(room);                // 일반방 진입 → (재)스폰
+            currentNormalRoom = room;
         }
 
-        /// <summary>플레이어가 구독된 방 콜라이더 중 하나라도 안에 있는지.</summary>
-        private bool IsPlayerInAnyRoom()
+        /// <summary>플레이어가 들어가 있는 '일반방'을 반환(없으면 null).</summary>
+        private RoomController GetPlayerNormalRoom()
         {
             if (playerTf == null)
             {
                 GameObject p = GameObject.FindGameObjectWithTag("Player");
                 if (p != null) playerTf = p.transform;
-                else return wasInRoom; // 플레이어 못 찾으면 직전 상태 유지
+                else return currentNormalRoom;
             }
 
             Vector2 pos = playerTf.position;
             foreach (RoomController rc in subscribed)
             {
-                if (rc == null) continue;
+                if (rc == null || rc.roomType != RoomType.Normal) continue;
                 Collider2D col = rc.GetComponent<Collider2D>();
-                if (col != null && col.OverlapPoint(pos)) return true;
+                if (col != null && col.OverlapPoint(pos)) return rc;
             }
-            return false;
+            return null;
+        }
+
+        /// <summary>현재 층 등장 몬스터(+특수방)를 종류별로 미리 생성해 풀에 적재(첫 스폰 끊김 방지).</summary>
+        private void PrewarmPool()
+        {
+            if (pool == null || prewarmPerType <= 0) return;
+            int floor = dungeonGenerator != null ? dungeonGenerator.currentFloor : 1;
+
+            FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
+            if (cfg != null && normalMonsters != null && normalMonsters.Length > 0)
+            {
+                int lo = Mathf.Clamp(cfg.minTier - 1, 0, normalMonsters.Length - 1);
+                int hi = Mathf.Clamp(cfg.maxTier - 1, 0, normalMonsters.Length - 1);
+                if (hi < lo) { int t = lo; lo = hi; hi = t; }
+                for (int i = lo; i <= hi; i++)
+                    if (normalMonsters[i] != null) pool.Prewarm(normalMonsters[i], prewarmPerType);
+            }
+
+            foreach (SpecialRoomRule r in specialRules)
+            {
+                if (r == null || r.monsterPrefabs == null) continue;
+                foreach (GameObject p in r.monsterPrefabs)
+                    if (p != null) pool.Prewarm(p, Mathf.Max(1, r.maxCount));
+            }
         }
 
         /// <summary>현재 활성 몬스터를 모두 풀로 반환합니다. (사망이 아닌 디스폰이라 방 클리어는 통지하지 않음)</summary>
@@ -243,15 +279,17 @@ namespace BagSurvivor.Monster
             {
                 if (rc == null || subscribed.Contains(rc)) continue;
 
-                RoomController room = rc; // 클로저 캡처용 지역 복사
+                subscribed.Add(rc);
 
-                // 런타임에 AddComponent로 생성된 방은 UnityEvent가 null이므로 생성해 할당.
-                // RoomController는 OnPlayerEnterRoom?.Invoke()로 null-safe 호출하므로 같은 인스턴스가 연결됨.
-                if (room.OnPlayerEnterRoom == null)
-                    room.OnPlayerEnterRoom = new UnityEngine.Events.UnityEvent();
-
-                room.OnPlayerEnterRoom.AddListener(() => SpawnForRoom(room));
-                subscribed.Add(room);
+                // 일반방: 진입/이탈을 직접 추적(재진입 시 재스폰)하므로 이벤트 구독 안 함.
+                // 특수방(Elite/MiniBoss/Boss): 문 잠금 타이밍과 동기화되도록 1회 진입 이벤트로 스폰.
+                if (rc.roomType != RoomType.Normal)
+                {
+                    RoomController room = rc; // 클로저 캡처용 지역 복사
+                    if (room.OnPlayerEnterRoom == null)
+                        room.OnPlayerEnterRoom = new UnityEngine.Events.UnityEvent();
+                    room.OnPlayerEnterRoom.AddListener(() => SpawnForRoom(room));
+                }
             }
         }
 

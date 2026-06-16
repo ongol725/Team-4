@@ -19,6 +19,10 @@ namespace BagSurvivor.Items
         [Header("풀 부모 (미지정 시 자동 생성)")]
         public Transform poolRoot;
 
+        [Header("풀 예열")]
+        [Tooltip("시작 시 미리 만들어 둘 골드 픽업 수 (0이면 끄기)")]
+        public int prewarmCount = 12;
+
         private readonly Stack<GoldPickup> pool = new Stack<GoldPickup>();
 
         private void Awake()
@@ -36,6 +40,20 @@ namespace BagSurvivor.Items
         private void OnDestroy()
         {
             if (Instance == this) Instance = null;
+        }
+
+        private void Start()
+        {
+            // 첫 드롭 끊김 방지를 위해 미리 생성해 풀에 적재
+            if (goldPrefab == null || prewarmCount <= 0) return;
+            for (int i = 0; i < prewarmCount; i++)
+            {
+                GameObject inst = Instantiate(goldPrefab, poolRoot);
+                inst.SetActive(false);
+                GoldPickup g = inst.GetComponent<GoldPickup>();
+                if (g != null) pool.Push(g);
+                else Destroy(inst);
+            }
         }
 
         /// <summary>지정 위치에 골드 픽업을 드롭합니다.</summary>
