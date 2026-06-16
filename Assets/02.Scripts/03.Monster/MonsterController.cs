@@ -497,12 +497,11 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void SpawnDropItem()
         {
-            if (monsterData == null) return;
-            if (string.IsNullOrEmpty(monsterData.dropItemID) || monsterData.dropItemValue <= 0) return;
+            if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
-            // TODO: 드롭 아이템 시스템과 연동
-            // 예시: DropManager.Instance.SpawnDrop(monsterData.dropItemID, monsterData.dropItemValue, transform.position);
-            Debug.Log($"[Monster] {monsterData.monsterName} 사망 - 드롭: {monsterData.dropItemID} x{monsterData.dropItemValue}");
+            // 드롭 수치(Drop_Item_Value)만큼 골드를 떨어뜨림
+            if (BagSurvivor.Items.GoldDropManager.Instance != null)
+                BagSurvivor.Items.GoldDropManager.Instance.Drop(transform.position, monsterData.dropItemValue);
         }
 
         // ==========================================

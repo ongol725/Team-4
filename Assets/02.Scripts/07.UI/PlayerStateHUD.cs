@@ -33,11 +33,24 @@ namespace BagSurvivor.UI
 
         private void Start()
         {
-            if (useMockData)
+            // 골드: GameManager가 단일 소스 (씬/층을 넘어 유지). 변경 시 자동 갱신.
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.onGoldChanged += SetGold;
+                SetGold(GameManager.Instance.gold);
+            }
+            else if (useMockData)
             {
                 SetGold(mockGold);
-                SetHealth(mockCurrentHP, mockMaxHP);
             }
+
+            // 체력 초기값(곧 PlayerHealth가 실제 값으로 덮어씀)
+            if (useMockData) SetHealth(mockCurrentHP, mockMaxHP);
+        }
+
+        private void OnDestroy()
+        {
+            if (GameManager.Instance != null) GameManager.Instance.onGoldChanged -= SetGold;
         }
 
         public void SetGold(int value)

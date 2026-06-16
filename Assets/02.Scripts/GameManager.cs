@@ -20,6 +20,25 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public int currentFloor = 1;
 
+    // 골드 (씬/층을 넘어 유지). 변경 시 onGoldChanged로 HUD 등에 통지.
+    [HideInInspector] public int gold = 0;
+    public event System.Action<int> onGoldChanged;
+
+    /// <summary>골드를 추가합니다.</summary>
+    public void AddGold(int amount)
+    {
+        if (amount <= 0) return;
+        gold += amount;
+        if (onGoldChanged != null) onGoldChanged(gold);
+    }
+
+    /// <summary>골드를 0으로 초기화합니다. (새 런 시작 시)</summary>
+    public void ResetGold()
+    {
+        gold = 0;
+        if (onGoldChanged != null) onGoldChanged(gold);
+    }
+
     [Header("층 전환 방식")]
     [Tooltip("false = 같은 씬에서 맵 재생성 (프로토타입)\ntrue  = 층별 씬 전환 (정식 버전)")]
     public bool useSceneTransition = false;

@@ -94,7 +94,11 @@ namespace BagSurvivor.UI
         {
             // 층마다 씬이 다르므로, 다시하기는 항상 첫 인게임 씬(02.Ingame)부터 = 1층 새 런으로 재시작
             Time.timeScale = 1f;
-            if (GameManager.Instance != null) GameManager.Instance.currentFloor = 1;
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.currentFloor = 1;
+                GameManager.Instance.ResetGold(); // 새 런이므로 골드 초기화
+            }
 
             // 시간 비례 난이도 타이머 초기화 (DontDestroyOnLoad로 유지되므로 명시적 리셋)
             if (BagSurvivor.Monster.DifficultyScaler.Instance != null)
