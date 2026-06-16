@@ -120,31 +120,57 @@ public class ShopUI : MonoBehaviour
     {
         var gradeRt = _gradeText.GetComponent<RectTransform>();
 
-        // 배경 박스
+        // 배경 박스 (드래그 이벤트를 받으려면 Image raycastTarget=true 필요)
         var boxGo = new GameObject("ShopStatsPanel", typeof(RectTransform), typeof(Image));
         boxGo.transform.SetParent(_gradeText.transform.parent, false);
 
         var boxRt = boxGo.GetComponent<RectTransform>();
         boxRt.anchorMin        = gradeRt.anchorMin;
         boxRt.anchorMax        = gradeRt.anchorMax;
-        boxRt.pivot            = new Vector2(0f, 1f);
+        boxRt.pivot            = new Vector2(1f, 1f);
         boxRt.anchoredPosition = new Vector2(
-            gradeRt.anchoredPosition.x + gradeRt.sizeDelta.x * 0.5f + 8f,
+            gradeRt.anchoredPosition.x - gradeRt.sizeDelta.x * 0.5f - 8f,
             gradeRt.anchoredPosition.y);
-        boxRt.sizeDelta = new Vector2(230f, 52f);
+        boxRt.sizeDelta = new Vector2(230f, 64f);  // 핸들 영역 포함해 높이 늘림
 
         var bg = boxGo.GetComponent<Image>();
-        bg.color = new Color(0.08f, 0.08f, 0.12f, 0.92f);
+        bg.color         = new Color(0.08f, 0.08f, 0.12f, 0.92f);
+        bg.raycastTarget = true;  // 드래그 이벤트 수신
 
-        // 텍스트
+        // 드래그 컴포넌트
+        boxGo.AddComponent<DraggableUI>();
+
+        // ── 핸들 텍스트 (박스 상단) ──────────────────────────────────
+        var handleGo = new GameObject("DragHandle", typeof(RectTransform), typeof(Text));
+        handleGo.transform.SetParent(boxGo.transform, false);
+
+        var handleRt = handleGo.GetComponent<RectTransform>();
+        handleRt.anchorMin        = new Vector2(0f, 1f);
+        handleRt.anchorMax        = new Vector2(1f, 1f);
+        handleRt.pivot            = new Vector2(0.5f, 1f);
+        handleRt.anchoredPosition = Vector2.zero;
+        handleRt.sizeDelta        = new Vector2(0f, 14f);
+
+        var handleTxt = handleGo.GetComponent<Text>();
+        handleTxt.font               = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+                                    ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+        handleTxt.text               = "≡ 상점 확률표";
+        handleTxt.fontSize           = 9;
+        handleTxt.color              = new Color(0.55f, 0.55f, 0.65f);
+        handleTxt.alignment          = TextAnchor.MiddleCenter;
+        handleTxt.horizontalOverflow = HorizontalWrapMode.Overflow;
+        handleTxt.verticalOverflow   = VerticalWrapMode.Overflow;
+        handleTxt.raycastTarget      = false;
+
+        // ── 스탯 텍스트 (핸들 아래) ──────────────────────────────────
         var textGo = new GameObject("StatsText", typeof(RectTransform), typeof(Text));
         textGo.transform.SetParent(boxGo.transform, false);
 
         var textRt = textGo.GetComponent<RectTransform>();
-        textRt.anchorMin = Vector2.zero;
-        textRt.anchorMax = Vector2.one;
+        textRt.anchorMin = new Vector2(0f, 0f);
+        textRt.anchorMax = new Vector2(1f, 1f);
         textRt.offsetMin = new Vector2(6f, 4f);
-        textRt.offsetMax = new Vector2(-6f, -4f);
+        textRt.offsetMax = new Vector2(-6f, -16f);  // 상단 핸들 높이만큼 여백
 
         _statsText = textGo.GetComponent<Text>();
         _statsText.font               = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
