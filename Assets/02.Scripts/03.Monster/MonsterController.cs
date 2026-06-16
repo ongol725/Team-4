@@ -79,6 +79,10 @@ namespace BagSurvivor.Monster
         // 특수 기믹에서 이동을 제어하기 위한 플래그
         private bool isMovementPaused = false;
 
+        // 보스 패턴 등에서 Rigidbody 이동을 직접 제어하기 위해 컨트롤러 기본 이동을 위임받는 플래그.
+        // true인 동안 FixedUpdate의 HandleMovement(추적/정지 처리)를 건너뛴다.
+        private bool externalMovementControl = false;
+
         // 사망 통지 콜백 (스폰 주체가 주입: 방 클리어 통지·풀 반환 위임). null이면 자체 비활성화.
         private System.Action<MonsterController> deathCallback;
 
@@ -154,6 +158,7 @@ namespace BagSurvivor.Monster
             isPlayerInContact = false;
             isDying = false;
             isMovementPaused = false;
+            externalMovementControl = false;
             deathCallback = null;
             hpMultiplier = 1f;
             attackMultiplier = 1f;
@@ -297,6 +302,9 @@ namespace BagSurvivor.Monster
             {
                 kbCooldownTimer -= Time.fixedDeltaTime;
             }
+
+            // 보스 패턴이 이동을 위임받은 동안에는 컨트롤러 기본 이동을 건너뛴다(패턴이 Rigidbody 직접 제어).
+            if (externalMovementControl) return;
 
             // Tracking 상태에서만 이동 처리
             if (currentState == MonsterState.Tracking)
@@ -588,6 +596,24 @@ namespace BagSurvivor.Monster
         public void ResumeMovement()
         {
             isMovementPaused = false;
+        }
+
+        /// <summary>
+        /// 컨트롤러 기본 이동(추적/정지)을 일시 위임받습니다. 보스 패턴이 Rigidbody를 직접 제어할 때 호출.
+        /// 호출 후 SetVelocity로 이동을 제어하고, 끝나면 반드시 EndExternalMovement()로 복귀시킵니다.
+        /// </summary>
+        public void BeginExternalMovement()
+        {
+            externalMovementControl = true;
+        }
+
+        /// <summary>
+        /// 위임받은 이동 제어를 컨트롤러에 되돌립니다(추적 복귀). 속도는 0으로 정리합니다.
+        /// </summary>
+        public void EndExternalMovement()
+        {
+            externalMovementControl = false;
+            if (rb != null) rb.linearVelocity = Vector2.zero;
         }
 
         /// <summary>
