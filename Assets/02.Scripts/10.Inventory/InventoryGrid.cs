@@ -19,12 +19,16 @@ public class InventoryGrid : MonoBehaviour
     private ItemInstance[,]  _itemAt;
     private readonly Dictionary<ItemInstance, Vector2Int> _origins = new();
 
+    // 인벤토리 블록으로 개별 활성화된 추가 셀 (초기 직사각형 외부)
+    private HashSet<Vector2Int> _extraActiveCells;
+
     // ─────────────────────────────────────────────────────────────
 
     private void Awake()
     {
-        _occupied = new bool[Rows, Cols];
-        _itemAt   = new ItemInstance[Rows, Cols];
+        _occupied         = new bool[Rows, Cols];
+        _itemAt           = new ItemInstance[Rows, Cols];
+        _extraActiveCells = new HashSet<Vector2Int>();
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -82,9 +86,44 @@ public class InventoryGrid : MonoBehaviour
     public bool TryGetOrigin(ItemInstance inst, out Vector2Int origin) =>
         _origins.TryGetValue(inst, out origin);
 
-    public bool InActiveArea(Vector2Int cell) =>
-        cell.x >= 0 && cell.y >= 0 &&
-        cell.x < ActiveRows && cell.y < ActiveCols;
+    /// <summary>현재 그리드에 배치된 모든 ItemInstance를 열거한다. (인벤토리 블록은 배치 즉시 소멸하므로 포함되지 않음)</summary>
+    public IEnumerable<ItemInstance> GetAllPlacedInstances() => _origins.Keys;
+
+    /// <summary>
+    /// 초기 직사각형(ActiveRows × ActiveCols) 또는 인벤토리 블록으로 개별 활성화된 셀이면 true.
+    /// 직렬화된 ActiveRows/ActiveCols를 직접 비교하므로 Awake 실행 순서에 무관하게 안전하다.
+    /// </summary>
+    public bool InActiveArea(Vector2Int cell)
+    {
+        if (cell.x >= 0 && cell.y >= 0 && cell.x < ActiveRows && cell.y < ActiveCols)
+            return true;
+        return _extraActiveCells != null && _extraActiveCells.Contains(cell);
+    }
+
+    /// <summary>인벤토리 블록 배치 가능 여부: 모든 셀이 잠긴 영역(비활성 + 미점유)이어야 한다.</summary>
+    public bool IsValidBlockExpansion(ItemInstance inst, Vector2Int origin)
+    {
+        foreach (var local in GetCells(inst.data))
+        {
+            var world = origin + local;
+            if (!InBounds(world))            return false;
+            if (InActiveArea(world))         return false;
+            if (_occupied[world.x, world.y]) return false;
+        }
+        return true;
+    }
+
+    /// <summary>배치된 셀을 추가 활성 집합에 등록한다.</summary>
+    public void ExpandWithBlock(ItemInstance inst, Vector2Int origin)
+    {
+        if (_extraActiveCells == null) _extraActiveCells = new HashSet<Vector2Int>();
+        foreach (var local in GetCells(inst.data))
+        {
+            var world = origin + local;
+            if (InBounds(world))
+                _extraActiveCells.Add(world);
+        }
+    }
 
     // ─────────────────────────────────────────────────────────────
 

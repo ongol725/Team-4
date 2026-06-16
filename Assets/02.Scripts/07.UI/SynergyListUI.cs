@@ -26,6 +26,12 @@ namespace BagSurvivor.UI
 
         private readonly List<SynergyEntry> entries = new List<SynergyEntry>();
 
+        private void Awake()
+        {
+            // content가 Inspector에서 연결되지 않은 경우 자신의 RectTransform 사용
+            if (content == null) content = GetComponent<RectTransform>();
+        }
+
         private void Start()
         {
             if (useMock && synergies.Count == 0) BuildMock();
@@ -48,18 +54,51 @@ namespace BagSurvivor.UI
 
         public void Populate()
         {
-            for (int i = 0; i < entries.Count; i++)
-                if (entries[i] != null) Destroy(entries[i].gameObject);
             entries.Clear();
 
-            if (entryPrefab == null || content == null) return;
+            if (content == null) return;
+
+            // 방식에 상관없이 Content의 모든 자식을 제거 (누적 방지)
+            for (int i = content.childCount - 1; i >= 0; i--)
+                Destroy(content.GetChild(i).gameObject);
 
             foreach (var s in synergies)
             {
-                var go = Instantiate(entryPrefab, content);
-                var entry = go.GetComponent<SynergyEntry>();
-                if (entry != null) { entry.Setup(s, this); entries.Add(entry); }
+                if (entryPrefab != null)
+                {
+                    var go    = Instantiate(entryPrefab, content);
+                    var entry = go.GetComponent<SynergyEntry>();
+                    if (entry != null) { entry.Setup(s, this); entries.Add(entry); }
+                }
+                else
+                {
+                    SpawnFallbackEntry(s);
+                }
             }
+        }
+
+        void SpawnFallbackEntry(SynergyInfo s)
+        {
+            var go = new GameObject("SynergyEntry_Text", typeof(RectTransform));
+            go.transform.SetParent(content, false);
+
+            var le = go.AddComponent<LayoutElement>();
+            le.preferredHeight = 26;
+
+            var txt = go.AddComponent<Text>();
+            txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+                         ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+            txt.fontSize  = 11;
+            txt.alignment = TextAnchor.MiddleLeft;
+
+            string label = s.grade == SynergyGrade.Gold
+                ? $"{s.synergyName}  ★{s.count}"
+                : $"{s.synergyName}  {s.count}/{s.nextThreshold}";
+
+            txt.text  = label;
+            txt.color = s.grade == SynergyGrade.Gold   ? new Color(1f, 0.84f, 0.3f)
+                      : s.grade == SynergyGrade.Silver  ? new Color(0.75f, 0.78f, 0.85f)
+                      : new Color(0.8f, 0.5f, 0.3f);
         }
 
         public void ShowTooltip(SynergyEntry e)

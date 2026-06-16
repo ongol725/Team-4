@@ -11,6 +11,7 @@ public class ShopSlotUI : MonoBehaviour
     [SerializeField] private Text           _nameText;
     [SerializeField] private Text           _costText;
     [SerializeField] private Text           _rarityText;
+    [SerializeField] private Text           _synergiesText;     // 시너지 태그 표시
     [SerializeField] private Button         _buyButton;
     [SerializeField] private Text           _buyButtonText;
     [SerializeField] private RectTransform  _previewContainer;  // 셀 형태 미리보기 부모
@@ -25,6 +26,24 @@ public class ShopSlotUI : MonoBehaviour
     };
 
     private static readonly string[] RarityLabels = { "일반", "희귀", "영웅", "전설" };
+
+    private static readonly System.Collections.Generic.Dictionary<SynergyType, string> SynergyNames =
+        new System.Collections.Generic.Dictionary<SynergyType, string>
+        {
+            { SynergyType.Assassin,       "암살단"     },
+            { SynergyType.SwordMaster,    "소드마스터" },
+            { SynergyType.HolyKnight,     "성기사단"   },
+            { SynergyType.DemonLord,      "마왕"       },
+            { SynergyType.BloodBerserker, "피의광전사" },
+            { SynergyType.Tycoon,         "대부호"     },
+            { SynergyType.Executioner,    "처형자"     },
+            { SynergyType.SpiritMage,     "정령술사"   },
+            { SynergyType.GearShift,      "기어시프트" },
+            { SynergyType.Pinball,        "핀볼"       },
+            { SynergyType.Overload,       "과부화"     },
+            { SynergyType.Electro,        "일렉트로"   },
+            { SynergyType.Impregnable,    "난공불락"   },
+        };
 
     private const float MiniCellSize = 11f;
     private const float MiniCellGap  = 1f;
@@ -50,10 +69,12 @@ public class ShopSlotUI : MonoBehaviour
         var rarityIdx = Mathf.Clamp((int)item.rarity, 0, RarityColors.Length - 1);
         var color     = RarityColors[rarityIdx];
 
-        _nameText.text  = item.itemName;
-        _costText.text  = $"{item.cost} G";
-        _rarityText.text = RarityLabels[rarityIdx];
+        _nameText.text   = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
+        _costText.text   = $"{item.cost} G";
+        _rarityText.text  = RarityLabels[rarityIdx];
         _rarityText.color = color;
+
+        RefreshSynergies(item);
 
         if (_slotBackground != null)
             _slotBackground.color = new Color(color.r * 0.25f, color.g * 0.25f, color.b * 0.25f, 0.85f);
@@ -102,6 +123,26 @@ public class ShopSlotUI : MonoBehaviour
             -cell.x * (MiniCellSize + MiniCellGap));
 
         go.GetComponent<Image>().color = color;
+    }
+
+    private void RefreshSynergies(SO_ItemData item)
+    {
+        if (_synergiesText == null) return;
+
+        if (item.synergies == null || item.synergies.Length == 0)
+        {
+            _synergiesText.text = string.Empty;
+            return;
+        }
+
+        var sb = new System.Text.StringBuilder();
+        foreach (var syn in item.synergies)
+        {
+            if (syn == SynergyType.None) continue;
+            if (sb.Length > 0) sb.Append(" · ");
+            sb.Append(SynergyNames.TryGetValue(syn, out var name) ? name : syn.ToString());
+        }
+        _synergiesText.text = sb.ToString();
     }
 
     private void OnBuyClicked() => _onBuy?.Invoke(_item, this);

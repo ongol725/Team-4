@@ -16,6 +16,7 @@ public class ShopManager : MonoBehaviour
         _allItems.AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Weapons"));
         _allItems.AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Armor"));
         _allItems.AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Accessories"));
+        _allItems.AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/InventoryBlocks"));
     }
 
     public SO_ItemData[] GenerateShopItems(int count = 5)

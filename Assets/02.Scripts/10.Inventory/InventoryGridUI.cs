@@ -28,6 +28,7 @@ public class InventoryGridUI : MonoBehaviour
     [SerializeField] private Color _invalidColor   = new Color(0.90f, 0.15f, 0.15f, 0.75f);
     [SerializeField] private Color _synthesizeColor = new Color(0.20f, 0.60f, 1.00f, 0.80f); // 합성 가능: 파란색
     [SerializeField] private Color _swapColor      = new Color(1.00f, 0.55f, 0.10f, 0.80f); // 스왑 가능: 주황색
+    [SerializeField] private Color _expandColor    = new Color(1.00f, 0.85f, 0.20f, 0.85f); // 잠금 해제 예정: 금색
 
     private RectTransform _rt;
     private Image[,]      _cellImages;
@@ -36,20 +37,24 @@ public class InventoryGridUI : MonoBehaviour
     // ItemInstance → 배치된 ItemBlockUI 매핑
     private readonly Dictionary<ItemInstance, ItemBlockUI> _instanceToBlock = new();
 
-    public TempSlotUI TempSlot         => _tempSlot;
-    public int        CellSize         => _cellSize;
-    public bool       IsAnyFollowingMouse => _followingCount > 0;
+    public TempSlotUI    TempSlot            => _tempSlot;
+    public int           CellSize            => _cellSize;
+    public bool          IsAnyFollowingMouse => _followingCount > 0;
+    public InventoryGrid Grid               => _grid;
 
-    private int _followingCount;
+    private int          _followingCount;
+    private ItemBlockUI  _activeFollowingBlock;
 
-    public void OnBlockStartedFollowing()
+    public void OnBlockStartedFollowing(ItemBlockUI block)
     {
         _followingCount++;
+        _activeFollowingBlock = block;
     }
 
-    public void OnBlockStoppedFollowing()
+    public void OnBlockStoppedFollowing(ItemBlockUI block)
     {
         if (_followingCount > 0) _followingCount--;
+        if (_activeFollowingBlock == block) _activeFollowingBlock = null;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -105,11 +110,9 @@ public class InventoryGridUI : MonoBehaviour
     /// <summary>상점 구매 후 아이템을 마우스에 들고 배치 대기 상태로 만든다</summary>
     public void BeginPlaceFromShop(ItemInstance inst)
     {
-        if (_pendingBlock != null)
-        {
-            Destroy(_pendingBlock.gameObject);
-            _pendingBlock = null;
-        }
+        // 이미 마우스에 들린 아이템이 있으면 임시칸으로 보냄
+        if (_activeFollowingBlock != null)
+            _activeFollowingBlock.ForceSendToTempSlot();
 
         var go    = new GameObject("ItemBlock_Pending", typeof(RectTransform));
         go.transform.SetParent(transform.root, false);
@@ -129,7 +132,21 @@ public class InventoryGridUI : MonoBehaviour
 
         var cells = InventoryGrid.GetCells(inst.data);
 
-        // 겹치는 아이템 분석
+        // ── 인벤토리 블록: 잠긴 셀에 배치 → 금색 / 불가 → 빨간색 ──
+        if (inst.data is SO_InventoryBlockData)
+        {
+            bool valid = _grid.IsValidBlockExpansion(inst, origin);
+            var blockColor = valid ? _expandColor : _invalidColor;
+            foreach (var local in cells)
+            {
+                var world = origin + local;
+                if (InCellRange(world))
+                    _cellImages[world.x, world.y].color = blockColor;
+            }
+            return;
+        }
+
+        // ── 일반 아이템 배치 ──
         ItemInstance overlapping = null;
         bool isMultiple = false;
         bool outOfRange = false;
@@ -155,7 +172,7 @@ public class InventoryGridUI : MonoBehaviour
         else if (overlapping.data == inst.data)
             color = overlapping.gradeIndex < 4 ? _synthesizeColor : _invalidColor;
         else
-            color = _swapColor; // 항상 스왑 가능 (임시칸 또는 마우스로 이동)
+            color = _swapColor;
 
         foreach (var local in cells)
         {
@@ -217,6 +234,12 @@ public class InventoryGridUI : MonoBehaviour
         ClearHighlight();
     }
 
+    public void OnItemSentToTempSlot(ItemBlockUI block)
+    {
+        if (_pendingBlock == block) _pendingBlock = null;
+        ClearHighlight();
+    }
+
     public void OnPlacementCancelled(ItemInstance inst)
     {
         if (_pendingBlock != null)
@@ -252,6 +275,32 @@ public class InventoryGridUI : MonoBehaviour
 
     public ItemBlockUI FindItemBlock(ItemInstance inst) =>
         _instanceToBlock.TryGetValue(inst, out var block) ? block : null;
+
+    // ─────────────────────────────────────────────────────────────
+    // 인벤토리 확장 연동
+
+    /// <summary>활성 영역 변경 후 호출하여 잠긴 셀 / 열린 셀 색상을 갱신한다.</summary>
+    public void RefreshCellColors()
+    {
+        for (int r = 0; r < _grid.Rows; r++)
+        for (int c = 0; c < _grid.Cols; c++)
+        {
+            var cell   = new Vector2Int(r, c);
+            bool locked = !_grid.InActiveArea(cell);
+
+            var outline = _cellImages[r, c].GetComponent<Outline>();
+            if (locked)
+            {
+                _cellImages[r, c].color = _lockedColor;
+                if (outline != null) outline.effectColor = new Color(0.2f, 0.2f, 0.2f, 0.20f);
+            }
+            else
+            {
+                _cellImages[r, c].color = _grid.IsOccupied(cell) ? _occupiedColor : _emptyColor;
+                if (outline != null) outline.effectColor = new Color(0.5f, 0.5f, 0.5f, 0.35f);
+            }
+        }
+    }
 
     // ─────────────────────────────────────────────────────────────
 

@@ -13,6 +13,7 @@ namespace BagSurvivor.UI
     {
         public string synergyName;     // 121001/122001
         public int count;
+        public int nextThreshold;      // 다음 단계까지 필요한 수 (Gold 최대치 포함)
         public SynergyGrade grade;
         [TextArea] public string description; // 122002
         [TextArea] public string effect;      // 122003

@@ -80,8 +80,13 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         // 구매 직후 클릭과 구분하기 위한 1프레임 딜레이
         if (!_placementInputGuard) { _placementInputGuard = true; return; }
 
-        if (mouse.leftButton.wasPressedThisFrame && cell.HasValue)
-            HandlePlacement(cell.Value);
+        if (mouse.leftButton.wasPressedThisFrame)
+        {
+            if (cell.HasValue)
+                HandlePlacement(cell.Value);
+            else if (IsMouseOverTempSlot())
+                SendToTempSlot();
+        }
 
         if (mouse.rightButton.wasPressedThisFrame)
         {
@@ -96,6 +101,20 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 
     private void HandlePlacement(Vector2Int origin)
     {
+        // ── 인벤토리 블록: 잠긴 셀에 배치 → 활성화 후 소멸 ──
+        if (_instance.data is SO_InventoryBlockData)
+        {
+            if (_grid.IsValidBlockExpansion(_instance, origin))
+            {
+                SetFollowing(false);
+                _grid.ExpandWithBlock(_instance, origin);
+                _gridUI.RefreshCellColors();
+                _gridUI.OnPlacementCancelled(_instance);
+                Destroy(gameObject);
+            }
+            return;
+        }
+
         var (overlapping, isMultiple) = FindOverlappingInstance(origin);
 
         if (isMultiple) return; // 여러 종류 겹침 → 불가
@@ -163,7 +182,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         {
             // 배치 성공: 임시칸이 있으면 임시칸으로, 없으면 마우스로
             var tempSlot = _gridUI.TempSlot;
-            if (tempSlot != null && !tempSlot.IsOccupied && displacedBlock != null)
+            if (tempSlot != null && displacedBlock != null)
                 tempSlot.ReceiveBlock(displacedBlock);
             else if (displacedBlock != null)
                 displacedBlock.ResumeFollowing();
@@ -176,6 +195,37 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             _grid.TryPlace(displaced, savedOrigin);
             _gridUI.OnItemRestored(displaced, displacedBlock);
         }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 임시칸으로 보내기
+
+    /// <summary>외부(상점 구매 등)에서 강제로 임시칸으로 보낼 때 호출</summary>
+    public void ForceSendToTempSlot()
+    {
+        if (!_isFollowingMouse) return;
+        SendToTempSlot();
+    }
+
+    private void SendToTempSlot()
+    {
+        var tempSlot = _gridUI.TempSlot;
+        SetFollowing(false);
+        if (tempSlot == null) return;
+        tempSlot.ReceiveBlock(this);
+        _gridUI.OnItemSentToTempSlot(this);
+    }
+
+    private bool IsMouseOverTempSlot()
+    {
+        var tempSlot = _gridUI.TempSlot;
+        if (tempSlot == null) return false;
+
+        var canvas = _gridUI.GetComponentInParent<Canvas>();
+        var cam    = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            ? canvas.worldCamera : null;
+        var rt = tempSlot.GetComponent<RectTransform>();
+        return RectTransformUtility.RectangleContainsScreenPoint(rt, Mouse.current.position.ReadValue(), cam);
     }
 
     /// <summary>스왑으로 밀려났을 때 마우스를 다시 따라다니게 한다</summary>
@@ -206,7 +256,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         }
         else if (_isInTempSlot)
         {
-            _tempSlot.OnItemPickedUp();
+            _tempSlot.OnItemPickedUp(this);
             _isInTempSlot = false;
             _tempSlot     = null;
         }
@@ -226,8 +276,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     {
         if (_isFollowingMouse == value) return;
         _isFollowingMouse = value;
-        if (value) _gridUI.OnBlockStartedFollowing();
-        else       _gridUI.OnBlockStoppedFollowing();
+        if (value) _gridUI.OnBlockStartedFollowing(this);
+        else       _gridUI.OnBlockStoppedFollowing(this);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -258,7 +308,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     {
         // 예외적으로 파괴될 때 카운트 보정
         if (_isFollowingMouse && _gridUI != null)
-            _gridUI.OnBlockStoppedFollowing();
+            _gridUI.OnBlockStoppedFollowing(this);
     }
 
     // ─────────────────────────────────────────────────────────────
