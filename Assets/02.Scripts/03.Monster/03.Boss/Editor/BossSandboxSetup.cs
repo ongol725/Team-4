@@ -58,7 +58,7 @@ namespace BagSurvivor.Monster.EditorTools
             GameObject projPrefab = MakeProjectilePrefab(projSpr);
             GameObject telePrefab = MakeSimplePooledPrefab(PrefabDir + "/Telegraph.prefab", "Telegraph", teleSpr, 0f, sortingOrder: 5);
             GameObject wavePrefab = MakeSimplePooledPrefab(PrefabDir + "/WaveEffect.prefab", "WaveEffect", waveSpr, 0.6f, sortingOrder: 6);
-            GameObject wolfPrefab = MakeWolfPrefab(wolfSpr, wolfData);
+            GameObject wolfPrefab = MakeWolfPrefab(wolfSpr, wolfData, telePrefab);
 
             // 4) 씬 구성
             BuildScene(bossSpr, playerSpr, bossData, projPrefab, telePrefab, wavePrefab, wolfPrefab);
@@ -147,14 +147,15 @@ namespace BagSurvivor.Monster.EditorTools
             return SaveAndDestroy(go, path);
         }
 
-        private static GameObject MakeWolfPrefab(Sprite spr, MonsterData data)
+        private static GameObject MakeWolfPrefab(Sprite spr, MonsterData data, GameObject dirTelegraph)
         {
             var go = new GameObject("Phantom_Wolf");
             var sr = go.AddComponent<SpriteRenderer>(); sr.sprite = spr; sr.sortingOrder = 9;
             var rb = go.AddComponent<Rigidbody2D>(); rb.gravityScale = 0f; rb.freezeRotation = true;
             var col = go.AddComponent<CircleCollider2D>(); col.isTrigger = true; col.radius = 0.45f;
             var mc = go.AddComponent<MonsterController>(); mc.monsterData = data; mc.sortingOrder = 9;
-            go.AddComponent<PhantomWolfDash>();
+            var dash = go.AddComponent<PhantomWolfDash>();
+            dash.dirTelegraphPrefab = dirTelegraph; // 돌진 방향 예고
             return SaveAndDestroy(go, PrefabDir + "/Phantom_Wolf.prefab");
         }
 
@@ -207,7 +208,7 @@ namespace BagSurvivor.Monster.EditorTools
 
             var charge = boss.AddComponent<Pattern_Charge>();
             charge.patternName = "Charge"; charge.isSpecial = false; charge.useRange = 8f; charge.telegraphTime = 2f; charge.cooldown = 10f; charge.chance = 25f;
-            charge.telegraphPrefab = telePrefab; charge.crushEffectPrefab = wavePrefab;
+            charge.telegraphPrefab = telePrefab; charge.impactEffectPrefab = wavePrefab;
 
             var blast = boss.AddComponent<Pattern_EnergyBlast>();
             blast.patternName = "EnergyBlast"; blast.isSpecial = false; blast.useRange = 10f; blast.telegraphTime = 1f; blast.cooldown = 12f; blast.chance = 25f;
@@ -215,7 +216,7 @@ namespace BagSurvivor.Monster.EditorTools
 
             var roar = boss.AddComponent<Pattern_RoarWave>();
             roar.patternName = "RoarWave"; roar.isSpecial = true; roar.useRange = 15f; roar.telegraphTime = 1.5f; roar.cooldown = 15f; roar.chance = 7f;
-            roar.telegraphPrefab = telePrefab; roar.waveEffectPrefab = wavePrefab;
+            roar.telegraphPrefab = telePrefab; roar.projectilePrefab = projPrefab;
 
             var phantom = boss.AddComponent<Pattern_PhantomDash>();
             phantom.patternName = "PhantomDash"; phantom.isSpecial = true; phantom.useRange = 15f; phantom.telegraphTime = 2f; phantom.cooldown = 20f; phantom.chance = 7f;
@@ -223,9 +224,10 @@ namespace BagSurvivor.Monster.EditorTools
 
             var leap = boss.AddComponent<Pattern_LeapBlast>();
             leap.patternName = "LeapBlast"; leap.isSpecial = true; leap.useRange = 30f; leap.telegraphTime = 2.5f; leap.cooldown = 25f; leap.chance = 6f;
-            leap.telegraphPrefab = telePrefab; leap.ringEffectPrefab = wavePrefab;
+            leap.telegraphPrefab = telePrefab; leap.ringWarningPrefab = telePrefab; leap.ringEffectPrefab = wavePrefab;
 
-            boss.AddComponent<BossPatternDriver>(); // 부착된 패턴 자동 수집
+            var driver = boss.AddComponent<BossPatternDriver>(); // 부착된 패턴 자동 수집
+            driver.debugManualMode = true; // 검증 편의: 숫자키로 패턴 직접 발동 (해제하면 자동 80/20)
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);
