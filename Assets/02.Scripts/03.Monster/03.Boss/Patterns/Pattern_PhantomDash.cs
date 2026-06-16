@@ -74,5 +74,13 @@ namespace BagSurvivor.Monster
             PhantomWolfDash dash = wolf.GetComponent<PhantomWolfDash>();
             if (dash != null) dash.Dash(dir);
         }
+
+        // 회색=발동 사거리 / 파랑=늑대 소환 위치 반경
+        private void OnDrawGizmos()
+        {
+            if (!ShouldDrawGizmo()) return;
+            GizmoCircle(transform.position, useRange, Color.gray);
+            GizmoCircle(transform.position, summonRadius, Color.cyan);
+        }
     }
 }

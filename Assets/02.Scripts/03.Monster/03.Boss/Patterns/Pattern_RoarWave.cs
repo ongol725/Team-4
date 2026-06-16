@@ -1,10 +1,11 @@
 // ============================================================
 // Pattern_RoarWave.cs
-// 특수 패턴 - 포효 충격파
-//  기획서: Use_Range 15m, Telegraph 1.5s, Hit_Delay 0.5s, Attack_Range 30m,
-//          중심 안전지대 5m, Cooldown 15s, Chance 7%
-//  - 텔레그래프 후, 보스 중심 안전지대(5m) 바깥 ~ 최대 30m 사이에 있는 플레이어 타격.
-//  - 즉, 보스에 바짝 붙으면(5m 이내) 회피 가능.
+// 특수 패턴 - 포효 (전방 직선 투사체 연사)
+//  기획서: Use_Range 15m, Telegraph 1.5s, 시전 시점 플레이어 방향으로
+//          초승달 투사체 5발을 0.5초 간격(Hit_Delay)으로 직선 발사.
+//          각 투사체 폭 약 5m, 최대 30m 비행, 유저/벽/최대사거리에서 소멸(유도 X).
+//          5발 발사 후 2초 정지 → 추적 재개. Cooldown 15s, Chance 7%.
+//  - 발사 방향은 시전 순간 고정(유저가 움직여도 궤도 불변).
 // ============================================================
 using UnityEngine;
 using System.Collections;
@@ -13,22 +14,28 @@ namespace BagSurvivor.Monster
 {
     public class Pattern_RoarWave : BossPatternBase
     {
-        [Header("포효 충격파 설정")]
-        [Tooltip("중심 안전지대 반경(m). 이 안에 있으면 피하지 않음")]
-        public float safeRadius = 5f;
+        [Header("포효 발사 설정")]
+        [Tooltip("발사할 투사체 수")]
+        public int projectileCount = 5;
 
-        [Tooltip("충격파 최대 반경(m, Attack_Range)")]
-        public float maxRadius = 30f;
+        [Tooltip("투사체 간 발사 간격(초, Hit_Delay)")]
+        public float fireInterval = 0.5f;
 
-        [Tooltip("텔레그래프 후 충격파 타격까지 지연(초, Hit_Delay)")]
-        public float hitDelay = 0.5f;
+        [Tooltip("투사체 비행 속도(m/s)")]
+        public float projectileSpeed = 12f;
 
-        [Header("연출 프리팹(선택)")]
-        [Tooltip("텔레그래프 표식")]
+        [Tooltip("투사체 최대 비행 거리(m, Attack_Range)")]
+        public float maxRange = 30f;
+
+        [Tooltip("발사 후 제자리 정지 시간(초)")]
+        public float recoveryTime = 2f;
+
+        [Header("연출/투사체 프리팹")]
+        [Tooltip("초승달 투사체 프리팹 (BossProjectile 필요). 폭 ~5m는 프리팹 스케일/콜라이더로 표현")]
+        public GameObject projectilePrefab;
+
+        [Tooltip("텔레그래프(예고) 표식")]
         public GameObject telegraphPrefab;
-
-        [Tooltip("충격파 이펙트(스폰 후 자체 수명으로 반환)")]
-        public GameObject waveEffectPrefab;
 
         private void Reset()
         {
@@ -42,21 +49,43 @@ namespace BagSurvivor.Monster
 
         protected override IEnumerator ExecuteRoutine()
         {
-            GameObject tele = telegraphPrefab != null
-                ? SpawnFromPool(telegraphPrefab, transform.position, Quaternion.identity) : null;
+            // 발사 방향 = 시전 시점 플레이어 방향으로 고정
+            Vector2 dir = DirToPlayer();
+
+            GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 
-            // 충격파 발생
-            if (waveEffectPrefab != null)
-                SpawnFromPool(waveEffectPrefab, transform.position, Quaternion.identity);
+            for (int i = 0; i < projectileCount; i++)
+            {
+                FireCrescent(dir);
+                if (i < projectileCount - 1)
+                    yield return new WaitForSeconds(fireInterval);
+            }
 
-            yield return new WaitForSeconds(hitDelay);
+            // 발사 후 제자리 정지(숨 고르기)
+            if (recoveryTime > 0f)
+                yield return new WaitForSeconds(recoveryTime);
+        }
 
-            // 안전지대(5m) 바깥 ~ 최대 반경 사이에 있으면 타격
-            float dist = controller.GetDistanceToPlayer();
-            if (dist > safeRadius && dist <= maxRadius)
-                TryHitPlayer(transform.position, maxRadius); // maxRadius 안은 이미 확인됨
+        private void FireCrescent(Vector2 dir)
+        {
+            if (projectilePrefab == null) return;
+            GameObject go = SpawnFromPool(projectilePrefab, transform.position, Quaternion.identity);
+            if (go == null) return;
+
+            BossProjectile proj = go.GetComponent<BossProjectile>();
+            if (proj != null) proj.Launch(dir, projectileSpeed, controller.Attack, maxRange);
+        }
+
+        // 노랑 선=발사 방향/사거리(30m), 회색=발동 사거리(15m)
+        private void OnDrawGizmos()
+        {
+            if (!ShouldDrawGizmo()) return;
+            Vector2 dir = (Application.isPlaying && controller != null) ? DirToPlayer() : Vector2.right;
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, transform.position + (Vector3)dir * maxRange);
+            GizmoCircle(transform.position, useRange, Color.gray);
         }
     }
 }

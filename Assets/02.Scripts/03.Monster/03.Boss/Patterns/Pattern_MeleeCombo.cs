@@ -16,8 +16,8 @@ namespace BagSurvivor.Monster
         [Tooltip("타격 횟수")]
         public int hitCount = 3;
 
-        [Tooltip("타격 사이 간격(초)")]
-        public float hitInterval = 0.4f;
+        [Tooltip("1타→2타 사이 간격(초). 기획서상 2타→3타는 0초(연속)")]
+        public float firstHitInterval = 0.4f;
 
         [Tooltip("타격 판정 사거리(m, Attack_Range)")]
         public float hitRange = 10f;
@@ -42,28 +42,39 @@ namespace BagSurvivor.Monster
             chance = 30f;
         }
 
+        private Vector2 lockedDir = Vector2.right; // 시전 시점 고정 방향(기즈모용)
+
         protected override IEnumerator ExecuteRoutine()
         {
             Vector2 dir = DirToPlayer();
+            lockedDir = dir;
 
             // 텔레그래프(예고) — 플레이어 방향으로 표시
             GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 
+            // 방향은 시전(텔레그래프) 시점에 고정. 이후 타격마다 재조준하지 않음(Tracking X).
             for (int i = 0; i < hitCount; i++)
             {
-                // 각 타격 직전 방향 재조준(추적 옵션 없으면 첫 방향 유지해도 무방하나 근접은 약간 추적)
-                dir = DirToPlayer();
-
                 if (hitEffectPrefab != null)
                     SpawnFromPool(hitEffectPrefab, transform.position, Quaternion.identity);
 
                 TryHitPlayer(transform.position, hitRange, attackAngle, dir);
 
-                if (i < hitCount - 1)
-                    yield return new WaitForSeconds(hitInterval);
+                // 기획서: 1타→2타 사이에만 딜레이(0.4초), 2타→3타는 0초(연속)
+                if (i == 0 && hitCount > 1)
+                    yield return new WaitForSeconds(firstHitInterval);
             }
+        }
+
+        // 빨강=타격 부채꼴(사거리/각도, 플레이어 방향 기준·에디터선 오른쪽 미리보기) / 회색=발동 사거리
+        private void OnDrawGizmos()
+        {
+            if (!ShouldDrawGizmo()) return;
+            Vector2 dir = Application.isPlaying ? lockedDir : Vector2.right; // 실행 중엔 고정 방향
+            GizmoCone(transform.position, dir, hitRange, attackAngle, Color.red);
+            GizmoCircle(transform.position, useRange, Color.gray);
         }
     }
 }

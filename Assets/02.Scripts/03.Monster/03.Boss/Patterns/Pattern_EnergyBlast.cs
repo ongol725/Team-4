@@ -17,14 +17,14 @@ namespace BagSurvivor.Monster
         [Tooltip("한 번에 발사할 방향 수 (360°를 균등 분할)")]
         public int projectilesPerVolley = 6;
 
-        [Tooltip("발사 횟수(연속 볼리)")]
-        public int volleyCount = 1;
+        [Tooltip("발사 횟수(연속 볼리). 테스트 기본 3회")]
+        public int volleyCount = 3;
 
         [Tooltip("볼리 사이 간격(초)")]
-        public float volleyInterval = 0.2f;
+        public float volleyInterval = 0.3f;
 
-        [Tooltip("볼리마다 추가 회전 오프셋(도). 나선 연출용. 0이면 고정")]
-        public float angleStepPerVolley = 0f;
+        [Tooltip("볼리마다 추가 회전 오프셋(도). 음수=시계방향 회전. 나선 연출용")]
+        public float angleStepPerVolley = -20f;
 
         [Tooltip("투사체 속도(m/s)")]
         public float projectileSpeed = 8f;
@@ -79,6 +79,22 @@ namespace BagSurvivor.Monster
 
             BossProjectile proj = go.GetComponent<BossProjectile>();
             if (proj != null) proj.Launch(dir, projectileSpeed, controller.Attack);
+        }
+
+        // 회색=발동 사거리 / 노랑 선=발사 방향 미리보기
+        private void OnDrawGizmos()
+        {
+            if (!ShouldDrawGizmo()) return;
+            GizmoCircle(transform.position, useRange, Color.gray);
+            int count = Mathf.Max(1, projectilesPerVolley);
+            float step = 360f / count;
+            Gizmos.color = Color.yellow;
+            for (int i = 0; i < count; i++)
+            {
+                float a = step * i * Mathf.Deg2Rad;
+                Vector3 d = new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0f);
+                Gizmos.DrawLine(transform.position, transform.position + d * 2f);
+            }
         }
     }
 }

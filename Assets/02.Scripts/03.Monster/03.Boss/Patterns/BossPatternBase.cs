@@ -35,8 +35,13 @@ namespace BagSurvivor.Monster
         [Range(0f, 100f)]
         public float chance = 25f;
 
+        [Header("디버그")]
+        [Tooltip("범위 기즈모 표시 여부")]
+        public bool drawRangeGizmo = true;
+
         protected MonsterController controller;
         private float cooldownTimer;
+        protected bool isRunning; // 패턴 실행 중 여부(플레이 중 기즈모는 실행 중인 패턴만 표시)
 
         /// <summary>쿨다운이 끝나 사용 가능한 상태인지</summary>
         public bool IsReady => cooldownTimer <= 0f;
@@ -56,6 +61,7 @@ namespace BagSurvivor.Monster
         {
             // 풀 재사용/재활성화 시 즉시 사용 가능 상태로 초기화
             cooldownTimer = 0f;
+            isRunning = false;
         }
 
         protected virtual void Update()
@@ -85,7 +91,17 @@ namespace BagSurvivor.Monster
         public IEnumerator Execute()
         {
             cooldownTimer = cooldown;
+            isRunning = true;
             yield return ExecuteRoutine();
+            isRunning = false;
+        }
+
+        /// <summary>지금 기즈모를 그려야 하는지(표시 토글 + 플레이 중엔 실행 중인 패턴만).</summary>
+        protected bool ShouldDrawGizmo()
+        {
+            if (!drawRangeGizmo) return false;
+            if (Application.isPlaying && !isRunning) return false; // 플레이 중엔 실행 중인 패턴만
+            return true; // 에디터(비플레이)에서는 미리보기로 항상 표시
         }
 
         /// <summary>실제 패턴 동작. 파생 클래스에서 구현.</summary>
@@ -154,6 +170,46 @@ namespace BagSurvivor.Monster
                 return true;
             }
             return false;
+        }
+
+        // ==========================================
+        // 기즈모 시각화 헬퍼 (범위 검증용)
+        // 2D 평면(XY) 기준. Scene 뷰는 항상, Game 뷰는 Gizmos 토글 ON일 때 보인다.
+        // ==========================================
+
+        /// <summary>중심 c, 반경 r의 원(XY 평면)을 그립니다.</summary>
+        protected static void GizmoCircle(Vector3 c, float r, Color col, int seg = 48)
+        {
+            if (r <= 0f) return;
+            Gizmos.color = col;
+            Vector3 prev = c + new Vector3(r, 0f, 0f);
+            for (int i = 1; i <= seg; i++)
+            {
+                float a = (i / (float)seg) * Mathf.PI * 2f;
+                Vector3 cur = c + new Vector3(Mathf.Cos(a) * r, Mathf.Sin(a) * r, 0f);
+                Gizmos.DrawLine(prev, cur);
+                prev = cur;
+            }
+        }
+
+        /// <summary>중심 c에서 dir 방향, 사거리 range, 전체 각도 angleDeg의 부채꼴을 그립니다.</summary>
+        protected static void GizmoCone(Vector3 c, Vector2 dir, float range, float angleDeg, Color col, int seg = 24)
+        {
+            if (range <= 0f) return;
+            if (dir.sqrMagnitude < 0.0001f) dir = Vector2.right;
+            Gizmos.color = col;
+            float baseAng = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            float half = angleDeg * 0.5f;
+            Vector3 prev = c + (Vector3)(Quaternion.Euler(0, 0, baseAng - half) * Vector3.right) * range;
+            Gizmos.DrawLine(c, prev);
+            for (int i = 1; i <= seg; i++)
+            {
+                float a = (baseAng - half) + (angleDeg) * (i / (float)seg);
+                Vector3 cur = c + (Vector3)(Quaternion.Euler(0, 0, a) * Vector3.right) * range;
+                Gizmos.DrawLine(prev, cur);
+                prev = cur;
+            }
+            Gizmos.DrawLine(prev, c);
         }
     }
 }
