@@ -537,11 +537,13 @@ namespace BagSurvivor.Monster
         /// </summary>
         private IEnumerator ContactDamageCoroutine(Collider2D playerCollider)
         {
+            PlayerHealth playerHealth = playerCollider != null ? playerCollider.GetComponentInParent<PlayerHealth>() : null;
+
             while (isPlayerInContact && !isDying)
             {
-                // TODO: 플레이어 데미지 시스템과 연동
-                // 예시: playerCollider.GetComponent<PlayerHealth>()?.TakeDamage(runtimeAttack);
-                Debug.Log($"[Monster] {monsterData.monsterName}이(가) 플레이어에게 {runtimeAttack} 데미지!");
+                // 시간 배율이 적용된 공격력으로 플레이어에게 접촉 데미지
+                if (playerHealth != null && !playerHealth.IsDead)
+                    playerHealth.TakeDamage(runtimeAttack);
 
                 yield return new WaitForSeconds(CONTACT_DAMAGE_INTERVAL);
             }
