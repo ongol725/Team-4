@@ -357,6 +357,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         }
     }
 
+    private static Font GetDefaultFont() =>
+        Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+
     private static void AddLabel(GameObject parent, string text)
     {
         var go = new GameObject("label", typeof(RectTransform), typeof(Text));
@@ -368,6 +372,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         rt.offsetMin = rt.offsetMax = Vector2.zero;
 
         var txt = go.GetComponent<Text>();
+        txt.font      = GetDefaultFont();
         txt.text      = text;
         txt.fontSize  = 9;
         txt.fontStyle = FontStyle.Bold;
@@ -382,17 +387,18 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         go.transform.SetParent(parent.transform, false);
 
         var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin        = new Vector2(1f, 0f);
-        rt.anchorMax        = new Vector2(1f, 0f);
-        rt.pivot            = new Vector2(1f, 0f);
-        rt.anchoredPosition = new Vector2(-2f, 2f);
-        rt.sizeDelta        = new Vector2(20f, 14f);
+        rt.anchorMin        = new Vector2(0f, 1f);
+        rt.anchorMax        = new Vector2(0f, 1f);
+        rt.pivot            = new Vector2(0f, 1f);
+        rt.anchoredPosition = new Vector2(2f, -2f);
+        rt.sizeDelta        = new Vector2(14f, 14f);
 
         var txt = go.GetComponent<Text>();
-        txt.text      = $"+{grade}";
-        txt.fontSize  = 8;
+        txt.font      = GetDefaultFont();
+        txt.text      = grade.ToString();
+        txt.fontSize  = 10;
         txt.fontStyle = FontStyle.Bold;
-        txt.alignment = TextAnchor.LowerRight;
+        txt.alignment = TextAnchor.UpperLeft;
         txt.color     = new Color(1f, 0.95f, 0.4f);
         txt.raycastTarget = false;
     }

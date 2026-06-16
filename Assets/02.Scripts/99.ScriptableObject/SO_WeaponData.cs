@@ -19,10 +19,11 @@ public class SO_WeaponData : SO_ItemData
 
     [Header("투사체 (등급 공통)")]
     [Tooltip("원거리 무기 발사체 프리팹. 근거리는 비워두세요.")]
-    public GameObject projectile;
-    public float      projectileSpeed;
-    public int        range;
-    public int        maxTargets;
+    public GameObject        projectile;
+    public SO_ProjectileData projectileData;
+    public float             projectileSpeed;
+    public int               range;
+    public int               maxTargets;
 
     [Header("합성 등급별 스탯 (인덱스 0 = 1등급 ~ 4 = 5등급)")]
     public WeaponGradeStats[] gradeStats = new WeaponGradeStats[5];
