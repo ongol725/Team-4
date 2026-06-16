@@ -201,6 +201,7 @@ MonoBehaviour:
     maxCount: 1
   edgeMargin: 1
   maxPositionAttempts: 25
+  prewarmPerType: 8
   floorTilemapOverride: {fileID: 0}
   wallTilemapOverride: {fileID: 0}
 --- !u!114 &92913257
@@ -262,6 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Items.GoldDropManager
   goldPrefab: {fileID: 4667203295015475285, guid: 56712a01268cf914aa53d8db29df99ad, type: 3}
   poolRoot: {fileID: 0}
+  prewarmCount: 12
 --- !u!1001 &254784477
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -535,6 +537,10 @@ PrefabInstance:
     - target: {fileID: 8380437479435598112, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_Name
       value: Dungeon_Export_Group
+      objectReference: {fileID: 0}
+    - target: {fileID: 8555633983462743653, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
