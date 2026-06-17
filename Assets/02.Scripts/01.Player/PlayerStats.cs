@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using BagSurvivor.UI;
 
 /// <summary>
 /// 캐릭터 기본 스탯 데이터.
@@ -10,6 +12,7 @@ using UnityEngine;
 ///
 /// ▶ 인벤토리 방어구 연동
 ///   GameManager.onLoadoutReady 구독 → hpBonus/hpRegen 자동 갱신
+///   같은 GameObject의 PlayerHealth가 있으면 maxHP 및 HP 재생도 함께 반영
 /// </summary>
 public class PlayerStats : MonoBehaviour
 {
@@ -31,8 +34,11 @@ public class PlayerStats : MonoBehaviour
     /// <summary>스탯(HP 포함)이 바뀔 때마다 발행 — StatInfoPanelUI 등이 구독한다.</summary>
     public event System.Action OnStatsChanged;
 
-    private int         _baseMaxHp;
-    private GameManager _gameManager;
+    private int          _baseMaxHp;
+    private int          _baseHealthMaxHp;
+    private GameManager  _gameManager;
+    private PlayerHealth _playerHealth;
+    private Coroutine    _regenCoroutine;
 
     // ─────────────────────────────────────────────────────────────
 
@@ -40,6 +46,10 @@ public class PlayerStats : MonoBehaviour
     {
         _baseMaxHp = maxHp;
         CurrentHp  = maxHp;
+
+        // 같은 GameObject의 PlayerHealth를 캐싱 (없으면 null — 인벤토리 씬 등)
+        _playerHealth = GetComponent<PlayerHealth>();
+        if (_playerHealth != null) _baseHealthMaxHp = _playerHealth.maxHP;
     }
 
     private void Start()
@@ -59,11 +69,34 @@ public class PlayerStats : MonoBehaviour
 
     private void OnLoadoutReady(BattleLoadout loadout)
     {
-        hpBonus = loadout.TotalHpBonus;
-        hpRegen = loadout.TotalHpRegen;
-        maxHp   = _baseMaxHp + hpBonus;
+        hpBonus   = loadout.TotalHpBonus;
+        hpRegen   = loadout.TotalHpRegen;
+        maxHp     = _baseMaxHp + hpBonus;
         CurrentHp = Mathf.Clamp(CurrentHp, 0, maxHp);
         OnStatsChanged?.Invoke();
+
+        // PlayerHealth 연동 — public 필드/메서드만 사용, 원본 수정 없음
+        if (_playerHealth != null)
+        {
+            _playerHealth.maxHP = _baseHealthMaxHp + hpBonus;
+            _playerHealth.hud?.SetHealth(_playerHealth.CurrentHP, _playerHealth.MaxHP);
+
+            if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);
+            if (hpRegen > 0)
+                _regenCoroutine = StartCoroutine(RegenLoop());
+        }
+    }
+
+    // 10초마다 hpRegen만큼 PlayerHealth를 회복
+    private IEnumerator RegenLoop()
+    {
+        var wait = new WaitForSeconds(10f);
+        while (_playerHealth != null && !_playerHealth.IsDead)
+        {
+            yield return wait;
+            _playerHealth.Heal(hpRegen);
+        }
+        _regenCoroutine = null;
     }
 
     // ─────────────────────────────────────────────────────────────

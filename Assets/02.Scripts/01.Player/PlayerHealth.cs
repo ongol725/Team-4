@@ -5,8 +5,6 @@
 //  - Player_State HUD(체력바/텍스트) 자동 갱신
 //  - 피격 시 스프라이트 빨강 깜빡(0.1초)
 //  - 사망 시 결과(실패) 화면 표시 + 일시정지
-//  - 인벤토리 방어구 연동: GameManager.onLoadoutReady 구독
-//    → maxHP 갱신 + 10초당 HP 재생 코루틴 실행
 // ============================================================
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,77 +30,31 @@ public class PlayerHealth : MonoBehaviour
     [Header("이벤트")]
     public UnityEvent onPlayerDeath;
 
-    private int     currentHP;
-    private bool    isDead;
+    private int currentHP;
+    private bool isDead;
     private SpriteRenderer spriteRenderer;
-    private Color   baseColor = Color.white;
+    private Color baseColor = Color.white;
     private Coroutine flashCoroutine;
 
-    private int         _baseMaxHp;
-    private Coroutine   _regenCoroutine;
-    private GameManager _gameManager;
-
-    public int  CurrentHP => currentHP;
-    public int  MaxHP     => maxHP;
-    public bool IsDead    => isDead;
-
-    // ─────────────────────────────────────────────────────────────
+    public int CurrentHP => currentHP;
+    public int MaxHP => maxHP;
+    public bool IsDead => isDead;
 
     private void Awake()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (spriteRenderer != null) baseColor = spriteRenderer.color;
-
-        _baseMaxHp = maxHP;
     }
 
     private void Start()
     {
-        _gameManager = GameManager.Instance;
-        if (_gameManager != null)
-            _gameManager.onLoadoutReady += OnLoadoutReady;
-
         if (hud == null) hud = FindFirstObjectByType<PlayerStateHUD>();
         if (resultPopup == null) resultPopup = FindFirstObjectByType<ResultPopup>();
 
         currentHP = maxHP;
-        isDead    = false;
+        isDead = false;
         UpdateHud();
     }
-
-    private void OnDestroy()
-    {
-        if (_gameManager != null)
-            _gameManager.onLoadoutReady -= OnLoadoutReady;
-    }
-
-    // ─────────────────────────────────────────────────────────────
-    // 인벤토리 방어구 연동
-
-    private void OnLoadoutReady(BattleLoadout loadout)
-    {
-        maxHP     = _baseMaxHp + loadout.TotalHpBonus;
-        currentHP = Mathf.Clamp(currentHP, 0, maxHP);
-        UpdateHud();
-
-        // 기존 재생 코루틴 교체
-        if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);
-        if (loadout.TotalHpRegen > 0 && !isDead)
-            _regenCoroutine = StartCoroutine(RegenLoop(loadout.TotalHpRegen));
-    }
-
-    private IEnumerator RegenLoop(int regenPerTick)
-    {
-        var wait = new WaitForSeconds(10f);
-        while (!isDead)
-        {
-            yield return wait;
-            Heal(regenPerTick);
-        }
-        _regenCoroutine = null;
-    }
-
-    // ─────────────────────────────────────────────────────────────
 
     /// <summary>데미지를 받습니다. (몬스터 접촉 등에서 호출)</summary>
     public void TakeDamage(int amount)
@@ -147,12 +99,6 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        if (_regenCoroutine != null)
-        {
-            StopCoroutine(_regenCoroutine);
-            _regenCoroutine = null;
-        }
-
         onPlayerDeath?.Invoke();
 
         // 결과(실패) 화면 표시
@@ -163,10 +109,10 @@ public class PlayerHealth : MonoBehaviour
                 ? DifficultyScaler.Instance.ElapsedMinutes * 60f
                 : Time.timeSinceLevelLoad;
             stats.mainSynergies = "-";
-            stats.weaponCount   = 0;
-            stats.killCount     = 0;
-            stats.goldSpent     = 0;
-            resultPopup.Show(false, stats);
+            stats.weaponCount = 0;
+            stats.killCount = 0;
+            stats.goldSpent = 0;
+            resultPopup.Show(false, stats); // Show 내부에서 timeScale=0 처리
         }
         else
         {
