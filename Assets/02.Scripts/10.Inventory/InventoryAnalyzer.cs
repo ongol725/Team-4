@@ -3,8 +3,9 @@ using UnityEngine;
 
 /// <summary>
 /// 인벤토리 배치 아이템 분석기.
-/// LateUpdate에서 그리드 상태를 폴링해 변화가 생기면 OnSnapshotChanged를 발행한다.
-/// InventoryGridUI 등 배치 코드에 일절 손대지 않는다.
+/// InventoryGrid.OnGridChanged 이벤트를 구독해 더티 플래그를 세우고,
+/// LateUpdate에서 한 프레임에 1회만 Analyze를 실행한다.
+/// (한 프레임에 배치·제거가 여러 번 일어나도 Analyze는 1회만 호출됨)
 /// </summary>
 public class InventoryAnalyzer : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class InventoryAnalyzer : MonoBehaviour
     /// <summary>마지막으로 계산된 스냅샷. BattleLoadoutBuilder 등 외부에서 참조한다.</summary>
     public InventorySnapshot LatestSnapshot { get; private set; }
 
-    private int _lastItemCount = -1;
+    // 더티 플래그: 한 프레임에 여러 번 그리드 변화가 생겨도 Analyze는 LateUpdate에서 1회만 실행
+    private bool _dirty;
 
     // ─────────────────────────────────────────────────────────────
 
@@ -27,18 +29,21 @@ public class InventoryAnalyzer : MonoBehaviour
 
     private void Start()
     {
-        // 씬 시작 시 초기 스냅샷 전파
+        if (_grid != null) _grid.OnGridChanged += OnGridChanged;
         ForceRefresh();
     }
 
+    private void OnDestroy()
+    {
+        if (_grid != null) _grid.OnGridChanged -= OnGridChanged;
+    }
+
+    private void OnGridChanged() => _dirty = true;
+
     private void LateUpdate()
     {
-        if (_grid == null) return;
-
-        int count = CountPlaced();
-        if (count == _lastItemCount) return;
-
-        _lastItemCount = count;
+        if (!_dirty) return;
+        _dirty = false;
         NotifyInventoryChanged();
     }
 
@@ -103,25 +108,16 @@ public class InventoryAnalyzer : MonoBehaviour
             }
 
             foreach (var weapon in adjacentWeapons)
+            {
                 weapon.RingGradeBonus += 1;
+                snapshot.RecordWeaponRingBuff(weapon, acc);
+            }
         }
     }
 
-    /// <summary>외부에서 강제로 갱신이 필요할 때 호출한다.</summary>
-    public void ForceRefresh()
-    {
-        _lastItemCount = CountPlaced();
-        NotifyInventoryChanged();
-    }
+    /// <summary>외부에서 강제로 즉시 갱신이 필요할 때 호출한다.</summary>
+    public void ForceRefresh() => NotifyInventoryChanged();
 
     public void NotifyInventoryChanged() =>
         OnSnapshotChanged?.Invoke(Analyze());
-
-    private int CountPlaced()
-    {
-        if (_grid == null) return 0;
-        int n = 0;
-        foreach (var _ in _grid.GetAllPlacedInstances()) n++;
-        return n;
-    }
 }

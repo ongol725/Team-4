@@ -15,6 +15,9 @@ public class InventoryGrid : MonoBehaviour
     [SerializeField] public int ActiveRows = 3;
     [SerializeField] public int ActiveCols = 4;
 
+    /// <summary>아이템 배치·제거가 발생할 때마다 발행된다. InventoryAnalyzer가 구독한다.</summary>
+    public event System.Action OnGridChanged;
+
     private bool[,]          _occupied;
     private ItemInstance[,]  _itemAt;
     private readonly Dictionary<ItemInstance, Vector2Int> _origins = new();
@@ -56,6 +59,7 @@ public class InventoryGrid : MonoBehaviour
             _itemAt[world.x, world.y]   = inst;
         }
         _origins[inst] = origin;
+        OnGridChanged?.Invoke();
         return true;
     }
 
@@ -73,6 +77,7 @@ public class InventoryGrid : MonoBehaviour
             }
         }
         _origins.Remove(inst);
+        OnGridChanged?.Invoke();
         return true;
     }
 
@@ -90,12 +95,15 @@ public class InventoryGrid : MonoBehaviour
     public IEnumerable<ItemInstance> GetAllPlacedInstances() => _origins.Keys;
 
     /// <summary>
-    /// 초기 직사각형(ActiveRows × ActiveCols) 또는 인벤토리 블록으로 개별 활성화된 셀이면 true.
-    /// 직렬화된 ActiveRows/ActiveCols를 직접 비교하므로 Awake 실행 순서에 무관하게 안전하다.
+    /// 초기 직사각형(ActiveRows × ActiveCols, 그리드 중앙 배치) 또는
+    /// 인벤토리 블록으로 개별 활성화된 셀이면 true.
     /// </summary>
     public bool InActiveArea(Vector2Int cell)
     {
-        if (cell.x >= 0 && cell.y >= 0 && cell.x < ActiveRows && cell.y < ActiveCols)
+        int startRow = (Rows - ActiveRows) / 2;
+        int startCol = (Cols - ActiveCols) / 2;
+        if (cell.x >= startRow && cell.x < startRow + ActiveRows &&
+            cell.y >= startCol && cell.y < startCol + ActiveCols)
             return true;
         return _extraActiveCells != null && _extraActiveCells.Contains(cell);
     }
