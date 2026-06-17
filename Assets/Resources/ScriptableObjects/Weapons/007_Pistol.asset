@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: WPN_007
   itemName: "\uAD8C\uCD1D"
   itemDescription: "1\uC778 \uACF5\uACA9"
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 21300000, guid: 3a8e2a9b2845b854885d29940bc051c2, type: 3}
   rarity: 0
   grade: 1
   cost: 1
