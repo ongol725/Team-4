@@ -546,7 +546,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         if (_instance.HasGrades)
             AddGradeBadge(_rt.gameObject,
                           _instance.gradeIndex + _instance.RingGradeBonus + 1,
-                          _instance.RingGradeBonus > 0);
+                          _instance.RingGradeBonus > 0,
+                          RarityColors[rarityIdx]);
     }
 
 
@@ -623,7 +624,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         txt.raycastTarget = false;
     }
 
-    private static void AddGradeBadge(GameObject parent, int grade, bool isBuffed = false)
+    private static void AddGradeBadge(GameObject parent, int grade, bool isBuffed, Color rarityColor)
     {
         var go = new GameObject("grade", typeof(RectTransform), typeof(Text));
         go.transform.SetParent(parent.transform, false);
@@ -633,16 +634,16 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         rt.anchorMax        = new Vector2(0f, 1f);
         rt.pivot            = new Vector2(0f, 1f);
         rt.anchoredPosition = new Vector2(2f, -2f);
-        rt.sizeDelta        = new Vector2(14f, 14f);
+        rt.sizeDelta        = new Vector2(28f, 28f);
 
         var txt = go.GetComponent<Text>();
         txt.font      = GetDefaultFont();
         txt.text      = grade.ToString();
-        txt.fontSize  = 10;
+        txt.fontSize  = 20;
         txt.fontStyle = FontStyle.Bold;
         txt.alignment = TextAnchor.UpperLeft;
-        // 반지 버프 적용 중이면 파란색, 아니면 기본 노란색
-        txt.color     = isBuffed ? new Color(0.35f, 0.75f, 1f) : new Color(1f, 0.95f, 0.4f);
+        // 반지 버프 적용 중이면 파란색, 아니면 희귀도 색상
+        txt.color     = isBuffed ? new Color(0.35f, 0.75f, 1f) : rarityColor;
         txt.raycastTarget = false;
     }
 }
