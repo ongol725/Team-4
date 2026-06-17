@@ -42,6 +42,7 @@ namespace BagSurvivor.Monster.EditorTools
             Sprite projSpr   = MakeSprite(ArtDir + "/projectile.png",new Color(1.0f, 0.8f, 0.2f), 16);
             Sprite teleSpr   = MakeSprite(ArtDir + "/telegraph.png", new Color(1.0f, 0.2f, 0.2f, 0.4f), 32);
             Sprite waveSpr   = MakeSprite(ArtDir + "/wave.png",      new Color(1.0f, 0.5f, 0.1f, 0.4f), 32);
+            Sprite floorSpr  = MakeSprite(ArtDir + "/floor.png",     new Color(0.5f, 0.0f, 0.6f, 0.35f), 32);
 
             // 2) MonsterData (보스/늑대)
             MonsterData bossData = MakeMonsterData(
@@ -59,9 +60,10 @@ namespace BagSurvivor.Monster.EditorTools
             GameObject telePrefab = MakeSimplePooledPrefab(PrefabDir + "/Telegraph.prefab", "Telegraph", teleSpr, 0f, sortingOrder: 5);
             GameObject wavePrefab = MakeSimplePooledPrefab(PrefabDir + "/WaveEffect.prefab", "WaveEffect", waveSpr, 0.6f, sortingOrder: 6);
             GameObject wolfPrefab = MakeWolfPrefab(wolfSpr, wolfData, telePrefab);
+            GameObject floorPrefab = MakeFloorPrefab(floorSpr);
 
             // 4) 씬 구성
-            BuildScene(bossSpr, playerSpr, bossData, projPrefab, telePrefab, wavePrefab, wolfPrefab);
+            BuildScene(bossSpr, playerSpr, bossData, projPrefab, telePrefab, wavePrefab, wolfPrefab, floorPrefab);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -159,6 +161,17 @@ namespace BagSurvivor.Monster.EditorTools
             return SaveAndDestroy(go, PrefabDir + "/Phantom_Wolf.prefab");
         }
 
+        // 2페이즈 영구 장판: 큰 반투명 사각형 + FloorHazard(트리거)
+        private static GameObject MakeFloorPrefab(Sprite spr)
+        {
+            var go = new GameObject("Floor_Hazard");
+            var sr = go.AddComponent<SpriteRenderer>(); sr.sprite = spr; sr.sortingOrder = 1;
+            go.transform.localScale = Vector3.one * 8f; // 장판 크기(지름 8m)
+            var col = go.AddComponent<BoxCollider2D>(); col.isTrigger = true;
+            var fh = go.AddComponent<FloorHazard>(); fh.damagePerTick = 5; fh.tickInterval = 0.5f;
+            return SaveAndDestroy(go, PrefabDir + "/Floor_Hazard.prefab");
+        }
+
         private static GameObject SaveAndDestroy(GameObject go, string path)
         {
             var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
@@ -168,7 +181,8 @@ namespace BagSurvivor.Monster.EditorTools
 
         // ------------------------------------------------------------
         private static void BuildScene(Sprite bossSpr, Sprite playerSpr, MonsterData bossData,
-            GameObject projPrefab, GameObject telePrefab, GameObject wavePrefab, GameObject wolfPrefab)
+            GameObject projPrefab, GameObject telePrefab, GameObject wavePrefab, GameObject wolfPrefab,
+            GameObject floorPrefab)
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
 
@@ -176,10 +190,11 @@ namespace BagSurvivor.Monster.EditorTools
             var cam = Camera.main;
             if (cam != null) { cam.orthographic = true; cam.orthographicSize = 12f; cam.transform.position = new Vector3(0, 0, -10); }
 
-            // 매니저: 풀들
+            // 매니저: 풀들 + R 재시작(테스트)
             var managers = new GameObject("Managers");
             managers.AddComponent<GameObjectPool>();
             managers.AddComponent<MonsterPool>();
+            managers.AddComponent<SandboxRestart>(); // R 키로 씬 재시작
 
             // 플레이어 (태그 Player)
             var player = new GameObject("Player");
@@ -229,8 +244,27 @@ namespace BagSurvivor.Monster.EditorTools
             var driver = boss.AddComponent<BossPatternDriver>(); // 부착된 패턴 자동 수집
             driver.debugManualMode = true; // 검증 편의: 숫자키로 패턴 직접 발동 (해제하면 자동 80/20)
 
+            // 페이즈 전환(40% → 무적·정지·장판·강화) + 보스 HP 디버그 키
+            var phase = boss.AddComponent<BossPhaseController>();
+            phase.floorHazardPrefab = floorPrefab;
+            boss.AddComponent<SandboxBossDebug>(); // K 키로 보스 HP 감소(전환 테스트)
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);
+            RegisterSceneInBuildSettings(ScenePath); // R 재시작(LoadScene)용 등록
+        }
+
+        /// <summary>씬을 빌드 세팅에 등록(이미 있으면 무시). 런타임 LoadScene/재시작에 필요.</summary>
+        private static void RegisterSceneInBuildSettings(string scenePath)
+        {
+            var existing = EditorBuildSettings.scenes;
+            foreach (var s in existing)
+                if (s.path == scenePath) return;
+
+            var arr = new EditorBuildSettingsScene[existing.Length + 1];
+            existing.CopyTo(arr, 0);
+            arr[existing.Length] = new EditorBuildSettingsScene(scenePath, true);
+            EditorBuildSettings.scenes = arr;
         }
     }
 }
