@@ -405,8 +405,9 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 
             float L = minCol * _cellSize, T = minRow * _cellSize;
             float R = (maxCol + 1) * _cellSize, B = (maxRow + 1) * _cellSize;
+            float gap = _cellSize * 0.05f;   // 90% 스케일 — 각 방향 5% 여백
+            L += gap; T += gap; R -= gap; B -= gap;
             float W = R - L, H = B - T;
-            const float bThick = 2f;
 
             // 투명 히트박스 타일 (클릭 감지용)
             foreach (var cell in cells)
@@ -513,8 +514,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                 var rt = go.GetComponent<RectTransform>();
                 rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
                 rt.pivot     = new Vector2(0f, 1f);
-                rt.sizeDelta = new Vector2(_cellSize - 2, _cellSize - 2);
-                rt.anchoredPosition = new Vector2(cell.y * _cellSize + 1f, -cell.x * _cellSize - 1f);
+                rt.sizeDelta = new Vector2(_cellSize * 0.9f, _cellSize * 0.9f);
+                rt.anchoredPosition = new Vector2(cell.y * _cellSize + _cellSize * 0.05f, -cell.x * _cellSize - _cellSize * 0.05f);
                 go.GetComponent<Image>().color = baseColor;
                 if (!labelPlaced)
                 {
