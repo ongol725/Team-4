@@ -399,12 +399,16 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         bool isWeapon = _instance.data is SO_WeaponData;
         bool hasSprite = _instance.data.itemImage != null && isWeapon;
 
-        // 등급 1-5 → 흰색에서 빨간색으로 그라데이션 (드래그 시 셀 외각선 색상)
+        // 희귀도 → 셀 보조선 색상
+        int   rarityIdx  = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
+        Color outlineCol = RarityColors[rarityIdx];
+        outlineCol.a     = 0.6f;
+
+        // 합성 등급 → 아이템 테두리 색상 (흰색 → 빨간색)
         int   effectiveGrade = Mathf.Clamp(_instance.gradeIndex + _instance.RingGradeBonus, 0, 4);
-        Color outlineCol     = _instance.HasGrades
+        Color borderCol      = _instance.HasGrades
             ? Color.Lerp(Color.white, Color.red, effectiveGrade / 4f)
             : Color.white;
-        outlineCol.a = 0.6f;
 
         // ── 무기: 투명 배경 + 테두리 방식 ──
         if (isWeapon)
@@ -437,8 +441,6 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                 go.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             }
 
-            int rarityIdx   = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
-            Color borderCol = RarityColors[rarityIdx];
             Vector2 center  = new Vector2((L + R) * 0.5f, -(T + B) * 0.5f);
 
             // 스프라이트 아이콘
@@ -513,7 +515,6 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             }
             else
             {
-                int rarityIdx = Mathf.Clamp((int)_instance.data.rarity, 0, BgColors.Length - 1);
                 float bright  = 1f + _instance.gradeIndex * 0.12f;
                 baseColor = new Color(
                     Mathf.Clamp01(BgColors[rarityIdx].r * bright),
