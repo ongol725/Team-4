@@ -50,6 +50,10 @@ public class BattleLoadoutDebugUI : MonoBehaviour
         if (_analyzer != null) _analyzer.OnSnapshotChanged -= Refresh;
     }
 
+    /// <summary>팝업 토글 시 패널 전체를 표시/숨깁니다.</summary>
+    public void SetPanelActive(bool active) =>
+        _panelTransform?.gameObject.SetActive(active);
+
     // 매 프레임 패널을 최상단으로 — 나중에 추가되는 UI에 덮이지 않도록
     private void LateUpdate()
     {
@@ -141,6 +145,8 @@ public class BattleLoadoutDebugUI : MonoBehaviour
             sb.AppendLine($"  {w.data.itemName} [{w.effectiveGrade + 1}등급]");
             sb.AppendLine($"   공{w.attackPower}  속{w.attackSpeed:F2}");
             if (w.data.projectileData != null) sb.AppendLine($"   {w.data.projectileData.name}");
+            foreach (var buff in w.RingBuffs)
+                sb.AppendLine($"   ▷ {buff.ringName}: {buff.effectDesc}");
         }
         sb.AppendLine();
         sb.AppendLine("■ 방어구");

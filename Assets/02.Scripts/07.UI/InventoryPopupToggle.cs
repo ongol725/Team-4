@@ -13,7 +13,9 @@ public class InventoryPopupToggle : MonoBehaviour
 {
     [SerializeField] private BattleLoadoutBuilder _loadoutBuilder;
 
-    private Canvas _popupCanvas;   // InventoryStoreRoot 의 Canvas 컴포넌트
+    private Canvas               _popupCanvas;   // InventoryStoreRoot 의 Canvas 컴포넌트
+    private BattleLoadoutDebugUI _debugUI;        // 배치 종합정보 패널 (Canvas_Inventory 직접 자식)
+    // SellSlotUI 는 싱글톤으로 접근
 
     // ─────────────────────────────────────────────────────────────
 
@@ -24,6 +26,8 @@ public class InventoryPopupToggle : MonoBehaviour
 
         if (_loadoutBuilder == null)
             _loadoutBuilder = GetComponent<BattleLoadoutBuilder>();
+
+        _debugUI = GetComponent<BattleLoadoutDebugUI>();
     }
 
     private void Update()
@@ -44,6 +48,10 @@ public class InventoryPopupToggle : MonoBehaviour
 
         bool willOpen = !_popupCanvas.enabled;
         _popupCanvas.enabled = willOpen;
+
+        // Canvas_Inventory 직접 자식인 패널도 함께 토글
+        _debugUI?.SetPanelActive(willOpen);
+        SellSlotUI.Instance?.SetPanelActive(willOpen);
 
         // 닫을 때 로드아웃 확정 (ShopUI.Close의 panelRoot 조작 없이 직접 호출)
         if (!willOpen)
