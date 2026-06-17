@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
-  m_Name: Scythe
+  m_Name: 030_Scythe
   m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
   itemID: WPN_030
   itemName: "\uC0AC\uC774\uB4DC"
@@ -22,9 +22,16 @@ MonoBehaviour:
   synergies: 070000000400000000000000
   cells:
   - {x: 0, y: 0}
-  - {x: 1, y: 0}
-  - {x: 2, y: 0}
+  - {x: 0, y: 1}
+  - {x: 1, y: 1}
   - {x: 2, y: 1}
+  attackStyle: "\uBC18\uC6D0 \uB0AB\uC9C8"
+  lv5AttackStyle: "\uC8FC\uC704 \uD55C\uBC14\uD034"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 0}
+  projectileSpeed: 0
+  range: 1
+  maxTargets: 0
   gradeStats:
   - attackPower: 60
     attackSpeed: 1.5
@@ -36,9 +43,3 @@ MonoBehaviour:
     attackSpeed: 1.25
   - attackPower: 147
     attackSpeed: 1.15
-  projectile: {fileID: 0}
-  projectileSpeed: 0
-  range: 1
-  attackStyle: "\uBC18\uC6D0 \uB0AB\uC9C8"
-  maxTargets: 0
-  lv5AttackStyle: "\uC8FC\uC704 \uD55C\uBC14\uD034"
