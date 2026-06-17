@@ -118,6 +118,28 @@ namespace BagSurvivor.UI.EditorTools
             Selection.activeGameObject = frameGO;
         }
 
+        [MenuItem("Tools/UI/③ Minimap 프레임 조정값 프리팹에 반영", priority = 2)]
+        public static void ApplyToPrefab()
+        {
+            Transform battle = FindInScene("BattleUI");
+            if (battle == null) { Debug.LogError("[MinimapFrame] 씬에서 'BattleUI'를 찾지 못했습니다."); return; }
+
+            Transform frame = FindChildByName(battle, FrameObjectName);
+            if (frame == null) { Debug.LogError("[MinimapFrame] 씬에 'Minimap_Frame'이 없습니다."); return; }
+
+            GameObject battleRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(battle.gameObject);
+            if (battleRoot == null) { Debug.LogError("[MinimapFrame] BattleUI가 프리팹 인스턴스가 아닙니다."); return; }
+
+            // Minimap_Frame의 인스턴스 오버라이드(크기/위치 등)를 BattleUI.prefab에 반영
+            PrefabUtility.ApplyObjectOverride(frame.gameObject, BattlePrefabPath, InteractionMode.AutomatedAction);
+            var rt = frame.GetComponent<RectTransform>();
+            if (rt != null)
+                PrefabUtility.ApplyObjectOverride(rt, BattlePrefabPath, InteractionMode.AutomatedAction);
+
+            EditorSceneManager.MarkSceneDirty(battle.gameObject.scene);
+            Debug.Log($"[MinimapFrame] 조정값을 BattleUI.prefab에 반영 완료. size={(rt != null ? rt.sizeDelta : default)}, pos={(rt != null ? rt.anchoredPosition : default)}");
+        }
+
         [MenuItem("Tools/UI/② Minimap 프레임 제거", priority = 1)]
         public static void Remove()
         {
