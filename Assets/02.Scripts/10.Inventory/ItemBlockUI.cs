@@ -104,8 +104,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         var mouse    = Mouse.current;
         var mousePos = (Vector2)mouse.position.ReadValue();
 
-        // 아이템을 마우스 좌상단으로 오프셋 — 마우스가 두 번째 셀 근방에 위치해 배치가 편해짐
-        var dragOffset = new Vector2(-_cellSize, _cellSize);
+        // 아이템을 마우스 좌상단으로 오프셋 — 마우스가 첫 번째 셀 중앙 근방에 위치해 배치가 편해짐
+        var dragOffset = new Vector2(-_cellSize * 0.5f, _cellSize * 0.5f);
         _rt.position   = mousePos + dragOffset;
 
         var cell = _gridUI.ScreenToCell(mousePos + dragOffset);
