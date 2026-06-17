@@ -1022,6 +1022,9 @@ GameObject:
   - component: {fileID: 232402534}
   - component: {fileID: 232402540}
   - component: {fileID: 232402541}
+  - component: {fileID: 232402542}
+  - component: {fileID: 232402543}
+  - component: {fileID: 232402544}
   m_Layer: 0
   m_Name: InventoryGrid
   m_TagString: Untagged
@@ -7582,6 +7585,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145946883}
   m_CullTransparentMesh: 1
+--- !u!114 &232402542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232402531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e7f912a045b68c4e2a9f1b3c8d0742, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _canvas: {fileID: 0}
+--- !u!114 &232402543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232402531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b4f631c907a58d3f1e5b8a4c9d2076, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _canvas: {fileID: 0}
+--- !u!114 &232402544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232402531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdf33e46b8604a9ca7bd048386d1ef11, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _popupRoot: {fileID: 0}
+  _loadoutBuilder: {fileID: 232402540}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
