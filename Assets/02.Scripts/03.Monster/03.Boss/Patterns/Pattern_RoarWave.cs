@@ -30,6 +30,13 @@ namespace BagSurvivor.Monster
         [Tooltip("발사 후 제자리 정지 시간(초)")]
         public float recoveryTime = 2f;
 
+        [Header("2페이즈 강화")]
+        [Tooltip("사용 후 보스가 받는 피해 감소율(0~1). 0.3 = 30% 감소")]
+        [Range(0f, 1f)] public float phase2DamageReduction = 0.3f;
+
+        [Tooltip("받는 피해 감소 지속 시간(초)")]
+        public float phase2BuffDuration = 10f;
+
         [Header("연출/투사체 프리팹")]
         [Tooltip("초승달 투사체 프리팹 (BossProjectile 필요). 폭 ~5m는 프리팹 스케일/콜라이더로 표현")]
         public GameObject projectilePrefab;
@@ -66,6 +73,10 @@ namespace BagSurvivor.Monster
             // 발사 후 제자리 정지(숨 고르기)
             if (recoveryTime > 0f)
                 yield return new WaitForSeconds(recoveryTime);
+
+            // 2페이즈 강화: 사용 종료 후 일정 시간 받는 피해 감소(방어 버프)
+            if (phase2Mode && controller != null)
+                controller.ApplyDamageReduction(phase2DamageReduction, phase2BuffDuration);
         }
 
         private void FireCrescent(Vector2 dir)

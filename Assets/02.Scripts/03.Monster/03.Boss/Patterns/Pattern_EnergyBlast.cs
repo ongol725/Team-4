@@ -29,6 +29,13 @@ namespace BagSurvivor.Monster
         [Tooltip("투사체 속도(m/s)")]
         public float projectileSpeed = 8f;
 
+        [Header("2페이즈 강화")]
+        [Tooltip("각 방향(시계/반시계) 발사 지속 시간(초)")]
+        public float phase2BurstDuration = 3f;
+
+        [Tooltip("시계→반시계 전환 사이 딜레이(초)")]
+        public float phase2BurstGap = 0.5f;
+
         [Header("연출/투사체 프리팹")]
         [Tooltip("발사할 투사체 프리팹 (BossProjectile 컴포넌트 필요)")]
         public GameObject projectilePrefab;
@@ -53,20 +60,37 @@ namespace BagSurvivor.Monster
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 
+            if (!phase2Mode)
+            {
+                // 1페이즈: 한 방향으로 volleyCount회 발사
+                yield return FireBurst(Mathf.Max(1, volleyCount), angleStepPerVolley);
+            }
+            else
+            {
+                // 2페이즈 강화: 시계방향 burstDuration초 → 0.5초 딜레이 → 반시계 burstDuration초
+                int volleys = Mathf.Max(1, Mathf.RoundToInt(phase2BurstDuration / Mathf.Max(0.01f, volleyInterval)));
+                float step = Mathf.Abs(angleStepPerVolley);
+                yield return FireBurst(volleys, -step); // 시계
+                yield return new WaitForSeconds(phase2BurstGap);
+                yield return FireBurst(volleys, +step); // 반시계
+            }
+        }
+
+        /// <summary>volleyCount회 볼리를 step(도)씩 회전시키며 발사.</summary>
+        private IEnumerator FireBurst(int volleys, float step)
+        {
             int count = Mathf.Max(1, projectilesPerVolley);
             float baseStep = 360f / count;
 
-            for (int v = 0; v < Mathf.Max(1, volleyCount); v++)
+            for (int v = 0; v < volleys; v++)
             {
-                float offset = angleStepPerVolley * v;
+                float offset = step * v;
                 for (int i = 0; i < count; i++)
                 {
                     float ang = (baseStep * i + offset) * Mathf.Deg2Rad;
-                    Vector2 dir = new Vector2(Mathf.Cos(ang), Mathf.Sin(ang));
-                    FireProjectile(dir);
+                    FireProjectile(new Vector2(Mathf.Cos(ang), Mathf.Sin(ang)));
                 }
-
-                if (v < volleyCount - 1)
+                if (v < volleys - 1)
                     yield return new WaitForSeconds(volleyInterval);
             }
         }

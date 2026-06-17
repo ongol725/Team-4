@@ -34,6 +34,10 @@ namespace BagSurvivor.Monster
         [Tooltip("유저/벽 충돌 시 정지 시간(초, crush_Delay)")]
         public float stopOnHit = 0.3f;
 
+        [Header("2페이즈 강화")]
+        [Tooltip("2페이즈에서 2번째 돌진 각도 오프셋(도, V자 형태)")]
+        public float phase2SecondDashAngle = 35f;
+
         [Header("연출 프리팹(선택)")]
         public GameObject telegraphPrefab;
         [Tooltip("충돌 시 임팩트 이펙트(광역 피해 없음, 연출용)")]
@@ -51,15 +55,29 @@ namespace BagSurvivor.Monster
 
         protected override IEnumerator ExecuteRoutine()
         {
-            // 시작 시점 방향 고정 (돌진은 직선)
-            Vector2 dir = DirToPlayer();
+            controller.BeginExternalMovement();
+            controller.SetKnockbackImmune(true);
+
+            // 1회 돌진 (텔레그래프 → 직선 돌진 → 충돌 시 정지 후딜)
+            yield return DoOneDash(0f);
+
+            // 2페이즈 강화: 1번 더 돌진(V자 형태로 약간 틀어서)
+            if (phase2Mode)
+                yield return DoOneDash(phase2SecondDashAngle);
+
+            controller.SetKnockbackImmune(false);
+            controller.EndExternalMovement();
+        }
+
+        /// <summary>돌진 1회. angleOffset만큼 플레이어 방향에서 틀어서 돌진(2페이즈 V자용).</summary>
+        private IEnumerator DoOneDash(float angleOffset)
+        {
+            // 시작 시점 방향 고정 (돌진은 직선). angleOffset만큼 회전.
+            Vector2 dir = (Vector2)(Quaternion.Euler(0f, 0f, angleOffset) * (Vector3)DirToPlayer());
 
             GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
-
-            controller.BeginExternalMovement();
-            controller.SetKnockbackImmune(true);
 
             float traveled = 0f;
             bool collided = false;
@@ -97,9 +115,6 @@ namespace BagSurvivor.Monster
                     SpawnFromPool(impactEffectPrefab, transform.position, Quaternion.identity);
                 yield return new WaitForSeconds(stopOnHit);
             }
-
-            controller.SetKnockbackImmune(false);
-            controller.EndExternalMovement();
         }
 
         // 노랑=돌진 경로/거리(플레이어 방향, 에디터선 오른쪽) / 회색=발동 사거리

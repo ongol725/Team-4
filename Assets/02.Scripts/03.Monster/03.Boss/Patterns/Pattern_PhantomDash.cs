@@ -23,6 +23,16 @@ namespace BagSurvivor.Monster
         [Tooltip("늑대 소환 위치 반경(보스 중심에서, m)")]
         public float summonRadius = 2f;
 
+        [Header("2페이즈 강화")]
+        [Tooltip("2페이즈 소환 늑대 수(기획서 3→5)")]
+        public int phase2SummonCount = 5;
+
+        [Tooltip("1페이즈 늑대 돌진 대기 시간(초)")]
+        public float phase1WolfStartDelay = 2f;
+
+        [Tooltip("2페이즈 늑대 돌진 대기 시간(초, 기획서 2→1)")]
+        public float phase2WolfStartDelay = 1f;
+
         [Header("소환물 프리팹")]
         [Tooltip("환영 늑대 프리팹 (MonsterController + PhantomWolfDash 필요, MonsterPool로 스폰)")]
         public GameObject wolfPrefab;
@@ -47,32 +57,38 @@ namespace BagSurvivor.Monster
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 
-            for (int i = 0; i < summonCount; i++)
+            int count = phase2Mode ? phase2SummonCount : summonCount;
+            for (int i = 0; i < count; i++)
             {
-                SummonAndDash(i);
-                if (i < summonCount - 1)
+                SummonAndDash(i, count);
+                if (i < count - 1)
                     yield return new WaitForSeconds(summonInterval);
             }
         }
 
-        private void SummonAndDash(int index)
+        private void SummonAndDash(int index, int count)
         {
             if (wolfPrefab == null || MonsterPool.Instance == null) return;
 
             // 보스 주변 균등 배치 위치에서 소환
-            float ang = (360f / Mathf.Max(1, summonCount)) * index * Mathf.Deg2Rad;
+            float ang = (360f / Mathf.Max(1, count)) * index * Mathf.Deg2Rad;
             Vector3 spawnPos = transform.position + new Vector3(Mathf.Cos(ang), Mathf.Sin(ang), 0f) * summonRadius;
 
             MonsterController wolf = MonsterPool.Instance.Get(wolfPrefab, spawnPos);
             if (wolf == null) return;
 
-            // 소환 시점 플레이어 방향으로 돌진
+            // 소환 시점 플레이어 방향(폴백). 실제 방향은 늑대가 돌진 직전 재확정.
             Vector2 dir = ((Vector2)(controller.PlayerTransform != null
                 ? controller.PlayerTransform.position - spawnPos
                 : (Vector3)Vector2.right)).normalized;
 
             PhantomWolfDash dash = wolf.GetComponent<PhantomWolfDash>();
-            if (dash != null) dash.Dash(dir);
+            if (dash != null)
+            {
+                // 돌진 대기 시간 명시 세팅(풀 재사용 시 이전 값 잔존 방지). 2페이즈는 단축.
+                dash.startDelay = phase2Mode ? phase2WolfStartDelay : phase1WolfStartDelay;
+                dash.Dash(dir);
+            }
         }
 
         // 회색=발동 사거리 / 파랑=늑대 소환 위치 반경

@@ -66,6 +66,13 @@ namespace BagSurvivor.Monster
                 if (i == 0 && hitCount > 1)
                     yield return new WaitForSeconds(firstHitInterval);
             }
+
+            // 2페이즈 강화: 연속 휘두르기 후 LeapBlast(점프 내려찍기)로 연계
+            if (phase2Mode)
+            {
+                var leap = GetComponent<Pattern_LeapBlast>();
+                if (leap != null) yield return leap.Execute();
+            }
         }
 
         // 빨강=타격 부채꼴(사거리/각도, 플레이어 방향 기준·에디터선 오른쪽 미리보기) / 회색=발동 사거리

@@ -31,6 +31,9 @@ namespace BagSurvivor.Monster
         [Tooltip("각 동심원 폭발 전 경고 바닥 표시 시간(초, Hit_Delay). 단계 간 간격도 됨")]
         public float ringWarningTime = 0.5f;
 
+        [Tooltip("2페이즈: 1차 폭발 후 2차 폭발까지 딜레이(초)")]
+        public float phase2SecondWaveDelay = 0.7f;
+
         [Header("연출 프리팹(선택)")]
         [Tooltip("착지 지점 예고 표식(낙하 지점)")]
         public GameObject telegraphPrefab;
@@ -94,6 +97,16 @@ namespace BagSurvivor.Monster
             yield return BlastRing(landing, 0f, ring1Radius);
             yield return BlastRing(landing, ring1Radius, ring2Radius);
             yield return BlastRing(landing, ring2Radius, ring3Radius);
+
+            // 2페이즈 강화: 0.7초 후 같은 순서로 2차 폭발
+            if (phase2Mode)
+            {
+                yield return new WaitForSeconds(phase2SecondWaveDelay);
+                yield return BlastRing(landing, 0f, ring1Radius);
+                yield return BlastRing(landing, ring1Radius, ring2Radius);
+                yield return BlastRing(landing, ring2Radius, ring3Radius);
+            }
+
             ringsActive = false;
         }
 

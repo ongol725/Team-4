@@ -86,6 +86,10 @@ namespace BagSurvivor.Monster
         // 무적 플래그(보스 페이즈 전환 연출 등). true인 동안 TakeDamage가 피해를 무시한다.
         private bool isInvincible = false;
 
+        // 받는 피해 배율(1=기본). 보스 강화 버프 등에서 일시적으로 낮춘다.
+        private float damageTakenMultiplier = 1f;
+        private Coroutine damageReductionCo;
+
         // 사망 통지 콜백 (스폰 주체가 주입: 방 클리어 통지·풀 반환 위임). null이면 자체 비활성화.
         private System.Action<MonsterController> deathCallback;
 
@@ -163,6 +167,8 @@ namespace BagSurvivor.Monster
             isMovementPaused = false;
             externalMovementControl = false;
             isInvincible = false;
+            damageTakenMultiplier = 1f;
+            damageReductionCo = null;
             deathCallback = null;
             hpMultiplier = 1f;
             attackMultiplier = 1f;
@@ -393,8 +399,10 @@ namespace BagSurvivor.Monster
         {
             if (isDying || isInvincible) return;
 
-            // 방어력 적용
+            // 방어력 + 받는 피해 배율 적용
             int finalDamage = monsterData.CalculateDamageTaken(rawDamage);
+            if (damageTakenMultiplier != 1f)
+                finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * damageTakenMultiplier));
             currentHP -= finalDamage;
 
             // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음)
@@ -628,6 +636,21 @@ namespace BagSurvivor.Monster
 
         /// <summary>현재 무적 여부.</summary>
         public bool IsInvincible => isInvincible;
+
+        /// <summary>일정 시간 동안 받는 피해를 reductionPercent(0~1)만큼 감소시킵니다(보스 강화 버프 등).</summary>
+        public void ApplyDamageReduction(float reductionPercent, float duration)
+        {
+            if (damageReductionCo != null) StopCoroutine(damageReductionCo);
+            damageReductionCo = StartCoroutine(DamageReductionRoutine(Mathf.Clamp01(reductionPercent), duration));
+        }
+
+        private IEnumerator DamageReductionRoutine(float reduction, float duration)
+        {
+            damageTakenMultiplier = 1f - reduction;
+            yield return new WaitForSeconds(duration);
+            damageTakenMultiplier = 1f;
+            damageReductionCo = null;
+        }
 
         /// <summary>현재 체력 비율(0~1).</summary>
         public float HpRatio => runtimeMaxHP > 0 ? (float)currentHP / runtimeMaxHP : 0f;

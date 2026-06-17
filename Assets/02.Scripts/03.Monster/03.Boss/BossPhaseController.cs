@@ -32,8 +32,8 @@ namespace BagSurvivor.Monster
         [Tooltip("진입 시 바닥에 생성할 영구 장판 프리팹(선택)")]
         public GameObject floorHazardPrefab;
 
-        [Tooltip("2페이즈 패턴 쿨다운 배율(강화). 0.7 = 30% 단축")]
-        [Range(0.1f, 1f)] public float phase2CooldownMultiplier = 0.7f;
+        [Tooltip("2페이즈 기본 패턴 선택 확률(나머지는 특수). 기획서 60% 기본")]
+        [Range(0f, 1f)] public float phase2BasicChance = 0.6f;
 
         private MonsterController controller;
         private BossPatternDriver driver;
@@ -101,12 +101,14 @@ namespace BagSurvivor.Monster
             if (driver != null) driver.Resume();
         }
 
-        /// <summary>2페이즈 강화: 부착된 모든 패턴의 쿨다운을 배율만큼 단축.</summary>
+        /// <summary>2페이즈 강화: 모든 패턴을 phase2 모드로 전환 + 드라이버 기본/특수 비율 변경.</summary>
         private void ApplyPhase2Strengthen()
         {
             var patterns = GetComponents<BossPatternBase>();
             foreach (var p in patterns)
-                p.cooldown = Mathf.Max(0.1f, p.cooldown * phase2CooldownMultiplier);
+                p.phase2Mode = true;
+
+            if (driver != null) driver.basicChance = phase2BasicChance; // 60/40
         }
     }
 }

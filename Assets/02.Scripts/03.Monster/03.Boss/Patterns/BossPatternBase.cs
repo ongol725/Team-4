@@ -35,6 +35,10 @@ namespace BagSurvivor.Monster
         [Range(0f, 100f)]
         public float chance = 25f;
 
+        [Header("페이즈")]
+        [Tooltip("2페이즈 강화 모드. 켜지면 각 패턴이 추가(강화) 동작을 수행. BossPhaseController가 전환 시 설정")]
+        public bool phase2Mode = false;
+
         [Header("디버그")]
         [Tooltip("범위 기즈모 표시 여부")]
         public bool drawRangeGizmo = true;
