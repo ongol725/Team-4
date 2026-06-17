@@ -14,8 +14,9 @@ public class SellSlotUI : MonoBehaviour
 
     public RectTransform PanelRt { get; private set; }
 
-    private Image _bg;
-    private Canvas _cachedCanvas;
+    private Image          _bg;
+    private Canvas         _cachedCanvas;
+    private InventoryGridUI _gridUI;
 
     private static readonly Color IdleColor  = new Color(0.50f, 0.05f, 0.05f, 0.88f);
     private static readonly Color HoverColor = new Color(0.85f, 0.12f, 0.12f, 0.96f);
@@ -42,13 +43,15 @@ public class SellSlotUI : MonoBehaviour
         if (_canvas == null) return;
 
         _cachedCanvas = _canvas;
+        _gridUI       = FindFirstObjectByType<InventoryGridUI>();
         BuildUI();
     }
 
     private void Update()
     {
         if (_bg == null) return;
-        _bg.color = IsMouseOver() ? HoverColor : IdleColor;
+        bool isDragging = _gridUI != null && _gridUI.IsAnyFollowingMouse;
+        _bg.color = (isDragging && IsMouseOver()) ? HoverColor : IdleColor;
     }
 
     // ─────────────────────────────────────────────────────────────
