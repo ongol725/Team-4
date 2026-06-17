@@ -426,13 +426,13 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 
             var iconRt = iconGo.GetComponent<RectTransform>();
             iconRt.anchorMin = iconRt.anchorMax = new Vector2(0f, 1f);
-            iconRt.pivot     = new Vector2(0f, 1f);
+            iconRt.pivot     = new Vector2(0.5f, 0.5f);
             iconRt.sizeDelta = new Vector2(
                 (maxCol - minCol + 1) * _cellSize,
                 (maxRow - minRow + 1) * _cellSize);
             iconRt.anchoredPosition = new Vector2(
-                 minCol * _cellSize,
-                -minRow * _cellSize);
+                 (minCol + maxCol + 1) * _cellSize * 0.5f,
+                -(minRow + maxRow + 1) * _cellSize * 0.5f);
 
             var iconImg = iconGo.GetComponent<Image>();
             iconImg.sprite         = _instance.data.itemImage;
