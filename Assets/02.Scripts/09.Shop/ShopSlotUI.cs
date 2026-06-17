@@ -12,8 +12,6 @@ public class ShopSlotUI : MonoBehaviour
     [SerializeField] private Text           _costText;
     [SerializeField] private Text           _rarityText;
     [SerializeField] private Text           _synergiesText;
-    [SerializeField] private Button         _buyButton;
-    [SerializeField] private Text           _buyButtonText;
     [SerializeField] private RectTransform  _previewContainer;
     [SerializeField] private Image          _slotBackground;
 
@@ -59,6 +57,7 @@ public class ShopSlotUI : MonoBehaviour
     private bool                             _isDiscounted;
     private int                              _finalCost;
     private Action<ItemInstance, ShopSlotUI> _onBuy;
+    private Button                           _shopImageButton;
 
     // ─────────────────────────────────────────────────────────────
 
@@ -115,18 +114,12 @@ public class ShopSlotUI : MonoBehaviour
             _slotBackground.color = new Color(color.r * 0.25f, color.g * 0.25f, color.b * 0.25f, 0.85f);
 
         BuildMiniPreview(color);
-
-        _buyButton.interactable = true;
-        if (_buyButtonText != null) _buyButtonText.text = "구매";
-
-        _buyButton.onClick.RemoveAllListeners();
-        _buyButton.onClick.AddListener(OnBuyClicked);
     }
 
     public void SetSoldOut()
     {
-        _buyButton.interactable = false;
-        if (_buyButtonText != null) _buyButtonText.text = "구매됨";
+        if (_shopImageButton != null)
+            _shopImageButton.interactable = false;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -136,12 +129,39 @@ public class ShopSlotUI : MonoBehaviour
         foreach (Transform child in _previewContainer)
             Destroy(child.gameObject);
 
-        var cells = (_item.cells != null && _item.cells.Length > 0)
-            ? _item.cells
-            : new[] { Vector2Int.zero };
+        _shopImageButton = null;
 
-        foreach (var cell in cells)
-            CreateMiniCell(cell, color);
+        Sprite shopSprite = null;
+        if (!string.IsNullOrEmpty(_item.itemID))
+            shopSprite = Resources.Load<Sprite>("ShopItems/" + _item.itemID + "_Shop");
+
+        if (shopSprite != null)
+        {
+            var go = new GameObject("ShopImage", typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(_previewContainer, false);
+
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            var img = go.GetComponent<Image>();
+            img.sprite          = shopSprite;
+            img.preserveAspect  = true;
+
+            _shopImageButton = go.GetComponent<Button>();
+            _shopImageButton.onClick.AddListener(OnBuyClicked);
+        }
+        else
+        {
+            var cells = (_item.cells != null && _item.cells.Length > 0)
+                ? _item.cells
+                : new[] { Vector2Int.zero };
+
+            foreach (var cell in cells)
+                CreateMiniCell(cell, color);
+        }
 
         if (_displayGradeIndex > 0)
             AddGrade2Arrow();
