@@ -39,7 +39,8 @@ public class InventoryGridUI : MonoBehaviour
 
     public TempSlotUI    TempSlot            => _tempSlot;
     public int           CellSize            => _cellSize;
-    public bool          IsAnyFollowingMouse => _followingCount > 0;
+    public bool          IsAnyFollowingMouse  => _followingCount > 0;
+    public ItemBlockUI   ActiveFollowingBlock => _activeFollowingBlock;
     public InventoryGrid Grid               => _grid;
 
     private int          _followingCount;

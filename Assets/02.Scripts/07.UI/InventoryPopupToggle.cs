@@ -15,6 +15,7 @@ public class InventoryPopupToggle : MonoBehaviour
 
     private Canvas               _popupCanvas;   // InventoryStoreRoot 의 Canvas 컴포넌트
     private BattleLoadoutDebugUI _debugUI;        // 배치 종합정보 패널 (Canvas_Inventory 직접 자식)
+    private InventoryGridUI      _gridUI;         // 현재 드래그 중인 블록 참조용
     // SellSlotUI 는 싱글톤으로 접근
 
     // ─────────────────────────────────────────────────────────────
@@ -28,6 +29,7 @@ public class InventoryPopupToggle : MonoBehaviour
             _loadoutBuilder = GetComponent<BattleLoadoutBuilder>();
 
         _debugUI = GetComponent<BattleLoadoutDebugUI>();
+        _gridUI  = GetComponent<InventoryGridUI>();
     }
 
     private void Update()
@@ -47,6 +49,11 @@ public class InventoryPopupToggle : MonoBehaviour
         if (_popupCanvas == null) return;
 
         bool willOpen = !_popupCanvas.enabled;
+
+        // 닫는 순간 들고 있는 아이템이 있으면 임시칸으로 먼저 이동
+        if (!willOpen)
+            _gridUI?.ActiveFollowingBlock?.ForceSendToTempSlot();
+
         _popupCanvas.enabled = willOpen;
 
         // Canvas_Inventory 직접 자식인 패널도 함께 토글
