@@ -92,6 +92,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         {
             if (cell.HasValue)
                 HandlePlacement(cell.Value);
+            else if (IsMouseOverSellSlot())
+                SellAndDestroy();
             else if (IsMouseOverTempSlot())
                 SendToTempSlot();
         }
@@ -131,9 +133,11 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             if (_grid.TryPlace(_instance, origin))
                 SnapToGrid(origin);
         }
-        else if (overlaps.Count == 1 && overlaps[0].data == _instance.data)
+        else if (overlaps.Count == 1
+              && overlaps[0].data       == _instance.data
+              && overlaps[0].gradeIndex == _instance.gradeIndex)
         {
-            // 같은 아이템 단독 → 합성
+            // 같은 종류 + 같은 등급 단독 → 합성
             TrySynthesize(overlaps[0]);
         }
         else
@@ -252,6 +256,17 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             ? canvas.worldCamera : null;
         var rt = tempSlot.GetComponent<RectTransform>();
         return RectTransformUtility.RectangleContainsScreenPoint(rt, Mouse.current.position.ReadValue(), cam);
+    }
+
+    private bool IsMouseOverSellSlot() =>
+        SellSlotUI.Instance != null && SellSlotUI.Instance.IsMouseOver();
+
+    private void SellAndDestroy()
+    {
+        SetFollowing(false);
+        _gridUI.OnPlacementCancelled(_instance);
+        SellSlotUI.Instance?.Sell(_instance);
+        Destroy(gameObject);
     }
 
     /// <summary>스왑으로 밀려났을 때 마우스를 다시 따라다니게 한다</summary>
