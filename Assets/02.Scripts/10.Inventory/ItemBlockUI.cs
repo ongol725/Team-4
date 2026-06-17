@@ -32,8 +32,17 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     private bool _placementInputGuard;
     private int  _lastRingGradeBonus = -1;
 
-    // 하이라이트 색상 (InventoryGridUI와 별도로 상태 전달용으로 사용)
+    // 희귀도별 테두리 색상 (무기용)
     private static readonly Color[] RarityColors =
+    {
+        new Color(1.00f, 1.00f, 1.00f),  // Common  → 흰색
+        new Color(0.30f, 0.55f, 1.00f),  // Rare    → 파랑
+        new Color(0.65f, 0.25f, 0.95f),  // Epic    → 보라
+        new Color(1.00f, 0.80f, 0.10f),  // Legendary → 노랑
+    };
+
+    // 무기 외 아이템 배경색 (기존 방식 유지)
+    private static readonly Color[] BgColors =
     {
         new Color(0.70f, 0.70f, 0.70f),  // Common
         new Color(0.30f, 0.55f, 1.00f),  // Rare
@@ -365,87 +374,138 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     private void BuildVisuals()
     {
         var cells     = InventoryGrid.GetCells(_instance.data);
-        bool hasSprite = _instance.data.itemImage != null
-                      && !(_instance.data is SO_InventoryBlockData);
+        bool isWeapon = _instance.data is SO_WeaponData;
+        bool hasSprite = _instance.data.itemImage != null && isWeapon;
 
-        Color baseColor;
-        if (_instance.data is SO_InventoryBlockData)
-        {
-            baseColor = new Color(0.25f, 0.80f, 0.35f); // 인벤토리 확장 전용 초록색
-        }
-        else
-        {
-            int rarityIdx = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
-            float bright  = 1f + _instance.gradeIndex * 0.12f;
-            baseColor = new Color(
-                Mathf.Clamp01(RarityColors[rarityIdx].r * bright),
-                Mathf.Clamp01(RarityColors[rarityIdx].g * bright),
-                Mathf.Clamp01(RarityColors[rarityIdx].b * bright));
-        }
-
-        // ── 1. 배경 타일 ──
-        bool labelPlaced = false;
-        foreach (var cell in cells)
-        {
-            var go  = new GameObject("tile", typeof(RectTransform), typeof(Image));
-            go.transform.SetParent(_rt, false);
-
-            var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
-            rt.pivot     = new Vector2(0f, 1f);
-            rt.sizeDelta = new Vector2(_cellSize - 2, _cellSize - 2);
-            rt.anchoredPosition = new Vector2(
-                 cell.y * _cellSize + 1f,
-                -cell.x * _cellSize - 1f);
-
-            go.GetComponent<Image>().color = baseColor;
-
-            // 스프라이트가 없을 때만 이름 레이블 표시
-            if (!labelPlaced && !hasSprite)
-            {
-                AddLabel(go, _instance.data.itemName);
-                labelPlaced = true;
-            }
-        }
-
-        // ── 2. 스프라이트 오버레이 (아이템 전체 셀 영역에 걸치게) ──
-        if (hasSprite)
+        // ── 무기: 투명 배경 + 테두리 방식 ──
+        if (isWeapon)
         {
             int minRow = int.MaxValue, minCol = int.MaxValue;
             int maxRow = int.MinValue, maxCol = int.MinValue;
             foreach (var c in cells)
             {
-                if (c.x < minRow) minRow = c.x;
-                if (c.x > maxRow) maxRow = c.x;
-                if (c.y < minCol) minCol = c.y;
-                if (c.y > maxCol) maxCol = c.y;
+                if (c.x < minRow) minRow = c.x; if (c.x > maxRow) maxRow = c.x;
+                if (c.y < minCol) minCol = c.y; if (c.y > maxCol) maxCol = c.y;
             }
 
-            var iconGo = new GameObject("icon", typeof(RectTransform), typeof(Image));
-            iconGo.transform.SetParent(_rt, false);
+            float L = minCol * _cellSize, T = minRow * _cellSize;
+            float R = (maxCol + 1) * _cellSize, B = (maxRow + 1) * _cellSize;
+            float W = R - L, H = B - T;
+            const float bThick = 2f;
 
-            var iconRt = iconGo.GetComponent<RectTransform>();
-            iconRt.anchorMin = iconRt.anchorMax = new Vector2(0f, 1f);
-            iconRt.pivot     = new Vector2(0.5f, 0.5f);
-            iconRt.sizeDelta = new Vector2(
-                (maxCol - minCol + 1) * _cellSize,
-                (maxRow - minRow + 1) * _cellSize);
-            iconRt.anchoredPosition = new Vector2(
-                 (minCol + maxCol + 1) * _cellSize * 0.5f,
-                -(minRow + maxRow + 1) * _cellSize * 0.5f);
+            // 투명 히트박스 타일 (클릭 감지용)
+            foreach (var cell in cells)
+            {
+                var go = new GameObject("tile", typeof(RectTransform), typeof(Image));
+                go.transform.SetParent(_rt, false);
+                var rt = go.GetComponent<RectTransform>();
+                rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
+                rt.pivot     = new Vector2(0f, 1f);
+                rt.sizeDelta = new Vector2(_cellSize - 2, _cellSize - 2);
+                rt.anchoredPosition = new Vector2(cell.y * _cellSize + 1f, -cell.x * _cellSize - 1f);
+                go.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
+            }
 
-            var iconImg = iconGo.GetComponent<Image>();
-            iconImg.sprite         = _instance.data.itemImage;
-            iconImg.preserveAspect = true;
-            iconImg.color          = Color.white;
-            iconImg.raycastTarget  = false;
+            // 희귀도 테두리 4변
+            int rarityIdx   = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
+            Color borderCol = RarityColors[rarityIdx];
+            AddBorderStrip("border_top",    L,           -T,              W,      bThick, borderCol);
+            AddBorderStrip("border_bottom", L,           -(B - bThick),   W,      bThick, borderCol);
+            AddBorderStrip("border_left",   L,           -T,              bThick, H,      borderCol);
+            AddBorderStrip("border_right",  R - bThick,  -T,              bThick, H,      borderCol);
+
+            // 스프라이트 아이콘
+            if (hasSprite)
+            {
+                var iconGo = new GameObject("icon", typeof(RectTransform), typeof(Image));
+                iconGo.transform.SetParent(_rt, false);
+                var iconRt = iconGo.GetComponent<RectTransform>();
+                iconRt.anchorMin = iconRt.anchorMax = new Vector2(0f, 1f);
+                iconRt.pivot     = new Vector2(0.5f, 0.5f);
+                iconRt.sizeDelta = new Vector2(W - bThick * 2, H - bThick * 2);
+                iconRt.anchoredPosition = new Vector2((L + R) * 0.5f, -(T + B) * 0.5f);
+                var iconImg = iconGo.GetComponent<Image>();
+                iconImg.sprite         = _instance.data.itemImage;
+                iconImg.preserveAspect = true;
+                iconImg.color          = Color.white;
+                iconImg.raycastTarget  = false;
+            }
+            else
+            {
+                // 스프라이트 없을 때 이름 레이블
+                var labelGo = new GameObject("label", typeof(RectTransform), typeof(Text));
+                labelGo.transform.SetParent(_rt, false);
+                var labelRt = labelGo.GetComponent<RectTransform>();
+                labelRt.anchorMin = labelRt.anchorMax = new Vector2(0f, 1f);
+                labelRt.pivot     = new Vector2(0.5f, 0.5f);
+                labelRt.sizeDelta = new Vector2(W, H);
+                labelRt.anchoredPosition = new Vector2((L + R) * 0.5f, -(T + B) * 0.5f);
+                var txt = labelGo.GetComponent<Text>();
+                txt.font      = GetDefaultFont();
+                txt.text      = _instance.data.itemName;
+                txt.fontSize  = 9;
+                txt.fontStyle = FontStyle.Bold;
+                txt.alignment = TextAnchor.MiddleCenter;
+                txt.color     = Color.white;
+                txt.raycastTarget = false;
+            }
+        }
+        else
+        {
+            // ── 무기 외: 기존 색상 타일 방식 ──
+            Color baseColor;
+            if (_instance.data is SO_InventoryBlockData)
+            {
+                baseColor = new Color(0.25f, 0.80f, 0.35f);
+            }
+            else
+            {
+                int rarityIdx = Mathf.Clamp((int)_instance.data.rarity, 0, BgColors.Length - 1);
+                float bright  = 1f + _instance.gradeIndex * 0.12f;
+                baseColor = new Color(
+                    Mathf.Clamp01(BgColors[rarityIdx].r * bright),
+                    Mathf.Clamp01(BgColors[rarityIdx].g * bright),
+                    Mathf.Clamp01(BgColors[rarityIdx].b * bright));
+            }
+
+            bool labelPlaced = false;
+            foreach (var cell in cells)
+            {
+                var go = new GameObject("tile", typeof(RectTransform), typeof(Image));
+                go.transform.SetParent(_rt, false);
+                var rt = go.GetComponent<RectTransform>();
+                rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
+                rt.pivot     = new Vector2(0f, 1f);
+                rt.sizeDelta = new Vector2(_cellSize - 2, _cellSize - 2);
+                rt.anchoredPosition = new Vector2(cell.y * _cellSize + 1f, -cell.x * _cellSize - 1f);
+                go.GetComponent<Image>().color = baseColor;
+                if (!labelPlaced)
+                {
+                    AddLabel(go, _instance.data.itemName);
+                    labelPlaced = true;
+                }
+            }
         }
 
-        // ── 3. 등급 배지 (아이콘보다 위에 렌더되도록 마지막에 추가) ──
+        // 등급 배지 (항상 최상단)
         if (_instance.HasGrades)
             AddGradeBadge(_rt.gameObject,
                           _instance.gradeIndex + _instance.RingGradeBonus + 1,
                           _instance.RingGradeBonus > 0);
+    }
+
+    private void AddBorderStrip(string name, float x, float y, float w, float h, Color color)
+    {
+        var go = new GameObject(name, typeof(RectTransform), typeof(Image));
+        go.transform.SetParent(_rt, false);
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
+        rt.pivot     = new Vector2(0f, 1f);
+        rt.anchoredPosition = new Vector2(x, y);
+        rt.sizeDelta        = new Vector2(w, h);
+        var img = go.GetComponent<Image>();
+        img.color         = color;
+        img.raycastTarget = false;
     }
 
     private static Font GetDefaultFont() =>
