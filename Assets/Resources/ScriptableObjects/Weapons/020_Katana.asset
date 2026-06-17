@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: WPN_020
   itemName: "\uCE74\uD0C0\uB098"
   itemDescription: "120\uB3C4 \uBE60\uB978 \uBCA0\uAE30"
-  itemImage: {fileID: 21300000, guid: 62f6d9011c87ad047a95af53a7043f76, type: 3}
+  itemImage: {fileID: -2673366551655856615, guid: 62f6d9011c87ad047a95af53a7043f76, type: 3}
   rarity: 2
   grade: 1
   cost: 3
