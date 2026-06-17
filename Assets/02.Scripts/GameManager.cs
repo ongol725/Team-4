@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int currentFloor = 1;
 
     // 골드 (씬/층을 넘어 유지). 변경 시 onGoldChanged로 HUD 등에 통지.
-    [HideInInspector] public int gold = 0;
+    [HideInInspector] public int gold = 10000;
     public event System.Action<int> onGoldChanged;
 
     /// <summary>골드를 추가합니다.</summary>
@@ -29,14 +29,24 @@ public class GameManager : MonoBehaviour
     {
         if (amount <= 0) return;
         gold += amount;
-        if (onGoldChanged != null) onGoldChanged(gold);
+        onGoldChanged?.Invoke(gold);
+    }
+
+    /// <summary>골드를 차감합니다. 잔액이 부족하면 false를 반환하고 차감하지 않습니다.</summary>
+    public bool SpendGold(int amount)
+    {
+        if (amount <= 0) return true;
+        if (gold < amount) return false;
+        gold -= amount;
+        onGoldChanged?.Invoke(gold);
+        return true;
     }
 
     /// <summary>골드를 0으로 초기화합니다. (새 런 시작 시)</summary>
     public void ResetGold()
     {
         gold = 0;
-        if (onGoldChanged != null) onGoldChanged(gold);
+        onGoldChanged?.Invoke(gold);
     }
 
     [Header("층 전환 방식")]

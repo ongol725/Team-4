@@ -2,6 +2,15 @@ using System.Collections.Generic;
 using BagSurvivor.UI;
 
 /// <summary>
+/// 특정 반지가 무기에 준 인접 버프 기록 1건.
+/// </summary>
+public class RingBuffRecord
+{
+    public string ringName;   // 반지 아이템명
+    public string effectDesc; // 버프 효과 설명 (adjacentGimmick 또는 수치 파생)
+}
+
+/// <summary>
 /// 무기 1개의 전투 진입 시 유효 데이터.
 /// SO_WeaponData는 투사체·사거리·maxTargets 등 공통 정보를 직접 참조한다.
 /// </summary>
@@ -11,6 +20,7 @@ public class WeaponLoadoutEntry
     public int           effectiveGrade; // gradeIndex + RingGradeBonus (0~4)
     public int           attackPower;    // effectiveGrade 기준 등급 스탯
     public float         attackSpeed;
+    public System.Collections.Generic.List<RingBuffRecord> RingBuffs = new();
 }
 
 /// <summary>

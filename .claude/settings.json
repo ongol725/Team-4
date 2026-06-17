@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l \"InventoryGrid\")",
+      "Bash(awk '/m_Name: InventoryStoreRoot/,/^---/' 99.InventoryStore.unity)",
+      "Bash(awk '/GameObject:$/{p=1} p{print} /^---/{if\\(p\\) p=0}' 99.InventoryStore.unity)",
+      "Bash(awk '/!u!1 &2087046029/,/^---/' 99.InventoryStore.unity)",
+      "Bash(python3 -c ' *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}

@@ -71,14 +71,48 @@ public class BattleLoadoutBuilder : MonoBehaviour
                                      ? wd.gradeStats[effectiveGrade]
                                      : null;
 
-            loadout.Weapons.Add(new WeaponLoadoutEntry
+            var entry = new WeaponLoadoutEntry
             {
-                data          = wd,
+                data           = wd,
                 effectiveGrade = effectiveGrade,
-                attackPower   = stats?.attackPower  ?? 0,
-                attackSpeed   = stats?.attackSpeed  ?? 0f,
-            });
+                attackPower    = stats?.attackPower ?? 0,
+                attackSpeed    = stats?.attackSpeed ?? 0f,
+            };
+
+            // 반지 버프 기록
+            if (snapshot.WeaponRingBuffs.TryGetValue(inst, out var rings))
+            {
+                foreach (var ring in rings)
+                {
+                    if (ring.data is SO_AccessoryData accData)
+                        entry.RingBuffs.Add(new RingBuffRecord
+                        {
+                            ringName   = accData.itemName,
+                            effectDesc = BuildRingEffectDesc(accData),
+                        });
+                }
+            }
+
+            loadout.Weapons.Add(entry);
         }
+    }
+
+    /// <summary>
+    /// 반지 효과 설명 생성.
+    /// adjacentGimmick이 있으면 그대로, 없으면 adjacentBuff 수치로 파생한다.
+    /// </summary>
+    private static string BuildRingEffectDesc(SO_AccessoryData acc)
+    {
+        if (!string.IsNullOrWhiteSpace(acc.adjacentGimmick))
+            return acc.adjacentGimmick;
+
+        var b  = acc.adjacentBuff;
+        var sb = new System.Text.StringBuilder();
+        if (b.attackPowerBonus != 0)  sb.Append($"공격력+{b.attackPowerBonus} ");
+        if (b.attackSpeedBonus != 0f) sb.Append($"공격속도+{b.attackSpeedBonus:F2} ");
+        if (b.hpBonus          != 0)  sb.Append($"HP+{b.hpBonus} ");
+        if (b.hpRegen          != 0)  sb.Append($"재생+{b.hpRegen} ");
+        return sb.Length > 0 ? sb.ToString().TrimEnd() : "등급+1";
     }
 
     private static void BuildArmorStats(InventorySnapshot snapshot, BattleLoadout loadout)

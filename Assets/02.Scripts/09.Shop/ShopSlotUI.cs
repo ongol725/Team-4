@@ -57,6 +57,7 @@ public class ShopSlotUI : MonoBehaviour
     private SO_ItemData                      _item;
     private int                              _displayGradeIndex;
     private bool                             _isDiscounted;
+    private int                              _finalCost;
     private Action<ItemInstance, ShopSlotUI> _onBuy;
 
     // ─────────────────────────────────────────────────────────────
@@ -103,8 +104,8 @@ public class ShopSlotUI : MonoBehaviour
         int discountIdx  = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
         _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
         int baseCost     = item.cost * (_displayGradeIndex > 0 ? 2 : 1);
-        int finalCost    = _isDiscounted ? Mathf.Max(1, Mathf.FloorToInt(baseCost * 0.5f)) : baseCost;
-        _costText.text   = $"{finalCost} G";
+        _finalCost       = _isDiscounted ? Mathf.Max(1, Mathf.FloorToInt(baseCost * 0.5f)) : baseCost;
+        _costText.text   = $"{_finalCost} G";
         _rarityText.text  = rarityLabel;
         _rarityText.color = color;
 
@@ -233,6 +234,8 @@ public class ShopSlotUI : MonoBehaviour
 
     private void OnBuyClicked()
     {
+        if (GameManager.Instance == null || !GameManager.Instance.SpendGold(_finalCost))
+            return; // 골드 부족 — 구매 취소
         _onBuy?.Invoke(new ItemInstance { data = _item, gradeIndex = _displayGradeIndex }, this);
     }
 }

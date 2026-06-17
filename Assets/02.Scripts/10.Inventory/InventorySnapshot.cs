@@ -20,10 +20,21 @@ public class InventorySnapshot
     // ── 시너지 카운트 (SynergyType → 고유 아이템 종류 수) ─────────
     public readonly Dictionary<SynergyType, int> SynergyCounts = new();
 
+    // ── 반지 버프 관계 (무기 인스턴스 → 버프를 준 반지 인스턴스 목록) ──
+    public readonly Dictionary<ItemInstance, List<ItemInstance>> WeaponRingBuffs = new();
+
     // 같은 SO_ItemData(= 같은 종류)를 두 번 이상 배치해도 시너지는 한 번만 반영한다.
     private readonly HashSet<SO_ItemData> _processedSynergySources = new();
 
     // ─────────────────────────────────────────────────────────────
+
+    /// <summary>무기-반지 버프 관계를 기록한다. InventoryAnalyzer 전용.</summary>
+    internal void RecordWeaponRingBuff(ItemInstance weapon, ItemInstance ring)
+    {
+        if (!WeaponRingBuffs.TryGetValue(weapon, out var list))
+            WeaponRingBuffs[weapon] = list = new List<ItemInstance>();
+        list.Add(ring);
+    }
 
     /// <summary>반지 인접 버프를 합산 스탯에 직접 가산한다. InventoryAnalyzer 전용.</summary>
     internal void AddAdjacentBuff(RingAdjacentBuff buff)
