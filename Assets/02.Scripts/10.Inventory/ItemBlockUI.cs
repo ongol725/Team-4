@@ -601,7 +601,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     }
 
     private static Font GetDefaultFont() =>
-        Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        Resources.Load<Font>("Fonts/Galmuri9")
+        ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
         ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
     private static void AddLabel(GameObject parent, string text)
