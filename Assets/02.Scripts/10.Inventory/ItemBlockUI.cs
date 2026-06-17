@@ -406,24 +406,44 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                 go.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             }
 
-            // 희귀도 테두리 4변
             int rarityIdx   = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
             Color borderCol = RarityColors[rarityIdx];
-            AddBorderStrip("border_top",    L,           -T,              W,      bThick, borderCol);
-            AddBorderStrip("border_bottom", L,           -(B - bThick),   W,      bThick, borderCol);
-            AddBorderStrip("border_left",   L,           -T,              bThick, H,      borderCol);
-            AddBorderStrip("border_right",  R - bThick,  -T,              bThick, H,      borderCol);
+            Vector2 center  = new Vector2((L + R) * 0.5f, -(T + B) * 0.5f);
 
             // 스프라이트 아이콘
             if (hasSprite)
             {
+                // 8방향 오프셋 아웃라인 — 실루엣 외곽 투명 영역에 희귀도 색상 렌더
+                const float outlineSize = 2f;
+                Vector2[] dirs = {
+                    new Vector2(-1,-1), new Vector2(0,-1), new Vector2(1,-1),
+                    new Vector2(-1, 0),                    new Vector2(1, 0),
+                    new Vector2(-1, 1), new Vector2(0, 1), new Vector2(1, 1),
+                };
+                foreach (var dir in dirs)
+                {
+                    var outGo = new GameObject("outline", typeof(RectTransform), typeof(Image));
+                    outGo.transform.SetParent(_rt, false);
+                    var outRt = outGo.GetComponent<RectTransform>();
+                    outRt.anchorMin = outRt.anchorMax = new Vector2(0f, 1f);
+                    outRt.pivot     = new Vector2(0.5f, 0.5f);
+                    outRt.sizeDelta = new Vector2(W, H);
+                    outRt.anchoredPosition = center + dir * outlineSize;
+                    var outImg = outGo.GetComponent<Image>();
+                    outImg.sprite         = _instance.data.itemImage;
+                    outImg.preserveAspect = true;
+                    outImg.color          = borderCol;
+                    outImg.raycastTarget  = false;
+                }
+
+                // 원본 스프라이트 (아웃라인 위에 렌더)
                 var iconGo = new GameObject("icon", typeof(RectTransform), typeof(Image));
                 iconGo.transform.SetParent(_rt, false);
                 var iconRt = iconGo.GetComponent<RectTransform>();
                 iconRt.anchorMin = iconRt.anchorMax = new Vector2(0f, 1f);
                 iconRt.pivot     = new Vector2(0.5f, 0.5f);
-                iconRt.sizeDelta = new Vector2(W - bThick * 2, H - bThick * 2);
-                iconRt.anchoredPosition = new Vector2((L + R) * 0.5f, -(T + B) * 0.5f);
+                iconRt.sizeDelta = new Vector2(W, H);
+                iconRt.anchoredPosition = center;
                 var iconImg = iconGo.GetComponent<Image>();
                 iconImg.sprite         = _instance.data.itemImage;
                 iconImg.preserveAspect = true;
@@ -439,7 +459,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                 labelRt.anchorMin = labelRt.anchorMax = new Vector2(0f, 1f);
                 labelRt.pivot     = new Vector2(0.5f, 0.5f);
                 labelRt.sizeDelta = new Vector2(W, H);
-                labelRt.anchoredPosition = new Vector2((L + R) * 0.5f, -(T + B) * 0.5f);
+                labelRt.anchoredPosition = center;
                 var txt = labelGo.GetComponent<Text>();
                 txt.font      = GetDefaultFont();
                 txt.text      = _instance.data.itemName;
@@ -494,19 +514,6 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                           _instance.RingGradeBonus > 0);
     }
 
-    private void AddBorderStrip(string name, float x, float y, float w, float h, Color color)
-    {
-        var go = new GameObject(name, typeof(RectTransform), typeof(Image));
-        go.transform.SetParent(_rt, false);
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
-        rt.pivot     = new Vector2(0f, 1f);
-        rt.anchoredPosition = new Vector2(x, y);
-        rt.sizeDelta        = new Vector2(w, h);
-        var img = go.GetComponent<Image>();
-        img.color         = color;
-        img.raycastTarget = false;
-    }
 
     private static Font GetDefaultFont() =>
         Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
