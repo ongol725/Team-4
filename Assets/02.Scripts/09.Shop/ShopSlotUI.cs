@@ -61,6 +61,7 @@ public class ShopSlotUI : MonoBehaviour
 
     private Vector2 _origAnchorMin, _origAnchorMax, _origOffsetMin, _origOffsetMax;
     private int     _origSiblingIndex;
+    private Image   _colorBar;
 
     // ─────────────────────────────────────────────────────────────
 
@@ -71,6 +72,10 @@ public class ShopSlotUI : MonoBehaviour
         _origOffsetMin    = _previewContainer.offsetMin;
         _origOffsetMax    = _previewContainer.offsetMax;
         _origSiblingIndex = _previewContainer.GetSiblingIndex();
+
+        var colorBarTr = transform.Find("ColorBar");
+        if (colorBarTr != null)
+            _colorBar = colorBarTr.GetComponent<Image>();
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -126,6 +131,9 @@ public class ShopSlotUI : MonoBehaviour
 
         if (_slotBackground != null)
             _slotBackground.color = new Color(color.r * 0.25f, color.g * 0.25f, color.b * 0.25f, 0.85f);
+
+        if (_colorBar != null)
+            _colorBar.color = color;
 
         BuildMiniPreview(color);
     }
