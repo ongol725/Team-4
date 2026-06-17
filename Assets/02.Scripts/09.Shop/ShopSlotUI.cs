@@ -63,6 +63,8 @@ public class ShopSlotUI : MonoBehaviour
     private int     _origSiblingIndex;
     private Image   _colorBar;
 
+    private readonly System.Collections.Generic.List<Text> _extraSynergyLabels = new();
+
     // ─────────────────────────────────────────────────────────────
 
     private void Awake()
@@ -268,22 +270,59 @@ public class ShopSlotUI : MonoBehaviour
 
     private void RefreshSynergies(SO_ItemData item)
     {
+        foreach (var l in _extraSynergyLabels)
+            if (l != null) Destroy(l.gameObject);
+        _extraSynergyLabels.Clear();
+
         if (_synergiesText == null) return;
 
-        if (item.synergies == null || item.synergies.Length == 0)
+        var valid = new System.Collections.Generic.List<SynergyType>();
+        if (item.synergies != null)
+            foreach (var s in item.synergies)
+                if (s != SynergyType.None) valid.Add(s);
+
+        if (valid.Count == 0)
         {
             _synergiesText.text = string.Empty;
             return;
         }
 
-        var sb = new System.Text.StringBuilder();
-        foreach (var syn in item.synergies)
+        _synergiesText.text = SynergyNames.TryGetValue(valid[0], out var n0) ? n0 : valid[0].ToString();
+
+        var srcRt = _synergiesText.rectTransform;
+        for (int i = 1; i < Mathf.Min(valid.Count, 3); i++)
         {
-            if (syn == SynergyType.None) continue;
-            if (sb.Length > 0) sb.Append(" · ");
-            sb.Append(SynergyNames.TryGetValue(syn, out var name) ? name : syn.ToString());
+            string label = SynergyNames.TryGetValue(valid[i], out var n) ? n : valid[i].ToString();
+            _extraSynergyLabels.Add(CreateSynergyLabel(i, label, srcRt));
         }
-        _synergiesText.text = sb.ToString();
+    }
+
+    private static Text CreateSynergyLabel(int index, string text, RectTransform template)
+    {
+        var go = new GameObject($"SynergyLabel_{index}",
+            typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+        go.transform.SetParent(template.parent, false);
+
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin        = template.anchorMin;
+        rt.anchorMax        = template.anchorMax;
+        rt.pivot            = template.pivot;
+        rt.sizeDelta        = template.sizeDelta;
+        rt.anchoredPosition = template.anchoredPosition + new Vector2(0f, -index * template.sizeDelta.y);
+
+        var src = template.GetComponent<Text>();
+        var txt = go.GetComponent<Text>();
+        txt.font               = src.font;
+        txt.fontSize           = src.fontSize;
+        txt.fontStyle          = src.fontStyle;
+        txt.color              = src.color;
+        txt.alignment          = src.alignment;
+        txt.horizontalOverflow = src.horizontalOverflow;
+        txt.verticalOverflow   = src.verticalOverflow;
+        txt.raycastTarget      = false;
+        txt.text               = text;
+
+        return txt;
     }
 
     private void OnBuyClicked()
