@@ -43,6 +43,9 @@ namespace BagSurvivor.Monster.EditorTools
             Sprite teleSpr   = MakeSprite(ArtDir + "/telegraph.png", new Color(1.0f, 0.2f, 0.2f, 0.4f), 32);
             Sprite waveSpr   = MakeSprite(ArtDir + "/wave.png",      new Color(1.0f, 0.5f, 0.1f, 0.4f), 32);
             Sprite floorSpr  = MakeSprite(ArtDir + "/floor.png",     new Color(0.5f, 0.0f, 0.6f, 0.35f), 32);
+            Sprite totemSpr  = MakeSprite(ArtDir + "/totem.png",     new Color(0.2f, 0.9f, 0.5f), 32);
+            Sprite stoneSpr  = MakeSprite(ArtDir + "/stone.png",     new Color(0.6f, 0.6f, 0.6f), 32);
+            Sprite itemSpr   = MakeSprite(ArtDir + "/item.png",      new Color(1.0f, 0.9f, 0.2f), 16);
 
             // 2) MonsterData (보스/늑대)
             MonsterData bossData = MakeMonsterData(
@@ -61,9 +64,13 @@ namespace BagSurvivor.Monster.EditorTools
             GameObject wavePrefab = MakeSimplePooledPrefab(PrefabDir + "/WaveEffect.prefab", "WaveEffect", waveSpr, 0.6f, sortingOrder: 6);
             GameObject wolfPrefab = MakeWolfPrefab(wolfSpr, wolfData, telePrefab);
             GameObject floorPrefab = MakeFloorPrefab(floorSpr);
+            GameObject totemPrefab = MakeTotemPrefab(totemSpr);
+            GameObject stonePrefab = MakeStonePrefab(stoneSpr);
+            GameObject itemPickupPrefab = MakeItemPickupPrefab(itemSpr);
 
             // 4) 씬 구성
-            BuildScene(bossSpr, playerSpr, bossData, projPrefab, telePrefab, wavePrefab, wolfPrefab, floorPrefab);
+            BuildScene(bossSpr, playerSpr, bossData, projPrefab, telePrefab, wavePrefab, wolfPrefab, floorPrefab,
+                       totemPrefab, stonePrefab, itemPickupPrefab);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -172,6 +179,40 @@ namespace BagSurvivor.Monster.EditorTools
             return SaveAndDestroy(go, PrefabDir + "/Floor_Hazard.prefab");
         }
 
+        // 힐링 토템: 스프라이트 + 트리거 콜라이더 + HittableObject + HealingTotem + PooledObject
+        private static GameObject MakeTotemPrefab(Sprite spr)
+        {
+            var go = new GameObject("Healing_Totem");
+            var sr = go.AddComponent<SpriteRenderer>(); sr.sprite = spr; sr.sortingOrder = 8;
+            var col = go.AddComponent<CircleCollider2D>(); col.isTrigger = true; col.radius = 0.5f;
+            var h = go.AddComponent<HittableObject>(); h.hitsToDestroy = 3;
+            var heal = go.AddComponent<HealingTotem>(); heal.healInterval = 1f; heal.healPercent = 0.005f;
+            go.AddComponent<PooledObject>(); // 수동 반환(파괴 시)
+            return SaveAndDestroy(go, PrefabDir + "/Healing_Totem.prefab");
+        }
+
+        // 파괴 가능한 돌: 스프라이트 + 트리거 콜라이더 + HittableObject + PooledObject
+        private static GameObject MakeStonePrefab(Sprite spr)
+        {
+            var go = new GameObject("Breakable_Stone");
+            var sr = go.AddComponent<SpriteRenderer>(); sr.sprite = spr; sr.sortingOrder = 7;
+            var col = go.AddComponent<CircleCollider2D>(); col.isTrigger = true; col.radius = 0.6f;
+            var h = go.AddComponent<HittableObject>(); h.hitsToDestroy = 3;
+            go.AddComponent<PooledObject>();
+            return SaveAndDestroy(go, PrefabDir + "/Breakable_Stone.prefab");
+        }
+
+        // 무력화 아이템 픽업: 스프라이트 + 트리거 콜라이더 + GimmickPickup + PooledObject
+        private static GameObject MakeItemPickupPrefab(Sprite spr)
+        {
+            var go = new GameObject("Gimmick_Item");
+            var sr = go.AddComponent<SpriteRenderer>(); sr.sprite = spr; sr.sortingOrder = 9;
+            var col = go.AddComponent<CircleCollider2D>(); col.isTrigger = true; col.radius = 0.5f;
+            go.AddComponent<GimmickPickup>();
+            go.AddComponent<PooledObject>();
+            return SaveAndDestroy(go, PrefabDir + "/Gimmick_Item.prefab");
+        }
+
         private static GameObject SaveAndDestroy(GameObject go, string path)
         {
             var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
@@ -182,7 +223,7 @@ namespace BagSurvivor.Monster.EditorTools
         // ------------------------------------------------------------
         private static void BuildScene(Sprite bossSpr, Sprite playerSpr, MonsterData bossData,
             GameObject projPrefab, GameObject telePrefab, GameObject wavePrefab, GameObject wolfPrefab,
-            GameObject floorPrefab)
+            GameObject floorPrefab, GameObject totemPrefab, GameObject stonePrefab, GameObject itemPickupPrefab)
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
 
@@ -195,6 +236,7 @@ namespace BagSurvivor.Monster.EditorTools
             managers.AddComponent<GameObjectPool>();
             managers.AddComponent<MonsterPool>();
             managers.AddComponent<SandboxRestart>(); // R 키로 씬 재시작
+            managers.AddComponent<SandboxHitter>();  // 마우스 클릭으로 토템/돌 타격
 
             // 플레이어 (태그 Player)
             var player = new GameObject("Player");
@@ -240,6 +282,16 @@ namespace BagSurvivor.Monster.EditorTools
             var leap = boss.AddComponent<Pattern_LeapBlast>();
             leap.patternName = "LeapBlast"; leap.isSpecial = true; leap.useRange = 30f; leap.telegraphTime = 2.5f; leap.cooldown = 25f; leap.chance = 6f;
             leap.telegraphPrefab = telePrefab; leap.ringWarningPrefab = telePrefab; leap.ringEffectPrefab = wavePrefab;
+
+            // 2페이즈 신규 특수 2종 (phase2Mode에서만 의미 있지만 컴포넌트는 항상 부착)
+            var healTotem = boss.AddComponent<Pattern_HealTotem>();
+            healTotem.patternName = "HealTotem"; healTotem.isSpecial = true; healTotem.phase2Only = true; healTotem.useRange = 100f; healTotem.telegraphTime = 1.5f; healTotem.cooldown = 35f; healTotem.chance = 10f;
+            healTotem.totemPrefab = totemPrefab; healTotem.telegraphPrefab = telePrefab;
+
+            var stoneBreak = boss.AddComponent<Pattern_StoneBreak>();
+            stoneBreak.patternName = "StoneBreak"; stoneBreak.isSpecial = true; stoneBreak.phase2Only = true; stoneBreak.useRange = 100f; stoneBreak.telegraphTime = 1.5f; stoneBreak.cooldown = 45f; stoneBreak.chance = 10f;
+            stoneBreak.stonePrefab = stonePrefab; stoneBreak.dashTelegraphPrefab = telePrefab; stoneBreak.itemPickupPrefab = itemPickupPrefab;
+            // itemMarkerPrefab은 비워둠 → 인게임처럼 돌이 구분되지 않음(부수면 아이템 드롭)
 
             var driver = boss.AddComponent<BossPatternDriver>(); // 부착된 패턴 자동 수집
             driver.debugManualMode = true; // 검증 편의: 숫자키로 패턴 직접 발동 (해제하면 자동 80/20)
