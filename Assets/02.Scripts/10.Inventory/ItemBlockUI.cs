@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -46,6 +47,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     private TempSlotUI _tempSlot;
     private bool _placementInputGuard;
     private int  _lastRingGradeBonus = -1;
+
+    private readonly List<GameObject> _cellOutlines = new();
 
     // 희귀도별 테두리 색상 (무기용)
     private static readonly Color[] RarityColors =
@@ -341,6 +344,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     {
         if (_isFollowingMouse == value) return;
         _isFollowingMouse = value;
+        foreach (var outline in _cellOutlines)
+            if (outline != null) outline.SetActive(value);
         if (value) _gridUI.OnBlockStartedFollowing(this);
         else       _gridUI.OnBlockStoppedFollowing(this);
     }
@@ -388,9 +393,18 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 
     private void BuildVisuals()
     {
+        _cellOutlines.Clear();
+
         var cells     = InventoryGrid.GetCells(_instance.data);
         bool isWeapon = _instance.data is SO_WeaponData;
         bool hasSprite = _instance.data.itemImage != null && isWeapon;
+
+        // 등급 1-5 → 흰색에서 빨간색으로 그라데이션 (드래그 시 셀 외각선 색상)
+        int   effectiveGrade = Mathf.Clamp(_instance.gradeIndex + _instance.RingGradeBonus, 0, 4);
+        Color outlineCol     = _instance.HasGrades
+            ? Color.Lerp(Color.white, Color.red, effectiveGrade / 4f)
+            : Color.white;
+        outlineCol.a = 0.6f;
 
         // ── 무기: 투명 배경 + 테두리 방식 ──
         if (isWeapon)
@@ -409,9 +423,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             L += gap; T += gap; R -= gap; B -= gap;
             float W = R - L, H = B - T;
 
-            // 투명 히트박스 타일 (클릭 감지용)
+            // 투명 히트박스 타일 (클릭 감지용) + 드래그 셀 외각선
             foreach (var cell in cells)
             {
+                AddCellOutline(cell, outlineCol);
                 var go = new GameObject("tile", typeof(RectTransform), typeof(Image));
                 go.transform.SetParent(_rt, false);
                 var rt = go.GetComponent<RectTransform>();
@@ -509,6 +524,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             bool labelPlaced = false;
             foreach (var cell in cells)
             {
+                AddCellOutline(cell, outlineCol);
                 var go = new GameObject("tile", typeof(RectTransform), typeof(Image));
                 go.transform.SetParent(_rt, false);
                 var rt = go.GetComponent<RectTransform>();
@@ -532,6 +548,43 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                           _instance.RingGradeBonus > 0);
     }
 
+
+    // 드래그 중 셀 형태를 나타내는 외각선 (4-strip 방식)
+    private void AddCellOutline(Vector2Int cell, Color col)
+    {
+        const float thick = 1.5f;
+        float s = _cellSize - 1f;
+
+        var container = new GameObject("cell_outline");
+        container.transform.SetParent(_rt, false);
+        var cRt = container.AddComponent<RectTransform>();
+        cRt.anchorMin = cRt.anchorMax = new Vector2(0f, 1f);
+        cRt.pivot     = new Vector2(0f, 1f);
+        cRt.sizeDelta = new Vector2(s, s);
+        cRt.anchoredPosition = new Vector2(cell.y * _cellSize + 0.5f, -cell.x * _cellSize - 0.5f);
+
+        OutlineStrip(container, new Vector2(0,         0              ), new Vector2(s,     thick),          col);
+        OutlineStrip(container, new Vector2(0,         -(s - thick)   ), new Vector2(s,     thick),          col);
+        OutlineStrip(container, new Vector2(0,         -thick         ), new Vector2(thick, s - thick * 2f), col);
+        OutlineStrip(container, new Vector2(s - thick, -thick         ), new Vector2(thick, s - thick * 2f), col);
+
+        container.SetActive(_isFollowingMouse);
+        _cellOutlines.Add(container);
+    }
+
+    private static void OutlineStrip(GameObject parent, Vector2 pos, Vector2 size, Color col)
+    {
+        var go = new GameObject("s", typeof(RectTransform), typeof(Image));
+        go.transform.SetParent(parent.transform, false);
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
+        rt.pivot     = new Vector2(0f, 1f);
+        rt.sizeDelta = size;
+        rt.anchoredPosition = pos;
+        var img = go.GetComponent<Image>();
+        img.color         = col;
+        img.raycastTarget = false;
+    }
 
     private static Font GetDefaultFont() =>
         Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
