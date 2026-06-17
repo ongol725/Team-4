@@ -67,11 +67,18 @@ namespace BagSurvivor.Monster
                     yield return new WaitForSeconds(firstHitInterval);
             }
 
-            // 2페이즈 강화: 연속 휘두르기 후 LeapBlast(점프 내려찍기)로 연계
+            // 2페이즈 강화: 연속 휘두르기 후 LeapBlast(점프 내려찍기)로 연계.
+            // 연계되는 LeapBlast는 '1페이즈 형태'(2차 폭발 없음)로 실행한다.
             if (phase2Mode)
             {
                 var leap = GetComponent<Pattern_LeapBlast>();
-                if (leap != null) yield return leap.Execute();
+                if (leap != null)
+                {
+                    bool prev = leap.phase2Mode;
+                    leap.phase2Mode = false; // 1페이즈 형태로 강제
+                    yield return leap.Execute();
+                    leap.phase2Mode = prev;  // 원상 복구
+                }
             }
         }
 

@@ -35,8 +35,8 @@ namespace BagSurvivor.Monster
         public float stopOnHit = 0.3f;
 
         [Header("2페이즈 강화")]
-        [Tooltip("2페이즈에서 2번째 돌진 각도 오프셋(도, V자 형태)")]
-        public float phase2SecondDashAngle = 35f;
+        [Tooltip("2페이즈 2번째 돌진의 짧은 경고선 시간(초). 플레이어 향해 재돌진")]
+        public float phase2SecondDashTelegraph = 0.5f;
 
         [Header("연출 프리팹(선택)")]
         public GameObject telegraphPrefab;
@@ -59,24 +59,23 @@ namespace BagSurvivor.Monster
             controller.SetKnockbackImmune(true);
 
             // 1회 돌진 (텔레그래프 → 직선 돌진 → 충돌 시 정지 후딜)
-            yield return DoOneDash(0f);
+            yield return DoOneDash(telegraphTime);
 
-            // 2페이즈 강화: 1번 더 돌진(V자 형태로 약간 틀어서)
+            // 2페이즈 강화: 짧은 경고선(0.5초) 후 플레이어 향해 1번 더 돌진
             if (phase2Mode)
-                yield return DoOneDash(phase2SecondDashAngle);
+                yield return DoOneDash(phase2SecondDashTelegraph);
 
             controller.SetKnockbackImmune(false);
             controller.EndExternalMovement();
         }
 
-        /// <summary>돌진 1회. angleOffset만큼 플레이어 방향에서 틀어서 돌진(2페이즈 V자용).</summary>
-        private IEnumerator DoOneDash(float angleOffset)
+        /// <summary>돌진 1회. telegraphSec 동안 플레이어 방향 경고선 표시 후 직선 돌진(시작 시점 방향 고정).</summary>
+        private IEnumerator DoOneDash(float telegraphSec)
         {
-            // 시작 시점 방향 고정 (돌진은 직선). angleOffset만큼 회전.
-            Vector2 dir = (Vector2)(Quaternion.Euler(0f, 0f, angleOffset) * (Vector3)DirToPlayer());
+            Vector2 dir = DirToPlayer();
 
             GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
-            yield return new WaitForSeconds(telegraphTime);
+            yield return new WaitForSeconds(telegraphSec);
             ReturnPooled(tele);
 
             float traveled = 0f;

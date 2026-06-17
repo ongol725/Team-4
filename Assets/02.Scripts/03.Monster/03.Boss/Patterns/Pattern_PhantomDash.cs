@@ -30,8 +30,8 @@ namespace BagSurvivor.Monster
         [Tooltip("1페이즈 늑대 돌진 대기 시간(초)")]
         public float phase1WolfStartDelay = 2f;
 
-        [Tooltip("2페이즈 늑대 돌진 대기 시간(초, 기획서 2→1)")]
-        public float phase2WolfStartDelay = 1f;
+        [Tooltip("2페이즈 늑대 돌진 대기 시간(초)")]
+        public float phase2WolfStartDelay = 0.3f;
 
         [Header("소환물 프리팹")]
         [Tooltip("환영 늑대 프리팹 (MonsterController + PhantomWolfDash 필요, MonsterPool로 스폰)")]

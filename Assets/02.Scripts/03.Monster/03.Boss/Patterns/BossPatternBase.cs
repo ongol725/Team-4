@@ -39,6 +39,9 @@ namespace BagSurvivor.Monster
         [Tooltip("2페이즈 강화 모드. 켜지면 각 패턴이 추가(강화) 동작을 수행. BossPhaseController가 전환 시 설정")]
         public bool phase2Mode = false;
 
+        [Tooltip("2페이즈에서만 사용 가능(1페이즈에선 선택되지 않음). 신규 2페이즈 전용 패턴용")]
+        public bool phase2Only = false;
+
         [Header("디버그")]
         [Tooltip("범위 기즈모 표시 여부")]
         public bool drawRangeGizmo = true;
@@ -85,6 +88,7 @@ namespace BagSurvivor.Monster
         public virtual bool CanExecute()
         {
             if (controller == null || controller.IsDead) return false;
+            if (phase2Only && !phase2Mode) return false; // 2페이즈 전용은 2페이즈에서만
             return IsReady && InRange();
         }
 

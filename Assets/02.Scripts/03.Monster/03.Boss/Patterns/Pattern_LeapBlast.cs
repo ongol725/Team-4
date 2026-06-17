@@ -34,6 +34,9 @@ namespace BagSurvivor.Monster
         [Tooltip("2페이즈: 1차 폭발 후 2차 폭발까지 딜레이(초)")]
         public float phase2SecondWaveDelay = 0.7f;
 
+        [Tooltip("2페이즈 2차 폭발: 1·2·3단 사이 간격(초). 짧을수록 한번에 퍼버벙")]
+        public float phase2SecondWaveRingDelay = 0.2f;
+
         [Header("연출 프리팹(선택)")]
         [Tooltip("착지 지점 예고 표식(낙하 지점)")]
         public GameObject telegraphPrefab;
@@ -92,19 +95,19 @@ namespace BagSurvivor.Monster
             controller.EndExternalMovement();
             ReturnPooled(tele);
 
-            // 착지 → 3단 동심원 (중심부터 바깥으로). 각 단은 '경고 바닥 → 폭발' 순서.
+            // 착지 → 3단 동심원 (중심부터 바깥으로). 각 단은 '경고 바닥 → 폭발' 순서(0.5초 간격).
             ringsActive = true;
-            yield return BlastRing(landing, 0f, ring1Radius);
-            yield return BlastRing(landing, ring1Radius, ring2Radius);
-            yield return BlastRing(landing, ring2Radius, ring3Radius);
+            yield return BlastRing(landing, 0f, ring1Radius, ringWarningTime);
+            yield return BlastRing(landing, ring1Radius, ring2Radius, ringWarningTime);
+            yield return BlastRing(landing, ring2Radius, ring3Radius, ringWarningTime);
 
-            // 2페이즈 강화: 0.7초 후 같은 순서로 2차 폭발
+            // 2페이즈 강화: 0.7초 후 2차 폭발 — 1·2·3단을 빠르게(0.2초 간격) 연속 "퍼버벙"
             if (phase2Mode)
             {
                 yield return new WaitForSeconds(phase2SecondWaveDelay);
-                yield return BlastRing(landing, 0f, ring1Radius);
-                yield return BlastRing(landing, ring1Radius, ring2Radius);
-                yield return BlastRing(landing, ring2Radius, ring3Radius);
+                yield return BlastRing(landing, 0f, ring1Radius, phase2SecondWaveRingDelay);
+                yield return BlastRing(landing, ring1Radius, ring2Radius, phase2SecondWaveRingDelay);
+                yield return BlastRing(landing, ring2Radius, ring3Radius, phase2SecondWaveRingDelay);
             }
 
             ringsActive = false;
@@ -120,12 +123,12 @@ namespace BagSurvivor.Monster
             GizmoCircle(c, ring3Radius, Color.red);
         }
 
-        /// <summary>경고 바닥(outer 크기) 표시 → ringWarningTime 후 폭발 + (inner,outer] 밴드 타격.</summary>
-        private IEnumerator BlastRing(Vector3 center, float inner, float outer)
+        /// <summary>경고 바닥(outer 크기) 표시 → warningTime 후 폭발 + (inner,outer] 밴드 타격.</summary>
+        private IEnumerator BlastRing(Vector3 center, float inner, float outer, float warningTime)
         {
             // 폭발 전 경고 바닥(밴드 바깥 반경 크기로 스케일)
             GameObject warn = SpawnScaled(ringWarningPrefab, center, outer);
-            if (ringWarningTime > 0f) yield return new WaitForSeconds(ringWarningTime);
+            if (warningTime > 0f) yield return new WaitForSeconds(warningTime);
             ReturnPooled(warn);
 
             // 폭발 이펙트 + 타격

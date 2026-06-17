@@ -59,7 +59,9 @@ namespace BagSurvivor.Monster
             GameObject tele = ShowTelegraph(dir);
 
             // 1) 조준 단계: 돌진 직전까지 예고 방향이 플레이어를 계속 추적
-            float aimTime = Mathf.Max(0f, startDelay - lockLeadTime);
+            // 총 대기는 항상 startDelay와 일치(조준 + 확정고정). startDelay가 짧으면 확정구간도 줄어듦.
+            float lockWait = Mathf.Min(lockLeadTime, startDelay);
+            float aimTime = Mathf.Max(0f, startDelay - lockWait);
             float t = 0f;
             while (t < aimTime)
             {
@@ -77,7 +79,7 @@ namespace BagSurvivor.Monster
             AimTelegraph(tele, dir);
 
             // 3) 확정 방향을 짧게 고정 표시 후 돌진
-            if (lockLeadTime > 0f) yield return new WaitForSeconds(lockLeadTime);
+            if (lockWait > 0f) yield return new WaitForSeconds(lockWait);
             ReturnTelegraph(tele);
 
             // 4) 돌진
