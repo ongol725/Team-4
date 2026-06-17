@@ -429,7 +429,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             if (hasSprite)
             {
                 // 8방향 오프셋 아웃라인 — 실루엣 외곽 투명 영역에 희귀도 색상 렌더
-                const float outlineSize = 5f;
+                const float outlineSize = 2f;
                 Vector2[] dirs = {
                     new Vector2(-1,-1), new Vector2(0,-1), new Vector2(1,-1),
                     new Vector2(-1, 0),                    new Vector2(1, 0),
