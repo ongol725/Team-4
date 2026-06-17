@@ -19,7 +19,11 @@ namespace BagSurvivor.Monster
         [Tooltip("한 번 누를 때 보스에 주는 피해(방어력 적용 전)")]
         public int damagePerPress = 2000;
 
+        [Tooltip("2페이즈 강화 모드 토글 키(전환 없이 패턴 강화 테스트)")]
+        public Key togglePhase2Key = Key.P;
+
         private MonsterController mc;
+        private bool phase2On;
 
         private void Awake()
         {
@@ -33,6 +37,15 @@ namespace BagSurvivor.Monster
 
             if (kb[damageKey].wasPressedThisFrame)
                 mc.TakeDamage(damagePerPress);
+
+            // P: 모든 패턴 phase2Mode 토글(강화 패턴 즉시 확인용)
+            if (kb[togglePhase2Key].wasPressedThisFrame)
+            {
+                phase2On = !phase2On;
+                foreach (var p in GetComponents<BossPatternBase>())
+                    p.phase2Mode = phase2On;
+                Debug.Log($"[SandboxBossDebug] phase2Mode = {phase2On}");
+            }
         }
     }
 }
