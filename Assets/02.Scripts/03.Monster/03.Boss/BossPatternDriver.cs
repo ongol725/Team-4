@@ -86,6 +86,30 @@ namespace BagSurvivor.Monster
             loop = null;
         }
 
+        /// <summary>현재 패턴을 실행 중인지(페이즈 전환 타이밍 판단용).</summary>
+        public bool IsExecuting => executing;
+
+        /// <summary>패턴 구동을 멈춥니다(진행 중 패턴 강제 종료 + 보스 제어 상태 정리). 페이즈 전환 등에서 호출.</summary>
+        public void Halt()
+        {
+            if (loop != null) { StopCoroutine(loop); loop = null; }
+            executing = false;
+            if (controller != null)
+            {
+                controller.EndExternalMovement();
+                controller.SetKnockbackImmune(false);
+                controller.PauseMovement(); // 전환 동안 제자리 정지
+            }
+        }
+
+        /// <summary>패턴 구동을 재개합니다(어그로 유지). 페이즈 전환 완료 후 호출.</summary>
+        public void Resume()
+        {
+            if (controller != null) controller.ResumeMovement();
+            aggroed = true;
+            if (loop == null) loop = StartCoroutine(DriveLoop());
+        }
+
         private IEnumerator DriveLoop()
         {
             var waitDecision = new WaitForSeconds(decisionInterval);

@@ -83,6 +83,9 @@ namespace BagSurvivor.Monster
         // true인 동안 FixedUpdate의 HandleMovement(추적/정지 처리)를 건너뛴다.
         private bool externalMovementControl = false;
 
+        // 무적 플래그(보스 페이즈 전환 연출 등). true인 동안 TakeDamage가 피해를 무시한다.
+        private bool isInvincible = false;
+
         // 사망 통지 콜백 (스폰 주체가 주입: 방 클리어 통지·풀 반환 위임). null이면 자체 비활성화.
         private System.Action<MonsterController> deathCallback;
 
@@ -159,6 +162,7 @@ namespace BagSurvivor.Monster
             isDying = false;
             isMovementPaused = false;
             externalMovementControl = false;
+            isInvincible = false;
             deathCallback = null;
             hpMultiplier = 1f;
             attackMultiplier = 1f;
@@ -387,7 +391,7 @@ namespace BagSurvivor.Monster
         /// <param name="knockbackDirection">넉백 방향 (정규화된 벡터)</param>
         public void TakeDamage(int rawDamage, float knockbackForce = 0f, Vector2 knockbackDirection = default)
         {
-            if (isDying) return;
+            if (isDying || isInvincible) return;
 
             // 방어력 적용
             int finalDamage = monsterData.CalculateDamageTaken(rawDamage);
@@ -615,6 +619,18 @@ namespace BagSurvivor.Monster
             externalMovementControl = false;
             if (rb != null) rb.linearVelocity = Vector2.zero;
         }
+
+        /// <summary>무적 상태를 설정합니다. true인 동안 TakeDamage가 무시됩니다(페이즈 전환 연출 등).</summary>
+        public void SetInvincible(bool value)
+        {
+            isInvincible = value;
+        }
+
+        /// <summary>현재 무적 여부.</summary>
+        public bool IsInvincible => isInvincible;
+
+        /// <summary>현재 체력 비율(0~1).</summary>
+        public float HpRatio => runtimeMaxHP > 0 ? (float)currentHP / runtimeMaxHP : 0f;
 
         /// <summary>
         /// 넉백 면역 상태를 설정합니다. 돌진 등 특수 상태에서 사용합니다.
