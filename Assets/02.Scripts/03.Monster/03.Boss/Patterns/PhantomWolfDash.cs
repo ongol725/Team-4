@@ -2,9 +2,9 @@
 // PhantomWolfDash.cs
 // 환영 늑대/분신용 돌진 동반 컴포넌트
 //  - MonsterPool로 소환된 MonsterController 위에 부착
-//  - Dash(dir) 호출 시: 돌진 방향 예고(텔레그래프)를 startDelay 동안 표시 → 돌진 → 풀 반환
-//  - 소환을 0.5초 간격으로 하고 각 늑대가 자기 소환 후 startDelay(2초) 뒤 돌진하므로,
-//    돌진도 0.5초씩 어긋난다.
+//  - Dash() 호출 시: 늑대는 소환 자리에 '가만히' 있고(위치 이동 X), 돌진 방향 예고만
+//    플레이어를 계속 추적 → 돌진 직전 추적을 멈춰 방향 확정 → 돌진 → 풀 반환.
+//  - 소환 0.5초 간격 + 각자 startDelay 후 돌진 → 돌진도 0.5초씩 어긋남.
 //  - 돌진 중 접촉 피해는 MonsterController의 기존 접촉 데미지 로직이 처리.
 //  - PhantomDash 패턴과 2페이즈 분신 패턴이 공용으로 사용.
 // ============================================================
@@ -23,8 +23,11 @@ namespace BagSurvivor.Monster
         [Tooltip("돌진 거리(m, 기획서 Attack_Range 20m)")]
         public float dashDistance = 20f;
 
-        [Tooltip("소환 후 돌진 시작까지 대기(초, 이 동안 방향 예고 표시)")]
+        [Tooltip("소환 후 돌진 시작까지 총 대기(초). 이 중 앞부분은 방향 추적, 끝의 lockLeadTime 동안 방향 확정")]
         public float startDelay = 2f;
+
+        [Tooltip("돌진 직전 방향 추적을 멈추고 확정 방향을 고정 표시하는 시간(초). 추적 시간 = startDelay - 이 값")]
+        public float lockLeadTime = 0.4f;
 
         [Header("연출 프리팹(선택)")]
         [Tooltip("돌진 방향 예고(텔레그래프) 프리팹")]
@@ -37,24 +40,47 @@ namespace BagSurvivor.Monster
             controller = GetComponent<MonsterController>();
         }
 
-        /// <summary>지정 방향으로 돌진을 시작합니다(소환 직후 호출). 방향 예고 후 돌진, 완료 시 풀 반환.</summary>
-        public void Dash(Vector2 dir)
+        /// <summary>돌진을 시작합니다(소환 직후 호출). 추적 → 직전 정지/예고 → 돌진 → 풀 반환.
+        /// fallbackDir는 플레이어를 못 찾을 때만 사용.</summary>
+        public void Dash(Vector2 fallbackDir)
         {
-            StartCoroutine(DashRoutine(dir.sqrMagnitude < 0.0001f ? Vector2.right : dir.normalized));
+            StartCoroutine(DashRoutine(fallbackDir.sqrMagnitude < 0.0001f ? Vector2.right : fallbackDir.normalized));
         }
 
-        private IEnumerator DashRoutine(Vector2 dir)
+        private IEnumerator DashRoutine(Vector2 fallbackDir)
         {
-            // 예고 동안 늑대가 추적하지 않도록 이동을 먼저 위임받아 정지
+            // 소환 직후부터 제자리 정지(위치 이동 X). 방향 예고만 플레이어를 추적.
             controller.BeginExternalMovement();
             controller.SetKnockbackImmune(true);
             controller.SetVelocity(Vector2.zero);
 
-            // 돌진 방향 예고: 소환 시점 방향으로 고정 표시
+            Vector2 dir = controller.GetDirectionToPlayer();
+            if (dir.sqrMagnitude < 0.0001f) dir = fallbackDir;
             GameObject tele = ShowTelegraph(dir);
-            if (startDelay > 0f) yield return new WaitForSeconds(startDelay);
+
+            // 1) 조준 단계: 돌진 직전까지 예고 방향이 플레이어를 계속 추적
+            float aimTime = Mathf.Max(0f, startDelay - lockLeadTime);
+            float t = 0f;
+            while (t < aimTime)
+            {
+                if (controller == null || controller.IsDead) break;
+                Vector2 d = controller.GetDirectionToPlayer();
+                if (d.sqrMagnitude > 0.0001f) dir = d;
+                AimTelegraph(tele, dir);
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            // 2) 추적 정지 → 돌진 방향 확정(마지막 플레이어 방향으로 고정)
+            Vector2 locked = controller != null ? controller.GetDirectionToPlayer() : Vector2.zero;
+            if (locked.sqrMagnitude > 0.0001f) dir = locked;
+            AimTelegraph(tele, dir);
+
+            // 3) 확정 방향을 짧게 고정 표시 후 돌진
+            if (lockLeadTime > 0f) yield return new WaitForSeconds(lockLeadTime);
             ReturnTelegraph(tele);
 
+            // 4) 돌진
             float traveled = 0f;
             while (traveled < dashDistance)
             {
@@ -79,6 +105,14 @@ namespace BagSurvivor.Monster
             if (GameObjectPool.Instance != null)
                 return GameObjectPool.Instance.Get(dirTelegraphPrefab, transform.position, rot);
             return Instantiate(dirTelegraphPrefab, transform.position, rot);
+        }
+
+        /// <summary>예고 표식을 늑대 위치에 두고 dir 방향으로 회전 갱신(조준 추적용).</summary>
+        private void AimTelegraph(GameObject tele, Vector2 dir)
+        {
+            if (tele == null) return;
+            float ang = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            tele.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0f, 0f, ang));
         }
 
         private void ReturnTelegraph(GameObject go)
