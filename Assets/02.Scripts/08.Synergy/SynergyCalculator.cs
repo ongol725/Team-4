@@ -120,6 +120,7 @@ public class SynergyCalculator : MonoBehaviour
 
             result.Add(new SynergyInfo
             {
+                type          = kvp.Key,
                 synergyName   = displayName,
                 count         = count,
                 nextThreshold = nextMin,

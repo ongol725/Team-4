@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
-    // 타입별 등장 확률 가중치: weapon=75, armor=15, inventory=10
-    private static readonly int[] TypeWeights = { 75, 15, 10 };
+    // 타입별 등장 확률 가중치: weapon=65, armor=15, inventory=10, accessory=10 (임시)
+    private static readonly int[] TypeWeights = { 65, 15, 10, 10 };
     private const int TypeWeightTotal = 100;
 
     // 상점 등급(1~7)별 레어도 가중치 [shopGrade-1][0=Common, 1=Rare, 2=Epic, 3=Legendary]
@@ -20,9 +20,10 @@ public class ShopManager : MonoBehaviour
     };
     private const int RarityCount = 4;
 
-    // 버킷 0=무기, 1=방어구, 2=인벤토리 블록
+    // 버킷 0=무기, 1=방어구, 2=인벤토리 블록, 3=장신구(반지)
     private readonly List<SO_ItemData>[] _buckets =
     {
+        new(),
         new(),
         new(),
         new(),
@@ -36,6 +37,7 @@ public class ShopManager : MonoBehaviour
         _buckets[0].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Weapons"));
         _buckets[1].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Armor"));
         _buckets[2].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/InventoryBlocks"));
+        _buckets[3].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Accessories"));
     }
 
     public SO_ItemData[] GenerateShopItems(int count = 5, int shopGrade = 1)
@@ -55,9 +57,9 @@ public class ShopManager : MonoBehaviour
                 var bucket  = _buckets[typeIdx];
                 if (bucket.Count == 0) continue;
 
-                // 인벤토리 블록은 레어도 무관 균등 선택
+                // 인벤토리 블록·장신구는 레어도 무관 균등 선택
                 SO_ItemData candidate;
-                if (typeIdx == 2)
+                if (typeIdx == 2 || typeIdx == 3)
                 {
                     candidate = bucket[Random.Range(0, bucket.Count)];
                 }

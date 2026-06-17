@@ -11,7 +11,11 @@ public class ItemInstance
     public SO_ItemData data;
 
     [Range(0, 4)]
-    public int gradeIndex;  // 0 = 1등급, 4 = 5등급
+    public int gradeIndex;     // 0 = 1등급, 4 = 5등급
+
+    /// <summary>반지 인접 버프로 추가되는 임시 등급 보너스. InventoryAnalyzer.Analyze()마다 초기화된다.</summary>
+    [System.NonSerialized]
+    public int RingGradeBonus;
 
     // ─────────────────────────────────────────────────────────────
 

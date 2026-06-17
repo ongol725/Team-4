@@ -25,6 +25,9 @@ public class ShopUI : MonoBehaviour
     [Header("패널 루트")]
     [SerializeField] private GameObject _panelRoot;
 
+    [Header("전투 데이터 전달")]
+    [SerializeField] private BattleLoadoutBuilder _loadoutBuilder;
+
     // 각 등급에서 다음 등급으로 오르는 데 필요한 리롤 횟수 (인덱스 0 = 1등급 → 2등급)
     private static readonly int[] GradeThresholds = { 10, 15, 20, 25, 30, 35 };
 
@@ -78,6 +81,7 @@ public class ShopUI : MonoBehaviour
 
     public void Close()
     {
+        _loadoutBuilder?.BuildAndDeliver();
         if (_panelRoot != null) _panelRoot.SetActive(false);
     }
 

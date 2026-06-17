@@ -25,6 +25,13 @@ public class InventorySnapshot
 
     // ─────────────────────────────────────────────────────────────
 
+    /// <summary>반지 인접 버프를 합산 스탯에 직접 가산한다. InventoryAnalyzer 전용.</summary>
+    internal void AddAdjacentBuff(RingAdjacentBuff buff)
+    {
+        TotalAttackPower += buff.attackPowerBonus;
+        TotalAttackSpeed += buff.attackSpeedBonus;
+    }
+
     /// <summary>아이템 한 개를 분류·집계에 추가한다. InventoryAnalyzer 전용.</summary>
     internal void Add(ItemInstance inst)
     {

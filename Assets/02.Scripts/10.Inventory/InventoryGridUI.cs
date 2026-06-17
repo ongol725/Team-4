@@ -165,8 +165,10 @@ public class InventoryGridUI : MonoBehaviour
         }
 
         Color color;
-        if (outOfRange || isMultiple)
+        if (outOfRange)
             color = _invalidColor;
+        else if (isMultiple)
+            color = _swapColor;   // 여러 아이템 → 전부 밀어내기 가능
         else if (overlapping == null)
             color = _validColor;
         else if (overlapping.data == inst.data)

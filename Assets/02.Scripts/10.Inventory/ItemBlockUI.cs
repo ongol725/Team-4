@@ -30,6 +30,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     private bool _isInTempSlot;
     private TempSlotUI _tempSlot;
     private bool _placementInputGuard;
+    private int  _lastRingGradeBonus = -1;
 
     // 하이라이트 색상 (InventoryGridUI와 별도로 상태 전달용으로 사용)
     private static readonly Color[] RarityColors =
@@ -64,6 +65,13 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 
     private void Update()
     {
+        // 배치 상태에서 반지 인접 버프가 바뀌면 비주얼 갱신
+        if (_isPlaced && _instance.RingGradeBonus != _lastRingGradeBonus)
+        {
+            _lastRingGradeBonus = _instance.RingGradeBonus;
+            RefreshVisuals();
+        }
+
         if (!_isFollowingMouse) return;
 
         var mouse    = Mouse.current;
@@ -115,41 +123,38 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             return;
         }
 
-        var (overlapping, isMultiple) = FindOverlappingInstance(origin);
+        var overlaps = FindAllOverlappingInstances(origin);
 
-        if (isMultiple) return; // 여러 종류 겹침 → 불가
-
-        if (overlapping == null)
+        if (overlaps.Count == 0)
         {
             // 빈 칸 → 일반 배치
             if (_grid.TryPlace(_instance, origin))
                 SnapToGrid(origin);
         }
-        else if (overlapping.data == _instance.data)
+        else if (overlaps.Count == 1 && overlaps[0].data == _instance.data)
         {
-            // 같은 아이템 → 합성
-            TrySynthesize(overlapping);
+            // 같은 아이템 단독 → 합성
+            TrySynthesize(overlaps[0]);
         }
         else
         {
-            // 다른 아이템 → 스왑
-            TrySwap(overlapping, origin);
+            // 하나 또는 여러 다른 아이템 → 스왑
+            TryMultiSwap(overlaps, origin);
         }
     }
 
-    /// <summary>origin 기준으로 이 아이템 셀들이 겹치는 단일 ItemInstance 탐색</summary>
-    private (ItemInstance inst, bool isMultiple) FindOverlappingInstance(Vector2Int origin)
+    /// <summary>origin 기준으로 겹치는 모든 고유 ItemInstance 목록 반환</summary>
+    private System.Collections.Generic.List<ItemInstance> FindAllOverlappingInstances(Vector2Int origin)
     {
-        ItemInstance found = null;
+        var result = new System.Collections.Generic.List<ItemInstance>();
         foreach (var local in InventoryGrid.GetCells(_instance.data))
         {
             var world = origin + local;
             var inst  = _grid.GetInstanceAt(world);
-            if (inst == null) continue;
-            if (found == null) found = inst;
-            else if (found != inst) return (null, true);
+            if (inst != null && !result.Contains(inst))
+                result.Add(inst);
         }
-        return (found, false);
+        return result;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -168,32 +173,53 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     // ─────────────────────────────────────────────────────────────
     // 스왑
 
-    private void TrySwap(ItemInstance displaced, Vector2Int origin)
+    private void TryMultiSwap(System.Collections.Generic.List<ItemInstance> displaced, Vector2Int origin)
     {
-        var displacedBlock = _gridUI.FindItemBlock(displaced);
+        // 원위치 및 블록UI 저장
+        var savedOrigins = new Vector2Int[displaced.Count];
+        var savedBlocks  = new ItemBlockUI[displaced.Count];
+        for (int i = 0; i < displaced.Count; i++)
+        {
+            _grid.TryGetOrigin(displaced[i], out savedOrigins[i]);
+            savedBlocks[i] = _gridUI.FindItemBlock(displaced[i]);
+        }
 
-        // 원래 위치를 미리 저장 (배치 실패 시 복원용)
-        _grid.TryGetOrigin(displaced, out var savedOrigin);
-
-        _grid.Remove(displaced);
-        _gridUI.OnItemUnplaced(displaced);
+        // 전부 그리드에서 제거
+        for (int i = 0; i < displaced.Count; i++)
+        {
+            _grid.Remove(displaced[i]);
+            _gridUI.OnItemUnplaced(displaced[i]);
+        }
 
         if (_grid.TryPlace(_instance, origin))
         {
-            // 배치 성공: 임시칸이 있으면 임시칸으로, 없으면 마우스로
-            var tempSlot = _gridUI.TempSlot;
-            if (tempSlot != null && displacedBlock != null)
-                tempSlot.ReceiveBlock(displacedBlock);
-            else if (displacedBlock != null)
-                displacedBlock.ResumeFollowing();
-
+            // 배치 성공: 첫 번째는 임시칸으로, 나머지는 마우스로
+            var tempSlot  = _gridUI.TempSlot;
+            bool tempUsed = false;
+            for (int i = 0; i < displaced.Count; i++)
+            {
+                var blockUI = savedBlocks[i];
+                if (blockUI == null) continue;
+                if (!tempUsed && tempSlot != null)
+                {
+                    tempSlot.ReceiveBlock(blockUI);
+                    tempUsed = true;
+                }
+                else
+                {
+                    blockUI.ResumeFollowing();
+                }
+            }
             SnapToGrid(origin);
         }
         else
         {
-            // 배치 실패: 밀려난 아이템 원위치 복원, 현재 아이템은 계속 들고 있음
-            _grid.TryPlace(displaced, savedOrigin);
-            _gridUI.OnItemRestored(displaced, displacedBlock);
+            // 배치 실패: 전부 원위치 복원
+            for (int i = 0; i < displaced.Count; i++)
+            {
+                _grid.TryPlace(displaced[i], savedOrigins[i]);
+                _gridUI.OnItemRestored(displaced[i], savedBlocks[i]);
+            }
         }
     }
 
@@ -360,7 +386,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             {
                 AddLabel(go, _instance.data.itemName);
                 if (_instance.HasGrades)
-                    AddGradeBadge(go, _instance.gradeIndex + 1);
+                    AddGradeBadge(go, _instance.gradeIndex + _instance.RingGradeBonus + 1,
+                                  _instance.RingGradeBonus > 0);
                 labelPlaced = true;
             }
         }
@@ -390,7 +417,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         txt.raycastTarget = false;
     }
 
-    private static void AddGradeBadge(GameObject parent, int grade)
+    private static void AddGradeBadge(GameObject parent, int grade, bool isBuffed = false)
     {
         var go = new GameObject("grade", typeof(RectTransform), typeof(Text));
         go.transform.SetParent(parent.transform, false);
@@ -408,7 +435,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         txt.fontSize  = 10;
         txt.fontStyle = FontStyle.Bold;
         txt.alignment = TextAnchor.UpperLeft;
-        txt.color     = new Color(1f, 0.95f, 0.4f);
+        // 반지 버프 적용 중이면 파란색, 아니면 기본 노란색
+        txt.color     = isBuffed ? new Color(0.35f, 0.75f, 1f) : new Color(1f, 0.95f, 0.4f);
         txt.raycastTarget = false;
     }
 }
