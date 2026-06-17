@@ -308,7 +308,7 @@ public class ShopSlotUI : MonoBehaviour
         rt.anchorMax        = template.anchorMax;
         rt.pivot            = template.pivot;
         rt.sizeDelta        = template.sizeDelta;
-        rt.anchoredPosition = template.anchoredPosition + new Vector2(0f, -index * template.sizeDelta.y);
+        rt.anchoredPosition = template.anchoredPosition + new Vector2(0f, -index * 24f);
 
         var src = template.GetComponent<Text>();
         var txt = go.GetComponent<Text>();
