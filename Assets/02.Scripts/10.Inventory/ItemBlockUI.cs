@@ -552,7 +552,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     // 드래그 중 셀 형태를 나타내는 외각선 (4-strip 방식)
     private void AddCellOutline(Vector2Int cell, Color col)
     {
-        const float thick = 3f;
+        const float thick = 1.5f;
         float s = _cellSize;
 
         var container = new GameObject("cell_outline");
