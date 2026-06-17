@@ -552,8 +552,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     // 드래그 중 셀 형태를 나타내는 외각선 (4-strip 방식)
     private void AddCellOutline(Vector2Int cell, Color col)
     {
-        const float thick = 1.5f;
-        float s = _cellSize - 1f;
+        const float thick = 3f;
+        float s = _cellSize;
 
         var container = new GameObject("cell_outline");
         container.transform.SetParent(_rt, false);
@@ -561,8 +561,20 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         cRt.anchorMin = cRt.anchorMax = new Vector2(0f, 1f);
         cRt.pivot     = new Vector2(0f, 1f);
         cRt.sizeDelta = new Vector2(s, s);
-        cRt.anchoredPosition = new Vector2(cell.y * _cellSize + 0.5f, -cell.x * _cellSize - 0.5f);
+        cRt.anchoredPosition = new Vector2(cell.y * s, -cell.x * s);
 
+        // 반투명 셀 배경 (아이템 뒤에서 블록 형태 강조)
+        var bgGo = new GameObject("bg", typeof(RectTransform), typeof(Image));
+        bgGo.transform.SetParent(container.transform, false);
+        var bgRt = bgGo.GetComponent<RectTransform>();
+        bgRt.anchorMin = Vector2.zero;
+        bgRt.anchorMax = Vector2.one;
+        bgRt.offsetMin = bgRt.offsetMax = Vector2.zero;
+        var bgImg = bgGo.GetComponent<Image>();
+        bgImg.color         = new Color(0f, 0f, 0f, 0.3f);
+        bgImg.raycastTarget = false;
+
+        // 3px 외각선 / 내부 구분선 (4-strip)
         OutlineStrip(container, new Vector2(0,         0              ), new Vector2(s,     thick),          col);
         OutlineStrip(container, new Vector2(0,         -(s - thick)   ), new Vector2(s,     thick),          col);
         OutlineStrip(container, new Vector2(0,         -thick         ), new Vector2(thick, s - thick * 2f), col);
