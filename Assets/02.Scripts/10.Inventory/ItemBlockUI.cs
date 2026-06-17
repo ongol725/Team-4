@@ -19,6 +19,21 @@ using UnityEngine.UI;
 [RequireComponent(typeof(RectTransform))]
 public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 {
+    // 씬 전반에서 하나만 생성해 재사용
+    private static Material _silhouetteMat;
+
+    private static Material SilhouetteMat
+    {
+        get
+        {
+            if (_silhouetteMat != null) return _silhouetteMat;
+            var shader = Shader.Find("Custom/UISilhouette");
+            if (shader == null) return null;
+            _silhouetteMat = new Material(shader) { name = "UISilhouette_Shared" };
+            return _silhouetteMat;
+        }
+    }
+
     private ItemInstance    _instance;
     private InventoryGridUI _gridUI;
     private InventoryGrid   _grid;
@@ -420,6 +435,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                     new Vector2(-1, 0),                    new Vector2(1, 0),
                     new Vector2(-1, 1), new Vector2(0, 1), new Vector2(1, 1),
                 };
+                var silMat = SilhouetteMat;
                 foreach (var dir in dirs)
                 {
                     var outGo = new GameObject("outline", typeof(RectTransform), typeof(Image));
@@ -434,6 +450,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                     outImg.preserveAspect = true;
                     outImg.color          = borderCol;
                     outImg.raycastTarget  = false;
+                    if (silMat != null) outImg.material = silMat;
                 }
 
                 // 원본 스프라이트 (아웃라인 위에 렌더)
