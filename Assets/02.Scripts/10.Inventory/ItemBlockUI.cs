@@ -364,7 +364,9 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 
     private void BuildVisuals()
     {
-        var cells = InventoryGrid.GetCells(_instance.data);
+        var cells     = InventoryGrid.GetCells(_instance.data);
+        bool hasSprite = _instance.data.itemImage != null
+                      && !(_instance.data is SO_InventoryBlockData);
 
         Color baseColor;
         if (_instance.data is SO_InventoryBlockData)
@@ -381,6 +383,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
                 Mathf.Clamp01(RarityColors[rarityIdx].b * bright));
         }
 
+        // ── 1. 배경 타일 ──
         bool labelPlaced = false;
         foreach (var cell in cells)
         {
@@ -397,15 +400,52 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
 
             go.GetComponent<Image>().color = baseColor;
 
-            if (!labelPlaced)
+            // 스프라이트가 없을 때만 이름 레이블 표시
+            if (!labelPlaced && !hasSprite)
             {
                 AddLabel(go, _instance.data.itemName);
-                if (_instance.HasGrades)
-                    AddGradeBadge(go, _instance.gradeIndex + _instance.RingGradeBonus + 1,
-                                  _instance.RingGradeBonus > 0);
                 labelPlaced = true;
             }
         }
+
+        // ── 2. 스프라이트 오버레이 (아이템 전체 셀 영역에 걸치게) ──
+        if (hasSprite)
+        {
+            int minRow = int.MaxValue, minCol = int.MaxValue;
+            int maxRow = int.MinValue, maxCol = int.MinValue;
+            foreach (var c in cells)
+            {
+                if (c.x < minRow) minRow = c.x;
+                if (c.x > maxRow) maxRow = c.x;
+                if (c.y < minCol) minCol = c.y;
+                if (c.y > maxCol) maxCol = c.y;
+            }
+
+            var iconGo = new GameObject("icon", typeof(RectTransform), typeof(Image));
+            iconGo.transform.SetParent(_rt, false);
+
+            var iconRt = iconGo.GetComponent<RectTransform>();
+            iconRt.anchorMin = iconRt.anchorMax = new Vector2(0f, 1f);
+            iconRt.pivot     = new Vector2(0f, 1f);
+            iconRt.sizeDelta = new Vector2(
+                (maxCol - minCol + 1) * _cellSize,
+                (maxRow - minRow + 1) * _cellSize);
+            iconRt.anchoredPosition = new Vector2(
+                 minCol * _cellSize,
+                -minRow * _cellSize);
+
+            var iconImg = iconGo.GetComponent<Image>();
+            iconImg.sprite         = _instance.data.itemImage;
+            iconImg.preserveAspect = true;
+            iconImg.color          = Color.white;
+            iconImg.raycastTarget  = false;
+        }
+
+        // ── 3. 등급 배지 (아이콘보다 위에 렌더되도록 마지막에 추가) ──
+        if (_instance.HasGrades)
+            AddGradeBadge(_rt.gameObject,
+                          _instance.gradeIndex + _instance.RingGradeBonus + 1,
+                          _instance.RingGradeBonus > 0);
     }
 
     private static Font GetDefaultFont() =>
