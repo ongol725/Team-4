@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_003
   itemName: "여행자의 망토"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -6938955921445924151, guid: 212e46efa5d1e5b4b8a6e5be94020baa, type: 3}
   rarity: 0
   grade: 1
   cost: 3

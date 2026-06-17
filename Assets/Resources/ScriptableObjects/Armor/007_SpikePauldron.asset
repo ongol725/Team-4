@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_007
   itemName: "가시 견갑"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 3673831549330728940, guid: 9b7b1d66b9d6b954e96d90dd8392ad00, type: 3}
   rarity: 1
   grade: 1
   cost: 4

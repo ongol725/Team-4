@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_004
   itemName: "철제 서클릿"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 8224905798187047091, guid: 32ec3f09244ed014eae0e5a6bebddf59, type: 3}
   rarity: 0
   grade: 1
   cost: 3

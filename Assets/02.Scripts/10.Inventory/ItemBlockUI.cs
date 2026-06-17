@@ -395,9 +395,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     {
         _cellOutlines.Clear();
 
-        var cells     = InventoryGrid.GetCells(_instance.data);
-        bool isWeapon = _instance.data is SO_WeaponData;
-        bool hasSprite = _instance.data.itemImage != null && isWeapon;
+        var cells         = InventoryGrid.GetCells(_instance.data);
+        bool isWeapon     = _instance.data is SO_WeaponData;
+        bool hasSprite    = _instance.data.itemImage != null;
+        bool useIconLayout = isWeapon || hasSprite;  // 무기 or 스프라이트가 있는 방어구
 
         // 희귀도 → 셀 보조선 색상
         int   rarityIdx  = Mathf.Clamp((int)_instance.data.rarity, 0, RarityColors.Length - 1);
@@ -411,7 +412,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
             : Color.white;
 
         // ── 무기: 투명 배경 + 테두리 방식 ──
-        if (isWeapon)
+        if (useIconLayout)
         {
             int minRow = int.MaxValue, minCol = int.MaxValue;
             int maxRow = int.MinValue, maxCol = int.MinValue;

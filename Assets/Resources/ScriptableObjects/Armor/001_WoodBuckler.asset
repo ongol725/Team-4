@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_001
   itemName: "나무 버클러"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -7731722449108740392, guid: c1e324df44f182241b5cac261f922d79, type: 3}
   rarity: 0
   grade: 1
   cost: 2

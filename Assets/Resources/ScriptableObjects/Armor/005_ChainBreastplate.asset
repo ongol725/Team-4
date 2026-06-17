@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_005
   itemName: "사슬 흉갑"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 6150422840948375150, guid: a13f9a9c0cd0c1440a0673d44667effb, type: 3}
   rarity: 1
   grade: 1
   cost: 4

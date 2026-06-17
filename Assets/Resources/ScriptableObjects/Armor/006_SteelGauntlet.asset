@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_006
   itemName: "강철 건틀릿"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 6839820221605333440, guid: 510a4fcfa63a189408af76279e211cc4, type: 3}
   rarity: 1
   grade: 1
   cost: 4

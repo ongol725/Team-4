@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_010
   itemName: "수호석 방패"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -672445290821627355, guid: 20888fe9fd08ce34287c59de89eaf33a, type: 3}
   rarity: 2
   grade: 1
   cost: 6

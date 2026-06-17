@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_008
   itemName: "기사단의 문장"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 7933383539249057995, guid: b43a240ad69cf7c4e9e89618e17069dc, type: 3}
   rarity: 2
   grade: 1
   cost: 6

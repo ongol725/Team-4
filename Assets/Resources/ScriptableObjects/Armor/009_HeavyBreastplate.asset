@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_009
   itemName: "중기갑 흉갑"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 8322253264223405996, guid: 97c0fb5d0b879854cafb570edc7d8978, type: 3}
   rarity: 2
   grade: 1
   cost: 7

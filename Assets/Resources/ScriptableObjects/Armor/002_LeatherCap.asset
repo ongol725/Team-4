@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ARM_002
   itemName: "가죽 두건"
   itemDescription:
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -5046670100443251171, guid: 906b9d3879382064ea0ecfc4c0f87f2c, type: 3}
   rarity: 0
   grade: 1
   cost: 2
