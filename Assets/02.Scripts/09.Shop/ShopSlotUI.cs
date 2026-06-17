@@ -59,6 +59,20 @@ public class ShopSlotUI : MonoBehaviour
     private Action<ItemInstance, ShopSlotUI> _onBuy;
     private Button                           _shopImageButton;
 
+    private Vector2 _origAnchorMin, _origAnchorMax, _origOffsetMin, _origOffsetMax;
+    private int     _origSiblingIndex;
+
+    // ─────────────────────────────────────────────────────────────
+
+    private void Awake()
+    {
+        _origAnchorMin    = _previewContainer.anchorMin;
+        _origAnchorMax    = _previewContainer.anchorMax;
+        _origOffsetMin    = _previewContainer.offsetMin;
+        _origOffsetMax    = _previewContainer.offsetMax;
+        _origSiblingIndex = _previewContainer.GetSiblingIndex();
+    }
+
     // ─────────────────────────────────────────────────────────────
 
     public void SetItem(SO_ItemData item, Action<ItemInstance, ShopSlotUI> onBuy, int shopGrade = 1)
@@ -137,6 +151,12 @@ public class ShopSlotUI : MonoBehaviour
 
         if (shopSprite != null)
         {
+            _previewContainer.SetAsFirstSibling();
+            _previewContainer.anchorMin = Vector2.zero;
+            _previewContainer.anchorMax = Vector2.one;
+            _previewContainer.offsetMin = Vector2.zero;
+            _previewContainer.offsetMax = Vector2.zero;
+
             var go = new GameObject("ShopImage", typeof(RectTransform), typeof(Image), typeof(Button));
             go.transform.SetParent(_previewContainer, false);
 
@@ -147,14 +167,20 @@ public class ShopSlotUI : MonoBehaviour
             rt.offsetMax = Vector2.zero;
 
             var img = go.GetComponent<Image>();
-            img.sprite          = shopSprite;
-            img.preserveAspect  = true;
+            img.sprite         = shopSprite;
+            img.preserveAspect = true;
 
             _shopImageButton = go.GetComponent<Button>();
             _shopImageButton.onClick.AddListener(OnBuyClicked);
         }
         else
         {
+            _previewContainer.SetSiblingIndex(_origSiblingIndex);
+            _previewContainer.anchorMin = _origAnchorMin;
+            _previewContainer.anchorMax = _origAnchorMax;
+            _previewContainer.offsetMin = _origOffsetMin;
+            _previewContainer.offsetMax = _origOffsetMax;
+
             var cells = (_item.cells != null && _item.cells.Length > 0)
                 ? _item.cells
                 : new[] { Vector2Int.zero };
