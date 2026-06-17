@@ -54,6 +54,7 @@ public class BattleLoadoutBuilder : MonoBehaviour
             Debug.LogWarning("[BattleLoadoutBuilder] 스냅샷을 가져올 수 없습니다.");
             return;
         }
+        GameManager.Instance?.ApplyLoadout(loadout);   // 씬 간 브릿지
         OnLoadoutReady?.Invoke(loadout);
         LogLoadout(loadout);
     }

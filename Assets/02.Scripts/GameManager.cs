@@ -24,6 +24,18 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int gold = 10000;
     public event System.Action<int> onGoldChanged;
 
+    // 전투 로드아웃 브릿지 — 인벤토리 팝업 닫힐 때 BattleLoadoutBuilder가 호출,
+    // PlayerStats/PlayerHealth 등 전투 씬 컴포넌트가 구독한다.
+    public BattleLoadout CurrentLoadout { get; private set; }
+    public event System.Action<BattleLoadout> onLoadoutReady;
+
+    public void ApplyLoadout(BattleLoadout loadout)
+    {
+        if (loadout == null) return;
+        CurrentLoadout = loadout;
+        onLoadoutReady?.Invoke(loadout);
+    }
+
     /// <summary>골드를 추가합니다.</summary>
     public void AddGold(int amount)
     {
