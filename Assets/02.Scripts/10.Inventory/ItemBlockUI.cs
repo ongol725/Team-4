@@ -49,6 +49,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     private int  _lastRingGradeBonus = -1;
 
     private readonly List<GameObject> _cellOutlines = new();
+    private Vector2 _dragOffset;
 
     // 희귀도별 테두리 색상 (무기용)
     private static readonly Color[] RarityColors =
@@ -83,9 +84,27 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         _rt.pivot     = new Vector2(0f, 1f);
 
         BuildVisuals();
+        _dragOffset = ComputeDragOffset();
 
         _placementInputGuard = false;
         SetFollowing(true);
+    }
+
+    // 셀 바운딩박스 중심이 마우스와 일치하도록 RT 오프셋 계산
+    private Vector2 ComputeDragOffset()
+    {
+        var cells  = InventoryGrid.GetCells(_instance.data);
+        int minRow = int.MaxValue, maxRow = int.MinValue;
+        int minCol = int.MaxValue, maxCol = int.MinValue;
+        foreach (var c in cells)
+        {
+            if (c.x < minRow) minRow = c.x; if (c.x > maxRow) maxRow = c.x;
+            if (c.y < minCol) minCol = c.y; if (c.y > maxCol) maxCol = c.y;
+        }
+        float cx = (minCol + maxCol + 1) * _cellSize * 0.5f;
+        float cy = (minRow + maxRow + 1) * _cellSize * 0.5f;
+        // pivot이 좌상단(0,1)이므로: 중심을 마우스에 맞추려면 좌로 cx, 위로 cy
+        return new Vector2(-cx, cy);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -104,11 +123,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         var mouse    = Mouse.current;
         var mousePos = (Vector2)mouse.position.ReadValue();
 
-        // 아이템을 마우스 좌상단으로 오프셋 — 마우스가 첫 번째 셀 중앙 근방에 위치해 배치가 편해짐
-        var dragOffset = new Vector2(-_cellSize * 0.5f, _cellSize * 0.5f);
-        _rt.position   = mousePos + dragOffset;
+        // 아이템 바운딩박스 중심이 마우스에 오도록 오프셋 적용
+        _rt.position = mousePos + _dragOffset;
 
-        var cell = _gridUI.ScreenToCell(mousePos + dragOffset);
+        var cell = _gridUI.ScreenToCell(mousePos + _dragOffset);
         if (cell.HasValue)
             _gridUI.HighlightPlacement(_instance, cell.Value);
         else
