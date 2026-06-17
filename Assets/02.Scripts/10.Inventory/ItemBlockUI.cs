@@ -641,7 +641,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         var txt = go.GetComponent<Text>();
         txt.font      = GetDefaultFont();
         txt.text      = grade.ToString();
-        txt.fontSize  = 20;
+        txt.fontSize  = 16;
         txt.fontStyle = FontStyle.Bold;
         txt.alignment = TextAnchor.UpperLeft;
         // 반지 버프 적용 중이면 파란색, 아니면 희귀도 색상
