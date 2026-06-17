@@ -7623,7 +7623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdf33e46b8604a9ca7bd048386d1ef11, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  _popupRoot: {fileID: 0}
   _loadoutBuilder: {fileID: 232402540}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
