@@ -19,6 +19,7 @@ public class InventoryPopupToggle : MonoBehaviour
     private Canvas               _popupCanvas;   // InventoryStoreRoot 의 Canvas 컴포넌트
     private BattleLoadoutDebugUI _debugUI;        // 배치 종합정보 패널 (Canvas_Inventory 직접 자식)
     private InventoryGridUI      _gridUI;         // 현재 드래그 중인 블록 참조용
+    private bool                 _inCombatZone;
     // SellSlotUI 는 싱글톤으로 접근
 
     // ─────────────────────────────────────────────────────────────
@@ -33,6 +34,43 @@ public class InventoryPopupToggle : MonoBehaviour
 
         _debugUI = GetComponent<BattleLoadoutDebugUI>();
         _gridUI  = GetComponent<InventoryGridUI>();
+
+        CombatZone.onCombatStateChanged += OnCombatStateChanged;
+
+        // Additive 씬 로드 타이밍 문제 대응:
+        // InventoryStore 씬이 늦게 로드되어 CombatZone 이벤트를 놓친 경우 즉시 로드아웃 적용
+        if (CombatZone.IsInCombat)
+        {
+            _inCombatZone = true;
+            _loadoutBuilder?.BuildAndDeliver();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        CombatZone.onCombatStateChanged -= OnCombatStateChanged;
+    }
+
+    private void OnCombatStateChanged(bool inCombat)
+    {
+        _inCombatZone = inCombat;
+        if (inCombat)
+        {
+            if (IsOpen) ForceClose();
+            else _loadoutBuilder?.BuildAndDeliver();
+        }
+    }
+
+    // 강제 닫기 — 전투 구역 진입 시 인벤토리가 열려 있으면 자동 닫음
+    private void ForceClose()
+    {
+        if (_popupCanvas == null || !_popupCanvas.enabled) return;
+        _gridUI?.ActiveFollowingBlock?.ForceSendToTempSlot();
+        _popupCanvas.enabled = false;
+        _debugUI?.SetPanelActive(false);
+        SellSlotUI.Instance?.SetPanelActive(false);
+        _loadoutBuilder?.BuildAndDeliver();
+        onPopupToggled?.Invoke(false);
     }
 
     private void Update()
@@ -50,6 +88,7 @@ public class InventoryPopupToggle : MonoBehaviour
     public void Toggle()
     {
         if (_popupCanvas == null) return;
+        if (_inCombatZone) return; // 전투 구역에서는 인벤토리 열기 불가
 
         bool willOpen = !_popupCanvas.enabled;
 

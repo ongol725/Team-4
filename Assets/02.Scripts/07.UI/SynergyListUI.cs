@@ -28,8 +28,60 @@ namespace BagSurvivor.UI
 
         private void Awake()
         {
-            // content가 Inspector에서 연결되지 않은 경우 자신의 RectTransform 사용
             if (content == null) content = GetComponent<RectTransform>();
+            EscapeInventoryCanvas();
+        }
+
+        /// <summary>
+        /// InventoryStoreRoot 캔버스 안에 있으면 독립 Canvas(SynergyCanvas)로 이탈.
+        /// Canvas.enabled = false 의 영향을 받지 않아 항상 렌더링된다.
+        /// </summary>
+        private void EscapeInventoryCanvas()
+        {
+            // InventoryStoreRoot를 찾을 때까지 부모 체인 탐색
+            Canvas srcCanvas = null;
+            Transform directChild = transform; // InventoryStoreRoot 직접 자식 후보
+            Transform t = transform.parent;
+            while (t != null)
+            {
+                if (t.name == "InventoryStoreRoot")
+                {
+                    srcCanvas = t.GetComponent<Canvas>();
+                    break;
+                }
+                directChild = t;
+                t = t.parent;
+            }
+            if (srcCanvas == null) return; // 이미 분리되어 있거나 다른 계층
+
+            // SynergyCanvas 생성 또는 재사용
+            const string CANVAS_NAME = "SynergyCanvas";
+            var canvasGO = GameObject.Find(CANVAS_NAME);
+            if (canvasGO == null)
+            {
+                canvasGO = new GameObject(CANVAS_NAME);
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(
+                    canvasGO, gameObject.scene);
+
+                var canvas = canvasGO.AddComponent<Canvas>();
+                canvas.renderMode   = RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = srcCanvas.sortingOrder + 1;
+
+                // 부모 Canvas의 CanvasScaler 설정 복사 → 좌표계 동일하게 유지
+                var srcScaler = srcCanvas.GetComponent<CanvasScaler>();
+                var dstScaler = canvasGO.AddComponent<CanvasScaler>();
+                if (srcScaler != null)
+                {
+                    dstScaler.uiScaleMode         = srcScaler.uiScaleMode;
+                    dstScaler.referenceResolution  = srcScaler.referenceResolution;
+                    dstScaler.screenMatchMode      = srcScaler.screenMatchMode;
+                    dstScaler.matchWidthOrHeight   = srcScaler.matchWidthOrHeight;
+                }
+                canvasGO.AddComponent<GraphicRaycaster>();
+            }
+
+            // InventoryStoreRoot의 직접 자식(패널 루트)을 SynergyCanvas로 이동
+            directChild.SetParent(canvasGO.transform, false);
         }
 
         private void Start()

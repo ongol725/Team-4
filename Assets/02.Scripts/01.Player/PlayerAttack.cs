@@ -17,15 +17,21 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float _meleeKnockback = 2f;
 
     private PlayerStats              _stats;
+    private Rigidbody2D              _rb;
     private GameManager              _gm;
     private Vector2                  _lastMoveDir = Vector2.right;
     private readonly List<Coroutine> _loops = new();
     private BattleLoadout            _currentLoadout;
     private bool                     _paused;
+    private bool                     _inCombatZone;
 
     // ─────────────────────────────────────────────────────────────
 
-    private void Awake()  => _stats = GetComponent<PlayerStats>();
+    private void Awake()
+    {
+        _stats = GetComponent<PlayerStats>();
+        _rb    = GetComponent<Rigidbody2D>();
+    }
 
     private void Start()
     {
@@ -40,19 +46,20 @@ public class PlayerAttack : MonoBehaviour
             Debug.LogWarning("[PlayerAttack] GameManager.Instance가 null — GameManager 프리팹이 씬에 있는지 확인하세요.");
 
         InventoryPopupToggle.onPopupToggled += OnInventoryToggled;
+        CombatZone.onCombatStateChanged     += OnCombatStateChanged;
     }
 
     private void OnDestroy()
     {
         if (_gm != null) _gm.onLoadoutReady -= OnLoadoutReady;
         InventoryPopupToggle.onPopupToggled -= OnInventoryToggled;
+        CombatZone.onCombatStateChanged     -= OnCombatStateChanged;
     }
 
     private void Update()
     {
-        var rb = GetComponent<Rigidbody2D>();
-        if (rb != null && rb.linearVelocity.sqrMagnitude > 0.01f)
-            _lastMoveDir = rb.linearVelocity.normalized;
+        if (_rb != null && _rb.linearVelocity.sqrMagnitude > 0.01f)
+            _lastMoveDir = _rb.linearVelocity.normalized;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -68,7 +75,14 @@ public class PlayerAttack : MonoBehaviour
         if (_paused == isOpen) return;
         _paused = isOpen;
         RestartLoops();
-        Debug.Log($"[PlayerAttack] 인벤토리 {(isOpen ? "열림 — 공격 정지" : "닫힘 — 공격 재개")}");
+    }
+
+    private void OnCombatStateChanged(bool inCombat)
+    {
+        if (_inCombatZone == inCombat) return;
+        _inCombatZone = inCombat;
+        RestartLoops();
+        Debug.Log($"[PlayerAttack] {(inCombat ? "전투 구역 진입 — 공격 시작" : "비전투 구역 이탈 — 공격 정지")}");
     }
 
     private void RestartLoops()
@@ -76,7 +90,8 @@ public class PlayerAttack : MonoBehaviour
         foreach (var co in _loops) if (co != null) StopCoroutine(co);
         _loops.Clear();
 
-        if (_paused || _currentLoadout == null || _currentLoadout.Weapons.Count == 0) return;
+        Debug.Log($"[PlayerAttack] RestartLoops — inCombat={_inCombatZone}, paused={_paused}, loadout={_currentLoadout != null}, weapons={_currentLoadout?.Weapons.Count ?? 0}");
+        if (!_inCombatZone || _paused || _currentLoadout == null || _currentLoadout.Weapons.Count == 0) return;
 
         Debug.Log($"[PlayerAttack] 공격 루프 시작 — 무기 {_currentLoadout.Weapons.Count}개");
         foreach (var w in _currentLoadout.Weapons)
@@ -98,9 +113,10 @@ public class PlayerAttack : MonoBehaviour
         float interval = 1f / (baseAps * weaponAps * spdBoost);
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
+        var wait = new WaitForSeconds(interval);
         while (true)
         {
-            yield return new WaitForSeconds(interval);
+            yield return wait;
             TryAttack(entry);
         }
     }
@@ -373,12 +389,13 @@ public class PlayerAttack : MonoBehaviour
         StartCoroutine(ShowMeleeFlash(entry.data, dir, range));
     }
 
+    private static readonly WaitForSeconds _waitMeleeBurst = new(0.12f);
     private IEnumerator AttackMeleeBurst(WeaponLoadoutEntry entry, float range, int count)
     {
         for (int i = 0; i < count; i++)
         {
             AttackMeleeSingle(entry, range);
-            yield return new WaitForSeconds(0.12f);
+            yield return _waitMeleeBurst;
         }
     }
 
@@ -396,6 +413,7 @@ public class PlayerAttack : MonoBehaviour
             SpawnProjectile(entry, Rotate(center, start + step * i));
     }
 
+    private static readonly WaitForSeconds _waitBurst = new(0.1f);
     private IEnumerator AttackBurst(WeaponLoadoutEntry entry, float range,
         int count, float kbPerShot = 0f)
     {
@@ -407,7 +425,7 @@ public class PlayerAttack : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             SpawnProjectile(entry, dir, knockbackForce: kbPerShot);
-            yield return new WaitForSeconds(0.1f);
+            yield return _waitBurst;
         }
     }
 
@@ -445,13 +463,13 @@ public class PlayerAttack : MonoBehaviour
             ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
             : BuildTempGO(wd.itemImage, wd.itemName);
 
+        go.transform.position = transform.position; // BuildTempGO는 위치를 설정하지 않으므로 항상 보정
+
         if (scaleMult != 1f)
             go.transform.localScale *= scaleMult;
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce);
-
-        Debug.Log($"[PlayerAttack] 발사 — {wd.itemName} / 방향 {dir} / 속도 {speed:F1} / 생존 {lifetime:F1}s / 관통 {maxHits}");
     }
 
     private static GameObject BuildTempGO(Sprite icon, string weaponName)

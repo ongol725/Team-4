@@ -24,6 +24,7 @@ public class GoldDisplayUI : MonoBehaviour
         if (_canvas == null) return;
 
         BuildUI();
+        BuildControlsPanel();
 
         _gameManager = GameManager.Instance;
         if (_gameManager != null)
@@ -48,6 +49,46 @@ public class GoldDisplayUI : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────
+
+    private void BuildControlsPanel()
+    {
+        var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+                ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+
+        // GoldPanel 바로 아래 (y: -10 패널높이38 -간격6 = -54)
+        var panel = new GameObject("ControlsPanel", typeof(RectTransform), typeof(Image));
+        panel.transform.SetParent(_canvas.transform, false);
+
+        var rt = panel.GetComponent<RectTransform>();
+        rt.anchorMin        = new Vector2(0.5f, 1f);
+        rt.anchorMax        = new Vector2(0.5f, 1f);
+        rt.pivot            = new Vector2(0.5f, 1f);
+        rt.anchoredPosition = new Vector2(0f, -54f);
+        rt.sizeDelta        = new Vector2(200f, 112f);
+        panel.GetComponent<Image>().color = new Color(0.06f, 0.06f, 0.10f, 0.88f);
+
+        var textGo = new GameObject("ControlsText", typeof(RectTransform), typeof(Text));
+        textGo.transform.SetParent(panel.transform, false);
+        var textRt = textGo.GetComponent<RectTransform>();
+        textRt.anchorMin = Vector2.zero;
+        textRt.anchorMax = Vector2.one;
+        textRt.offsetMin = new Vector2(10f, 6f);
+        textRt.offsetMax = new Vector2(-10f, -6f);
+
+        var txt = textGo.GetComponent<Text>();
+        txt.font        = font;
+        txt.fontSize    = 11;
+        txt.alignment   = TextAnchor.UpperLeft;
+        txt.color       = new Color(0.82f, 0.85f, 0.95f, 1f);
+        txt.raycastTarget = false;
+        txt.text =
+            "<b>[ 단축키 ]</b>\n" +
+            "<color=#FFDD88>[I]</color>  인벤토리 열기·닫기\n" +
+            "<color=#FFDD88>[L]</color>  즉시 합성\n" +
+            "<color=#FFDD88>[O]</color>  자동 배치\n" +
+            "<color=#FFDD88>[우클릭]</color>  스마트 구매";
+        txt.supportRichText = true;
+    }
 
     private void BuildUI()
     {

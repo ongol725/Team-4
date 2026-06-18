@@ -18,7 +18,7 @@ using UnityEngine.UI;
 ///   - IPointerDownHandler → 임시칸에서 꺼내어 재배치
 /// </summary>
 [RequireComponent(typeof(RectTransform))]
-public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
+public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     // 씬 전반에서 하나만 생성해 재사용
     private static Material _silhouetteMat;
@@ -39,6 +39,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
     private InventoryGridUI _gridUI;
     private InventoryGrid   _grid;
     private int             _cellSize;
+
+    public ItemInstance Instance => _instance;
 
     private RectTransform _rt;
     private bool _isFollowingMouse;
@@ -374,6 +376,22 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         _gridUI.OnPlacementSuccess(_instance, this);
     }
 
+    /// <summary>
+    /// 우클릭 스마트 구매용. Initialize 직후 호출 — 마우스 추적 없이 바로 그리드에 배치.
+    /// </summary>
+    public void SnapDirectly(Vector2Int cell) => SnapToGrid(cell);
+
+    /// <summary>
+    /// 자동 정렬 전용. 그리드/임시칸 상태 플래그를 모두 초기화한다.
+    /// 이후 SnapDirectly 또는 TempSlot.ReceiveBlock 이 올바른 상태를 다시 설정한다.
+    /// </summary>
+    public void ResetForAutoSort()
+    {
+        _isPlaced     = false;
+        _isInTempSlot = false;
+        _tempSlot     = null;
+    }
+
     private void OnDestroy()
     {
         // 예외적으로 파괴될 때 카운트 보정
@@ -647,5 +665,22 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler
         // 반지 버프 적용 중이면 파란색, 아니면 희귀도 색상
         txt.color     = isBuffed ? new Color(0.35f, 0.75f, 1f) : rarityColor;
         txt.raycastTarget = false;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 아이템 정보 팝업
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // 마우스로 드래그 중이거나 데이터 없으면 표시 안 함
+        if (_isFollowingMouse || _instance?.data == null) return;
+        int effectiveGrade = Mathf.Clamp(
+            _instance.gradeIndex + _instance.RingGradeBonus, 0, 4);
+        ItemInfoPopup.Show(_instance.data, effectiveGrade, eventData.position);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ItemInfoPopup.Hide();
     }
 }

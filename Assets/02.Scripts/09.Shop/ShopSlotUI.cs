@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
 /// 상점 슬롯 하나를 담당: 아이템 미리보기, 이름, 코스트, 구매 버튼
 /// </summary>
-public class ShopSlotUI : MonoBehaviour
+public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI 참조")]
     [SerializeField] private Text           _nameText;
@@ -65,10 +66,22 @@ public class ShopSlotUI : MonoBehaviour
 
     private readonly System.Collections.Generic.List<Text> _extraSynergyLabels = new();
 
+    private static readonly Color MergeHintBlue = new Color(0.35f, 0.75f, 1f);
+
+    private Color            _defaultNameColor;
+    private InventoryGrid    _cachedGrid;
+    private TempSlotUI       _cachedTempSlot;
+    private InventoryGridUI  _cachedGridUI;
+    private bool             _gridSubscribed;
+    private bool             _tempSubscribed;
+    private bool             _isSoldOut;
+    private bool             _isHovered;
+
     // ─────────────────────────────────────────────────────────────
 
     private void Awake()
     {
+        _defaultNameColor = _nameText != null ? _nameText.color : Color.white;
         _origAnchorMin    = _previewContainer.anchorMin;
         _origAnchorMax    = _previewContainer.anchorMax;
         _origOffsetMin    = _previewContainer.offsetMin;
@@ -94,6 +107,7 @@ public class ShopSlotUI : MonoBehaviour
         }
 
         gameObject.SetActive(true);
+        _isSoldOut = false;
 
         // 2등급 롤: 등급 있는 아이템(무기/방어구)에만 적용
         _displayGradeIndex = 0;
@@ -130,6 +144,8 @@ public class ShopSlotUI : MonoBehaviour
         _rarityText.color = color;
 
         RefreshSynergies(item);
+        EnsureSubscriptions();
+        CheckMergeHighlight();
 
         if (_slotBackground != null)
             _slotBackground.color = new Color(color.r * 0.25f, color.g * 0.25f, color.b * 0.25f, 0.85f);
@@ -142,8 +158,11 @@ public class ShopSlotUI : MonoBehaviour
 
     public void SetSoldOut()
     {
+        _isSoldOut = true;
         if (_shopImageButton != null)
             _shopImageButton.interactable = false;
+        if (_nameText != null)
+            _nameText.color = new Color(0.5f, 0.5f, 0.5f, 1f);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -325,10 +344,122 @@ public class ShopSlotUI : MonoBehaviour
         return txt;
     }
 
+    // ─────────────────────────────────────────────────────────────
+    // 합성 가능 힌트
+
+    /// <summary>이벤트 구독 - Grid는 null이면 재시도, TempSlot은 static이라 한 번만</summary>
+    private void EnsureSubscriptions()
+    {
+        if (!_tempSubscribed)
+        {
+            _tempSubscribed = true;
+            TempSlotUI.onTempSlotChanged += CheckMergeHighlight;
+        }
+
+        if (!_gridSubscribed)
+        {
+            _cachedGrid = FindAnyObjectByType<InventoryGrid>();
+            if (_cachedGrid != null)
+            {
+                _gridSubscribed = true;
+                _cachedGrid.OnGridChanged += CheckMergeHighlight;
+            }
+        }
+
+        if (_cachedTempSlot == null)
+            _cachedTempSlot = FindAnyObjectByType<TempSlotUI>();
+    }
+
+    private void OnDestroy()
+    {
+        if (_cachedGrid != null)
+            _cachedGrid.OnGridChanged -= CheckMergeHighlight;
+        TempSlotUI.onTempSlotChanged -= CheckMergeHighlight;
+    }
+
+    private void CheckMergeHighlight()
+    {
+        if (_nameText == null || _item == null) return;
+        if (_isSoldOut) { _nameText.color = new Color(0.5f, 0.5f, 0.5f, 1f); return; }
+
+        // 등급 없는 아이템(악세서리, 인벤 확장 블록)은 합성 불가 → 힌트 없음
+        bool hasGrades = _item is SO_WeaponData || _item is SO_ArmorData;
+        if (!hasGrades) { _nameText.color = _defaultNameColor; return; }
+
+        // null이면 재탐색 (씬 로드 타이밍 방어)
+        if (_cachedGrid == null)
+        {
+            _cachedGrid = FindAnyObjectByType<InventoryGrid>();
+            if (_cachedGrid != null && !_gridSubscribed)
+            {
+                _gridSubscribed = true;
+                _cachedGrid.OnGridChanged += CheckMergeHighlight;
+            }
+        }
+        if (_cachedTempSlot == null)
+            _cachedTempSlot = FindAnyObjectByType<TempSlotUI>();
+
+        bool found = false;
+
+        // 인벤토리 그리드 탐색
+        if (_cachedGrid != null)
+            foreach (var inst in _cachedGrid.GetAllPlacedInstances())
+                if (inst.data == _item && inst.gradeIndex == _displayGradeIndex)
+                { found = true; break; }
+
+        // 임시칸 탐색
+        if (!found && _cachedTempSlot != null)
+            foreach (var block in _cachedTempSlot.HeldBlocks)
+                if (block?.Instance?.data == _item && block.Instance.gradeIndex == _displayGradeIndex)
+                { found = true; break; }
+
+        _nameText.color = found ? MergeHintBlue : _defaultNameColor;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+
     private void OnBuyClicked()
     {
         if (GameManager.Instance == null || !GameManager.Instance.SpendGold(_finalCost))
             return; // 골드 부족 — 구매 취소
         _onBuy?.Invoke(new ItemInstance { data = _item, gradeIndex = _displayGradeIndex }, this);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 아이템 정보 팝업
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        _isHovered = true;
+        if (_item == null) return;
+        ItemInfoPopup.Show(_item, _displayGradeIndex, eventData.position);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _isHovered = false;
+        ItemInfoPopup.Hide();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 우클릭 스마트 구매
+
+    private void Update()
+    {
+        if (!_isHovered || !Input.GetMouseButtonDown(1)) return;
+        TrySmartBuy();
+    }
+
+    private void TrySmartBuy()
+    {
+        if (_item == null || _isSoldOut) return;
+        if (GameManager.Instance == null || !GameManager.Instance.SpendGold(_finalCost)) return;
+
+        if (_cachedGridUI == null) _cachedGridUI = FindAnyObjectByType<InventoryGridUI>();
+        if (_cachedGridUI == null) return;
+
+        var inst = new ItemInstance { data = _item, gradeIndex = _displayGradeIndex };
+        _cachedGridUI.SmartReceiveFromShop(inst);
+        SetSoldOut();
     }
 }

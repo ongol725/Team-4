@@ -310,4 +310,174 @@ public class InventoryGridUI : MonoBehaviour
     private bool InCellRange(Vector2Int cell) =>
         cell.x >= 0 && cell.x < _grid.Rows &&
         cell.y >= 0 && cell.y < _grid.Cols;
+
+    // ─────────────────────────────────────────────────────────────
+    // 자동 최적화 정렬 (O 키)
+
+    /// <summary>
+    /// 인벤토리 그리드 + 임시칸의 아이템을 전부 모아
+    /// 합성등급(내림) → 희귀도(내림) → 셀 크기(내림) 순으로 정렬 후 재배치.
+    /// 그리드가 꽉 차도 임시칸 아이템까지 포함해 최적 위치를 찾는다.
+    /// 그리드에 들어가지 못한 아이템은 임시칸으로 이동.
+    /// </summary>
+    public void AutoSortInventory()
+    {
+        // ── 1. 전체 수집 ──
+        var gridInstances = new List<ItemInstance>(_grid.GetAllPlacedInstances());
+        var tempBlockSnap = _tempSlot != null
+            ? new List<ItemBlockUI>(_tempSlot.HeldBlocks)
+            : new List<ItemBlockUI>();
+
+        var allItems = new List<ItemInstance>(gridInstances);
+        var blockMap = new Dictionary<ItemInstance, ItemBlockUI>();
+
+        foreach (var inst in gridInstances)
+        {
+            var b = FindItemBlock(inst);
+            if (b != null) blockMap[inst] = b;
+        }
+        foreach (var block in tempBlockSnap)
+        {
+            if (block?.Instance == null) continue;
+            allItems.Add(block.Instance);
+            blockMap[block.Instance] = block;
+        }
+
+        Debug.Log($"[AutoSort] grid={gridInstances.Count}개, temp={tempBlockSnap.Count}개, 합계={allItems.Count}개");
+        if (allItems.Count == 0) return;
+
+        // ── 2. 현재 위치에서 전부 제거 ──
+        foreach (var inst in gridInstances)
+        {
+            _grid.Remove(inst);
+            OnItemUnplaced(inst);
+        }
+        foreach (var block in tempBlockSnap)
+        {
+            if (block?.Instance != null)
+                _tempSlot.OnItemPickedUp(block);
+        }
+
+        // ── 3. 블록 상태 플래그 초기화 (그리드/임시칸 모두) ──
+        foreach (var block in blockMap.Values)
+            block.ResetForAutoSort();
+
+        // ── 4. 정렬: 합성등급↓ → 희귀도↓ → 셀 크기↓ ──
+        allItems.Sort((a, b) =>
+        {
+            int g = b.gradeIndex.CompareTo(a.gradeIndex);
+            if (g != 0) return g;
+            int r = ((int)b.data.rarity).CompareTo((int)a.data.rarity);
+            if (r != 0) return r;
+            return InventoryGrid.GetCells(b.data).Length
+                  .CompareTo(InventoryGrid.GetCells(a.data).Length);
+        });
+
+        // ── 5. 재배치: 그리드 먼저, 공간 없으면 임시칸 ──
+        foreach (var inst in allItems)
+        {
+            if (!blockMap.TryGetValue(inst, out var block)) continue;
+
+            var origin = FindFirstValidPlacement(inst);
+            if (origin.HasValue)
+            {
+                _grid.TryPlace(inst, origin.Value);
+                block.SnapDirectly(origin.Value);
+            }
+            else if (_tempSlot != null)
+            {
+                _tempSlot.ReceiveBlock(block);
+                OnItemSentToTempSlot(block);
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 우클릭 스마트 구매 (합성 > 자동배치 > 임시칸)
+
+    /// <summary>
+    /// 우클릭 구매 아이템을 우선순위에 따라 처리한다.
+    /// 1순위: 인벤/임시칸의 같은 종류+등급 아이템과 합성
+    /// 2순위: 인벤토리 빈 공간에 자동 배치
+    /// 3순위: 임시칸으로 이동
+    /// </summary>
+    public void SmartReceiveFromShop(ItemInstance inst)
+    {
+        // 이미 드래그 중인 아이템이 있으면 먼저 임시칸으로 보냄
+        if (_activeFollowingBlock != null)
+            _activeFollowingBlock.ForceSendToTempSlot();
+
+        if (TryMergeWithExisting(inst)) return;
+
+        var origin = FindFirstValidPlacement(inst);
+        if (origin.HasValue) { DirectPlaceFromShop(inst, origin.Value); return; }
+
+        SendToTempSlotFromShop(inst);
+    }
+
+    /// <summary>인벤/임시칸에서 합성 가능한 아이템을 찾아 합성. 성공 시 true.</summary>
+    private bool TryMergeWithExisting(ItemInstance newInst)
+    {
+        if (!newInst.HasGrades || newInst.gradeIndex >= 4) return false;
+
+        // 그리드 탐색
+        foreach (var existing in _grid.GetAllPlacedInstances())
+        {
+            if (existing.data != newInst.data || existing.gradeIndex != newInst.gradeIndex) continue;
+            existing.TryUpgrade();
+            RefreshItemBlockVisual(existing);
+            return true;
+        }
+
+        // 임시칸 탐색
+        if (_tempSlot != null)
+            foreach (var block in _tempSlot.HeldBlocks)
+            {
+                if (block?.Instance == null) continue;
+                if (block.Instance.data != newInst.data || block.Instance.gradeIndex != newInst.gradeIndex) continue;
+                block.Instance.TryUpgrade();
+                block.RefreshVisuals();
+                return true;
+            }
+
+        return false;
+    }
+
+    /// <summary>아이템 모양을 수용할 수 있는 첫 번째 유효 셀을 반환.</summary>
+    private Vector2Int? FindFirstValidPlacement(ItemInstance inst)
+    {
+        for (int r = 0; r < _grid.Rows; r++)
+        for (int c = 0; c < _grid.Cols; c++)
+        {
+            var cell = new Vector2Int(r, c);
+            if (_grid.IsValidPlacement(inst, cell)) return cell;
+        }
+        return null;
+    }
+
+    /// <summary>지정 셀에 아이템 블록을 마우스 없이 즉시 배치.</summary>
+    private void DirectPlaceFromShop(ItemInstance inst, Vector2Int origin)
+    {
+        if (!_grid.TryPlace(inst, origin)) return;
+
+        var go = new GameObject("ItemBlock", typeof(RectTransform));
+        go.transform.SetParent(transform.root, false);
+        go.transform.SetAsLastSibling();
+
+        var block = go.AddComponent<ItemBlockUI>();
+        block.Initialize(inst, this, _grid, _cellSize);
+        block.SnapDirectly(origin);
+    }
+
+    /// <summary>아이템 블록을 생성해 임시칸으로 즉시 전달.</summary>
+    private void SendToTempSlotFromShop(ItemInstance inst)
+    {
+        var go = new GameObject("ItemBlock", typeof(RectTransform));
+        go.transform.SetParent(transform.root, false);
+        go.transform.SetAsLastSibling();
+
+        var block = go.AddComponent<ItemBlockUI>();
+        block.Initialize(inst, this, _grid, _cellSize);
+        block.ForceSendToTempSlot();
+    }
 }
