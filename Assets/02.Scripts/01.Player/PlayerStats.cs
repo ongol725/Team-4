@@ -56,7 +56,11 @@ public class PlayerStats : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
         if (_gameManager != null)
+        {
             _gameManager.onLoadoutReady += OnLoadoutReady;
+            if (_gameManager.CurrentLoadout != null)
+                OnLoadoutReady(_gameManager.CurrentLoadout);
+        }
     }
 
     private void OnDestroy()
