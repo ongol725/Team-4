@@ -277,10 +277,17 @@ public class SynergyManager : MonoBehaviour
     private List<MonsterController> GetEnemiesInRange(Vector3 center, float range)
     {
         var result = new List<MonsterController>();
-        var hits = _enemyLayer == 0
-            ? Physics2D.OverlapCircleAll(center, range)
-            : Physics2D.OverlapCircleAll(center, range, _enemyLayer);
-        foreach (var h in hits)
+
+        // 몬스터 콜라이더가 IsTrigger=true 이므로 ContactFilter2D.useTriggers 필수
+        var filter = new ContactFilter2D();
+        filter.useTriggers = true;
+        if (_enemyLayer != 0) filter.SetLayerMask(_enemyLayer);
+        else                  filter.NoFilter();
+
+        var cols = new List<Collider2D>();
+        Physics2D.OverlapCircle((Vector2)center, range, filter, cols);
+
+        foreach (var h in cols)
         {
             var mc = h.GetComponent<MonsterController>()
                   ?? h.GetComponentInParent<MonsterController>();
