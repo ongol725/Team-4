@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -22,6 +22,14 @@ MonoBehaviour:
   synergies: 040000000000000000000000
   cells:
   - {x: 0, y: 0}
+  attackStyleType: 7
+  attackStyle: "\uBC94\uC704 \uD3ED\uBC1C"
+  lv5AttackStyle: "\uC18D\uB3C4\xB7\uBC94\uC704 \uC99D\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 12
+  range: 3
+  maxTargets: 0
   gradeStats:
   - attackPower: 60
     attackSpeed: 2
@@ -33,9 +41,3 @@ MonoBehaviour:
     attackSpeed: 1.6
   - attackPower: 144
     attackSpeed: 1.5
-  projectile: {fileID: 0}
-  projectileSpeed: 12
-  range: 3
-  attackStyle: "\uBC94\uC704 \uD3ED\uBC1C"
-  maxTargets: 0
-  lv5AttackStyle: "\uC18D\uB3C4\xB7\uBC94\uC704 \uC99D\uAC00"

@@ -11,6 +11,9 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class InventoryPopupToggle : MonoBehaviour
 {
+    /// <summary>인벤토리가 열리거나 닫힐 때 발행. true = 열림, false = 닫힘</summary>
+    public static event System.Action<bool> onPopupToggled;
+
     [SerializeField] private BattleLoadoutBuilder _loadoutBuilder;
 
     private Canvas               _popupCanvas;   // InventoryStoreRoot 의 Canvas 컴포넌트
@@ -63,6 +66,8 @@ public class InventoryPopupToggle : MonoBehaviour
         // 닫을 때 로드아웃 확정 (ShopUI.Close의 panelRoot 조작 없이 직접 호출)
         if (!willOpen)
             _loadoutBuilder?.BuildAndDeliver();
+
+        onPopupToggled?.Invoke(willOpen);
     }
 
     /// <summary>팝업 현재 열림 상태</summary>

@@ -26,11 +26,22 @@ MonoBehaviour:
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   - {x: 2, y: 1}
-  attackPower: 0
-  attackSpeed: 0
+  attackStyleType: 0
+  attackStyle: "\uBCF4\uC2A4 \uC804\uC6A9 \uBB34\uAE30"
+  lv5AttackStyle: '-'
   projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
   projectileSpeed: 50
   range: 20
-  attackStyle: "\uBCF4\uC2A4 \uC804\uC6A9 \uBB34\uAE30"
   maxTargets: 0
-  lv5AttackStyle: '-'
+  gradeStats:
+  - attackPower: 0
+    attackSpeed: 0
+  - attackPower: 0
+    attackSpeed: 0
+  - attackPower: 0
+    attackSpeed: 0
+  - attackPower: 0
+    attackSpeed: 0
+  - attackPower: 0
+    attackSpeed: 0

@@ -24,10 +24,11 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
   - {x: 0, y: 2}
+  attackStyleType: 2
   attackStyle: "120\uB3C4 \uBE60\uB978 \uBCA0\uAE30"
   lv5AttackStyle: "\uC18D\uB3C4 +30%"
   projectile: {fileID: 0}
-  projectileData: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
   projectileSpeed: 0
   range: 1
   maxTargets: 0
