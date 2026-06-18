@@ -164,6 +164,8 @@ public static class TestBattleSetup
         else
             Debug.LogWarning("[Setup] Player.prefab 없음 — Player를 수동 배치하세요.");
 
+        AddInventoryLoaderToScene();
+
         EditorSceneManager.SaveScene(scene, SCENE_PATH);
         AssetDatabase.Refresh();
 
@@ -171,7 +173,43 @@ public static class TestBattleSetup
             "Assets/01.Scenes/00.TestBattle.unity 생성 완료\n\n" +
             "남은 수동 설정:\n" +
             "· PlayerAttack 컴포넌트 → Enemy Layer 지정\n" +
-            "· 테스트용 더미 몬스터 배치\n" +
-            "· (필요 시) InventoryStore 연동 확인", "확인");
+            "· 테스트용 더미 몬스터 배치", "확인");
+    }
+
+    // ─────────────────────────────────────────────────────────────
+
+    [MenuItem("Team4/4. TestBattle 씬에 인벤토리 로더 추가")]
+    static void AddInventoryLoaderMenu()
+    {
+        // 씬이 열려 있지 않으면 먼저 열기
+        var scene = EditorSceneManager.GetSceneByPath(SCENE_PATH);
+        if (!scene.isLoaded)
+        {
+            scene = EditorSceneManager.OpenScene(SCENE_PATH, OpenSceneMode.Single);
+        }
+
+        AddInventoryLoaderToScene();
+        EditorSceneManager.SaveScene(scene);
+        AssetDatabase.Refresh();
+
+        EditorUtility.DisplayDialog("완료",
+            "InventoryAdditiveLoader 추가 완료\n\n" +
+            "플레이 시 99.InventoryStore 씬이 자동 로드됩니다.\n" +
+            "I 키로 인벤토리를 열 수 있습니다.", "확인");
+    }
+
+    static void AddInventoryLoaderToScene()
+    {
+        // 이미 존재하면 스킵
+        var existing = Object.FindFirstObjectByType<InventoryAdditiveLoader>();
+        if (existing != null)
+        {
+            Debug.Log("[Setup] InventoryAdditiveLoader 이미 존재합니다.");
+            return;
+        }
+
+        var go = new GameObject("InventoryLoader");
+        go.AddComponent<InventoryAdditiveLoader>();
+        Debug.Log("[Setup] InventoryAdditiveLoader 추가 완료");
     }
 }
