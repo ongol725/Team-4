@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BagSurvivor.UI
 {
-    public enum SynergyGrade { Bronze, Silver, Gold }
+    public enum SynergyGrade { Bronze, Silver, Gold, Prism }
 
     [System.Serializable]
     public class SynergyInfo
