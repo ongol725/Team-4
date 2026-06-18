@@ -140,17 +140,23 @@ public class SynergyManager : MonoBehaviour
         if (_player == null) return;
 
         var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius);
+        Vector3 vfxPos = _player.position;
 
         switch (skill.targetType)
         {
             case SkillTargetType.RandomEnemy:
                 if (enemies.Count > 0)
-                    HitEnemy(skill, enemies[Random.Range(0, enemies.Count)], damage);
+                {
+                    var target = enemies[Random.Range(0, enemies.Count)];
+                    vfxPos = target.transform.position;
+                    HitEnemy(skill, target, damage);
+                }
                 break;
 
             case SkillTargetType.AreaCenter:
             case SkillTargetType.Self:
                 foreach (var mc in enemies) HitEnemy(skill, mc, damage);
+                // AoE는 플레이어 중심에 표시
                 break;
 
             case SkillTargetType.Forward:
@@ -161,11 +167,15 @@ public class SynergyManager : MonoBehaviour
                     float d = Vector2.Distance(_player.position, mc.transform.position);
                     if (d < minD) { minD = d; nearest = mc; }
                 }
-                if (nearest != null) HitEnemy(skill, nearest, damage);
+                if (nearest != null)
+                {
+                    vfxPos = nearest.transform.position;
+                    HitEnemy(skill, nearest, damage);
+                }
                 break;
         }
 
-        SpawnVFX(skill, _player.position);
+        SpawnVFX(skill, vfxPos);
     }
 
     private void HitEnemy(SO_SkillData skill, MonsterController mc, int damage)

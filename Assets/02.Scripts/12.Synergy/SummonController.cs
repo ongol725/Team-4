@@ -1,11 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using BagSurvivor.Monster;
 
-/// <summary>
-/// 소환형 시너지로 생성된 소환수의 AI 동작.
-/// MinionSynergyRunner가 Init()을 호출해 데이터를 주입한다.
-/// </summary>
 public class SummonController : MonoBehaviour
 {
     private SO_SummonData _data;
@@ -16,9 +13,22 @@ public class SummonController : MonoBehaviour
     private float _atkTimer;
     private float _uniqueSkillTimer;
 
+    // ── FollowAttack FSM ─────────────────────────────────────────
+    private enum SummonState { Wander, Chase }
+    private SummonState  _state = SummonState.Wander;
+    private MonsterController _chaseTarget;
+
+    // 배회 전용
+    private Vector2 _wanderDest;
+    private float   _wanderTimer;
+    private const float WanderRadius    = 5f;   // 플레이어 주변 배회 반경
+    private const float WanderInterval  = 2.5f; // 새 웨이포인트 갱신 간격
+    private const float DetectRange     = 8f;   // 적 감지 거리
+    private const float LeashRange      = 14f;  // 이 거리 이상 벗어나면 플레이어로 복귀
+
     // OrbitPlayer 전용
     private float _orbitAngle;
-    private float _orbitRadius = 2.5f;
+    private const float OrbitRadius = 2.5f;
 
     // ─────────────────────────────────────────────────────────────
 
@@ -39,8 +49,7 @@ public class SummonController : MonoBehaviour
         }
         else if (GetComponentInChildren<SpriteRenderer>() == null)
         {
-            // 테스트용 플레이스홀더: 초록 원
-            var sr = gameObject.AddComponent<SpriteRenderer>();
+            var sr  = gameObject.AddComponent<SpriteRenderer>();
             var tex = new Texture2D(32, 32);
             for (int y = 0; y < 32; y++)
             for (int x = 0; x < 32; x++)
@@ -50,10 +59,13 @@ public class SummonController : MonoBehaviour
                 tex.SetPixel(x, y, dist < 14f ? Color.white : Color.clear);
             }
             tex.Apply();
-            sr.sprite = Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 32f);
-            sr.color = new Color(0.2f, 0.9f, 0.3f, 1f);
+            sr.sprite       = Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 32f);
+            sr.color        = new Color(0.2f, 0.9f, 0.3f, 1f);
             sr.sortingOrder = 5;
         }
+
+        // 초기 배회 목적지 설정
+        PickNewWanderDest();
     }
 
     private void Update()
@@ -65,9 +77,9 @@ public class SummonController : MonoBehaviour
 
         switch (_data.aiType)
         {
-            case SummonAIType.FollowAttack:  UpdateFollowAttack();  break;
-            case SummonAIType.OrbitPlayer:   UpdateOrbitPlayer();   break;
-            case SummonAIType.Stationary:    UpdateStationary();    break;
+            case SummonAIType.FollowAttack: UpdateFollowAttack(); break;
+            case SummonAIType.OrbitPlayer:  UpdateOrbitPlayer();  break;
+            case SummonAIType.Stationary:   UpdateStationary();   break;
         }
 
         if (_data.uniqueSkill != null && _uniqueSkillTimer >= _data.uniqueSkillCooldown)
@@ -78,41 +90,101 @@ public class SummonController : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────
-    // AI 패턴
+    // FollowAttack FSM
 
     private void UpdateFollowAttack()
     {
-        var target = FindNearest(_data.atkRange * 3f);
+        // 플레이어와 너무 멀면 즉시 복귀
+        float distToPlayer = Vector2.Distance(transform.position, _player.position);
+        if (distToPlayer > LeashRange)
+        {
+            _state = SummonState.Wander;
+            PickNewWanderDest();
+            MoveToward(_player.position);
+            return;
+        }
 
-        // 이동: 적이 있으면 적 방향, 없으면 플레이어 방향
-        Vector2 dest = target != null
-            ? (Vector2)target.transform.position
-            : (Vector2)_player.position;
+        switch (_state)
+        {
+            case SummonState.Wander:
+                UpdateWander();
+                break;
+            case SummonState.Chase:
+                UpdateChase();
+                break;
+        }
+    }
 
-        MoveToward(dest);
+    private void UpdateWander()
+    {
+        // 감지 범위 내 적 확인 → Chase 전환
+        var detected = FindNearest(DetectRange);
+        if (detected != null)
+        {
+            _chaseTarget = detected;
+            _state = SummonState.Chase;
+            return;
+        }
+
+        // 웨이포인트 타이머
+        _wanderTimer -= Time.deltaTime;
+        if (_wanderTimer <= 0f || Vector2.Distance(transform.position, _wanderDest) < 0.4f)
+            PickNewWanderDest();
+
+        MoveToward(_wanderDest);
+    }
+
+    private void UpdateChase()
+    {
+        // 타겟 무효화 확인
+        if (_chaseTarget == null || _chaseTarget.IsDead)
+        {
+            _chaseTarget = null;
+            _state = SummonState.Wander;
+            PickNewWanderDest();
+            return;
+        }
+
+        // 감지 범위 이탈 시 배회 복귀
+        float distToTarget = Vector2.Distance(transform.position, _chaseTarget.transform.position);
+        if (distToTarget > DetectRange * 1.5f)
+        {
+            _chaseTarget = null;
+            _state = SummonState.Wander;
+            PickNewWanderDest();
+            return;
+        }
+
+        // 공격 사거리 밖이면 접근
+        if (distToTarget > _data.atkRange)
+            MoveToward(_chaseTarget.transform.position);
 
         // 공격
         if (_atkTimer >= _data.atkCooldown)
         {
-            var atkTarget = FindNearest(_data.atkRange);
-            if (atkTarget != null)
-            {
-                _atkTimer = 0f;
-                Vector2 kb = ((Vector2)atkTarget.transform.position - (Vector2)transform.position).normalized;
-                atkTarget.TakeDamage(_attackPower, 1f, kb);
-            }
+            _atkTimer = 0f;
+            Vector2 kb = ((Vector2)_chaseTarget.transform.position - (Vector2)transform.position).normalized;
+            _chaseTarget.TakeDamage(_attackPower, 1f, kb);
         }
     }
 
+    private void PickNewWanderDest()
+    {
+        _wanderTimer = WanderInterval;
+        Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(WanderRadius * 0.3f, WanderRadius);
+        _wanderDest = (Vector2)_player.position + offset;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // OrbitPlayer
+
     private void UpdateOrbitPlayer()
     {
-        // 플레이어 주변 회전
         _orbitAngle += 90f * Time.deltaTime;
         float rad = _orbitAngle * Mathf.Deg2Rad;
         transform.position = (Vector2)_player.position
-            + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * _orbitRadius;
+            + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * OrbitRadius;
 
-        // 사거리 내 적 공격
         if (_atkTimer >= _data.atkCooldown)
         {
             var target = FindNearest(_data.atkRange);
@@ -124,6 +196,9 @@ public class SummonController : MonoBehaviour
             }
         }
     }
+
+    // ─────────────────────────────────────────────────────────────
+    // Stationary
 
     private void UpdateStationary()
     {
@@ -140,29 +215,23 @@ public class SummonController : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────
-    // 스킬 실행 (uniqueSkill)
+    // 유니크 스킬
 
     private IEnumerator ExecuteSkill(SO_SkillData skill)
     {
-        int damage = Mathf.RoundToInt(_attackPower * skill.dmgMultiplier);
+        int damage  = Mathf.RoundToInt(_attackPower * skill.dmgMultiplier);
         var enemies = GetEnemiesInRange(skill.rangeRadius);
 
         switch (skill.targetType)
         {
             case SkillTargetType.RandomEnemy:
                 if (enemies.Count > 0)
-                {
-                    var rnd = enemies[Random.Range(0, enemies.Count)];
-                    ApplySkillHit(skill, rnd, damage);
-                }
+                    ApplySkillHit(skill, enemies[Random.Range(0, enemies.Count)], damage);
                 break;
-
             case SkillTargetType.AreaCenter:
             case SkillTargetType.Self:
-                foreach (var mc in enemies)
-                    ApplySkillHit(skill, mc, damage);
+                foreach (var mc in enemies) ApplySkillHit(skill, mc, damage);
                 break;
-
             case SkillTargetType.Forward:
                 var nearest = FindNearest(skill.rangeRadius);
                 if (nearest != null) ApplySkillHit(skill, nearest, damage);
@@ -172,8 +241,7 @@ public class SummonController : MonoBehaviour
         if (skill.vfxPrefab != null)
         {
             var vfx = Instantiate(skill.vfxPrefab, transform.position, Quaternion.identity);
-            if (skill.duration > 0f) Destroy(vfx, skill.duration);
-            else                     Destroy(vfx, 2f);
+            Destroy(vfx, skill.duration > 0f ? skill.duration : 2f);
         }
 
         yield return null;
@@ -209,9 +277,9 @@ public class SummonController : MonoBehaviour
         return best;
     }
 
-    private System.Collections.Generic.List<MonsterController> GetEnemiesInRange(float range)
+    private List<MonsterController> GetEnemiesInRange(float range)
     {
-        var result = new System.Collections.Generic.List<MonsterController>();
+        var result = new List<MonsterController>();
         var hits = _enemyLayer == 0
             ? Physics2D.OverlapCircleAll(transform.position, range)
             : Physics2D.OverlapCircleAll(transform.position, range, _enemyLayer);
