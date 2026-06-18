@@ -14,6 +14,7 @@ public class WeaponGradeStats
 public class SO_WeaponData : SO_ItemData
 {
     [Header("공격 방식 (등급 공통)")]
+    public WeaponAttackStyleType attackStyleType;
     public string     attackStyle;
     public string     lv5AttackStyle;
 
