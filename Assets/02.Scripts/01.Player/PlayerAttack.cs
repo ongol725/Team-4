@@ -39,6 +39,8 @@ public class PlayerAttack : MonoBehaviour
             if (_gm.CurrentLoadout != null)
                 OnLoadoutReady(_gm.CurrentLoadout);
         }
+        else
+            Debug.LogWarning("[PlayerAttack] GameManager.Instance가 null — GameManager 프리팹이 씬에 있는지 확인하세요.");
     }
 
     private void OnDestroy()
@@ -60,15 +62,25 @@ public class PlayerAttack : MonoBehaviour
     {
         foreach (var co in _loops) if (co != null) StopCoroutine(co);
         _loops.Clear();
+
+        if (loadout.Weapons.Count == 0)
+        {
+            Debug.Log("[PlayerAttack] 로드아웃 수신 — 배치된 무기 없음");
+            return;
+        }
+
+        Debug.Log($"[PlayerAttack] 로드아웃 수신 — 무기 {loadout.Weapons.Count}개 공격 루프 시작");
         foreach (var weapon in loadout.Weapons)
             _loops.Add(StartCoroutine(AttackLoop(weapon)));
     }
 
     private IEnumerator AttackLoop(WeaponLoadoutEntry entry)
     {
-        float baseAps  = _stats != null ? _stats.attackSpeed : 1f;
+        float baseAps   = _stats != null ? _stats.attackSpeed : 1f;
         float weaponAps = entry.attackSpeed > 0f ? entry.attackSpeed : 1f;
         float interval  = 1f / (baseAps * weaponAps);
+
+        Debug.Log($"[PlayerAttack] {entry.data.itemName} 공격 루프 시작 — 간격 {interval:F2}초 / 스타일 {entry.data.attackStyleType}");
 
         while (true)
         {
@@ -108,12 +120,13 @@ public class PlayerAttack : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 구현된 공격 스타일 4종
 
-    /// <summary>SingleTarget: 범위 내 가장 가까운 적 1인에게 투사체 발사</summary>
+    /// <summary>SingleTarget: 범위 내 가장 가까운 적 방향으로 투사체 발사. 적 없으면 이동 방향으로 발사.</summary>
     private void AttackSingleTarget(WeaponLoadoutEntry entry, float range)
     {
         var target = FindNearest(range);
-        if (target == null) return;
-        Vector2 dir = ((Vector2)target.transform.position - (Vector2)transform.position).normalized;
+        Vector2 dir = target != null
+            ? ((Vector2)target.transform.position - (Vector2)transform.position).normalized
+            : _lastMoveDir;
         SpawnProjectile(entry, dir);
     }
 
@@ -130,13 +143,17 @@ public class PlayerAttack : MonoBehaviour
         StartCoroutine(ShowMeleeFlash(entry.data, facing, range));
     }
 
-    /// <summary>MeleeSingle: 보는 방향 단일 근접 타격</summary>
+    /// <summary>MeleeSingle: 보는 방향 단일 근접 타격. 적 없으면 이동 방향 비주얼만 표시.</summary>
     private void AttackMeleeSingle(WeaponLoadoutEntry entry, float range)
     {
         var target = FindNearest(range);
-        if (target == null) return;
-        Vector2 dir = ((Vector2)target.transform.position - (Vector2)transform.position).normalized;
-        target.TakeDamage(entry.attackPower, _meleeKnockback, dir);
+        Vector2 dir = target != null
+            ? ((Vector2)target.transform.position - (Vector2)transform.position).normalized
+            : _lastMoveDir;
+
+        if (target != null)
+            target.TakeDamage(entry.attackPower, _meleeKnockback, dir);
+
         StartCoroutine(ShowMeleeFlash(entry.data, dir, range));
     }
 
@@ -171,24 +188,27 @@ public class PlayerAttack : MonoBehaviour
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, entry.attackPower, speed, lifetime, maxHits);
+
+        Debug.Log($"[PlayerAttack] 투사체 발사 — {wd.itemName} / 방향 {dir} / 속도 {speed} / 생존 {lifetime:F1}s");
     }
 
-    // 투사체 프리팹 없을 때 무기 아이콘으로 임시 투사체 생성
+    // 투사체 프리팹 없을 때 무기 아이콘(없으면 흰 원)으로 임시 투사체 생성
     private static GameObject BuildTempGO(Sprite icon, string weaponName)
     {
         var go = new GameObject($"Proj_{weaponName}");
 
-        var sr        = go.AddComponent<SpriteRenderer>();
-        sr.sprite     = icon;
+        var sr          = go.AddComponent<SpriteRenderer>();
+        sr.sprite       = icon;           // null이면 SpriteRenderer가 흰 사각형 표시
+        sr.color        = icon != null ? Color.white : new Color(1f, 0.8f, 0.2f);
         sr.sortingOrder = 10;
         go.transform.localScale = Vector3.one * 0.4f;
 
-        var rb        = go.AddComponent<Rigidbody2D>();
+        var rb          = go.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
 
-        var col       = go.AddComponent<CircleCollider2D>();
-        col.isTrigger = true;
-        col.radius    = 0.3f;
+        var col         = go.AddComponent<CircleCollider2D>();
+        col.isTrigger   = true;
+        col.radius      = 0.3f;
 
         return go;
     }
