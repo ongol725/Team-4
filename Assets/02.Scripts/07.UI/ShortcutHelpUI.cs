@@ -114,7 +114,7 @@ public class ShortcutHelpUI : MonoBehaviour
         if (float.IsPositiveInfinity(invLeftX))
         {
             panelRt.anchorMin = panelRt.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRt.anchoredPosition = new Vector2(-PanelW * 0.5f - 20f, panelH * 0.5f);
+            panelRt.anchoredPosition = new Vector2(-PanelW * 0.5f - 20f, 0f);
             return;
         }
 
