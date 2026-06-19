@@ -101,31 +101,58 @@ public class ShortcutHelpUI : MonoBehaviour
 
     private static void PositionNextToInventory(RectTransform panelRt, Canvas canvas, float panelH)
     {
-        var inventoryGridUI = FindObjectOfType<InventoryGridUI>();
-        if (inventoryGridUI == null)
+        var canvasRt = canvas.GetComponent<RectTransform>();
+        var cam      = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+
+        // 인벤토리 좌상단 X 구하기
+        float leftX = GetLeftEdgeX(FindObjectOfType<InventoryGridUI>()?.GetComponent<RectTransform>(),
+                                   canvasRt, cam);
+
+        // 시너지 UI 좌상단 X 구하기 (더 왼쪽이면 그 값 사용)
+        var synergyRt = FindObjectOfType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
+        if (synergyRt != null)
         {
+            float synergyLeft = GetLeftEdgeX(synergyRt, canvasRt, cam);
+            if (synergyLeft < leftX) leftX = synergyLeft;
+        }
+
+        if (float.IsPositiveInfinity(leftX))
+        {
+            // 아무것도 못 찾은 경우 — 화면 중앙 좌측
             panelRt.anchorMin = panelRt.anchorMax = new Vector2(0.5f, 0.5f);
             panelRt.anchoredPosition = new Vector2(-PanelW * 0.5f - 20f, panelH * 0.5f);
             return;
         }
 
-        var invRt    = inventoryGridUI.GetComponent<RectTransform>();
-        var canvasRt = canvas.GetComponent<RectTransform>();
-        var cam      = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-
-        // 인벤토리의 월드 코너 (0=좌하, 1=좌상, 2=우상, 3=우하)
-        var corners = new Vector3[4];
-        invRt.GetWorldCorners(corners);
-
-        // 인벤토리 좌상단의 screen 좌표 → canvas 로컬 좌표
-        var screenPt = RectTransformUtility.WorldToScreenPoint(cam, corners[1]);
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvasRt, screenPt, cam, out var localTopLeft))
-            return;
-
-        // 패널 우상단을 인벤토리 좌상단에 맞춤 (Gap 간격)
+        // 패널 우상단을 두 UI 중 가장 왼쪽 edge에 맞춤 (Gap 간격)
         panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 0f);
-        panelRt.anchoredPosition = new Vector2(localTopLeft.x - Gap, localTopLeft.y);
+
+        // 상단 Y는 인벤토리 기준
+        float topY = GetTopEdgeY(FindObjectOfType<InventoryGridUI>()?.GetComponent<RectTransform>(),
+                                 canvasRt, cam);
+        panelRt.anchoredPosition = new Vector2(leftX - Gap, topY);
+    }
+
+    /// <summary>RectTransform의 월드 좌상단 X를 캔버스 로컬 좌표로 반환</summary>
+    private static float GetLeftEdgeX(RectTransform rt, RectTransform canvasRt, Camera cam)
+    {
+        if (rt == null) return float.PositiveInfinity;
+        var corners = new Vector3[4];
+        rt.GetWorldCorners(corners); // 0=좌하, 1=좌상
+        var screenPt = RectTransformUtility.WorldToScreenPoint(cam, corners[1]);
+        return RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRt, screenPt, cam, out var local) ? local.x : float.PositiveInfinity;
+    }
+
+    /// <summary>RectTransform의 월드 좌상단 Y를 캔버스 로컬 좌표로 반환</summary>
+    private static float GetTopEdgeY(RectTransform rt, RectTransform canvasRt, Camera cam)
+    {
+        if (rt == null) return 0f;
+        var corners = new Vector3[4];
+        rt.GetWorldCorners(corners); // 1=좌상
+        var screenPt = RectTransformUtility.WorldToScreenPoint(cam, corners[1]);
+        return RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRt, screenPt, cam, out var local) ? local.y : 0f;
     }
 
     // ─────────────────────────────────────────────────────────────
