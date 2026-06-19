@@ -15,7 +15,6 @@ public class ShortcutHelpUI : MonoBehaviour
     private bool _isVisible;
 
     [SerializeField] private Vector2 _positionOffset = new Vector2(-300f, 0f);
-    private Vector2 _lastOffset;
 
     private const float PanelW  = 340f;
     private const float PadX    = 20f;
@@ -36,12 +35,9 @@ public class ShortcutHelpUI : MonoBehaviour
         if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
             SetVisible(!_isVisible);
 
-        // Inspector에서 offset 값이 바뀌면 패널 위치 즉시 반영
-        if (_panelRt != null && _positionOffset != _lastOffset)
-        {
+        // Inspector offset 실시간 반영
+        if (_panelRt != null)
             _panelRt.anchoredPosition = _basePosition + _positionOffset;
-            _lastOffset = _positionOffset;
-        }
     }
 
     public void SetVisible(bool visible)
@@ -106,7 +102,6 @@ public class ShortcutHelpUI : MonoBehaviour
         // ── 인벤토리 좌측에 배치 ────────────────────────────────────
         _panelRt = panelRt;
         PositionNextToInventory(panelRt, canvas);
-        _lastOffset = _positionOffset;
 
         _panel.SetActive(false);
     }
