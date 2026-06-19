@@ -7,15 +7,36 @@ using UnityEngine.UI;
 /// </summary>
 public class GoldDisplayUI : MonoBehaviour
 {
+    public static GoldDisplayUI Instance { get; private set; }
+
     [SerializeField] private Canvas _canvas;
 
     private Text        _goldText;
     private GameManager _gameManager;
+    private GameObject  _controlsPanel;
 
     // ─────────────────────────────────────────────────────────────
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+        if (_gameManager != null)
+            _gameManager.onGoldChanged -= SetGold;
+    }
+
     private void Start()
     {
+        if (_canvas == null)
+        {
+            // TempSlot과 같은 좌표계(InventoryStoreRoot)를 우선 사용
+            var go = GameObject.Find("InventoryStoreRoot");
+            if (go != null) _canvas = go.GetComponent<Canvas>();
+        }
         if (_canvas == null)
         {
             var go = GameObject.Find("Canvas_Inventory");
@@ -34,12 +55,6 @@ public class GoldDisplayUI : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        if (_gameManager != null)
-            _gameManager.onGoldChanged -= SetGold;
-    }
-
     // ─────────────────────────────────────────────────────────────
 
     private void SetGold(int amount)
@@ -50,22 +65,28 @@ public class GoldDisplayUI : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────────
 
+    public void ShowHelp() { if (_controlsPanel != null) _controlsPanel.SetActive(true); }
+    public void HideHelp() { if (_controlsPanel != null) _controlsPanel.SetActive(false); }
+
     private void BuildControlsPanel()
     {
         var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
                 ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-        // GoldPanel 바로 아래 (y: -10 패널높이38 -간격6 = -54)
+        // 인벤토리 왼쪽에 배치
+        // InventoryContainer: anchor=(0.5,1), pos=(0,-20), width=582 → 왼쪽 끝 x=-291, 여백 8px
         var panel = new GameObject("ControlsPanel", typeof(RectTransform), typeof(Image));
         panel.transform.SetParent(_canvas.transform, false);
 
         var rt = panel.GetComponent<RectTransform>();
         rt.anchorMin        = new Vector2(0.5f, 1f);
         rt.anchorMax        = new Vector2(0.5f, 1f);
-        rt.pivot            = new Vector2(0.5f, 1f);
-        rt.anchoredPosition = new Vector2(0f, -54f);
-        rt.sizeDelta        = new Vector2(200f, 112f);
+        rt.pivot            = new Vector2(1f, 1f);
+        rt.anchoredPosition = new Vector2(-299f, -20f);
+        rt.sizeDelta        = new Vector2(200f, 120f);
         panel.GetComponent<Image>().color = new Color(0.06f, 0.06f, 0.10f, 0.88f);
+
+        _controlsPanel = panel;
 
         var textGo = new GameObject("ControlsText", typeof(RectTransform), typeof(Text));
         textGo.transform.SetParent(panel.transform, false);
@@ -88,6 +109,9 @@ public class GoldDisplayUI : MonoBehaviour
             "<color=#FFDD88>[O]</color>  자동 배치\n" +
             "<color=#FFDD88>[우클릭]</color>  스마트 구매";
         txt.supportRichText = true;
+
+        // 상점이 열릴 때만 표시
+        panel.SetActive(false);
     }
 
     private void BuildUI()

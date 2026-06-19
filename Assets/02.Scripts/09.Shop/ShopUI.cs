@@ -79,12 +79,14 @@ public class ShopUI : MonoBehaviour
     public void Open()
     {
         if (_panelRoot != null) _panelRoot.SetActive(true);
+        GoldDisplayUI.Instance?.ShowHelp();
     }
 
     public void Close()
     {
         _loadoutBuilder?.BuildAndDeliver();
         if (_panelRoot != null) _panelRoot.SetActive(false);
+        GoldDisplayUI.Instance?.HideHelp();
     }
 
     // ─────────────────────────────────────────────────────────────
