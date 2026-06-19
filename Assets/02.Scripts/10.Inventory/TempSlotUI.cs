@@ -16,18 +16,18 @@ public class TempSlotUI : MonoBehaviour
     private readonly List<ItemBlockUI> _heldBlocks = new();
     private RectTransform _rt;
 
-    // 배치 우선순위: 좌상 → 우하 → 우상 → 좌하 → 중앙 → 상중 → 하중 → 좌중 → 우중
+    // 배치 우선순위: 좌상 → 우상 → 좌하 → 우하 → 상중 → 좌중 → 우중 → 하중 → 중앙
     // Vector2(normalizedX, normalizedY)  X: 0=left 1=right, Y: 0=bottom 1=top
     private static readonly Vector2[] SpreadAnchors =
     {
         new Vector2(0f,   1f),   // 좌상
-        new Vector2(1f,   0f),   // 우하
         new Vector2(1f,   1f),   // 우상
         new Vector2(0f,   0f),   // 좌하
+        new Vector2(1f,   0f),   // 우하
         new Vector2(0.5f, 1f),   // 상중
-        new Vector2(0.5f, 0f),   // 하중
         new Vector2(0f,   0.5f), // 좌중
         new Vector2(1f,   0.5f), // 우중
+        new Vector2(0.5f, 0f),   // 하중
         new Vector2(0.5f, 0.5f), // 중앙
     };
 
