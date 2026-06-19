@@ -12,6 +12,8 @@ public class ShortcutHelpUI : MonoBehaviour
     private GameObject _panel;
     private bool _isVisible;
 
+    [SerializeField] private Vector2 _positionOffset = new Vector2(-300f, 0f);
+
     private const float PanelW  = 340f;
     private const float PadX    = 20f;
     private const float PadY    = 14f;
@@ -92,14 +94,14 @@ public class ShortcutHelpUI : MonoBehaviour
         panelRt.sizeDelta = new Vector2(PanelW, panelH);
 
         // ── 인벤토리 좌측에 배치 ────────────────────────────────────
-        PositionNextToInventory(panelRt, canvas, panelH);
+        PositionNextToInventory(panelRt, canvas);
 
         _panel.SetActive(false);
     }
 
     // ─────────────────────────────────────────────────────────────
 
-    private static void PositionNextToInventory(RectTransform panelRt, Canvas canvas, float panelH)
+    private void PositionNextToInventory(RectTransform panelRt, Canvas canvas)
     {
         var canvasRt  = canvas.GetComponent<RectTransform>();
         var cam       = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
@@ -136,7 +138,7 @@ public class ShortcutHelpUI : MonoBehaviour
         float canvasHalfW = canvasRt.rect.width * 0.5f;
         anchorX = Mathf.Max(anchorX, -canvasHalfW + PanelW + Gap);
 
-        panelRt.anchoredPosition = new Vector2(anchorX - 300f, topY);
+        panelRt.anchoredPosition = new Vector2(anchorX + _positionOffset.x, topY + _positionOffset.y);
     }
 
     /// <summary>RectTransform의 월드 좌상단 X를 캔버스 로컬 좌표로 반환</summary>
