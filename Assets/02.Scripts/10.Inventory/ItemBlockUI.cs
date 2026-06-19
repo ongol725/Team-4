@@ -50,6 +50,12 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private bool _placementInputGuard;
     private int  _lastRingGradeBonus = -1;
 
+    // 우클릭 취소 시 복원을 위한 원래 위치 정보
+    private enum OriginType { None, Grid, TempSlot }
+    private OriginType _originType    = OriginType.None;
+    private Vector2Int _originCell;
+    private TempSlotUI _originTempSlot;
+
     private readonly List<GameObject> _cellOutlines = new();
 
     // 희귀도별 테두리 색상 (무기용)
@@ -130,8 +136,28 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         if (mouse.rightButton.wasPressedThisFrame)
         {
             SetFollowing(false);
-            _gridUI.OnPlacementCancelled(_instance);
-            Destroy(gameObject);
+            _gridUI.ClearHighlight();
+
+            if (_originType == OriginType.Grid)
+            {
+                // 그리드 원위치 복원
+                if (_grid.TryPlace(_instance, _originCell))
+                    SnapToGrid(_originCell);
+                else
+                    SendToTempSlot(); // 복원 불가 시 임시칸으로
+            }
+            else if (_originType == OriginType.TempSlot && _originTempSlot != null)
+            {
+                // 임시칸 원위치 복원
+                _originTempSlot.ReceiveBlock(this);
+                _gridUI.OnItemSentToTempSlot(this);
+            }
+            else
+            {
+                // 상점에서 구매한 신규 아이템 → 취소
+                _gridUI.OnPlacementCancelled(_instance);
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -320,12 +346,18 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
         if (_isPlaced)
         {
+            _grid.TryGetOrigin(_instance, out _originCell);
+            _originType     = OriginType.Grid;
+            _originTempSlot = null;
             _grid.Remove(_instance);
             _gridUI.OnItemUnplaced(_instance);
             _isPlaced = false;
         }
         else if (_isInTempSlot)
         {
+            _originType     = OriginType.TempSlot;
+            _originTempSlot = _tempSlot;
+            _originCell     = default;
             _tempSlot.OnItemPickedUp(this);
             _isInTempSlot = false;
             _tempSlot     = null;
