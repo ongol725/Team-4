@@ -136,8 +136,8 @@ public class SummonController : MonoBehaviour
 
     private void UpdateChase()
     {
-        // 타겟 무효화 확인
-        if (_chaseTarget == null || _chaseTarget.IsDead)
+        // 타겟 무효화 확인 — IsDead 외에 풀 반환(비활성화)도 처리
+        if (_chaseTarget == null || _chaseTarget.IsDead || !_chaseTarget.gameObject.activeInHierarchy)
         {
             _chaseTarget = null;
             _state = SummonState.Wander;
@@ -294,7 +294,7 @@ public class SummonController : MonoBehaviour
         {
             var mc = h.GetComponent<MonsterController>()
                   ?? h.GetComponentInParent<MonsterController>();
-            if (mc != null && !mc.IsDead) result.Add(mc);
+            if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy) result.Add(mc);
         }
         return result;
     }

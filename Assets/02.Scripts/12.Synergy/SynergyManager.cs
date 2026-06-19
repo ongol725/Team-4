@@ -291,7 +291,7 @@ public class SynergyManager : MonoBehaviour
         {
             var mc = h.GetComponent<MonsterController>()
                   ?? h.GetComponentInParent<MonsterController>();
-            if (mc != null && !mc.IsDead) result.Add(mc);
+            if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy) result.Add(mc);
         }
         return result;
     }
