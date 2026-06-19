@@ -177,6 +177,8 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         Sprite shopSprite = null;
         if (!string.IsNullOrEmpty(_item.itemID))
             shopSprite = Resources.Load<Sprite>("ShopItems/" + _item.itemID + "_Shop");
+        if (shopSprite == null)
+            shopSprite = _item.itemImage;
 
         if (shopSprite != null)
         {

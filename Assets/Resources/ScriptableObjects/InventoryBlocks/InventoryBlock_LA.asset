@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: inv_block_la
   itemName: "\uC778\uBCA4\uD1A0\uB9AC \uBE14\uB85D (\u3131\uC790 A)"
   itemDescription: "\uC7A0\uAE34 \uC778\uBCA4\uD1A0\uB9AC \uCE78 3\uAC1C\uB97C \uAC1C\uBC29\uD569\uB2C8\uB2E4."
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 21300000, guid: 69bea076ec3269f458765c2a1aa0c2e7, type: 3}
   rarity: 0
   grade: 1
   cost: 15
