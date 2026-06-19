@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public int currentFloor = 1;
 
-    [SerializeField] private int _startingGold = 50;
+    [SerializeField] private SO_GameSettings _settings;
 
     // 골드 (씬/층을 넘어 유지). 변경 시 onGoldChanged로 HUD 등에 통지.
     [HideInInspector] public int gold;
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     /// <summary>골드를 시작 기본값으로 초기화합니다. (새 런 시작 시)</summary>
     public void ResetGold()
     {
-        gold = _startingGold;
+        gold = _settings != null ? _settings.startingGold : 50;
         onGoldChanged?.Invoke(gold);
     }
 
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
-        gold = _startingGold;
+        gold = _settings != null ? _settings.startingGold : 50;
     }
 
     public void GoToNextFloor()

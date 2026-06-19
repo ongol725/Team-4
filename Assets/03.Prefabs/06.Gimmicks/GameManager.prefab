@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170708930c7abe04cb8c9857265cedd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  _settings: {fileID: 11400000, guid: 8ebb1b9230e84798b5ec2559f4b88420, type: 2}
   currentFloor: 1
   gold: 50
   useSceneTransition: 0
