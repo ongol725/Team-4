@@ -5532,6 +5532,7 @@ GameObject:
   - component: {fileID: 1642988220}
   - component: {fileID: 1642988222}
   - component: {fileID: 1642988221}
+  - component: {fileID: 1642988223}
   m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
@@ -5596,6 +5597,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1642988219}
   m_CullTransparentMesh: 1
+--- !u!114 &1642988223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642988219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b9784e16c645b7ba2e229417702bdf, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BackpackBGAdjust
+  _posOffset: {x: 0, y: 0}
+  _sizeOffset: {x: 0, y: 0}
 --- !u!1 &1676942182
 GameObject:
   m_ObjectHideFlags: 0
