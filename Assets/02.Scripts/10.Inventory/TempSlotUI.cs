@@ -65,7 +65,7 @@ public class TempSlotUI : MonoBehaviour
     public void OnItemPickedUp(ItemBlockUI block)
     {
         _heldBlocks.Remove(block);
-        RefreshPositions();
+        // 남은 아이템 위치 유지 — RefreshPositions 호출 안 함
         UpdateBackground();
         onTempSlotChanged?.Invoke();
     }
