@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public int currentFloor = 1;
 
-    [SerializeField] private SO_GameSettings _settings;
+    private SO_GameSettings _settings;
 
     // 골드 (씬/층을 넘어 유지). 변경 시 onGoldChanged로 HUD 등에 통지.
     [HideInInspector] public int gold;
@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
+        _settings = Resources.Load<SO_GameSettings>("GameSettings");
         gold = _settings != null ? _settings.startingGold : 50;
     }
 

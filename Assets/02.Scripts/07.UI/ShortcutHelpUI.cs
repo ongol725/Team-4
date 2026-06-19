@@ -6,15 +6,28 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Q키를 누르면 인벤토리 좌측에 단축키 도움말 팝업을 토글한다.
 /// 패널 높이는 텍스트 내용에 맞게 자동 계산된다.
+/// RuntimeInitializeOnLoadMethod로 자동 생성되므로 씬에 배치 불필요.
 /// </summary>
 public class ShortcutHelpUI : MonoBehaviour
 {
+    private static ShortcutHelpUI _instance;
+
     private GameObject _panel;
     private RectTransform _panelRt;
     private Vector2 _basePosition;
     private bool _isVisible;
 
-    [SerializeField] private Vector2 _positionOffset = new Vector2(-300f, 0f);
+    // 위치 오프셋: 인벤토리 좌측 기준 (x=좌우, y=상하)
+    private Vector2 _positionOffset = new Vector2(-315f, 250f);
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void AutoCreate()
+    {
+        if (_instance != null) return;
+        var go = new GameObject("ShortcutHelpUI");
+        DontDestroyOnLoad(go);
+        _instance = go.AddComponent<ShortcutHelpUI>();
+    }
 
     private const float PanelW  = 340f;
     private const float PadX    = 20f;
