@@ -60,6 +60,15 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Action<ItemInstance, ShopSlotUI> _onBuy;
     private Button                           _shopImageButton;
 
+    [Header("아이콘 위치/크기 (인스펙터에서 실시간 조정)")]
+    [SerializeField] private Vector2 _discountIconOffset = Vector2.zero;
+    [SerializeField] private Vector2 _discountIconSize   = new Vector2(44f, 20f);
+    [SerializeField] private Vector2 _grade2IconOffset   = Vector2.zero;
+    [SerializeField] private Vector2 _grade2IconSize     = new Vector2(25f, 20f);
+
+    private RectTransform _discountIconRt;
+    private RectTransform _grade2IconRt;
+
     private Vector2 _origAnchorMin, _origAnchorMax, _origOffsetMin, _origOffsetMax;
     private int     _origSiblingIndex;
     private Image   _colorBar;
@@ -260,12 +269,12 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         var go = new GameObject("grade2_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
 
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin        = new Vector2(1f, 1f);
-        rt.anchorMax        = new Vector2(1f, 1f);
-        rt.pivot            = new Vector2(1f, 1f);
-        rt.anchoredPosition = Vector2.zero;
-        rt.sizeDelta        = new Vector2(25f, 20f);  // 원본 239×193 비율 유지
+        _grade2IconRt               = go.GetComponent<RectTransform>();
+        _grade2IconRt.anchorMin     = new Vector2(1f, 1f);
+        _grade2IconRt.anchorMax     = new Vector2(1f, 1f);
+        _grade2IconRt.pivot         = new Vector2(1f, 1f);
+        _grade2IconRt.anchoredPosition = _grade2IconOffset;
+        _grade2IconRt.sizeDelta     = _grade2IconSize;
 
         var img = go.GetComponent<Image>();
         img.sprite         = sprite;
@@ -281,17 +290,31 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         var go = new GameObject("discount_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
 
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin        = new Vector2(0f, 0f);
-        rt.anchorMax        = new Vector2(0f, 0f);
-        rt.pivot            = new Vector2(0f, 0f);
-        rt.anchoredPosition = Vector2.zero;
-        rt.sizeDelta        = new Vector2(44f, 20f);  // 원본 438×198 비율 유지
+        _discountIconRt               = go.GetComponent<RectTransform>();
+        _discountIconRt.anchorMin     = new Vector2(0f, 0f);
+        _discountIconRt.anchorMax     = new Vector2(0f, 0f);
+        _discountIconRt.pivot         = new Vector2(0f, 0f);
+        _discountIconRt.anchoredPosition = _discountIconOffset;
+        _discountIconRt.sizeDelta     = _discountIconSize;
 
         var img = go.GetComponent<Image>();
         img.sprite         = sprite;
         img.preserveAspect = true;
         img.raycastTarget  = false;
+    }
+
+    private void OnValidate()
+    {
+        if (_discountIconRt != null)
+        {
+            _discountIconRt.anchoredPosition = _discountIconOffset;
+            _discountIconRt.sizeDelta        = _discountIconSize;
+        }
+        if (_grade2IconRt != null)
+        {
+            _grade2IconRt.anchoredPosition = _grade2IconOffset;
+            _grade2IconRt.sizeDelta        = _grade2IconSize;
+        }
     }
 
     private void RefreshSynergies(SO_ItemData item)
