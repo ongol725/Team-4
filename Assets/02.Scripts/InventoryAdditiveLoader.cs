@@ -33,16 +33,28 @@ public class InventoryAdditiveLoader : MonoBehaviour
         var listeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
         if (listeners.Length > 1)
         {
-            // MainCamera 태그가 있는 것을 남기고 나머지 비활성화
             AudioListener keep = null;
             foreach (var l in listeners)
                 if (l.gameObject.CompareTag("MainCamera")) { keep = l; break; }
-
-            // MainCamera가 없으면 첫 번째를 유지
             if (keep == null) keep = listeners[0];
-
             foreach (var l in listeners)
                 if (l != keep) l.enabled = false;
+        }
+
+        // Additive 로드 시 EventSystem 중복 제거 — 메인 씬 것만 유지
+        var eventSystems = FindObjectsByType<UnityEngine.EventSystems.EventSystem>(FindObjectsSortMode.None);
+        if (eventSystems.Length > 1)
+        {
+            // 인벤토리 씬(99.InventoryStore)의 EventSystem을 비활성화
+            var inventoryScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(_sceneName);
+            foreach (var es in eventSystems)
+            {
+                if (es.gameObject.scene == inventoryScene)
+                {
+                    es.gameObject.SetActive(false);
+                    break;
+                }
+            }
         }
 
         Debug.Log("[InventoryLoader] 인벤토리 씬 로드 완료 — I 키로 인벤토리 열기");

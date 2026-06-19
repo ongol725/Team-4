@@ -73,6 +73,19 @@ public class CombatZone : MonoBehaviour
             onCombatStateChanged?.Invoke(false);
     }
 
+    /// <summary>
+    /// 트리거 Collider 없이 외부에서 직접 전투 상태를 주입한다 (DungeonCombatZone 전용).
+    /// 이미 같은 상태면 이벤트를 발행하지 않는다.
+    /// </summary>
+    public static void ForceSetCombat(bool inCombat)
+    {
+        bool wasInCombat = _overlapCount > 0;
+        if (inCombat == wasInCombat) return;
+
+        _overlapCount = inCombat ? 1 : 0;
+        onCombatStateChanged?.Invoke(inCombat);
+    }
+
     // 씬 전환 / 오브젝트 비활성화 시 카운트 정리
     private void OnDisable()
     {
