@@ -109,7 +109,7 @@ public class InventoryGridUI : MonoBehaviour
     // 상점 연동
 
     /// <summary>상점 구매 후 아이템을 마우스에 들고 배치 대기 상태로 만든다</summary>
-    public void BeginPlaceFromShop(ItemInstance inst)
+    public void BeginPlaceFromShop(ItemInstance inst, ShopSlotUI shopSlot = null, int refundCost = 0)
     {
         // 이미 마우스에 들린 아이템이 있으면 임시칸으로 보냄
         if (_activeFollowingBlock != null)
@@ -120,6 +120,7 @@ public class InventoryGridUI : MonoBehaviour
 
         var block = go.AddComponent<ItemBlockUI>();
         block.Initialize(inst, this, _grid, _cellSize);
+        block.SetShopSource(shopSlot, refundCost);
 
         _pendingBlock = block;
     }
@@ -444,7 +445,7 @@ public class InventoryGridUI : MonoBehaviour
     }
 
     /// <summary>아이템 모양을 수용할 수 있는 첫 번째 유효 셀을 반환.</summary>
-    private Vector2Int? FindFirstValidPlacement(ItemInstance inst)
+    public Vector2Int? FindFirstValidPlacement(ItemInstance inst)
     {
         for (int r = 0; r < _grid.Rows; r++)
         for (int c = 0; c < _grid.Cols; c++)

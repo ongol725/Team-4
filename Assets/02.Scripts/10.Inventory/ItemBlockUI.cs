@@ -50,6 +50,16 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private bool _placementInputGuard;
     private int  _lastRingGradeBonus = -1;
 
+    // 우클릭 취소 시 복원을 위한 원래 위치 정보
+    private enum OriginType { None, Grid, TempSlot }
+    private OriginType _originType    = OriginType.None;
+    private Vector2Int _originCell;
+    private TempSlotUI _originTempSlot;
+
+    // 상점 구매 출처 (우클릭 취소 시 환불·슬롯 복원용)
+    private ShopSlotUI _shopSlot;
+    private int        _shopRefundCost;
+
     private readonly List<GameObject> _cellOutlines = new();
 
     // 희귀도별 테두리 색상 (무기용)
@@ -86,8 +96,25 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
         BuildVisuals();
 
+        // 임시칸 RefreshPositions가 sizeDelta로 아이템 크기를 읽으므로 셀 범위로 설정
+        var cells = InventoryGrid.GetCells(_instance.data);
+        int maxRow = 0, maxCol = 0;
+        foreach (var c in cells)
+        {
+            if (c.x > maxRow) maxRow = c.x;
+            if (c.y > maxCol) maxCol = c.y;
+        }
+        _rt.sizeDelta = new Vector2((maxCol + 1) * _cellSize, (maxRow + 1) * _cellSize);
+
         _placementInputGuard = false;
         SetFollowing(true);
+    }
+
+    /// <summary>상점 구매 출처를 저장한다. BeginPlaceFromShop 직후 호출.</summary>
+    public void SetShopSource(ShopSlotUI slot, int refundCost)
+    {
+        _shopSlot       = slot;
+        _shopRefundCost = refundCost;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -124,14 +151,44 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             else if (IsMouseOverSellSlot())
                 SellAndDestroy();
             else if (IsMouseOverTempSlot())
-                SendToTempSlot();
+            {
+                var tempSlot    = _gridUI.TempSlot;
+                var mergeTarget = tempSlot?.FindMergeTarget(_instance);
+                if (mergeTarget != null)
+                    TrySynthesizeInTempSlot(mergeTarget);
+                else
+                    SendToTempSlot();
+            }
         }
 
         if (mouse.rightButton.wasPressedThisFrame)
         {
             SetFollowing(false);
-            _gridUI.OnPlacementCancelled(_instance);
-            Destroy(gameObject);
+            _gridUI.ClearHighlight();
+
+            if (_originType == OriginType.Grid)
+            {
+                // 그리드 원위치 복원
+                if (_grid.TryPlace(_instance, _originCell))
+                    SnapToGrid(_originCell);
+                else
+                    SendToTempSlot(); // 복원 불가 시 임시칸으로
+            }
+            else if (_originType == OriginType.TempSlot && _originTempSlot != null)
+            {
+                // 임시칸 원위치 복원
+                _originTempSlot.ReceiveBlock(this);
+                _gridUI.OnItemSentToTempSlot(this);
+            }
+            else
+            {
+                // 상점에서 구매한 신규 아이템 → 취소: 골드 환불 + 슬롯 복원
+                if (_shopRefundCost > 0)
+                    GameManager.Instance?.AddGold(_shopRefundCost);
+                _shopSlot?.RestoreFromSoldOut();
+                _gridUI.OnPlacementCancelled(_instance);
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -201,6 +258,53 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         _gridUI.RefreshItemBlockVisual(target);
         _gridUI.OnPlacementCancelled(_instance);
         Destroy(gameObject);
+    }
+
+    private void TrySynthesizeInTempSlot(ItemBlockUI targetBlock)
+    {
+        if (!targetBlock.Instance.TryUpgrade()) return; // 최고 등급이면 합성 불가
+
+        SetFollowing(false);
+        _gridUI.OnPlacementCancelled(_instance);
+        targetBlock.RefreshVisuals();
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 임시칸 아이템 우클릭 처리: 합성 우선 → 그리드 자동 배치.
+    /// 빈 공간도 없으면 임시칸에 그대로 유지.
+    /// </summary>
+    private void TrySmartPlaceFromTempSlot()
+    {
+        // 1순위: 그리드에서 합성 가능한 아이템 탐색
+        if (_instance.HasGrades && _instance.gradeIndex < 4)
+        {
+            foreach (var existing in _grid.GetAllPlacedInstances())
+            {
+                if (existing.data != _instance.data || existing.gradeIndex != _instance.gradeIndex) continue;
+
+                var savedTempSlot = _tempSlot;
+                _isInTempSlot = false;
+                _tempSlot     = null;
+                savedTempSlot.OnItemPickedUp(this);
+                existing.TryUpgrade();
+                _gridUI.RefreshItemBlockVisual(existing);
+                _gridUI.OnPlacementCancelled(_instance);
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        // 2순위: 그리드 빈 공간에 자동 배치
+        var origin = _gridUI.FindFirstValidPlacement(_instance);
+        if (!origin.HasValue) return; // 공간 없음 → 임시칸 유지
+
+        var slot = _tempSlot;
+        _isInTempSlot = false;
+        _tempSlot     = null;
+        slot.OnItemPickedUp(this);
+        if (_grid.TryPlace(_instance, origin.Value))
+            SnapToGrid(origin.Value);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -318,14 +422,46 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         if (_isFollowingMouse) return;
         if (_gridUI.IsAnyFollowingMouse) return; // 다른 블록 드래그 중 → 클릭 무시
 
+        // 우클릭: 임시칸 → 합성 우선, 빈 공간 자동 배치
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (_isInTempSlot) TrySmartPlaceFromTempSlot();
+            return;
+        }
+
+        // T + 좌클릭: 즉시 판매
+        if (eventData.button == PointerEventData.InputButton.Left
+         && Keyboard.current != null && Keyboard.current.tKey.isPressed)
+        {
+            if (_isPlaced)
+            {
+                _grid.Remove(_instance);
+                _gridUI.OnItemUnplaced(_instance);
+            }
+            else if (_isInTempSlot)
+            {
+                _tempSlot.OnItemPickedUp(this);
+            }
+            SellSlotUI.Instance?.Sell(_instance);
+            _gridUI.OnPlacementCancelled(_instance);
+            Destroy(gameObject);
+            return;
+        }
+
         if (_isPlaced)
         {
+            _grid.TryGetOrigin(_instance, out _originCell);
+            _originType     = OriginType.Grid;
+            _originTempSlot = null;
             _grid.Remove(_instance);
             _gridUI.OnItemUnplaced(_instance);
             _isPlaced = false;
         }
         else if (_isInTempSlot)
         {
+            _originType     = OriginType.TempSlot;
+            _originTempSlot = _tempSlot;
+            _originCell     = default;
             _tempSlot.OnItemPickedUp(this);
             _isInTempSlot = false;
             _tempSlot     = null;

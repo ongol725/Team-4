@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 /// <summary>
 /// L 키 즉시 합성 시스템.
@@ -22,8 +25,13 @@ public class AutoMergeSystem : MonoBehaviour
 
     private void Update()
     {
+#if ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null && Keyboard.current.lKey.wasPressedThisFrame)
+            RunAutoMerge();
+#else
         if (Input.GetKeyDown(KeyCode.L))
             RunAutoMerge();
+#endif
     }
 
     // ─────────────────────────────────────────────────────────────

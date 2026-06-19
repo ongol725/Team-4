@@ -16,23 +16,34 @@ public class TempSlotUI : MonoBehaviour
     private readonly List<ItemBlockUI> _heldBlocks = new();
     private RectTransform _rt;
 
-    // 배치 우선순위: 좌상 → 우하 → 우상 → 좌하 → 중앙 → 상중 → 하중 → 좌중 → 우중
+    // 배치 우선순위: 좌상 → 우상 → 좌하 → 우하 → 상중 → 좌중 → 우중 → 하중 → 중앙
     // Vector2(normalizedX, normalizedY)  X: 0=left 1=right, Y: 0=bottom 1=top
     private static readonly Vector2[] SpreadAnchors =
     {
         new Vector2(0f,   1f),   // 좌상
-        new Vector2(1f,   0f),   // 우하
         new Vector2(1f,   1f),   // 우상
         new Vector2(0f,   0f),   // 좌하
+        new Vector2(1f,   0f),   // 우하
         new Vector2(0.5f, 1f),   // 상중
-        new Vector2(0.5f, 0f),   // 하중
         new Vector2(0f,   0.5f), // 좌중
         new Vector2(1f,   0.5f), // 우중
+        new Vector2(0.5f, 0f),   // 하중
         new Vector2(0.5f, 0.5f), // 중앙
     };
 
     public bool IsOccupied => _heldBlocks.Count > 0;
     public IReadOnlyList<ItemBlockUI> HeldBlocks => _heldBlocks;
+
+    /// <summary>임시칸 내에서 inst와 합성 가능한 블록을 반환한다</summary>
+    public ItemBlockUI FindMergeTarget(ItemInstance inst)
+    {
+        foreach (var block in _heldBlocks)
+            if (block.Instance != inst
+             && block.Instance.data       == inst.data
+             && block.Instance.gradeIndex == inst.gradeIndex)
+                return block;
+        return null;
+    }
 
     public static event System.Action onTempSlotChanged;
 
@@ -65,7 +76,7 @@ public class TempSlotUI : MonoBehaviour
     public void OnItemPickedUp(ItemBlockUI block)
     {
         _heldBlocks.Remove(block);
-        RefreshPositions();
+        // 남은 아이템 위치 유지 — RefreshPositions 호출 안 함
         UpdateBackground();
         onTempSlotChanged?.Invoke();
     }
@@ -105,7 +116,7 @@ public class TempSlotUI : MonoBehaviour
 
             rt.anchoredPosition = new Vector2(
                  pad + anchor.x * usableX,
-                -(pad + anchor.y * usableY));
+                -(pad + (1f - anchor.y) * usableY));
 
             // 배경(sibling 0) 다음 순서로 쌓기 — 뒤에 추가된 아이템이 위에 렌더링
             rt.SetSiblingIndex(i + 1);

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 /// <summary>
 /// O 키 / 자동정렬 버튼으로 인벤토리 아이템을
@@ -21,8 +24,13 @@ public class AutoSortSystem : MonoBehaviour
         // 버튼은 InventoryGridUI 가 로드된 뒤 한 번만 생성
         if (!_buttonCreated) TryCreateButton();
 
+#if ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null && Keyboard.current.oKey.wasPressedThisFrame)
+            RunAutoSort();
+#else
         if (Input.GetKeyDown(KeyCode.O))
             RunAutoSort();
+#endif
     }
 
     // ─────────────────────────────────────────────────────────────

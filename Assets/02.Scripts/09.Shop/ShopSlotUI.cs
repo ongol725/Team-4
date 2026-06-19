@@ -156,6 +156,8 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         BuildMiniPreview(color);
     }
 
+    public int FinalCost => _finalCost;
+
     public void SetSoldOut()
     {
         _isSoldOut = true;
@@ -163,6 +165,15 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             _shopImageButton.interactable = false;
         if (_nameText != null)
             _nameText.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+    }
+
+    public void RestoreFromSoldOut()
+    {
+        _isSoldOut = false;
+        if (_shopImageButton != null)
+            _shopImageButton.interactable = true;
+        if (_nameText != null)
+            _nameText.color = _defaultNameColor;
     }
 
     // ─────────────────────────────────────────────────────────────

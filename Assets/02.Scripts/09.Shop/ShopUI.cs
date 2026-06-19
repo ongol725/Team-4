@@ -211,6 +211,6 @@ public class ShopUI : MonoBehaviour
     private void OnItemBought(ItemInstance inst, ShopSlotUI slot)
     {
         slot.SetSoldOut();
-        _inventoryGridUI.BeginPlaceFromShop(inst);
+        _inventoryGridUI.BeginPlaceFromShop(inst, slot, slot.FinalCost);
     }
 }
