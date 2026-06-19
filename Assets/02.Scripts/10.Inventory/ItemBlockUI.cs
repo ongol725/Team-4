@@ -514,7 +514,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private void SnapToGrid(Vector2Int cell)
     {
         SetFollowing(false);
-        _isPlaced = true;
+        _isPlaced             = true;
+        _lastRingGradeBonus   = -1; // 배치 후 다음 Update에서 반드시 비주얼 재빌드
 
         transform.SetParent(_gridUI.transform, false);
         _rt.anchoredPosition = _gridUI.CellToAnchoredPos(cell);
