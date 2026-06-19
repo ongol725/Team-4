@@ -133,5 +133,8 @@ public class SellSlotUI : MonoBehaviour
         hintTxt.alignment = TextAnchor.MiddleCenter;
         hintTxt.color     = new Color(0.85f, 0.65f, 0.65f);
         hintTxt.raycastTarget = false;
+
+        // 인벤토리가 닫힌 상태에서 시작하므로 초기에는 숨김
+        panel.SetActive(false);
     }
 }
