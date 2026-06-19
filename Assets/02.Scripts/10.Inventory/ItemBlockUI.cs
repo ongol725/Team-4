@@ -56,6 +56,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private Vector2Int _originCell;
     private TempSlotUI _originTempSlot;
 
+    // 상점 구매 출처 (우클릭 취소 시 환불·슬롯 복원용)
+    private ShopSlotUI _shopSlot;
+    private int        _shopRefundCost;
+
     private readonly List<GameObject> _cellOutlines = new();
 
     // 희귀도별 테두리 색상 (무기용)
@@ -94,6 +98,13 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
         _placementInputGuard = false;
         SetFollowing(true);
+    }
+
+    /// <summary>상점 구매 출처를 저장한다. BeginPlaceFromShop 직후 호출.</summary>
+    public void SetShopSource(ShopSlotUI slot, int refundCost)
+    {
+        _shopSlot       = slot;
+        _shopRefundCost = refundCost;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -154,7 +165,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             }
             else
             {
-                // 상점에서 구매한 신규 아이템 → 취소
+                // 상점에서 구매한 신규 아이템 → 취소: 골드 환불 + 슬롯 복원
+                if (_shopRefundCost > 0)
+                    GameManager.Instance?.AddGold(_shopRefundCost);
+                _shopSlot?.RestoreFromSoldOut();
                 _gridUI.OnPlacementCancelled(_instance);
                 Destroy(gameObject);
             }
