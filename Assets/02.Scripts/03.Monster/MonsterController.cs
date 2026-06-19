@@ -93,6 +93,9 @@ namespace BagSurvivor.Monster
         // 사망 통지 콜백 (스폰 주체가 주입: 방 클리어 통지·풀 반환 위임). null이면 자체 비활성화.
         private System.Action<MonsterController> deathCallback;
 
+        /// <summary>사망 시 발생하는 이벤트(분열 등 기믹용). 풀 반환 직전 1회 호출. OnDisable에서 정리.</summary>
+        public event System.Action<MonsterController> OnDeath;
+
         // 난이도(층/시간) 스탯 배율. 스폰 시 주입되며, 베이스 스탯에 곱해 런타임 스탯을 산출.
         private float hpMultiplier = 1f;
         private float attackMultiplier = 1f;
@@ -170,6 +173,7 @@ namespace BagSurvivor.Monster
             damageTakenMultiplier = 1f;
             damageReductionCo = null;
             deathCallback = null;
+            OnDeath = null; // 풀 재사용 시 이전 구독자 잔존 방지(기믹은 OnEnable에서 재구독)
             hpMultiplier = 1f;
             attackMultiplier = 1f;
             HideHpBar();
@@ -524,6 +528,9 @@ namespace BagSurvivor.Monster
             // 3. 드롭 아이템 스폰
             SpawnDropItem();
 
+            // 3-1. 사망 이벤트 통지 (분열 등 기믹이 사망 위치에서 반응). 풀 반환 전에 호출.
+            OnDeath?.Invoke(this);
+
             // 4. 사망 통지 / 오브젝트 풀 반환
             //    스폰 주체(RoomMonsterSpawner)가 콜백을 주입한 경우: 방 클리어 통지 + 풀 반환을 위임.
             //    콜백이 없으면 기존 동작(비활성화)으로 폴백.
@@ -540,9 +547,10 @@ namespace BagSurvivor.Monster
         {
             if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
-            // 드롭 수치(Drop_Item_Value)만큼 골드를 떨어뜨림
+            // 돈 ID(Drop_ItemID)의 액면가 동전을 Drop_Item_Value(개수)만큼 떨어뜨림
             if (BagSurvivor.Items.GoldDropManager.Instance != null)
-                BagSurvivor.Items.GoldDropManager.Instance.Drop(transform.position, monsterData.dropItemValue);
+                BagSurvivor.Items.GoldDropManager.Instance.Drop(
+                    transform.position, monsterData.dropItemID, monsterData.dropItemValue);
         }
 
         // ==========================================
