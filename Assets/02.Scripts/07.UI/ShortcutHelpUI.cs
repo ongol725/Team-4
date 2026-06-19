@@ -10,9 +10,12 @@ using UnityEngine.InputSystem;
 public class ShortcutHelpUI : MonoBehaviour
 {
     private GameObject _panel;
+    private RectTransform _panelRt;
+    private Vector2 _basePosition;
     private bool _isVisible;
 
     [SerializeField] private Vector2 _positionOffset = new Vector2(-300f, 0f);
+    private Vector2 _lastOffset;
 
     private const float PanelW  = 340f;
     private const float PadX    = 20f;
@@ -32,6 +35,13 @@ public class ShortcutHelpUI : MonoBehaviour
     {
         if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
             SetVisible(!_isVisible);
+
+        // Inspector에서 offset 값이 바뀌면 패널 위치 즉시 반영
+        if (_panelRt != null && _positionOffset != _lastOffset)
+        {
+            _panelRt.anchoredPosition = _basePosition + _positionOffset;
+            _lastOffset = _positionOffset;
+        }
     }
 
     public void SetVisible(bool visible)
@@ -94,7 +104,9 @@ public class ShortcutHelpUI : MonoBehaviour
         panelRt.sizeDelta = new Vector2(PanelW, panelH);
 
         // ── 인벤토리 좌측에 배치 ────────────────────────────────────
+        _panelRt = panelRt;
         PositionNextToInventory(panelRt, canvas);
+        _lastOffset = _positionOffset;
 
         _panel.SetActive(false);
     }
@@ -138,7 +150,8 @@ public class ShortcutHelpUI : MonoBehaviour
         float canvasHalfW = canvasRt.rect.width * 0.5f;
         anchorX = Mathf.Max(anchorX, -canvasHalfW + PanelW + Gap);
 
-        panelRt.anchoredPosition = new Vector2(anchorX + _positionOffset.x, topY + _positionOffset.y);
+        _basePosition = new Vector2(anchorX, topY);
+        panelRt.anchoredPosition = _basePosition + _positionOffset;
     }
 
     /// <summary>RectTransform의 월드 좌상단 X를 캔버스 로컬 좌표로 반환</summary>
