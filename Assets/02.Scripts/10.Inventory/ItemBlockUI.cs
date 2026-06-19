@@ -96,6 +96,16 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
         BuildVisuals();
 
+        // 임시칸 RefreshPositions가 sizeDelta로 아이템 크기를 읽으므로 셀 범위로 설정
+        var cells = InventoryGrid.GetCells(_instance.data);
+        int maxRow = 0, maxCol = 0;
+        foreach (var c in cells)
+        {
+            if (c.x > maxRow) maxRow = c.x;
+            if (c.y > maxCol) maxCol = c.y;
+        }
+        _rt.sizeDelta = new Vector2((maxCol + 1) * _cellSize, (maxRow + 1) * _cellSize);
+
         _placementInputGuard = false;
         SetFollowing(true);
     }

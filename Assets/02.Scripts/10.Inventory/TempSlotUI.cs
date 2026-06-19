@@ -105,7 +105,7 @@ public class TempSlotUI : MonoBehaviour
 
             rt.anchoredPosition = new Vector2(
                  pad + anchor.x * usableX,
-                -(pad + anchor.y * usableY));
+                -(pad + (1f - anchor.y) * usableY));
 
             // 배경(sibling 0) 다음 순서로 쌓기 — 뒤에 추가된 아이템이 위에 렌더링
             rt.SetSiblingIndex(i + 1);
