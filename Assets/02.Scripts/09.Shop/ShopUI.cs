@@ -49,12 +49,15 @@ public class ShopUI : MonoBehaviour
     private int _shopGrade             = 1;
     private int _rerollsInCurrentGrade = 0;
 
-    private Text _statsText;
+    private Text   _statsText;
+    private Canvas _rootCanvas;
 
     // ─────────────────────────────────────────────────────────────
 
     private void Start()
     {
+        _rootCanvas = GetComponentInParent<Canvas>();
+
         _rerollButton.onClick.AddListener(Reroll);
         if (_rerollCostText != null)
             _rerollCostText.text = $"리롤 ({_rerollCost}G)";
@@ -70,7 +73,7 @@ public class ShopUI : MonoBehaviour
 
     private void Update()
     {
-        if (_panelRoot != null && _panelRoot.activeSelf
+        if (_rootCanvas != null && _rootCanvas.enabled
          && Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
             Reroll();
     }
