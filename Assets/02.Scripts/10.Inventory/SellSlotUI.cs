@@ -81,7 +81,7 @@ public class SellSlotUI : MonoBehaviour
 
     private void BuildUI()
     {
-        // TempSlot: anchor=center, pos=(137,-347), size=200×200
+        // TempSlot: anchor=center, pos=(137,-50), size=200×200
         // SellSlot: TempSlot 오른쪽 끝(237) + 8px 여백 + 자신 너비 절반(100) = 345
         var panel = new GameObject("SellSlot", typeof(RectTransform), typeof(Image));
         panel.transform.SetParent(_canvas.transform, false);
@@ -90,7 +90,7 @@ public class SellSlotUI : MonoBehaviour
         rt.anchorMin        = new Vector2(0.5f, 0.5f);
         rt.anchorMax        = new Vector2(0.5f, 0.5f);
         rt.pivot            = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = new Vector2(345f, -347f);
+        rt.anchoredPosition = new Vector2(345f, -50f);
         rt.sizeDelta        = new Vector2(200f, 200f);
         PanelRt = rt;
 
