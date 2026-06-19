@@ -61,9 +61,9 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Button                           _shopImageButton;
 
     [Header("아이콘 위치/크기 (인스펙터에서 실시간 조정)")]
-    [SerializeField] private Vector2 _discountIconOffset = Vector2.zero;
+    [SerializeField] private Vector2 _discountIconOffset = new Vector2(0f, 95f);
     [SerializeField] private Vector2 _discountIconSize   = new Vector2(44f, 20f);
-    [SerializeField] private Vector2 _grade2IconOffset   = Vector2.zero;
+    [SerializeField] private Vector2 _grade2IconOffset   = new Vector2(-243f, -12f);
     [SerializeField] private Vector2 _grade2IconSize     = new Vector2(25f, 20f);
 
     private RectTransform _discountIconRt;
