@@ -101,36 +101,39 @@ public class ShortcutHelpUI : MonoBehaviour
 
     private static void PositionNextToInventory(RectTransform panelRt, Canvas canvas, float panelH)
     {
-        var canvasRt = canvas.GetComponent<RectTransform>();
-        var cam      = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        var canvasRt  = canvas.GetComponent<RectTransform>();
+        var cam       = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        var invGridRt = FindObjectOfType<InventoryGridUI>()?.GetComponent<RectTransform>();
 
-        // 인벤토리 좌상단 X 구하기
-        float leftX = GetLeftEdgeX(FindObjectOfType<InventoryGridUI>()?.GetComponent<RectTransform>(),
-                                   canvasRt, cam);
+        // 인벤토리 좌측 X, 상단 Y
+        float invLeftX = GetLeftEdgeX(invGridRt, canvasRt, cam);
+        float topY     = GetTopEdgeY(invGridRt, canvasRt, cam);
 
-        // 시너지 UI 좌상단 X 구하기 (더 왼쪽이면 그 값 사용)
-        var synergyRt = FindObjectOfType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
-        if (synergyRt != null)
+        if (float.IsPositiveInfinity(invLeftX))
         {
-            float synergyLeft = GetLeftEdgeX(synergyRt, canvasRt, cam);
-            if (synergyLeft < leftX) leftX = synergyLeft;
-        }
-
-        if (float.IsPositiveInfinity(leftX))
-        {
-            // 아무것도 못 찾은 경우 — 화면 중앙 좌측
             panelRt.anchorMin = panelRt.anchorMax = new Vector2(0.5f, 0.5f);
             panelRt.anchoredPosition = new Vector2(-PanelW * 0.5f - 20f, panelH * 0.5f);
             return;
         }
 
-        // 패널 우상단을 두 UI 중 가장 왼쪽 edge에 맞춤 (Gap 간격)
-        panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 0f);
+        // 팝업 우측 기준점: 기본값은 인벤토리 좌측
+        float anchorX = invLeftX - Gap;
 
-        // 상단 Y는 인벤토리 기준
-        float topY = GetTopEdgeY(FindObjectOfType<InventoryGridUI>()?.GetComponent<RectTransform>(),
-                                 canvasRt, cam);
-        panelRt.anchoredPosition = new Vector2(leftX - Gap, topY);
+        // 시너지 UI가 인벤토리와 겹치는 위치에 있으면 시너지 좌측을 기준으로
+        var synergyRt = FindObjectOfType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
+        if (synergyRt != null)
+        {
+            float synergyLeft = GetLeftEdgeX(synergyRt, canvasRt, cam);
+            if (synergyLeft < invLeftX)
+                anchorX = synergyLeft - Gap;
+        }
+
+        // 화면 왼쪽 경계를 벗어나지 않도록 clamp
+        float canvasHalfW = canvasRt.rect.width * 0.5f;
+        anchorX = Mathf.Max(anchorX, -canvasHalfW + PanelW + Gap);
+
+        panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 0f);
+        panelRt.anchoredPosition = new Vector2(anchorX, topY);
     }
 
     /// <summary>RectTransform의 월드 좌상단 X를 캔버스 로컬 좌표로 반환</summary>
