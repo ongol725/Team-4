@@ -73,6 +73,15 @@ public class DungeonCombatZone : MonoBehaviour
         CombatZone.ForceSetCombat(_currentCombat);
     }
 
+    private void OnDisable()
+    {
+        if (_currentCombat)
+        {
+            _currentCombat = false;
+            CombatZone.ForceSetCombat(false);
+        }
+    }
+
     private bool IsInCombatRoom(Vector2 pos)
     {
         foreach (var rc in _cachedRooms)
