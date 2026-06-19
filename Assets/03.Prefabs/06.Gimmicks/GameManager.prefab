@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   currentFloor: 1
+  gold: 10000
   useSceneTransition: 0
   floorSceneNames:
   - 02.Floor1

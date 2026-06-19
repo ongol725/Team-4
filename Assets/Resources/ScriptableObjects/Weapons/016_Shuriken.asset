@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 016_Shuriken
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_016
+  itemName: "\uC218\uB9AC\uAC80"
+  itemDescription: "1\uC778 \uACF5\uACA9"
+  itemImage: {fileID: 2203536453563690352, guid: 2d2f8bd90ec6db244ab5a44a95b13e5d, type: 3}
+  rarity: 1
+  grade: 1
+  cost: 2
+  synergies: 0b000000010000000a000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  attackStyleType: 1
+  attackStyle: "1\uC778 \uACF5\uACA9"
+  lv5AttackStyle: "\uD06C\uAE30\xB7\uAD00\uD1B5 \uC99D\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  range: 0
+  maxTargets: 0
+  gradeStats:
+  - attackPower: 10
+    attackSpeed: 0.5
+  - attackPower: 13
+    attackSpeed: 0.45
+  - attackPower: 17
+    attackSpeed: 0.4
+  - attackPower: 20
+    attackSpeed: 0.35
+  - attackPower: 24
+    attackSpeed: 0.3

@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l \"InventoryGrid\")",
+      "Bash(awk '/m_Name: InventoryStoreRoot/,/^---/' 99.InventoryStore.unity)",
+      "Bash(awk '/GameObject:$/{p=1} p{print} /^---/{if\\(p\\) p=0}' 99.InventoryStore.unity)",
+      "Bash(awk '/!u!1 &2087046029/,/^---/' 99.InventoryStore.unity)",
+      "Bash(python3 -c ' *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(xargs grep -l \"Projectile\\\\|Weapon\\\\|Attack\\\\|Shoot\\\\|Fire\")",
+      "Bash(mkdir -p \"c:/Team-4/Assets/02.Scripts/12.Synergy\")",
+      "Bash(xargs grep -l \"ParticleSystem\\\\|Effect\\\\|VFX\")",
+      "Bash(git -C \"c:/Team-4\" status)",
+      "Bash(git -C c:/Team-4 add Assets/01.Scenes/00.TestBattle.unity Assets/02.Scripts/07.UI/SynergyData.cs Assets/02.Scripts/12.Synergy.meta Assets/02.Scripts/12.Synergy/ Assets/02.Scripts/99.ScriptableObject/SO_SkillData.cs Assets/02.Scripts/99.ScriptableObject/SO_SkillData.cs.meta Assets/02.Scripts/99.ScriptableObject/SO_SummonData.cs Assets/02.Scripts/99.ScriptableObject/SO_SummonData.cs.meta Assets/Resources/ScriptableObjects/Skills.meta Assets/Resources/ScriptableObjects/Skills/ Assets/Resources/ScriptableObjects/Summons.meta Assets/Resources/ScriptableObjects/Summons/)",
+      "Bash(git -C c:/Team-4 commit -m ' *)",
+      "Bash(git -C \"c:/Team-4\" add \"Assets/02.Scripts/12.Synergy/SynergyManager.cs\" \"Assets/02.Scripts/12.Synergy/SummonController.cs\")",
+      "Bash(git -C \"c:/Team-4\" add \"Assets/02.Scripts/12.Synergy/SynergyManager.cs\" \"Assets/02.Scripts/12.Synergy/SummonController.cs\" \"Assets/02.Scripts/03.Monster/02.Spawn/TestMonsterSpawner.cs\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Team-4\\Assets\\02.Scripts"
+    ]
+  }
+}

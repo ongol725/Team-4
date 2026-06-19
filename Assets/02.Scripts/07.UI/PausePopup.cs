@@ -55,9 +55,25 @@ namespace BagSurvivor.UI
             if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnLobbyConfirm);
             if (lobbyConfirmNoButton != null) lobbyConfirmNoButton.onClick.AddListener(OnLobbyCancel);
 
+            // 인벤토리 등 다른 Canvas(sortingOrder 10)보다 위에 렌더링되도록 Canvas override 설정
+            EnsureTopCanvas(pausePanel);
+            EnsureTopCanvas(settingPopup);
+            EnsureTopCanvas(lobbyConfirmPanel);
+
             if (pausePanel != null) pausePanel.SetActive(false);
             if (settingPopup != null) settingPopup.SetActive(false);
             if (lobbyConfirmPanel != null) lobbyConfirmPanel.SetActive(false);
+        }
+
+        private static void EnsureTopCanvas(GameObject panel)
+        {
+            if (panel == null) return;
+            var canvas = panel.GetComponent<Canvas>();
+            if (canvas == null) canvas = panel.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 100;
+            if (panel.GetComponent<UnityEngine.UI.GraphicRaycaster>() == null)
+                panel.AddComponent<UnityEngine.UI.GraphicRaycaster>();
         }
 
         private void SetLabel(Button b, int code)

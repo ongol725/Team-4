@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8, type: 3}
+  m_Name: 002_BoneRing
+  m_EditorClassIdentifier: Assembly-CSharp::SO_AccessoryData
+  itemID: ACC_002
+  itemName: "뼈 반지"
+  itemDescription: "투사체 소멸 시 사방으로 뼛조각을 흩뿌려 광역 피해"
+  itemImage: {fileID: 0}
+  rarity: 3
+  grade: 1
+  cost: 10
+  synergies: []
+  cells:
+  - {x: 0, y: 0}
+  adjacentGimmick: "투사체 소멸 시 사방으로 3~5개의 뼛조각을 흩뿌리며 주변에 추가 광역 피해"
+  lv5Gimmick:

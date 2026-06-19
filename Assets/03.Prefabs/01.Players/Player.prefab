@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1010718704681210835}
   - component: {fileID: 556315359690223484}
   - component: {fileID: 9009732684212373277}
+  - component: {fileID: 4039093665397703897}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -171,3 +172,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
   moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+--- !u!114 &4039093665397703897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140267717648347481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cc4f6eb5ffc09c4faae25092b993ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _meleeRange: 1.5
+  _meleeKnockback: 2

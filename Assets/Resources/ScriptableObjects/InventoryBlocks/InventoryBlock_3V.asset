@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f1ac17da71041044aae6e53fec6c21f, type: 3}
+  m_Name: InventoryBlock_3V
+  m_EditorClassIdentifier: Assembly-CSharp::SO_InventoryBlockData
+  itemID: inv_block_3v
+  itemName: "\uC778\uBCA4\uD1A0\uB9AC \uBE14\uB85D (3\uCE78 \uC138\uB85C)"
+  itemDescription: "\uC7A0\uAE34 \uC778\uBCA4\uD1A0\uB9AC \uCE78 3\uAC1C\uB97C \uAC1C\uBC29\uD569\uB2C8\uB2E4."
+  itemImage: {fileID: 0}
+  rarity: 0
+  grade: 0
+  cost: 15
+  synergies: 000000000000000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  expandRows: 0
+  expandCols: 0

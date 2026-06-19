@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 001_Dagger
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_001
+  itemName: "\uB2E8\uAC80"
+  itemDescription: "1\uC778 \uACF5\uACA9"
+  itemImage: {fileID: 2008942932546052199, guid: 4556e59974783cb47957b4b0ae6bf3c7, type: 3}
+  rarity: 0
+  grade: 1
+  cost: 1
+  synergies: 010000000200000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  attackStyleType: 1
+  attackStyle: "1\uC778 \uACF5\uACA9"
+  lv5AttackStyle: "2\uAC1C \uD22C\uCCA9"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 10
+  range: 3
+  maxTargets: 1
+  gradeStats:
+  - attackPower: 15
+    attackSpeed: 1
+  - attackPower: 20
+    attackSpeed: 0.95
+  - attackPower: 25
+    attackSpeed: 0.88
+  - attackPower: 32
+    attackSpeed: 0.85
+  - attackPower: 38
+    attackSpeed: 0.8

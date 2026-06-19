@@ -32,7 +32,12 @@ namespace BagSurvivor.UI
             info = i;
             owner = o;
             if (nameText != null) nameText.text = i.synergyName;
-            if (countText != null) countText.text = "x" + i.count;
+            if (countText != null)
+            {
+                countText.text = i.grade == SynergyGrade.Gold
+                    ? i.count.ToString()
+                    : $"{i.count}/{i.nextThreshold}";
+            }
             if (iconImage != null && i.icon != null) iconImage.sprite = i.icon;
             if (frameImage != null)
                 frameImage.color = i.grade == SynergyGrade.Gold ? gold

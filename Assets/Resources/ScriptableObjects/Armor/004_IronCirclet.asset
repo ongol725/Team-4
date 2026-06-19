@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 3}
+  m_Name: 004_IronCirclet
+  m_EditorClassIdentifier: Assembly-CSharp::SO_ArmorData
+  itemID: ARM_004
+  itemName: "철제 서클릿"
+  itemDescription:
+  itemImage: {fileID: 8224905798187047091, guid: 32ec3f09244ed014eae0e5a6bebddf59, type: 3}
+  rarity: 0
+  grade: 1
+  cost: 3
+  synergies: 000000000000000000000000
+  cells:
+  - {x: 0, y: 0}
+  gradeStats:
+  - hpBonus: 140
+    hpRegen: 2
+  - hpBonus: 210
+    hpRegen: 4
+  - hpBonus: 315
+    hpRegen: 6
+  - hpBonus: 210
+    hpRegen: 9
+  - hpBonus: 315
+    hpRegen: 13

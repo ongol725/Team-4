@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private bool isStunned = false;
+    private bool _inventoryOpen = false;
 
     void Start()
     {
@@ -20,6 +21,19 @@ public class PlayerMovement : MonoBehaviour
         // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
         if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         if (moveAction != null) moveAction.action.Enable();
+
+        InventoryPopupToggle.onPopupToggled += OnInventoryToggled;
+    }
+
+    void OnDestroy()
+    {
+        InventoryPopupToggle.onPopupToggled -= OnInventoryToggled;
+    }
+
+    private void OnInventoryToggled(bool isOpen)
+    {
+        _inventoryOpen = isOpen;
+        if (isOpen) rb.linearVelocity = Vector2.zero;
     }
 
     void Update()
@@ -33,8 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        //스턴시 이속 0으로
-        if (isStunned)
+        if (isStunned || _inventoryOpen)
         {
             rb.linearVelocity = Vector2.zero;
             return;

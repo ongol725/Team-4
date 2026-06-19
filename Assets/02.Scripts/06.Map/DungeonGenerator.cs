@@ -221,7 +221,6 @@ public class DungeonGenerator : MonoBehaviour
                 Mathf.FloorToInt(actualStartRoom.bounds.center.y)
             );
             
-            bool foundFloor = false;
             float minDistance = float.MaxValue;
             Vector2 center = actualStartRoom.bounds.center;
             
@@ -236,7 +235,6 @@ public class DungeonGenerator : MonoBehaviour
                         {
                             minDistance = dist;
                             spawnGridPos = new Vector2Int(x, y);
-                            foundFloor = true;
                         }
                     }
                 }
