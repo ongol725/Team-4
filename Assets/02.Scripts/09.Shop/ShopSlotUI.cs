@@ -453,6 +453,7 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private void TrySmartBuy()
     {
         if (_item == null || _isSoldOut) return;
+        if (_item is SO_InventoryBlockData) return;
         if (GameManager.Instance == null || !GameManager.Instance.SpendGold(_finalCost)) return;
 
         if (_cachedGridUI == null) _cachedGridUI = FindAnyObjectByType<InventoryGridUI>();
