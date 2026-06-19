@@ -26,6 +26,64 @@ namespace BagSurvivor.UI
 
         private readonly List<SynergyEntry> entries = new List<SynergyEntry>();
 
+        private void Awake()
+        {
+            if (content == null) content = GetComponent<RectTransform>();
+            EscapeInventoryCanvas();
+        }
+
+        /// <summary>
+        /// InventoryStoreRoot 캔버스 안에 있으면 독립 Canvas(SynergyCanvas)로 이탈.
+        /// Canvas.enabled = false 의 영향을 받지 않아 항상 렌더링된다.
+        /// </summary>
+        private void EscapeInventoryCanvas()
+        {
+            // InventoryStoreRoot를 찾을 때까지 부모 체인 탐색
+            Canvas srcCanvas = null;
+            Transform directChild = transform; // InventoryStoreRoot 직접 자식 후보
+            Transform t = transform.parent;
+            while (t != null)
+            {
+                if (t.name == "InventoryStoreRoot")
+                {
+                    srcCanvas = t.GetComponent<Canvas>();
+                    break;
+                }
+                directChild = t;
+                t = t.parent;
+            }
+            if (srcCanvas == null) return; // 이미 분리되어 있거나 다른 계층
+
+            // SynergyCanvas 생성 또는 재사용
+            const string CANVAS_NAME = "SynergyCanvas";
+            var canvasGO = GameObject.Find(CANVAS_NAME);
+            if (canvasGO == null)
+            {
+                canvasGO = new GameObject(CANVAS_NAME);
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(
+                    canvasGO, gameObject.scene);
+
+                var canvas = canvasGO.AddComponent<Canvas>();
+                canvas.renderMode   = RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = srcCanvas.sortingOrder + 1;
+
+                // 부모 Canvas의 CanvasScaler 설정 복사 → 좌표계 동일하게 유지
+                var srcScaler = srcCanvas.GetComponent<CanvasScaler>();
+                var dstScaler = canvasGO.AddComponent<CanvasScaler>();
+                if (srcScaler != null)
+                {
+                    dstScaler.uiScaleMode         = srcScaler.uiScaleMode;
+                    dstScaler.referenceResolution  = srcScaler.referenceResolution;
+                    dstScaler.screenMatchMode      = srcScaler.screenMatchMode;
+                    dstScaler.matchWidthOrHeight   = srcScaler.matchWidthOrHeight;
+                }
+                canvasGO.AddComponent<GraphicRaycaster>();
+            }
+
+            // InventoryStoreRoot의 직접 자식(패널 루트)을 SynergyCanvas로 이동
+            directChild.SetParent(canvasGO.transform, false);
+        }
+
         private void Start()
         {
             if (useMock && synergies.Count == 0) BuildMock();
@@ -48,18 +106,51 @@ namespace BagSurvivor.UI
 
         public void Populate()
         {
-            for (int i = 0; i < entries.Count; i++)
-                if (entries[i] != null) Destroy(entries[i].gameObject);
             entries.Clear();
 
-            if (entryPrefab == null || content == null) return;
+            if (content == null) return;
+
+            // 방식에 상관없이 Content의 모든 자식을 제거 (누적 방지)
+            for (int i = content.childCount - 1; i >= 0; i--)
+                Destroy(content.GetChild(i).gameObject);
 
             foreach (var s in synergies)
             {
-                var go = Instantiate(entryPrefab, content);
-                var entry = go.GetComponent<SynergyEntry>();
-                if (entry != null) { entry.Setup(s, this); entries.Add(entry); }
+                if (entryPrefab != null)
+                {
+                    var go    = Instantiate(entryPrefab, content);
+                    var entry = go.GetComponent<SynergyEntry>();
+                    if (entry != null) { entry.Setup(s, this); entries.Add(entry); }
+                }
+                else
+                {
+                    SpawnFallbackEntry(s);
+                }
             }
+        }
+
+        void SpawnFallbackEntry(SynergyInfo s)
+        {
+            var go = new GameObject("SynergyEntry_Text", typeof(RectTransform));
+            go.transform.SetParent(content, false);
+
+            var le = go.AddComponent<LayoutElement>();
+            le.preferredHeight = 26;
+
+            var txt = go.AddComponent<Text>();
+            txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+                         ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+            txt.fontSize  = 11;
+            txt.alignment = TextAnchor.MiddleLeft;
+
+            string label = s.grade == SynergyGrade.Gold
+                ? $"{s.synergyName}  ★{s.count}"
+                : $"{s.synergyName}  {s.count}/{s.nextThreshold}";
+
+            txt.text  = label;
+            txt.color = s.grade == SynergyGrade.Gold   ? new Color(1f, 0.84f, 0.3f)
+                      : s.grade == SynergyGrade.Silver  ? new Color(0.75f, 0.78f, 0.85f)
+                      : new Color(0.8f, 0.5f, 0.3f);
         }
 
         public void ShowTooltip(SynergyEntry e)

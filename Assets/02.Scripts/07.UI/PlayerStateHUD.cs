@@ -31,13 +31,16 @@ namespace BagSurvivor.UI
         public int mockMaxHP = 100;
         public int mockCurrentHP = 100;
 
+        private GameManager _gameManager;
+
         private void Start()
         {
             // 골드: GameManager가 단일 소스 (씬/층을 넘어 유지). 변경 시 자동 갱신.
-            if (GameManager.Instance != null)
+            _gameManager = GameManager.Instance;
+            if (_gameManager != null)
             {
-                GameManager.Instance.onGoldChanged += SetGold;
-                SetGold(GameManager.Instance.gold);
+                _gameManager.onGoldChanged += SetGold;
+                SetGold(_gameManager.gold);
             }
             else if (useMockData)
             {
@@ -50,7 +53,7 @@ namespace BagSurvivor.UI
 
         private void OnDestroy()
         {
-            if (GameManager.Instance != null) GameManager.Instance.onGoldChanged -= SetGold;
+            if (_gameManager != null) _gameManager.onGoldChanged -= SetGold;
         }
 
         public void SetGold(int value)

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 012_Grimoire
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_012
+  itemName: "\uB9C8\uB3C4\uC11C"
+  itemDescription: "\uB3CC \uBC94\uC704 \uACF5\uACA9"
+  itemImage: {fileID: -747855824929361045, guid: 41a0a4b4743ff864b8689fa73f9c3244, type: 3}
+  rarity: 2
+  grade: 1
+  cost: 3
+  synergies: 0c000000080000000b000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  attackStyleType: 6
+  attackStyle: "\uB3CC \uBC94\uC704 \uACF5\uACA9"
+  lv5AttackStyle: "\uB3CC \uD06C\uAE30 1.5\uBC30"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 10
+  range: 5
+  maxTargets: 0
+  gradeStats:
+  - attackPower: 43
+    attackSpeed: 1.49
+  - attackPower: 57
+    attackSpeed: 1.41
+  - attackPower: 72
+    attackSpeed: 1.31
+  - attackPower: 90
+    attackSpeed: 1.25
+  - attackPower: 106
+    attackSpeed: 1.15

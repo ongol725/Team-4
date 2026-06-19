@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 022_Flail
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_022
+  itemName: "\uD50C\uB808\uC77C"
+  itemDescription: "\uC6D0\uD615 \uD0C0\uACA9"
+  itemImage: {fileID: 164041673675774661, guid: fe61fa7edbb2fe845b087cd9c312a7fb, type: 3}
+  rarity: 2
+  grade: 1
+  cost: 3
+  synergies: 070000000200000009000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 1, y: 1}
+  attackStyleType: 2
+  attackStyle: "\uC6D0\uD615 \uD0C0\uACA9"
+  lv5AttackStyle: "\uD68C\uC804 \uBC18\uACA9 \uCD94\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 15
+  range: 1
+  maxTargets: 0
+  gradeStats:
+  - attackPower: 45
+    attackSpeed: 1.4
+  - attackPower: 59
+    attackSpeed: 1.3
+  - attackPower: 74
+    attackSpeed: 1.2
+  - attackPower: 90
+    attackSpeed: 1.1
+  - attackPower: 108
+    attackSpeed: 1

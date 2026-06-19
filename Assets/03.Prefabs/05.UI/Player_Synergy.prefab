@@ -605,7 +605,7 @@ MonoBehaviour:
   entryPrefab: {fileID: 8859169447779929697, guid: 91c13a3cac6666544bbbc6e575c21670, type: 3}
   tooltip: {fileID: 0}
   tooltipOffset: {x: 160, y: 0}
-  useMock: 1
+  useMock: 0
   synergies: []
 --- !u!1 &7205261950283818282
 GameObject:

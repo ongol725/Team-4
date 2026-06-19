@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 017_Bazooka
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_017
+  itemName: "\uBC14\uC8FC\uCE74"
+  itemDescription: "\uBC94\uC704 \uD3ED\uBC1C"
+  itemImage: {fileID: 1323871535956428201, guid: 5d1477f8b6ee6c84797cc2eef519ecdd, type: 3}
+  rarity: 3
+  grade: 1
+  cost: 4
+  synergies: 040000000600000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  attackStyleType: 7
+  attackStyle: "\uBC94\uC704 \uD3ED\uBC1C"
+  lv5AttackStyle: "\uD3ED\uBC1C \uBC94\uC704 \uC99D\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 14
+  range: 5
+  maxTargets: 0
+  gradeStats:
+  - attackPower: 80
+    attackSpeed: 2.5
+  - attackPower: 104
+    attackSpeed: 2.3
+  - attackPower: 132
+    attackSpeed: 2.1
+  - attackPower: 160
+    attackSpeed: 2
+  - attackPower: 192
+    attackSpeed: 1.8

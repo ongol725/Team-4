@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 004_Whip
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_004
+  itemName: "\uCC44\uCC0D"
+  itemDescription: "90\uB3C4 \uBD80\uCC44\uAF34 \uACF5\uACA9"
+  itemImage: {fileID: 6743430906504135506, guid: ebde265a04205894296dc5bb6cec3168, type: 3}
+  rarity: 2
+  grade: 1
+  cost: 3
+  synergies: 070000000800000006000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackStyleType: 2
+  attackStyle: "90\uB3C4 \uBD80\uCC44\uAF34 \uACF5\uACA9"
+  lv5AttackStyle: "\uBC18\uB3D9 \uBC18\uACA9 \uCD94\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  range: 1
+  maxTargets: 0
+  gradeStats:
+  - attackPower: 18
+    attackSpeed: 1.1
+  - attackPower: 23
+    attackSpeed: 1
+  - attackPower: 30
+    attackSpeed: 0.95
+  - attackPower: 36
+    attackSpeed: 0.9
+  - attackPower: 43
+    attackSpeed: 0.8

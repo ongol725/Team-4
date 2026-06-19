@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 020_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_020
+  itemName: "\uCE74\uD0C0\uB098"
+  itemDescription: "120\uB3C4 \uBE60\uB978 \uBCA0\uAE30"
+  itemImage: {fileID: -2673366551655856615, guid: 62f6d9011c87ad047a95af53a7043f76, type: 3}
+  rarity: 2
+  grade: 1
+  cost: 3
+  synergies: 010000000200000009000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  attackStyleType: 2
+  attackStyle: "120\uB3C4 \uBE60\uB978 \uBCA0\uAE30"
+  lv5AttackStyle: "\uC18D\uB3C4 +30%"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  range: 1
+  maxTargets: 0
+  gradeStats:
+  - attackPower: 22
+    attackSpeed: 0.9
+  - attackPower: 29
+    attackSpeed: 0.85
+  - attackPower: 36
+    attackSpeed: 0.8
+  - attackPower: 44
+    attackSpeed: 0.75
+  - attackPower: 53
+    attackSpeed: 0.7
