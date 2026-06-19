@@ -151,7 +151,14 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             else if (IsMouseOverSellSlot())
                 SellAndDestroy();
             else if (IsMouseOverTempSlot())
-                SendToTempSlot();
+            {
+                var tempSlot    = _gridUI.TempSlot;
+                var mergeTarget = tempSlot?.FindMergeTarget(_instance);
+                if (mergeTarget != null)
+                    TrySynthesizeInTempSlot(mergeTarget);
+                else
+                    SendToTempSlot();
+            }
         }
 
         if (mouse.rightButton.wasPressedThisFrame)
@@ -250,6 +257,16 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         SetFollowing(false);
         _gridUI.RefreshItemBlockVisual(target);
         _gridUI.OnPlacementCancelled(_instance);
+        Destroy(gameObject);
+    }
+
+    private void TrySynthesizeInTempSlot(ItemBlockUI targetBlock)
+    {
+        if (!targetBlock.Instance.TryUpgrade()) return; // 최고 등급이면 합성 불가
+
+        SetFollowing(false);
+        _gridUI.OnPlacementCancelled(_instance);
+        targetBlock.RefreshVisuals();
         Destroy(gameObject);
     }
 

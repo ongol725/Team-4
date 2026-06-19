@@ -34,6 +34,17 @@ public class TempSlotUI : MonoBehaviour
     public bool IsOccupied => _heldBlocks.Count > 0;
     public IReadOnlyList<ItemBlockUI> HeldBlocks => _heldBlocks;
 
+    /// <summary>임시칸 내에서 inst와 합성 가능한 블록을 반환한다</summary>
+    public ItemBlockUI FindMergeTarget(ItemInstance inst)
+    {
+        foreach (var block in _heldBlocks)
+            if (block.Instance != inst
+             && block.Instance.data       == inst.data
+             && block.Instance.gradeIndex == inst.gradeIndex)
+                return block;
+        return null;
+    }
+
     public static event System.Action onTempSlotChanged;
 
 
