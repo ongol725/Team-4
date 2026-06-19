@@ -276,9 +276,8 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void AddDiscountIcon()
     {
-        var sprites = Resources.LoadAll<Sprite>("Icons/icon_discount");
-        if (sprites == null || sprites.Length == 0) return;
-        var sprite = System.Array.Find(sprites, s => s.name == "50%off_0") ?? sprites[0];
+        var sprite = Resources.Load<Sprite>("Icons/icon_discount");
+        if (sprite == null) return;
 
         var go = new GameObject("discount_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
@@ -288,10 +287,10 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         rt.anchorMax        = new Vector2(0f, 0f);
         rt.pivot            = new Vector2(0f, 0f);
         rt.anchoredPosition = Vector2.zero;
-        rt.sizeDelta        = new Vector2(20f, 20f);
+        rt.sizeDelta        = new Vector2(44f, 20f);  // 원본 438×198 비율 유지
 
         var img = go.GetComponent<Image>();
-        img.sprite        = sprite;
+        img.sprite         = sprite;
         img.preserveAspect = true;
         img.raycastTarget  = false;
     }
