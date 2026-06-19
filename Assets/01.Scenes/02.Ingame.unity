@@ -334,6 +334,8 @@ GameObject:
   - component: {fileID: 269679925}
   - component: {fileID: 269679929}
   - component: {fileID: 269679928}
+  - component: {fileID: 269679930}
+  - component: {fileID: 269679931}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1028,3 +1030,27 @@ SceneRoots:
   - {fileID: 810000002}
   - {fileID: 820000002}
   - {fileID: 830000002}
+--- !u!114 &269679930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 269679924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d795c02944d181e46a8790c1011fb30a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AutoMergeSystem
+--- !u!114 &269679931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 269679924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64429adc19d9b3345ba195c854052e45, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AutoSortSystem
