@@ -270,6 +270,43 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// 임시칸 아이템 우클릭 처리: 합성 우선 → 그리드 자동 배치.
+    /// 빈 공간도 없으면 임시칸에 그대로 유지.
+    /// </summary>
+    private void TrySmartPlaceFromTempSlot()
+    {
+        // 1순위: 그리드에서 합성 가능한 아이템 탐색
+        if (_instance.HasGrades && _instance.gradeIndex < 4)
+        {
+            foreach (var existing in _grid.GetAllPlacedInstances())
+            {
+                if (existing.data != _instance.data || existing.gradeIndex != _instance.gradeIndex) continue;
+
+                var savedTempSlot = _tempSlot;
+                _isInTempSlot = false;
+                _tempSlot     = null;
+                savedTempSlot.OnItemPickedUp(this);
+                existing.TryUpgrade();
+                _gridUI.RefreshItemBlockVisual(existing);
+                _gridUI.OnPlacementCancelled(_instance);
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        // 2순위: 그리드 빈 공간에 자동 배치
+        var origin = _gridUI.FindFirstValidPlacement(_instance);
+        if (!origin.HasValue) return; // 공간 없음 → 임시칸 유지
+
+        var slot = _tempSlot;
+        _isInTempSlot = false;
+        _tempSlot     = null;
+        slot.OnItemPickedUp(this);
+        if (_grid.TryPlace(_instance, origin.Value))
+            SnapToGrid(origin.Value);
+    }
+
     // ─────────────────────────────────────────────────────────────
     // 스왑
 
@@ -384,6 +421,13 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     {
         if (_isFollowingMouse) return;
         if (_gridUI.IsAnyFollowingMouse) return; // 다른 블록 드래그 중 → 클릭 무시
+
+        // 우클릭: 임시칸 → 합성 우선, 빈 공간 자동 배치
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (_isInTempSlot) TrySmartPlaceFromTempSlot();
+            return;
+        }
 
         if (_isPlaced)
         {

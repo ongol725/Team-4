@@ -445,7 +445,7 @@ public class InventoryGridUI : MonoBehaviour
     }
 
     /// <summary>아이템 모양을 수용할 수 있는 첫 번째 유효 셀을 반환.</summary>
-    private Vector2Int? FindFirstValidPlacement(ItemInstance inst)
+    public Vector2Int? FindFirstValidPlacement(ItemInstance inst)
     {
         for (int r = 0; r < _grid.Rows; r++)
         for (int c = 0; c < _grid.Cols; c++)
