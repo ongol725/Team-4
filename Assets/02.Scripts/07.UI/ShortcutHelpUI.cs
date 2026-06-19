@@ -1,16 +1,30 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Q키를 누르면 인게임 단축키 도움말 팝업을 토글한다.
+/// Q키를 누르면 인벤토리 좌측에 단축키 도움말 팝업을 토글한다.
+/// 패널 높이는 텍스트 내용에 맞게 자동 계산된다.
 /// </summary>
 public class ShortcutHelpUI : MonoBehaviour
 {
     private GameObject _panel;
     private bool _isVisible;
 
-    private void Start() => BuildUI();
+    private const float PanelW  = 340f;
+    private const float PadX    = 20f;
+    private const float PadY    = 14f;
+    private const float TitleH  = 28f;
+    private const float Gap     = 10f; // 인벤토리와의 간격
+
+    // ─────────────────────────────────────────────────────────────
+
+    private IEnumerator Start()
+    {
+        yield return null; // 씬 초기화 완료 대기
+        BuildUI();
+    }
 
     private void Update()
     {
@@ -18,7 +32,7 @@ public class ShortcutHelpUI : MonoBehaviour
             SetVisible(!_isVisible);
     }
 
-    private void SetVisible(bool visible)
+    public void SetVisible(bool visible)
     {
         _isVisible = visible;
         if (_panel != null) _panel.SetActive(visible);
@@ -31,37 +45,90 @@ public class ShortcutHelpUI : MonoBehaviour
         var canvas = FindCanvas();
         if (canvas == null) return;
 
-        // ── 배경 패널 ──────────────────────────────────────────────
+        // ── 패널 루트 ──────────────────────────────────────────────
         _panel = new GameObject("ShortcutHelpPanel", typeof(RectTransform), typeof(Image));
         _panel.transform.SetParent(canvas.transform, false);
         _panel.transform.SetAsLastSibling();
 
-        var rt = _panel.GetComponent<RectTransform>();
-        rt.anchorMin        = new Vector2(0.5f, 0.5f);
-        rt.anchorMax        = new Vector2(0.5f, 0.5f);
-        rt.pivot            = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta        = new Vector2(400f, 320f);
-        rt.anchoredPosition = Vector2.zero;
+        var panelRt = _panel.GetComponent<RectTransform>();
+        panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 1f);
+        panelRt.pivot     = new Vector2(1f, 1f);
+        panelRt.sizeDelta = new Vector2(PanelW, 100f); // 높이는 나중에 계산
 
         var bg = _panel.GetComponent<Image>();
         bg.color = new Color(0.05f, 0.05f, 0.10f, 0.96f);
-
-        AddOutline(_panel);
+        var outlineComp = _panel.AddComponent<Outline>();
+        outlineComp.effectColor    = new Color(0.35f, 0.35f, 0.55f, 0.85f);
+        outlineComp.effectDistance = new Vector2(1.5f, -1.5f);
 
         // ── 타이틀 ──────────────────────────────────────────────────
-        AddText(_panel, "[ 단축키 도움말 ]",
-            new Vector2(0f, 1f), new Vector2(1f, 1f),
-            new Vector2(0f, -16f), new Vector2(0f, -42f),
-            14, FontStyle.Bold, new Color(1f, 0.85f, 0.4f), TextAnchor.MiddleCenter);
+        var titleGo = MakeText(_panel, "[ 단축키 도움말 ]", 13, FontStyle.Bold,
+                               new Color(1f, 0.85f, 0.4f), TextAnchor.MiddleCenter);
+        var titleRt = titleGo.GetComponent<RectTransform>();
+        titleRt.anchorMin        = new Vector2(0f, 1f);
+        titleRt.anchorMax        = new Vector2(1f, 1f);
+        titleRt.pivot            = new Vector2(0.5f, 1f);
+        titleRt.anchoredPosition = new Vector2(0f, -PadY);
+        titleRt.sizeDelta        = new Vector2(0f, TitleH);
 
         // ── 본문 ────────────────────────────────────────────────────
-        AddText(_panel, BuildBody(),
-            new Vector2(0f, 0f), new Vector2(1f, 1f),
-            new Vector2(24f, 12f), new Vector2(-24f, -50f),
-            12, FontStyle.Normal, new Color(0.88f, 0.88f, 0.88f), TextAnchor.UpperLeft);
+        var bodyGo = MakeText(_panel, BuildBody(), 11, FontStyle.Normal,
+                              new Color(0.88f, 0.88f, 0.88f), TextAnchor.UpperLeft);
+        var bodyRt  = bodyGo.GetComponent<RectTransform>();
+        var bodyTxt = bodyGo.GetComponent<Text>();
+        bodyTxt.horizontalOverflow = HorizontalWrapMode.Wrap;    // 너비 안에서 줄바꿈
+        bodyTxt.verticalOverflow   = VerticalWrapMode.Overflow;
+
+        bodyRt.anchorMin        = new Vector2(0f, 1f);
+        bodyRt.anchorMax        = new Vector2(1f, 1f);
+        bodyRt.pivot            = new Vector2(0f, 1f);
+        bodyRt.anchoredPosition = new Vector2(PadX, -(PadY + TitleH + 6f));
+        bodyRt.sizeDelta        = new Vector2(-PadX * 2f, 0f); // 너비 고정, 높이 무제한
+
+        // ── 텍스트 높이 측정 후 패널 크기 확정 ──────────────────────
+        Canvas.ForceUpdateCanvases();
+        float bodyH   = bodyTxt.preferredHeight;
+        float panelH  = PadY + TitleH + 6f + bodyH + PadY;
+        panelRt.sizeDelta = new Vector2(PanelW, panelH);
+
+        // ── 인벤토리 좌측에 배치 ────────────────────────────────────
+        PositionNextToInventory(panelRt, canvas, panelH);
 
         _panel.SetActive(false);
     }
+
+    // ─────────────────────────────────────────────────────────────
+
+    private static void PositionNextToInventory(RectTransform panelRt, Canvas canvas, float panelH)
+    {
+        var inventoryGridUI = FindObjectOfType<InventoryGridUI>();
+        if (inventoryGridUI == null)
+        {
+            panelRt.anchorMin = panelRt.anchorMax = new Vector2(0.5f, 0.5f);
+            panelRt.anchoredPosition = new Vector2(-PanelW * 0.5f - 20f, panelH * 0.5f);
+            return;
+        }
+
+        var invRt    = inventoryGridUI.GetComponent<RectTransform>();
+        var canvasRt = canvas.GetComponent<RectTransform>();
+        var cam      = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+
+        // 인벤토리의 월드 코너 (0=좌하, 1=좌상, 2=우상, 3=우하)
+        var corners = new Vector3[4];
+        invRt.GetWorldCorners(corners);
+
+        // 인벤토리 좌상단의 screen 좌표 → canvas 로컬 좌표
+        var screenPt = RectTransformUtility.WorldToScreenPoint(cam, corners[1]);
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRt, screenPt, cam, out var localTopLeft))
+            return;
+
+        // 패널 우상단을 인벤토리 좌상단에 맞춤 (Gap 간격)
+        panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 0f);
+        panelRt.anchoredPosition = new Vector2(localTopLeft.x - Gap, localTopLeft.y);
+    }
+
+    // ─────────────────────────────────────────────────────────────
 
     private static string BuildBody() =>
         "<color=#99aaff>■ 인벤토리</color>\n" +
@@ -80,7 +147,7 @@ public class ShortcutHelpUI : MonoBehaviour
         "  좌클릭         구매 후 배치\n" +
         "  우클릭         스마트 구매\n" +
         "\n" +
-        "<color=#666666>Q — 열기 / 닫기</color>";
+        "<color=#555566>Q — 열기 / 닫기</color>";
 
     // ─────────────────────────────────────────────────────────────
 
@@ -92,60 +159,26 @@ public class ShortcutHelpUI : MonoBehaviour
             var c = go.GetComponent<Canvas>();
             if (c != null) return c;
         }
-        return Object.FindObjectOfType<Canvas>();
+        return FindObjectOfType<Canvas>();
     }
 
-    private static void AddText(GameObject parent,
-        string content,
-        Vector2 anchorMin, Vector2 anchorMax,
-        Vector2 offsetMin, Vector2 offsetMax,
+    private static GameObject MakeText(GameObject parent, string content,
         int fontSize, FontStyle style, Color color, TextAnchor align)
     {
         var go = new GameObject("Text", typeof(RectTransform), typeof(Text));
         go.transform.SetParent(parent.transform, false);
 
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin = anchorMin;
-        rt.anchorMax = anchorMax;
-        rt.offsetMin = offsetMin;
-        rt.offsetMax = offsetMax;
-
         var txt = go.GetComponent<Text>();
-        txt.font               = GetFont();
-        txt.text               = content;
-        txt.fontSize           = fontSize;
-        txt.fontStyle          = style;
-        txt.color              = color;
-        txt.alignment          = align;
-        txt.lineSpacing        = 1.45f;
-        txt.supportRichText    = true;
-        txt.horizontalOverflow = HorizontalWrapMode.Overflow;
-        txt.verticalOverflow   = VerticalWrapMode.Overflow;
-        txt.raycastTarget      = false;
-    }
-
-    private static void AddOutline(GameObject parent)
-    {
-        const float thick = 1.5f;
-        var rt = parent.GetComponent<RectTransform>();
-        float w = rt.sizeDelta.x, h = rt.sizeDelta.y;
-
-        void Strip(Vector2 pos, Vector2 size)
-        {
-            var go = new GameObject("border", typeof(RectTransform), typeof(Image));
-            go.transform.SetParent(parent.transform, false);
-            var r = go.GetComponent<RectTransform>();
-            r.anchorMin = r.anchorMax = new Vector2(0f, 1f);
-            r.pivot     = new Vector2(0f, 1f);
-            r.sizeDelta        = size;
-            r.anchoredPosition = pos;
-            go.GetComponent<Image>().color = new Color(0.35f, 0.35f, 0.55f, 0.8f);
-        }
-
-        Strip(new Vector2(0,         0        ), new Vector2(w,     thick));
-        Strip(new Vector2(0,         -(h-thick)), new Vector2(w,     thick));
-        Strip(new Vector2(0,         -thick   ), new Vector2(thick,  h - thick * 2f));
-        Strip(new Vector2(w - thick, -thick   ), new Vector2(thick,  h - thick * 2f));
+        txt.font            = GetFont();
+        txt.text            = content;
+        txt.fontSize        = fontSize;
+        txt.fontStyle       = style;
+        txt.color           = color;
+        txt.alignment       = align;
+        txt.lineSpacing     = 1.45f;
+        txt.supportRichText = true;
+        txt.raycastTarget   = false;
+        return go;
     }
 
     private static Font GetFont() =>
