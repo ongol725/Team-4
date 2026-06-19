@@ -1019,10 +1019,10 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 232402531}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7544d928830c48e4dbdbe70ce3b3b8a9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BattleLoadoutDebugUI
   _builder: {fileID: 232402540}
   _analyzer: {fileID: 232402535}
