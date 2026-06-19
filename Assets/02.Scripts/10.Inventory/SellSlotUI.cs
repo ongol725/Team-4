@@ -37,6 +37,12 @@ public class SellSlotUI : MonoBehaviour
     {
         if (_canvas == null)
         {
+            // TempSlot과 같은 좌표계(InventoryStoreRoot)에 배치하기 위해 해당 Canvas를 우선 사용
+            var go = GameObject.Find("InventoryStoreRoot");
+            if (go != null) _canvas = go.GetComponent<Canvas>();
+        }
+        if (_canvas == null)
+        {
             var go = GameObject.Find("Canvas_Inventory");
             if (go != null) _canvas = go.GetComponent<Canvas>();
         }
