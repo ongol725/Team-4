@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// 상점 전체 패널: 5개 슬롯 + 리롤 버튼 + 상점 등급 관리
@@ -66,6 +67,13 @@ public class ShopUI : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────
+
+    private void Update()
+    {
+        if (_panelRoot != null && _panelRoot.activeSelf
+         && Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
+            Reroll();
+    }
 
     public void Reroll()
     {

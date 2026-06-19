@@ -187,6 +187,7 @@ public class ShortcutHelpUI : MonoBehaviour
         "  우클릭         그리드 자동 배치 (합성 우선)\n" +
         "\n" +
         "<color=#99aaff>■ 상점</color>\n" +
+        "  R              리롤\n" +
         "  좌클릭         구매 후 배치\n" +
         "  우클릭         스마트 구매\n" +
         "\n" +
