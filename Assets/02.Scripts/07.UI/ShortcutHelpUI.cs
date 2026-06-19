@@ -128,12 +128,15 @@ public class ShortcutHelpUI : MonoBehaviour
                 anchorX = synergyLeft - Gap;
         }
 
-        // 화면 왼쪽 경계를 벗어나지 않도록 clamp
+        // anchor를 캔버스 pivot과 동일하게 맞춰야
+        // ScreenPointToLocalPointInRectangle 결과를 anchoredPosition에 그대로 쓸 수 있음
+        panelRt.anchorMin = panelRt.anchorMax = canvasRt.pivot;
+
+        // 화면 밖으로 나가지 않도록 clamp (canvas local 좌표 기준)
         float canvasHalfW = canvasRt.rect.width * 0.5f;
         anchorX = Mathf.Max(anchorX, -canvasHalfW + PanelW + Gap);
 
-        panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 0f);
-        panelRt.anchoredPosition = new Vector2(anchorX - 1000f, topY);
+        panelRt.anchoredPosition = new Vector2(anchorX, topY);
     }
 
     /// <summary>RectTransform의 월드 좌상단 X를 캔버스 로컬 좌표로 반환</summary>
