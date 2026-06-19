@@ -136,7 +136,7 @@ public class ShortcutHelpUI : MonoBehaviour
         float canvasHalfW = canvasRt.rect.width * 0.5f;
         anchorX = Mathf.Max(anchorX, -canvasHalfW + PanelW + Gap);
 
-        panelRt.anchoredPosition = new Vector2(anchorX, topY);
+        panelRt.anchoredPosition = new Vector2(anchorX - 300f, topY);
     }
 
     /// <summary>RectTransform의 월드 좌상단 X를 캔버스 로컬 좌표로 반환</summary>
