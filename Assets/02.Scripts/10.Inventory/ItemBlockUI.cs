@@ -429,6 +429,25 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             return;
         }
 
+        // T + 좌클릭: 즉시 판매
+        if (eventData.button == PointerEventData.InputButton.Left
+         && Keyboard.current != null && Keyboard.current.tKey.isPressed)
+        {
+            if (_isPlaced)
+            {
+                _grid.Remove(_instance);
+                _gridUI.OnItemUnplaced(_instance);
+            }
+            else if (_isInTempSlot)
+            {
+                _tempSlot.OnItemPickedUp(this);
+            }
+            SellSlotUI.Instance?.Sell(_instance);
+            _gridUI.OnPlacementCancelled(_instance);
+            Destroy(gameObject);
+            return;
+        }
+
         if (_isPlaced)
         {
             _grid.TryGetOrigin(_instance, out _originCell);
