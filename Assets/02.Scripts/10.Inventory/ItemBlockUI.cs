@@ -503,6 +503,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         if (_instance != null && _instance.RingGradeBonus != 0)
         {
             _instance.RingGradeBonus = 0;
+            _lastRingGradeBonus      = 0;
             RefreshVisuals();
         }
     }
