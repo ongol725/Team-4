@@ -499,6 +499,12 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         _isPlaced     = false;
         _isInTempSlot = true;
         _tempSlot     = slot;
+
+        if (_instance != null && _instance.RingGradeBonus != 0)
+        {
+            _instance.RingGradeBonus = 0;
+            RefreshVisuals();
+        }
     }
 
     // ─────────────────────────────────────────────────────────────
