@@ -1365,6 +1365,10 @@ MonoBehaviour:
   _synergiesText: {fileID: 665964167}
   _previewContainer: {fileID: 1238338512}
   _slotBackground: {fileID: 299125915}
+  _discountIconOffset: {x: 0, y: 95}
+  _discountIconSize: {x: 44, y: 20}
+  _grade2IconOffset: {x: -243, y: -12}
+  _grade2IconSize: {x: 25, y: 20}
 --- !u!114 &299125915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2452,6 +2456,10 @@ MonoBehaviour:
   _synergiesText: {fileID: 558487937}
   _previewContainer: {fileID: 1052352675}
   _slotBackground: {fileID: 636576503}
+  _discountIconOffset: {x: 0, y: 95}
+  _discountIconSize: {x: 44, y: 20}
+  _grade2IconOffset: {x: -243, y: -12}
+  _grade2IconSize: {x: 25, y: 20}
 --- !u!114 &636576503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2775,6 +2783,10 @@ MonoBehaviour:
   _synergiesText: {fileID: 236542020}
   _previewContainer: {fileID: 1210944504}
   _slotBackground: {fileID: 807637338}
+  _discountIconOffset: {x: 0, y: 95}
+  _discountIconSize: {x: 44, y: 20}
+  _grade2IconOffset: {x: -243, y: -12}
+  _grade2IconSize: {x: 25, y: 20}
 --- !u!114 &807637338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2976,6 +2988,10 @@ MonoBehaviour:
   _synergiesText: {fileID: 2145946885}
   _previewContainer: {fileID: 1458847383}
   _slotBackground: {fileID: 845892031}
+  _discountIconOffset: {x: 0, y: 95}
+  _discountIconSize: {x: 44, y: 20}
+  _grade2IconOffset: {x: -243, y: -12}
+  _grade2IconSize: {x: 25, y: 20}
 --- !u!114 &845892031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3500,6 +3516,10 @@ MonoBehaviour:
   _synergiesText: {fileID: 571788932}
   _previewContainer: {fileID: 183785751}
   _slotBackground: {fileID: 1034847644}
+  _discountIconOffset: {x: 0, y: 95}
+  _discountIconSize: {x: 44, y: 20}
+  _grade2IconOffset: {x: -243, y: -12}
+  _grade2IconSize: {x: 25, y: 20}
 --- !u!114 &1034847644
 MonoBehaviour:
   m_ObjectHideFlags: 0
