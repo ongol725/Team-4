@@ -337,7 +337,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             {
                 var blockUI = savedBlocks[i];
                 if (blockUI == null) continue;
-                if (!tempUsed && tempSlot != null)
+                if (!tempUsed && tempSlot != null
+                    && !(blockUI.Instance.data is SO_InventoryBlockData))
                 {
                     tempSlot.ReceiveBlock(blockUI);
                     tempUsed = true;
@@ -372,6 +373,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     private void SendToTempSlot()
     {
+        if (_instance.data is SO_InventoryBlockData) return; // 임시칸 배치 불가
+
         var tempSlot = _gridUI.TempSlot;
         SetFollowing(false);
         if (tempSlot == null) return;
