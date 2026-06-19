@@ -230,10 +230,10 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
 
         if (_displayGradeIndex > 0)
-            AddGrade2Arrow();
+            AddGrade2Icon();
 
         if (_isDiscounted)
-            AddDiscountArrow();
+            AddDiscountIcon();
     }
 
     private void CreateMiniCell(Vector2Int cell, Color color)
@@ -252,50 +252,48 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         go.GetComponent<Image>().color = color;
     }
 
-    private void AddGrade2Arrow()
+    private void AddGrade2Icon()
     {
-        var go = new GameObject("grade2_arrow", typeof(RectTransform), typeof(Text));
+        var sprites = Resources.LoadAll<Sprite>("Icons/icon_grade2");
+        if (sprites == null || sprites.Length == 0) return;
+        var sprite = System.Array.Find(sprites, s => s.name == "+2upgrade_0") ?? sprites[0];
+
+        var go = new GameObject("grade2_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
 
         var rt = go.GetComponent<RectTransform>();
         rt.anchorMin        = new Vector2(1f, 1f);
         rt.anchorMax        = new Vector2(1f, 1f);
         rt.pivot            = new Vector2(1f, 1f);
-        rt.anchoredPosition = new Vector2(0f, 0f);
-        rt.sizeDelta        = new Vector2(14f, 14f);
+        rt.anchoredPosition = Vector2.zero;
+        rt.sizeDelta        = new Vector2(20f, 20f);
 
-        var txt = go.GetComponent<Text>();
-        txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
-                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
-        txt.text      = "↑";
-        txt.fontSize  = 12;
-        txt.fontStyle = FontStyle.Bold;
-        txt.alignment = TextAnchor.UpperRight;
-        txt.color     = new Color(0.25f, 0.90f, 0.35f);
-        txt.raycastTarget = false;
+        var img = go.GetComponent<Image>();
+        img.sprite        = sprite;
+        img.preserveAspect = true;
+        img.raycastTarget  = false;
     }
 
-    private void AddDiscountArrow()
+    private void AddDiscountIcon()
     {
-        var go = new GameObject("discount_arrow", typeof(RectTransform), typeof(Text));
+        var sprites = Resources.LoadAll<Sprite>("Icons/icon_discount");
+        if (sprites == null || sprites.Length == 0) return;
+        var sprite = System.Array.Find(sprites, s => s.name == "50%off_0") ?? sprites[0];
+
+        var go = new GameObject("discount_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
 
         var rt = go.GetComponent<RectTransform>();
         rt.anchorMin        = new Vector2(0f, 0f);
         rt.anchorMax        = new Vector2(0f, 0f);
         rt.pivot            = new Vector2(0f, 0f);
-        rt.anchoredPosition = new Vector2(0f, 0f);
-        rt.sizeDelta        = new Vector2(14f, 14f);
+        rt.anchoredPosition = Vector2.zero;
+        rt.sizeDelta        = new Vector2(20f, 20f);
 
-        var txt = go.GetComponent<Text>();
-        txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
-                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
-        txt.text      = "↓";
-        txt.fontSize  = 12;
-        txt.fontStyle = FontStyle.Bold;
-        txt.alignment = TextAnchor.LowerLeft;
-        txt.color     = new Color(1f, 0.25f, 0.25f);
-        txt.raycastTarget = false;
+        var img = go.GetComponent<Image>();
+        img.sprite        = sprite;
+        img.preserveAspect = true;
+        img.raycastTarget  = false;
     }
 
     private void RefreshSynergies(SO_ItemData item)
