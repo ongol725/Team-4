@@ -19,6 +19,10 @@ public class DungeonRenderer : MonoBehaviour
 
         [Header("기둥 타일 (Parthenon 방)")]
         public Sprite[] pillarSprites;
+
+        [Header("벽 정면(face) 타일 - 북쪽 벽 높이 표현")]
+        [Tooltip("방 북쪽 벽의 윗면 아래로 노출되는 정면(높이) 스프라이트. 비워두면 정면을 그리지 않음.")]
+        public Sprite wallFaceSprite;
     }
 
     [Header("렌더링 옵션")]
@@ -98,6 +102,7 @@ public class DungeonRenderer : MonoBehaviour
         TileBase activeAltFloorTile = defaultAltFloorTile;
         TileBase activeWallTile = defaultWallTile;
         Sprite[] activeWallSprites = null;
+        Sprite activeFaceSprite = null;
 
         if (floorThemes != null && currentFloor >= 1 && currentFloor <= floorThemes.Length)
         {
@@ -105,6 +110,7 @@ public class DungeonRenderer : MonoBehaviour
             if (floorThemes[currentFloor - 1].altFloorTile != null) activeAltFloorTile = floorThemes[currentFloor - 1].altFloorTile;
             if (floorThemes[currentFloor - 1].wallTile != null) activeWallTile = floorThemes[currentFloor - 1].wallTile;
             activeWallSprites = floorThemes[currentFloor - 1].advancedWallSprites;
+            activeFaceSprite = floorThemes[currentFloor - 1].wallFaceSprite;
         }
 
         for (int x = 0; x < mapWidth; x++)
@@ -145,6 +151,20 @@ public class DungeonRenderer : MonoBehaviour
                     {
                         // 기존 방식 (롤백)
                         if (wallTilemap != null && activeWallTile != null) wallTilemap.SetTile(pos, activeWallTile);
+                    }
+
+                    // 정면(face) 패스: 북쪽 벽(남쪽 칸이 바닥)이면 정면 타일을 남쪽 칸 위에 시각적으로 오버레이한다.
+                    // mapData는 변경하지 않으므로 충돌·이동·길찾기 로직에는 영향을 주지 않는다.
+                    if (useAdvancedAutoTiling && activeFaceSprite != null
+                        && y - 1 >= 0 && mapData[x, y - 1] == 1 && wallTilemap != null)
+                    {
+                        if (!tileCache.ContainsKey(activeFaceSprite))
+                        {
+                            Tile faceTile = ScriptableObject.CreateInstance<Tile>();
+                            faceTile.sprite = activeFaceSprite;
+                            tileCache[activeFaceSprite] = faceTile;
+                        }
+                        wallTilemap.SetTile(new Vector3Int(x, y - 1, 0), tileCache[activeFaceSprite]);
                     }
                 }
             }

@@ -684,6 +684,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: floorThemes.Array.data[0].wallFaceSprite
+      value: 
+      objectReference: {fileID: 156473342, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: floorThemes.Array.data[0].pillarSprites.Array.size
       value: 3
       objectReference: {fileID: 0}
