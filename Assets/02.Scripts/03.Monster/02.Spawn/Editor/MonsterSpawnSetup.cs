@@ -1,9 +1,14 @@
 // ============================================================
 // MonsterSpawnSetup.cs (Editor 전용)
 //  - 현재 열린 씬에 MonsterSpawnSystem(스포너+풀+난이도)을 자동 생성/갱신
-//  - 1001~1015 프리팹을 MonsterData.index 순서로 normalMonsters에 자동 배선
-//  - MiniBoss 방 규칙(tiger/bear/ogre) 자동 설정
+//  - 층별 일반방 near/mid/far 밴드를 MonsterData.index 기준으로 자동 배선(지속 스폰)
+//  - MiniBoss 방 규칙(호랑이1016/곰1017/오우거1018) + 2↔4 중복방지 자동 설정
 //  - 메뉴: BagSurvivor > Setup > Create / Update MonsterSpawnSystem
+//
+//  [밴드 구성 — 누적식]  near=가장 약함 / mid=+1종 / far=그 층 전체
+//   1층 쥐(1001)/들개(1002)/슬라임(1003)   2층 고블린(1005)/고블린아처(1006)
+//   3층 코볼트(1007)/멧돼지(1008)/좀비(1009) 4층 스켈전사(1010)/스켈궁수(1011)/늑대(1013)
+//   5층 가고일(1014)/오크(1015)             ※1012 함정식물·1004 분열체는 직접 스폰 안 함
 // ============================================================
 using UnityEngine;
 using UnityEditor;
@@ -56,20 +61,18 @@ namespace BagSurvivor.MonsterEditor
             }
             spawner.normalMonsters = normal;
 
-            // 4) floorConfigs (비어 있으면 기본값 주입: 5층은 의도적으로 없음)
-            if (spawner.floorConfigs == null || spawner.floorConfigs.Count == 0)
+            // 4) floorConfigs: 층별 near/mid/far 밴드 (항상 재배선 — 누적식)
+            spawner.floorConfigs = new List<RoomMonsterSpawner.FloorSpawnConfig>
             {
-                spawner.floorConfigs = new List<RoomMonsterSpawner.FloorSpawnConfig>
-                {
-                    new RoomMonsterSpawner.FloorSpawnConfig { floor = 1, minTier = 1,  maxTier = 5,  minCount = 3, maxCount = 6 },
-                    new RoomMonsterSpawner.FloorSpawnConfig { floor = 2, minTier = 4,  maxTier = 8,  minCount = 4, maxCount = 7 },
-                    new RoomMonsterSpawner.FloorSpawnConfig { floor = 3, minTier = 7,  maxTier = 12, minCount = 5, maxCount = 8 },
-                    new RoomMonsterSpawner.FloorSpawnConfig { floor = 4, minTier = 11, maxTier = 15, minCount = 6, maxCount = 9 },
-                };
-            }
+                MakeFloor(byIndex, 1, 5, 2.0f, new[]{1001}, new[]{1001,1002}, new[]{1001,1002,1003}),
+                MakeFloor(byIndex, 2, 6, 2.0f, new[]{1005}, new[]{1005,1006}, new[]{1005,1006}),
+                MakeFloor(byIndex, 3, 7, 1.8f, new[]{1007}, new[]{1007,1008}, new[]{1007,1008,1009}),
+                MakeFloor(byIndex, 4, 8, 1.6f, new[]{1010}, new[]{1010,1011}, new[]{1010,1011,1013}),
+                MakeFloor(byIndex, 5, 8, 1.6f, new[]{1014}, new[]{1014,1015}, new[]{1014,1015}),
+            };
 
-            // 5) specialRules: MiniBoss = tiger(1016)/bear(1017)/ogre(1018)
-            //    (Elite/Boss는 추후 기획 확정 시 추가 — 현재 미설정 = 스폰 안 함)
+            // 5) specialRules: MiniBoss = 호랑이(1016)/곰(1017)/오우거(1018), 2↔4 중복방지
+            //    (Elite 1·3층은 전용 엘리트 프리팹 제작 후 별도 셋업에서 추가)
             List<GameObject> miniBossPrefabs = new List<GameObject>();
             if (byIndex.ContainsKey(1016)) miniBossPrefabs.Add(byIndex[1016]);
             if (byIndex.ContainsKey(1017)) miniBossPrefabs.Add(byIndex[1017]);
@@ -84,7 +87,9 @@ namespace BagSurvivor.MonsterEditor
                 miniRule = new RoomMonsterSpawner.SpecialRoomRule { roomType = RoomType.MiniBoss, minCount = 1, maxCount = 1 };
                 spawner.specialRules.Add(miniRule);
             }
+            miniRule.floor = 0; // 2·4층 공통
             miniRule.monsterPrefabs = miniBossPrefabs.ToArray();
+            miniRule.noRepeatAcrossRooms = true;
 
             // 6) 변경 사항 저장 처리
             EditorUtility.SetDirty(spawner);
@@ -95,6 +100,31 @@ namespace BagSurvivor.MonsterEditor
             string warn = missing.Count > 0 ? "  (프리팹 없는 id: " + string.Join(",", missing) + " → 해당 tier는 자동 스킵)" : "";
             Debug.Log($"[MonsterSpawnSetup] 완료. normalMonsters {assigned}/15, MiniBoss {miniRule.monsterPrefabs.Length}종." +
                       $" DungeonGenerator {(gen != null ? "연결됨" : "런타임 탐색")}.{warn}\n씬을 저장(Ctrl+S)하세요.");
+        }
+
+        /// <summary>층 설정 1개 생성: 인덱스 배열을 프리팹 배열로 변환해 near/mid/far에 배선.</summary>
+        private static RoomMonsterSpawner.FloorSpawnConfig MakeFloor(
+            Dictionary<int, GameObject> byIndex, int floor, int maxAlive, float interval,
+            int[] near, int[] mid, int[] far)
+        {
+            return new RoomMonsterSpawner.FloorSpawnConfig
+            {
+                floor = floor,
+                maxAlive = maxAlive,
+                spawnInterval = interval,
+                nearMonsters = ResolveBand(byIndex, near),
+                midMonsters = ResolveBand(byIndex, mid),
+                farMonsters = ResolveBand(byIndex, far),
+            };
+        }
+
+        /// <summary>인덱스 배열 → 존재하는 프리팹만 모아 반환(없는 id는 건너뜀).</summary>
+        private static GameObject[] ResolveBand(Dictionary<int, GameObject> byIndex, int[] ids)
+        {
+            var list = new List<GameObject>();
+            foreach (int id in ids)
+                if (byIndex.TryGetValue(id, out GameObject pf) && pf != null) list.Add(pf);
+            return list.ToArray();
         }
 
         private static T GetOrAdd<T>(GameObject go) where T : Component

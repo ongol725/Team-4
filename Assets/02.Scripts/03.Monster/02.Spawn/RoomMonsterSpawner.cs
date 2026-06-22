@@ -22,24 +22,39 @@ namespace BagSurvivor.Monster
 {
     public class RoomMonsterSpawner : MonoBehaviour
     {
-        // 층별 일반방 스폰 설정 (출현 순번 윈도우 + 마리 수 범위)
+        // 층별 일반방 스폰 설정 (가까운/중간/먼 밴드별 몬스터 풀 + 지속 스폰 파라미터)
+        //  - 방의 거리(시작방→특수방)로 near/mid/far 밴드를 정하고, 그 밴드 풀에서 지속 스폰.
         [System.Serializable]
         public class FloorSpawnConfig
         {
             [Tooltip("적용 층 (1~5)")]
             public int floor = 1;
 
-            [Tooltip("등장 몬스터 시작 순번 (1-based, normalMonsters 기준)")]
-            public int minTier = 1;
+            [Tooltip("가까운 방(시작방 근처): 등장 몬스터 프리팹")]
+            public GameObject[] nearMonsters;
 
-            [Tooltip("등장 몬스터 끝 순번 (1-based, 포함)")]
-            public int maxTier = 5;
+            [Tooltip("중간 방: 등장 몬스터 프리팹")]
+            public GameObject[] midMonsters;
 
-            [Tooltip("방 1개당 최소 스폰 수")]
-            public int minCount = 3;
+            [Tooltip("먼 방(특수방 직전, 가장 어려움): 등장 몬스터 프리팹")]
+            public GameObject[] farMonsters;
 
-            [Tooltip("방 1개당 최대 스폰 수")]
-            public int maxCount = 6;
+            [Tooltip("방 1개당 동시 생존 상한 (지속 스폰 시 이 수를 유지하며 죽은 만큼 보충)")]
+            public int maxAlive = 6;
+
+            [Tooltip("보충 스폰 주기(초)")]
+            public float spawnInterval = 2f;
+
+            /// <summary>밴드 인덱스(0=near,1=mid,2=far)에 해당하는 풀을 반환. 비면 상위 밴드로 폴백.</summary>
+            public GameObject[] BandPool(int band)
+            {
+                GameObject[][] all = { nearMonsters, midMonsters, farMonsters };
+                for (int b = Mathf.Clamp(band, 0, 2); b >= 0; b--)
+                    if (all[b] != null && all[b].Length > 0) return all[b];
+                for (int b = 0; b < 3; b++)
+                    if (all[b] != null && all[b].Length > 0) return all[b];
+                return null;
+            }
         }
 
         // 특수방(Elite/MiniBoss/Boss) 스폰 설정
@@ -49,8 +64,14 @@ namespace BagSurvivor.Monster
             [Tooltip("적용 방 타입")]
             public RoomType roomType = RoomType.Elite;
 
+            [Tooltip("적용 층 (0 = 모든 층). 같은 타입을 층마다 다르게 쓰려면 지정 — 예: Elite 1층=슬라임, 3층=좀비")]
+            public int floor = 0;
+
             [Tooltip("등장 몬스터 프리팹 후보 (랜덤 선택)")]
             public GameObject[] monsterPrefabs;
+
+            [Tooltip("같은 타입의 다른 방에서 직전에 뽑힌 몬스터를 제외하고 뽑음 (중간보스 2↔4 중복 방지)")]
+            public bool noRepeatAcrossRooms = false;
 
             [Tooltip("방 1개당 최소 스폰 수")]
             public int minCount = 1;
@@ -68,35 +89,24 @@ namespace BagSurvivor.Monster
         [Tooltip("1001~1015 몬스터 프리팹을 순서대로 배치")]
         public GameObject[] normalMonsters;
 
-        [Header("층별 일반방 스폰 (설정 없는 층은 스폰 안 함, 예: 5층)")]
+        [Header("층별 일반방 스폰 (near/mid/far 밴드 프리팹은 인스펙터에서 배정 / 5층은 비움)")]
         public List<FloorSpawnConfig> floorConfigs = new List<FloorSpawnConfig>
         {
-            new FloorSpawnConfig { floor = 1, minTier = 1,  maxTier = 5,  minCount = 3, maxCount = 6 },
-            new FloorSpawnConfig { floor = 2, minTier = 4,  maxTier = 8,  minCount = 4, maxCount = 7 },
-            new FloorSpawnConfig { floor = 3, minTier = 7,  maxTier = 12, minCount = 5, maxCount = 8 },
-            new FloorSpawnConfig { floor = 4, minTier = 11, maxTier = 15, minCount = 6, maxCount = 9 },
-            // 5층: 보스층 → 일반방 스폰 없음 (의도적으로 비움)
+            new FloorSpawnConfig { floor = 1, maxAlive = 5, spawnInterval = 2.0f },
+            new FloorSpawnConfig { floor = 2, maxAlive = 6, spawnInterval = 2.0f },
+            new FloorSpawnConfig { floor = 3, maxAlive = 7, spawnInterval = 1.8f },
+            new FloorSpawnConfig { floor = 4, maxAlive = 8, spawnInterval = 1.6f },
+            new FloorSpawnConfig { floor = 5, maxAlive = 8, spawnInterval = 1.6f }, // 일반방=가고일/오크, 보스는 잠긴 Boss방
         };
 
         [Header("특수방 스폰 (Elite / MiniBoss / Boss)")]
         public List<SpecialRoomRule> specialRules = new List<SpecialRoomRule>();
 
-        [Header("거리 기반 스폰 (시작방→보스방 난이도 보간)")]
-        [Tooltip("켜면 일반방을 시작방/보스방과의 거리로 스폰(끄면 위 floorConfigs 사용)")]
-        public bool useDistanceBasedSpawn = true;
-
-        [Tooltip("시작방 근처(가장 쉬움): 등장 몬스터 시작 순번")]
-        public int easyTierMin = 1;
-        [Tooltip("시작방 근처(가장 쉬움): 등장 몬스터 끝 순번")]
-        public int easyTierMax = 3;
-        [Tooltip("보스방 근처(가장 어려움): 등장 몬스터 시작 순번")]
-        public int hardTierMin = 12;
-        [Tooltip("보스방 근처(가장 어려움): 등장 몬스터 끝 순번")]
-        public int hardTierMax = 15;
-        [Tooltip("시작방 근처 마리 수")]
-        public int easyCount = 3;
-        [Tooltip("보스방 근처 마리 수")]
-        public int hardCount = 9;
+        [Header("밴드 경계 (시작방→특수방 거리비율 t)")]
+        [Tooltip("t < 이 값 → 가까운(near) 밴드")]
+        [Range(0f, 1f)] public float nearThreshold = 0.4f;
+        [Tooltip("t < 이 값 → 중간(mid) 밴드, 그 이상은 먼(far) 밴드")]
+        [Range(0f, 1f)] public float midThreshold = 0.75f;
 
         [Header("스폰 위치 옵션")]
         [Tooltip("방 가장자리(벽)와 띄울 그리드 여백")]
@@ -126,6 +136,11 @@ namespace BagSurvivor.Monster
         private readonly List<MonsterController> activeMonsters = new List<MonsterController>();
         private Transform playerTf;
         private RoomController currentNormalRoom; // 플레이어가 현재 들어가 있는 일반방
+        private Coroutine continuousRoutine;       // 현재 일반방 지속 스폰 코루틴
+
+        // 같은 씬에서 층 이동(던전 재생성)해도 이 스폰러 인스턴스는 유지됨 → 중간보스 직전 선택을
+        // 인스턴스 필드로 기억해 2↔4층 중복을 방지. (타입별 마지막 선택 프리팹)
+        private readonly Dictionary<RoomType, GameObject> lastSpecialPick = new Dictionary<RoomType, GameObject>();
 
         private IEnumerator Start()
         {
@@ -168,6 +183,7 @@ namespace BagSurvivor.Monster
                 lastRoomsContainer = container;
                 floorTilemap = null;
                 wallTilemap = null;
+                StopContinuous();           // 이전 층 지속 스폰 정지
                 DespawnAllMonsters();       // 이전 층 몬스터 정리
                 currentNormalRoom = null;
                 subscribed.Clear();         // 파괴된 이전 방 구독 정리
@@ -184,8 +200,8 @@ namespace BagSurvivor.Monster
             RoomController room = GetPlayerNormalRoom();
             if (room == currentNormalRoom) return;
 
-            if (currentNormalRoom != null) DespawnAllMonsters(); // 일반방 이탈 → 디스폰
-            if (room != null) SpawnForRoom(room);                // 일반방 진입 → (재)스폰
+            if (currentNormalRoom != null) { StopContinuous(); DespawnAllMonsters(); } // 이탈 → 정지+디스폰
+            if (room != null) StartContinuous(room);                                   // 진입 → 지속 스폰 시작
             currentNormalRoom = room;
         }
 
@@ -216,13 +232,17 @@ namespace BagSurvivor.Monster
             int floor = dungeonGenerator != null ? dungeonGenerator.currentFloor : 1;
 
             FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
-            if (cfg != null && normalMonsters != null && normalMonsters.Length > 0)
+            if (cfg != null)
             {
-                int lo = Mathf.Clamp(cfg.minTier - 1, 0, normalMonsters.Length - 1);
-                int hi = Mathf.Clamp(cfg.maxTier - 1, 0, normalMonsters.Length - 1);
-                if (hi < lo) { int t = lo; lo = hi; hi = t; }
-                for (int i = lo; i <= hi; i++)
-                    if (normalMonsters[i] != null) pool.Prewarm(normalMonsters[i], prewarmPerType);
+                // 이 층의 near/mid/far 모든 밴드 몬스터를 종류별로 예열
+                GameObject[][] bands = { cfg.nearMonsters, cfg.midMonsters, cfg.farMonsters };
+                var warmed = new HashSet<GameObject>();
+                foreach (GameObject[] b in bands)
+                {
+                    if (b == null) continue;
+                    foreach (GameObject p in b)
+                        if (p != null && warmed.Add(p)) pool.Prewarm(p, prewarmPerType);
+                }
             }
 
             foreach (SpecialRoomRule r in specialRules)
@@ -310,69 +330,75 @@ namespace BagSurvivor.Monster
             }
         }
 
-        /// <summary>특정 방에 몬스터를 스폰합니다. (RoomController.OnPlayerEnterRoom에서 호출)</summary>
+        /// <summary>특수방(Elite/MiniBoss/Boss)에 1회 스폰합니다. (RoomController.OnPlayerEnterRoom에서 호출)</summary>
         private void SpawnForRoom(RoomController rc)
         {
-            if (rc == null || pool == null) return;
+            if (rc == null || pool == null || rc.roomType == RoomType.Normal) return;
 
-            int floor = dungeonGenerator != null ? dungeonGenerator.currentFloor : 1;
             float hpMul = difficulty != null ? difficulty.GetHpMultiplier() : 1f;
             float atkMul = difficulty != null ? difficulty.GetAttackMultiplier() : 1f;
-
-            if (rc.roomType == RoomType.Normal)
-                SpawnNormal(rc, floor, hpMul, atkMul);
-            else
-                SpawnSpecial(rc, hpMul, atkMul); // Start/Shop은 규칙이 없어 자동으로 스폰 안 됨
+            SpawnSpecial(rc, hpMul, atkMul); // Start/Shop은 규칙이 없어 자동으로 스폰 안 됨
         }
 
-        private void SpawnNormal(RoomController rc, int floor, float hpMul, float atkMul)
+        // ── 일반방 지속 스폰 ────────────────────────────────────────────────
+        private void StartContinuous(RoomController rc)
         {
-            if (normalMonsters == null || normalMonsters.Length == 0) return;
+            StopContinuous();
+            continuousRoutine = StartCoroutine(ContinuousSpawn(rc));
+        }
 
-            int tierMin, tierMax, count;
+        private void StopContinuous()
+        {
+            if (continuousRoutine != null) { StopCoroutine(continuousRoutine); continuousRoutine = null; }
+        }
 
-            // 거리 기반: 시작방→보스방 거리 비율로 난이도(등장 순번·마리 수) 보간
-            if (useDistanceBasedSpawn && TryDistanceDifficulty(rc, out tierMin, out tierMax, out count))
-            {
-                // 보간값 사용
-            }
-            else
-            {
-                // 폴백: 층별 설정
-                FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
-                if (cfg == null) return;
-                tierMin = cfg.minTier;
-                tierMax = cfg.maxTier;
-                count = Random.Range(cfg.minCount, cfg.maxCount + 1);
-            }
+        /// <summary>일반방에 머무는 동안 밴드 풀에서 maxAlive를 유지하며 지속 스폰합니다(죽은 만큼 보충).</summary>
+        private IEnumerator ContinuousSpawn(RoomController rc)
+        {
+            int floor = dungeonGenerator != null ? dungeonGenerator.currentFloor : 1;
+            FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
+            if (cfg == null) yield break; // 5층 등 설정 없는 층은 일반방 스폰 안 함
 
-            for (int i = 0; i < count; i++)
+            int band = ComputeBand(rc);                 // 0=near,1=mid,2=far
+            GameObject[] pool2 = cfg.BandPool(band);
+            if (pool2 == null || pool2.Length == 0) yield break;
+
+            int maxAlive = Mathf.Max(1, cfg.maxAlive);
+            float interval = Mathf.Max(0.1f, cfg.spawnInterval);
+            var wait = new WaitForSeconds(interval);
+
+            while (true)
             {
-                GameObject prefab = PickFromTier(tierMin, tierMax);
-                SpawnOne(rc, prefab, hpMul, atkMul);
+                // 동시 생존이 상한 미만이면 1마리 보충 (진입 직후엔 빠르게 상한까지 채워짐)
+                if (activeMonsters.Count < maxAlive)
+                {
+                    float hpMul = difficulty != null ? difficulty.GetHpMultiplier() : 1f;
+                    float atkMul = difficulty != null ? difficulty.GetAttackMultiplier() : 1f;
+                    SpawnOne(rc, pool2[Random.Range(0, pool2.Length)], hpMul, atkMul);
+                }
+
+                // 상한 미달이면 빠르게 채우고(다음 프레임), 가득 차면 interval 대기
+                if (activeMonsters.Count < maxAlive) yield return null;
+                else yield return wait;
             }
         }
 
-        /// <summary>시작방/보스방과의 거리 비율(0=시작,1=보스)로 등장 순번·마리 수를 보간합니다.</summary>
-        private bool TryDistanceDifficulty(RoomController rc, out int tierMin, out int tierMax, out int count)
+        /// <summary>시작방→특수방(Elite/MiniBoss/Boss) 거리비율 t로 밴드(0=near,1=mid,2=far)를 결정.</summary>
+        private int ComputeBand(RoomController rc)
         {
-            tierMin = tierMax = count = 0;
-
             RoomController start = FindRoomOfType(RoomType.Start);
-            RoomController boss = FindRoomOfType(RoomType.Boss);
-            if (start == null || boss == null) return false;
+            RoomController lockRoom = FindLockedRoom();
+            if (start == null || lockRoom == null) return 0;
 
             Vector2 c = rc.roomBounds.center;
             float dStart = Vector2.Distance(c, start.roomBounds.center);
-            float dBoss = Vector2.Distance(c, boss.roomBounds.center);
-            float sum = dStart + dBoss;
-            float t = sum > 0.001f ? Mathf.Clamp01(dStart / sum) : 0f; // 0=시작방 근처, 1=보스방 근처
+            float dLock = Vector2.Distance(c, lockRoom.roomBounds.center);
+            float sum = dStart + dLock;
+            float t = sum > 0.001f ? Mathf.Clamp01(dStart / sum) : 0f; // 0=시작방 근처, 1=특수방 근처
 
-            tierMin = Mathf.RoundToInt(Mathf.Lerp(easyTierMin, hardTierMin, t));
-            tierMax = Mathf.RoundToInt(Mathf.Lerp(easyTierMax, hardTierMax, t));
-            count   = Mathf.Max(1, Mathf.RoundToInt(Mathf.Lerp(easyCount, hardCount, t)));
-            if (tierMax < tierMin) tierMax = tierMin;
-            return true;
+            if (t < nearThreshold) return 0;
+            if (t < midThreshold) return 1;
+            return 2;
         }
 
         private RoomController FindRoomOfType(RoomType type)
@@ -382,37 +408,53 @@ namespace BagSurvivor.Monster
             return null;
         }
 
+        /// <summary>그 층의 잠긴 특수방(Elite/MiniBoss/Boss 중 존재하는 것)을 반환 — far 거리 기준점.</summary>
+        private RoomController FindLockedRoom()
+        {
+            RoomController found = null;
+            foreach (RoomController rc in FindObjectsByType<RoomController>(FindObjectsSortMode.None))
+            {
+                if (rc == null) continue;
+                if (rc.roomType == RoomType.Elite || rc.roomType == RoomType.MiniBoss || rc.roomType == RoomType.Boss)
+                    return rc;
+            }
+            return found;
+        }
+
         private void SpawnSpecial(RoomController rc, float hpMul, float atkMul)
         {
-            SpecialRoomRule rule = specialRules.Find(r => r != null && r.roomType == rc.roomType);
+            int floor = dungeonGenerator != null ? dungeonGenerator.currentFloor : 1;
+
+            // 층 지정 규칙 우선(Elite 1층=슬라임/3층=좀비), 없으면 floor=0(모든 층) 규칙으로 폴백
+            SpecialRoomRule rule = specialRules.Find(r => r != null && r.roomType == rc.roomType && r.floor == floor);
+            if (rule == null)
+                rule = specialRules.Find(r => r != null && r.roomType == rc.roomType && r.floor == 0);
             if (rule == null || rule.monsterPrefabs == null || rule.monsterPrefabs.Length == 0) return;
 
             int count = Random.Range(rule.minCount, rule.maxCount + 1);
             for (int i = 0; i < count; i++)
             {
-                GameObject prefab = rule.monsterPrefabs[Random.Range(0, rule.monsterPrefabs.Length)];
+                GameObject prefab = PickSpecialPrefab(rule);
                 SpawnOne(rc, prefab, hpMul, atkMul);
             }
         }
 
-        /// <summary>normalMonsters 배열에서 [minTier, maxTier] (1-based, 포함) 범위의 프리팹을 랜덤 선택.</summary>
-        private GameObject PickFromTier(int minTier, int maxTier)
+        /// <summary>특수방 규칙에서 프리팹 1개 선택. noRepeat면 같은 타입 직전 선택을 제외(중간보스 2↔4 중복방지).</summary>
+        private GameObject PickSpecialPrefab(SpecialRoomRule rule)
         {
-            if (normalMonsters == null || normalMonsters.Length == 0) return null;
+            GameObject[] cands = rule.monsterPrefabs;
+            GameObject prev = null;
+            if (rule.noRepeatAcrossRooms) lastSpecialPick.TryGetValue(rule.roomType, out prev);
 
-            int lo = Mathf.Clamp(minTier - 1, 0, normalMonsters.Length - 1);
-            int hi = Mathf.Clamp(maxTier - 1, 0, normalMonsters.Length - 1);
-            if (hi < lo) { int t = lo; lo = hi; hi = t; }
-
-            for (int a = 0; a < 8; a++)
+            GameObject pick = cands[Random.Range(0, cands.Length)];
+            // 후보가 2개 이상이고 직전과 같으면 다른 것으로 재추첨(중복 회피)
+            if (rule.noRepeatAcrossRooms && prev != null && cands.Length > 1)
             {
-                int idx = Random.Range(lo, hi + 1);
-                if (normalMonsters[idx] != null) return normalMonsters[idx];
+                int guard = 0;
+                while (pick == prev && guard++ < 8) pick = cands[Random.Range(0, cands.Length)];
             }
-            // 폴백: 범위 내 첫 non-null
-            for (int idx = lo; idx <= hi; idx++)
-                if (normalMonsters[idx] != null) return normalMonsters[idx];
-            return null;
+            if (rule.noRepeatAcrossRooms) lastSpecialPick[rule.roomType] = pick;
+            return pick;
         }
 
         private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul)
