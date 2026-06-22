@@ -13,8 +13,8 @@ public class SellSlotUI : MonoBehaviour
     [SerializeField] private Canvas _canvas;
 
     [Header("패널 위치/크기 (Inspector에서 조정)")]
-    [SerializeField] private Vector2 _panelPos  = new Vector2(345f, -50f);
-    [SerializeField] private Vector2 _panelSize = new Vector2(200f, 200f);
+    [SerializeField] private Vector2 _panelPos  = new Vector2(811f, 26f);
+    [SerializeField] private Vector2 _panelSize = new Vector2(300f, 900f);
 
     [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시)")]
     [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(0f, 0f);
