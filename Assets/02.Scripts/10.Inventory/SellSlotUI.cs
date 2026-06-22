@@ -18,6 +18,8 @@ public class SellSlotUI : MonoBehaviour
     private Canvas         _cachedCanvas;
     private InventoryGridUI _gridUI;
 
+    private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
+
     private static readonly Color IdleColor  = new Color(0.50f, 0.05f, 0.05f, 0.88f);
     private static readonly Color HoverColor = new Color(0.85f, 0.12f, 0.12f, 0.96f);
 
@@ -79,7 +81,8 @@ public class SellSlotUI : MonoBehaviour
     /// <summary>아이템을 판매하고 골드를 지급한다</summary>
     public void Sell(ItemInstance inst)
     {
-        int price = Mathf.Max(1, inst.data.cost / 2);
+        int rarityIdx = Mathf.Clamp((int)inst.data.rarity, 0, RarityBaseCosts.Length - 1);
+        int price = RarityBaseCosts[rarityIdx] / 2;
         GameManager.Instance?.AddGold(price);
     }
 

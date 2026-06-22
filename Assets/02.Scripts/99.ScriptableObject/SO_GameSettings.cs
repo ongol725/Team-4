@@ -9,5 +9,5 @@ public class SO_GameSettings : ScriptableObject
 {
     [Header("골드")]
     [Tooltip("게임 시작 시 지급되는 초기 골드")]
-    public int startingGold = 50;
+    public int startingGold = 200;
 }

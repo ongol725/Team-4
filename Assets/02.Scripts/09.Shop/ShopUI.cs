@@ -18,7 +18,7 @@ public class ShopUI : MonoBehaviour
     [Header("리롤 버튼")]
     [SerializeField] private Button _rerollButton;
     [SerializeField] private Text   _rerollCostText;
-    [SerializeField] private int    _rerollCost = 2;
+    [SerializeField] private int    _rerollCost = 20;
 
     [Header("상점 등급 UI")]
     [SerializeField] private Text _gradeText;

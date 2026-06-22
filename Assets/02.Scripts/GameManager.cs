@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     /// <summary>골드를 시작 기본값으로 초기화합니다. (새 런 시작 시)</summary>
     public void ResetGold()
     {
-        gold = _settings != null ? _settings.startingGold : 50;
+        gold = _settings != null ? _settings.startingGold : 200;
         onGoldChanged?.Invoke(gold);
     }
 
@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(gameObject);
         _settings = Resources.Load<SO_GameSettings>("GameSettings");
-        gold = _settings != null ? _settings.startingGold : 50;
+        gold = _settings != null ? _settings.startingGold : 200;
     }
 
     public void GoToNextFloor()
