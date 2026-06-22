@@ -17,8 +17,8 @@ public class SellSlotUI : MonoBehaviour
     [SerializeField] private Vector2 _panelSize = new Vector2(300f, 900f);
 
     [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시)")]
-    [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(0f, 0f);
-    [SerializeField] private Vector2 _shopOverlaySize = new Vector2(550f, 450f);
+    [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(811f, 26f);
+    [SerializeField] private Vector2 _shopOverlaySize = new Vector2(300f, 900f);
 
     public RectTransform PanelRt { get; private set; }
 
@@ -83,20 +83,31 @@ public class SellSlotUI : MonoBehaviour
             PanelRt, Mouse.current.position.ReadValue(), cam);
     }
 
-    /// <summary>팝업 토글 시 패널 전체를 표시/숨깁니다.</summary>
+    /// <summary>강제 닫기 전용 (전투 구역 진입 등). 표시는 SetShopMode로만 제어.</summary>
     public void SetPanelActive(bool active)
     {
-        if (!active) SetShopMode(false);
-        PanelRt?.gameObject.SetActive(active);
+        if (!active)
+        {
+            _inShopMode = false;
+            PanelRt?.gameObject.SetActive(false);
+        }
     }
 
-    /// <summary>상점 오버레이 모드: 판매 패널을 상점 위치로 이동/복원합니다.</summary>
+    /// <summary>상점 오버레이 모드: 드래그 중 상점 위에 판매 패널을 표시/숨깁니다.</summary>
     public void SetShopMode(bool active)
     {
         if (PanelRt == null || _inShopMode == active) return;
         _inShopMode = active;
-        PanelRt.anchoredPosition = active ? _shopOverlayPos : _panelPos;
-        PanelRt.sizeDelta        = active ? _shopOverlaySize : _panelSize;
+        if (active)
+        {
+            PanelRt.anchoredPosition = _shopOverlayPos;
+            PanelRt.sizeDelta        = _shopOverlaySize;
+            PanelRt.gameObject.SetActive(true);
+        }
+        else
+        {
+            PanelRt.gameObject.SetActive(false);
+        }
     }
 
 #if UNITY_EDITOR
