@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2978572112176779115}
   - component: {fileID: 3334203594467013030}
   - component: {fileID: 6942957959600654797}
+  - component: {fileID: 615733193070938207}
   m_Layer: 8
   m_Name: Prefab_Kobold
   m_TagString: Monster
@@ -171,3 +172,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: 3096a29e6c2fea547a68f26ddcc26818, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  sortingOrder: 10
+  stopDistance: 7
+  approachOverlap: 0.4
+--- !u!114 &615733193070938207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823377373297771252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3afaf163e204bc64ba1681e7ec5f7400, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RangedAttackGimmick
+  aimMode: 1
+  attackRange: 7
+  fireCooldown: 1.5
+  projectileSpeed: 8
+  projectileMaxRange: 12
+  projectilePrefab: {fileID: 6614194758801626682, guid: 1c70bb39c9fbb2e49bd444c586488494, type: 3}
