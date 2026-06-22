@@ -73,6 +73,12 @@ namespace BagSurvivor.Monster
             [Tooltip("같은 타입의 다른 방에서 직전에 뽑힌 몬스터를 제외하고 뽑음 (중간보스 2↔4 중복 방지)")]
             public bool noRepeatAcrossRooms = false;
 
+            [Tooltip("HP 배율 (층별 난이도 차등 — 예: 4층 중간보스 2배)")]
+            public float hpMultiplier = 1f;
+
+            [Tooltip("공격 배율 (층별 난이도 차등)")]
+            public float attackMultiplier = 1f;
+
             [Tooltip("방 1개당 최소 스폰 수")]
             public int minCount = 1;
 
@@ -432,10 +438,12 @@ namespace BagSurvivor.Monster
             if (rule == null || rule.monsterPrefabs == null || rule.monsterPrefabs.Length == 0) return;
 
             int count = Random.Range(rule.minCount, rule.maxCount + 1);
+            float hp = hpMul * Mathf.Max(0.01f, rule.hpMultiplier);   // 층별 차등 배율
+            float atk = atkMul * Mathf.Max(0.01f, rule.attackMultiplier);
             for (int i = 0; i < count; i++)
             {
                 GameObject prefab = PickSpecialPrefab(rule);
-                SpawnOne(rc, prefab, hpMul, atkMul);
+                SpawnOne(rc, prefab, hp, atk);
             }
         }
 
@@ -463,6 +471,10 @@ namespace BagSurvivor.Monster
 
             Vector3 pos;
             if (!TryGetSpawnPosition(rc.roomBounds, out pos)) return;
+
+            // 엘리트 프리팹이면 인스펙터 배율(기본 HP 5배)을 난이도 배율에 곱함
+            var elite = prefab.GetComponent<EliteMonster>();
+            if (elite != null) { hpMul *= elite.hpMultiplier; atkMul *= elite.attackMultiplier; }
 
             MonsterController mc = pool.Get(prefab, pos, hpMul, atkMul);
             if (mc == null) return;

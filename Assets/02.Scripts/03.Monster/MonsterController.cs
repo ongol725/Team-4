@@ -118,6 +118,13 @@ namespace BagSurvivor.Monster
         /// </summary>
         public int MaxHP => runtimeMaxHP;
 
+        /// <summary>현재 적용된 HP/공격 배율 (분열체가 부모 기준으로 자기 배율을 산출할 때 사용).</summary>
+        public float HpMul => hpMultiplier;
+        public float AtkMul => attackMultiplier;
+
+        /// <summary>true면 사망 시 골드를 드롭하지 않음 (엘리트 슬라임 분열 중간 세대 등). 기믹이 설정.</summary>
+        [System.NonSerialized] public bool suppressGoldDrop = false;
+
         /// <summary>
         /// 배율이 적용된 공격력 (접촉/투사체 데미지용)
         /// </summary>
@@ -545,6 +552,7 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void SpawnDropItem()
         {
+            if (suppressGoldDrop) return; // 분열 중간 세대 등: 드롭 억제
             if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
             // dropItemValue = 떨어뜨릴 총 골드. 동전 1개로 정확한 총액 드롭.

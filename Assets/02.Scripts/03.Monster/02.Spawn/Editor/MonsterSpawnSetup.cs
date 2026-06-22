@@ -78,18 +78,15 @@ namespace BagSurvivor.MonsterEditor
             if (byIndex.ContainsKey(1017)) miniBossPrefabs.Add(byIndex[1017]);
             if (byIndex.ContainsKey(1018)) miniBossPrefabs.Add(byIndex[1018]);
 
-            RoomMonsterSpawner.SpecialRoomRule miniRule = null;
             if (spawner.specialRules == null) spawner.specialRules = new List<RoomMonsterSpawner.SpecialRoomRule>();
-            foreach (var r in spawner.specialRules)
-                if (r != null && r.roomType == RoomType.MiniBoss) { miniRule = r; break; }
-            if (miniRule == null)
-            {
-                miniRule = new RoomMonsterSpawner.SpecialRoomRule { roomType = RoomType.MiniBoss, minCount = 1, maxCount = 1 };
-                spawner.specialRules.Add(miniRule);
-            }
-            miniRule.floor = 0; // 2·4층 공통
-            miniRule.monsterPrefabs = miniBossPrefabs.ToArray();
-            miniRule.noRepeatAcrossRooms = true;
+            // 기존 MiniBoss 규칙 제거 후 2층/4층 분리 재생성 (noRepeat 공유 키로 2↔4 중복방지)
+            spawner.specialRules.RemoveAll(r => r != null && r.roomType == RoomType.MiniBoss);
+            spawner.specialRules.Add(MakeMiniBoss(miniBossPrefabs.ToArray(), 2, 1f, 1f));   // 2층: 기본
+            spawner.specialRules.Add(MakeMiniBoss(miniBossPrefabs.ToArray(), 4, 2f, 2f));   // 4층: 스탯 2배
+
+            // 5-2) Elite 방: 1층=슬라임 엘리트, 3층=좀비 엘리트 (Team4/엘리트 셋업으로 프리팹 생성 후 연결됨)
+            SetEliteRule(spawner, 1, "Assets/03.Prefabs/02.Monsters/Prefab_EliteSlime.prefab");
+            SetEliteRule(spawner, 3, "Assets/03.Prefabs/02.Monsters/Prefab_EliteZombie.prefab");
 
             // 6) 변경 사항 저장 처리
             EditorUtility.SetDirty(spawner);
@@ -98,8 +95,46 @@ namespace BagSurvivor.MonsterEditor
             Selection.activeGameObject = sysGO;
 
             string warn = missing.Count > 0 ? "  (프리팹 없는 id: " + string.Join(",", missing) + " → 해당 tier는 자동 스킵)" : "";
-            Debug.Log($"[MonsterSpawnSetup] 완료. normalMonsters {assigned}/15, MiniBoss {miniRule.monsterPrefabs.Length}종." +
+            Debug.Log($"[MonsterSpawnSetup] 완료. normalMonsters {assigned}/15, MiniBoss {miniBossPrefabs.Count}종(2층 ×1 / 4층 ×2)." +
                       $" DungeonGenerator {(gen != null ? "연결됨" : "런타임 탐색")}.{warn}\n씬을 저장(Ctrl+S)하세요.");
+        }
+
+        /// <summary>중간보스 규칙 1개 생성(층별 배율 차등). noRepeat는 RoomType 키 공유라 2↔4 중복방지됨.</summary>
+        private static RoomMonsterSpawner.SpecialRoomRule MakeMiniBoss(GameObject[] prefabs, int floor, float hpMul, float atkMul)
+        {
+            return new RoomMonsterSpawner.SpecialRoomRule
+            {
+                roomType = RoomType.MiniBoss,
+                floor = floor,
+                monsterPrefabs = prefabs,
+                noRepeatAcrossRooms = true,
+                hpMultiplier = hpMul,
+                attackMultiplier = atkMul,
+                minCount = 1,
+                maxCount = 1,
+            };
+        }
+
+        /// <summary>Elite 방(층별) 규칙 설정: 해당 층 Elite 방에 지정 엘리트 프리팹 1마리 스폰.</summary>
+        private static void SetEliteRule(RoomMonsterSpawner s, int floor, string prefabPath)
+        {
+            GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            if (pf == null)
+            {
+                Debug.LogWarning($"[MonsterSpawnSetup] 엘리트 프리팹 없음(층 {floor}): {prefabPath}\n→ 'Team4/엘리트 셋업'을 먼저 실행하세요.");
+                return;
+            }
+            if (s.specialRules == null) s.specialRules = new List<RoomMonsterSpawner.SpecialRoomRule>();
+            var rule = s.specialRules.Find(r => r != null && r.roomType == RoomType.Elite && r.floor == floor);
+            if (rule == null)
+            {
+                rule = new RoomMonsterSpawner.SpecialRoomRule { roomType = RoomType.Elite, floor = floor };
+                s.specialRules.Add(rule);
+            }
+            rule.monsterPrefabs = new[] { pf };
+            rule.minCount = 1;
+            rule.maxCount = 1;
+            rule.noRepeatAcrossRooms = false;
         }
 
         /// <summary>층 설정 1개 생성: 인덱스 배열을 프리팹 배열로 변환해 near/mid/far에 배선.</summary>
