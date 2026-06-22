@@ -186,14 +186,9 @@ public class DungeonRenderer : MonoBehaviour
         if ((pattern & mask_cardinal) == (2 | 64 | 8))  return sprites[3]; // E가 바닥 -> Left Outer (│)
         if ((pattern & mask_cardinal) == (2 | 64 | 16)) return sprites[5]; // W가 바닥 -> Right Outer (│)
 
-        // 3. 2방향 벽인 경우 (내부 코너) - 13개 이상 스프라이트 할당 시 전용 타일 사용
-        if (sprites.Length >= 13)
-        {
-            if ((pattern & mask_cardinal) == (2 | 16))  return sprites[9];  // N, E 벽 -> Inner Bottom Left
-            if ((pattern & mask_cardinal) == (2 | 8))   return sprites[10]; // N, W 벽 -> Inner Bottom Right
-            if ((pattern & mask_cardinal) == (64 | 16)) return sprites[11]; // S, E 벽 -> Inner Top Left
-            if ((pattern & mask_cardinal) == (64 | 8))  return sprites[12]; // S, W 벽 -> Inner Top Right
-        }
+        // 3. 2방향 벽인 경우 (내부 코너) - 이 타일셋엔 내부 코너 전용 타일이 없으므로
+        //    별도 분기 없이 아래로 흘려보내 기본값(중앙 채우기 ■)으로 처리한다.
+        //    (내부 코너 타일이 있는 다른 타일셋을 쓸 경우 sprites[9~12] 분기를 추가)
 
         // 4. 예외: 1블록 두께 벽 (방과 방 사이 1칸 띄워진 곳 등, 거의 발생 안 함)
         if ((pattern & mask_cardinal) == (8 | 16)) return sprites[1]; // 가로 1칸 벽 -> Top Outer

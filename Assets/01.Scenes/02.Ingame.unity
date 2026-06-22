@@ -701,7 +701,7 @@ PrefabInstance:
       objectReference: {fileID: -374405025, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
     - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: floorThemes.Array.data[0].advancedWallSprites.Array.size
-      value: 13
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: 'floorThemes.Array.data[0].advancedWallSprites.Array.data[0]'
