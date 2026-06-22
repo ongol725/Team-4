@@ -282,7 +282,7 @@ public class SynergyManager : MonoBehaviour
         var filter = new ContactFilter2D();
         filter.useTriggers = true;
         if (_enemyLayer != 0) filter.SetLayerMask(_enemyLayer);
-        else                  filter.NoFilter();
+        else                  filter = ContactFilter2D.noFilter;
 
         var cols = new List<Collider2D>();
         Physics2D.OverlapCircle((Vector2)center, range, filter, cols);
