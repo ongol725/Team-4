@@ -16,6 +16,9 @@ public class DungeonRenderer : MonoBehaviour
         [Header("고급 오토 타일링용 (사용 시 활성화)")]
         [Tooltip("9개(또는 13개) 이상의 스프라이트를 규칙에 맞게 넣어주세요.")]
         public Sprite[] advancedWallSprites;
+
+        [Header("기둥 타일 (Parthenon 방)")]
+        public Sprite[] pillarSprites;
     }
 
     [Header("렌더링 옵션")]
