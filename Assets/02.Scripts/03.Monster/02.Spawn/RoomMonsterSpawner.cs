@@ -81,6 +81,23 @@ namespace BagSurvivor.Monster
         [Header("특수방 스폰 (Elite / MiniBoss / Boss)")]
         public List<SpecialRoomRule> specialRules = new List<SpecialRoomRule>();
 
+        [Header("거리 기반 스폰 (시작방→보스방 난이도 보간)")]
+        [Tooltip("켜면 일반방을 시작방/보스방과의 거리로 스폰(끄면 위 floorConfigs 사용)")]
+        public bool useDistanceBasedSpawn = true;
+
+        [Tooltip("시작방 근처(가장 쉬움): 등장 몬스터 시작 순번")]
+        public int easyTierMin = 1;
+        [Tooltip("시작방 근처(가장 쉬움): 등장 몬스터 끝 순번")]
+        public int easyTierMax = 3;
+        [Tooltip("보스방 근처(가장 어려움): 등장 몬스터 시작 순번")]
+        public int hardTierMin = 12;
+        [Tooltip("보스방 근처(가장 어려움): 등장 몬스터 끝 순번")]
+        public int hardTierMax = 15;
+        [Tooltip("시작방 근처 마리 수")]
+        public int easyCount = 3;
+        [Tooltip("보스방 근처 마리 수")]
+        public int hardCount = 9;
+
         [Header("스폰 위치 옵션")]
         [Tooltip("방 가장자리(벽)와 띄울 그리드 여백")]
         public int edgeMargin = 1;
@@ -310,15 +327,59 @@ namespace BagSurvivor.Monster
 
         private void SpawnNormal(RoomController rc, int floor, float hpMul, float atkMul)
         {
-            FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
-            if (cfg == null || normalMonsters == null || normalMonsters.Length == 0) return;
+            if (normalMonsters == null || normalMonsters.Length == 0) return;
 
-            int count = Random.Range(cfg.minCount, cfg.maxCount + 1);
+            int tierMin, tierMax, count;
+
+            // 거리 기반: 시작방→보스방 거리 비율로 난이도(등장 순번·마리 수) 보간
+            if (useDistanceBasedSpawn && TryDistanceDifficulty(rc, out tierMin, out tierMax, out count))
+            {
+                // 보간값 사용
+            }
+            else
+            {
+                // 폴백: 층별 설정
+                FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
+                if (cfg == null) return;
+                tierMin = cfg.minTier;
+                tierMax = cfg.maxTier;
+                count = Random.Range(cfg.minCount, cfg.maxCount + 1);
+            }
+
             for (int i = 0; i < count; i++)
             {
-                GameObject prefab = PickFromTier(cfg.minTier, cfg.maxTier);
+                GameObject prefab = PickFromTier(tierMin, tierMax);
                 SpawnOne(rc, prefab, hpMul, atkMul);
             }
+        }
+
+        /// <summary>시작방/보스방과의 거리 비율(0=시작,1=보스)로 등장 순번·마리 수를 보간합니다.</summary>
+        private bool TryDistanceDifficulty(RoomController rc, out int tierMin, out int tierMax, out int count)
+        {
+            tierMin = tierMax = count = 0;
+
+            RoomController start = FindRoomOfType(RoomType.Start);
+            RoomController boss = FindRoomOfType(RoomType.Boss);
+            if (start == null || boss == null) return false;
+
+            Vector2 c = rc.roomBounds.center;
+            float dStart = Vector2.Distance(c, start.roomBounds.center);
+            float dBoss = Vector2.Distance(c, boss.roomBounds.center);
+            float sum = dStart + dBoss;
+            float t = sum > 0.001f ? Mathf.Clamp01(dStart / sum) : 0f; // 0=시작방 근처, 1=보스방 근처
+
+            tierMin = Mathf.RoundToInt(Mathf.Lerp(easyTierMin, hardTierMin, t));
+            tierMax = Mathf.RoundToInt(Mathf.Lerp(easyTierMax, hardTierMax, t));
+            count   = Mathf.Max(1, Mathf.RoundToInt(Mathf.Lerp(easyCount, hardCount, t)));
+            if (tierMax < tierMin) tierMax = tierMin;
+            return true;
+        }
+
+        private RoomController FindRoomOfType(RoomType type)
+        {
+            foreach (RoomController rc in FindObjectsByType<RoomController>(FindObjectsSortMode.None))
+                if (rc != null && rc.roomType == type) return rc;
+            return null;
         }
 
         private void SpawnSpecial(RoomController rc, float hpMul, float atkMul)
