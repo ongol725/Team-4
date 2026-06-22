@@ -1053,8 +1053,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 0}
-  _panelPos: {x: 811, y: 26}
-  _panelSize: {x: 300, y: 900}
+  _shopOverlayPos: {x: 811, y: 26}
+  _shopOverlaySize: {x: 300, y: 900}
+  _previewInEditor: 0
 --- !u!114 &232402544
 MonoBehaviour:
   m_ObjectHideFlags: 0

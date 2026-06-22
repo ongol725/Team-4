@@ -12,13 +12,13 @@ public class SellSlotUI : MonoBehaviour
 
     [SerializeField] private Canvas _canvas;
 
-    [Header("패널 위치/크기 (Inspector에서 조정)")]
-    [SerializeField] private Vector2 _panelPos  = new Vector2(811f, 26f);
-    [SerializeField] private Vector2 _panelSize = new Vector2(300f, 900f);
-
     [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시)")]
     [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(811f, 26f);
     [SerializeField] private Vector2 _shopOverlaySize = new Vector2(300f, 900f);
+
+    [Header("디버그")]
+    [Tooltip("체크하면 플레이 중 패널을 미리 표시해서 위치/크기를 바로 조정할 수 있습니다")]
+    [SerializeField] private bool _previewInEditor = false;
 
     public RectTransform PanelRt { get; private set; }
 
@@ -114,8 +114,10 @@ public class SellSlotUI : MonoBehaviour
     private void OnValidate()
     {
         if (PanelRt == null) return;
-        PanelRt.anchoredPosition = _inShopMode ? _shopOverlayPos : _panelPos;
-        PanelRt.sizeDelta        = _inShopMode ? _shopOverlaySize : _panelSize;
+        PanelRt.anchoredPosition = _shopOverlayPos;
+        PanelRt.sizeDelta        = _shopOverlaySize;
+        if (_previewInEditor)
+            PanelRt.gameObject.SetActive(true);
     }
 #endif
 
@@ -131,8 +133,6 @@ public class SellSlotUI : MonoBehaviour
 
     private void BuildUI()
     {
-        // TempSlot: anchor=center, pos=(137,-50), size=200×200
-        // SellSlot: TempSlot 오른쪽 끝(237) + 8px 여백 + 자신 너비 절반(100) = 345
         var panel = new GameObject("SellSlot", typeof(RectTransform), typeof(Image));
         panel.transform.SetParent(_canvas.transform, false);
 
@@ -140,8 +140,8 @@ public class SellSlotUI : MonoBehaviour
         rt.anchorMin        = new Vector2(0.5f, 0.5f);
         rt.anchorMax        = new Vector2(0.5f, 0.5f);
         rt.pivot            = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = _panelPos;
-        rt.sizeDelta        = _panelSize;
+        rt.anchoredPosition = _shopOverlayPos;
+        rt.sizeDelta        = _shopOverlaySize;
         PanelRt = rt;
 
         _bg = panel.GetComponent<Image>();
