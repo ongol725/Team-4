@@ -2224,7 +2224,7 @@ MonoBehaviour:
   - {fileID: 845892030}
   _rerollButton: {fileID: 1528729857}
   _rerollCostText: {fileID: 1977006709}
-  _rerollCost: 2
+  _rerollCost: 20
   _gradeText: {fileID: 1111222203}
   _panelRoot: {fileID: 582178091}
   _loadoutBuilder: {fileID: 232402540}
