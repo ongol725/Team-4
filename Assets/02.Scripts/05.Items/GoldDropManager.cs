@@ -96,6 +96,27 @@ namespace BagSurvivor.Items
         }
 
         /// <summary>
+        /// 지정 위치에 '정확한 총 골드'를 동전 1개로 드롭합니다(획득 시 totalGold 만큼 획득).
+        /// 동전 스프라이트는 금액 크기에 맞는 액면가 것으로 표시.
+        /// </summary>
+        public void DropGold(Vector3 position, int totalGold)
+        {
+            if (goldPrefab == null || totalGold <= 0) return;
+            SpawnPickup(position, totalGold, PickSpriteForAmount(totalGold));
+        }
+
+        /// <summary>금액 이하의 가장 큰 액면가 스프라이트를 반환(없으면 null → 픽업 기본 애니).</summary>
+        private Sprite PickSpriteForAmount(int gold)
+        {
+            Denomination best = null;
+            if (denominations != null)
+                foreach (var d in denominations)
+                    if (d != null && d.goldValue <= gold && (best == null || d.goldValue > best.goldValue))
+                        best = d;
+            return best != null ? best.sprite : null;
+        }
+
+        /// <summary>
         /// 돈 ID(액면가)에 맞는 동전을 count개 드롭합니다. (CSV: Drop_ItemID / Drop_Item_Value)
         /// 예: itemID=Item_002(10골드), count=3 → 10골드 동전 3개(=30골드) 흩뿌림.
         /// </summary>

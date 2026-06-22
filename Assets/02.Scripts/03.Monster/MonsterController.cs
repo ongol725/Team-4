@@ -547,10 +547,10 @@ namespace BagSurvivor.Monster
         {
             if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
-            // 돈 ID(Drop_ItemID)의 액면가 동전을 Drop_Item_Value(개수)만큼 떨어뜨림
+            // dropItemValue = 떨어뜨릴 총 골드. 동전 1개로 정확한 총액 드롭.
             if (BagSurvivor.Items.GoldDropManager.Instance != null)
-                BagSurvivor.Items.GoldDropManager.Instance.Drop(
-                    transform.position, monsterData.dropItemID, monsterData.dropItemValue);
+                BagSurvivor.Items.GoldDropManager.Instance.DropGold(
+                    transform.position, monsterData.dropItemValue);
         }
 
         // ==========================================

@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 6
   spawnCount: 2
   dropItemID: Item_003
-  dropItemValue: 1
+  dropItemValue: 48
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Gargoyle.prefab

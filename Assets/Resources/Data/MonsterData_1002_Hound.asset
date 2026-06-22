@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 3
   spawnCount: 2
   dropItemID: Item_001
-  dropItemValue: 2
+  dropItemValue: 14
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Hound.prefab

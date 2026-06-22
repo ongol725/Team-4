@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 0
   spawnCount: 0
   dropItemID: Item_001
-  dropItemValue: 1
+  dropItemValue: 4
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Slime.prefab
