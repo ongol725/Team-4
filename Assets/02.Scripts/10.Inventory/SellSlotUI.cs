@@ -12,6 +12,10 @@ public class SellSlotUI : MonoBehaviour
 
     [SerializeField] private Canvas _canvas;
 
+    [Header("패널 위치/크기 (Inspector에서 조정)")]
+    [SerializeField] private Vector2 _panelPos  = new Vector2(345f, -50f);
+    [SerializeField] private Vector2 _panelSize = new Vector2(200f, 200f);
+
     public RectTransform PanelRt { get; private set; }
 
     private Image          _bg;
@@ -99,8 +103,8 @@ public class SellSlotUI : MonoBehaviour
         rt.anchorMin        = new Vector2(0.5f, 0.5f);
         rt.anchorMax        = new Vector2(0.5f, 0.5f);
         rt.pivot            = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = new Vector2(345f, -50f);
-        rt.sizeDelta        = new Vector2(200f, 200f);
+        rt.anchoredPosition = _panelPos;
+        rt.sizeDelta        = _panelSize;
         PanelRt = rt;
 
         _bg = panel.GetComponent<Image>();
