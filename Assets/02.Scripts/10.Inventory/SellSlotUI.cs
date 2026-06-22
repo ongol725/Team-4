@@ -99,6 +99,15 @@ public class SellSlotUI : MonoBehaviour
         PanelRt.sizeDelta        = active ? _shopOverlaySize : _panelSize;
     }
 
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (PanelRt == null) return;
+        PanelRt.anchoredPosition = _inShopMode ? _shopOverlayPos : _panelPos;
+        PanelRt.sizeDelta        = _inShopMode ? _shopOverlaySize : _panelSize;
+    }
+#endif
+
     /// <summary>아이템을 판매하고 골드를 지급한다</summary>
     public void Sell(ItemInstance inst)
     {
