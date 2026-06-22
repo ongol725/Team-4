@@ -16,11 +16,16 @@ public class SellSlotUI : MonoBehaviour
     [SerializeField] private Vector2 _panelPos  = new Vector2(345f, -50f);
     [SerializeField] private Vector2 _panelSize = new Vector2(200f, 200f);
 
+    [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시)")]
+    [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(0f, 0f);
+    [SerializeField] private Vector2 _shopOverlaySize = new Vector2(550f, 450f);
+
     public RectTransform PanelRt { get; private set; }
 
     private Image          _bg;
     private Canvas         _cachedCanvas;
     private InventoryGridUI _gridUI;
+    private bool           _inShopMode;
 
     private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
 
@@ -79,8 +84,20 @@ public class SellSlotUI : MonoBehaviour
     }
 
     /// <summary>팝업 토글 시 패널 전체를 표시/숨깁니다.</summary>
-    public void SetPanelActive(bool active) =>
+    public void SetPanelActive(bool active)
+    {
+        if (!active) SetShopMode(false);
         PanelRt?.gameObject.SetActive(active);
+    }
+
+    /// <summary>상점 오버레이 모드: 판매 패널을 상점 위치로 이동/복원합니다.</summary>
+    public void SetShopMode(bool active)
+    {
+        if (PanelRt == null || _inShopMode == active) return;
+        _inShopMode = active;
+        PanelRt.anchoredPosition = active ? _shopOverlayPos : _panelPos;
+        PanelRt.sizeDelta        = active ? _shopOverlaySize : _panelSize;
+    }
 
     /// <summary>아이템을 판매하고 골드를 지급한다</summary>
     public void Sell(ItemInstance inst)

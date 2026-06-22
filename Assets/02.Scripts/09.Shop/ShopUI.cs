@@ -49,6 +49,9 @@ public class ShopUI : MonoBehaviour
     private int _shopGrade             = 1;
     private int _rerollsInCurrentGrade = 0;
 
+    private bool   _inSellMode;
+    private bool[] _slotWasActive;
+
     private Text   _statsText;
     private Canvas _rootCanvas;
 
@@ -76,6 +79,44 @@ public class ShopUI : MonoBehaviour
         if (_rootCanvas != null && _rootCanvas.enabled
          && Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
             Reroll();
+
+        if (_panelRoot == null || !_panelRoot.activeSelf) return;
+        bool shouldSell = _inventoryGridUI != null
+            && _inventoryGridUI.IsAnyFollowingMouse
+            && IsMouseOverPanel();
+        if (shouldSell != _inSellMode)
+            SetSellMode(shouldSell);
+    }
+
+    private bool IsMouseOverPanel()
+    {
+        if (Mouse.current == null) return false;
+        var rt  = _panelRoot.GetComponent<RectTransform>();
+        var cam = (_rootCanvas != null && _rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            ? _rootCanvas.worldCamera : null;
+        return RectTransformUtility.RectangleContainsScreenPoint(
+            rt, Mouse.current.position.ReadValue(), cam);
+    }
+
+    private void SetSellMode(bool active)
+    {
+        _inSellMode = active;
+        if (active)
+        {
+            _slotWasActive = new bool[_slots.Length];
+            for (int i = 0; i < _slots.Length; i++)
+            {
+                _slotWasActive[i] = _slots[i].gameObject.activeSelf;
+                _slots[i].gameObject.SetActive(false);
+            }
+        }
+        else if (_slotWasActive != null)
+        {
+            for (int i = 0; i < _slots.Length; i++)
+                _slots[i].gameObject.SetActive(_slotWasActive[i]);
+            _slotWasActive = null;
+        }
+        SellSlotUI.Instance?.SetShopMode(active);
     }
 
     public void Reroll()
@@ -95,6 +136,7 @@ public class ShopUI : MonoBehaviour
 
     public void Close()
     {
+        SetSellMode(false);
         _loadoutBuilder?.BuildAndDeliver();
         if (_panelRoot != null) _panelRoot.SetActive(false);
         GoldDisplayUI.Instance?.HideHelp();
