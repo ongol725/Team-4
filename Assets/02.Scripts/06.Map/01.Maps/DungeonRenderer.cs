@@ -186,14 +186,14 @@ public class DungeonRenderer : MonoBehaviour
         if ((pattern & mask_cardinal) == (2 | 64 | 8))  return sprites[3]; // E가 바닥 -> Left Outer (│)
         if ((pattern & mask_cardinal) == (2 | 64 | 16)) return sprites[5]; // W가 바닥 -> Right Outer (│)
 
-        // 3. 2방향 벽인 경우 (내부 코너) - 내부 코너 전용 타일 대신 기본 중앙 채우기(■) 블록으로 대치
-        // 내부 코너 타일(9~12번)을 따로 사용하려면 아래 주석을 해제하세요.
-        /*
-        if ((pattern & mask_cardinal) == (2 | 16))  return sprites[9];  // N, E 벽 -> Inner Bottom Left
-        if ((pattern & mask_cardinal) == (2 | 8))   return sprites[10]; // N, W 벽 -> Inner Bottom Right
-        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[11]; // S, E 벽 -> Inner Top Left
-        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[12]; // S, W 벽 -> Inner Top Right
-        */
+        // 3. 2방향 벽인 경우 (내부 코너) - 13개 이상 스프라이트 할당 시 전용 타일 사용
+        if (sprites.Length >= 13)
+        {
+            if ((pattern & mask_cardinal) == (2 | 16))  return sprites[9];  // N, E 벽 -> Inner Bottom Left
+            if ((pattern & mask_cardinal) == (2 | 8))   return sprites[10]; // N, W 벽 -> Inner Bottom Right
+            if ((pattern & mask_cardinal) == (64 | 16)) return sprites[11]; // S, E 벽 -> Inner Top Left
+            if ((pattern & mask_cardinal) == (64 | 8))  return sprites[12]; // S, W 벽 -> Inner Top Right
+        }
 
         // 4. 예외: 1블록 두께 벽 (방과 방 사이 1칸 띄워진 곳 등, 거의 발생 안 함)
         if ((pattern & mask_cardinal) == (8 | 16)) return sprites[1]; // 가로 1칸 벽 -> Top Outer
