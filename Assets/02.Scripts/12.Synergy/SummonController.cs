@@ -170,6 +170,7 @@ public class SummonController : MonoBehaviour
 
     private void PickNewWanderDest()
     {
+        if (_player == null) return;
         _wanderTimer = WanderInterval;
         Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(WanderRadius * 0.3f, WanderRadius);
         _wanderDest = (Vector2)_player.position + offset;

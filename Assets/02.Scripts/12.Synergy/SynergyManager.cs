@@ -56,15 +56,15 @@ public class SynergyManager : MonoBehaviour
 
     private void Start()
     {
+        var playerGO = GameObject.FindWithTag("Player");
+        if (playerGO != null) _player = playerGO.transform;
+
         _gm = GameManager.Instance;
         if (_gm != null)
         {
             _gm.onLoadoutReady += OnLoadoutReady;
             if (_gm.CurrentLoadout != null) OnLoadoutReady(_gm.CurrentLoadout);
         }
-
-        var playerGO = GameObject.FindWithTag("Player");
-        if (playerGO != null) _player = playerGO.transform;
 
         _summonRoot = new GameObject("SummonRoot").transform;
         _summonRoot.SetParent(transform);
@@ -236,6 +236,13 @@ public class SynergyManager : MonoBehaviour
 
     private void SpawnMinions(SO_SummonData data, int count, int weaponAtk)
     {
+        if (_player == null)
+        {
+            var p = GameObject.FindWithTag("Player");
+            if (p != null) _player = p.transform;
+        }
+        if (_player == null) return;
+
         int minionAtk = Mathf.RoundToInt(weaponAtk * data.atkMultiplier);
 
         for (int i = 0; i < count; i++)
