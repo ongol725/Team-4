@@ -125,7 +125,7 @@ public class ShortcutHelpUI : MonoBehaviour
     {
         var canvasRt  = canvas.GetComponent<RectTransform>();
         var cam       = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-        var invGridRt = FindObjectOfType<InventoryGridUI>()?.GetComponent<RectTransform>();
+        var invGridRt = FindFirstObjectByType<InventoryGridUI>()?.GetComponent<RectTransform>();
 
         // 인벤토리 좌측 X, 상단 Y
         float invLeftX = GetLeftEdgeX(invGridRt, canvasRt, cam);
@@ -142,7 +142,7 @@ public class ShortcutHelpUI : MonoBehaviour
         float anchorX = invLeftX - Gap;
 
         // 시너지 UI가 인벤토리와 겹치는 위치에 있으면 시너지 좌측을 기준으로
-        var synergyRt = FindObjectOfType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
+        var synergyRt = FindFirstObjectByType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
         if (synergyRt != null)
         {
             float synergyLeft = GetLeftEdgeX(synergyRt, canvasRt, cam);

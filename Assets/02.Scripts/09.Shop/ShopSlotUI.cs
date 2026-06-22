@@ -149,8 +149,8 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         _nameText.text    = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
         int discountIdx  = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
         _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
-        int rarityIdx    = Mathf.Clamp((int)item.rarity, 0, RarityBaseCosts.Length - 1);
-        int baseCost     = RarityBaseCosts[rarityIdx] * (_displayGradeIndex > 0 ? 2 : 1);
+        int priceIdx     = Mathf.Clamp((int)item.rarity, 0, RarityBaseCosts.Length - 1);
+        int baseCost     = RarityBaseCosts[priceIdx] * (_displayGradeIndex > 0 ? 2 : 1);
         _finalCost       = _isDiscounted ? Mathf.Max(1, Mathf.FloorToInt(baseCost * 0.5f)) : baseCost;
         _costText.text   = $"{_finalCost} G";
         _rarityText.text  = rarityLabel;
