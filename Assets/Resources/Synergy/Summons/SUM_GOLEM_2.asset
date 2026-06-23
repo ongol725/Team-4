@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5cbe33e3a919e429ca178123b7de13, type: 3}
+  m_Name: SUM_GOLEM_2
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SummonData
+  summonID: SUM_GOLEM_2
+  summonName: "\uC815\uB839 \uACE8\uB818 (\uC2E4\uBC84)"
+  aiType: 0
+  scalingStat: 1
+  atkMultiplier: 1
+  moveSpeed: 5.2
+  atkCooldown: 1
+  atkRange: 1.5
+  duration: -1
+  uniqueSkill: {fileID: 0}
+  uniqueSkillCooldown: 8
+  fixedEffect: 0
+  fixedEffectValue: 0
+  modelPrefab: {fileID: 0}
+  icon: {fileID: 2044662942463612365, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  animFrames:
+  - {fileID: 2044662942463612365, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -2985112567063365680, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: 8366238621336920787, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -524694576540928402, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -6582405856281038687, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -6427117306431663934, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -790838948123382306, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: 5346539683592780098, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  animFps: 10
+  hp: 0
