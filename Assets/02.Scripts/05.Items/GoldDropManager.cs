@@ -1,7 +1,8 @@
 // ============================================================
 // GoldDropManager.cs
 // 골드 픽업 드롭 + 오브젝트 풀 (최적화)
-//  - 몬스터 사망 시 Drop(position, amount) 호출
+//  - 몬스터 사망 시 Drop(position, dropItemID, count) 호출
+//    → 돈 ID(액면가)에 맞는 동전을 count개 떨어뜨림 (CSV: Drop_ItemID / Drop_Item_Value)
 //  - 픽업 획득 시 Return으로 풀에 반환
 // ============================================================
 using UnityEngine;
@@ -13,8 +14,29 @@ namespace BagSurvivor.Items
     {
         public static GoldDropManager Instance { get; private set; }
 
+        /// <summary>돈 ID → 액면가(골드값) + 스프라이트 매핑. CSV의 Drop_ItemID에 대응.</summary>
+        [System.Serializable]
+        public class Denomination
+        {
+            public string id;          // 예: Item_001
+            public int goldValue;      // 액면가(획득 시 더해지는 골드)
+            public Sprite sprite;      // 해당 동전 스프라이트(Gold_1~4)
+        }
+
         [Header("골드 픽업 프리팹")]
         public GameObject goldPrefab;
+
+        [Header("돈 액면가 테이블 (Drop_ItemID → 골드값/스프라이트)")]
+        public Denomination[] denominations = new Denomination[]
+        {
+            new Denomination { id = "Item_001", goldValue = 1 },
+            new Denomination { id = "Item_002", goldValue = 10 },
+            new Denomination { id = "Item_003", goldValue = 100 },
+            new Denomination { id = "Item_004", goldValue = 500 },
+        };
+
+        [Header("드롭 분산 반경 (동전 여러 개 흩뿌리기, m)")]
+        public float scatterRadius = 0.5f;
 
         [Header("풀 부모 (미지정 시 자동 생성)")]
         public Transform poolRoot;
@@ -24,6 +46,7 @@ namespace BagSurvivor.Items
         public int prewarmCount = 12;
 
         private readonly Stack<GoldPickup> pool = new Stack<GoldPickup>();
+        private readonly Dictionary<string, Denomination> denomLookup = new Dictionary<string, Denomination>();
 
         private void Awake()
         {
@@ -35,6 +58,22 @@ namespace BagSurvivor.Items
                 go.transform.SetParent(transform);
                 poolRoot = go.transform;
             }
+
+            // 기존 씬 인스턴스에서 새 필드가 비어 있을 수 있으니, 비면 기본 액면가로 채움(스프라이트는 인스펙터 지정)
+            if (denominations == null || denominations.Length == 0)
+            {
+                denominations = new Denomination[]
+                {
+                    new Denomination { id = "Item_001", goldValue = 1 },
+                    new Denomination { id = "Item_002", goldValue = 10 },
+                    new Denomination { id = "Item_003", goldValue = 100 },
+                    new Denomination { id = "Item_004", goldValue = 500 },
+                };
+            }
+
+            denomLookup.Clear();
+            foreach (var d in denominations)
+                if (d != null && !string.IsNullOrEmpty(d.id)) denomLookup[d.id] = d;
         }
 
         private void OnDestroy()
@@ -56,10 +95,55 @@ namespace BagSurvivor.Items
             }
         }
 
-        /// <summary>지정 위치에 골드 픽업을 드롭합니다.</summary>
-        public void Drop(Vector3 position, int amount)
+        /// <summary>
+        /// 지정 위치에 '정확한 총 골드'를 동전 1개로 드롭합니다(획득 시 totalGold 만큼 획득).
+        /// 동전 스프라이트는 금액 크기에 맞는 액면가 것으로 표시.
+        /// </summary>
+        public void DropGold(Vector3 position, int totalGold)
         {
-            if (goldPrefab == null || amount <= 0) return;
+            if (goldPrefab == null || totalGold <= 0) return;
+            SpawnPickup(position, totalGold, PickSpriteForAmount(totalGold));
+        }
+
+        /// <summary>금액 이하의 가장 큰 액면가 스프라이트를 반환(없으면 null → 픽업 기본 애니).</summary>
+        private Sprite PickSpriteForAmount(int gold)
+        {
+            Denomination best = null;
+            if (denominations != null)
+                foreach (var d in denominations)
+                    if (d != null && d.goldValue <= gold && (best == null || d.goldValue > best.goldValue))
+                        best = d;
+            return best != null ? best.sprite : null;
+        }
+
+        /// <summary>
+        /// 돈 ID(액면가)에 맞는 동전을 count개 드롭합니다. (CSV: Drop_ItemID / Drop_Item_Value)
+        /// 예: itemID=Item_002(10골드), count=3 → 10골드 동전 3개(=30골드) 흩뿌림.
+        /// </summary>
+        public void Drop(Vector3 position, string itemID, int count)
+        {
+            if (goldPrefab == null || count <= 0) return;
+
+            if (!denomLookup.TryGetValue(itemID, out Denomination d) || d == null)
+            {
+                Debug.LogWarning($"[GoldDrop] 알 수 없는 돈 ID '{itemID}' — 액면가 테이블에 없음. 드롭 생략.");
+                return;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 pos = position;
+                if (scatterRadius > 0f) pos += (Vector3)(Random.insideUnitCircle * scatterRadius);
+                SpawnPickup(pos, d.goldValue, d.sprite);
+            }
+        }
+
+        /// <summary>지정 위치에 골드 픽업 1개를 드롭합니다(액면가/스프라이트 지정).</summary>
+        public void Drop(Vector3 position, int amount) => SpawnPickup(position, amount, null);
+
+        private void SpawnPickup(Vector3 position, int goldValue, Sprite sprite)
+        {
+            if (goldPrefab == null || goldValue <= 0) return;
 
             GoldPickup g = null;
             while (pool.Count > 0)
@@ -78,7 +162,7 @@ namespace BagSurvivor.Items
 
             g.transform.SetParent(poolRoot);
             g.transform.position = position;
-            g.Init(amount, this);
+            g.Init(goldValue, this, sprite);
             g.gameObject.SetActive(true);
         }
 

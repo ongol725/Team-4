@@ -72,8 +72,10 @@ namespace BagSurvivor.Monster
         {
             isInChargeSequence = true;
 
-            // 1. 정지
-            controller.PauseMovement();
+            // 1. 이동 제어를 위임받아 정지 (PauseMovement는 매 스텝 속도를 0으로 덮어써 돌진을
+            //    막으므로, 보스 돌진과 동일하게 BeginExternalMovement로 직접 제어한다)
+            controller.BeginExternalMovement();
+            controller.SetVelocity(Vector2.zero);
 
             // 2. 돌진 방향 결정 (준비 시작 시점의 플레이어 위치)
             Vector2 chargeDirection = controller.GetDirectionToPlayer();
@@ -94,11 +96,11 @@ namespace BagSurvivor.Monster
 
             float chargeSpeed = controller.monsterData.moveSpeed * chargeSpeedMultiplier;
             float distanceTraveled = 0f;
-            bool hitPlayer = false;
 
-            while (distanceTraveled < chargeMaxDistance && !hitPlayer)
+            // isCharging이 false가 되면(플레이어 충돌) 즉시 중단
+            while (distanceTraveled < chargeMaxDistance && isCharging)
             {
-                if (controller.IsDead) yield break;
+                if (controller.IsDead) break;
 
                 controller.SetVelocity(chargeDirection * chargeSpeed);
                 distanceTraveled = Vector2.Distance(startPosition, transform.position);
@@ -111,11 +113,11 @@ namespace BagSurvivor.Monster
             controller.SetKnockbackImmune(false);
             controller.SetVelocity(Vector2.zero);
 
-            // 6. 휴식 (3초)
+            // 6. 휴식 (3초, 제자리 정지 유지)
             yield return new WaitForSeconds(restDuration);
 
-            // 7. 이동 재개
-            controller.ResumeMovement();
+            // 7. 이동 제어 반환 → 추적 재개
+            controller.EndExternalMovement();
             isInChargeSequence = false;
         }
 

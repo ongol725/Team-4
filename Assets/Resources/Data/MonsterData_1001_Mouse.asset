@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 2
   spawnCount: 1
   dropItemID: Item_001
-  dropItemValue: 1
+  dropItemValue: 10
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Mouse.prefab

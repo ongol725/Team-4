@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 6
   spawnCount: 1
   dropItemID: Item_002
-  dropItemValue: 2
+  dropItemValue: 30
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Kobold.prefab

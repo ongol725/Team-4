@@ -1,0 +1,114 @@
+// ============================================================
+// BossPhaseController.cs
+// 보스 1→2 페이즈 전환 제어 (기획서 기준)
+//  - 체력 40% 미만 → 쓰던 패턴을 끝까지 마저 쓴 뒤 2페이즈 전환 실행.
+//  - 예외(안전장치): 패턴이 길어 도중 35% 이하로 떨어지면, 패턴을 중단하지 않고
+//    그대로 진행시키되 '무적'을 부여해 전환 전에 죽지 않게 한다.
+//  - 전환 진행: 보스 무적 + 패턴 정지(제자리) → 연출(시간) → 바닥 영구 장판 생성.
+//  - 2페이즈 진입: 기존 패턴 쿨다운 단축(강화) 후 패턴 구동 재개.
+//    (신규 2페이즈 전용 패턴: 분신 군무·힐링 토템은 별도 작업)
+// ============================================================
+using UnityEngine;
+using System.Collections;
+
+namespace BagSurvivor.Monster
+{
+    [RequireComponent(typeof(MonsterController))]
+    [RequireComponent(typeof(BossPatternDriver))]
+    public class BossPhaseController : MonoBehaviour
+    {
+        [Header("전환 임계치(체력 비율)")]
+        [Tooltip("이 비율 미만이면 2페이즈 전환 시작(기획서 40%)")]
+        [Range(0f, 1f)] public float phase2Threshold = 0.40f;
+
+        [Tooltip("전환 대기 중 이 비율 이하로 떨어지면 무적 부여(패턴은 중단 않음). 기획서 35%")]
+        [Range(0f, 1f)] public float invincibleThreshold = 0.35f;
+
+        [Header("전환 연출")]
+        [Tooltip("무적 상태로 멈춰 있는 전환 연출 시간(초)")]
+        public float transitionDuration = 2f;
+
+        [Header("2페이즈")]
+        [Tooltip("진입 시 바닥에 생성할 영구 장판 프리팹(선택)")]
+        public GameObject floorHazardPrefab;
+
+        [Tooltip("2페이즈 기본 패턴 선택 확률(나머지는 특수). 기획서 60% 기본")]
+        [Range(0f, 1f)] public float phase2BasicChance = 0.6f;
+
+        private MonsterController controller;
+        private BossPatternDriver driver;
+        private bool transitioning;
+        private bool transitioned;
+
+        /// <summary>2페이즈 진입 완료 여부.</summary>
+        public bool IsPhase2 => transitioned;
+
+        private void Awake()
+        {
+            controller = GetComponent<MonsterController>();
+            driver = GetComponent<BossPatternDriver>();
+        }
+
+        private void OnEnable()
+        {
+            // 풀 재사용/재시작 대비 초기화
+            transitioning = false;
+            transitioned = false;
+        }
+
+        private void Update()
+        {
+            if (controller == null || controller.IsDead) return;
+            if (transitioning || transitioned) return;
+
+            if (controller.HpRatio < phase2Threshold)
+                StartCoroutine(TransitionRoutine());
+        }
+
+        private IEnumerator TransitionRoutine()
+        {
+            transitioning = true;
+
+            // 40%: 진행 중인 패턴이 끝날 때까지 대기(중단하지 않음).
+            // 대기 중 35% 이하로 떨어지면 죽지 않도록 무적만 부여하고 패턴은 계속 진행.
+            while (driver != null && driver.IsExecuting)
+            {
+                if (!controller.IsInvincible && controller.HpRatio <= invincibleThreshold)
+                    controller.SetInvincible(true);
+                yield return null;
+            }
+
+            // 패턴 종료 → 전환 진행: 무적(아직이면 지금 부여) + 패턴 정지(제자리)
+            controller.SetInvincible(true);
+            if (driver != null) driver.Halt();
+
+            // 전환 연출 시간
+            if (transitionDuration > 0f)
+                yield return new WaitForSeconds(transitionDuration);
+
+            // 바닥 영구 장판 생성 (영구 지속이므로 풀 대신 직접 생성)
+            if (floorHazardPrefab != null)
+                Instantiate(floorHazardPrefab, transform.position, Quaternion.identity);
+
+            // 2페이즈 강화: 기존 패턴 쿨다운 단축
+            ApplyPhase2Strengthen();
+
+            transitioned = true;
+            transitioning = false;
+
+            // 무적 해제 + 패턴 재개
+            controller.SetInvincible(false);
+            if (driver != null) driver.Resume();
+        }
+
+        /// <summary>2페이즈 강화: 모든 패턴을 phase2 모드로 전환 + 드라이버 기본/특수 비율 변경.</summary>
+        private void ApplyPhase2Strengthen()
+        {
+            var patterns = GetComponents<BossPatternBase>();
+            foreach (var p in patterns)
+                p.phase2Mode = true;
+
+            if (driver != null) driver.basicChance = phase2BasicChance; // 60/40
+        }
+    }
+}
