@@ -103,6 +103,7 @@ public class DungeonRenderer : MonoBehaviour
         TileBase activeWallTile = defaultWallTile;
         Sprite[] activeWallSprites = null;
         Sprite activeFaceSprite = null;
+        Sprite[] activePillarSprites = null;
 
         if (floorThemes != null && currentFloor >= 1 && currentFloor <= floorThemes.Length)
         {
@@ -111,6 +112,7 @@ public class DungeonRenderer : MonoBehaviour
             if (floorThemes[currentFloor - 1].wallTile != null) activeWallTile = floorThemes[currentFloor - 1].wallTile;
             activeWallSprites = floorThemes[currentFloor - 1].advancedWallSprites;
             activeFaceSprite = floorThemes[currentFloor - 1].wallFaceSprite;
+            activePillarSprites = floorThemes[currentFloor - 1].pillarSprites;
         }
 
         for (int x = 0; x < mapWidth; x++)
@@ -167,6 +169,29 @@ public class DungeonRenderer : MonoBehaviour
                         wallTilemap.SetTile(new Vector3Int(x, y - 1, 0), tileCache[activeFaceSprite]);
                     }
                 }
+                else if (mapData[x, y] == 4)
+                {
+                    // 기둥 받침: 바닥을 깔고 그 위에 세로 기둥(받침/몸통/머리)을 오버레이한다.
+                    if (floorTilemap != null && activeFloorTile != null)
+                        floorTilemap.SetTile(pos, activeFloorTile);
+                    if (useAdvancedAutoTiling && activePillarSprites != null
+                        && activePillarSprites.Length >= 3 && wallTilemap != null)
+                    {
+                        // [0]=받침(아래) [1]=몸통(중간) [2]=머리(위), 위(y+)로 쌓는다
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Sprite ps = activePillarSprites[i];
+                            if (ps == null) continue;
+                            if (!tileCache.ContainsKey(ps))
+                            {
+                                Tile pt = ScriptableObject.CreateInstance<Tile>();
+                                pt.sprite = ps;
+                                tileCache[ps] = pt;
+                            }
+                            wallTilemap.SetTile(new Vector3Int(x, y + i, 0), tileCache[ps]);
+                        }
+                    }
+                }
             }
         }
     }
@@ -212,8 +237,8 @@ public class DungeonRenderer : MonoBehaviour
         if ((pattern & mask_cardinal) == (2 | 16)) return sprites[1];  // N+E 벽 -> Top 직선(─)
         if ((pattern & mask_cardinal) == (2 | 8))  return sprites[1];  // N+W 벽 -> Top 직선(─)
         // 아래로 가는 복도(S+W/S+E): 정면이 없으므로 외부 코너 타일로 꺾어줌
-        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[0]; // S+W 벽(왼쪽 꺾임)  -> TL 코너(┌) _2
-        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[2]; // S+E 벽(오른쪽 꺾임) -> TR 코너(┐) _4
+        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[6]; // S+W 벽(안쪽 NE) -> BL 코너(└) _39
+        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[8]; // S+E 벽(안쪽 NW) -> BR 코너(┘) _23
 
         // 4. 예외: 1블록 두께 벽 (방과 방 사이 1칸 띄워진 곳 등, 거의 발생 안 함)
         if ((pattern & mask_cardinal) == (8 | 16)) return sprites[1]; // 가로 1칸 벽 -> Top Outer
