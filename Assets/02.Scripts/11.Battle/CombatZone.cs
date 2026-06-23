@@ -43,7 +43,7 @@ public class CombatZone : MonoBehaviour
         if (col == null) return;
 
         var results = new List<Collider2D>();
-        col.Overlap(new ContactFilter2D().NoFilter(), results);
+        col.Overlap(ContactFilter2D.noFilter, results);
         foreach (var other in results)
         {
             if (!other.CompareTag("Player")) continue;

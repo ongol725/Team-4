@@ -337,7 +337,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             {
                 var blockUI = savedBlocks[i];
                 if (blockUI == null) continue;
-                if (!tempUsed && tempSlot != null)
+                if (!tempUsed && tempSlot != null
+                    && !(blockUI.Instance.data is SO_InventoryBlockData))
                 {
                     tempSlot.ReceiveBlock(blockUI);
                     tempUsed = true;
@@ -372,6 +373,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     private void SendToTempSlot()
     {
+        if (_instance.data is SO_InventoryBlockData) return; // 임시칸 배치 불가
+
         var tempSlot = _gridUI.TempSlot;
         SetFollowing(false);
         if (tempSlot == null) return;
@@ -496,6 +499,13 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         _isPlaced     = false;
         _isInTempSlot = true;
         _tempSlot     = slot;
+
+        if (_instance != null && _instance.RingGradeBonus != 0)
+        {
+            _instance.RingGradeBonus = 0;
+            _lastRingGradeBonus      = 0;
+            RefreshVisuals();
+        }
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -504,7 +514,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private void SnapToGrid(Vector2Int cell)
     {
         SetFollowing(false);
-        _isPlaced = true;
+        _isPlaced             = true;
+        _lastRingGradeBonus   = -1; // 배치 후 다음 Update에서 반드시 비주얼 재빌드
 
         transform.SetParent(_gridUI.transform, false);
         _rt.anchoredPosition = _gridUI.CellToAnchoredPos(cell);

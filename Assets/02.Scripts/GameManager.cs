@@ -20,10 +20,10 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public int currentFloor = 1;
 
-    private const int StartingGold = 50;
+    private SO_GameSettings _settings;
 
     // 골드 (씬/층을 넘어 유지). 변경 시 onGoldChanged로 HUD 등에 통지.
-    [HideInInspector] public int gold = StartingGold;
+    [HideInInspector] public int gold;
     public event System.Action<int> onGoldChanged;
 
     // 전투 로드아웃 브릿지 — 인벤토리 팝업 닫힐 때 BattleLoadoutBuilder가 호출,
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     /// <summary>골드를 시작 기본값으로 초기화합니다. (새 런 시작 시)</summary>
     public void ResetGold()
     {
-        gold = StartingGold;
+        gold = _settings != null ? _settings.startingGold : 200;
         onGoldChanged?.Invoke(gold);
     }
 
@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
+        _settings = Resources.Load<SO_GameSettings>("GameSettings");
+        gold = _settings != null ? _settings.startingGold : 200;
     }
 
     public void GoToNextFloor()
