@@ -49,19 +49,35 @@ public class SummonController : MonoBehaviour
         }
         else if (GetComponentInChildren<SpriteRenderer>() == null)
         {
-            var sr  = gameObject.AddComponent<SpriteRenderer>();
-            var tex = new Texture2D(32, 32);
-            for (int y = 0; y < 32; y++)
-            for (int x = 0; x < 32; x++)
-            {
-                float dx = x - 16f, dy = y - 16f;
-                float dist = Mathf.Sqrt(dx * dx + dy * dy);
-                tex.SetPixel(x, y, dist < 14f ? Color.white : Color.clear);
-            }
-            tex.Apply();
-            sr.sprite       = Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 32f);
-            sr.color        = new Color(0.2f, 0.9f, 0.3f, 1f);
+            var sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sortingOrder = 5;
+
+            if (data.icon != null)
+            {
+                sr.sprite = data.icon;
+                // AI 타입별 표시 크기 정규화
+                float scale = data.aiType switch
+                {
+                    SummonAIType.Bounce      => 0.25f, // 핀볼: 작은 공
+                    SummonAIType.OrbitPlayer => 0.40f, // 페어리: 플레이어 주변 회전
+                    _                        => 0.60f, // 골렘·성역: 일반 크기
+                };
+                transform.localScale = Vector3.one * scale;
+            }
+            else
+            {
+                // 전용 이미지 없을 때 흰색 원 (임시 placeholder)
+                var tex = new Texture2D(32, 32);
+                for (int y = 0; y < 32; y++)
+                for (int x = 0; x < 32; x++)
+                {
+                    float dx = x - 16f, dy = y - 16f;
+                    tex.SetPixel(x, y, Mathf.Sqrt(dx * dx + dy * dy) < 14f ? Color.white : Color.clear);
+                }
+                tex.Apply();
+                sr.sprite = Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 32f);
+                sr.color  = Color.white;
+            }
         }
 
         // 초기 배회 목적지 설정

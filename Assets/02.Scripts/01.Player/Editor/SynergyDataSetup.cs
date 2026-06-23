@@ -601,6 +601,71 @@ namespace BagSurvivor.SynergyEditor
             AssetDatabase.SaveAssets();
             Debug.Log($"[SynergyDataSetup] 시너지 아이콘 {filled}개 적용 완료" +
                       " (Electro·Overload는 런타임 컬러 아이콘 사용)");
+
+            // ── 소환수 아이콘도 함께 할당 ──────────────────────────────
+            FillSummonIcons(SheetDir);
+        }
+
+        static void FillSummonIcons(string sheetDir)
+        {
+            // SO_SummonData ID → (스프라이트 시트 경로, 프레임 접미사)
+            var summonIconMap = new Dictionary<string, string>
+            {
+                { "SUM_FAIRY_1",      $"{sheetDir}/Fairy.prefab.png"        },
+                { "SUM_FAIRY_2",      $"{sheetDir}/Fairy.prefab.png"        },
+                { "SUM_FAIRY_3",      $"{sheetDir}/Fairy.prefab.png"        },
+                { "SUM_PINBALL_1",    $"{sheetDir}/Pinball.prefab.png"      },
+                { "SUM_PINBALL_2",    $"{sheetDir}/Pinball.prefab.png"      },
+                { "SUM_GOLEM_1",      $"{sheetDir}/Spirit_Br.prefab.png"    },
+                { "SUM_GOLEM_2",      $"{sheetDir}/Spirit_Sv.prefab.png"    },
+                { "SUM_GOLEM_3",      $"{sheetDir}/Spirit_Gd.prefab.png"    },
+                { "SUM_GIANT_GOLEM",  $"{sheetDir}/Spirit_Gd.prefab.png"    },
+                { "SUM_SANCTUARY_1",  $"{sheetDir}/Sanctuary_Br.prefab.png" },
+                { "SUM_SANCTUARY_2",  $"{sheetDir}/Sanctuary_Sv.prefab.png" },
+                { "SUM_SANCTUARY_3",  $"{sheetDir}/Sanctuary_Gd.prefab.png" },
+            };
+
+            // 스프라이트 시트 경로 → _0 Sprite 캐시
+            var spriteCache = new Dictionary<string, Sprite>();
+
+            int filled = 0;
+            foreach (var kvp in summonIconMap)
+            {
+                var path = $"{SummonDir}/{kvp.Key}.asset";
+                var summon = AssetDatabase.LoadAssetAtPath<SO_SummonData>(path);
+                if (summon == null)
+                {
+                    Debug.LogWarning($"[SynergyDataSetup] 소환수 에셋 없음: {path}  ← ① 먼저 실행하세요.");
+                    continue;
+                }
+
+                if (!spriteCache.TryGetValue(kvp.Value, out var sprite))
+                {
+                    sprite = null;
+                    foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(kvp.Value))
+                    {
+                        if (asset is Sprite sp && sp.name.EndsWith("_0"))
+                        {
+                            sprite = sp;
+                            break;
+                        }
+                    }
+                    spriteCache[kvp.Value] = sprite;
+                }
+
+                if (sprite == null)
+                {
+                    Debug.LogWarning($"[SynergyDataSetup] 소환수 스프라이트 없음: {kvp.Value}");
+                    continue;
+                }
+
+                summon.icon = sprite;
+                EditorUtility.SetDirty(summon);
+                filled++;
+            }
+
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[SynergyDataSetup] 소환수 아이콘 {filled}개 적용 완료");
         }
 
         // ─────────────────────────────────────────────────────────────

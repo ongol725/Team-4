@@ -30,6 +30,8 @@ public class SO_SummonData : ScriptableObject
 
     [Header("외형")]
     public GameObject modelPrefab;
+    [Tooltip("modelPrefab 없을 때 사용할 스프라이트 (스프라이트 시트 첫 프레임 등)")]
+    public Sprite icon;
     [Tooltip("소환수 체력 (0이면 무적)")]
     public int hp = 0;
 }
