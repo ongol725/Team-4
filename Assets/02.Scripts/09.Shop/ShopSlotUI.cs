@@ -26,6 +26,9 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private static readonly string[] RarityLabels = { "일반", "희귀", "영웅", "전설" };
 
+    // 희귀도(Common/Rare/Epic/Legendary)별 기본 구매가
+    private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
+
     // 상점 등급(1~7)별 2등급 아이템 등장 확률(%)
     private static readonly int[] Grade2Rates    = { 8, 10, 12, 14, 16, 18, 20 };
 
@@ -59,6 +62,15 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private int                              _finalCost;
     private Action<ItemInstance, ShopSlotUI> _onBuy;
     private Button                           _shopImageButton;
+
+    [Header("아이콘 위치/크기 (인스펙터에서 실시간 조정)")]
+    [SerializeField] private Vector2 _discountIconOffset = new Vector2(0f, 95f);
+    [SerializeField] private Vector2 _discountIconSize   = new Vector2(44f, 20f);
+    [SerializeField] private Vector2 _grade2IconOffset   = new Vector2(-243f, -12f);
+    [SerializeField] private Vector2 _grade2IconSize     = new Vector2(25f, 20f);
+
+    private RectTransform _discountIconRt;
+    private RectTransform _grade2IconRt;
 
     private Vector2 _origAnchorMin, _origAnchorMax, _origOffsetMin, _origOffsetMax;
     private int     _origSiblingIndex;
@@ -137,7 +149,8 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         _nameText.text    = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
         int discountIdx  = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
         _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
-        int baseCost     = item.cost * (_displayGradeIndex > 0 ? 2 : 1);
+        int priceIdx     = Mathf.Clamp((int)item.rarity, 0, RarityBaseCosts.Length - 1);
+        int baseCost     = RarityBaseCosts[priceIdx] * (_displayGradeIndex > 0 ? 2 : 1);
         _finalCost       = _isDiscounted ? Mathf.Max(1, Mathf.FloorToInt(baseCost * 0.5f)) : baseCost;
         _costText.text   = $"{_finalCost} G";
         _rarityText.text  = rarityLabel;
@@ -230,10 +243,10 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
 
         if (_displayGradeIndex > 0)
-            AddGrade2Arrow();
+            AddGrade2Icon();
 
         if (_isDiscounted)
-            AddDiscountArrow();
+            AddDiscountIcon();
     }
 
     private void CreateMiniCell(Vector2Int cell, Color color)
@@ -252,50 +265,60 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         go.GetComponent<Image>().color = color;
     }
 
-    private void AddGrade2Arrow()
+    private void AddGrade2Icon()
     {
-        var go = new GameObject("grade2_arrow", typeof(RectTransform), typeof(Text));
+        var sprite = Resources.Load<Sprite>("Icons/icon_grade2");
+        if (sprite == null) return;
+
+        var go = new GameObject("grade2_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
 
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin        = new Vector2(1f, 1f);
-        rt.anchorMax        = new Vector2(1f, 1f);
-        rt.pivot            = new Vector2(1f, 1f);
-        rt.anchoredPosition = new Vector2(0f, 0f);
-        rt.sizeDelta        = new Vector2(14f, 14f);
+        _grade2IconRt               = go.GetComponent<RectTransform>();
+        _grade2IconRt.anchorMin     = new Vector2(1f, 1f);
+        _grade2IconRt.anchorMax     = new Vector2(1f, 1f);
+        _grade2IconRt.pivot         = new Vector2(1f, 1f);
+        _grade2IconRt.anchoredPosition = _grade2IconOffset;
+        _grade2IconRt.sizeDelta     = _grade2IconSize;
 
-        var txt = go.GetComponent<Text>();
-        txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
-                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
-        txt.text      = "↑";
-        txt.fontSize  = 12;
-        txt.fontStyle = FontStyle.Bold;
-        txt.alignment = TextAnchor.UpperRight;
-        txt.color     = new Color(0.25f, 0.90f, 0.35f);
-        txt.raycastTarget = false;
+        var img = go.GetComponent<Image>();
+        img.sprite         = sprite;
+        img.preserveAspect = true;
+        img.raycastTarget  = false;
     }
 
-    private void AddDiscountArrow()
+    private void AddDiscountIcon()
     {
-        var go = new GameObject("discount_arrow", typeof(RectTransform), typeof(Text));
+        var sprite = Resources.Load<Sprite>("Icons/icon_discount");
+        if (sprite == null) return;
+
+        var go = new GameObject("discount_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
 
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin        = new Vector2(0f, 0f);
-        rt.anchorMax        = new Vector2(0f, 0f);
-        rt.pivot            = new Vector2(0f, 0f);
-        rt.anchoredPosition = new Vector2(0f, 0f);
-        rt.sizeDelta        = new Vector2(14f, 14f);
+        _discountIconRt               = go.GetComponent<RectTransform>();
+        _discountIconRt.anchorMin     = new Vector2(0f, 0f);
+        _discountIconRt.anchorMax     = new Vector2(0f, 0f);
+        _discountIconRt.pivot         = new Vector2(0f, 0f);
+        _discountIconRt.anchoredPosition = _discountIconOffset;
+        _discountIconRt.sizeDelta     = _discountIconSize;
 
-        var txt = go.GetComponent<Text>();
-        txt.font      = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
-                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
-        txt.text      = "↓";
-        txt.fontSize  = 12;
-        txt.fontStyle = FontStyle.Bold;
-        txt.alignment = TextAnchor.LowerLeft;
-        txt.color     = new Color(1f, 0.25f, 0.25f);
-        txt.raycastTarget = false;
+        var img = go.GetComponent<Image>();
+        img.sprite         = sprite;
+        img.preserveAspect = true;
+        img.raycastTarget  = false;
+    }
+
+    private void OnValidate()
+    {
+        if (_discountIconRt != null)
+        {
+            _discountIconRt.anchoredPosition = _discountIconOffset;
+            _discountIconRt.sizeDelta        = _discountIconSize;
+        }
+        if (_grade2IconRt != null)
+        {
+            _grade2IconRt.anchoredPosition = _grade2IconOffset;
+            _grade2IconRt.sizeDelta        = _grade2IconSize;
+        }
     }
 
     private void RefreshSynergies(SO_ItemData item)

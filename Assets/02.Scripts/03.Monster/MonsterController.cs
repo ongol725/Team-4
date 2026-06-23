@@ -79,8 +79,22 @@ namespace BagSurvivor.Monster
         // 특수 기믹에서 이동을 제어하기 위한 플래그
         private bool isMovementPaused = false;
 
+        // 보스 패턴 등에서 Rigidbody 이동을 직접 제어하기 위해 컨트롤러 기본 이동을 위임받는 플래그.
+        // true인 동안 FixedUpdate의 HandleMovement(추적/정지 처리)를 건너뛴다.
+        private bool externalMovementControl = false;
+
+        // 무적 플래그(보스 페이즈 전환 연출 등). true인 동안 TakeDamage가 피해를 무시한다.
+        private bool isInvincible = false;
+
+        // 받는 피해 배율(1=기본). 보스 강화 버프 등에서 일시적으로 낮춘다.
+        private float damageTakenMultiplier = 1f;
+        private Coroutine damageReductionCo;
+
         // 사망 통지 콜백 (스폰 주체가 주입: 방 클리어 통지·풀 반환 위임). null이면 자체 비활성화.
         private System.Action<MonsterController> deathCallback;
+
+        /// <summary>사망 시 발생하는 이벤트(분열 등 기믹용). 풀 반환 직전 1회 호출. OnDisable에서 정리.</summary>
+        public event System.Action<MonsterController> OnDeath;
 
         // 난이도(층/시간) 스탯 배율. 스폰 시 주입되며, 베이스 스탯에 곱해 런타임 스탯을 산출.
         private float hpMultiplier = 1f;
@@ -103,6 +117,13 @@ namespace BagSurvivor.Monster
         /// 배율이 적용된 최대 HP (HP바·비율 계산용)
         /// </summary>
         public int MaxHP => runtimeMaxHP;
+
+        /// <summary>현재 적용된 HP/공격 배율 (분열체가 부모 기준으로 자기 배율을 산출할 때 사용).</summary>
+        public float HpMul => hpMultiplier;
+        public float AtkMul => attackMultiplier;
+
+        /// <summary>true면 사망 시 골드를 드롭하지 않음 (엘리트 슬라임 분열 중간 세대 등). 기믹이 설정.</summary>
+        [System.NonSerialized] public bool suppressGoldDrop = false;
 
         /// <summary>
         /// 배율이 적용된 공격력 (접촉/투사체 데미지용)
@@ -154,7 +175,12 @@ namespace BagSurvivor.Monster
             isPlayerInContact = false;
             isDying = false;
             isMovementPaused = false;
+            externalMovementControl = false;
+            isInvincible = false;
+            damageTakenMultiplier = 1f;
+            damageReductionCo = null;
             deathCallback = null;
+            OnDeath = null; // 풀 재사용 시 이전 구독자 잔존 방지(기믹은 OnEnable에서 재구독)
             hpMultiplier = 1f;
             attackMultiplier = 1f;
             HideHpBar();
@@ -298,6 +324,9 @@ namespace BagSurvivor.Monster
                 kbCooldownTimer -= Time.fixedDeltaTime;
             }
 
+            // 보스 패턴이 이동을 위임받은 동안에는 컨트롤러 기본 이동을 건너뛴다(패턴이 Rigidbody 직접 제어).
+            if (externalMovementControl) return;
+
             // Tracking 상태에서만 이동 처리
             if (currentState == MonsterState.Tracking)
             {
@@ -379,10 +408,12 @@ namespace BagSurvivor.Monster
         /// <param name="knockbackDirection">넉백 방향 (정규화된 벡터)</param>
         public void TakeDamage(int rawDamage, float knockbackForce = 0f, Vector2 knockbackDirection = default)
         {
-            if (isDying) return;
+            if (isDying || isInvincible) return;
 
-            // 방어력 적용
+            // 방어력 + 받는 피해 배율 적용
             int finalDamage = monsterData.CalculateDamageTaken(rawDamage);
+            if (damageTakenMultiplier != 1f)
+                finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * damageTakenMultiplier));
             currentHP -= finalDamage;
 
             // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음)
@@ -504,6 +535,9 @@ namespace BagSurvivor.Monster
             // 3. 드롭 아이템 스폰
             SpawnDropItem();
 
+            // 3-1. 사망 이벤트 통지 (분열 등 기믹이 사망 위치에서 반응). 풀 반환 전에 호출.
+            OnDeath?.Invoke(this);
+
             // 4. 사망 통지 / 오브젝트 풀 반환
             //    스폰 주체(RoomMonsterSpawner)가 콜백을 주입한 경우: 방 클리어 통지 + 풀 반환을 위임.
             //    콜백이 없으면 기존 동작(비활성화)으로 폴백.
@@ -518,11 +552,13 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void SpawnDropItem()
         {
+            if (suppressGoldDrop) return; // 분열 중간 세대 등: 드롭 억제
             if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
-            // 드롭 수치(Drop_Item_Value)만큼 골드를 떨어뜨림
+            // dropItemValue = 떨어뜨릴 총 골드. 동전 1개로 정확한 총액 드롭.
             if (BagSurvivor.Items.GoldDropManager.Instance != null)
-                BagSurvivor.Items.GoldDropManager.Instance.Drop(transform.position, monsterData.dropItemValue);
+                BagSurvivor.Items.GoldDropManager.Instance.DropGold(
+                    transform.position, monsterData.dropItemValue);
         }
 
         // ==========================================
@@ -589,6 +625,51 @@ namespace BagSurvivor.Monster
         {
             isMovementPaused = false;
         }
+
+        /// <summary>
+        /// 컨트롤러 기본 이동(추적/정지)을 일시 위임받습니다. 보스 패턴이 Rigidbody를 직접 제어할 때 호출.
+        /// 호출 후 SetVelocity로 이동을 제어하고, 끝나면 반드시 EndExternalMovement()로 복귀시킵니다.
+        /// </summary>
+        public void BeginExternalMovement()
+        {
+            externalMovementControl = true;
+        }
+
+        /// <summary>
+        /// 위임받은 이동 제어를 컨트롤러에 되돌립니다(추적 복귀). 속도는 0으로 정리합니다.
+        /// </summary>
+        public void EndExternalMovement()
+        {
+            externalMovementControl = false;
+            if (rb != null) rb.linearVelocity = Vector2.zero;
+        }
+
+        /// <summary>무적 상태를 설정합니다. true인 동안 TakeDamage가 무시됩니다(페이즈 전환 연출 등).</summary>
+        public void SetInvincible(bool value)
+        {
+            isInvincible = value;
+        }
+
+        /// <summary>현재 무적 여부.</summary>
+        public bool IsInvincible => isInvincible;
+
+        /// <summary>일정 시간 동안 받는 피해를 reductionPercent(0~1)만큼 감소시킵니다(보스 강화 버프 등).</summary>
+        public void ApplyDamageReduction(float reductionPercent, float duration)
+        {
+            if (damageReductionCo != null) StopCoroutine(damageReductionCo);
+            damageReductionCo = StartCoroutine(DamageReductionRoutine(Mathf.Clamp01(reductionPercent), duration));
+        }
+
+        private IEnumerator DamageReductionRoutine(float reduction, float duration)
+        {
+            damageTakenMultiplier = 1f - reduction;
+            yield return new WaitForSeconds(duration);
+            damageTakenMultiplier = 1f;
+            damageReductionCo = null;
+        }
+
+        /// <summary>현재 체력 비율(0~1).</summary>
+        public float HpRatio => runtimeMaxHP > 0 ? (float)currentHP / runtimeMaxHP : 0f;
 
         /// <summary>
         /// 넉백 면역 상태를 설정합니다. 돌진 등 특수 상태에서 사용합니다.

@@ -56,15 +56,15 @@ public class SynergyManager : MonoBehaviour
 
     private void Start()
     {
+        var playerGO = GameObject.FindWithTag("Player");
+        if (playerGO != null) _player = playerGO.transform;
+
         _gm = GameManager.Instance;
         if (_gm != null)
         {
             _gm.onLoadoutReady += OnLoadoutReady;
             if (_gm.CurrentLoadout != null) OnLoadoutReady(_gm.CurrentLoadout);
         }
-
-        var playerGO = GameObject.FindWithTag("Player");
-        if (playerGO != null) _player = playerGO.transform;
 
         _summonRoot = new GameObject("SummonRoot").transform;
         _summonRoot.SetParent(transform);
@@ -236,6 +236,13 @@ public class SynergyManager : MonoBehaviour
 
     private void SpawnMinions(SO_SummonData data, int count, int weaponAtk)
     {
+        if (_player == null)
+        {
+            var p = GameObject.FindWithTag("Player");
+            if (p != null) _player = p.transform;
+        }
+        if (_player == null) return;
+
         int minionAtk = Mathf.RoundToInt(weaponAtk * data.atkMultiplier);
 
         for (int i = 0; i < count; i++)
@@ -282,7 +289,7 @@ public class SynergyManager : MonoBehaviour
         var filter = new ContactFilter2D();
         filter.useTriggers = true;
         if (_enemyLayer != 0) filter.SetLayerMask(_enemyLayer);
-        else                  filter.NoFilter();
+        else                  filter = ContactFilter2D.noFilter;
 
         var cols = new List<Collider2D>();
         Physics2D.OverlapCircle((Vector2)center, range, filter, cols);

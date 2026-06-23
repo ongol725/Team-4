@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7044834487461981755}
   - component: {fileID: 5503807697345093931}
   - component: {fileID: 8928994163963701202}
+  - component: {fileID: 3867242365250654926}
   m_Layer: 8
   m_Name: Prefab_GoblinArcher
   m_TagString: Monster
@@ -171,3 +172,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: fb147e291898cd5408f927c89f7462ef, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  sortingOrder: 10
+  stopDistance: 7
+  approachOverlap: 0.4
+--- !u!114 &3867242365250654926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6703318431440199771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3afaf163e204bc64ba1681e7ec5f7400, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RangedAttackGimmick
+  aimMode: 0
+  attackRange: 7
+  fireCooldown: 1.5
+  projectileSpeed: 8
+  projectileMaxRange: 12
+  projectilePrefab: {fileID: 5813921172449787936, guid: a98dea411e3080346afefddd2263fadd, type: 3}

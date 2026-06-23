@@ -170,6 +170,7 @@ public class SummonController : MonoBehaviour
 
     private void PickNewWanderDest()
     {
+        if (_player == null) return;
         _wanderTimer = WanderInterval;
         Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(WanderRadius * 0.3f, WanderRadius);
         _wanderDest = (Vector2)_player.position + offset;
@@ -285,7 +286,7 @@ public class SummonController : MonoBehaviour
         var filter = new ContactFilter2D();
         filter.useTriggers = true;
         if (_enemyLayer != 0) filter.SetLayerMask(_enemyLayer);
-        else                  filter.NoFilter();
+        else                  filter = ContactFilter2D.noFilter;
 
         var cols = new List<Collider2D>();
         Physics2D.OverlapCircle((Vector2)transform.position, range, filter, cols);

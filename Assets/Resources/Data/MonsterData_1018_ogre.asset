@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 0
   spawnCount: 0
   dropItemID: Item_003
-  dropItemValue: 4
+  dropItemValue: 100
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Ogre.prefab

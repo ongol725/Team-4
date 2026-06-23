@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// 상점 전체 패널: 5개 슬롯 + 리롤 버튼 + 상점 등급 관리
@@ -17,7 +18,7 @@ public class ShopUI : MonoBehaviour
     [Header("리롤 버튼")]
     [SerializeField] private Button _rerollButton;
     [SerializeField] private Text   _rerollCostText;
-    [SerializeField] private int    _rerollCost = 2;
+    [SerializeField] private int    _rerollCost = 20;
 
     [Header("상점 등급 UI")]
     [SerializeField] private Text _gradeText;
@@ -48,12 +49,18 @@ public class ShopUI : MonoBehaviour
     private int _shopGrade             = 1;
     private int _rerollsInCurrentGrade = 0;
 
-    private Text _statsText;
+    private bool   _inSellMode;
+    private bool[] _slotWasActive;
+
+    private Text   _statsText;
+    private Canvas _rootCanvas;
 
     // ─────────────────────────────────────────────────────────────
 
     private void Start()
     {
+        _rootCanvas = GetComponentInParent<Canvas>();
+
         _rerollButton.onClick.AddListener(Reroll);
         if (_rerollCostText != null)
             _rerollCostText.text = $"리롤 ({_rerollCost}G)";
@@ -66,6 +73,51 @@ public class ShopUI : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────
+
+    private void Update()
+    {
+        if (_rootCanvas != null && _rootCanvas.enabled
+         && Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
+            Reroll();
+
+        if (_panelRoot == null || !_panelRoot.activeSelf) return;
+        bool shouldSell = _inventoryGridUI != null
+            && _inventoryGridUI.IsAnyFollowingMouse
+            && IsMouseOverPanel();
+        if (shouldSell != _inSellMode)
+            SetSellMode(shouldSell);
+    }
+
+    private bool IsMouseOverPanel()
+    {
+        if (Mouse.current == null) return false;
+        var rt  = _panelRoot.GetComponent<RectTransform>();
+        var cam = (_rootCanvas != null && _rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            ? _rootCanvas.worldCamera : null;
+        return RectTransformUtility.RectangleContainsScreenPoint(
+            rt, Mouse.current.position.ReadValue(), cam);
+    }
+
+    private void SetSellMode(bool active)
+    {
+        _inSellMode = active;
+        if (active)
+        {
+            _slotWasActive = new bool[_slots.Length];
+            for (int i = 0; i < _slots.Length; i++)
+            {
+                _slotWasActive[i] = _slots[i].gameObject.activeSelf;
+                _slots[i].gameObject.SetActive(false);
+            }
+        }
+        else if (_slotWasActive != null)
+        {
+            for (int i = 0; i < _slots.Length; i++)
+                _slots[i].gameObject.SetActive(_slotWasActive[i]);
+            _slotWasActive = null;
+        }
+        SellSlotUI.Instance?.SetShopMode(active);
+    }
 
     public void Reroll()
     {
@@ -84,6 +136,7 @@ public class ShopUI : MonoBehaviour
 
     public void Close()
     {
+        SetSellMode(false);
         _loadoutBuilder?.BuildAndDeliver();
         if (_panelRoot != null) _panelRoot.SetActive(false);
         GoldDisplayUI.Instance?.HideHelp();

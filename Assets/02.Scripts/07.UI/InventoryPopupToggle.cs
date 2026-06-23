@@ -68,7 +68,6 @@ public class InventoryPopupToggle : MonoBehaviour
         _gridUI?.ActiveFollowingBlock?.ForceSendToTempSlot();
         _popupCanvas.enabled = false;
         _debugUI?.SetPanelActive(false);
-        SellSlotUI.Instance?.SetPanelActive(false);
         _loadoutBuilder?.BuildAndDeliver();
         onPopupToggled?.Invoke(false);
     }
@@ -100,7 +99,6 @@ public class InventoryPopupToggle : MonoBehaviour
 
         // Canvas_Inventory 직접 자식인 패널도 함께 토글
         _debugUI?.SetPanelActive(willOpen);
-        SellSlotUI.Instance?.SetPanelActive(willOpen);
 
         // 닫을 때 로드아웃 확정 (ShopUI.Close의 panelRoot 조작 없이 직접 호출)
         if (!willOpen)

@@ -262,6 +262,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Items.GoldDropManager
   goldPrefab: {fileID: 4667203295015475285, guid: 56712a01268cf914aa53d8db29df99ad, type: 3}
+  denominations:
+  - id: Item_001
+    goldValue: 1
+    sprite: {fileID: 6124535499641642896, guid: 468e7c452c785944d8563283afaf2f65, type: 3}
+  - id: Item_002
+    goldValue: 10
+    sprite: {fileID: 8939671175689594465, guid: c7237ec05e07850488472801d5ff4d24, type: 3}
+  - id: Item_003
+    goldValue: 100
+    sprite: {fileID: -7229738149477256258, guid: 4254ad7dee8414b429a84d5c49e35f73, type: 3}
+  - id: Item_004
+    goldValue: 500
+    sprite: {fileID: -7485415606213293452, guid: b2bd68e5e9fb82f448caf5bc9e15839c, type: 3}
+  scatterRadius: 0.5
   poolRoot: {fileID: 0}
   prewarmCount: 12
 --- !u!1001 &254784477
@@ -336,7 +350,6 @@ GameObject:
   - component: {fileID: 269679928}
   - component: {fileID: 269679930}
   - component: {fileID: 269679931}
-  - component: {fileID: 269679932}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -501,19 +514,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64429adc19d9b3345ba195c854052e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoSortSystem
---- !u!114 &269679932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269679924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c94e64e78f4cdc97c8849321e4db81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShortcutHelpUI
-  _positionOffset: {x: -315, y: 250}
 --- !u!1 &810000001
 GameObject:
   m_ObjectHideFlags: 0

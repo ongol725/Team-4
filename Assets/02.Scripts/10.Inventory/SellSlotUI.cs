@@ -12,11 +12,22 @@ public class SellSlotUI : MonoBehaviour
 
     [SerializeField] private Canvas _canvas;
 
+    [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시)")]
+    [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(811f, 26f);
+    [SerializeField] private Vector2 _shopOverlaySize = new Vector2(300f, 900f);
+
+    [Header("디버그")]
+    [Tooltip("체크하면 플레이 중 패널을 미리 표시해서 위치/크기를 바로 조정할 수 있습니다")]
+    [SerializeField] private bool _previewInEditor = false;
+
     public RectTransform PanelRt { get; private set; }
 
     private Image          _bg;
     private Canvas         _cachedCanvas;
     private InventoryGridUI _gridUI;
+    private bool           _inShopMode;
+
+    private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
 
     private static readonly Color IdleColor  = new Color(0.50f, 0.05f, 0.05f, 0.88f);
     private static readonly Color HoverColor = new Color(0.85f, 0.12f, 0.12f, 0.96f);
@@ -72,14 +83,49 @@ public class SellSlotUI : MonoBehaviour
             PanelRt, Mouse.current.position.ReadValue(), cam);
     }
 
-    /// <summary>팝업 토글 시 패널 전체를 표시/숨깁니다.</summary>
-    public void SetPanelActive(bool active) =>
-        PanelRt?.gameObject.SetActive(active);
+    /// <summary>강제 닫기 전용 (전투 구역 진입 등). 표시는 SetShopMode로만 제어.</summary>
+    public void SetPanelActive(bool active)
+    {
+        if (!active)
+        {
+            _inShopMode = false;
+            PanelRt?.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>상점 오버레이 모드: 드래그 중 상점 위에 판매 패널을 표시/숨깁니다.</summary>
+    public void SetShopMode(bool active)
+    {
+        if (PanelRt == null || _inShopMode == active) return;
+        _inShopMode = active;
+        if (active)
+        {
+            PanelRt.anchoredPosition = _shopOverlayPos;
+            PanelRt.sizeDelta        = _shopOverlaySize;
+            PanelRt.gameObject.SetActive(true);
+        }
+        else
+        {
+            PanelRt.gameObject.SetActive(false);
+        }
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (PanelRt == null) return;
+        PanelRt.anchoredPosition = _shopOverlayPos;
+        PanelRt.sizeDelta        = _shopOverlaySize;
+        if (_previewInEditor)
+            PanelRt.gameObject.SetActive(true);
+    }
+#endif
 
     /// <summary>아이템을 판매하고 골드를 지급한다</summary>
     public void Sell(ItemInstance inst)
     {
-        int price = Mathf.Max(1, inst.data.cost / 2);
+        int rarityIdx = Mathf.Clamp((int)inst.data.rarity, 0, RarityBaseCosts.Length - 1);
+        int price = RarityBaseCosts[rarityIdx] / 2;
         GameManager.Instance?.AddGold(price);
     }
 
@@ -87,8 +133,6 @@ public class SellSlotUI : MonoBehaviour
 
     private void BuildUI()
     {
-        // TempSlot: anchor=center, pos=(137,-50), size=200×200
-        // SellSlot: TempSlot 오른쪽 끝(237) + 8px 여백 + 자신 너비 절반(100) = 345
         var panel = new GameObject("SellSlot", typeof(RectTransform), typeof(Image));
         panel.transform.SetParent(_canvas.transform, false);
 
@@ -96,8 +140,8 @@ public class SellSlotUI : MonoBehaviour
         rt.anchorMin        = new Vector2(0.5f, 0.5f);
         rt.anchorMax        = new Vector2(0.5f, 0.5f);
         rt.pivot            = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = new Vector2(345f, -50f);
-        rt.sizeDelta        = new Vector2(200f, 200f);
+        rt.anchoredPosition = _shopOverlayPos;
+        rt.sizeDelta        = _shopOverlaySize;
         PanelRt = rt;
 
         _bg = panel.GetComponent<Image>();

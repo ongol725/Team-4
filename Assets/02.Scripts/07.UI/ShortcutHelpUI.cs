@@ -6,15 +6,28 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Q키를 누르면 인벤토리 좌측에 단축키 도움말 팝업을 토글한다.
 /// 패널 높이는 텍스트 내용에 맞게 자동 계산된다.
+/// RuntimeInitializeOnLoadMethod로 자동 생성되므로 씬에 배치 불필요.
 /// </summary>
 public class ShortcutHelpUI : MonoBehaviour
 {
+    private static ShortcutHelpUI _instance;
+
     private GameObject _panel;
     private RectTransform _panelRt;
     private Vector2 _basePosition;
     private bool _isVisible;
 
-    [SerializeField] private Vector2 _positionOffset = new Vector2(-300f, 0f);
+    // 위치 오프셋: 인벤토리 좌측 기준 (x=좌우, y=상하)
+    private Vector2 _positionOffset = new Vector2(-315f, 250f);
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void AutoCreate()
+    {
+        if (_instance != null) return;
+        var go = new GameObject("ShortcutHelpUI");
+        DontDestroyOnLoad(go);
+        _instance = go.AddComponent<ShortcutHelpUI>();
+    }
 
     private const float PanelW  = 340f;
     private const float PadX    = 20f;
@@ -112,7 +125,7 @@ public class ShortcutHelpUI : MonoBehaviour
     {
         var canvasRt  = canvas.GetComponent<RectTransform>();
         var cam       = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-        var invGridRt = FindObjectOfType<InventoryGridUI>()?.GetComponent<RectTransform>();
+        var invGridRt = FindFirstObjectByType<InventoryGridUI>()?.GetComponent<RectTransform>();
 
         // 인벤토리 좌측 X, 상단 Y
         float invLeftX = GetLeftEdgeX(invGridRt, canvasRt, cam);
@@ -129,7 +142,7 @@ public class ShortcutHelpUI : MonoBehaviour
         float anchorX = invLeftX - Gap;
 
         // 시너지 UI가 인벤토리와 겹치는 위치에 있으면 시너지 좌측을 기준으로
-        var synergyRt = FindObjectOfType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
+        var synergyRt = FindFirstObjectByType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
         if (synergyRt != null)
         {
             float synergyLeft = GetLeftEdgeX(synergyRt, canvasRt, cam);
@@ -187,6 +200,7 @@ public class ShortcutHelpUI : MonoBehaviour
         "  우클릭         그리드 자동 배치 (합성 우선)\n" +
         "\n" +
         "<color=#99aaff>■ 상점</color>\n" +
+        "  R              리롤\n" +
         "  좌클릭         구매 후 배치\n" +
         "  우클릭         스마트 구매\n" +
         "\n" +
