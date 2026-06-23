@@ -182,14 +182,17 @@ namespace BagSurvivor.Items
         public void ClearAllDropped()
         {
             if (poolRoot == null) return;
-            for (int i = poolRoot.childCount - 1; i >= 0; i--)
+            // 먼저 수집 후 일괄 처리 — Return 내부 SetParent 시 자식 인덱스 변경으로
+            // 역방향 루프가 항목을 건너뛰는 버그를 방지
+            var active = new List<GoldPickup>();
+            foreach (Transform child in poolRoot)
             {
-                Transform child = poolRoot.GetChild(i);
                 if (!child.gameObject.activeSelf) continue;
                 var g = child.GetComponent<GoldPickup>();
-                if (g != null) Return(g);
+                if (g != null) active.Add(g);
                 else child.gameObject.SetActive(false);
             }
+            foreach (var g in active) Return(g);
         }
     }
 }

@@ -31,7 +31,8 @@ public static class SynergyIconHelper
     /// <summary>시너지 타입에 맞는 플레이스홀더 스프라이트를 반환한다. 최초 호출 시 생성 후 캐싱한다.</summary>
     public static Sprite GetIcon(SynergyType type)
     {
-        if (Cache.TryGetValue(type, out var cached)) return cached;
+        // 씬 재로드 시 생성된 Sprite/Texture2D가 파괴될 수 있으므로 null 여부를 재확인
+        if (Cache.TryGetValue(type, out var cached) && cached != null) return cached;
 
         Color fill = Colors.TryGetValue(type, out var c) ? c : Color.white;
         var tex = new Texture2D(Size, Size, TextureFormat.RGBA32, false) { name = $"SynergyIcon_{type}" };

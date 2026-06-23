@@ -52,6 +52,13 @@ namespace BagSurvivor.UI
             if (retryButton != null) retryButton.onClick.AddListener(OnRetry);
         }
 
+        private void OnDestroy()
+        {
+            // 씬 전환 등 외부 경로로 오브젝트가 파괴될 때 timeScale 복구
+            if (panel != null && panel.activeSelf)
+                Time.timeScale = 1f;
+        }
+
         /// <summary>결과 화면 표시. isClear=true 클리어, false 실패.</summary>
         public void Show(bool isClear, ResultStats s)
         {
@@ -87,6 +94,7 @@ namespace BagSurvivor.UI
         private void OnLobby()
         {
             Time.timeScale = 1f;
+            GameManager.Instance?.ClearLoadout();
             SceneManager.LoadScene(lobbySceneName);
         }
 
@@ -96,8 +104,9 @@ namespace BagSurvivor.UI
             Time.timeScale = 1f;
             if (GameManager.Instance != null)
             {
+                GameManager.Instance.ClearLoadout(); // 이전 런의 시너지·무기 루프 즉시 적용 방지
                 GameManager.Instance.currentFloor = 1;
-                GameManager.Instance.ResetGold(); // 새 런이므로 골드 초기화
+                GameManager.Instance.ResetGold();
             }
 
             // 시간 비례 난이도 타이머 초기화 (DontDestroyOnLoad로 유지되므로 명시적 리셋)

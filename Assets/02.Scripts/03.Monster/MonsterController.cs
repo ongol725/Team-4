@@ -536,15 +536,23 @@ namespace BagSurvivor.Monster
             SpawnDropItem();
 
             // 3-1. 사망 이벤트 통지 (분열 등 기믹이 사망 위치에서 반응). 풀 반환 전에 호출.
-            OnDeath?.Invoke(this);
-
-            // 4. 사망 통지 / 오브젝트 풀 반환
-            //    스폰 주체(RoomMonsterSpawner)가 콜백을 주입한 경우: 방 클리어 통지 + 풀 반환을 위임.
-            //    콜백이 없으면 기존 동작(비활성화)으로 폴백.
-            if (deathCallback != null)
-                deathCallback.Invoke(this);
-            else
-                gameObject.SetActive(false);
+            // try-finally: OnDeath 핸들러에서 예외가 발생해도 deathCallback이 반드시 실행되도록 보장
+            try
+            {
+                OnDeath?.Invoke(this);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[MonsterController] OnDeath 핸들러 예외: {e}");
+            }
+            finally
+            {
+                // 4. 사망 통지 / 오브젝트 풀 반환
+                if (deathCallback != null)
+                    deathCallback.Invoke(this);
+                else
+                    gameObject.SetActive(false);
+            }
         }
 
         /// <summary>

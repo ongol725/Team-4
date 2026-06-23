@@ -105,7 +105,8 @@ public class ItemInfoPopup : MonoBehaviour
 
     private IEnumerator HideAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay);
+        // timeScale=0(일시정지) 시에도 정상 동작하도록 실시간 대기 사용
+        yield return new WaitForSecondsRealtime(delay);
         _panelRT.gameObject.SetActive(false);
         _isVisible     = false;
         _hideCoroutine = null;

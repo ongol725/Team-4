@@ -6,12 +6,19 @@ using BagSurvivor.UI;
 
 /// <summary>
 /// 활성 시너지 목록(BattleLoadout.ActiveSynergies)을 받아
-/// 스킬형/소환형 시너지를 실행하는 메인 관리자.
+/// 트리거 타입별로 스킬형/소환형 시너지를 실행하는 메인 관리자.
 ///
-/// 사용법:
-///   씬의 아무 오브젝트에 부착.
-///   Inspector에서 _skillBindings, _summonBindings 배열에
-///   (SynergyType + SynergyGrade) → SO_SkillData / SO_SummonData 를 매핑한다.
+/// ▶ 트리거 타입
+///   AutoTimer  — 쿨타임마다 자동 발동 (암살단·일렉트로·처형자·소드마스터·티탄·마왕)
+///   OnHitTaken — 플레이어 피격 시 발동 (난공불락)
+///   OnMove     — 플레이어 이동 거리 누적 시 발동 (대부호)
+///   Passive    — 소환수/오브젝트를 전투 내내 유지 (핀볼·페어리·정령술사·성기사단)
+///   Penalty    — 브~골 패널티, 프리즘 초강력 발동 (과부화)
+///
+/// ▶ 스케일링 스탯
+///   WPN_ATK_SUM — 무기 공격력 총합
+///   WPN_ATK_AVG — 무기 공격력 평균
+///   ARM_HP_SUM  — 방어구 체력 총합 (난공불락)
 /// </summary>
 public class SynergyManager : MonoBehaviour
 {
@@ -28,10 +35,10 @@ public class SynergyManager : MonoBehaviour
     [System.Serializable]
     public class SynergySummonBinding
     {
-        public SynergyType  synergyType;
-        public SynergyGrade grade;
+        public SynergyType   synergyType;
+        public SynergyGrade  grade;
         public SO_SummonData summon;
-        public int          count = 1;
+        public int           count = 1;
     }
 
     [Header("스킬형 시너지 바인딩")]
@@ -45,19 +52,29 @@ public class SynergyManager : MonoBehaviour
 
     // ── 런타임 상태 ───────────────────────────────────────────────
 
-    private GameManager               _gm;
-    private Transform                 _player;
-    private BattleLoadout             _loadout;
-    private readonly List<Coroutine>  _skillRoutines = new();
-    private readonly List<SummonController> _summons = new();
-    private Transform                 _summonRoot;
+    private GameManager                  _gm;
+    private Transform                    _player;
+    private PlayerHealth                 _playerHealth;
+    private PlayerMovement               _playerMovement;
+    private BattleLoadout                _loadout;
+
+    private readonly List<Coroutine>         _skillRoutines = new();
+    private readonly List<SummonController>  _summons       = new();
+    private Transform                        _summonRoot;
+
+    // OnHitTaken 트리거 등록 목록 (난공불락)
+    private readonly List<(SO_SkillData skill, int dmg)> _onHitSkills = new();
+
+    // OnMove 트리거 누적 (대부호)
+    private readonly List<(SO_SkillData skill, int dmg)> _onMoveSkills = new();
+    private float _moveDistAccum = 0f;
+    private const float MoveDropInterval = 1f; // 1유닛 이동마다 골드 드랍
 
     // ─────────────────────────────────────────────────────────────
 
     private void Start()
     {
-        var playerGO = GameObject.FindWithTag("Player");
-        if (playerGO != null) _player = playerGO.transform;
+        FindPlayerRefs();
 
         _gm = GameManager.Instance;
         if (_gm != null)
@@ -73,6 +90,32 @@ public class SynergyManager : MonoBehaviour
     private void OnDestroy()
     {
         if (_gm != null) _gm.onLoadoutReady -= OnLoadoutReady;
+        UnsubscribePlayerEvents();
+        if (_playerHealth != null) _playerHealth.DamageReductionPct = 0f;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+
+    private void FindPlayerRefs()
+    {
+        var playerGO = GameObject.FindWithTag("Player");
+        if (playerGO == null) return;
+
+        _player         = playerGO.transform;
+        _playerHealth   = playerGO.GetComponent<PlayerHealth>();
+        _playerMovement = playerGO.GetComponent<PlayerMovement>();
+    }
+
+    private void SubscribePlayerEvents()
+    {
+        if (_playerHealth   != null) _playerHealth.onDamageTaken   += OnPlayerHit;
+        if (_playerMovement != null) _playerMovement.onDistanceMoved += OnPlayerMoved;
+    }
+
+    private void UnsubscribePlayerEvents()
+    {
+        if (_playerHealth   != null) _playerHealth.onDamageTaken   -= OnPlayerHit;
+        if (_playerMovement != null) _playerMovement.onDistanceMoved -= OnPlayerMoved;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -86,93 +129,257 @@ public class SynergyManager : MonoBehaviour
     /// <summary>로드아웃이 갱신될 때마다 기존 러너 제거 후 재구성</summary>
     private void Refresh()
     {
-        // 스킬 루프 중단
+        // 기존 루프/소환 전부 정리
         foreach (var co in _skillRoutines) if (co != null) StopCoroutine(co);
         _skillRoutines.Clear();
-
-        // 소환수 전부 제거
         foreach (var s in _summons) if (s != null) Destroy(s.gameObject);
         _summons.Clear();
+        // 코루틴 정리 직후 패널티 해제 — Refresh 도중 PenaltyLoop가 중단돼도 이동속도가 복구됨
+        RemoveOverloadPenalty();
+
+        UnsubscribePlayerEvents();
+        _onHitSkills.Clear();
+        _onMoveSkills.Clear();
+        _moveDistAccum = 0f;
+
+        // 패시브 피해 감소 초기화
+        if (_playerHealth != null) _playerHealth.DamageReductionPct = 0f;
 
         if (_loadout == null) return;
+        if (_player == null) FindPlayerRefs();
 
-        int totalWeaponAtk = 0;
-        foreach (var w in _loadout.Weapons) totalWeaponAtk += w.attackPower;
+        bool needHitEvent  = false;
+        bool needMoveEvent = false;
 
         foreach (var entry in _loadout.ActiveSynergies)
         {
-            // 스킬형
+            int dmgBase = 0;
+
+            // ── 스킬형 ─────────────────────────────────────────
             var skillBinding = FindSkillBinding(entry.type, entry.grade);
-            if (skillBinding != null)
+            if (skillBinding?.skill != null)
             {
-                var co = StartCoroutine(SkillLoop(skillBinding.skill, totalWeaponAtk));
-                _skillRoutines.Add(co);
-                Debug.Log($"[SynergyManager] 스킬 루프 시작: {entry.type} {entry.grade} — {skillBinding.skill.skillName}");
+                var skill = skillBinding.skill;
+                dmgBase = Mathf.RoundToInt(_loadout.GetScaledBase(skill.scalingStat) * skill.dmgMultiplier);
+
+                switch (skill.triggerType)
+                {
+                    case SynergyTriggerType.AutoTimer:
+                        _skillRoutines.Add(StartCoroutine(SkillLoop(skill, dmgBase)));
+                        Debug.Log($"[SynergyManager] AutoTimer: {entry.type} {entry.grade} — {skill.skillName}");
+                        break;
+
+                    case SynergyTriggerType.OnHitTaken:
+                        _onHitSkills.Add((skill, dmgBase));
+                        needHitEvent = true;
+                        Debug.Log($"[SynergyManager] OnHitTaken: {entry.type} {entry.grade} — {skill.skillName}");
+                        break;
+
+                    case SynergyTriggerType.OnMove:
+                        _onMoveSkills.Add((skill, dmgBase));
+                        needMoveEvent = true;
+                        Debug.Log($"[SynergyManager] OnMove: {entry.type} {entry.grade} — {skill.skillName}");
+                        break;
+
+                    case SynergyTriggerType.Penalty:
+                        _skillRoutines.Add(StartCoroutine(PenaltyLoop(skill, entry.grade, dmgBase)));
+                        Debug.Log($"[SynergyManager] Penalty: {entry.type} {entry.grade} — {skill.skillName}");
+                        break;
+
+                    case SynergyTriggerType.Passive:
+                        // Passive 스킬은 소환형과 함께 처리 (아래)
+                        break;
+                }
             }
 
-            // 소환형
+            // ── 소환형 ─────────────────────────────────────────
             var summonBinding = FindSummonBinding(entry.type, entry.grade);
-            if (summonBinding != null)
+            if (summonBinding?.summon != null)
             {
-                SpawnMinions(summonBinding.summon, summonBinding.count, totalWeaponAtk);
-                Debug.Log($"[SynergyManager] 소환수 스폰: {entry.type} {entry.grade} — {summonBinding.summon.summonName} x{summonBinding.count}");
+                var summon    = summonBinding.summon;
+                int summonAtk = Mathf.RoundToInt(_loadout.GetScaledBase(summon.scalingStat) * summon.atkMultiplier);
+                SpawnMinions(summon, summonBinding.count, summonAtk);
+                Debug.Log($"[SynergyManager] Summon: {entry.type} {entry.grade} — {summon.summonName} x{summonBinding.count}");
+            }
+        }
+
+        // 이벤트 구독
+        if (needHitEvent || needMoveEvent)
+            SubscribePlayerEvents();
+
+        // DamageReduction 패시브 집계 후 PlayerHealth에 적용 (난공불락)
+        if (_playerHealth != null)
+        {
+            float maxReduction = 0f;
+            foreach (var entry in _loadout.ActiveSynergies)
+            {
+                var sb = FindSkillBinding(entry.type, entry.grade);
+                if (sb?.skill != null && sb.skill.fixedEffect == FixedEffectType.DamageReduction)
+                    maxReduction = Mathf.Max(maxReduction, sb.skill.fixedEffectValue / 100f);
+            }
+            _playerHealth.DamageReductionPct = Mathf.Clamp01(maxReduction);
+            if (maxReduction > 0f)
+                Debug.Log($"[SynergyManager] 피해 감소 패시브 적용: {maxReduction * 100f:F0}%");
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 플레이어 이벤트 핸들러
+
+    private void OnPlayerHit(int dmgAmount)
+    {
+        foreach (var (skill, dmg) in _onHitSkills)
+            ExecuteSkill(skill, dmg);
+    }
+
+    private void OnPlayerMoved(float dist)
+    {
+        if (_onMoveSkills.Count == 0) return;
+        _moveDistAccum += dist;
+        while (_moveDistAccum >= MoveDropInterval)
+        {
+            _moveDistAccum -= MoveDropInterval;
+            foreach (var (skill, dmg) in _onMoveSkills)
+                ExecuteSkill(skill, dmg);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // AutoTimer 스킬 루프
+
+    private IEnumerator SkillLoop(SO_SkillData skill, int damage)
+    {
+        var wait     = new WaitForSeconds(skill.cooldown);
+        int hitCount = Mathf.Max(1, skill.hitCount);
+        var hitWait  = hitCount > 1 ? new WaitForSeconds(skill.hitInterval) : null;
+        while (true)
+        {
+            yield return wait;
+            for (int h = 0; h < hitCount; h++)
+            {
+                ExecuteSkill(skill, damage);
+                if (h < hitCount - 1) yield return hitWait;
             }
         }
     }
 
     // ─────────────────────────────────────────────────────────────
-    // 스킬 루프
+    // Penalty 루프 (과부화)
 
-    private IEnumerator SkillLoop(SO_SkillData skill, int weaponAtk)
+    private IEnumerator PenaltyLoop(SO_SkillData skill, SynergyGrade grade, int damage)
     {
-        int damage = Mathf.RoundToInt(weaponAtk * skill.dmgMultiplier);
-        var wait   = new WaitForSeconds(skill.cooldown);
-
-        while (true)
+        if (grade == SynergyGrade.Prism)
         {
-            yield return wait;
-            ExecuteSkill(skill, damage);
+            // 프리즘: 초강력 스킬 무한 발동
+            var wait = new WaitForSeconds(skill.cooldown > 0f ? skill.cooldown : 0.33f);
+            while (true)
+            {
+                ExecuteSkill(skill, damage);
+                yield return wait;
+            }
+        }
+        else
+        {
+            // 브론즈~골드: 10초마다 1초간 이동속도/피해량 50% 감소
+            var waitCycle   = new WaitForSeconds(10f);
+            var waitPenalty = new WaitForSeconds(1f);
+            float penaltyRate = skill.fixedEffectValue > 0f ? 1f - skill.fixedEffectValue / 100f : 0.5f;
+
+            while (true)
+            {
+                yield return waitCycle;
+                ApplyOverloadPenalty(penaltyRate);
+                yield return waitPenalty;
+                RemoveOverloadPenalty();
+            }
         }
     }
+
+    private void ApplyOverloadPenalty(float speedRate)
+    {
+        if (_playerMovement != null)
+            _playerMovement.speedMultiplier = speedRate;
+        Debug.Log($"[과부화] 패널티 발동 (이동속도 ×{speedRate:F2})");
+    }
+
+    private void RemoveOverloadPenalty()
+    {
+        if (_playerMovement != null)
+            _playerMovement.speedMultiplier = 1f;
+        Debug.Log("[과부화] 패널티 해제");
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 스킬 실행
 
     private void ExecuteSkill(SO_SkillData skill, int damage)
     {
         if (_player == null) return;
 
-        var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius);
         Vector3 vfxPos = _player.position;
 
         switch (skill.targetType)
         {
             case SkillTargetType.RandomEnemy:
-                if (enemies.Count > 0)
+            {
+                var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 50f : skill.rangeRadius);
+                int count   = skill.extraCount > 0 ? skill.extraCount : 1;
+                for (int i = 0; i < count && enemies.Count > 0; i++)
                 {
                     var target = enemies[Random.Range(0, enemies.Count)];
                     vfxPos = target.transform.position;
                     HitEnemy(skill, target, damage);
+                    enemies.Remove(target);
                 }
                 break;
+            }
 
             case SkillTargetType.AreaCenter:
             case SkillTargetType.Self:
+            {
+                var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius);
                 foreach (var mc in enemies) HitEnemy(skill, mc, damage);
-                // AoE는 플레이어 중심에 표시
                 break;
+            }
 
             case SkillTargetType.Forward:
-                MonsterController nearest = null;
-                float minD = float.MaxValue;
-                foreach (var mc in enemies)
-                {
-                    float d = Vector2.Distance(_player.position, mc.transform.position);
-                    if (d < minD) { minD = d; nearest = mc; }
-                }
+            {
+                var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 20f : skill.rangeRadius);
+                MonsterController nearest = FindNearest(enemies, _player.position);
+                if (nearest != null) { vfxPos = nearest.transform.position; HitEnemy(skill, nearest, damage); }
+                break;
+            }
+
+            case SkillTargetType.ForwardDual:
+            {
+                // 좌·우 방향으로 각각 가장 가까운 적 타격 (처형자)
+                var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 20f : skill.rangeRadius);
+                MonsterController nearest = FindNearest(enemies, _player.position);
                 if (nearest != null)
                 {
                     vfxPos = nearest.transform.position;
                     HitEnemy(skill, nearest, damage);
+                    // 두 번째 타격: 첫 번째와 다른 적
+                    enemies.Remove(nearest);
+                    MonsterController second = FindNearest(enemies, _player.position);
+                    if (second != null) HitEnemy(skill, second, damage);
                 }
                 break;
+            }
+
+            case SkillTargetType.ForwardTriple:
+            {
+                var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 20f : skill.rangeRadius);
+                for (int i = 0; i < 3 && enemies.Count > 0; i++)
+                {
+                    MonsterController t = FindNearest(enemies, _player.position);
+                    if (t == null) break;
+                    if (i == 0) vfxPos = t.transform.position;
+                    HitEnemy(skill, t, damage);
+                    enemies.Remove(t);
+                }
+                break;
+            }
         }
 
         SpawnVFX(skill, vfxPos);
@@ -180,42 +387,72 @@ public class SynergyManager : MonoBehaviour
 
     private void HitEnemy(SO_SkillData skill, MonsterController mc, int damage)
     {
-        Vector2 kb = ((Vector2)mc.transform.position - (Vector2)_player.position).normalized;
-        float kbForce = skill.statusEffect == StatusEffectType.Knockback ? skill.effectValue : 0f;
+        // 처형자 즉사 판정
+        if (skill.fixedEffect == FixedEffectType.InstantDeath && skill.fixedEffectValue > 0f)
+        {
+            float hpRatio = mc.HpRatio; // 0~1
+            if (hpRatio <= skill.fixedEffectValue / 100f)
+            {
+                mc.TakeDamage(999999, 0f, Vector2.zero);
+                return;
+            }
+        }
+
+        // Burn DoT — 초당 피해량의 20% × 3초
+        if (skill.fixedEffect == FixedEffectType.Burn)
+            StartCoroutine(ApplyBurn(mc, Mathf.Max(1, damage / 5), 3f, 1f));
+
+        Vector2 kb      = ((Vector2)mc.transform.position - (Vector2)_player.position).normalized;
+        float kbForce   = skill.fixedEffect == FixedEffectType.Knockback ? skill.fixedEffectValue : 0f;
         mc.TakeDamage(damage, kbForce, kb);
     }
+
+    private IEnumerator ApplyBurn(MonsterController mc, int dmgPerTick, float duration, float interval)
+    {
+        float elapsed = 0f;
+        var wait = new WaitForSeconds(interval);
+        while (elapsed < duration)
+        {
+            yield return wait;
+            // 대기 후 null/사망 체크를 TakeDamage 직전에 수행 (레이스 컨디션 방지)
+            if (mc == null || mc.IsDead || !mc.gameObject.activeInHierarchy) yield break;
+            elapsed += interval;
+            mc.TakeDamage(dmgPerTick, 0f, Vector2.zero);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // VFX
 
     private void SpawnVFX(SO_SkillData skill, Vector3 pos)
     {
         if (skill.vfxPrefab != null)
         {
             var vfx = Instantiate(skill.vfxPrefab, pos, Quaternion.identity);
-            float lifetime = skill.duration > 0f ? skill.duration : 2f;
-            Destroy(vfx, lifetime);
+            Destroy(vfx, skill.duration > 0f ? skill.duration : 2f);
             return;
         }
-
-        // 테스트용: VFX 없을 때 색상 원으로 대체
         StartCoroutine(PlaceholderVFX(pos, skill.rangeRadius));
     }
 
     private IEnumerator PlaceholderVFX(Vector3 pos, float radius)
     {
         var go = new GameObject("VFX_Placeholder");
+        go.transform.SetParent(transform); // SynergyManager 파괴 시 자동 소멸
         go.transform.position = pos;
 
-        var sr = go.AddComponent<SpriteRenderer>();
+        var sr  = go.AddComponent<SpriteRenderer>();
         var tex = new Texture2D(64, 64);
         for (int y = 0; y < 64; y++)
         for (int x = 0; x < 64; x++)
         {
             float dx = x - 32f, dy = y - 32f;
             float dist = Mathf.Sqrt(dx * dx + dy * dy);
-            float alpha = dist < 28f ? 1f : (dist < 32f ? (32f - dist) / 4f : 0f);
+            float alpha = dist < 28f ? 1f : dist < 32f ? (32f - dist) / 4f : 0f;
             tex.SetPixel(x, y, new Color(1f, 0.9f, 0.1f, alpha));
         }
         tex.Apply();
-        sr.sprite = Sprite.Create(tex, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f), 64f);
+        sr.sprite       = Sprite.Create(tex, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f), 64f);
         sr.sortingOrder = 10;
         float scale = Mathf.Max(0.5f, radius * 0.08f);
         go.transform.localScale = Vector3.one * scale;
@@ -224,8 +461,7 @@ public class SynergyManager : MonoBehaviour
         while (elapsed < 0.4f)
         {
             elapsed += Time.deltaTime;
-            float a = Mathf.Lerp(0.8f, 0f, elapsed / 0.4f);
-            sr.color = new Color(1f, 1f, 1f, a);
+            sr.color = new Color(1f, 1f, 1f, Mathf.Lerp(0.8f, 0f, elapsed / 0.4f));
             yield return null;
         }
         Destroy(go);
@@ -234,30 +470,20 @@ public class SynergyManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 소환형
 
-    private void SpawnMinions(SO_SummonData data, int count, int weaponAtk)
+    private void SpawnMinions(SO_SummonData data, int count, int atkPower)
     {
-        if (_player == null)
-        {
-            var p = GameObject.FindWithTag("Player");
-            if (p != null) _player = p.transform;
-        }
+        if (_player == null) FindPlayerRefs();
         if (_player == null) return;
-
-        int minionAtk = Mathf.RoundToInt(weaponAtk * data.atkMultiplier);
 
         for (int i = 0; i < count; i++)
         {
             Vector2 offset = Random.insideUnitCircle.normalized * 1.5f;
-            Vector3 pos    = _player != null
-                ? _player.position + (Vector3)offset
-                : (Vector3)offset;
-
             var go = new GameObject($"Summon_{data.summonID}_{i}");
             go.transform.SetParent(_summonRoot);
-            go.transform.position = pos;
+            go.transform.position = _player.position + (Vector3)offset;
 
             var sc = go.AddComponent<SummonController>();
-            sc.Init(data, _player, minionAtk, _enemyLayer);
+            sc.Init(data, _player, atkPower, _enemyLayer);
             _summons.Add(sc);
         }
     }
@@ -284,22 +510,31 @@ public class SynergyManager : MonoBehaviour
     private List<MonsterController> GetEnemiesInRange(Vector3 center, float range)
     {
         var result = new List<MonsterController>();
-
-        // 몬스터 콜라이더가 IsTrigger=true 이므로 ContactFilter2D.useTriggers 필수
-        var filter = new ContactFilter2D();
-        filter.useTriggers = true;
+        var filter = new ContactFilter2D { useTriggers = true };
         if (_enemyLayer != 0) filter.SetLayerMask(_enemyLayer);
-        else                  filter = ContactFilter2D.noFilter;
+        else filter = ContactFilter2D.noFilter;
 
         var cols = new List<Collider2D>();
         Physics2D.OverlapCircle((Vector2)center, range, filter, cols);
-
         foreach (var h in cols)
         {
             var mc = h.GetComponent<MonsterController>()
                   ?? h.GetComponentInParent<MonsterController>();
-            if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy) result.Add(mc);
+            if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy)
+                result.Add(mc);
         }
         return result;
+    }
+
+    private MonsterController FindNearest(List<MonsterController> list, Vector3 from)
+    {
+        MonsterController best = null;
+        float minD = float.MaxValue;
+        foreach (var mc in list)
+        {
+            float d = Vector2.Distance(from, mc.transform.position);
+            if (d < minD) { minD = d; best = mc; }
+        }
+        return best;
     }
 }

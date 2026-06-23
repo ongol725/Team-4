@@ -7,6 +7,7 @@ public class SummonController : MonoBehaviour
 {
     private SO_SummonData _data;
     private Transform     _player;
+    private PlayerHealth  _playerHealth;
     private int           _attackPower;
     private LayerMask     _enemyLayer;
 
@@ -30,17 +31,28 @@ public class SummonController : MonoBehaviour
     private float _orbitAngle;
     private const float OrbitRadius = 2.5f;
 
+    // Bounce 전용
+    private Vector2 _bounceVel;
+    private const float BounceContactRadius = 0.6f;
+
+    // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
+    private Camera _mainCam;
+    // 메모리: Init에서 생성한 임시 Texture2D를 OnDestroy에서 명시적으로 해제
+    private Texture2D _runtimeTex;
+
     // ─────────────────────────────────────────────────────────────
 
     public void Init(SO_SummonData data, Transform player, int attackPower, LayerMask enemyLayer)
     {
-        _data        = data;
-        _player      = player;
-        _attackPower = attackPower;
-        _enemyLayer  = enemyLayer;
+        _data         = data;
+        _player       = player;
+        _playerHealth = player.GetComponent<PlayerHealth>();
+        _attackPower  = attackPower;
+        _enemyLayer   = enemyLayer;
 
         _atkTimer         = 0f;
         _uniqueSkillTimer = 0f;
+        _mainCam          = Camera.main;
 
         if (data.modelPrefab != null)
         {
@@ -67,21 +79,31 @@ public class SummonController : MonoBehaviour
             else
             {
                 // 전용 이미지 없을 때 흰색 원 (임시 placeholder)
-                var tex = new Texture2D(32, 32);
+                _runtimeTex = new Texture2D(32, 32);
                 for (int y = 0; y < 32; y++)
                 for (int x = 0; x < 32; x++)
                 {
                     float dx = x - 16f, dy = y - 16f;
-                    tex.SetPixel(x, y, Mathf.Sqrt(dx * dx + dy * dy) < 14f ? Color.white : Color.clear);
+                    _runtimeTex.SetPixel(x, y, Mathf.Sqrt(dx * dx + dy * dy) < 14f ? Color.white : Color.clear);
                 }
-                tex.Apply();
-                sr.sprite = Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 32f);
+                _runtimeTex.Apply();
+                sr.sprite = Sprite.Create(_runtimeTex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 32f);
                 sr.color  = Color.white;
             }
         }
 
         // 초기 배회 목적지 설정
         PickNewWanderDest();
+
+        // Bounce 초기 방향 설정
+        if (data.aiType == SummonAIType.Bounce)
+            _bounceVel = Random.insideUnitCircle.normalized * data.moveSpeed;
+    }
+
+    private void OnDestroy()
+    {
+        // Init에서 생성한 임시 Texture2D 명시적 해제 (메모리 누수 방지)
+        if (_runtimeTex != null) Destroy(_runtimeTex);
     }
 
     private void Update()
@@ -96,6 +118,7 @@ public class SummonController : MonoBehaviour
             case SummonAIType.FollowAttack: UpdateFollowAttack(); break;
             case SummonAIType.OrbitPlayer:  UpdateOrbitPlayer();  break;
             case SummonAIType.Stationary:   UpdateStationary();   break;
+            case SummonAIType.Bounce:       UpdateBounce();       break;
         }
 
         if (_data.uniqueSkill != null && _uniqueSkillTimer >= _data.uniqueSkillCooldown)
@@ -219,14 +242,81 @@ public class SummonController : MonoBehaviour
 
     private void UpdateStationary()
     {
+        if (_atkTimer < _data.atkCooldown) return;
+        _atkTimer = 0f;
+
+        // 성기사단 성역: 플레이어 체력 회복 (HealArmorHpPct)
+        if (_data.fixedEffect == FixedEffectType.HealArmorHpPct && _playerHealth != null)
+        {
+            int armorHp  = GameManager.Instance?.CurrentLoadout?.TotalArmorHp ?? 0;
+            int healAmt  = Mathf.Max(1, Mathf.RoundToInt(armorHp * _data.fixedEffectValue / 100f));
+            _playerHealth.Heal(healAmt);
+        }
+
+        // 일반 근거리 공격
+        var target = FindNearest(_data.atkRange);
+        if (target != null)
+        {
+            Vector2 kb = ((Vector2)target.transform.position - (Vector2)transform.position).normalized;
+            target.TakeDamage(_attackPower, 1f, kb);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Bounce (핀볼)
+
+    private void UpdateBounce()
+    {
+        // 이동
+        transform.position += (Vector3)(_bounceVel * Time.deltaTime);
+
+        // 카메라 경계에서 반사 (Camera.main 대신 캐싱된 _mainCam 사용)
+        var cam = _mainCam != null ? _mainCam : (_mainCam = Camera.main);
+        if (cam != null)
+        {
+            float halfH  = cam.orthographicSize;
+            float halfW  = halfH * cam.aspect;
+            var   camPos = cam.transform.position;
+            var   pos    = (Vector2)transform.position;
+
+            if (pos.x < camPos.x - halfW || pos.x > camPos.x + halfW)
+            {
+                _bounceVel.x = -_bounceVel.x;
+                transform.position = new Vector3(
+                    Mathf.Clamp(pos.x, camPos.x - halfW, camPos.x + halfW),
+                    pos.y, 0f);
+            }
+            if (pos.y < camPos.y - halfH || pos.y > camPos.y + halfH)
+            {
+                _bounceVel.y = -_bounceVel.y;
+                transform.position = new Vector3(
+                    transform.position.x,
+                    Mathf.Clamp(pos.y, camPos.y - halfH, camPos.y + halfH), 0f);
+            }
+        }
+
+        // 플레이어 리셀 (너무 멀어지면 복귀)
+        if (Vector2.Distance(transform.position, _player.position) > LeashRange * 3f)
+        {
+            transform.position = _player.position;
+            _bounceVel = Random.insideUnitCircle.normalized * _data.moveSpeed;
+        }
+
+        // 접촉 피해
         if (_atkTimer >= _data.atkCooldown)
         {
-            var target = FindNearest(_data.atkRange);
-            if (target != null)
+            var enemies = GetEnemiesInRange(BounceContactRadius);
+            if (enemies.Count > 0)
             {
                 _atkTimer = 0f;
-                Vector2 kb = ((Vector2)target.transform.position - (Vector2)transform.position).normalized;
-                target.TakeDamage(_attackPower, 1f, kb);
+                foreach (var mc in enemies)
+                {
+                    Vector2 kb = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
+                    mc.TakeDamage(_attackPower, 2f, kb);
+                }
+                // 적 충돌 시에도 방향 반사 (첫 번째 적 기준)
+                Vector2 toEnemy = ((Vector2)enemies[0].transform.position - (Vector2)transform.position).normalized;
+                _bounceVel = Vector2.Reflect(_bounceVel, -toEnemy).normalized * _data.moveSpeed;
             }
         }
     }
@@ -267,7 +357,7 @@ public class SummonController : MonoBehaviour
     private void ApplySkillHit(SO_SkillData skill, MonsterController mc, int damage)
     {
         Vector2 kb = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
-        float kbForce = skill.statusEffect == StatusEffectType.Knockback ? skill.effectValue : 0f;
+        float kbForce = skill.fixedEffect == FixedEffectType.Knockback ? skill.fixedEffectValue : 0f;
         mc.TakeDamage(damage, kbForce, kb);
     }
 

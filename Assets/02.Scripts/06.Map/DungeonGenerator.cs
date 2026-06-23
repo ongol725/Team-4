@@ -106,6 +106,23 @@ public class DungeonGenerator : MonoBehaviour
                 Destroy(t.GetChild(i).gameObject);
         }
 
+        // 3-a. 살아있는 몬스터 정리 (이전 층 몬스터가 다음 층에 잔류하는 Critical 버그 방지)
+        {
+            var pool = BagSurvivor.Monster.MonsterPool.Instance;
+            var monsters = FindObjectsByType<BagSurvivor.Monster.MonsterController>(FindObjectsSortMode.None);
+            foreach (var m in monsters)
+            {
+                if (pool != null) pool.Return(m);
+                else Destroy(m.gameObject);
+            }
+        }
+
+        // 3-b. 비행 중인 투사체 정리
+        {
+            var projs = FindObjectsByType<ProjectileBase>(FindObjectsSortMode.None);
+            foreach (var p in projs) Destroy(p.gameObject);
+        }
+
         // 4. 층수 동기화 후 재생성
         if (GameManager.Instance != null)
             currentFloor = GameManager.Instance.currentFloor;

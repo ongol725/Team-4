@@ -87,7 +87,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void RestartLoops()
     {
-        foreach (var co in _loops) if (co != null) StopCoroutine(co);
+        // StopAllCoroutines: AttackMeleeBurst, AttackBurst, DelayedFanDir 등
+        // _loops 밖에서 기동된 서브 코루틴도 함께 중단
+        StopAllCoroutines();
         _loops.Clear();
 
         Debug.Log($"[PlayerAttack] RestartLoops — inCombat={_inCombatZone}, paused={_paused}, loadout={_currentLoadout != null}, weapons={_currentLoadout?.Weapons.Count ?? 0}");
@@ -100,17 +102,19 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator AttackLoop(WeaponLoadoutEntry entry)
     {
-        bool  g5         = entry.effectiveGrade >= 4;
-        string id        = entry.data.itemID;
-        float  baseAps   = _stats != null ? _stats.attackSpeed : 1f;
-        float  weaponAps = entry.attackSpeed > 0f ? entry.attackSpeed : 1f;
+        bool  g5           = entry.effectiveGrade >= 4;
+        string id          = entry.data.itemID;
+        float  baseAps     = _stats != null ? _stats.attackSpeed : 1f;
+        float  weaponAps   = entry.attackSpeed > 0f ? entry.attackSpeed : 1f;
+        float  charSpeedMul = _stats != null ? _stats.attackSpeedMultiplier : 1f;
 
         // 5단계 공격 속도 보정
         float spdBoost = 1f;
         if (g5 && id == "WPN_009") spdBoost = 1f / 0.85f; // 활: 쿨타임 -15%
         if (g5 && id == "WPN_020") spdBoost = 1.3f;        // 카타나: 공속 +30%
 
-        float interval = 1f / (baseAps * weaponAps * spdBoost);
+        // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율
+        float interval = 1f / (baseAps * weaponAps * spdBoost * charSpeedMul);
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
         var wait = new WaitForSeconds(interval);
@@ -350,10 +354,11 @@ public class PlayerAttack : MonoBehaviour
             ? GetEnemiesInRange(range)
             : FindInFan(facing, range, angleDeg);
 
+        int meleeDmg = ScaleDamage(entry.attackPower);
         foreach (var mc in enemies)
         {
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
-            mc.TakeDamage(entry.attackPower, knockback, kbDir);
+            mc.TakeDamage(meleeDmg, knockback, kbDir);
         }
         StartCoroutine(ShowMeleeFlash(entry.data, facing, range, flashScale));
     }
@@ -374,7 +379,7 @@ public class PlayerAttack : MonoBehaviour
 
         if (target != null)
         {
-            target.TakeDamage(entry.attackPower, _meleeKnockback, dir);
+            target.TakeDamage(ScaleDamage(entry.attackPower), _meleeKnockback, dir);
 
             if (splash)
             {
@@ -382,7 +387,7 @@ public class PlayerAttack : MonoBehaviour
                 {
                     if (mc == target) continue;
                     Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
-                    mc.TakeDamage(entry.attackPower / 2, _meleeKnockback * 0.5f, kbDir);
+                    mc.TakeDamage(ScaleDamage(entry.attackPower, 0.5f), _meleeKnockback * 0.5f, kbDir);
                 }
             }
         }
@@ -454,7 +459,7 @@ public class PlayerAttack : MonoBehaviour
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
         float speed    = rawSpeed * spdMult;
         float lifetime = wd.range > 0 ? (float)wd.range / rawSpeed : 3f;
-        int   damage   = Mathf.RoundToInt(entry.attackPower * dmgMult);
+        int   damage   = ScaleDamage(entry.attackPower, dmgMult);
         int   maxHits  = wd.maxTargets > 0 ? wd.maxTargets : 1; // 0 = 기본 1타
         if (wd.projectileData != null) maxHits += wd.projectileData.pierceCount;
         maxHits += pierce;
@@ -464,6 +469,11 @@ public class PlayerAttack : MonoBehaviour
             : BuildTempGO(wd.itemImage, wd.itemName);
 
         go.transform.position = transform.position; // BuildTempGO는 위치를 설정하지 않으므로 항상 보정
+
+        // BuildTempGO는 아이콘 크기 기반으로 내부 localScale을 설정하므로
+        // scaleMult를 적용하기 전에 Vector3.one으로 초기화해 이중 배율 방지
+        if (wd.projectile == null)
+            go.transform.localScale = Vector3.one;
 
         if (scaleMult != 1f)
             go.transform.localScale *= scaleMult;
@@ -480,7 +490,20 @@ public class PlayerAttack : MonoBehaviour
         sr.sprite       = icon;
         sr.color        = icon != null ? Color.white : new Color(1f, 0.8f, 0.2f);
         sr.sortingOrder = 10;
-        go.transform.localScale = Vector3.one * 0.4f;
+
+        // 아이콘 스프라이트의 실제 월드 크기에 관계없이 투사체를 0.4 유닛으로 고정
+        // (UI용 아이콘은 PPU가 낮아 스케일 0.4f 고정 시 과도하게 커질 수 있음)
+        if (icon != null)
+        {
+            float maxExtent = Mathf.Max(icon.bounds.extents.x, icon.bounds.extents.y);
+            go.transform.localScale = maxExtent > 0.001f
+                ? Vector3.one * (0.2f / maxExtent)
+                : Vector3.one * 0.4f;
+        }
+        else
+        {
+            go.transform.localScale = Vector3.one * 0.4f;
+        }
 
         var rb          = go.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
@@ -577,5 +600,12 @@ public class PlayerAttack : MonoBehaviour
         float rad = deg * Mathf.Deg2Rad;
         float cos = Mathf.Cos(rad), sin = Mathf.Sin(rad);
         return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+    }
+
+    /// <summary>무기 기본 데미지에 캐릭터 공격 배율과 추가 배율을 곱해 최종 데미지를 반환.</summary>
+    private int ScaleDamage(int baseDamage, float extraMult = 1f)
+    {
+        float charMul = _stats != null ? _stats.attackMultiplier : 1f;
+        return Mathf.RoundToInt(baseDamage * charMul * extraMult);
     }
 }

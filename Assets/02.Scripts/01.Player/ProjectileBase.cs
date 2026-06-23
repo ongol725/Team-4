@@ -5,7 +5,7 @@ using BagSurvivor.Monster;
 public class ProjectileBase : MonoBehaviour
 {
     private int   _damage;
-    private int   _remainingHits;
+    private int   _remainingHits = 1; // Init 이전 충돌 시 즉시 파괴 방지
     private float _knockbackForce;
 
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits, float knockbackForce = 0f)

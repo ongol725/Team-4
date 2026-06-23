@@ -41,6 +41,12 @@ namespace BagSurvivor.UI
 
         private bool isPaused;
 
+        private void OnDestroy()
+        {
+            // 씬 전환 등 외부 경로로 파괴될 때 timeScale 복구
+            if (isPaused) Time.timeScale = 1f;
+        }
+
         private void Awake()
         {
             // 버튼 라벨 (스트링 테이블)
@@ -133,6 +139,7 @@ namespace BagSurvivor.UI
         private void OnLobbyConfirm()
         {
             Time.timeScale = 1f; // 다음 씬이 멈춘 채 시작하지 않도록 복구
+            GameManager.Instance?.ClearLoadout();
             SceneManager.LoadScene(lobbySceneName);
         }
 

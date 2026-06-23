@@ -15,11 +15,15 @@ public class PlayerMovement : MonoBehaviour
     private bool isStunned = false;
     private bool _inventoryOpen = false;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
         if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+    }
+
+    void Start()
+    {
         if (moveAction != null) moveAction.action.Enable();
 
         InventoryPopupToggle.onPopupToggled += OnInventoryToggled;
