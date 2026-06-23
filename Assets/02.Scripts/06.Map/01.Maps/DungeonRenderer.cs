@@ -78,7 +78,7 @@ public class DungeonRenderer : MonoBehaviour
     }
 
     // 완성된 mapData를 바탕으로 실제 타일맵에 타일을 렌더링합니다.
-    public void RenderTilemap(int[,] mapData, int mapWidth, int mapHeight, int currentFloor)
+    public void RenderTilemap(int[,] mapData, int mapWidth, int mapHeight, int currentFloor, bool[,] corridorMask = null)
     {
         if (floorTilemap != null) 
         {
@@ -137,7 +137,7 @@ public class DungeonRenderer : MonoBehaviour
                 {
                     if (useAdvancedAutoTiling && activeWallSprites != null && activeWallSprites.Length >= 9)
                     {
-                        Sprite wallSprite = GetOrientedWallSprite(mapData, x, y, mapWidth, mapHeight, activeWallSprites);
+                        Sprite wallSprite = GetOrientedWallSprite(mapData, x, y, mapWidth, mapHeight, activeWallSprites, corridorMask);
                         if (wallSprite != null)
                         {
                             if (!tileCache.ContainsKey(wallSprite))
@@ -197,7 +197,7 @@ public class DungeonRenderer : MonoBehaviour
     }
 
     // 비트마스크(Bitmask)를 이용해 맵 데이터를 분석하여 올바른 벽 스프라이트를 반환합니다.
-    private Sprite GetOrientedWallSprite(int[,] mapData, int x, int y, int w, int h, Sprite[] sprites)
+    private Sprite GetOrientedWallSprite(int[,] mapData, int x, int y, int w, int h, Sprite[] sprites, bool[,] corridorMask = null)
     {
         // 주변 8방향의 벽(Wall) 여부를 확인합니다.
         // IsWall은 맵 밖이거나 바닥(1)이 아니면 true(벽)를 반환합니다.
@@ -233,12 +233,18 @@ public class DungeonRenderer : MonoBehaviour
 
         // 3. 2방향 벽인 경우 (내부 코너) - 내부 코너 전용 타일이 없으므로, 통짜 벽(■) 대신
         //    직선 외곽 벽 타일로 처리해 복도-방 연결부를 매끄럽게 잇는다.
-        // N+E: 안쪽 대각 SE가 벽이면 방 코너(┐), 바닥이면 위로 가는 복도 입구(직선+정면)
+        // N+E: 서쪽(안쪽)이 복도면 복도 입구->직선, 방이면 방 위벽 끝->코너(┐)
         if ((pattern & mask_cardinal) == (2 | 16))
-            return (pattern & 128) != 0 ? sprites[2] : sprites[1]; // SE벽 -> TR ┐ _4, 아니면 Top 직선
-        // N+W: 안쪽 대각 SW가 벽이면 방 코너(┌), 바닥이면 위로 가는 복도 입구(직선+정면)
+        {
+            bool corridorSide = corridorMask != null && x - 1 >= 0 && corridorMask[x - 1, y];
+            return corridorSide ? sprites[1] : sprites[2]; // 복도->Top 직선, 방끝->TR ┐ _4
+        }
+        // N+W: 동쪽(안쪽)이 복도면 복도 입구->직선, 방이면 방 위벽 끝->코너(┌)
         if ((pattern & mask_cardinal) == (2 | 8))
-            return (pattern & 32) != 0 ? sprites[0] : sprites[1];  // SW벽 -> TL ┌ _2, 아니면 Top 직선
+        {
+            bool corridorSide = corridorMask != null && x + 1 < w && corridorMask[x + 1, y];
+            return corridorSide ? sprites[1] : sprites[0]; // 복도->Top 직선, 방끝->TL ┌ _2
+        }
         // 아래로 가는 복도(S+W/S+E): 외부 코너 타일로 꺾어줌 (사용자 지정 _2/_4)
         if ((pattern & mask_cardinal) == (64 | 8))  return sprites[0]; // S+W 벽(왼쪽 꺾임)  -> TL 코너(┌) _2
         if ((pattern & mask_cardinal) == (64 | 16)) return sprites[2]; // S+E 벽(오른쪽 꺾임) -> TR 코너(┐) _4

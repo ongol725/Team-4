@@ -51,6 +51,7 @@ public class DungeonGenerator : MonoBehaviour
     //private int mapWidth = 150;
     //private int mapHeight = 150;
     private int[,] mapData;      // 0: 빈공간, 1: 바닥(방 및 복도), 3: 벽
+    private bool[,] corridorMask; // true: 복도 바닥 (방 벽 / 복도 벽 구분용)
     private List<Room> generatedRooms = new List<Room>();
 
     // ==========================================
@@ -114,6 +115,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         // 데이터 초기화
         mapData = new int[mapWidth, mapHeight];
+        corridorMask = new bool[mapWidth, mapHeight];
         generatedRooms.Clear();
 
 
@@ -161,7 +163,7 @@ public class DungeonGenerator : MonoBehaviour
         if (dungeonRenderer != null)
         {
             dungeonRenderer.GenerateWalls(mapData, mapWidth, mapHeight);
-            dungeonRenderer.RenderTilemap(mapData, mapWidth, mapHeight, currentFloor);
+            dungeonRenderer.RenderTilemap(mapData, mapWidth, mapHeight, currentFloor, corridorMask);
         }
 
         //타일맵 렌더링 후 함정 및 추가 요소 배치
@@ -332,6 +334,11 @@ public class DungeonGenerator : MonoBehaviour
             if (!CorridorConnectsToFloor(corridor, dir)) return false;
 
             WriteRect(corridor, 1);
+            // 복도 영역을 마스크에 기록 (방 벽 / 복도 벽 구분용)
+            for (int cx = corridor.xMin; cx < corridor.xMax; cx++)
+                for (int cy = corridor.yMin; cy < corridor.yMax; cy++)
+                    if (cx >= 0 && cx < mapWidth && cy >= 0 && cy < mapHeight)
+                        corridorMask[cx, cy] = true;
             
             Room newGeneratedRoom = new Room { bounds = newRoom, type = RoomType.Normal };
             newGeneratedRoom.shape = (RoomShape)Random.Range(0, 6);
