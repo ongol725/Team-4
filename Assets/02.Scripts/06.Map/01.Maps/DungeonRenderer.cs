@@ -236,9 +236,9 @@ public class DungeonRenderer : MonoBehaviour
         // 위로 가는 복도(N+E/N+W): 정면(face)이 이어지므로 직선 윗면으로 통일
         if ((pattern & mask_cardinal) == (2 | 16)) return sprites[1];  // N+E 벽 -> Top 직선(─)
         if ((pattern & mask_cardinal) == (2 | 8))  return sprites[1];  // N+W 벽 -> Top 직선(─)
-        // 아래로 가는 복도(S+W/S+E): 정면이 없으므로 외부 코너 타일로 꺾어줌
-        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[6]; // S+W 벽(안쪽 NE) -> BL 코너(└) _39
-        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[8]; // S+E 벽(안쪽 NW) -> BR 코너(┘) _23
+        // 아래로 가는 복도(S+W/S+E): 외부 코너 타일로 꺾어줌 (사용자 지정 _2/_4)
+        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[0]; // S+W 벽(왼쪽 꺾임)  -> TL 코너(┌) _2
+        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[2]; // S+E 벽(오른쪽 꺾임) -> TR 코너(┐) _4
 
         // 4. 예외: 1블록 두께 벽 (방과 방 사이 1칸 띄워진 곳 등, 거의 발생 안 함)
         if ((pattern & mask_cardinal) == (8 | 16)) return sprites[1]; // 가로 1칸 벽 -> Top Outer
