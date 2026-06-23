@@ -91,11 +91,14 @@ public class DungeonGenerator : MonoBehaviour
     // 같은 씬에서 맵을 초기화하고 다시 생성합니다.
     public void RegenerateDungeon()
     {
-        // 1. RoomControllers 및 하위 오브젝트 (문, 계단) 제거
+        // 1. 이전 층 드랍 골드 수거 (GoldDropManager 풀로 반환)
+        BagSurvivor.Items.GoldDropManager.Instance?.ClearAllDropped();
+
+        // 2. RoomControllers 및 하위 오브젝트 (문, 계단) 제거
         GameObject roomControllers = GameObject.Find("RoomControllers");
         if (roomControllers != null) Destroy(roomControllers);
 
-        // 2. floorTilemap 자식 오브젝트 제거 (함정 등)
+        // 3. floorTilemap 자식 오브젝트 제거 (함정 등)
         if (dungeonRenderer != null && dungeonRenderer.floorTilemap != null)
         {
             Transform t = dungeonRenderer.floorTilemap.transform;
@@ -103,7 +106,7 @@ public class DungeonGenerator : MonoBehaviour
                 Destroy(t.GetChild(i).gameObject);
         }
 
-        // 3. 층수 동기화 후 재생성
+        // 4. 층수 동기화 후 재생성
         if (GameManager.Instance != null)
             currentFloor = GameManager.Instance.currentFloor;
 
