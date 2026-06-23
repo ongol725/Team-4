@@ -206,9 +206,12 @@ public class DungeonRenderer : MonoBehaviour
         if ((pattern & mask_cardinal) == (2 | 64 | 8))  return sprites[3]; // E가 바닥 -> Left Outer (│)
         if ((pattern & mask_cardinal) == (2 | 64 | 16)) return sprites[5]; // W가 바닥 -> Right Outer (│)
 
-        // 3. 2방향 벽인 경우 (내부 코너) - 이 타일셋엔 내부 코너 전용 타일이 없으므로
-        //    별도 분기 없이 아래로 흘려보내 기본값(중앙 채우기 ■)으로 처리한다.
-        //    (내부 코너 타일이 있는 다른 타일셋을 쓸 경우 sprites[9~12] 분기를 추가)
+        // 3. 2방향 벽인 경우 (내부 코너) - 내부 코너 전용 타일이 없으므로, 통짜 벽(■) 대신
+        //    직선 외곽 벽 타일로 처리해 복도-방 연결부를 매끄럽게 잇는다.
+        if ((pattern & mask_cardinal) == (2 | 16)) return sprites[1];  // N+E 벽 -> Top 직선(─)
+        if ((pattern & mask_cardinal) == (2 | 8))  return sprites[1];  // N+W 벽 -> Top 직선(─)
+        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[7]; // S+E 벽 -> Bottom 직선(─)
+        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[7]; // S+W 벽 -> Bottom 직선(─)
 
         // 4. 예외: 1블록 두께 벽 (방과 방 사이 1칸 띄워진 곳 등, 거의 발생 안 함)
         if ((pattern & mask_cardinal) == (8 | 16)) return sprites[1]; // 가로 1칸 벽 -> Top Outer
