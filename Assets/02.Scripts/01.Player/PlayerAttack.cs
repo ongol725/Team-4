@@ -470,11 +470,6 @@ public class PlayerAttack : MonoBehaviour
 
         go.transform.position = transform.position; // BuildTempGO는 위치를 설정하지 않으므로 항상 보정
 
-        // BuildTempGO는 아이콘 크기 기반으로 내부 localScale을 설정하므로
-        // scaleMult를 적용하기 전에 Vector3.one으로 초기화해 이중 배율 방지
-        if (wd.projectile == null)
-            go.transform.localScale = Vector3.one;
-
         if (scaleMult != 1f)
             go.transform.localScale *= scaleMult;
 
