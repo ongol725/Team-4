@@ -233,9 +233,12 @@ public class DungeonRenderer : MonoBehaviour
 
         // 3. 2방향 벽인 경우 (내부 코너) - 내부 코너 전용 타일이 없으므로, 통짜 벽(■) 대신
         //    직선 외곽 벽 타일로 처리해 복도-방 연결부를 매끄럽게 잇는다.
-        // 위로 가는 복도(N+E/N+W): 정면(face)이 이어지므로 직선 윗면으로 통일
-        if ((pattern & mask_cardinal) == (2 | 16)) return sprites[1];  // N+E 벽 -> Top 직선(─)
-        if ((pattern & mask_cardinal) == (2 | 8))  return sprites[1];  // N+W 벽 -> Top 직선(─)
+        // N+E: 안쪽 대각 SE가 벽이면 방 코너(┐), 바닥이면 위로 가는 복도 입구(직선+정면)
+        if ((pattern & mask_cardinal) == (2 | 16))
+            return (pattern & 128) != 0 ? sprites[2] : sprites[1]; // SE벽 -> TR ┐ _4, 아니면 Top 직선
+        // N+W: 안쪽 대각 SW가 벽이면 방 코너(┌), 바닥이면 위로 가는 복도 입구(직선+정면)
+        if ((pattern & mask_cardinal) == (2 | 8))
+            return (pattern & 32) != 0 ? sprites[0] : sprites[1];  // SW벽 -> TL ┌ _2, 아니면 Top 직선
         // 아래로 가는 복도(S+W/S+E): 외부 코너 타일로 꺾어줌 (사용자 지정 _2/_4)
         if ((pattern & mask_cardinal) == (64 | 8))  return sprites[0]; // S+W 벽(왼쪽 꺾임)  -> TL 코너(┌) _2
         if ((pattern & mask_cardinal) == (64 | 16)) return sprites[2]; // S+E 벽(오른쪽 꺾임) -> TR 코너(┐) _4
