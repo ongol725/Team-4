@@ -59,6 +59,14 @@ public class PlayerHealth : MonoBehaviour
 
         currentHP = maxHP;
         isDead = false;
+        // 모든 Start() 완료 후 갱신 — PlayerStateHUD.Start()의 mock 값보다 늦게 실행 보장
+        StartCoroutine(InitHudLate());
+    }
+
+    private System.Collections.IEnumerator InitHudLate()
+    {
+        yield return null;
+        if (hud == null) hud = FindFirstObjectByType<PlayerStateHUD>();
         UpdateHud();
     }
 
