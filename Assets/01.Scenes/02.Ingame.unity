@@ -745,6 +745,42 @@ MonoBehaviour:
     grade: 3
     summon: {fileID: 11400000, guid: a7887a8b8794a91469352e1c9dbf9383, type: 2}
     count: 1
+  - synergyType: 10
+    grade: 0
+    summon: {fileID: 11400000, guid: 5ffa954434b8cfd46b38fd692102703f, type: 2}
+    count: 1
+  - synergyType: 10
+    grade: 1
+    summon: {fileID: 11400000, guid: 8224dc909ad7ded459c7b5cd23433f83, type: 2}
+    count: 2
+  - synergyType: 10
+    grade: 2
+    summon: {fileID: 11400000, guid: 8224dc909ad7ded459c7b5cd23433f83, type: 2}
+    count: 3
+  - synergyType: 3
+    grade: 0
+    summon: {fileID: 11400000, guid: 35991cf7e0ce4a44c98939310c0dbee8, type: 2}
+    count: 1
+  - synergyType: 3
+    grade: 1
+    summon: {fileID: 11400000, guid: be01a8ef0a0503a40b1828ce2e6895e3, type: 2}
+    count: 1
+  - synergyType: 3
+    grade: 2
+    summon: {fileID: 11400000, guid: 0e216001e240223458b071065c20c2a9, type: 2}
+    count: 1
+  - synergyType: 15
+    grade: 0
+    summon: {fileID: 11400000, guid: 83ed448cc24824540b3bd058c206219f, type: 2}
+    count: 1
+  - synergyType: 15
+    grade: 1
+    summon: {fileID: 11400000, guid: 003526dca1dca2740b6791b244f348ec, type: 2}
+    count: 2
+  - synergyType: 15
+    grade: 2
+    summon: {fileID: 11400000, guid: 0674475495319924f9907f10fc1b2aaf, type: 2}
+    count: 3
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 256

@@ -514,6 +514,7 @@ public class PlayerAttack : MonoBehaviour
         float range, float scaleMult = 1f)
     {
         var go      = new GameObject($"Melee_{wd.itemName}");
+        Destroy(go, 0.15f); // 코루틴 중단 시에도 반드시 소멸되도록 즉시 예약
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         go.transform.position = (Vector2)transform.position + dir * (range * 0.6f);
         go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
@@ -521,10 +522,20 @@ public class PlayerAttack : MonoBehaviour
         var sr          = go.AddComponent<SpriteRenderer>();
         sr.sprite       = wd.itemImage;
         sr.sortingOrder = 10;
-        go.transform.localScale = Vector3.one * range * 0.8f * scaleMult;
+
+        // 스프라이트 크기 정규화 후 적정 크기로 표시 (range * 0.8f는 너무 커서 0.6 유닛으로 고정)
+        if (wd.itemImage != null)
+        {
+            float maxExtent = Mathf.Max(wd.itemImage.bounds.extents.x, wd.itemImage.bounds.extents.y);
+            float normalized = maxExtent > 0.001f ? 0.6f / maxExtent : 0.6f;
+            go.transform.localScale = Vector3.one * normalized * scaleMult;
+        }
+        else
+        {
+            go.transform.localScale = Vector3.one * 0.6f * scaleMult;
+        }
 
         yield return new WaitForSeconds(0.15f);
-        if (go != null) Destroy(go);
     }
 
     // ─────────────────────────────────────────────────────────────
