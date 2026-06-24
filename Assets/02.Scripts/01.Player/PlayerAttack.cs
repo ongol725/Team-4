@@ -157,9 +157,7 @@ public class PlayerAttack : MonoBehaviour
                     {
                         case "WPN_001": shots     = 2;     break; // 단검: 2발 투척
                         case "WPN_007": dmgMult   = 1.3f;  break; // 권총: 데미지 +30%
-                        case "WPN_011": targetCnt = 2;     break; // 지팡이: 적 2명
-                        case "WPN_012": scaleMult = 1.5f;  break; // 마도서: 크기 1.5배
-                        case "WPN_013": targetCnt = 2;     break; // 번개구슬: 적 2명
+                        case "WPN_011": targetCnt = 2;    break; // 지팡이: 적 2명
                         case "WPN_016": scaleMult = 1.5f; pierce = 1; break; // 수리검: 크기 + 관통
                     }
                 }
@@ -268,6 +266,35 @@ public class PlayerAttack : MonoBehaviour
                     if (id == "WPN_018") count = 8;
                 }
                 StartCoroutine(AttackBurst(entry, range, count, kbPerShot));
+                break;
+            }
+
+            // ── AreaDrop ───────────────────────────────────────────
+            case WeaponAttackStyleType.AreaDrop:
+            {
+                if (id == "WPN_012")
+                {
+                    // 마도서: 가장 가까운 적 위치에 마법진 투척 → 착탄 폭발
+                    float dropRange = range > 0f ? range : 5f;
+                    float explodeR  = dropRange * 0.5f;
+                    if (g5) explodeR *= 1.5f; // 5단계: 폭발 반경 1.5배
+
+                    var    nearest = FindNearest(dropRange);
+                    Vector2 dir    = nearest != null
+                        ? ((Vector2)nearest.transform.position - (Vector2)transform.position).normalized
+                        : _lastMoveDir;
+                    SpawnExplosive(entry, dir, dropRange, explodeR);
+                }
+                else if (id == "WPN_013")
+                {
+                    // 번개구슬: 즉시 주변 적 타격 (range=0이므로 고정 탐색 반경 사용)
+                    int targetCnt = g5 ? 2 : 1;
+                    AttackMultiTarget(entry, 8f, targetCnt);
+                }
+                else
+                {
+                    AttackSingleTarget(entry, range);
+                }
                 break;
             }
 
