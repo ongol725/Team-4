@@ -179,6 +179,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_004" => 90f,
                     "WPN_019" => 100f,
                     "WPN_020" => 120f,
+                    "WPN_022" => 360f, // 플레일: 전방위
                     "WPN_023" => 60f,  // 메이스: 좁은 부채꼴
                     "WPN_027" => 120f, // 할버드: 넓은 부채꼴
                     "WPN_029" => 360f, // 워해머: 전방위
@@ -237,7 +238,32 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
+                // 플레일 5단계: 전방위 근접 + 투사체 1발 방출
+                if (g5 && id == "WPN_022")
+                {
+                    AttackMeleeFan(entry, range, angle, kb, flashScale);
+                    SpawnProjectile(entry, FacingDir(range * 3f));
+                    break;
+                }
+
+                // 시클 5단계: 전방위 근접 + 4방향 투사체 방출
+                if (g5 && id == "WPN_030")
+                {
+                    AttackMeleeFan(entry, range, angle, kb, flashScale);
+                    for (int i = 0; i < 4; i++)
+                        SpawnProjectile(entry, Rotate(Vector2.right, i * 90f));
+                    break;
+                }
+
                 AttackMeleeFan(entry, range, angle, kb, flashScale);
+
+                // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1.5초 적용
+                if (g5 && id == "WPN_023")
+                {
+                    foreach (var mc in FindInFan(FacingDir(range), range, angle))
+                        mc.ApplyStun(1.5f);
+                }
+
                 break;
             }
 
