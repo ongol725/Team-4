@@ -14,202 +14,202 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_SynergyConfig
   thresholds:
   - type: 1
-    displayName: "\uC554\uC0B4\uB2E8"
+    displayName: "암살단"
     icon: {fileID: 2532263399861557006, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
     bronzeThreshold: 2
     silverThreshold: 4
-    goldThreshold: 6
+    goldThreshold: 5
     prismThreshold: 0
-    description: "\uAC00\uBC29 \uBB34\uAE30 \uACF5\uACA9\uB825 \uD3C9\uADE0\uC5D0
-      \uBE44\uB840\uD558\uB294 \uC218\uB9AC\uAC80\uC744 3\uCD08\uB9C8\uB2E4 \uD22C\uCC99\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uC218\uB9AC\uAC80\uC744 \uB358\uC9D1\uB2C8\uB2E4.  \uB300\uBBF8\uC9C0
+    description: "가방 무기 공격력 평균에
+      비례하는 수리검을 3초마다 투척합니다."
+    bronzeEffect: "수리검을 던집니다.  대미지
       100%"
-    silverEffect: "\uC218\uB9AC\uAC80 \uC18D\uB3C4 30% \uC99D\uAC00.  \uB300\uBBF8\uC9C0
+    silverEffect: "수리검 속도 30% 증가.  대미지
       110%"
-    goldEffect: "\uC218\uB9AC\uAC80 \uD06C\uAE30 \xD71.5.  \uB300\uBBF8\uC9C0 120%"
-    prismEffect: 
+    goldEffect: "수리검 크기 \xD71.5.  대미지 120%"
+    prismEffect:
   - type: 12
-    displayName: "\uC77C\uB809\uD2B8\uB85C"
+    displayName: "일렉트로"
     icon: {fileID: 0}
     bronzeThreshold: 2
     silverThreshold: 3
-    goldThreshold: 99
+    goldThreshold: 3
     prismThreshold: 0
-    description: "\uAC00\uBC29 \uBB34\uAE30 \uACF5\uACA9\uB825 \uCD1D\uD569\uC5D0
-      \uBE44\uB840\uD558\uB294 \uB099\uB8B0\uB97C 2\uCD08\uB9C8\uB2E4 \uB5A8\uAD7D\uB2C8\uB2E4.\n\uB099\uB8B0\uAC00
-      \uC801\uC744 \uCC98\uCE58\uD558\uBA74 \uCFE8\uD0C0\uC784 50% \uAC10\uC18C."
-    bronzeEffect: "\uB9C8\uBC95 \uB099\uB8B0 1\uAC1C \uD22C\uD558"
-    silverEffect: "\uB9C8\uBC95 \uB099\uB8B0 3\uAC1C \uD22C\uD558"
-    goldEffect: 
-    prismEffect: 
+    description: "가방 무기 공격력 총합에
+      비례하는 낙뢰를 2초마다 떨굽니다.\n낙뢰가
+      적을 처치하면 쿨타임 50% 감소."
+    bronzeEffect: "마법 낙뢰 1개 투하"
+    silverEffect: "마법 낙뢰 3개 투하"
+    goldEffect:
+    prismEffect:
   - type: 10
-    displayName: "\uD540\uBCFC"
+    displayName: "핀볼"
     icon: {fileID: -4988515602114213454, guid: 260308becee7ede4ea832c4e7492e287, type: 3}
     bronzeThreshold: 2
     silverThreshold: 3
-    goldThreshold: 99
+    goldThreshold: 3
     prismThreshold: 0
-    description: "\uB9F5 \uC804\uCCB4\uB97C \uD295\uACA8 \uB2E4\uB2C8\uBA70 \uC801\uC5D0\uAC8C
-      \uD53C\uD574\uB97C \uC8FC\uB294 \uAD6C\uCCB4\uB97C \uC0DD\uC131\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uD540\uBCFC \uC0DD\uC131.  \uB300\uBBF8\uC9C0 110%"
-    silverEffect: "\uD540\uBCFC \uC774\uB3D9 \uC18D\uB3C4 \uC99D\uAC00.  \uB300\uBBF8\uC9C0
+    description: "맵 전체를 튕겨 다니며 적에게
+      피해를 주는 구체를 생성합니다."
+    bronzeEffect: "핀볼 생성.  대미지 110%"
+    silverEffect: "핀볼 이동 속도 증가.  대미지
       130%"
-    goldEffect: 
-    prismEffect: 
+    goldEffect:
+    prismEffect:
   - type: 7
-    displayName: "\uCC98\uD615\uC790"
+    displayName: "처형자"
     icon: {fileID: -6187263773204134119, guid: 52da82195f96439478d40abfe15f4b88, type: 3}
     bronzeThreshold: 2
     silverThreshold: 4
-    goldThreshold: 6
+    goldThreshold: 5
     prismThreshold: 0
-    description: "3\uCD08\uB9C8\uB2E4 \uC88C\uC6B0\uC5D0 \uC0AC\uC2E0\uC758 \uB0AB\uC744
-      \uBC1C\uC0AC\uD569\uB2C8\uB2E4. \uCCB4\uB825\uC774 \uB0AE\uC740 \uC801\uC744
-      \uC989\uC0AC\uC2DC\uD0B5\uB2C8\uB2E4."
-    bronzeEffect: "\uCCB4\uB825 5% \uC774\uD558 \uC801 \uC989\uC0AC.  \uB300\uBBF8\uC9C0
+    description: "3초마다 좌우에 사신의 낫을
+      발사합니다. 체력이 낮은 적을
+      즉사시킵니다."
+    bronzeEffect: "체력 5% 이하 적 즉사.  대미지
       100%"
-    silverEffect: "\uCCB4\uB825 10% \uC774\uD558 \uC801 \uC989\uC0AC.  \uB300\uBBF8\uC9C0
+    silverEffect: "체력 10% 이하 적 즉사.  대미지
       110%"
-    goldEffect: "\uCCB4\uB825 15% \uC774\uD558 \uC801 \uC989\uC0AC.  \uB300\uBBF8\uC9C0
+    goldEffect: "체력 15% 이하 적 즉사.  대미지
       130%"
-    prismEffect: 
+    prismEffect:
   - type: 3
-    displayName: "\uC131\uAE30\uC0AC\uB2E8"
+    displayName: "성기사단"
     icon: {fileID: -8794681838325113743, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
     bronzeThreshold: 2
-    silverThreshold: 3
-    goldThreshold: 4
-    prismThreshold: 0
-    description: "\uD50C\uB808\uC774\uC5B4 \uC704\uCE58\uC5D0 \uC2E0\uC131\uD55C
-      \uC131\uC5ED \uC7A5\uD310\uC744 \uC0DD\uC131\uD569\uB2C8\uB2E4. \uC7A5\uD310
-      \uB0B4\uC5D0\uC11C \uCCB4\uB825\uC774 \uD68C\uBCF5\uB429\uB2C8\uB2E4."
-    bronzeEffect: "\uC7A5\uD310 5\uCD08 \uC720\uC9C0.  \uCCB4\uB825 \uD68C\uBCF5
-      1%.  \uB300\uBBF8\uC9C0 50%"
-    silverEffect: "\uC7A5\uD310 8\uCD08 \uC720\uC9C0.  \uCCB4\uB825 \uD68C\uBCF5
-      1.5%.  \uB300\uBBF8\uC9C0 60%"
-    goldEffect: "\uC7A5\uD310 11\uCD08 \uC720\uC9C0.  \uCCB4\uB825 \uD68C\uBCF5 2%. 
-      \uB300\uBBF8\uC9C0 70%"
-    prismEffect: 
-  - type: 2
-    displayName: "\uC18C\uB4DC\uB9C8\uC2A4\uD130"
-    icon: {fileID: 8648652656248321043, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-    bronzeThreshold: 2
     silverThreshold: 4
-    goldThreshold: 6
+    goldThreshold: 5
     prismThreshold: 0
-    description: "2\uCD08\uB9C8\uB2E4 \uC804\uBC29\uC73C\uB85C \uAC80\uAE30\uB97C
-      \uBC1C\uC0AC\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uAC80\uAE30 1\uAC1C \uBC1C\uC0AC.  \uB300\uBBF8\uC9C0 100%"
-    silverEffect: "\uAC80\uAE30 \uD06C\uAE30 50% \uD655\uB300.  \uB300\uBBF8\uC9C0
+    description: "플레이어 위치에 신성한
+      성역 장판을 생성합니다. 장판
+      내에서 체력이 회복됩니다."
+    bronzeEffect: "장판 5초 유지.  체력 회복
+      1%.  대미지 50%"
+    silverEffect: "장판 8초 유지.  체력 회복
+      1.5%.  대미지 60%"
+    goldEffect: "장판 11초 유지.  체력 회복 2%.
+      대미지 70%"
+    prismEffect:
+  - type: 2
+    displayName: "소드마스터"
+    icon: {fileID: 8648652656248321043, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+    bronzeThreshold: 3
+    silverThreshold: 4
+    goldThreshold: 5
+    prismThreshold: 0
+    description: "2초마다 전방으로 검기를
+      발사합니다."
+    bronzeEffect: "검기 1개 발사.  대미지 100%"
+    silverEffect: "검기 크기 50% 확대.  대미지
       110%"
-    goldEffect: "\uAC80\uAE30 2\uD68C \uBC1C\uC0AC.  \uB300\uBBF8\uC9C0 130%"
-    prismEffect: 
-  - type: 5
-    displayName: "\uD2F0\uD0C4"
+    goldEffect: "검기 2회 발사.  대미지 130%"
+    prismEffect:
+  - type: 14
+    displayName: "티탄"
     icon: {fileID: 9162558817055672269, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
     bronzeThreshold: 2
     silverThreshold: 4
     goldThreshold: 6
     prismThreshold: 0
-    description: "4\uCD08\uB9C8\uB2E4 \uBB34\uC791\uC704 \uC801\uC5D0\uAC8C \uB3CC\uC744
-      \uB5A8\uAD7D\uB2C8\uB2E4."
-    bronzeEffect: "\uB3CC 3\uAC1C \uB099\uD558.  \uB300\uBBF8\uC9C0 500%"
-    silverEffect: "\uB3CC 6\uAC1C \uB099\uD558.  \uB300\uBBF8\uC9C0 500%"
-    goldEffect: "\uB3CC 9\uAC1C \uB099\uD558.  \uB300\uBBF8\uC9C0 500%"
-    prismEffect: 
-  - type: 9
-    displayName: "\uD398\uC5B4\uB9AC"
+    description: "4초마다 무작위 적에게 돌을
+      떨굽니다."
+    bronzeEffect: "돌 3개 낙하.  대미지 500%"
+    silverEffect: "돌 6개 낙하.  대미지 500%"
+    goldEffect: "돌 9개 낙하.  대미지 500%"
+    prismEffect:
+  - type: 15
+    displayName: "페어리"
     icon: {fileID: 3125021152161970209, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
     bronzeThreshold: 2
     silverThreshold: 4
     goldThreshold: 6
     prismThreshold: 0
-    description: "\uD50C\uB808\uC774\uC5B4 \uC8FC\uBCC0\uC744 \uD68C\uC804\uD558\uBA70
-      \uC801\uC5D0\uAC8C \uD53C\uD574\uB97C \uC8FC\uB294 \uC694\uC815\uC744 \uC18C\uD658\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uC694\uC815 1\uB9C8\uB9AC \uC18C\uD658.  \uB300\uBBF8\uC9C0 100%"
-    silverEffect: "\uC694\uC815 2\uB9C8\uB9AC \uC18C\uD658.  \uB300\uBBF8\uC9C0 100%"
-    goldEffect: "\uC694\uC815 3\uB9C8\uB9AC \uC18C\uD658 (\uAC00\uC18D).  \uB300\uBBF8\uC9C0
+    description: "플레이어 주변을 회전하며
+      적에게 피해를 주는 요정을 소환합니다."
+    bronzeEffect: "요정 1마리 소환.  대미지 100%"
+    silverEffect: "요정 2마리 소환.  대미지 100%"
+    goldEffect: "요정 3마리 소환 (가속).  대미지
       100%"
-    prismEffect: 
+    prismEffect:
   - type: 13
-    displayName: "\uB09C\uACF5\uBD88\uB77D"
+    displayName: "난공불락"
     icon: {fileID: -554125210310083391, guid: d05e11ea1caeccf4ead6f441bf8873d4, type: 3}
-    bronzeThreshold: 2
-    silverThreshold: 4
-    goldThreshold: 6
-    prismThreshold: 8
-    description: "\uD53C\uACA9 \uC2DC \uCDA9\uACA9\uD30C\uB97C \uBC1C\uC0B0\uD558\uACE0
-      \uBC1B\uB294 \uD53C\uD574\uB97C \uAC10\uC18C\uC2DC\uD0B5\uB2C8\uB2E4.\n\uBC29\uC5B4\uAD6C
-      \uCCB4\uB825 \uCD1D\uD569\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uCDA9\uACA9\uD30C.  \uD53C\uD574 \uAC10\uC18C 10%.  \uB300\uBBF8\uC9C0
+    bronzeThreshold: 3
+    silverThreshold: 6
+    goldThreshold: 9
+    prismThreshold: 12
+    description: "피격 시 충격파를 발산하고
+      받는 피해를 감소시킵니다.\n방어구
+      체력 총합에 비례합니다."
+    bronzeEffect: "충격파.  피해 감소 10%.  대미지
       1000%"
-    silverEffect: "\uCDA9\uACA9\uD30C \uD06C\uAE30 \xD72.  \uD53C\uD574 \uAC10\uC18C
-      20%.  \uB300\uBBF8\uC9C0 1000%"
-    goldEffect: "\uCDA9\uACA9\uD30C \uAC15\uD654.  \uD53C\uD574 \uAC10\uC18C 35%. 
-      \uB300\uBBF8\uC9C0 1300%"
-    prismEffect: "0.5\uCD08\uB9C8\uB2E4 \uC790\uB3D9 \uBC1C\uB3D9.  \uD53C\uD574
-      \uAC10\uC18C 60%.  \uB300\uBBF8\uC9C0 2000%"
+    silverEffect: "충격파 크기 \xD72.  피해 감소
+      20%.  대미지 1000%"
+    goldEffect: "충격파 강화.  피해 감소 35%.
+      대미지 1300%"
+    prismEffect: "0.5초마다 자동 발동.  피해
+      감소 60%.  대미지 2000%"
   - type: 8
-    displayName: "\uC815\uB839\uC220\uC0AC"
+    displayName: "정령술사"
     icon: {fileID: 2044662942463612365, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
-    bronzeThreshold: 2
-    silverThreshold: 4
-    goldThreshold: 6
-    prismThreshold: 8
-    description: "\uC804\uD22C\uC5D0 \uD568\uAED8\uD558\uB294 \uC815\uB839 \uACE8\uB818\uC744
-      \uC18C\uD658\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uC815\uB839 \uACE8\uB818 1\uAE30.  \uB300\uBBF8\uC9C0 100%"
-    silverEffect: "\uC815\uB839 \uACE8\uB818 2\uAE30.  \uC774\uB3D9\uC18D\uB3C4 30%
-      \uC99D\uAC00."
-    goldEffect: "\uC815\uB839 \uACE8\uB818 4\uAE30.  \uB300\uBBF8\uC9C0 200%"
-    prismEffect: "\uACE0\uB300 \uC815\uB839 1\uAE30.  \uB300\uBBF8\uC9C0 450%.  8\uCD08\uB9C8\uB2E4
-      \uAD11\uC5ED \uACF5\uACA9"
+    bronzeThreshold: 3
+    silverThreshold: 5
+    goldThreshold: 7
+    prismThreshold: 9
+    description: "전투에 함께하는 정령 골녨을
+      소환합니다."
+    bronzeEffect: "정령 골녨 1기.  대미지 100%"
+    silverEffect: "정령 골녨 2기.  이동속도 30%
+      증가."
+    goldEffect: "정령 골녨 4기.  대미지 200%"
+    prismEffect: "고대 정령 1기.  대미지 450%.  8초마다
+      광역 공격"
   - type: 4
-    displayName: "\uB9C8\uC655"
+    displayName: "마왕"
     icon: {fileID: -8754867915087685011, guid: 98da75eed8a704f439c61185104545a6, type: 3}
     bronzeThreshold: 2
     silverThreshold: 4
     goldThreshold: 6
     prismThreshold: 8
-    description: "\uB9C8\uC655\uC758 \uC2A4\uD0AC\uC774 \uBC1C\uB3D9\uB429\uB2C8\uB2E4.
-      \uB4F1\uAE09\uC774 \uC624\uB97C\uC218\uB85D \uC2A4\uD0AC \uD615\uD0DC\uAC00
-      \uAC15\uD654\uB429\uB2C8\uB2E4."
-    bronzeEffect: "\uC9C0\uC625\uBD88 \uBD88\uC528.  2\uCD08\uB2F9 1\uD68C.  \uB300\uBBF8\uC9C0
+    description: "마왕의 스킬이 발동됩니다.
+      등급이 오를수록 스킬 형태가
+      강화됩니다."
+    bronzeEffect: "지옥불 불씨.  2초당 1회.  대미지
       100%"
-    silverEffect: "\uC5F0\uC625\uC758 \uD30C\uB3C4.  \uCD08\uB2F9 1\uD68C.  \uB300\uBBF8\uC9C0
+    silverEffect: "연옥의 파도.  초당 1회.  대미지
       100%"
-    goldEffect: "\uB9C8\uC655\uC758 \uBA78\uCC9C\uCC38.  0.1\uCD08\uB2F9 20% \uB300\uBBF8\uC9C0"
-    prismEffect: "\uC804 \uC2A4\uD0AC \uD569\uC0B0 + \uAC15\uD654.  \uB300\uBBF8\uC9C0
-      150%\u2191"
+    goldEffect: "마왕의 멸천참.  0.1초당 20% 대미지"
+    prismEffect: "전 스킬 합산 + 강화.  대미지
+      150%↑"
   - type: 6
-    displayName: "\uB300\uBD80\uD638"
+    displayName: "대부호"
     icon: {fileID: 1802441802970508738, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
-    bronzeThreshold: 2
-    silverThreshold: 4
-    goldThreshold: 6
-    prismThreshold: 8
-    description: "\uC774\uB3D9 \uC2DC \uACE8\uB4DC\uB97C \uBFCC\uB9BD\uB2C8\uB2E4.
-      2\uCD08 \uD6C4 \uD3ED\uBC1C\uD558\uBA70 \uBC94\uC704 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
-    bronzeEffect: "1\uCE78\uB2F9 \uACE8\uB4DC 3\uAC1C.  \uACE8\uB4DC\uB2F9 70% \uB300\uBBF8\uC9C0"
-    silverEffect: "1\uCE78\uB2F9 \uACE8\uB4DC 5\uAC1C."
-    goldEffect: "1\uCE78\uB2F9 \uACE8\uB4DC 7\uAC1C."
-    prismEffect: "1\uCE78\uB2F9 \uACE8\uB4DC 15\uAC1C.  \uD3ED\uBC1C \uC2DC\uAC04
-      1\uCD08\uB85C \uB2E8\uCD95"
+    bronzeThreshold: 5
+    silverThreshold: 7
+    goldThreshold: 8
+    prismThreshold: 9
+    description: "이동 시 골드를 뿌립니다.
+      2초 후 폭발하며 범위 피해를 줍니다."
+    bronzeEffect: "1칸당 골드 3개.  골드당 70% 대미지"
+    silverEffect: "1칸당 골드 5개."
+    goldEffect: "1칸당 골드 7개."
+    prismEffect: "1칸당 골드 15개.  폭발 시간
+      1초로 단축"
   - type: 11
-    displayName: "\uACFC\uBD80\uD654"
+    displayName: "과부화"
     icon: {fileID: 0}
-    bronzeThreshold: 2
-    silverThreshold: 4
-    goldThreshold: 6
+    bronzeThreshold: 1
+    silverThreshold: 2
+    goldThreshold: 7
     prismThreshold: 8
-    description: "\uC655\uADC0\uD615 \uCF58\uC149\uD2B8. \uBE0C~\uACE8\uB4DC\uB294
-      \uD328\uB110\uD2F0\uB9CC \uC788\uACE0 \uD504\uB9AC\uC998 \uB2EC\uC131 \uC2DC
-      \uC2E0\uC774 \uB429\uB2C8\uB2E4."
-    bronzeEffect: "10\uCD08\uB9C8\uB2E4 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4/\uD53C\uD574\uB7C9
-      50% \uAC10\uC18C"
-    silverEffect: "10\uCD08\uB9C8\uB2E4 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4/\uD53C\uD574\uB7C9
-      50% \uAC10\uC18C"
-    goldEffect: "10\uCD08\uB9C8\uB2E4 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4/\uD53C\uD574\uB7C9
-      50% \uAC10\uC18C"
-    prismEffect: "\uCD08\uAC15\uB825 \uC2A4\uD0AC 3\uAC1C \uBB34\uD55C \uB09C\uC0AC. 
-      \uB300\uBBF8\uC9C0 1000%"
+    description: "왕귀형 콘셉트. 브~골드는
+      패널티만 있고 프리즘 달성 시
+      신이 됩니다."
+    bronzeEffect: "10초마다 1초간 이동속도/피해량
+      50% 감소"
+    silverEffect: "10초마다 1초간 이동속도/피해량
+      50% 감소"
+    goldEffect: "10초마다 1초간 이동속도/피해량
+      50% 감소"
+    prismEffect: "초강력 스킬 3개 무한 난사.
+      대미지 1000%"

@@ -20,7 +20,8 @@ namespace BagSurvivor.UI
         [Header("등급 색상")]
         public Color bronze = new Color(0.80f, 0.50f, 0.30f, 1f);
         public Color silver = new Color(0.75f, 0.78f, 0.85f, 1f);
-        public Color gold = new Color(1f, 0.84f, 0.30f, 1f);
+        public Color gold   = new Color(1f,    0.84f, 0.30f, 1f);
+        public Color prism  = new Color(0.75f, 0.45f, 1.00f, 1f);
 
         private SynergyInfo info;
         private SynergyListUI owner;
@@ -34,14 +35,15 @@ namespace BagSurvivor.UI
             if (nameText != null) nameText.text = i.synergyName;
             if (countText != null)
             {
-                countText.text = i.grade == SynergyGrade.Gold
+                countText.text = (i.grade == SynergyGrade.Gold || i.grade == SynergyGrade.Prism)
                     ? i.count.ToString()
                     : $"{i.count}/{i.nextThreshold}";
             }
             if (iconImage != null && i.icon != null) iconImage.sprite = i.icon;
             if (frameImage != null)
-                frameImage.color = i.grade == SynergyGrade.Gold ? gold
-                                 : (i.grade == SynergyGrade.Silver ? silver : bronze);
+                frameImage.color = i.grade == SynergyGrade.Prism  ? prism
+                                 : i.grade == SynergyGrade.Gold    ? gold
+                                 : i.grade == SynergyGrade.Silver  ? silver : bronze;
         }
 
         public void OnPointerEnter(PointerEventData e) { if (owner != null) owner.ShowTooltip(this); }

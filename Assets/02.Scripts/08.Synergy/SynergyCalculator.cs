@@ -45,6 +45,8 @@ public class SynergyCalculator : MonoBehaviour
             { SynergyType.Overload,       "과부화"     },
             { SynergyType.Electro,        "일렉트로"   },
             { SynergyType.Impregnable,    "난공불락"   },
+            { SynergyType.Titan,          "티탄"       },
+            { SynergyType.Fairy,          "페어리"     },
         };
 
     // ─────────────────────────────────────────────────────────────
@@ -95,15 +97,19 @@ public class SynergyCalculator : MonoBehaviour
             int bronzeMin = threshold != null ? threshold.bronzeThreshold : DefaultBronze;
             int silverMin = threshold != null ? threshold.silverThreshold : DefaultSilver;
             int goldMin   = threshold != null ? threshold.goldThreshold   : DefaultGold;
+            int prismMin  = threshold != null ? threshold.prismThreshold  : 0;
 
             if (count < bronzeMin) continue;
 
-            var grade = count >= goldMin   ? SynergyGrade.Gold
-                      : count >= silverMin ? SynergyGrade.Silver
+            var grade = (prismMin > 0 && count >= prismMin) ? SynergyGrade.Prism
+                      : count >= goldMin                    ? SynergyGrade.Gold
+                      : count >= silverMin                  ? SynergyGrade.Silver
                       : SynergyGrade.Bronze;
 
-            // Gold이면 goldMin, Silver이면 goldMin(다음=Gold), Bronze이면 silverMin(다음=Silver)
-            int nextMin = grade == SynergyGrade.Bronze ? silverMin : goldMin;
+            int nextMin = grade == SynergyGrade.Bronze ? silverMin
+                        : grade == SynergyGrade.Silver ? goldMin
+                        : grade == SynergyGrade.Gold   ? (prismMin > 0 ? prismMin : goldMin)
+                        : prismMin;
 
             string displayName = threshold != null && !string.IsNullOrEmpty(threshold.displayName)
                 ? threshold.displayName
@@ -112,6 +118,7 @@ public class SynergyCalculator : MonoBehaviour
             string effect = threshold != null
                 ? grade switch
                 {
+                    SynergyGrade.Prism  => threshold.prismEffect,
                     SynergyGrade.Gold   => threshold.goldEffect,
                     SynergyGrade.Silver => threshold.silverEffect,
                     _                   => threshold.bronzeEffect,
