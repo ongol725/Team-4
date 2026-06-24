@@ -46,11 +46,28 @@ public class ShortcutHelpUI : MonoBehaviour
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
+        {
+            // 씬 전환으로 이전 Canvas가 파괴된 경우 패널 재생성 후 표시
+            if (_panel == null)
+            {
+                StartCoroutine(RebuildAndShow());
+                return;
+            }
             SetVisible(!_isVisible);
+        }
 
         // Inspector offset 실시간 반영
         if (_panelRt != null)
             _panelRt.anchoredPosition = _basePosition + _positionOffset;
+    }
+
+    private IEnumerator RebuildAndShow()
+    {
+        _isVisible = false;
+        _panelRt   = null;
+        yield return null; // 씬 초기화 완료 대기
+        BuildUI();
+        SetVisible(true);
     }
 
     public void SetVisible(bool visible)
