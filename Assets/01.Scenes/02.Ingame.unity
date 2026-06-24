@@ -151,14 +151,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9baae10591796e4c8afb78304f8be01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RoomMonsterSpawner
-  dungeonGenerator: {fileID: 1966734777}
+  dungeonGenerator: {fileID: 1716958155}
   pool: {fileID: 92913258}
   difficulty: {fileID: 92913257}
   normalMonsters:
   - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
   - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
   - {fileID: 439714262228731463, guid: 6c0a190e70a06d446b105f0aaaa12814, type: 3}
-  - {fileID: 0}
+  - {fileID: 8503639987653096166, guid: a8b1e8348165dc84c9035d323c683ad5, type: 3}
   - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
   - {fileID: 6703318431440199771, guid: ca72c7c52032dcc408019e20c5921fd7, type: 3}
   - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
@@ -172,33 +172,106 @@ MonoBehaviour:
   - {fileID: 1071622943208925043, guid: 81cd25f279ae19e42abf49a6b9c76da9, type: 3}
   floorConfigs:
   - floor: 1
-    minTier: 1
-    maxTier: 5
-    minCount: 3
-    maxCount: 6
+    nearMonsters:
+    - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
+    midMonsters:
+    - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
+    - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
+    farMonsters:
+    - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
+    - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
+    - {fileID: 439714262228731463, guid: 6c0a190e70a06d446b105f0aaaa12814, type: 3}
+    maxAlive: 5
+    spawnInterval: 2
   - floor: 2
-    minTier: 4
-    maxTier: 8
-    minCount: 4
-    maxCount: 7
+    nearMonsters:
+    - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
+    midMonsters:
+    - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
+    - {fileID: 6703318431440199771, guid: ca72c7c52032dcc408019e20c5921fd7, type: 3}
+    farMonsters:
+    - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
+    - {fileID: 6703318431440199771, guid: ca72c7c52032dcc408019e20c5921fd7, type: 3}
+    maxAlive: 6
+    spawnInterval: 2
   - floor: 3
-    minTier: 7
-    maxTier: 12
-    minCount: 5
-    maxCount: 8
+    nearMonsters:
+    - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
+    midMonsters:
+    - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
+    - {fileID: 2122078588672271730, guid: b8ca1903eb5a33c43a55f2759551c795, type: 3}
+    farMonsters:
+    - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
+    - {fileID: 2122078588672271730, guid: b8ca1903eb5a33c43a55f2759551c795, type: 3}
+    - {fileID: 6427610672282125992, guid: 3ba080278912b774da7c2534d0587717, type: 3}
+    maxAlive: 7
+    spawnInterval: 1.8
   - floor: 4
-    minTier: 11
-    maxTier: 15
-    minCount: 6
-    maxCount: 9
+    nearMonsters:
+    - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    midMonsters:
+    - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    - {fileID: 7878504994168186160, guid: e6c5f6d2e136c4348afa675d9cb36a80, type: 3}
+    farMonsters:
+    - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    - {fileID: 7878504994168186160, guid: e6c5f6d2e136c4348afa675d9cb36a80, type: 3}
+    - {fileID: 7970580902981092378, guid: 38b080fa7dcc1c049a5829d1e948476e, type: 3}
+    maxAlive: 8
+    spawnInterval: 1.6
+  - floor: 5
+    nearMonsters:
+    - {fileID: 3051456863515954885, guid: 40c0ec4db1209684794719d9ed4263d6, type: 3}
+    midMonsters:
+    - {fileID: 3051456863515954885, guid: 40c0ec4db1209684794719d9ed4263d6, type: 3}
+    - {fileID: 1071622943208925043, guid: 81cd25f279ae19e42abf49a6b9c76da9, type: 3}
+    farMonsters:
+    - {fileID: 3051456863515954885, guid: 40c0ec4db1209684794719d9ed4263d6, type: 3}
+    - {fileID: 1071622943208925043, guid: 81cd25f279ae19e42abf49a6b9c76da9, type: 3}
+    maxAlive: 8
+    spawnInterval: 1.6
   specialRules:
   - roomType: 4
+    floor: 2
     monsterPrefabs:
     - {fileID: 6457529420895026653, guid: 9f5ac0fa91f646744ab99f0d38667cc9, type: 3}
     - {fileID: 9158167247413763753, guid: 9d5c7f1771b4b474a8fc2613850a7330, type: 3}
     - {fileID: 9112178706994911348, guid: fc49b2fd66dc1124785717f2a532a124, type: 3}
+    noRepeatAcrossRooms: 1
+    hpMultiplier: 1
+    attackMultiplier: 1
     minCount: 1
     maxCount: 1
+  - roomType: 4
+    floor: 4
+    monsterPrefabs:
+    - {fileID: 6457529420895026653, guid: 9f5ac0fa91f646744ab99f0d38667cc9, type: 3}
+    - {fileID: 9158167247413763753, guid: 9d5c7f1771b4b474a8fc2613850a7330, type: 3}
+    - {fileID: 9112178706994911348, guid: fc49b2fd66dc1124785717f2a532a124, type: 3}
+    noRepeatAcrossRooms: 1
+    hpMultiplier: 2
+    attackMultiplier: 2
+    minCount: 1
+    maxCount: 1
+  - roomType: 3
+    floor: 1
+    monsterPrefabs:
+    - {fileID: 439714262228731463, guid: b802cd5e3aa9e8249a1637fe397d2a1e, type: 3}
+    noRepeatAcrossRooms: 0
+    hpMultiplier: 1
+    attackMultiplier: 1
+    minCount: 1
+    maxCount: 1
+  - roomType: 3
+    floor: 3
+    monsterPrefabs:
+    - {fileID: 6427610672282125992, guid: 16bc372123e71654086f06f8b0508703, type: 3}
+    noRepeatAcrossRooms: 0
+    hpMultiplier: 1
+    attackMultiplier: 1
+    minCount: 1
+    maxCount: 1
+  nearThreshold: 0.4
+  midThreshold: 0.75
   edgeMargin: 1
   maxPositionAttempts: 25
   prewarmPerType: 8
@@ -675,7 +748,7 @@ MonoBehaviour:
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 256
---- !u!1001 &994228888
+--- !u!1001 &865236342
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -683,13 +756,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: 'floorThemes.Array.data[0].advancedWallSprites.Array.data[0]'
+      value: 
+      objectReference: {fileID: -4596972127225251403, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: 'floorThemes.Array.data[0].advancedWallSprites.Array.data[2]'
+      value: 
+      objectReference: {fileID: 406551859847576100, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
     - target: {fileID: 1873677519157473571, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 845.0437
+      value: 1220.6935
       objectReference: {fileID: 0}
     - target: {fileID: 1873677519157473571, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 566.09454
+      value: 575.04474
       objectReference: {fileID: 0}
     - target: {fileID: 1873677519157473571, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -723,29 +804,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2500541725486549241, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: monsterPrefabs.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2500541725486549241, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'monsterPrefabs.Array.data[0]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4126022947026927154, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: playerTransform
-      value: 
-      objectReference: {fileID: 5172927875404501766}
     - target: {fileID: 8380437479435598112, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_Name
       value: Dungeon_Export_Group
       objectReference: {fileID: 0}
-    - target: {fileID: 8555633983462743653, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: m_CullTransparentMesh
+    - target: {fileID: 8635619495784352158, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8816057791952058084, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8816057791952058084, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 6915391288100759030, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6364535931c3b474d9258dccd370598b, type: 3}
@@ -954,10 +1030,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
---- !u!114 &1966734777 stripped
+--- !u!114 &1716958155 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4126022947026927154, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-  m_PrefabInstance: {fileID: 994228888}
+  m_PrefabInstance: {fileID: 865236342}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -1022,6 +1098,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9009732684212373277, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
+      propertyPath: moveSpeed
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1061,8 +1141,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 269679927}
   - {fileID: 5172927875404501765}
+  - {fileID: 865236342}
   - {fileID: 1449309142}
-  - {fileID: 994228888}
   - {fileID: 254784477}
   - {fileID: 92913259}
   - {fileID: 810000002}

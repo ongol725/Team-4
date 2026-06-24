@@ -16,6 +16,13 @@ public class DungeonRenderer : MonoBehaviour
         [Header("고급 오토 타일링용 (사용 시 활성화)")]
         [Tooltip("9개(또는 13개) 이상의 스프라이트를 규칙에 맞게 넣어주세요.")]
         public Sprite[] advancedWallSprites;
+
+        [Header("기둥 타일 (Parthenon 방)")]
+        public Sprite[] pillarSprites;
+
+        [Header("벽 정면(face) 타일 - 북쪽 벽 높이 표현")]
+        [Tooltip("방 북쪽 벽의 윗면 아래로 노출되는 정면(높이) 스프라이트. 비워두면 정면을 그리지 않음.")]
+        public Sprite wallFaceSprite;
     }
 
     [Header("렌더링 옵션")]
@@ -71,7 +78,7 @@ public class DungeonRenderer : MonoBehaviour
     }
 
     // 완성된 mapData를 바탕으로 실제 타일맵에 타일을 렌더링합니다.
-    public void RenderTilemap(int[,] mapData, int mapWidth, int mapHeight, int currentFloor)
+    public void RenderTilemap(int[,] mapData, int mapWidth, int mapHeight, int currentFloor, bool[,] corridorMask = null)
     {
         if (floorTilemap != null) 
         {
@@ -95,6 +102,8 @@ public class DungeonRenderer : MonoBehaviour
         TileBase activeAltFloorTile = defaultAltFloorTile;
         TileBase activeWallTile = defaultWallTile;
         Sprite[] activeWallSprites = null;
+        Sprite activeFaceSprite = null;
+        Sprite[] activePillarSprites = null;
 
         if (floorThemes != null && currentFloor >= 1 && currentFloor <= floorThemes.Length)
         {
@@ -102,6 +111,8 @@ public class DungeonRenderer : MonoBehaviour
             if (floorThemes[currentFloor - 1].altFloorTile != null) activeAltFloorTile = floorThemes[currentFloor - 1].altFloorTile;
             if (floorThemes[currentFloor - 1].wallTile != null) activeWallTile = floorThemes[currentFloor - 1].wallTile;
             activeWallSprites = floorThemes[currentFloor - 1].advancedWallSprites;
+            activeFaceSprite = floorThemes[currentFloor - 1].wallFaceSprite;
+            activePillarSprites = floorThemes[currentFloor - 1].pillarSprites;
         }
 
         for (int x = 0; x < mapWidth; x++)
@@ -126,7 +137,7 @@ public class DungeonRenderer : MonoBehaviour
                 {
                     if (useAdvancedAutoTiling && activeWallSprites != null && activeWallSprites.Length >= 9)
                     {
-                        Sprite wallSprite = GetOrientedWallSprite(mapData, x, y, mapWidth, mapHeight, activeWallSprites);
+                        Sprite wallSprite = GetOrientedWallSprite(mapData, x, y, mapWidth, mapHeight, activeWallSprites, corridorMask);
                         if (wallSprite != null)
                         {
                             if (!tileCache.ContainsKey(wallSprite))
@@ -143,13 +154,50 @@ public class DungeonRenderer : MonoBehaviour
                         // 기존 방식 (롤백)
                         if (wallTilemap != null && activeWallTile != null) wallTilemap.SetTile(pos, activeWallTile);
                     }
+
+                    // 정면(face) 패스: 북쪽 벽(남쪽 칸이 바닥)이면 정면 타일을 남쪽 칸 위에 시각적으로 오버레이한다.
+                    // mapData는 변경하지 않으므로 충돌·이동·길찾기 로직에는 영향을 주지 않는다.
+                    if (useAdvancedAutoTiling && activeFaceSprite != null
+                        && y - 1 >= 0 && mapData[x, y - 1] == 1 && wallTilemap != null)
+                    {
+                        if (!tileCache.ContainsKey(activeFaceSprite))
+                        {
+                            Tile faceTile = ScriptableObject.CreateInstance<Tile>();
+                            faceTile.sprite = activeFaceSprite;
+                            tileCache[activeFaceSprite] = faceTile;
+                        }
+                        wallTilemap.SetTile(new Vector3Int(x, y - 1, 0), tileCache[activeFaceSprite]);
+                    }
+                }
+                else if (mapData[x, y] == 4)
+                {
+                    // 기둥 받침: 바닥을 깔고 그 위에 세로 기둥(받침/몸통/머리)을 오버레이한다.
+                    if (floorTilemap != null && activeFloorTile != null)
+                        floorTilemap.SetTile(pos, activeFloorTile);
+                    if (useAdvancedAutoTiling && activePillarSprites != null
+                        && activePillarSprites.Length >= 3 && wallTilemap != null)
+                    {
+                        // [0]=받침(아래) [1]=몸통(중간) [2]=머리(위), 위(y+)로 쌓는다
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Sprite ps = activePillarSprites[i];
+                            if (ps == null) continue;
+                            if (!tileCache.ContainsKey(ps))
+                            {
+                                Tile pt = ScriptableObject.CreateInstance<Tile>();
+                                pt.sprite = ps;
+                                tileCache[ps] = pt;
+                            }
+                            wallTilemap.SetTile(new Vector3Int(x, y + i, 0), tileCache[ps]);
+                        }
+                    }
                 }
             }
         }
     }
 
     // 비트마스크(Bitmask)를 이용해 맵 데이터를 분석하여 올바른 벽 스프라이트를 반환합니다.
-    private Sprite GetOrientedWallSprite(int[,] mapData, int x, int y, int w, int h, Sprite[] sprites)
+    private Sprite GetOrientedWallSprite(int[,] mapData, int x, int y, int w, int h, Sprite[] sprites, bool[,] corridorMask = null)
     {
         // 주변 8방향의 벽(Wall) 여부를 확인합니다.
         // IsWall은 맵 밖이거나 바닥(1)이 아니면 true(벽)를 반환합니다.
@@ -170,8 +218,8 @@ public class DungeonRenderer : MonoBehaviour
         // 1. 4방향 모두 벽인 경우 (외곽 코너 또는 중앙 채우기)
         if ((pattern & mask_cardinal) == mask_cardinal) 
         {
-            if ((pattern & 128) == 0) return sprites[0]; // SE 바닥 -> Top Left Outer (┌)
-            if ((pattern & 32) == 0)  return sprites[2]; // SW 바닥 -> Top Right Outer (┐)
+            if ((pattern & 128) == 0) return sprites[2]; // SE 바닥 -> Top Left Outer (┌)
+            if ((pattern & 32) == 0)  return sprites[0]; // SW 바닥 -> Top Right Outer (┐)
             if ((pattern & 4) == 0)   return sprites[6]; // NE 바닥 -> Bottom Left Outer (└)
             if ((pattern & 1) == 0)   return sprites[8]; // NW 바닥 -> Bottom Right Outer (┘)
             return sprites[4]; // 대각선도 모두 벽이거나 예외 상황이면 Center Fill (■)
@@ -183,14 +231,23 @@ public class DungeonRenderer : MonoBehaviour
         if ((pattern & mask_cardinal) == (2 | 64 | 8))  return sprites[3]; // E가 바닥 -> Left Outer (│)
         if ((pattern & mask_cardinal) == (2 | 64 | 16)) return sprites[5]; // W가 바닥 -> Right Outer (│)
 
-        // 3. 2방향 벽인 경우 (내부 코너) - 내부 코너 전용 타일 대신 기본 중앙 채우기(■) 블록으로 대치
-        // 내부 코너 타일(9~12번)을 따로 사용하려면 아래 주석을 해제하세요.
-        /*
-        if ((pattern & mask_cardinal) == (2 | 16))  return sprites[9];  // N, E 벽 -> Inner Bottom Left
-        if ((pattern & mask_cardinal) == (2 | 8))   return sprites[10]; // N, W 벽 -> Inner Bottom Right
-        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[11]; // S, E 벽 -> Inner Top Left
-        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[12]; // S, W 벽 -> Inner Top Right
-        */
+        // 3. 2방향 벽인 경우 (내부 코너) - 내부 코너 전용 타일이 없으므로, 통짜 벽(■) 대신
+        //    직선 외곽 벽 타일로 처리해 복도-방 연결부를 매끄럽게 잇는다.
+        // N+E: 서쪽(안쪽)이 복도면 복도 입구->직선, 방이면 방 위벽 끝->코너(┐)
+        if ((pattern & mask_cardinal) == (2 | 16))
+        {
+            bool corridorSide = corridorMask != null && x - 1 >= 0 && corridorMask[x - 1, y];
+            return corridorSide ? sprites[1] : sprites[2]; // 복도->Top 직선, 방끝->TR ┐ _4
+        }
+        // N+W: 동쪽(안쪽)이 복도면 복도 입구->직선, 방이면 방 위벽 끝->코너(┌)
+        if ((pattern & mask_cardinal) == (2 | 8))
+        {
+            bool corridorSide = corridorMask != null && x + 1 < w && corridorMask[x + 1, y];
+            return corridorSide ? sprites[1] : sprites[0]; // 복도->Top 직선, 방끝->TL ┌ _2
+        }
+        // 아래로 가는 복도(S+W/S+E): 외부 코너 타일로 꺾어줌 (사용자 지정 _2/_4)
+        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[0]; // S+W 벽(왼쪽 꺾임)  -> TL 코너(┌) _2
+        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[2]; // S+E 벽(오른쪽 꺾임) -> TR 코너(┐) _4
 
         // 4. 예외: 1블록 두께 벽 (방과 방 사이 1칸 띄워진 곳 등, 거의 발생 안 함)
         if ((pattern & mask_cardinal) == (8 | 16)) return sprites[1]; // 가로 1칸 벽 -> Top Outer

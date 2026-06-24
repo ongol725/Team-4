@@ -29,6 +29,18 @@ public class InventoryAdditiveLoader : MonoBehaviour
 #else
         yield return SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
 #endif
+        // Additive 로드 시 인벤토리 씬의 Camera 비활성화 — 메인 씬 카메라만 렌더링
+        var inventorySceneForCamera = UnityEngine.SceneManagement.SceneManager.GetSceneByName(_sceneName);
+        var allCameras = FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var cam in allCameras)
+        {
+            if (cam.gameObject.scene == inventorySceneForCamera)
+            {
+                cam.enabled = false;
+                Debug.Log($"[InventoryLoader] 인벤토리 씬 카메라 비활성화: {cam.gameObject.name}");
+            }
+        }
+
         // Additive 로드 시 AudioListener 중복 제거 — 메인 씬 카메라 것만 유지
         var listeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
         if (listeners.Length > 1)

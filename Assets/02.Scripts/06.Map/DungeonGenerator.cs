@@ -51,6 +51,7 @@ public class DungeonGenerator : MonoBehaviour
     //private int mapWidth = 150;
     //private int mapHeight = 150;
     private int[,] mapData;      // 0: 빈공간, 1: 바닥(방 및 복도), 3: 벽
+    private bool[,] corridorMask; // true: 복도 바닥 (방 벽 / 복도 벽 구분용)
     private List<Room> generatedRooms = new List<Room>();
 
     // ==========================================
@@ -114,6 +115,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         // 데이터 초기화
         mapData = new int[mapWidth, mapHeight];
+        corridorMask = new bool[mapWidth, mapHeight];
         generatedRooms.Clear();
 
 
@@ -161,7 +163,7 @@ public class DungeonGenerator : MonoBehaviour
         if (dungeonRenderer != null)
         {
             dungeonRenderer.GenerateWalls(mapData, mapWidth, mapHeight);
-            dungeonRenderer.RenderTilemap(mapData, mapWidth, mapHeight, currentFloor);
+            dungeonRenderer.RenderTilemap(mapData, mapWidth, mapHeight, currentFloor, corridorMask);
         }
 
         //타일맵 렌더링 후 함정 및 추가 요소 배치
@@ -325,13 +327,18 @@ public class DungeonGenerator : MonoBehaviour
         // 겹침 검사
         // 복도는 출발 방을 무시하고 패딩 1로 겹침 검사
         // 새 방은 무시하는 방 없이(크기가 0인 RectInt 전달) 패딩 2로 검사하여 기존 방들과 완전히 떨어지도록 보장
-        if (IsSpaceValid(corridor, baseRoom.bounds, 1) && IsSpaceValid(newRoom, new RectInt(0, 0, 0, 0), 2))
+        if (IsSpaceValid(corridor, baseRoom.bounds, 1) && IsSpaceValid(newRoom, new RectInt(0, 0, 0, 0), 4))
         {
             // 핵심 검증: 복도 시작점이 실제 바닥(mapData==1)에 맞닿아 있는지 확인
             // ㄱ/ㄴ자 방의 파인 허공 구역에서 복도가 뻗어나가는 것을 방지
             if (!CorridorConnectsToFloor(corridor, dir)) return false;
 
             WriteRect(corridor, 1);
+            // 복도 영역을 마스크에 기록 (방 벽 / 복도 벽 구분용)
+            for (int cx = corridor.xMin; cx < corridor.xMax; cx++)
+                for (int cy = corridor.yMin; cy < corridor.yMax; cy++)
+                    if (cx >= 0 && cx < mapWidth && cy >= 0 && cy < mapHeight)
+                        corridorMask[cx, cy] = true;
             
             Room newGeneratedRoom = new Room { bounds = newRoom, type = RoomType.Normal };
             newGeneratedRoom.shape = (RoomShape)Random.Range(0, 6);
@@ -536,27 +543,24 @@ public class DungeonGenerator : MonoBehaviour
                         break;
 
 case RoomShape.Parthenon:
-                        // 파르테논 신전형: 방의 4등분 위치에 2x2 크기의 튼튼한 기둥 4개 배치
-                        
-                        // 기둥이 들어가려면 방이 어느 정도 커야 하므로 최소 10x10 이상일 때만 발동
-                        if (w >= 10 && h >= 10) 
+                        // 파르테논 신전형: 방의 4등분 위치에 세로 기둥(받침/몸통/머리) 4개 배치
+                        // 기둥 받침 1칸을 값 4로 표시하고, 실제 기둥 스프라이트는 렌더러가 세로로 그린다.
+                        if (w >= 10 && h >= 10)
                         {
-                            int pillarSize = 2; // 기둥의 크기 (2칸 x 2칸)
-                            
-                            // 방 전체 크기의 4분의 1 지점에 기둥을 세우도록 좌표 계산 (비율에 따라 유동적으로 변함)
                             int offsetX = w / 4;
                             int offsetY = h / 4;
 
-                            // 4개의 기둥 위치에 현재 타일(localX, localY)이 겹치는지 수학적으로 검사
-                            bool isBottomLeftPillar = (localX >= offsetX && localX < offsetX + pillarSize) && (localY >= offsetY && localY < offsetY + pillarSize);
-                            bool isBottomRightPillar = (localX >= w - offsetX - pillarSize && localX < w - offsetX) && (localY >= offsetY && localY < offsetY + pillarSize);
-                            bool isTopLeftPillar = (localX >= offsetX && localX < offsetX + pillarSize) && (localY >= h - offsetY - pillarSize && localY < h - offsetY);
-                            bool isTopRightPillar = (localX >= w - offsetX - pillarSize && localX < w - offsetX) && (localY >= h - offsetY - pillarSize && localY < h - offsetY);
+                            // 4등분 위치에 기둥 받침(1칸)을 둔다
+                            bool isPillarBase =
+                                (localX == offsetX && localY == offsetY) ||
+                                (localX == w - offsetX - 1 && localY == offsetY) ||
+                                (localX == offsetX && localY == h - offsetY - 1) ||
+                                (localX == w - offsetX - 1 && localY == h - offsetY - 1);
 
-                            // 현재 그릴 타일이 4개 기둥 중 어느 한 곳에라도 속해 있다면 바닥을 그리지 않음 (구멍을 뚫음)
-                            if (isBottomLeftPillar || isBottomRightPillar || isTopLeftPillar || isTopRightPillar)
+                            if (isPillarBase)
                             {
-                                drawFloor = false;
+                                mapData[x, y] = 4; // 기둥 받침 마킹 (렌더러가 바닥+기둥을 처리)
+                                drawFloor = false; // 아래에서 바닥(1)으로 덮어쓰지 않도록
                             }
                         }
                         break;
