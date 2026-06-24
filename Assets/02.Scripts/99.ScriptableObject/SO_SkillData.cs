@@ -47,4 +47,8 @@ public class SO_SkillData : ScriptableObject
 
     [Header("이펙트")]
     public GameObject vfxPrefab;
+    [Tooltip("Projectile 스킬용 투사체 프리팹. 비우면 임시 투사체(원)로 발사된다.")]
+    public GameObject projectilePrefab;
+    [Tooltip("Projectile 투사체 속도(유닛/초). 0 이하이면 기본 15 적용")]
+    public float projectileSpeed = 15f;
 }

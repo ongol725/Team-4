@@ -328,7 +328,7 @@ public class SynergyManager : MonoBehaviour
                 {
                     var target = enemies[Random.Range(0, enemies.Count)];
                     vfxPos = target.transform.position;
-                    HitEnemy(skill, target, damage);
+                    ApplyHit(skill, target, damage);
                     enemies.Remove(target);
                 }
                 break;
@@ -338,7 +338,7 @@ public class SynergyManager : MonoBehaviour
             case SkillTargetType.Self:
             {
                 var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius);
-                foreach (var mc in enemies) HitEnemy(skill, mc, damage);
+                foreach (var mc in enemies) ApplyHit(skill, mc, damage);
                 break;
             }
 
@@ -346,7 +346,7 @@ public class SynergyManager : MonoBehaviour
             {
                 var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 20f : skill.rangeRadius);
                 MonsterController nearest = FindNearest(enemies, _player.position);
-                if (nearest != null) { vfxPos = nearest.transform.position; HitEnemy(skill, nearest, damage); }
+                if (nearest != null) { vfxPos = nearest.transform.position; ApplyHit(skill, nearest, damage); }
                 break;
             }
 
@@ -358,11 +358,11 @@ public class SynergyManager : MonoBehaviour
                 if (nearest != null)
                 {
                     vfxPos = nearest.transform.position;
-                    HitEnemy(skill, nearest, damage);
+                    ApplyHit(skill, nearest, damage);
                     // 두 번째 타격: 첫 번째와 다른 적
                     enemies.Remove(nearest);
                     MonsterController second = FindNearest(enemies, _player.position);
-                    if (second != null) HitEnemy(skill, second, damage);
+                    if (second != null) ApplyHit(skill, second, damage);
                 }
                 break;
             }
@@ -375,7 +375,7 @@ public class SynergyManager : MonoBehaviour
                     MonsterController t = FindNearest(enemies, _player.position);
                     if (t == null) break;
                     if (i == 0) vfxPos = t.transform.position;
-                    HitEnemy(skill, t, damage);
+                    ApplyHit(skill, t, damage);
                     enemies.Remove(t);
                 }
                 break;
@@ -383,6 +383,84 @@ public class SynergyManager : MonoBehaviour
         }
 
         SpawnVFX(skill, vfxPos);
+    }
+
+    /// <summary>
+    /// 스킬 형태(skillType)에 따라 타격을 적용한다.
+    /// Projectile = 타겟 방향으로 투사체 발사, 그 외 = 즉시 데미지(기존 동작).
+    /// </summary>
+    private void ApplyHit(SO_SkillData skill, MonsterController mc, int damage)
+    {
+        if (mc == null) return;
+        if (skill.skillType == SkillType.Projectile)
+            FireProjectileAt(skill, mc, damage);
+        else
+            HitEnemy(skill, mc, damage);
+    }
+
+    /// <summary>플레이어 위치에서 타겟 방향으로 투사체를 발사한다(ProjectileBase 재사용).</summary>
+    private void FireProjectileAt(SO_SkillData skill, MonsterController target, int damage)
+    {
+        if (_player == null || target == null) return;
+
+        Vector2 dir = ((Vector2)target.transform.position - (Vector2)_player.position).normalized;
+        if (dir == Vector2.zero) dir = Vector2.right;
+
+        GameObject go = skill.projectilePrefab != null
+            ? Instantiate(skill.projectilePrefab, _player.position, Quaternion.identity)
+            : BuildTempProjectile(skill);
+        go.transform.position = _player.position;
+
+        float speed   = skill.projectileSpeed > 0f ? skill.projectileSpeed : 15f;
+        float kbForce = skill.fixedEffect == FixedEffectType.Knockback ? skill.fixedEffectValue : 0f;
+
+        var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
+
+        // 명중 시 시너지 고정효과 적용 (마왕 불씨 등의 Burn)
+        if (skill.fixedEffect == FixedEffectType.Burn)
+            proj.SetOnHit(mc => StartCoroutine(ApplyBurn(mc, Mathf.Max(1, damage / 5), 3f, 1f)));
+
+        proj.Init(dir, damage, speed, lifetime: 3f, maxHits: 1, knockbackForce: kbForce);
+    }
+
+    /// <summary>프리팹이 없는 시너지 투사체용 임시 GameObject(노란 원)를 생성한다.</summary>
+    private GameObject BuildTempProjectile(SO_SkillData skill)
+    {
+        var go = new GameObject($"SynergyProj_{skill.skillID}");
+
+        var sr          = go.AddComponent<SpriteRenderer>();
+        sr.sprite       = GetCircleSprite();
+        sr.color        = new Color(1f, 0.9f, 0.1f); // 노란 원 정책 유지
+        sr.sortingOrder = 10;
+        go.transform.localScale = Vector3.one * 0.4f;
+
+        var rb          = go.AddComponent<Rigidbody2D>();
+        rb.gravityScale = 0f;
+
+        var col         = go.AddComponent<CircleCollider2D>();
+        col.isTrigger   = true;
+        col.radius      = 0.3f;
+
+        return go;
+    }
+
+    // 임시 투사체용 흰 원 스프라이트 (최초 1회 생성 후 캐싱, color로 틴트)
+    private static Sprite _circleSprite;
+    private static Sprite GetCircleSprite()
+    {
+        if (_circleSprite != null) return _circleSprite;
+        const int S = 32;
+        var tex = new Texture2D(S, S, TextureFormat.RGBA32, false) { name = "SynergyProjCircle" };
+        float c = (S - 1) * 0.5f, r = c;
+        for (int y = 0; y < S; y++)
+        for (int x = 0; x < S; x++)
+        {
+            float d = Mathf.Sqrt((x - c) * (x - c) + (y - c) * (y - c));
+            tex.SetPixel(x, y, d <= r ? Color.white : Color.clear);
+        }
+        tex.Apply();
+        _circleSprite = Sprite.Create(tex, new Rect(0, 0, S, S), new Vector2(0.5f, 0.5f), S);
+        return _circleSprite;
     }
 
     private void HitEnemy(SO_SkillData skill, MonsterController mc, int damage)

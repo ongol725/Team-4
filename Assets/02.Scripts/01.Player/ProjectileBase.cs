@@ -10,6 +10,12 @@ public class ProjectileBase : MonoBehaviour
     private float _explosionRadius;
     private bool  _exploded;
 
+    // 적 타격 시 추가 효과(시너지 Burn/즉사 등)를 적용하는 선택적 콜백. 기본 null.
+    private System.Action<MonsterController> _onHit;
+
+    /// <summary>적에게 명중할 때마다 호출될 콜백을 설정한다(시너지 고정효과 전달용).</summary>
+    public void SetOnHit(System.Action<MonsterController> onHit) => _onHit = onHit;
+
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
         float knockbackForce = 0f, float explosionRadius = 0f)
     {
@@ -53,6 +59,7 @@ public class ProjectileBase : MonoBehaviour
 
         Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
         mc.TakeDamage(_damage, _knockbackForce, kbDir);
+        _onHit?.Invoke(mc);
 
         if (--_remainingHits <= 0)
             Destroy(gameObject);
@@ -71,6 +78,7 @@ public class ProjectileBase : MonoBehaviour
             if (mc == null || mc.IsDead) continue;
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(_damage, _knockbackForce, kbDir);
+            _onHit?.Invoke(mc);
         }
     }
 }
