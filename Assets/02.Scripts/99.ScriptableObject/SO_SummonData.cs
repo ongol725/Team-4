@@ -16,11 +16,23 @@ public class SO_SummonData : ScriptableObject
     public SummonAIType aiType;
 
     [Header("전투")]
-    [Tooltip("시너지 무기 총합 공격력 대비 배율 (1.0 = 100%)")]
+    [Tooltip("ScalingStatType에 따라 WPN_ATK_AVG/SUM 또는 ARM_HP_SUM 대비 배율")]
+    public ScalingStatType scalingStat = ScalingStatType.WPN_ATK_AVG;
+    [Tooltip("scalingStat 기준 대비 배율 (1.0 = 100%)")]
     public float atkMultiplier = 0.5f;
     public float moveSpeed    = 4f;
     public float atkCooldown  = 1.5f;
     public float atkRange     = 1.5f;
+
+    [Header("지속 시간")]
+    [Tooltip("-1 = 전투 내내 영구 유지, 양수 = N초 후 소멸")]
+    public float duration = -1f;
+
+    [Header("고유 고정 효과")]
+    [Tooltip("성기사단 성역처럼 대미지 외 추가 효과가 있는 경우")]
+    public FixedEffectType fixedEffect = FixedEffectType.None;
+    [Tooltip("fixedEffect 수치. 예: HealArmorHpPct=1 이면 방어구 HP 총합의 1% 회복")]
+    public float fixedEffectValue = 0f;
 
     [Header("특수 스킬")]
     [Tooltip("평타 외 주기적으로 시전하는 스킬. 없으면 null")]
