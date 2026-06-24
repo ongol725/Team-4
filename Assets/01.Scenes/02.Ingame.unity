@@ -740,6 +740,78 @@ MonoBehaviour:
   - synergyType: 13
     grade: 3
     skill: {fileID: 11400000, guid: 44f8a02ad22efd94ab277acabd444af3, type: 2}
+  - synergyType: 1
+    grade: 0
+    skill: {fileID: 11400000, guid: 9659d1b528d04e74798ec18d27c2c2df, type: 2}
+  - synergyType: 1
+    grade: 1
+    skill: {fileID: 11400000, guid: a0afae21b17875147944fb0b7b7199a8, type: 2}
+  - synergyType: 1
+    grade: 2
+    skill: {fileID: 11400000, guid: cb5944a0e2ba70347b0bdb9ba1142b61, type: 2}
+  - synergyType: 2
+    grade: 0
+    skill: {fileID: 11400000, guid: dbcf6ae7777d8e9448a171cd8c4aaeec, type: 2}
+  - synergyType: 2
+    grade: 1
+    skill: {fileID: 11400000, guid: ca86461d1c615fb4fb5d0d72a9e5823e, type: 2}
+  - synergyType: 2
+    grade: 2
+    skill: {fileID: 11400000, guid: 359de3c9b68142b4b917a7d15c5f9b0c, type: 2}
+  - synergyType: 4
+    grade: 0
+    skill: {fileID: 11400000, guid: b78ecbdf86770e54f8c2a8999808c49f, type: 2}
+  - synergyType: 4
+    grade: 1
+    skill: {fileID: 11400000, guid: 5e9283036ca091145bfb591ac656f349, type: 2}
+  - synergyType: 4
+    grade: 2
+    skill: {fileID: 11400000, guid: 70f23400203035740ad178870c04ddda, type: 2}
+  - synergyType: 4
+    grade: 3
+    skill: {fileID: 11400000, guid: 83f22fe4a8bd97d4797921080b7a71ad, type: 2}
+  - synergyType: 6
+    grade: 0
+    skill: {fileID: 11400000, guid: 13f2353281b57544391e164eb2a5aab1, type: 2}
+  - synergyType: 6
+    grade: 1
+    skill: {fileID: 11400000, guid: d24415b82db45cb438e10e2d22a4ea74, type: 2}
+  - synergyType: 6
+    grade: 2
+    skill: {fileID: 11400000, guid: 26765f6fec6ecf5408c16695b95fdc89, type: 2}
+  - synergyType: 6
+    grade: 3
+    skill: {fileID: 11400000, guid: 5e42ed1c3470cfb499f4004f4a198aa0, type: 2}
+  - synergyType: 7
+    grade: 0
+    skill: {fileID: 11400000, guid: 76d21c2472a78d94faae0d7f143b0003, type: 2}
+  - synergyType: 7
+    grade: 1
+    skill: {fileID: 11400000, guid: 19334b2cfd2ab234dbca7bf88ba9aa1f, type: 2}
+  - synergyType: 7
+    grade: 2
+    skill: {fileID: 11400000, guid: dded2a9ea90b2a94384ba18eb9a2e471, type: 2}
+  - synergyType: 11
+    grade: 0
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 1
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 2
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 3
+    skill: {fileID: 11400000, guid: 01715f8b20d39f949a653242c5515d4b, type: 2}
+  - synergyType: 14
+    grade: 0
+    skill: {fileID: 11400000, guid: 94aee6b541b3d4d4ab5ed07575d8be5c, type: 2}
+  - synergyType: 14
+    grade: 1
+    skill: {fileID: 11400000, guid: 5f9477afe1733f94fb0301c5522ea879, type: 2}
+  - synergyType: 14
+    grade: 2
+    skill: {fileID: 11400000, guid: 931d2ebea23dc5c48922dc276424d3d5, type: 2}
   _summonBindings:
   - synergyType: 8
     grade: 0
