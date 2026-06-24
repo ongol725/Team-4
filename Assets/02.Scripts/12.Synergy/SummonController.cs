@@ -75,6 +75,10 @@ public class SummonController : MonoBehaviour
                     _                        => 0.60f, // 골렘·성역: 일반 크기
                 };
                 transform.localScale = Vector3.one * scale;
+
+                // 프레임이 2개 이상이면 애니메이션 코루틴 시작
+                if (data.animFrames != null && data.animFrames.Length > 1)
+                    StartCoroutine(PlaySpriteAnim(sr, data.animFrames, data.animFps));
             }
             else
             {
@@ -359,6 +363,23 @@ public class SummonController : MonoBehaviour
         Vector2 kb = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
         float kbForce = skill.fixedEffect == FixedEffectType.Knockback ? skill.fixedEffectValue : 0f;
         mc.TakeDamage(damage, kbForce, kb);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 스프라이트 애니메이션
+
+    private IEnumerator PlaySpriteAnim(SpriteRenderer sr, Sprite[] frames, float fps)
+    {
+        float interval = 1f / Mathf.Max(fps, 1f);
+        var wait = new WaitForSeconds(interval);
+        int idx = 0;
+        while (true)
+        {
+            if (sr == null) yield break;
+            sr.sprite = frames[idx];
+            idx = (idx + 1) % frames.Length;
+            yield return wait;
+        }
     }
 
     // ─────────────────────────────────────────────────────────────

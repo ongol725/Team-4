@@ -625,8 +625,9 @@ namespace BagSurvivor.SynergyEditor
                 { "SUM_SANCTUARY_3",  $"{sheetDir}/Sanctuary_Gd.prefab.png" },
             };
 
-            // 스프라이트 시트 경로 → _0 Sprite 캐시
-            var spriteCache = new Dictionary<string, Sprite>();
+            // 스프라이트 시트 경로 → (icon _0, 전체 프레임 배열) 캐시
+            var iconCache   = new Dictionary<string, Sprite>();
+            var framesCache = new Dictionary<string, Sprite[]>();
 
             int filled = 0;
             foreach (var kvp in summonIconMap)
@@ -639,7 +640,8 @@ namespace BagSurvivor.SynergyEditor
                     continue;
                 }
 
-                if (!spriteCache.TryGetValue(kvp.Value, out var sprite))
+                // _0 아이콘
+                if (!iconCache.TryGetValue(kvp.Value, out var sprite))
                 {
                     sprite = null;
                     foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(kvp.Value))
@@ -650,7 +652,7 @@ namespace BagSurvivor.SynergyEditor
                             break;
                         }
                     }
-                    spriteCache[kvp.Value] = sprite;
+                    iconCache[kvp.Value] = sprite;
                 }
 
                 if (sprite == null)
@@ -659,7 +661,27 @@ namespace BagSurvivor.SynergyEditor
                     continue;
                 }
 
-                summon.icon = sprite;
+                // 전체 애니메이션 프레임 배열 (번호 순 정렬)
+                if (!framesCache.TryGetValue(kvp.Value, out var frames))
+                {
+                    var list = new System.Collections.Generic.List<Sprite>();
+                    foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(kvp.Value))
+                    {
+                        if (asset is Sprite sp) list.Add(sp);
+                    }
+                    // 이름 끝 숫자 기준 오름차순 정렬 (_0, _1, _2 ...)
+                    list.Sort((a, b) =>
+                    {
+                        int numA = ExtractTrailingNumber(a.name);
+                        int numB = ExtractTrailingNumber(b.name);
+                        return numA.CompareTo(numB);
+                    });
+                    frames = list.ToArray();
+                    framesCache[kvp.Value] = frames;
+                }
+
+                summon.icon       = sprite;
+                summon.animFrames = frames;
                 EditorUtility.SetDirty(summon);
                 filled++;
             }
@@ -677,6 +699,16 @@ namespace BagSurvivor.SynergyEditor
             string folder = System.IO.Path.GetFileName(path);
             if (!string.IsNullOrEmpty(parent)) EnsureFolder(parent);
             AssetDatabase.CreateFolder(parent ?? "Assets", folder);
+        }
+
+        // 스프라이트 이름 끝의 숫자 추출 ("Fairy.prefab_12" → 12)
+        static int ExtractTrailingNumber(string name)
+        {
+            int i = name.Length - 1;
+            while (i >= 0 && char.IsDigit(name[i])) i--;
+            return (i < name.Length - 1)
+                ? int.Parse(name.Substring(i + 1))
+                : int.MaxValue;
         }
     }
 }
