@@ -24,6 +24,7 @@ public class PlayerAttack : MonoBehaviour
     private BattleLoadout            _currentLoadout;
     private bool                     _paused;
     private bool                     _inCombatZone;
+    private bool                     _boomerangGoLeft; // WPN_010 좌우 방향 토글
 
     // ─────────────────────────────────────────────────────────────
 
@@ -139,6 +140,16 @@ public class PlayerAttack : MonoBehaviour
             // ── SingleTarget ───────────────────────────────────────
             case WeaponAttackStyleType.SingleTarget:
             {
+                // ── WPN_010 부메랑: 좌우 방향 번갈아 발사 ──────────
+                if (id == "WPN_010")
+                {
+                    float   spdM = g5 ? 1.5f : 1f;
+                    Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
+                    _boomerangGoLeft = !_boomerangGoLeft;
+                    SpawnProjectile(entry, dir, spdMult: spdM);
+                    break;
+                }
+
                 int   shots      = 1;
                 float dmgMult    = 1f;
                 float spdMult    = 1f;
@@ -146,14 +157,16 @@ public class PlayerAttack : MonoBehaviour
                 int   pierce     = 0;
                 int   targetCnt  = 1;
 
+                // 쇠뇌: 4단계(effectiveGrade≥3)부터 무제한 관통
+                if (id == "WPN_006" && entry.effectiveGrade >= 3)
+                    pierce = 99;
+
                 if (g5)
                 {
                     switch (id)
                     {
                         case "WPN_001": shots     = 2;     break; // 단검: 2발 투척
-                        case "WPN_006": pierce    = 99;    break; // 쇠뇌: 무제한 관통
                         case "WPN_007": dmgMult   = 1.3f;  break; // 권총: 데미지 +30%
-                        case "WPN_010": spdMult   = 1.5f;  break; // 부메랑: 속도 증가
                         case "WPN_011": targetCnt = 2;     break; // 지팡이: 적 2명
                         case "WPN_012": scaleMult = 1.5f;  break; // 마도서: 크기 1.5배
                         case "WPN_013": targetCnt = 2;     break; // 번개구슬: 적 2명
@@ -272,7 +285,8 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.PierceLine:
             {
                 float lineRange = g5 && id == "WPN_021" ? range * 1.5f : range;
-                AttackPierceLine(entry, lineRange, 99); // 스피어: 기본 무제한 관통
+                int   pierce    = g5 && id == "WPN_021" ? 99 : 3; // 5단계에서 관통 해제
+                AttackPierceLine(entry, lineRange, pierce);
                 break;
             }
 
