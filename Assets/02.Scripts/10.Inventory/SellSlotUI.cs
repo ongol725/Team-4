@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -147,7 +147,7 @@ public class SellSlotUI : MonoBehaviour
         _bg = panel.GetComponent<Image>();
         _bg.color = IdleColor;
 
-        var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        var font = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                 ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         // ── 타이틀 "판매" ──────────────────────────────────────────

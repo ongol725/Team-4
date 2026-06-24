@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -232,7 +232,7 @@ public class ItemInfoPopup : MonoBehaviour
         var gr = gameObject.AddComponent<GraphicRaycaster>();
         gr.blockingMask = 0; // 팝업 자체는 레이캐스트 차단 안 함
 
-        Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        Font font = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                  ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         // ── 패널 루트 ──
