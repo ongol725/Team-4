@@ -63,12 +63,6 @@ public class DungeonPopulator : MonoBehaviour
         else bossRoom.type = RoomType.Elite;
 
         available.Remove(bossRoom);
-
-        if (available.Count > 0)
-        {
-            int shopIdx = Random.Range(0, available.Count);
-            available[shopIdx].type = RoomType.Shop;
-        }
     }
 
     private int CountEntrances(Room room, int[,] mapData)
