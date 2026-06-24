@@ -71,6 +71,14 @@ public class GameManager : MonoBehaviour
     [Tooltip("1층부터 순서대로 씬 이름 입력 (마지막이 보스 씬)")]
     public string[] floorSceneNames = { "02.Floor1", "03.Floor2", "04.Floor3", "05.Floor4", "06.Floor5_Boss" };
 
+    [Header("씬 이름")]
+    [Tooltip("로비에서 런 시작 시 진입할 인게임 씬")]
+    public string ingameSceneName = "02.Ingame";
+    [Tooltip("bossFloor 도달 시 이동할 보스룸 씬")]
+    public string bossRoomSceneName = "06.BossRoom";
+    [Tooltip("이 층에 도달하면 보스룸 씬으로 이동")]
+    public int bossFloor = 5;
+
     void Awake()
     {
         if (_instance != null && _instance != this)
@@ -84,10 +92,26 @@ public class GameManager : MonoBehaviour
         gold = _settings != null ? _settings.startingGold : 200;
     }
 
+    /// <summary>로비에서 호출. 골드를 초기화하고 1층부터 새 런을 시작한다.</summary>
+    public void StartRun()
+    {
+        currentFloor = 1;
+        ResetGold();
+        Debug.Log("[GameManager] 새 런을 시작합니다. (1층)");
+        SceneManager.LoadScene(ingameSceneName);
+    }
+
     public void GoToNextFloor()
     {
         currentFloor++;
         Debug.Log($"[GameManager] {currentFloor}층으로 이동합니다.");
+
+        // 보스 층 도달 시: 던전 재생성 대신 보스룸 씬으로 이동
+        if (currentFloor >= bossFloor)
+        {
+            SceneManager.LoadScene(bossRoomSceneName);
+            return;
+        }
 
         if (!useSceneTransition)
         {

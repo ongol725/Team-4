@@ -327,7 +327,7 @@ public class DungeonGenerator : MonoBehaviour
         // 겹침 검사
         // 복도는 출발 방을 무시하고 패딩 1로 겹침 검사
         // 새 방은 무시하는 방 없이(크기가 0인 RectInt 전달) 패딩 2로 검사하여 기존 방들과 완전히 떨어지도록 보장
-        if (IsSpaceValid(corridor, baseRoom.bounds, 1) && IsSpaceValid(newRoom, new RectInt(0, 0, 0, 0), 2))
+        if (IsSpaceValid(corridor, baseRoom.bounds, 1) && IsSpaceValid(newRoom, new RectInt(0, 0, 0, 0), 4))
         {
             // 핵심 검증: 복도 시작점이 실제 바닥(mapData==1)에 맞닿아 있는지 확인
             // ㄱ/ㄴ자 방의 파인 허공 구역에서 복도가 뻗어나가는 것을 방지
