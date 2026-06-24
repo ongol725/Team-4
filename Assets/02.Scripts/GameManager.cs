@@ -38,6 +38,14 @@ public class GameManager : MonoBehaviour
         onLoadoutReady?.Invoke(loadout);
     }
 
+    /// <summary>
+    /// 새 런 시작 또는 씬 전환 전 호출. 이전 로드아웃이 새 씬에서 즉시 적용되는 것을 방지한다.
+    /// </summary>
+    public void ClearLoadout()
+    {
+        CurrentLoadout = null;
+    }
+
     /// <summary>골드를 추가합니다.</summary>
     public void AddGold(int amount)
     {

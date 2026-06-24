@@ -21,10 +21,10 @@ MonoBehaviour:
   atkCooldown: 1
   atkRange: 5
   duration: 5
-  uniqueSkill: {fileID: 0}
-  uniqueSkillCooldown: 8
   fixedEffect: 2
   fixedEffectValue: 1
+  uniqueSkill: {fileID: 0}
+  uniqueSkillCooldown: 8
   modelPrefab: {fileID: 0}
   icon: {fileID: 996224133246222207, guid: 694b7826f3eedac498a143bb509d9b63, type: 3}
   animFrames:

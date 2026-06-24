@@ -158,7 +158,7 @@ MonoBehaviour:
   - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
   - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
   - {fileID: 439714262228731463, guid: 6c0a190e70a06d446b105f0aaaa12814, type: 3}
-  - {fileID: 0}
+  - {fileID: 8503639987653096166, guid: a8b1e8348165dc84c9035d323c683ad5, type: 3}
   - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
   - {fileID: 6703318431440199771, guid: ca72c7c52032dcc408019e20c5921fd7, type: 3}
   - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
@@ -172,33 +172,106 @@ MonoBehaviour:
   - {fileID: 1071622943208925043, guid: 81cd25f279ae19e42abf49a6b9c76da9, type: 3}
   floorConfigs:
   - floor: 1
-    minTier: 1
-    maxTier: 5
-    minCount: 3
-    maxCount: 6
+    nearMonsters:
+    - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
+    midMonsters:
+    - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
+    - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
+    farMonsters:
+    - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
+    - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
+    - {fileID: 439714262228731463, guid: 6c0a190e70a06d446b105f0aaaa12814, type: 3}
+    maxAlive: 5
+    spawnInterval: 2
   - floor: 2
-    minTier: 4
-    maxTier: 8
-    minCount: 4
-    maxCount: 7
+    nearMonsters:
+    - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
+    midMonsters:
+    - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
+    - {fileID: 6703318431440199771, guid: ca72c7c52032dcc408019e20c5921fd7, type: 3}
+    farMonsters:
+    - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
+    - {fileID: 6703318431440199771, guid: ca72c7c52032dcc408019e20c5921fd7, type: 3}
+    maxAlive: 6
+    spawnInterval: 2
   - floor: 3
-    minTier: 7
-    maxTier: 12
-    minCount: 5
-    maxCount: 8
+    nearMonsters:
+    - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
+    midMonsters:
+    - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
+    - {fileID: 2122078588672271730, guid: b8ca1903eb5a33c43a55f2759551c795, type: 3}
+    farMonsters:
+    - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
+    - {fileID: 2122078588672271730, guid: b8ca1903eb5a33c43a55f2759551c795, type: 3}
+    - {fileID: 6427610672282125992, guid: 3ba080278912b774da7c2534d0587717, type: 3}
+    maxAlive: 7
+    spawnInterval: 1.8
   - floor: 4
-    minTier: 11
-    maxTier: 15
-    minCount: 6
-    maxCount: 9
+    nearMonsters:
+    - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    midMonsters:
+    - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    - {fileID: 7878504994168186160, guid: e6c5f6d2e136c4348afa675d9cb36a80, type: 3}
+    farMonsters:
+    - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    - {fileID: 7878504994168186160, guid: e6c5f6d2e136c4348afa675d9cb36a80, type: 3}
+    - {fileID: 7970580902981092378, guid: 38b080fa7dcc1c049a5829d1e948476e, type: 3}
+    maxAlive: 8
+    spawnInterval: 1.6
+  - floor: 5
+    nearMonsters:
+    - {fileID: 3051456863515954885, guid: 40c0ec4db1209684794719d9ed4263d6, type: 3}
+    midMonsters:
+    - {fileID: 3051456863515954885, guid: 40c0ec4db1209684794719d9ed4263d6, type: 3}
+    - {fileID: 1071622943208925043, guid: 81cd25f279ae19e42abf49a6b9c76da9, type: 3}
+    farMonsters:
+    - {fileID: 3051456863515954885, guid: 40c0ec4db1209684794719d9ed4263d6, type: 3}
+    - {fileID: 1071622943208925043, guid: 81cd25f279ae19e42abf49a6b9c76da9, type: 3}
+    maxAlive: 8
+    spawnInterval: 1.6
   specialRules:
   - roomType: 4
+    floor: 2
     monsterPrefabs:
     - {fileID: 6457529420895026653, guid: 9f5ac0fa91f646744ab99f0d38667cc9, type: 3}
     - {fileID: 9158167247413763753, guid: 9d5c7f1771b4b474a8fc2613850a7330, type: 3}
     - {fileID: 9112178706994911348, guid: fc49b2fd66dc1124785717f2a532a124, type: 3}
+    noRepeatAcrossRooms: 1
+    hpMultiplier: 1
+    attackMultiplier: 1
     minCount: 1
     maxCount: 1
+  - roomType: 4
+    floor: 4
+    monsterPrefabs:
+    - {fileID: 6457529420895026653, guid: 9f5ac0fa91f646744ab99f0d38667cc9, type: 3}
+    - {fileID: 9158167247413763753, guid: 9d5c7f1771b4b474a8fc2613850a7330, type: 3}
+    - {fileID: 9112178706994911348, guid: fc49b2fd66dc1124785717f2a532a124, type: 3}
+    noRepeatAcrossRooms: 1
+    hpMultiplier: 2
+    attackMultiplier: 2
+    minCount: 1
+    maxCount: 1
+  - roomType: 3
+    floor: 1
+    monsterPrefabs:
+    - {fileID: 439714262228731463, guid: 2e01cb712ec147447aaed11ec251d8c8, type: 3}
+    noRepeatAcrossRooms: 0
+    hpMultiplier: 1
+    attackMultiplier: 1
+    minCount: 1
+    maxCount: 1
+  - roomType: 3
+    floor: 3
+    monsterPrefabs:
+    - {fileID: 6427610672282125992, guid: b1af656e087bd7f469e5c084d3a3412c, type: 3}
+    noRepeatAcrossRooms: 0
+    hpMultiplier: 1
+    attackMultiplier: 1
+    minCount: 1
+    maxCount: 1
+  nearThreshold: 0.4
+  midThreshold: 0.75
   edgeMargin: 1
   maxPositionAttempts: 25
   prewarmPerType: 8
@@ -952,8 +1025,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2670288576129206443, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1954800508}
   m_SourcePrefab: {fileID: 100100000, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+--- !u!1 &1954800506 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2670288576129206443, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+  m_PrefabInstance: {fileID: 1449309142}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1954800508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954800506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4095f4a30e724324982e76aacc23a2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopStateButton
 --- !u!114 &1966734777 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4126022947026927154, guid: 6364535931c3b474d9258dccd370598b, type: 3}

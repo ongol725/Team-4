@@ -104,7 +104,7 @@ public class GoldDisplayUI : MonoBehaviour
         txt.raycastTarget = false;
         txt.text =
             "<b>[ 단축키 ]</b>\n" +
-            "<color=#FFDD88>[I]</color>  인벤토리 열기·닫기\n" +
+            "<color=#FFDD88>[Tab]</color>  인벤토리 열기·닫기\n" +
             "<color=#FFDD88>[L]</color>  즉시 합성\n" +
             "<color=#FFDD88>[O]</color>  자동 배치\n" +
             "<color=#FFDD88>[우클릭]</color>  스마트 구매";
