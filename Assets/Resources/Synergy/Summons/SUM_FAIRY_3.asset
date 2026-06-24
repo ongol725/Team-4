@@ -15,7 +15,7 @@ MonoBehaviour:
   summonID: SUM_FAIRY_3
   summonName: "\uACE0\uC18D \uC694\uC815 (\uACE8\uB4DC)"
   aiType: 1
-  scalingStat: 0
+  scalingStat: 1
   atkMultiplier: 1
   moveSpeed: 150
   atkCooldown: 0.15

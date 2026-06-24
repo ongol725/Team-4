@@ -483,7 +483,7 @@ public class SynergyManager : MonoBehaviour
             go.transform.position = _player.position + (Vector3)offset;
 
             var sc = go.AddComponent<SummonController>();
-            sc.Init(data, _player, atkPower, _enemyLayer);
+            sc.Init(data, _player, atkPower, _enemyLayer, i, count);
             _summons.Add(sc);
         }
     }

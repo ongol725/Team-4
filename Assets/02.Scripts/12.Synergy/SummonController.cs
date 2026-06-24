@@ -42,7 +42,8 @@ public class SummonController : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────────
 
-    public void Init(SO_SummonData data, Transform player, int attackPower, LayerMask enemyLayer)
+    public void Init(SO_SummonData data, Transform player, int attackPower, LayerMask enemyLayer,
+                     int siblingIndex = 0, int siblingCount = 1)
     {
         _data         = data;
         _player       = player;
@@ -53,6 +54,10 @@ public class SummonController : MonoBehaviour
         _atkTimer         = 0f;
         _uniqueSkillTimer = 0f;
         _mainCam          = Camera.main;
+
+        // 여러 요정 소환 시 균등 배치: 0°, 120°, 240° 등
+        if (siblingCount > 1)
+            _orbitAngle = 360f / siblingCount * siblingIndex;
 
         if (data.modelPrefab != null)
         {
@@ -224,7 +229,7 @@ public class SummonController : MonoBehaviour
 
     private void UpdateOrbitPlayer()
     {
-        _orbitAngle += 90f * Time.deltaTime;
+        _orbitAngle += _data.moveSpeed * Time.deltaTime;
         float rad = _orbitAngle * Mathf.Deg2Rad;
         transform.position = (Vector2)_player.position
             + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * OrbitRadius;
