@@ -79,6 +79,12 @@ namespace BagSurvivor.Monster
         // 특수 기믹에서 이동을 제어하기 위한 플래그
         private bool isMovementPaused = false;
 
+        // 상태이상 관련
+        private float     _speedMultiplier = 1f;
+        private Coroutine _stunCo;
+        private Coroutine _slowCo;
+        private Coroutine _burnCo;
+
         // 보스 패턴 등에서 Rigidbody 이동을 직접 제어하기 위해 컨트롤러 기본 이동을 위임받는 플래그.
         // true인 동안 FixedUpdate의 HandleMovement(추적/정지 처리)를 건너뛴다.
         private bool externalMovementControl = false;
@@ -179,6 +185,10 @@ namespace BagSurvivor.Monster
             isInvincible = false;
             damageTakenMultiplier = 1f;
             damageReductionCo = null;
+            _speedMultiplier = 1f;
+            _stunCo = null;
+            _slowCo = null;
+            _burnCo = null;
             deathCallback = null;
             OnDeath = null; // 풀 재사용 시 이전 구독자 잔존 방지(기믹은 OnEnable에서 재구독)
             hpMultiplier = 1f;
@@ -392,7 +402,7 @@ namespace BagSurvivor.Monster
                 return;
             }
 
-            rb.linearVelocity = (toPlayer / dist) * monsterData.moveSpeed;
+            rb.linearVelocity = (toPlayer / dist) * monsterData.moveSpeed * _speedMultiplier;
         }
 
         // ==========================================
@@ -693,6 +703,61 @@ namespace BagSurvivor.Monster
             {
                 kbCooldownTimer = 0f;
             }
+        }
+
+        // ==========================================
+        // 상태이상 API
+        // ==========================================
+
+        /// <summary>duration 초 동안 이동을 멈춥니다. 중복 적용 시 남은 시간을 갱신합니다.</summary>
+        public void ApplyStun(float duration)
+        {
+            if (isDying) return;
+            if (_stunCo != null) StopCoroutine(_stunCo);
+            _stunCo = StartCoroutine(StunRoutine(duration));
+        }
+
+        private IEnumerator StunRoutine(float duration)
+        {
+            isMovementPaused = true;
+            rb.linearVelocity = Vector2.zero;
+            yield return new WaitForSeconds(duration);
+            isMovementPaused = false;
+            _stunCo = null;
+        }
+
+        /// <summary>duration 초 동안 이동 속도에 multiplier(0~1)를 곱합니다. 중복 시 갱신.</summary>
+        public void ApplySlow(float multiplier, float duration)
+        {
+            if (isDying) return;
+            if (_slowCo != null) StopCoroutine(_slowCo);
+            _slowCo = StartCoroutine(SlowRoutine(Mathf.Clamp01(multiplier), duration));
+        }
+
+        private IEnumerator SlowRoutine(float multiplier, float duration)
+        {
+            _speedMultiplier = multiplier;
+            yield return new WaitForSeconds(duration);
+            _speedMultiplier = 1f;
+            _slowCo = null;
+        }
+
+        /// <summary>tickInterval마다 damagePerTick 피해를 ticks회 입힙니다. 중복 시 갱신(재점화).</summary>
+        public void ApplyBurn(int damagePerTick, float tickInterval, int ticks)
+        {
+            if (isDying) return;
+            if (_burnCo != null) StopCoroutine(_burnCo);
+            _burnCo = StartCoroutine(BurnRoutine(damagePerTick, tickInterval, ticks));
+        }
+
+        private IEnumerator BurnRoutine(int dmg, float interval, int ticks)
+        {
+            for (int i = 0; i < ticks && !isDying; i++)
+            {
+                yield return new WaitForSeconds(interval);
+                if (!isDying) TakeDamage(dmg);
+            }
+            _burnCo = null;
         }
 
         /// <summary>
