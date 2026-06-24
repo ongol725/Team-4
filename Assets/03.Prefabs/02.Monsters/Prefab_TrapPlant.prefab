@@ -185,8 +185,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.TrapPlantGimmick
   areaPrefab: {fileID: 0}
-  initialDelay: 3
+  initialDelay: 1
   spawnInterval: 10
   areaDuration: 5
   areaRadius: 2
   damageTickInterval: 0.5
+  areaDamage: 8
