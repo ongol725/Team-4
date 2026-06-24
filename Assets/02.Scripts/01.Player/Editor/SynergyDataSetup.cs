@@ -254,6 +254,17 @@ namespace BagSurvivor.SynergyEditor
         {
             var config = LoadOrCreate<SO_SynergyConfig>(ConfigPath);
 
+            // ① 메뉴 실행 시 아이콘이 null로 초기화되지 않도록 기존 아이콘 보존
+            var savedIcons = new Dictionary<SynergyType, Sprite>();
+            if (config.thresholds != null)
+            {
+                foreach (var t in config.thresholds)
+                {
+                    if (t != null && t.icon != null)
+                        savedIcons[t.type] = t.icon;
+                }
+            }
+
             config.thresholds = new SynergyThreshold[]
             {
                 // ── 암살단 ──────────────────────────────────────────
@@ -352,6 +363,13 @@ namespace BagSurvivor.SynergyEditor
                     "10초마다 1초간 이동속도/피해량 50% 감소",
                     "초강력 스킬 3개 무한 난사.  대미지 1000%"),
             };
+
+            // 보존된 아이콘 복원
+            foreach (var t in config.thresholds)
+            {
+                if (t != null && savedIcons.TryGetValue(t.type, out var icon))
+                    t.icon = icon;
+            }
 
             EditorUtility.SetDirty(config);
             Debug.Log($"[SynergyDataSetup] SynergyConfig 생성 완료: {ConfigPath}");
@@ -557,17 +575,17 @@ namespace BagSurvivor.SynergyEditor
             // Electro·Overload 는 전용 이미지 없음 → SynergyIconHelper 런타임 컬러 아이콘 fallback
             var iconMap = new Dictionary<SynergyType, string>
             {
-                { SynergyType.Assassin,    $"{SheetDir}/Shuriken_Sv.prefab.png"      },
-                { SynergyType.SwordMaster, $"{SheetDir}/SwordWave.prefab.png"        },
-                { SynergyType.HolyKnight,  $"{SheetDir}/Sanctuary_Sv.prefab.png"     },
-                { SynergyType.DemonLord,   $"{SheetDir}/Scythe_BlackRed.prefab.png"  },
-                { SynergyType.Titan,       $"{SheetDir}/Shockwave_RED.prefab.png"    },
-                { SynergyType.Tycoon,      $"{SheetDir}/Gold_Coin1.prefab.png"       },
-                { SynergyType.Executioner, $"{SheetDir}/Scythe_Black.prefab.png"     },
-                { SynergyType.SpiritMage,  $"{SheetDir}/Spirit_Sv.prefab.png"        },
-                { SynergyType.Fairy,       $"{SheetDir}/Fairy.prefab.png"            },
-                { SynergyType.Pinball,     $"{SheetDir}/Pinball.prefab.png"          },
-                { SynergyType.Impregnable, $"{SheetDir}/Shockwave_Common.prefab.png" },
+                { SynergyType.Assassin,    $"{SheetDir}/Shuriken_Sv.png"      },
+                { SynergyType.SwordMaster, $"{SheetDir}/SwordWave.png"        },
+                { SynergyType.HolyKnight,  $"{SheetDir}/Sanctuary_Sv.png"     },
+                { SynergyType.DemonLord,   $"{SheetDir}/Scythe_BlackRed.png"  },
+                { SynergyType.Titan,       $"{SheetDir}/Shockwave_RED.png"    },
+                { SynergyType.Tycoon,      $"{SheetDir}/Gold_Coin1.png"       },
+                { SynergyType.Executioner, $"{SheetDir}/Scythe_Black.png"     },
+                { SynergyType.SpiritMage,  $"{SheetDir}/Spirit_Sv.png"        },
+                { SynergyType.Fairy,       $"{SheetDir}/Fairy.png"            },
+                { SynergyType.Pinball,     $"{SheetDir}/Pinball.png"          },
+                { SynergyType.Impregnable, $"{SheetDir}/Shockwave_Common.png" },
             };
 
             int filled = 0;
@@ -611,18 +629,18 @@ namespace BagSurvivor.SynergyEditor
             // SO_SummonData ID → (스프라이트 시트 경로, 프레임 접미사)
             var summonIconMap = new Dictionary<string, string>
             {
-                { "SUM_FAIRY_1",      $"{sheetDir}/Fairy.prefab.png"        },
-                { "SUM_FAIRY_2",      $"{sheetDir}/Fairy.prefab.png"        },
-                { "SUM_FAIRY_3",      $"{sheetDir}/Fairy.prefab.png"        },
-                { "SUM_PINBALL_1",    $"{sheetDir}/Pinball.prefab.png"      },
-                { "SUM_PINBALL_2",    $"{sheetDir}/Pinball.prefab.png"      },
-                { "SUM_GOLEM_1",      $"{sheetDir}/Spirit_Br.prefab.png"    },
-                { "SUM_GOLEM_2",      $"{sheetDir}/Spirit_Sv.prefab.png"    },
-                { "SUM_GOLEM_3",      $"{sheetDir}/Spirit_Gd.prefab.png"    },
-                { "SUM_GIANT_GOLEM",  $"{sheetDir}/Spirit_Gd.prefab.png"    },
-                { "SUM_SANCTUARY_1",  $"{sheetDir}/Sanctuary_Br.prefab.png" },
-                { "SUM_SANCTUARY_2",  $"{sheetDir}/Sanctuary_Sv.prefab.png" },
-                { "SUM_SANCTUARY_3",  $"{sheetDir}/Sanctuary_Gd.prefab.png" },
+                { "SUM_FAIRY_1",      $"{sheetDir}/Fairy.png"        },
+                { "SUM_FAIRY_2",      $"{sheetDir}/Fairy.png"        },
+                { "SUM_FAIRY_3",      $"{sheetDir}/Fairy.png"        },
+                { "SUM_PINBALL_1",    $"{sheetDir}/Pinball.png"      },
+                { "SUM_PINBALL_2",    $"{sheetDir}/Pinball.png"      },
+                { "SUM_GOLEM_1",      $"{sheetDir}/Spirit_Br.png"    },
+                { "SUM_GOLEM_2",      $"{sheetDir}/Spirit_Sv.png"    },
+                { "SUM_GOLEM_3",      $"{sheetDir}/Spirit_Gd.png"    },
+                { "SUM_GIANT_GOLEM",  $"{sheetDir}/Spirit_Gd.png"    },
+                { "SUM_SANCTUARY_1",  $"{sheetDir}/Sanctuary_Br.png" },
+                { "SUM_SANCTUARY_2",  $"{sheetDir}/Sanctuary_Sv.png" },
+                { "SUM_SANCTUARY_3",  $"{sheetDir}/Sanctuary_Gd.png" },
             };
 
             // 스프라이트 시트 경로 → (icon _0, 전체 프레임 배열) 캐시
