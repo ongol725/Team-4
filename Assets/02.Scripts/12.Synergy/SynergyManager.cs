@@ -615,4 +615,23 @@ public class SynergyManager : MonoBehaviour
         }
         return best;
     }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    // ─────────────────────────────────────────────────────────────
+    // 테스트 전용 진입점 (SynergyTestPanel 에서 호출)
+
+    /// <summary>임의로 구성한 로드아웃을 즉시 적용해 시너지를 재구성한다.</summary>
+    public void ApplyLoadoutForTest(BattleLoadout loadout)
+    {
+        _loadout = loadout;
+        if (_player == null) FindPlayerRefs();
+        Refresh();
+    }
+
+    /// <summary>OnHitTaken 트리거(난공불락 등)를 강제 1회 발동.</summary>
+    public void TestSimulateHit() => OnPlayerHit(10);
+
+    /// <summary>OnMove 트리거(대부호)를 강제 1회 발동.</summary>
+    public void TestSimulateMove() => OnPlayerMoved(MoveDropInterval);
+#endif
 }
