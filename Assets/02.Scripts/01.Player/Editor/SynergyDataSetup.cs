@@ -585,7 +585,7 @@ namespace BagSurvivor.SynergyEditor
                 { SynergyType.SpiritMage,  $"{SheetDir}/Spirit_Sv.png"        },
                 { SynergyType.Fairy,       $"{SheetDir}/Fairy.png"            },
                 { SynergyType.Pinball,     $"{SheetDir}/Pinball.png"          },
-                { SynergyType.Impregnable, $"{SheetDir}/Shockwave_Common.png" },
+                // Impregnable: Shockwave_Common 첫 프레임이 노란 원이라 SynergyIconHelper fallback 사용
             };
 
             int filled = 0;
