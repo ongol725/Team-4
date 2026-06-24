@@ -687,6 +687,7 @@ GameObject:
   m_Component:
   - component: {fileID: 830000002}
   - component: {fileID: 830000003}
+  - component: {fileID: 830000004}
   m_Layer: 0
   m_Name: SynergyManager
   m_TagString: Untagged
@@ -868,6 +869,22 @@ MonoBehaviour:
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &830000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c3e91a4b2d6f08498e1a5c3d7b609f2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _manager: {fileID: 0}
+  _toggleKey: 282
+  _wpnAtk: 100
+  _armHp: 100
 --- !u!1001 &994228888
 PrefabInstance:
   m_ObjectHideFlags: 0
