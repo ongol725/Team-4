@@ -271,6 +271,31 @@ public class PlayerAttack : MonoBehaviour
                 break;
             }
 
+            // ── ThrownExplosive ────────────────────────────────────
+            case WeaponAttackStyleType.ThrownExplosive:
+            {
+                float explodeR = range * 0.5f;
+                int   count    = 1;
+
+                if (g5)
+                {
+                    if (id == "WPN_014") count     = 3;    // 그레네이드: 3발 부채꼴 투척
+                    if (id == "WPN_017") explodeR *= 1.5f; // 바주카: 폭발 범위 1.5배
+                }
+
+                var     nearest = FindNearest(range * 2f);
+                Vector2 center  = nearest != null
+                    ? ((Vector2)nearest.transform.position - (Vector2)transform.position).normalized
+                    : _lastMoveDir;
+
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 dir = count > 1 ? Rotate(center, (i - count / 2) * 20f) : center;
+                    SpawnExplosive(entry, dir, range, explodeR);
+                }
+                break;
+            }
+
             // ── PierceLine ─────────────────────────────────────────
             case WeaponAttackStyleType.PierceLine:
             {
@@ -489,6 +514,23 @@ public class PlayerAttack : MonoBehaviour
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce);
+    }
+
+    private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,
+        float travelRange, float explodeRadius)
+    {
+        var   wd       = entry.data;
+        float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
+        float lifetime = travelRange / rawSpeed;
+        int   damage   = ScaleDamage(entry.attackPower);
+
+        GameObject go = wd.projectile != null
+            ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
+            : BuildTempGO(wd.itemImage, wd.itemName);
+        go.transform.position = transform.position;
+
+        var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
+        proj.Init(dir, damage, rawSpeed, lifetime, 1, explosionRadius: explodeRadius);
     }
 
     private static GameObject BuildTempGO(Sprite icon, string weaponName)
