@@ -5560,7 +5560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.25, y: 122.68}
+  m_AnchoredPosition: {x: -16, y: -52}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1642988221
@@ -5613,7 +5613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b9784e16c645b7ba2e229417702bdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackpackBGAdjust
-  _posOffset: {x: -7.25, y: 122.68}
+  _posOffset: {x: -16, y: -52}
   _sizeOffset: {x: 0, y: 0}
 --- !u!1 &1676942182
 GameObject:
