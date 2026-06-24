@@ -181,7 +181,7 @@ MonoBehaviour:
     - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
     midMonsters:
     - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
-    - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
+    - {fileID: 439714262228731463, guid: 6c0a190e70a06d446b105f0aaaa12814, type: 3}
     farMonsters:
     - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
     - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}
@@ -235,6 +235,24 @@ MonoBehaviour:
     maxAlive: 8
     spawnInterval: 1.6
   specialRules:
+  - roomType: 3
+    floor: 1
+    monsterPrefabs:
+    - {fileID: 439714262228731463, guid: 895f25cb7f3a99c4bab8a138356721aa, type: 3}
+    noRepeatAcrossRooms: 0
+    hpMultiplier: 1
+    attackMultiplier: 1
+    minCount: 1
+    maxCount: 1
+  - roomType: 3
+    floor: 3
+    monsterPrefabs:
+    - {fileID: 6427610672282125992, guid: a1ce37b7b84dd384fb646bf3f2607c69, type: 3}
+    noRepeatAcrossRooms: 0
+    hpMultiplier: 1
+    attackMultiplier: 1
+    minCount: 1
+    maxCount: 1
   - roomType: 4
     floor: 2
     monsterPrefabs:
@@ -257,26 +275,7 @@ MonoBehaviour:
     attackMultiplier: 2
     minCount: 1
     maxCount: 1
-  - roomType: 3
-    floor: 1
-    monsterPrefabs:
-    - {fileID: 439714262228731463, guid: 895f25cb7f3a99c4bab8a138356721aa, type: 3}
-    noRepeatAcrossRooms: 0
-    hpMultiplier: 1
-    attackMultiplier: 1
-    minCount: 1
-    maxCount: 1
-  - roomType: 3
-    floor: 3
-    monsterPrefabs:
-    - {fileID: 6427610672282125992, guid: a1ce37b7b84dd384fb646bf3f2607c69, type: 3}
-    noRepeatAcrossRooms: 0
-    hpMultiplier: 1
-    attackMultiplier: 1
-    minCount: 1
-    maxCount: 1
-  nearThreshold: 0.4
-  midThreshold: 0.75
+  nearRingFactor: 1.5
   edgeMargin: 1
   maxPositionAttempts: 25
   prewarmPerType: 8
@@ -1253,6 +1252,10 @@ PrefabInstance:
     - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9009732684212373277, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
+      propertyPath: moveSpeed
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
