@@ -131,7 +131,7 @@ public class SynergyCalculator : MonoBehaviour
                 grade         = grade,
                 description   = threshold?.description ?? string.Empty,
                 effect        = effect,
-                icon          = threshold?.icon,
+                icon          = threshold?.icon ?? SynergyIconHelper.GetIcon(kvp.Key),
             });
         }
 
