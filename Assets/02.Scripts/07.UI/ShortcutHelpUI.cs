@@ -17,8 +17,8 @@ public class ShortcutHelpUI : MonoBehaviour
     private Vector2 _basePosition;
     private bool _isVisible;
 
-    // 위치 오프셋: 인벤토리 좌측 기준 (x=좌우, y=상하)
-    private Vector2 _positionOffset = new Vector2(-315f, 250f);
+    // 위치 오프셋: 시너지 우측 기준 (x=좌우, y=상하)
+    private Vector2 _positionOffset = new Vector2(10f, 0f);
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoCreate()
@@ -90,7 +90,7 @@ public class ShortcutHelpUI : MonoBehaviour
 
         var panelRt = _panel.GetComponent<RectTransform>();
         panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 1f);
-        panelRt.pivot     = new Vector2(1f, 1f);
+        panelRt.pivot     = new Vector2(0f, 1f); // 좌상단 기준 — 시너지 우측에 붙임
         panelRt.sizeDelta = new Vector2(PanelW, 100f); // 높이는 나중에 계산
 
         var bg = _panel.GetComponent<Image>();
@@ -131,52 +131,49 @@ public class ShortcutHelpUI : MonoBehaviour
 
         // ── 인벤토리 좌측에 배치 ────────────────────────────────────
         _panelRt = panelRt;
-        PositionNextToInventory(panelRt, canvas);
+        PositionNextToSynergy(panelRt, canvas);
 
         _panel.SetActive(false);
     }
 
     // ─────────────────────────────────────────────────────────────
 
-    private void PositionNextToInventory(RectTransform panelRt, Canvas canvas)
+    private void PositionNextToSynergy(RectTransform panelRt, Canvas canvas)
     {
         var canvasRt  = canvas.GetComponent<RectTransform>();
         var cam       = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-        var invGridRt = FindFirstObjectByType<InventoryGridUI>()?.GetComponent<RectTransform>();
+        var synergyRt = FindFirstObjectByType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
 
-        // 인벤토리 좌측 X, 상단 Y
-        float invLeftX = GetLeftEdgeX(invGridRt, canvasRt, cam);
-        float topY     = GetTopEdgeY(invGridRt, canvasRt, cam);
+        float rightX = GetRightEdgeX(synergyRt, canvasRt, cam);
+        float topY   = GetTopEdgeY(synergyRt, canvasRt, cam);
 
-        if (float.IsPositiveInfinity(invLeftX))
+        if (float.IsPositiveInfinity(rightX))
         {
-            panelRt.anchorMin = panelRt.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRt.anchoredPosition = new Vector2(-PanelW * 0.5f - 20f, 0f);
+            // 시너지를 못 찾으면 화면 왼쪽 끝에 폴백
+            panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 0.5f);
+            panelRt.anchoredPosition = new Vector2(Gap, 0f);
             return;
         }
 
-        // 팝업 우측 기준점: 기본값은 인벤토리 좌측
-        float anchorX = invLeftX - Gap;
-
-        // 시너지 UI가 인벤토리와 겹치는 위치에 있으면 시너지 좌측을 기준으로
-        var synergyRt = FindFirstObjectByType<BagSurvivor.UI.SynergyListUI>()?.GetComponent<RectTransform>();
-        if (synergyRt != null)
-        {
-            float synergyLeft = GetLeftEdgeX(synergyRt, canvasRt, cam);
-            if (synergyLeft < invLeftX)
-                anchorX = synergyLeft - Gap;
-        }
-
-        // anchor를 캔버스 pivot과 동일하게 맞춰야
-        // ScreenPointToLocalPointInRectangle 결과를 anchoredPosition에 그대로 쓸 수 있음
         panelRt.anchorMin = panelRt.anchorMax = canvasRt.pivot;
 
-        // 화면 밖으로 나가지 않도록 clamp (canvas local 좌표 기준)
+        // 화면 오른쪽으로 나가지 않도록 clamp
         float canvasHalfW = canvasRt.rect.width * 0.5f;
-        anchorX = Mathf.Max(anchorX, -canvasHalfW + PanelW + Gap);
+        rightX = Mathf.Min(rightX, canvasHalfW - PanelW - Gap);
 
-        _basePosition = new Vector2(anchorX, topY);
+        _basePosition = new Vector2(rightX, topY);
         panelRt.anchoredPosition = _basePosition + _positionOffset;
+    }
+
+    /// <summary>RectTransform의 월드 우상단 X를 캔버스 로컬 좌표로 반환</summary>
+    private static float GetRightEdgeX(RectTransform rt, RectTransform canvasRt, Camera cam)
+    {
+        if (rt == null) return float.PositiveInfinity;
+        var corners = new Vector3[4];
+        rt.GetWorldCorners(corners); // 2=우상
+        var screenPt = RectTransformUtility.WorldToScreenPoint(cam, corners[2]);
+        return RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRt, screenPt, cam, out var local) ? local.x : float.PositiveInfinity;
     }
 
     /// <summary>RectTransform의 월드 좌상단 X를 캔버스 로컬 좌표로 반환</summary>
