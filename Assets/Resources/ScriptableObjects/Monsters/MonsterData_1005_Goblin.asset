@@ -21,7 +21,7 @@ MonoBehaviour:
   defense: 2
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 4
+  moveSpeed: 2.5
   movePattern: 0
   kbResist: 0.1
   kbCooldown: 0
