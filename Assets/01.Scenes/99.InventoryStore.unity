@@ -963,7 +963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2facb9a69f4bb5546a4879f4d998e71e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SynergyCalculator
-  _config: {fileID: 0}
+  _config: {fileID: 11400000, guid: c5ecfea2d0d1ba04b85db7973367aa2f, type: 2}
   _analyzer: {fileID: 232402535}
   _synergyListUI: {fileID: 0}
 --- !u!114 &232402535
