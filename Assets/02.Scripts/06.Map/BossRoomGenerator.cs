@@ -29,6 +29,16 @@ public class BossRoomGenerator : MonoBehaviour
     public TileBase altFloorTile;
     public TileBase wallTile;
 
+    [Header("바닥 장식(Decor) - 베이스 사이사이 랜덤 배치")]
+    [Tooltip("단독으로 박히는 장식 타일들")]
+    public TileBase[] floorSingleTiles;
+    [Range(0f, 1f)] [Tooltip("각 바닥 칸이 단독 장식 타일이 될 확률")]
+    public float floorSingleChance = 0.05f;
+    [Tooltip("여러 칸이 한 묶음인 장식 세트")]
+    public FloorDecorSet[] floorDecorSets;
+    [Tooltip("배치 시도 횟수")]
+    public int floorDecorSetAttempts = 8;
+
     [Header("플레이어 스폰")]
     [Tooltip("씬에 배치된 플레이어 오브젝트")] public Transform playerTransform;
     [Tooltip("방 중앙 기준 스폰 오프셋 (타일 단위)")] public Vector2Int spawnOffset = Vector2Int.zero;
@@ -93,6 +103,11 @@ public class BossRoomGenerator : MonoBehaviour
                 floorTilemap.SetTile(new Vector3Int(x, y, 0), tile);
             }
         }
+
+        // 바닥 장식(단독/세트) 배치 — 방 전체가 바닥
+        FloorDecorPlacer.Apply(floorTilemap, roomWidth, roomHeight,
+            (x, y) => true,
+            floorSingleTiles, floorSingleChance, floorDecorSets, floorDecorSetAttempts);
 
         // 벽 배치 (바닥 경계 1칸 바깥)
         if (wallTilemap != null && wallTile != null)

@@ -42,6 +42,16 @@ public class DungeonRenderer : MonoBehaviour
     public TileBase defaultAltFloorTile;
     public TileBase defaultWallTile;
 
+    [Header("바닥 장식(Decor) - 베이스 사이사이 랜덤 배치")]
+    [Tooltip("단독으로 박히는 장식 타일들")]
+    public TileBase[] floorSingleTiles;
+    [Range(0f, 1f)] [Tooltip("각 바닥 칸이 단독 장식 타일이 될 확률")]
+    public float floorSingleChance = 0.05f;
+    [Tooltip("여러 칸이 한 묶음인 장식 세트")]
+    public FloorDecorSet[] floorDecorSets;
+    [Tooltip("던전당 세트 배치 시도 횟수")]
+    public int floorDecorSetAttempts = 8;
+
     // 맵 데이터와 크기를 받아서 8방향 벽을 계산합니다.
     public void GenerateWalls(int[,] mapData, int mapWidth, int mapHeight)
     {
@@ -194,6 +204,12 @@ public class DungeonRenderer : MonoBehaviour
                 }
             }
         }
+
+        // 바닥 장식(단독/세트) 배치 — 바닥(mapData==1) 위에만
+        if (floorTilemap != null)
+            FloorDecorPlacer.Apply(floorTilemap, mapWidth, mapHeight,
+                (cx, cy) => mapData[cx, cy] == 1,
+                floorSingleTiles, floorSingleChance, floorDecorSets, floorDecorSetAttempts);
     }
 
     // 비트마스크(Bitmask)를 이용해 맵 데이터를 분석하여 올바른 벽 스프라이트를 반환합니다.
