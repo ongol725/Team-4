@@ -1348,7 +1348,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 160}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &299125914
 MonoBehaviour:
@@ -2439,7 +2439,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 160}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &636576502
 MonoBehaviour:
@@ -2766,7 +2766,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 160}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &807637337
 MonoBehaviour:
@@ -2971,7 +2971,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 160}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &845892030
 MonoBehaviour:
@@ -3499,7 +3499,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 160}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1034847643
 MonoBehaviour:
@@ -5222,7 +5222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -16, y: -978}
+  m_AnchoredPosition: {x: -316, y: -978}
   m_SizeDelta: {x: 130, y: 34}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1528729857
@@ -5958,12 +5958,13 @@ MonoBehaviour:
   _attackPowerText: {fileID: 494932585}
   _attackSpeedText: {fileID: 176504657}
   _moveSpeedText: {fileID: 2052373693}
+  _dpsText: {fileID: 0}
   _critChanceText: {fileID: 209144383}
   _hpRegenText: {fileID: 0}
   _useMock: 1
   _mockMaxHp: 100
-  _mockAttackPow: 10
-  _mockAtkSpeed: 1
+  _mockAtkMul: 1
+  _mockAtkSpdMul: 1
   _mockMoveSpeed: 5
   _mockCritChance: 0.05
 --- !u!1 &1784275116
