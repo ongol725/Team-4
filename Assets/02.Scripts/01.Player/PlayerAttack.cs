@@ -140,16 +140,6 @@ public class PlayerAttack : MonoBehaviour
             // ── SingleTarget ───────────────────────────────────────
             case WeaponAttackStyleType.SingleTarget:
             {
-                // ── WPN_010 부메랑: 좌우 방향 번갈아 발사 ──────────
-                if (id == "WPN_010")
-                {
-                    float   spdM = g5 ? 1.5f : 1f;
-                    Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
-                    _boomerangGoLeft = !_boomerangGoLeft;
-                    SpawnProjectile(entry, dir, spdMult: spdM);
-                    break;
-                }
-
                 int   shots      = 1;
                 float dmgMult    = 1f;
                 float spdMult    = 1f;
@@ -287,6 +277,16 @@ public class PlayerAttack : MonoBehaviour
                 float lineRange = g5 && id == "WPN_021" ? range * 1.5f : range;
                 int   pierce    = g5 && id == "WPN_021" ? 99 : 3; // 5단계에서 관통 해제
                 AttackPierceLine(entry, lineRange, pierce);
+                break;
+            }
+
+            // ── Boomerang ──────────────────────────────────────────
+            case WeaponAttackStyleType.Boomerang:
+            {
+                float   spdM = g5 ? 1.5f : 1f;
+                Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
+                _boomerangGoLeft = !_boomerangGoLeft;
+                SpawnProjectile(entry, dir, spdMult: spdM);
                 break;
             }
 
