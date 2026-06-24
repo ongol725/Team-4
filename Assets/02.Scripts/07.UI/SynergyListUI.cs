@@ -143,7 +143,7 @@ namespace BagSurvivor.UI
             txt.fontSize  = 11;
             txt.alignment = TextAnchor.MiddleLeft;
 
-            string label = (s.grade == SynergyGrade.Gold || s.grade == SynergyGrade.Prism)
+            string label = (s.grade == SynergyGrade.Prism || s.count >= s.nextThreshold)
                 ? $"{s.synergyName}  ★{s.count}"
                 : $"{s.synergyName}  {s.count}/{s.nextThreshold}";
 

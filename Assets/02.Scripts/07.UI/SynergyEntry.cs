@@ -35,7 +35,7 @@ namespace BagSurvivor.UI
             if (nameText != null) nameText.text = i.synergyName;
             if (countText != null)
             {
-                countText.text = (i.grade == SynergyGrade.Gold || i.grade == SynergyGrade.Prism)
+                countText.text = (i.grade == SynergyGrade.Prism || i.count >= i.nextThreshold)
                     ? i.count.ToString()
                     : $"{i.count}/{i.nextThreshold}";
             }

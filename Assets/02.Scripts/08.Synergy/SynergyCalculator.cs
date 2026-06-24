@@ -106,10 +106,7 @@ public class SynergyCalculator : MonoBehaviour
                       : count >= silverMin                  ? SynergyGrade.Silver
                       : SynergyGrade.Bronze;
 
-            int nextMin = grade == SynergyGrade.Bronze ? silverMin
-                        : grade == SynergyGrade.Silver ? goldMin
-                        : grade == SynergyGrade.Gold   ? (prismMin > 0 ? prismMin : goldMin)
-                        : prismMin;
+            int nextMin = prismMin > 0 ? prismMin : goldMin;
 
             string displayName = threshold != null && !string.IsNullOrEmpty(threshold.displayName)
                 ? threshold.displayName
