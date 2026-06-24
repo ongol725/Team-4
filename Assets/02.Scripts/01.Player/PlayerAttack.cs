@@ -201,6 +201,25 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
 
+                // 화염방사기: 부채꼴 범위 내 즉시 피해 + 화상 DoT (넉백 없음)
+                if (id == "WPN_026")
+                {
+                    const float flamRange = 4f;
+                    float flamAngle = g5 ? 120f : 90f;
+                    int   burnTicks = g5 ? 6 : 4;
+
+                    Vector2 faceDir = FacingDir(flamRange);
+                    int     meleeDmg = ScaleDamage(entry.attackPower);
+                    foreach (var mc in FindInFan(faceDir, flamRange, flamAngle))
+                    {
+                        Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
+                        mc.TakeDamage(meleeDmg, 0f, kbDir);
+                        mc.ApplyBurn(meleeDmg, 0.5f, burnTicks);
+                    }
+                    StartCoroutine(ShowMeleeFlash(entry.data, faceDir, flamRange));
+                    break;
+                }
+
                 // 채찍: 오른쪽 → 왼쪽 순차 공격 (5단계: 반격 추가)
                 if (id == "WPN_004")
                 {
