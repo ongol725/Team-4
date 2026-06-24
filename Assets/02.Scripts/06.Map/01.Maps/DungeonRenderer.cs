@@ -218,8 +218,8 @@ public class DungeonRenderer : MonoBehaviour
         // 1. 4방향 모두 벽인 경우 (외곽 코너 또는 중앙 채우기)
         if ((pattern & mask_cardinal) == mask_cardinal) 
         {
-            if ((pattern & 128) == 0) return sprites[0]; // SE 바닥 -> Top Left Outer (┌)
-            if ((pattern & 32) == 0)  return sprites[2]; // SW 바닥 -> Top Right Outer (┐)
+            if ((pattern & 128) == 0) return sprites[2]; // SE 바닥 -> Top Left Outer (┌)
+            if ((pattern & 32) == 0)  return sprites[0]; // SW 바닥 -> Top Right Outer (┐)
             if ((pattern & 4) == 0)   return sprites[6]; // NE 바닥 -> Bottom Left Outer (└)
             if ((pattern & 1) == 0)   return sprites[8]; // NW 바닥 -> Bottom Right Outer (┘)
             return sprites[4]; // 대각선도 모두 벽이거나 예외 상황이면 Center Fill (■)
