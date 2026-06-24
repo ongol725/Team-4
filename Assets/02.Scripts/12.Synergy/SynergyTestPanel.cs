@@ -12,6 +12,7 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 using System.Collections.Generic;
 using UnityEngine;
+using BagSurvivor.UI;
 
 public class SynergyTestPanel : MonoBehaviour
 {
