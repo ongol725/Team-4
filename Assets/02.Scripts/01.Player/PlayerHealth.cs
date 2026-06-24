@@ -50,6 +50,10 @@ public class PlayerHealth : MonoBehaviour
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (spriteRenderer != null) baseColor = spriteRenderer.color;
+
+        // PlayerStats 없이도 캐릭터 maxHp 반영
+        var charData = CharacterManager.Instance?.SelectedCharacter;
+        if (charData != null) maxHP = charData.maxHp;
     }
 
     private void Start()
