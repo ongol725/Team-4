@@ -160,7 +160,7 @@ namespace BagSurvivor.SynergyEditor
             d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥 소용돌이",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.WPN_ATK_SUM, dmg:0.5f, cd:1f, range:3f,
-                followVfx:true, vSize:6f);
+                followVfx:true, vSize:3f);
             d["SK_DEMON_3"] = Sk("SK_DEMON_3", "마왕의 멸천참(예비)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Self,
                 ScalingStatType.WPN_ATK_SUM, dmg:0.2f, cd:0.1f, range:8f, vSize:1.6f);
