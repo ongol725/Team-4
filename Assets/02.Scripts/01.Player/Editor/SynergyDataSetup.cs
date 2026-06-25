@@ -87,13 +87,14 @@ namespace BagSurvivor.SynergyEditor
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
                 ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1, pierce:999);
 
-            // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy ──
-            d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
-                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:1);
-            d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
-                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:3);
+            // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / SidePillars (콘셉트 슬라이드 2) ──
+            // 캐릭터 좌·우에 번개 기둥을 세운다. extra = 기둥 수(브 2 / 실 4).
+            d["SK_ELEC_1"] = Sk("SK_ELEC_1", "번개 기둥 2개",
+                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.SidePillars,
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:2);
+            d["SK_ELEC_2"] = Sk("SK_ELEC_2", "번개 기둥 4개",
+                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.SidePillars,
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:4);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
             d["SK_SCYTHE_1"] = Sk("SK_SCYTHE_1", "사신의 낫 (브론즈)",
@@ -189,9 +190,16 @@ namespace BagSurvivor.SynergyEditor
                 SynergyTriggerType.Penalty, SkillType.Buff, SkillTargetType.Self,
                 ScalingStatType.None, dmg:0f, cd:10f, range:0f,
                 fx:FixedEffectType.SpeedPenalty, fxVal:50f);
-            d["SK_OVERLOAD_PRISM"] = Sk("SK_OVERLOAD_PRISM", "초강력 난사 (프리즘)",
+            // 과부화 프리즘: 3종 효과 동시 발동 (콘셉트 슬라이드 24). 각각 Penalty 트리거로 무한 발동.
+            d["SK_OVERLOAD_LASER"] = Sk("SK_OVERLOAD_LASER", "과부화 레이저 (프리즘)",
+                SynergyTriggerType.Penalty, SkillType.Projectile, SkillTargetType.Forward,
+                ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0.15f, range:30f, pierce:999);
+            d["SK_OVERLOAD_CHAIN"] = Sk("SK_OVERLOAD_CHAIN", "과부화 체인라이트닝 (프리즘)",
+                SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.ChainLightning,
+                ScalingStatType.WPN_ATK_AVG, dmg:6.0f, cd:0.5f, range:50f, extra:4);
+            d["SK_OVERLOAD_BUBBLE"] = Sk("SK_OVERLOAD_BUBBLE", "과부화 비눗방울 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:10.0f, cd:0.33f, range:50f, extra:3);
+                ScalingStatType.WPN_ATK_AVG, dmg:4.0f, cd:0.4f, range:50f, extra:3);
 
             // ── 대정령 광역(프리즘) — SUM_GIANT_GOLEM.uniqueSkill 로 연결 ──
             // 콘셉트 슬라이드 18: 대정령이 주변 빨간 영역을 주기적으로 강타.
@@ -298,9 +306,9 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 일렉트로 ────────────────────────────────────────
                 Th(SynergyType.Electro, "일렉트로", 2, 3, 3, 0,
-                    "가방 무기 공격력 총합에 비례하는 낙뢰를 2초마다 떨굽니다.\n낙뢰가 적을 처치하면 쿨타임 50% 감소.",
-                    "마법 낙뢰 1개 투하",
-                    "마법 낙뢰 3개 투하",
+                    "2초마다 캐릭터 좌·우에 번개 기둥을 세워 범위 피해를 줍니다. 무기 공격력 총합에 비례.",
+                    "번개 기둥 2개 (좌·우)",
+                    "번개 기둥 4개",
                     ""),
 
                 // ── 핀볼 ────────────────────────────────────────────
@@ -383,7 +391,7 @@ namespace BagSurvivor.SynergyEditor
                     "10초마다 1초간 이동속도/피해량 50% 감소",
                     "10초마다 1초간 이동속도/피해량 50% 감소",
                     "10초마다 1초간 이동속도/피해량 50% 감소",
-                    "초강력 스킬 3개 무한 난사.  대미지 1000%"),
+                    "레이저 + 체인라이트닝 + 비눗방울 3종 무한 발동.  신이 됩니다."),
             };
 
             // 보존된 아이콘 복원
@@ -439,7 +447,10 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Overload,    SynergyGrade.Bronze, "SK_OVERLOAD_PENALTY"),
                 (SynergyType.Overload,    SynergyGrade.Silver, "SK_OVERLOAD_PENALTY"),
                 (SynergyType.Overload,    SynergyGrade.Gold,   "SK_OVERLOAD_PENALTY"),
-                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_PRISM"),
+                // 프리즘: 레이저 + 체인라이트닝 + 비눗방울 3종 동시 발동
+                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_LASER"),
+                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_CHAIN"),
+                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_BUBBLE"),
             };
 
             var prop = so.FindProperty("_skillBindings");
@@ -687,8 +698,10 @@ namespace BagSurvivor.SynergyEditor
                 // 마왕(DemonLord) 누적 발동: 검기=Devil_Slash, 소용돌이=Devil_Fireball (기어=Devil_Wave는 소환수 아이콘)
                 { "SK_DEMON_1", "Devil_Slash" },    { "SK_DEMON_2", "Devil_Fireball" },
                 { "SK_DEMON_3", "Devil_Slash" },    { "SK_DEMON_4", "Devil_Slash" },
-                // 과부화 프리즘 → 추천 기본값 OVERLOAD1_Pr — 기획 확인 후 조정.
-                { "SK_OVERLOAD_PRISM", "OVERLOAD1_Pr" },
+                // 과부화 프리즘 3종: 레이저=OVERLOAD3_Pr(빔형), 체인=OVERLOAD2_Pr, 비눗방울=OVERLOAD1_Pr
+                { "SK_OVERLOAD_LASER",  "OVERLOAD3_Pr" },
+                { "SK_OVERLOAD_CHAIN",  "OVERLOAD2_Pr" },
+                { "SK_OVERLOAD_BUBBLE", "OVERLOAD1_Pr" },
                 { "SK_GOLD_BOMB_1", "RichCoin_BOMB1" }, { "SK_GOLD_BOMB_2", "RichCoin_BOMB2" },
                 { "SK_GOLD_BOMB_3", "RichCoin_BOMB3" }, { "SK_GOLD_FAST", "RichCoin_BOMB4" },
                 // 대정령 광역 강타(프리즘) → 정령 공격 이펙트 시트 재사용

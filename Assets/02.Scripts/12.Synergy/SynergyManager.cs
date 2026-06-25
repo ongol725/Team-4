@@ -377,15 +377,17 @@ public class SynergyManager : MonoBehaviour
             case SkillTargetType.RandomEnemy:
             {
                 var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 50f : skill.rangeRadius);
-                int count   = skill.extraCount > 0 ? skill.extraCount : 1;
+                int  count  = skill.extraCount > 0 ? skill.extraCount : 1;
+                bool isProj = skill.skillType == SkillType.Projectile || skill.skillType == SkillType.Slash;
                 for (int i = 0; i < count && enemies.Count > 0; i++)
                 {
                     var target = enemies[Random.Range(0, enemies.Count)];
-                    vfxPos = target.transform.position;
                     ApplyHit(skill, target, damage);
+                    // 다수 대상(티탄 돌·과부화 비눗방울 등)은 명중 지점마다 이펙트를 띄운다.
+                    if (!isProj) SpawnVFX(skill, target.transform.position);
                     enemies.Remove(target);
                 }
-                break;
+                return; // VFX를 대상별로 처리했으므로 하단 공용 VFX 생략
             }
 
             case SkillTargetType.AreaCenter:
@@ -426,6 +428,41 @@ public class SynergyManager : MonoBehaviour
                     enemies.Remove(t);
                 }
                 break;
+            }
+
+            case SkillTargetType.SidePillars:
+            {
+                // 일렉트로: 플레이어 좌·우(필요 시 더 바깥쪽)에 번개 기둥을 세운다.
+                // extraCount = 기둥 수. 좌→우→더 먼 좌→더 먼 우 순으로 대칭 배치.
+                int   pillars = skill.extraCount > 0 ? skill.extraCount : 2;
+                const float gap = 2.8f;       // 플레이어~기둥 간격
+                const float pillarRadius = 1.8f; // 기둥당 타격 반경
+                for (int i = 0; i < pillars; i++)
+                {
+                    int sign = (i % 2 == 0) ? -1 : 1; // 좌, 우, 좌, 우…
+                    int rank = i / 2 + 1;
+                    Vector3 pos = (Vector2)_player.position + new Vector2(sign * gap * rank, 0f);
+                    foreach (var mc in GetEnemiesInRange(pos, pillarRadius)) HitEnemy(skill, mc, damage);
+                    SpawnVFX(skill, pos);
+                }
+                return; // 기둥별 VFX 처리 완료
+            }
+
+            case SkillTargetType.ChainLightning:
+            {
+                // 과부화: 최근접 적부터 시작해 직전 적 기준 가장 가까운 적으로 연쇄 타격.
+                int hops = skill.extraCount > 0 ? skill.extraCount : 4;
+                var pool = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 50f : skill.rangeRadius);
+                MonsterController cur = FindNearest(pool, _player.position);
+                while (hops-- > 0 && cur != null)
+                {
+                    Vector3 hitPos = cur.transform.position;
+                    HitEnemy(skill, cur, damage);
+                    SpawnVFX(skill, hitPos);
+                    pool.Remove(cur);
+                    cur = FindNearest(pool, hitPos); // 다음 홉은 직전 적 기준 최근접
+                }
+                return; // 홉마다 VFX 처리 완료
             }
         }
 

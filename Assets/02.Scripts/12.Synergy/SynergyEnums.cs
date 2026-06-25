@@ -16,6 +16,8 @@ public enum SkillTargetType
     AreaCenter,    // 화면 중앙
     ForwardDual,   // 좌·우 각각 가장 가까운 적 2명 (처형자)
     ForwardTriple, // 가장 가까운 적 3명 순차 타격 (마왕 프리즘)
+    SidePillars,   // 플레이어 좌·우 고정 위치에 기둥 생성 (일렉트로)
+    ChainLightning,// 최근접 적부터 차례로 연쇄 타격 (과부화 체인라이트닝)
 }
 
 /// <summary>피격 시 부여되는 상태이상</summary>
