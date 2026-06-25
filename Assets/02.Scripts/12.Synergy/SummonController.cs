@@ -37,9 +37,10 @@ public class SummonController : MonoBehaviour
     private Vector2 _bounceVel;
     private const float BounceContactRadius = 0.6f;
 
-    // GuardOffset 전용 (마왕 기어) — 플레이어 기준 고정 위치를 따라다니며 원거리 공격
-    private Vector2 _guardOffset;
-    private const float GuardRadius = 2.2f;
+    // GuardOffset 전용 (마왕 기어) — 플레이어 주변을 공전하며 원거리 공격
+    private float _guardAngle;                    // 현재 공전 각도(도)
+    private const float GuardRadius = 2.2f;       // 공전 반경
+    private const float GuardOrbitSpeed = 120f;   // 공전 속도(초당 도)
 
     // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
     private Camera _mainCam;
@@ -117,13 +118,12 @@ public class SummonController : MonoBehaviour
         if (data.aiType == SummonAIType.Bounce)
             _bounceVel = Random.insideUnitCircle.normalized * data.moveSpeed;
 
-        // GuardOffset(마왕 기어): 플레이어 주변에 균등 각도로 고정 위치 배치 (위쪽 12시부터 시작)
+        // GuardOffset(마왕 기어): 플레이어 주변을 균등 각도로 시작해 공전 (위쪽 12시부터)
         if (data.aiType == SummonAIType.GuardOffset)
         {
-            float ang = (siblingCount > 0 ? 360f / siblingCount * siblingIndex : 0f) + 90f;
-            float rad = ang * Mathf.Deg2Rad;
-            _guardOffset = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * GuardRadius;
-            transform.position = (Vector2)player.position + _guardOffset;
+            _guardAngle = (siblingCount > 0 ? 360f / siblingCount * siblingIndex : 0f) + 90f;
+            float rad = _guardAngle * Mathf.Deg2Rad;
+            transform.position = (Vector2)player.position + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * GuardRadius;
         }
     }
 
@@ -383,9 +383,10 @@ public class SummonController : MonoBehaviour
 
     private void UpdateGuardOffset()
     {
-        Vector2 target = (Vector2)_player.position + _guardOffset;
-        float t = Mathf.Clamp01(_data.moveSpeed * Time.deltaTime); // moveSpeed가 추종 민첩도
-        transform.position = Vector2.Lerp(transform.position, target, t);
+        // 플레이어 주변을 공전 — 매 프레임 각도를 돌려 위치를 갱신(이동하는 플레이어도 정확히 추종)
+        _guardAngle += GuardOrbitSpeed * Time.deltaTime;
+        float rad = _guardAngle * Mathf.Deg2Rad;
+        transform.position = (Vector2)_player.position + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * GuardRadius;
 
         if (_atkTimer >= _data.atkCooldown)
         {
