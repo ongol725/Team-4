@@ -207,8 +207,8 @@ public class SummonController : MonoBehaviour
         if (distToTarget > _data.atkRange)
             MoveToward(_chaseTarget.transform.position);
 
-        // 공격
-        if (_atkTimer >= _data.atkCooldown)
+        // 공격 (사거리 안에 들어왔을 때만 — 쫓아가는 도중 원거리 타격 방지)
+        if (distToTarget <= _data.atkRange && _atkTimer >= _data.atkCooldown)
         {
             _atkTimer = 0f;
             Vector2 kb = ((Vector2)_chaseTarget.transform.position - (Vector2)transform.position).normalized;
