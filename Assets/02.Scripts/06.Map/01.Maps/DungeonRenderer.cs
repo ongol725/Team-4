@@ -234,8 +234,8 @@ public class DungeonRenderer : MonoBehaviour
         // 1. 4방향 모두 벽인 경우 (외곽 코너 또는 중앙 채우기)
         if ((pattern & mask_cardinal) == mask_cardinal) 
         {
-            if ((pattern & 128) == 0) return sprites[2]; // SE 바닥 -> Top Left Outer (┌)
-            if ((pattern & 32) == 0)  return sprites[0]; // SW 바닥 -> Top Right Outer (┐)
+            if ((pattern & 128) == 0) return sprites[0]; // SE 바닥 -> Top Left Outer (┌) = [0]
+            if ((pattern & 32) == 0)  return sprites[2]; // SW 바닥 -> Top Right Outer (┐) = [2]
             if ((pattern & 4) == 0)   return sprites[6]; // NE 바닥 -> Bottom Left Outer (└)
             if ((pattern & 1) == 0)   return sprites[8]; // NW 바닥 -> Bottom Right Outer (┘)
             return sprites[4]; // 대각선도 모두 벽이거나 예외 상황이면 Center Fill (■)
@@ -253,17 +253,17 @@ public class DungeonRenderer : MonoBehaviour
         if ((pattern & mask_cardinal) == (2 | 16))
         {
             bool corridorSide = corridorMask != null && x - 1 >= 0 && corridorMask[x - 1, y];
-            return corridorSide ? sprites[1] : sprites[2]; // 복도->Top 직선, 방끝->TR ┐ _4
+            return corridorSide ? sprites[1] : sprites[0]; // 복도->Top 직선, 방끝->코너 [0](┌)
         }
         // N+W: 동쪽(안쪽)이 복도면 복도 입구->직선, 방이면 방 위벽 끝->코너(┌)
         if ((pattern & mask_cardinal) == (2 | 8))
         {
             bool corridorSide = corridorMask != null && x + 1 < w && corridorMask[x + 1, y];
-            return corridorSide ? sprites[1] : sprites[0]; // 복도->Top 직선, 방끝->TL ┌ _2
+            return corridorSide ? sprites[1] : sprites[2]; // 복도->Top 직선, 방끝->코너 [2](┐)
         }
         // 아래로 가는 복도(S+W/S+E): 외부 코너 타일로 꺾어줌 (사용자 지정 _2/_4)
-        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[0]; // S+W 벽(왼쪽 꺾임)  -> TL 코너(┌) _2
-        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[2]; // S+E 벽(오른쪽 꺾임) -> TR 코너(┐) _4
+        if ((pattern & mask_cardinal) == (64 | 8))  return sprites[2]; // S+W 벽(왼쪽 꺾임)  -> 코너 [2](┐)
+        if ((pattern & mask_cardinal) == (64 | 16)) return sprites[0]; // S+E 벽(오른쪽 꺾임) -> 코너 [0](┌)
 
         // 4. 예외: 1블록 두께 벽 (방과 방 사이 1칸 띄워진 곳 등, 거의 발생 안 함)
         if ((pattern & mask_cardinal) == (8 | 16)) return sprites[1]; // 가로 1칸 벽 -> Top Outer
