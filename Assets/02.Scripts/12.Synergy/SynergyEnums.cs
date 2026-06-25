@@ -66,4 +66,5 @@ public enum SummonAIType
     OrbitPlayer,   // 플레이어 주변 회전
     Stationary,    // 고정형 토템
     Bounce,        // 맵을 튕겨 다니며 접촉 피해 (핀볼)
+    GuardOffset,   // 플레이어 기준 고정 오프셋 유지 + 원거리 공격 (마왕 기어)
 }

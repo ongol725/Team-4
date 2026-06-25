@@ -149,21 +149,22 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.ARM_HP_SUM, dmg:20.0f, cd:0.5f, range:30f,
                 fx:FixedEffectType.DamageReduction, fxVal:60f);
 
-            // ── 마왕 (DemonLord) — AutoTimer / WPN_ATK_SUM ──
-            d["SK_DEMON_1"] = Sk("SK_DEMON_1", "지옥불 불씨",
-                SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f,
-                fx:FixedEffectType.Burn, fxVal:0f);
-            d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥의 파도",
+            // ── 마왕 (DemonLord) — 누적형 동시 발동 (콘셉트 19~22) ──
+            // 투사체(검기)·소용돌이는 스킬, 기어는 소환수(SUM_DEMON_GEAR)로 구성한다.
+            d["SK_DEMON_1"] = Sk("SK_DEMON_1", "지옥 검기 (투사체)",
+                SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:20f,
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999);
+            d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥 소용돌이",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:1f, range:8f);
-            d["SK_DEMON_3"] = Sk("SK_DEMON_3", "마왕의 멸천참",
+                ScalingStatType.WPN_ATK_SUM, dmg:0.5f, cd:1f, range:3f);
+            d["SK_DEMON_3"] = Sk("SK_DEMON_3", "마왕의 멸천참(예비)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Self,
                 ScalingStatType.WPN_ATK_SUM, dmg:0.2f, cd:0.1f, range:8f);
-            d["SK_DEMON_4"] = Sk("SK_DEMON_4", "마왕 강림 (프리즘)",
-                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.ForwardTriple,
+            d["SK_DEMON_4"] = Sk("SK_DEMON_4", "지옥 검기 3연 (프리즘)",
+                SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.ForwardTriple,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.5f, cd:2f, range:50f,
-                extra:3, fx:FixedEffectType.Burn, fxVal:0f);
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999);
 
             // ── 대부호 (Tycoon) — OnMove / WPN_ATK_SUM / 골드 드랍 ──
             d["SK_GOLD_BOMB_1"] = Sk("SK_GOLD_BOMB_1", "골드 폭발 (브론즈)",
@@ -242,6 +243,11 @@ namespace BagSurvivor.SynergyEditor
                 SummonAIType.FollowAttack, ScalingStatType.WPN_ATK_AVG,
                 atk:4.5f, spd:3.5f, atkCd:2.0f, atkRange:2.0f, dur:-1f,
                 uniqueSkillCd:8f);
+
+            // ── 마왕 기어 (DemonLord) — GuardOffset, 플레이어 주변 고정 위치 원거리 공격 ──
+            d["SUM_DEMON_GEAR"] = Sum("SUM_DEMON_GEAR", "지옥 기어",
+                SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_SUM,
+                atk:0.5f, spd:10f, atkCd:1.0f, atkRange:6f, dur:-1f);
 
             // ── 성기사단 (HolyKnight) — Stationary + HealArmorHpPct ──
             d["SUM_SANCTUARY_1"] = Sum("SUM_SANCTUARY_1", "성역 장판 (브론즈)",
@@ -357,11 +363,11 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 마왕 ────────────────────────────────────────────
                 Th(SynergyType.DemonLord, "마왕", 2, 4, 6, 8,
-                    "마왕의 스킬이 발동됩니다. 등급이 오를수록 스킬 형태가 강화됩니다.",
-                    "지옥불 불씨.  2초당 1회.  대미지 100%",
-                    "연옥의 파도.  초당 1회.  대미지 100%",
-                    "마왕의 멸천참.  0.1초당 20% 대미지",
-                    "전 스킬 합산 + 강화.  대미지 150%↑"),
+                    "마왕의 권능이 누적 발동됩니다. 등급이 오를수록 효과가 더해집니다.",
+                    "지옥 검기를 전방으로 발사.  대미지 100%",
+                    "검기 + 지옥 기어 2기 추가.",
+                    "검기 + 기어 2기 + 연옥 소용돌이.",
+                    "3연 검기 + 기어 4기 + 소용돌이.  강림."),
 
                 // ── 대부호 ──────────────────────────────────────────
                 Th(SynergyType.Tycoon, "대부호", 5, 7, 8, 9,
@@ -418,10 +424,14 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Impregnable, SynergyGrade.Silver, "SK_FORTRESS_2"),
                 (SynergyType.Impregnable, SynergyGrade.Gold,   "SK_FORTRESS_3"),
                 (SynergyType.Impregnable, SynergyGrade.Prism,  "SK_FORTRESS_4"),
-                (SynergyType.DemonLord,   SynergyGrade.Bronze, "SK_DEMON_1"),
-                (SynergyType.DemonLord,   SynergyGrade.Silver, "SK_DEMON_2"),
-                (SynergyType.DemonLord,   SynergyGrade.Gold,   "SK_DEMON_3"),
-                (SynergyType.DemonLord,   SynergyGrade.Prism,  "SK_DEMON_4"),
+                // 마왕: 누적 발동 — 등급이 오를수록 검기에 소용돌이가 더해지고 프리즘은 3연 검기.
+                //   (기어는 소환형 바인딩 SUM_DEMON_GEAR 로 별도 추가)
+                (SynergyType.DemonLord,   SynergyGrade.Bronze, "SK_DEMON_1"),                       // 검기
+                (SynergyType.DemonLord,   SynergyGrade.Silver, "SK_DEMON_1"),                       // 검기(+기어2)
+                (SynergyType.DemonLord,   SynergyGrade.Gold,   "SK_DEMON_1"),                       // 검기
+                (SynergyType.DemonLord,   SynergyGrade.Gold,   "SK_DEMON_2"),                       // +소용돌이(+기어2)
+                (SynergyType.DemonLord,   SynergyGrade.Prism,  "SK_DEMON_4"),                       // 3연 검기
+                (SynergyType.DemonLord,   SynergyGrade.Prism,  "SK_DEMON_2"),                       // +소용돌이(+기어4)
                 (SynergyType.Tycoon,      SynergyGrade.Bronze, "SK_GOLD_BOMB_1"),
                 (SynergyType.Tycoon,      SynergyGrade.Silver, "SK_GOLD_BOMB_2"),
                 (SynergyType.Tycoon,      SynergyGrade.Gold,   "SK_GOLD_BOMB_3"),
@@ -458,6 +468,10 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Fairy,      SynergyGrade.Bronze, "SUM_FAIRY_1",   1),
                 (SynergyType.Fairy,      SynergyGrade.Silver, "SUM_FAIRY_2",   2),
                 (SynergyType.Fairy,      SynergyGrade.Gold,   "SUM_FAIRY_3",   3),
+                // 마왕 기어: 실버·골드 2기, 프리즘 4기 (검기·소용돌이 스킬과 함께 누적 발동)
+                (SynergyType.DemonLord,  SynergyGrade.Silver, "SUM_DEMON_GEAR", 2),
+                (SynergyType.DemonLord,  SynergyGrade.Gold,   "SUM_DEMON_GEAR", 2),
+                (SynergyType.DemonLord,  SynergyGrade.Prism,  "SUM_DEMON_GEAR", 4),
                 (SynergyType.HolyKnight, SynergyGrade.Bronze, "SUM_SANCTUARY_1", 1),
                 (SynergyType.HolyKnight, SynergyGrade.Silver, "SUM_SANCTUARY_2", 1),
                 (SynergyType.HolyKnight, SynergyGrade.Gold,   "SUM_SANCTUARY_3", 1),
@@ -670,9 +684,9 @@ namespace BagSurvivor.SynergyEditor
                 // 난공불락: 브~골 일반 충격파, 프리즘은 강화 RED 충격파(콘셉트 슬라이드 14)
                 { "SK_FORTRESS_1", "Shockwave_Common" }, { "SK_FORTRESS_2", "Shockwave_Common" },
                 { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_RED" },
-                // 마왕(DemonLord) → 전용 Devil_* 시트 (신규). DEMON_4(프리즘)는 추천 기본값 Devil_Fireball — 기획 확인 후 조정.
-                { "SK_DEMON_1", "Devil_Fireball" }, { "SK_DEMON_2", "Devil_Wave" },
-                { "SK_DEMON_3", "Devil_Slash" },    { "SK_DEMON_4", "Devil_Fireball" },
+                // 마왕(DemonLord) 누적 발동: 검기=Devil_Slash, 소용돌이=Devil_Fireball (기어=Devil_Wave는 소환수 아이콘)
+                { "SK_DEMON_1", "Devil_Slash" },    { "SK_DEMON_2", "Devil_Fireball" },
+                { "SK_DEMON_3", "Devil_Slash" },    { "SK_DEMON_4", "Devil_Slash" },
                 // 과부화 프리즘 → 추천 기본값 OVERLOAD1_Pr — 기획 확인 후 조정.
                 { "SK_OVERLOAD_PRISM", "OVERLOAD1_Pr" },
                 { "SK_GOLD_BOMB_1", "RichCoin_BOMB1" }, { "SK_GOLD_BOMB_2", "RichCoin_BOMB2" },
@@ -764,6 +778,7 @@ namespace BagSurvivor.SynergyEditor
                 { "SUM_GOLEM_2",      $"{sheetDir}/Spirit_Sv.png"    },
                 { "SUM_GOLEM_3",      $"{sheetDir}/Spirit_Gd.png"    },
                 { "SUM_GIANT_GOLEM",  $"{sheetDir}/GiantGolem.png"   },
+                { "SUM_DEMON_GEAR",   $"{sheetDir}/Devil_Wave.png"   },
                 { "SUM_SANCTUARY_1",  $"{sheetDir}/Sanctuary_Br.png" },
                 { "SUM_SANCTUARY_2",  $"{sheetDir}/Sanctuary_Sv.png" },
                 { "SUM_SANCTUARY_3",  $"{sheetDir}/Sanctuary_Gd.png" },

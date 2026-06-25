@@ -37,6 +37,10 @@ public class SummonController : MonoBehaviour
     private Vector2 _bounceVel;
     private const float BounceContactRadius = 0.6f;
 
+    // GuardOffset 전용 (마왕 기어) — 플레이어 기준 고정 위치를 따라다니며 원거리 공격
+    private Vector2 _guardOffset;
+    private const float GuardRadius = 2.2f;
+
     // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
     private Camera _mainCam;
     // 메모리: Init에서 생성한 임시 Texture2D를 OnDestroy에서 명시적으로 해제
@@ -81,6 +85,7 @@ public class SummonController : MonoBehaviour
                 {
                     SummonAIType.Bounce      => 0.25f, // 핀볼: 작은 공
                     SummonAIType.OrbitPlayer => 0.40f, // 페어리: 플레이어 주변 회전
+                    SummonAIType.GuardOffset => 0.45f, // 마왕 기어
                     _                        => 0.60f, // 골렘·성역: 일반 크기
                 };
                 transform.localScale = Vector3.one * scale;
@@ -111,6 +116,15 @@ public class SummonController : MonoBehaviour
         // Bounce 초기 방향 설정
         if (data.aiType == SummonAIType.Bounce)
             _bounceVel = Random.insideUnitCircle.normalized * data.moveSpeed;
+
+        // GuardOffset(마왕 기어): 플레이어 주변에 균등 각도로 고정 위치 배치 (위쪽 12시부터 시작)
+        if (data.aiType == SummonAIType.GuardOffset)
+        {
+            float ang = (siblingCount > 0 ? 360f / siblingCount * siblingIndex : 0f) + 90f;
+            float rad = ang * Mathf.Deg2Rad;
+            _guardOffset = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * GuardRadius;
+            transform.position = (Vector2)player.position + _guardOffset;
+        }
     }
 
     private void OnDestroy()
@@ -132,6 +146,7 @@ public class SummonController : MonoBehaviour
             case SummonAIType.OrbitPlayer:  UpdateOrbitPlayer();  break;
             case SummonAIType.Stationary:   UpdateStationary();   break;
             case SummonAIType.Bounce:       UpdateBounce();       break;
+            case SummonAIType.GuardOffset:  UpdateGuardOffset();  break;
         }
 
         if (_data.uniqueSkill != null && _uniqueSkillTimer >= _data.uniqueSkillCooldown)
@@ -359,6 +374,28 @@ public class SummonController : MonoBehaviour
                 // 적 충돌 시에도 방향 반사 (첫 번째 적 기준)
                 Vector2 toEnemy = ((Vector2)enemies[0].transform.position - (Vector2)transform.position).normalized;
                 _bounceVel = Vector2.Reflect(_bounceVel, -toEnemy).normalized * _data.moveSpeed;
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // GuardOffset (마왕 기어) — 플레이어 기준 고정 위치를 부드럽게 따라가며 원거리 공격
+
+    private void UpdateGuardOffset()
+    {
+        Vector2 target = (Vector2)_player.position + _guardOffset;
+        float t = Mathf.Clamp01(_data.moveSpeed * Time.deltaTime); // moveSpeed가 추종 민첩도
+        transform.position = Vector2.Lerp(transform.position, target, t);
+
+        if (_atkTimer >= _data.atkCooldown)
+        {
+            var enemy = FindNearest(_data.atkRange);
+            if (enemy != null)
+            {
+                _atkTimer = 0f;
+                Vector2 kb = ((Vector2)enemy.transform.position - (Vector2)transform.position).normalized;
+                enemy.TakeDamage(_attackPower, 1f, kb);
+                SpawnAttackEffect(enemy.transform.position);
             }
         }
     }

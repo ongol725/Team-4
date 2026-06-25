@@ -165,8 +165,8 @@ public class SynergyManager : MonoBehaviour
             int dmgBase = 0;
 
             // ── 스킬형 ─────────────────────────────────────────
-            var skillBinding = FindSkillBinding(entry.type, entry.grade);
-            if (skillBinding?.skill != null)
+            // 같은 (시너지·등급)에 여러 스킬을 바인딩할 수 있다(마왕 누적 발동: 투사체+소용돌이 등).
+            foreach (var skillBinding in FindSkillBindings(entry.type, entry.grade))
             {
                 var skill = skillBinding.skill;
                 dmgBase = Mathf.RoundToInt(_loadout.GetScaledBase(skill.scalingStat) * skill.dmgMultiplier);
@@ -222,9 +222,9 @@ public class SynergyManager : MonoBehaviour
             float maxReduction = 0f;
             foreach (var entry in _loadout.ActiveSynergies)
             {
-                var sb = FindSkillBinding(entry.type, entry.grade);
-                if (sb?.skill != null && sb.skill.fixedEffect == FixedEffectType.DamageReduction)
-                    maxReduction = Mathf.Max(maxReduction, sb.skill.fixedEffectValue / 100f);
+                foreach (var sb in FindSkillBindings(entry.type, entry.grade))
+                    if (sb.skill.fixedEffect == FixedEffectType.DamageReduction)
+                        maxReduction = Mathf.Max(maxReduction, sb.skill.fixedEffectValue / 100f);
             }
             _playerHealth.DamageReductionPct = Mathf.Clamp01(maxReduction);
             if (maxReduction > 0f)
@@ -690,6 +690,14 @@ public class SynergyManager : MonoBehaviour
         foreach (var b in _skillBindings)
             if (b.synergyType == type && b.grade == grade && b.skill != null) return b;
         return null;
+    }
+
+    /// <summary>같은 (시너지·등급)에 바인딩된 모든 스킬 항목을 반환(마왕 누적 발동 지원).</summary>
+    private IEnumerable<SynergySkillBinding> FindSkillBindings(SynergyType type, SynergyGrade grade)
+    {
+        if (_skillBindings == null) yield break;
+        foreach (var b in _skillBindings)
+            if (b.synergyType == type && b.grade == grade && b.skill != null) yield return b;
     }
 
     private SynergySummonBinding FindSummonBinding(SynergyType type, SynergyGrade grade)
