@@ -67,15 +67,16 @@ namespace BagSurvivor.SynergyEditor
             var d = new Dictionary<string, SO_SkillData>();
 
             // ── 암살단 (Assassin) — AutoTimer / WPN_ATK_AVG / Forward ──
+            // 수리검은 콘셉트(슬라이드 1)대로 적을 관통(pierce 999)하며 날아간다.
             d["SK_ASS_1"] = Sk("SK_ASS_1", "수리검 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:3f, range:15f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:3f, range:15f, pierce:999);
             d["SK_ASS_2"] = Sk("SK_ASS_2", "수리검 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:3f, range:15f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:3f, range:15f, pierce:999);
             d["SK_ASS_3"] = Sk("SK_ASS_3", "거대 수리검 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1, pierce:999);
 
             // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy ──
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
@@ -89,15 +90,15 @@ namespace BagSurvivor.SynergyEditor
             d["SK_SCYTHE_1"] = Sk("SK_SCYTHE_1", "사신의 낫 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:5f);
+                fx:FixedEffectType.InstantDeath, fxVal:5f, pierce:999);
             d["SK_SCYTHE_2"] = Sk("SK_SCYTHE_2", "사신의 낫 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.1f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:10f);
+                fx:FixedEffectType.InstantDeath, fxVal:10f, pierce:999);
             d["SK_SCYTHE_3"] = Sk("SK_SCYTHE_3", "사신의 낫 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.3f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:15f);
+                fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999);
 
             // ── 소드마스터 (SwordMaster) — AutoTimer / WPN_ATK_AVG / Forward ──
             d["SK_SWORD_1"] = Sk("SK_SWORD_1", "검기 (브론즈)",
@@ -477,7 +478,7 @@ namespace BagSurvivor.SynergyEditor
             ScalingStatType scaling, float dmg, float cd, float range,
             int hits = 1, float hitInterval = 0.1f, int extra = 0,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float duration = 0f)
+            float duration = 0f, int pierce = 1)
         {
             string path = $"{SkillDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SkillData>(path);
@@ -496,6 +497,7 @@ namespace BagSurvivor.SynergyEditor
             asset.fixedEffect      = fx;
             asset.fixedEffectValue = fxVal;
             asset.duration         = duration;
+            asset.pierceCount      = pierce;
             EditorUtility.SetDirty(asset);
             return asset;
         }

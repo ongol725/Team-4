@@ -51,6 +51,8 @@ public class SO_SkillData : ScriptableObject
     public GameObject projectilePrefab;
     [Tooltip("Projectile 투사체 속도(유닛/초). 0 이하이면 기본 15 적용")]
     public float projectileSpeed = 15f;
+    [Tooltip("투사체 관통 횟수. 1=첫 명중 후 소멸, 999=경로상 모든 적 관통(암살단 수리검·처형자 낫 등)")]
+    public int pierceCount = 1;
 
     [Header("발동 비주얼 (스프라이트 시트 애니메이션)")]
     [Tooltip("투사체/이펙트로 재생할 스프라이트 프레임 배열(③ 메뉴로 자동 채움). 비우면 노란 원 fallback")]

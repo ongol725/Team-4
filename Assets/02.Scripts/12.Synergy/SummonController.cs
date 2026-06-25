@@ -27,9 +27,11 @@ public class SummonController : MonoBehaviour
     private const float DetectRange     = 5f;   // 적 감지 거리 (멀리 쫓아가지 않도록 축소)
     private const float LeashRange      = 9f;   // 이 거리 이상 벗어나면 플레이어로 복귀
 
-    // OrbitPlayer 전용
+    // OrbitPlayer 전용 (페어리) — 콘셉트(슬라이드 6~8): 타원 궤도 + 요정별 교차 궤도
     private float _orbitAngle;
-    private const float OrbitRadius = 2.5f;
+    private float _orbitTilt;                  // 요정별 타원 궤도면 회전각(교차 궤도용)
+    private const float OrbitRadiusX = 3.0f;   // 타원 가로 반경
+    private const float OrbitRadiusY = 1.4f;   // 타원 세로 반경
 
     // Bounce 전용
     private Vector2 _bounceVel;
@@ -58,6 +60,8 @@ public class SummonController : MonoBehaviour
         // 여러 요정 소환 시 균등 배치: 0°, 120°, 240° 등
         if (siblingCount > 1)
             _orbitAngle = 360f / siblingCount * siblingIndex;
+        // 요정별 타원 궤도면 회전각 — 서로 교차하는 궤도를 만든다 (2마리→0°,90° / 3마리→0°,60°,120°)
+        _orbitTilt = siblingCount > 1 ? 180f / siblingCount * siblingIndex : 0f;
 
         if (data.modelPrefab != null)
         {
@@ -255,8 +259,13 @@ public class SummonController : MonoBehaviour
     {
         _orbitAngle += _data.moveSpeed * Time.deltaTime;
         float rad = _orbitAngle * Mathf.Deg2Rad;
-        transform.position = (Vector2)_player.position
-            + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * OrbitRadius;
+
+        // 타원 로컬 좌표(가로>세로) → 요정별 궤도면 회전 적용 → 플레이어 기준 배치
+        Vector2 local = new Vector2(Mathf.Cos(rad) * OrbitRadiusX, Mathf.Sin(rad) * OrbitRadiusY);
+        float t  = _orbitTilt * Mathf.Deg2Rad;
+        float ct = Mathf.Cos(t), st = Mathf.Sin(t);
+        Vector2 rot = new Vector2(local.x * ct - local.y * st, local.x * st + local.y * ct);
+        transform.position = (Vector2)_player.position + rot;
 
         if (_atkTimer >= _data.atkCooldown)
         {

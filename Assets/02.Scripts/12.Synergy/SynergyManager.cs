@@ -259,9 +259,16 @@ public class SynergyManager : MonoBehaviour
         if (_player == null) return;
         int   count = skill.extraCount > 0 ? skill.extraCount : 3;
         float delay = skill.duration   > 0f ? skill.duration   : 2f;
+
+        // 콘셉트(슬라이드 23): 캐릭터 기준 "원의 경로"를 따라 골드를 균등 살포한다.
+        // 시작 각을 매번 무작위로 돌려 같은 자리에 겹치지 않게 한다.
+        const float ringRadius = 1.8f;
+        float startAngle = Random.value * 360f;
         for (int i = 0; i < count; i++)
         {
-            Vector2 offset = Random.insideUnitCircle * 1.5f;
+            float ang  = (startAngle + 360f / count * i) * Mathf.Deg2Rad;
+            float r    = ringRadius + Random.Range(-0.25f, 0.25f); // 살짝 흩뿌려 자연스럽게
+            Vector2 offset = new Vector2(Mathf.Cos(ang), Mathf.Sin(ang)) * r;
             StartCoroutine(GoldCoinRoutine(skill, (Vector2)_player.position + offset, damage, delay));
         }
     }
@@ -401,7 +408,7 @@ public class SynergyManager : MonoBehaviour
             {
                 // 처형자: 적을 조준하지 않고 플레이어 기준 좌·우 고정 방향으로 낫을 발사한다.
                 // 각 낫은 경로상의 적을 관통하며, 즉사 등 고정효과는 명중 시 적용된다.
-                const int pierceHits = 999; // 경로상 모든 적 관통
+                int pierceHits = skill.pierceCount > 0 ? skill.pierceCount : 999; // 기본: 경로상 모든 적 관통
                 FireProjectileInDirection(skill, Vector2.left,  damage, pierceHits);
                 FireProjectileInDirection(skill, Vector2.right, damage, pierceHits);
                 break;
@@ -447,7 +454,8 @@ public class SynergyManager : MonoBehaviour
         if (_player == null || target == null) return;
 
         Vector2 dir = ((Vector2)target.transform.position - (Vector2)_player.position).normalized;
-        FireProjectileInDirection(skill, dir, damage, maxHits: 1);
+        int maxHits = skill.pierceCount > 0 ? skill.pierceCount : 1; // 관통 횟수(암살단 수리검 등)
+        FireProjectileInDirection(skill, dir, damage, maxHits);
     }
 
     /// <summary>플레이어 위치에서 지정한 방향으로 투사체를 발사한다(ProjectileBase 재사용).
