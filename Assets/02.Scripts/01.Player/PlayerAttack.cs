@@ -24,6 +24,7 @@ public class PlayerAttack : MonoBehaviour
     private BattleLoadout            _currentLoadout;
     private bool                     _paused;
     private bool                     _inCombatZone;
+    private bool                     _boomerangGoLeft; // WPN_010 좌우 방향 토글
 
     // ─────────────────────────────────────────────────────────────
 
@@ -87,7 +88,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void RestartLoops()
     {
-        foreach (var co in _loops) if (co != null) StopCoroutine(co);
+        // StopAllCoroutines: AttackMeleeBurst, AttackBurst, DelayedFanDir 등
+        // _loops 밖에서 기동된 서브 코루틴도 함께 중단
+        StopAllCoroutines();
         _loops.Clear();
 
         Debug.Log($"[PlayerAttack] RestartLoops — inCombat={_inCombatZone}, paused={_paused}, loadout={_currentLoadout != null}, weapons={_currentLoadout?.Weapons.Count ?? 0}");
@@ -100,17 +103,19 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator AttackLoop(WeaponLoadoutEntry entry)
     {
-        bool  g5         = entry.effectiveGrade >= 4;
-        string id        = entry.data.itemID;
-        float  baseAps   = _stats != null ? _stats.attackSpeed : 1f;
-        float  weaponAps = entry.attackSpeed > 0f ? entry.attackSpeed : 1f;
+        bool  g5           = entry.effectiveGrade >= 4;
+        string id          = entry.data.itemID;
+        float  baseAps     = _stats != null ? _stats.attackSpeed : 1f;
+        float  weaponAps   = entry.attackSpeed > 0f ? entry.attackSpeed : 1f;
+        float  charSpeedMul = _stats != null ? _stats.attackSpeedMultiplier : 1f;
 
         // 5단계 공격 속도 보정
         float spdBoost = 1f;
         if (g5 && id == "WPN_009") spdBoost = 1f / 0.85f; // 활: 쿨타임 -15%
         if (g5 && id == "WPN_020") spdBoost = 1.3f;        // 카타나: 공속 +30%
 
-        float interval = 1f / (baseAps * weaponAps * spdBoost);
+        // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율
+        float interval = 1f / (baseAps * weaponAps * spdBoost * charSpeedMul);
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
         var wait = new WaitForSeconds(interval);
@@ -142,17 +147,17 @@ public class PlayerAttack : MonoBehaviour
                 int   pierce     = 0;
                 int   targetCnt  = 1;
 
+                // 쇠뇌: 4단계(effectiveGrade≥3)부터 무제한 관통
+                if (id == "WPN_006" && entry.effectiveGrade >= 3)
+                    pierce = 99;
+
                 if (g5)
                 {
                     switch (id)
                     {
                         case "WPN_001": shots     = 2;     break; // 단검: 2발 투척
-                        case "WPN_006": pierce    = 99;    break; // 쇠뇌: 무제한 관통
                         case "WPN_007": dmgMult   = 1.3f;  break; // 권총: 데미지 +30%
-                        case "WPN_010": spdMult   = 1.5f;  break; // 부메랑: 속도 증가
-                        case "WPN_011": targetCnt = 2;     break; // 지팡이: 적 2명
-                        case "WPN_012": scaleMult = 1.5f;  break; // 마도서: 크기 1.5배
-                        case "WPN_013": targetCnt = 2;     break; // 번개구슬: 적 2명
+                        case "WPN_011": targetCnt = 2;    break; // 지팡이: 적 2명
                         case "WPN_016": scaleMult = 1.5f; pierce = 1; break; // 수리검: 크기 + 관통
                     }
                 }
@@ -174,6 +179,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_004" => 90f,
                     "WPN_019" => 100f,
                     "WPN_020" => 120f,
+                    "WPN_022" => 360f, // 플레일: 전방위
                     "WPN_023" => 60f,  // 메이스: 좁은 부채꼴
                     "WPN_027" => 120f, // 할버드: 넓은 부채꼴
                     "WPN_029" => 360f, // 워해머: 전방위
@@ -196,6 +202,25 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
 
+                // 화염방사기: 부채꼴 범위 내 즉시 피해 + 화상 DoT (넉백 없음)
+                if (id == "WPN_026")
+                {
+                    const float flamRange = 4f;
+                    float flamAngle = g5 ? 120f : 90f;
+                    int   burnTicks = g5 ? 6 : 4;
+
+                    Vector2 faceDir = FacingDir(flamRange);
+                    int     meleeDmg = ScaleDamage(entry.attackPower);
+                    foreach (var mc in FindInFan(faceDir, flamRange, flamAngle))
+                    {
+                        Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
+                        mc.TakeDamage(meleeDmg, 0f, kbDir);
+                        mc.ApplyBurn(meleeDmg, 0.5f, burnTicks);
+                    }
+                    StartCoroutine(ShowMeleeFlash(entry.data, faceDir, flamRange));
+                    break;
+                }
+
                 // 채찍: 오른쪽 → 왼쪽 순차 공격 (5단계: 반격 추가)
                 if (id == "WPN_004")
                 {
@@ -213,7 +238,32 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
+                // 플레일 5단계: 전방위 근접 + 투사체 1발 방출
+                if (g5 && id == "WPN_022")
+                {
+                    AttackMeleeFan(entry, range, angle, kb, flashScale);
+                    SpawnProjectile(entry, FacingDir(range * 3f));
+                    break;
+                }
+
+                // 시클 5단계: 전방위 근접 + 4방향 투사체 방출
+                if (g5 && id == "WPN_030")
+                {
+                    AttackMeleeFan(entry, range, angle, kb, flashScale);
+                    for (int i = 0; i < 4; i++)
+                        SpawnProjectile(entry, Rotate(Vector2.right, i * 90f));
+                    break;
+                }
+
                 AttackMeleeFan(entry, range, angle, kb, flashScale);
+
+                // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1.5초 적용
+                if (g5 && id == "WPN_023")
+                {
+                    foreach (var mc in FindInFan(FacingDir(range), range, angle))
+                        mc.ApplyStun(1.5f);
+                }
+
                 break;
             }
 
@@ -264,11 +314,76 @@ public class PlayerAttack : MonoBehaviour
                 break;
             }
 
+            // ── AreaDrop ───────────────────────────────────────────
+            case WeaponAttackStyleType.AreaDrop:
+            {
+                if (id == "WPN_012")
+                {
+                    // 마도서: 가장 가까운 적 위치에 마법진 투척 → 착탄 폭발
+                    float dropRange = range > 0f ? range : 5f;
+                    float explodeR  = dropRange * 0.5f;
+                    if (g5) explodeR *= 1.5f; // 5단계: 폭발 반경 1.5배
+
+                    var    nearest = FindNearest(dropRange);
+                    Vector2 dir    = nearest != null
+                        ? ((Vector2)nearest.transform.position - (Vector2)transform.position).normalized
+                        : _lastMoveDir;
+                    SpawnExplosive(entry, dir, dropRange, explodeR);
+                }
+                else if (id == "WPN_013")
+                {
+                    // 번개구슬: 즉시 주변 적 타격 (range=0이므로 고정 탐색 반경 사용)
+                    int targetCnt = g5 ? 2 : 1;
+                    AttackMultiTarget(entry, 8f, targetCnt);
+                }
+                else
+                {
+                    AttackSingleTarget(entry, range);
+                }
+                break;
+            }
+
+            // ── ThrownExplosive ────────────────────────────────────
+            case WeaponAttackStyleType.ThrownExplosive:
+            {
+                float explodeR = range * 0.5f;
+                int   count    = 1;
+
+                if (g5)
+                {
+                    if (id == "WPN_014") count     = 3;    // 그레네이드: 3발 부채꼴 투척
+                    if (id == "WPN_017") explodeR *= 1.5f; // 바주카: 폭발 범위 1.5배
+                }
+
+                var     nearest = FindNearest(range * 2f);
+                Vector2 center  = nearest != null
+                    ? ((Vector2)nearest.transform.position - (Vector2)transform.position).normalized
+                    : _lastMoveDir;
+
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 dir = count > 1 ? Rotate(center, (i - count / 2) * 20f) : center;
+                    SpawnExplosive(entry, dir, range, explodeR);
+                }
+                break;
+            }
+
             // ── PierceLine ─────────────────────────────────────────
             case WeaponAttackStyleType.PierceLine:
             {
                 float lineRange = g5 && id == "WPN_021" ? range * 1.5f : range;
-                AttackPierceLine(entry, lineRange, 99); // 스피어: 기본 무제한 관통
+                int   pierce    = g5 && id == "WPN_021" ? 99 : 3; // 5단계에서 관통 해제
+                AttackPierceLine(entry, lineRange, pierce);
+                break;
+            }
+
+            // ── Boomerang ──────────────────────────────────────────
+            case WeaponAttackStyleType.Boomerang:
+            {
+                float   spdM = g5 ? 1.5f : 1f;
+                Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
+                _boomerangGoLeft = !_boomerangGoLeft;
+                SpawnProjectile(entry, dir, spdMult: spdM);
                 break;
             }
 
@@ -350,10 +465,11 @@ public class PlayerAttack : MonoBehaviour
             ? GetEnemiesInRange(range)
             : FindInFan(facing, range, angleDeg);
 
+        int meleeDmg = ScaleDamage(entry.attackPower);
         foreach (var mc in enemies)
         {
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
-            mc.TakeDamage(entry.attackPower, knockback, kbDir);
+            mc.TakeDamage(meleeDmg, knockback, kbDir);
         }
         StartCoroutine(ShowMeleeFlash(entry.data, facing, range, flashScale));
     }
@@ -374,7 +490,7 @@ public class PlayerAttack : MonoBehaviour
 
         if (target != null)
         {
-            target.TakeDamage(entry.attackPower, _meleeKnockback, dir);
+            target.TakeDamage(ScaleDamage(entry.attackPower), _meleeKnockback, dir);
 
             if (splash)
             {
@@ -382,7 +498,7 @@ public class PlayerAttack : MonoBehaviour
                 {
                     if (mc == target) continue;
                     Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
-                    mc.TakeDamage(entry.attackPower / 2, _meleeKnockback * 0.5f, kbDir);
+                    mc.TakeDamage(ScaleDamage(entry.attackPower, 0.5f), _meleeKnockback * 0.5f, kbDir);
                 }
             }
         }
@@ -454,7 +570,7 @@ public class PlayerAttack : MonoBehaviour
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
         float speed    = rawSpeed * spdMult;
         float lifetime = wd.range > 0 ? (float)wd.range / rawSpeed : 3f;
-        int   damage   = Mathf.RoundToInt(entry.attackPower * dmgMult);
+        int   damage   = ScaleDamage(entry.attackPower, dmgMult);
         int   maxHits  = wd.maxTargets > 0 ? wd.maxTargets : 1; // 0 = 기본 1타
         if (wd.projectileData != null) maxHits += wd.projectileData.pierceCount;
         maxHits += pierce;
@@ -472,6 +588,23 @@ public class PlayerAttack : MonoBehaviour
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce);
     }
 
+    private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,
+        float travelRange, float explodeRadius)
+    {
+        var   wd       = entry.data;
+        float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
+        float lifetime = travelRange / rawSpeed;
+        int   damage   = ScaleDamage(entry.attackPower);
+
+        GameObject go = wd.projectile != null
+            ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
+            : BuildTempGO(wd.itemImage, wd.itemName);
+        go.transform.position = transform.position;
+
+        var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
+        proj.Init(dir, damage, rawSpeed, lifetime, 1, explosionRadius: explodeRadius);
+    }
+
     private static GameObject BuildTempGO(Sprite icon, string weaponName)
     {
         var go = new GameObject($"Proj_{weaponName}");
@@ -480,7 +613,20 @@ public class PlayerAttack : MonoBehaviour
         sr.sprite       = icon;
         sr.color        = icon != null ? Color.white : new Color(1f, 0.8f, 0.2f);
         sr.sortingOrder = 10;
-        go.transform.localScale = Vector3.one * 0.4f;
+
+        // 아이콘 스프라이트의 실제 월드 크기에 관계없이 투사체를 0.4 유닛으로 고정
+        // (UI용 아이콘은 PPU가 낮아 스케일 0.4f 고정 시 과도하게 커질 수 있음)
+        if (icon != null)
+        {
+            float maxExtent = Mathf.Max(icon.bounds.extents.x, icon.bounds.extents.y);
+            go.transform.localScale = maxExtent > 0.001f
+                ? Vector3.one * (0.2f / maxExtent)
+                : Vector3.one * 0.4f;
+        }
+        else
+        {
+            go.transform.localScale = Vector3.one * 0.4f;
+        }
 
         var rb          = go.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
@@ -496,6 +642,7 @@ public class PlayerAttack : MonoBehaviour
         float range, float scaleMult = 1f)
     {
         var go      = new GameObject($"Melee_{wd.itemName}");
+        Destroy(go, 0.15f); // 코루틴 중단 시에도 반드시 소멸되도록 즉시 예약
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         go.transform.position = (Vector2)transform.position + dir * (range * 0.6f);
         go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
@@ -503,10 +650,20 @@ public class PlayerAttack : MonoBehaviour
         var sr          = go.AddComponent<SpriteRenderer>();
         sr.sprite       = wd.itemImage;
         sr.sortingOrder = 10;
-        go.transform.localScale = Vector3.one * range * 0.8f * scaleMult;
+
+        // 스프라이트 크기 정규화 후 적정 크기로 표시 (range * 0.8f는 너무 커서 0.6 유닛으로 고정)
+        if (wd.itemImage != null)
+        {
+            float maxExtent = Mathf.Max(wd.itemImage.bounds.extents.x, wd.itemImage.bounds.extents.y);
+            float normalized = maxExtent > 0.001f ? 0.6f / maxExtent : 0.6f;
+            go.transform.localScale = Vector3.one * normalized * scaleMult;
+        }
+        else
+        {
+            go.transform.localScale = Vector3.one * 0.6f * scaleMult;
+        }
 
         yield return new WaitForSeconds(0.15f);
-        if (go != null) Destroy(go);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -577,5 +734,12 @@ public class PlayerAttack : MonoBehaviour
         float rad = deg * Mathf.Deg2Rad;
         float cos = Mathf.Cos(rad), sin = Mathf.Sin(rad);
         return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+    }
+
+    /// <summary>무기 기본 데미지에 캐릭터 공격 배율과 추가 배율을 곱해 최종 데미지를 반환.</summary>
+    private int ScaleDamage(int baseDamage, float extraMult = 1f)
+    {
+        float charMul = _stats != null ? _stats.attackMultiplier : 1f;
+        return Mathf.RoundToInt(baseDamage * charMul * extraMult);
     }
 }

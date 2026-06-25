@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -70,7 +70,7 @@ public class GoldDisplayUI : MonoBehaviour
 
     private void BuildControlsPanel()
     {
-        var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        var font = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                 ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         // 인벤토리 왼쪽에 배치
@@ -104,7 +104,7 @@ public class GoldDisplayUI : MonoBehaviour
         txt.raycastTarget = false;
         txt.text =
             "<b>[ 단축키 ]</b>\n" +
-            "<color=#FFDD88>[I]</color>  인벤토리 열기·닫기\n" +
+            "<color=#FFDD88>[Tab]</color>  인벤토리 열기·닫기\n" +
             "<color=#FFDD88>[L]</color>  즉시 합성\n" +
             "<color=#FFDD88>[O]</color>  자동 배치\n" +
             "<color=#FFDD88>[우클릭]</color>  스마트 구매";
@@ -127,7 +127,7 @@ public class GoldDisplayUI : MonoBehaviour
         rt.sizeDelta        = new Vector2(180f, 38f);
         panel.GetComponent<Image>().color = new Color(0.08f, 0.06f, 0.02f, 0.92f);
 
-        var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        var font = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                 ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         var textGo = new GameObject("GoldText", typeof(RectTransform), typeof(Text));

@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_DEMON_4
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_DEMON_4
+  skillName: "\uB9C8\uC655 \uAC15\uB9BC (\uD504\uB9AC\uC998)"
+  triggerType: 0
+  skillType: 1
+  targetType: 5
+  scalingStat: 2
+  dmgMultiplier: 1.5
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 3
+  rangeRadius: 50
+  duration: 0
+  cooldown: 2
+  fixedEffect: 1
+  fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  animFrames:
+  - {fileID: -8754867915087685011, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 8679542853494697340, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 6366917469315340877, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 242848130262823738, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 6881369859824921196, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 1255622092432382496, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: -5454437971888522140, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 419736884663942202, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: -3178720267876325065, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 6685651074201436903, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 4959334719234670812, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: -5672818014027213603, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: -3881794552604655563, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: -4231670396659074079, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: -7897053593728127965, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: -4009304207767384383, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  animFps: 12
+  visualSize: 0.8
+  dropFrames: []
+  dropFps: 8

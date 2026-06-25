@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 157ffae42b082b445a6b77238bd3f877
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1329415588979320134
+    second: Gold_Coin4.prefab_0
+  - first:
+      213: 593885762049810145
+    second: Gold_Coin4.prefab_1
+  - first:
+      213: -6594506970150110393
+    second: Gold_Coin4.prefab_2
+  - first:
+      213: 4879079910906956485
+    second: Gold_Coin4.prefab_3
+  - first:
+      213: 6967732010969542865
+    second: Gold_Coin4.prefab_4
+  - first:
+      213: -9197883882450239713
+    second: Gold_Coin4.prefab_5
+  - first:
+      213: 7848880150843951880
+    second: Gold_Coin4.prefab_6
+  - first:
+      213: 2216862459845095223
+    second: Gold_Coin4.prefab_7
+  - first:
+      213: 6364923250070317762
+    second: Gold_Coin4.prefab_8
+  - first:
+      213: 5680742747975682449
+    second: Gold_Coin4.prefab_9
+  - first:
+      213: 5383197012656158466
+    second: Gold_Coin4.prefab_10
+  - first:
+      213: -6450299794591231589
+    second: Gold_Coin4.prefab_11
+  - first:
+      213: -6479819896092367491
+    second: Gold_Coin4.prefab_12
+  - first:
+      213: 2028247099510356210
+    second: Gold_Coin4.prefab_13
+  - first:
+      213: -7044323411912721641
+    second: Gold_Coin4.prefab_14
+  - first:
+      213: -3449593559978820622
+    second: Gold_Coin4.prefab_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 725
+        width: 206
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aba550cb097fc8de0800000000000000
+      internalID: -1329415588979320134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_1
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 725
+        width: 194
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ee142c34f7ed3800800000000000000
+      internalID: 593885762049810145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_2
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 725
+        width: 146
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74b7d5f89da9b74a0800000000000000
+      internalID: -6594506970150110393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_3
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 725
+        width: 86
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ca8a581459f5b340800000000000000
+      internalID: 4879079910906956485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_4
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 491
+        width: 38
+        height: 218
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d035fbe85b52b060800000000000000
+      internalID: 6967732010969542865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_5
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 485
+        width: 86
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1f3345675d8a5080800000000000000
+      internalID: -9197883882450239713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_6
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 485
+        width: 146
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80b0bab79e2dcec60800000000000000
+      internalID: 7848880150843951880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_7
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 485
+        width: 194
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73f27fa69a0e3ce10800000000000000
+      internalID: 2216862459845095223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_8
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 245
+        width: 206
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cae01f19ffb45850800000000000000
+      internalID: 6364923250070317762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_9
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 245
+        width: 194
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19987717e6d06de40800000000000000
+      internalID: 5680742747975682449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_10
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 245
+        width: 146
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 207705f5925f4ba40800000000000000
+      internalID: 5383197012656158466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_11
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 245
+        width: 86
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b915d90138eeb76a0800000000000000
+      internalID: -6450299794591231589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_12
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 11
+        width: 38
+        height: 218
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d75e7e4d22e0316a0800000000000000
+      internalID: -6479819896092367491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_13
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 5
+        width: 86
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f8f70badf7c52c10800000000000000
+      internalID: 2028247099510356210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_14
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 5
+        width: 146
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71b79f5ed298d3e90800000000000000
+      internalID: -7044323411912721641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gold_Coin4.prefab_15
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 5
+        width: 194
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fbbcf51fe49020d0800000000000000
+      internalID: -3449593559978820622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Gold_Coin4.prefab_0: -1329415588979320134
+      Gold_Coin4.prefab_1: 593885762049810145
+      Gold_Coin4.prefab_10: 5383197012656158466
+      Gold_Coin4.prefab_11: -6450299794591231589
+      Gold_Coin4.prefab_12: -6479819896092367491
+      Gold_Coin4.prefab_13: 2028247099510356210
+      Gold_Coin4.prefab_14: -7044323411912721641
+      Gold_Coin4.prefab_15: -3449593559978820622
+      Gold_Coin4.prefab_2: -6594506970150110393
+      Gold_Coin4.prefab_3: 4879079910906956485
+      Gold_Coin4.prefab_4: 6967732010969542865
+      Gold_Coin4.prefab_5: -9197883882450239713
+      Gold_Coin4.prefab_6: 7848880150843951880
+      Gold_Coin4.prefab_7: 2216862459845095223
+      Gold_Coin4.prefab_8: 6364923250070317762
+      Gold_Coin4.prefab_9: 5680742747975682449
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

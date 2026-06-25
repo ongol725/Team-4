@@ -193,8 +193,12 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void BuildMiniPreview(Color color)
     {
+        // Destroy는 다음 프레임 실행이므로 DestroyImmediate로 즉시 제거 — 리롤 시 Button 중복 방지
+        var children = new System.Collections.Generic.List<GameObject>();
         foreach (Transform child in _previewContainer)
-            Destroy(child.gameObject);
+            children.Add(child.gameObject);
+        foreach (var c in children)
+            DestroyImmediate(c);
 
         _shopImageButton = null;
 
@@ -402,6 +406,13 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         if (_cachedTempSlot == null)
             _cachedTempSlot = FindAnyObjectByType<TempSlotUI>();
+    }
+
+    private void OnDisable()
+    {
+        // 슬롯이 비활성화될 때 OnPointerExit이 보장되지 않으므로 수동 초기화
+        _isHovered = false;
+        ItemInfoPopup.Hide();
     }
 
     private void OnDestroy()

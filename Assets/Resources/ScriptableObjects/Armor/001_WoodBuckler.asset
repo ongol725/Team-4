@@ -19,7 +19,7 @@ MonoBehaviour:
   rarity: 0
   grade: 1
   cost: 2
-  synergies: 000000000000000000000000
+  synergies: 0d0000000000000000000000
   cells:
   - {x: 0, y: 0}
   gradeStats:

@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 2cf2892d46b302e46b6bf17e77cbba91
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8794681838325113743
+    second: Sanctuary_Sv.prefab_0
+  - first:
+      213: 3548270735272551330
+    second: Sanctuary_Sv.prefab_1
+  - first:
+      213: -7119676255022055996
+    second: Sanctuary_Sv.prefab_2
+  - first:
+      213: 2717771104610761796
+    second: Sanctuary_Sv.prefab_3
+  - first:
+      213: -5671545569337942426
+    second: Sanctuary_Sv.prefab_4
+  - first:
+      213: -423064369058207134
+    second: Sanctuary_Sv.prefab_5
+  - first:
+      213: 8153742529241509658
+    second: Sanctuary_Sv.prefab_6
+  - first:
+      213: 8749354135015402517
+    second: Sanctuary_Sv.prefab_7
+  - first:
+      213: -7957411943464433763
+    second: Sanctuary_Sv.prefab_8
+  - first:
+      213: 1285647238273880457
+    second: Sanctuary_Sv.prefab_9
+  - first:
+      213: -8851422383021661771
+    second: Sanctuary_Sv.prefab_10
+  - first:
+      213: 3056128904291157074
+    second: Sanctuary_Sv.prefab_11
+  - first:
+      213: -5808198893027165987
+    second: Sanctuary_Sv.prefab_12
+  - first:
+      213: 6323193764763214031
+    second: Sanctuary_Sv.prefab_13
+  - first:
+      213: -5707779042869791483
+    second: Sanctuary_Sv.prefab_14
+  - first:
+      213: -5319991778577857716
+    second: Sanctuary_Sv.prefab_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 775
+        width: 243
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17c5d0ad67303f580800000000000000
+      internalID: -8794681838325113743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_1
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 775
+        width: 244
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a3a5d62f6dfd3130800000000000000
+      internalID: 3548270735272551330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_2
+      rect:
+        serializedVersion: 2
+        x: 518
+        y: 774
+        width: 244
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cd70afea24d13d90800000000000000
+      internalID: -7119676255022055996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_3
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 775
+        width: 242
+        height: 242
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44c35279b6677b520800000000000000
+      internalID: 2717771104610761796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_4
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 520
+        width: 240
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66edb249a5f9a41b0800000000000000
+      internalID: -5671545569337942426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_5
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 521
+        width: 238
+        height: 238
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26a2925a239f02af0800000000000000
+      internalID: -423064369058207134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_6
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 522
+        width: 234
+        height: 235
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1f6f6541a9e72170800000000000000
+      internalID: 8153742529241509658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_7
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 523
+        width: 234
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51c20bfca33fb6970800000000000000
+      internalID: 8749354135015402517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_8
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 267
+        width: 234
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d970a526ff7919190800000000000000
+      internalID: -7957411943464433763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_9
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 267
+        width: 234
+        height: 233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 981d6cff95987d110800000000000000
+      internalID: 1285647238273880457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_10
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 267
+        width: 234
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b16d0f4d3e692580800000000000000
+      internalID: -8851422383021661771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_11
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 267
+        width: 234
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2540410eb0d896a20800000000000000
+      internalID: 3056128904291157074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_12
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 8
+        width: 240
+        height: 239
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd87c4441e1256fa0800000000000000
+      internalID: -5808198893027165987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_13
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 7
+        width: 242
+        height: 242
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc02da23a3f70c750800000000000000
+      internalID: 6323193764763214031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_14
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 8
+        width: 240
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 505b35d9335e9c0b0800000000000000
+      internalID: -5707779042869791483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sanctuary_Sv.prefab_15
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 6
+        width: 244
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c434ed5f9a79b26b0800000000000000
+      internalID: -5319991778577857716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Sanctuary_Sv.prefab_0: -8794681838325113743
+      Sanctuary_Sv.prefab_1: 3548270735272551330
+      Sanctuary_Sv.prefab_10: -8851422383021661771
+      Sanctuary_Sv.prefab_11: 3056128904291157074
+      Sanctuary_Sv.prefab_12: -5808198893027165987
+      Sanctuary_Sv.prefab_13: 6323193764763214031
+      Sanctuary_Sv.prefab_14: -5707779042869791483
+      Sanctuary_Sv.prefab_15: -5319991778577857716
+      Sanctuary_Sv.prefab_2: -7119676255022055996
+      Sanctuary_Sv.prefab_3: 2717771104610761796
+      Sanctuary_Sv.prefab_4: -5671545569337942426
+      Sanctuary_Sv.prefab_5: -423064369058207134
+      Sanctuary_Sv.prefab_6: 8153742529241509658
+      Sanctuary_Sv.prefab_7: 8749354135015402517
+      Sanctuary_Sv.prefab_8: -7957411943464433763
+      Sanctuary_Sv.prefab_9: 1285647238273880457
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_GOLD_BOMB_1
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_GOLD_BOMB_1
+  skillName: "\uACE8\uB4DC \uD3ED\uBC1C (\uBE0C\uB860\uC988)"
+  triggerType: 2
+  skillType: 1
+  targetType: 2
+  scalingStat: 2
+  dmgMultiplier: 0.7
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 3
+  rangeRadius: 3
+  duration: 2
+  cooldown: 0
+  fixedEffect: 0
+  fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  animFrames:
+  - {fileID: -1209024078395844683, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 5862099010598259677, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -5806571485615005472, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -8953299127035170492, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -5876357637638997447, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 1925853062893409135, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 8897044677577326068, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -3312385615103743565, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 4754935924412999247, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 2162891647012308843, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -1971812988695073952, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  animFps: 12
+  visualSize: 0.8
+  dropFrames:
+  - {fileID: 1802441802970508738, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -6697529884170365944, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -295642451700783646, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 9012100199946562512, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -223332720024318959, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -3282618330201887937, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 577326657207558945, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -1359916920685808653, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -618239774915007240, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -1917847599840621230, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -25317107457533335, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -5951648549312869222, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 3644475451823879185, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 4037727611758162905, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  dropFps: 8
