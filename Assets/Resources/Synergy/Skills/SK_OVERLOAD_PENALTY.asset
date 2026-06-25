@@ -17,14 +17,18 @@ MonoBehaviour:
   triggerType: 4
   skillType: 3
   targetType: 2
-  scalingStat: 3
+  scalingStat: 0
   dmgMultiplier: 0
   hitCount: 1
   hitInterval: 0.1
+  extraCount: 0
   rangeRadius: 0
   duration: 0
   cooldown: 10
-  extraCount: 0
-  fixedEffect: 4
+  fixedEffect: 6
   fixedEffectValue: 50
+  statusEffect: 0
+  effectValue: 0
   vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15

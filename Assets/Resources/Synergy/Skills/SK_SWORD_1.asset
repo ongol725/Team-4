@@ -21,10 +21,29 @@ MonoBehaviour:
   dmgMultiplier: 1
   hitCount: 1
   hitInterval: 0.1
+  extraCount: 0
   rangeRadius: 15
   duration: 0
   cooldown: 2
-  extraCount: 0
   fixedEffect: 0
   fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
   vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  animFrames:
+  - {fileID: -6396920090767046450, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1140119825554999357, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -3775535705050807342, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -5415449223971354714, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 4429619745803587987, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -4518314169681718716, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 5205797594410604231, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 1850009166319848077, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 5528597359183025346, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1045935456595090405, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -2965455852859209428, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 50924733264574085, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  animFps: 12
+  visualSize: 0.8

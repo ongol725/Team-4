@@ -21,10 +21,14 @@ MonoBehaviour:
   dmgMultiplier: 10
   hitCount: 1
   hitInterval: 0.1
+  extraCount: 3
   rangeRadius: 50
   duration: 0
   cooldown: 0.33
-  extraCount: 3
   fixedEffect: 0
   fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
   vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15

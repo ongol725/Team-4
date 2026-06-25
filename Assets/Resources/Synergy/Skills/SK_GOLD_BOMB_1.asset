@@ -17,14 +17,35 @@ MonoBehaviour:
   triggerType: 2
   skillType: 1
   targetType: 2
-  scalingStat: 0
+  scalingStat: 2
   dmgMultiplier: 0.7
   hitCount: 1
   hitInterval: 0.1
+  extraCount: 3
   rangeRadius: 3
   duration: 2
   cooldown: 0
-  extraCount: 3
   fixedEffect: 0
   fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
   vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  animFrames:
+  - {fileID: 1802441802970508738, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -6697529884170365944, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -295642451700783646, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 9012100199946562512, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -223332720024318959, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -3282618330201887937, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 577326657207558945, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -1359916920685808653, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -618239774915007240, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -1917847599840621230, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -25317107457533335, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: -5951648549312869222, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 3644475451823879185, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  - {fileID: 4037727611758162905, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
+  animFps: 12
+  visualSize: 0.8

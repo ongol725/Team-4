@@ -87,7 +87,7 @@ MonoBehaviour:
       1%.  \uB300\uBBF8\uC9C0 50%"
     silverEffect: "\uC7A5\uD310 8\uCD08 \uC720\uC9C0.  \uCCB4\uB825 \uD68C\uBCF5
       1.5%.  \uB300\uBBF8\uC9C0 60%"
-    goldEffect: "\uC7A5\uD310 11\uCD08 \uC720\uC9C0.  \uCCB4\uB825 \uD68C\uBCF5 2%.
+    goldEffect: "\uC7A5\uD310 11\uCD08 \uC720\uC9C0.  \uCCB4\uB825 \uD68C\uBCF5 2%. 
       \uB300\uBBF8\uC9C0 70%"
     prismEffect: 
   - type: 2
@@ -145,7 +145,7 @@ MonoBehaviour:
       1000%"
     silverEffect: "\uCDA9\uACA9\uD30C \uD06C\uAE30 \xD72.  \uD53C\uD574 \uAC10\uC18C
       20%.  \uB300\uBBF8\uC9C0 1000%"
-    goldEffect: "\uCDA9\uACA9\uD30C \uAC15\uD654.  \uD53C\uD574 \uAC10\uC18C 35%.
+    goldEffect: "\uCDA9\uACA9\uD30C \uAC15\uD654.  \uD53C\uD574 \uAC10\uC18C 35%. 
       \uB300\uBBF8\uC9C0 1300%"
     prismEffect: "0.5\uCD08\uB9C8\uB2E4 \uC790\uB3D9 \uBC1C\uB3D9.  \uD53C\uD574
       \uAC10\uC18C 60%.  \uB300\uBBF8\uC9C0 2000%"
@@ -156,12 +156,12 @@ MonoBehaviour:
     silverThreshold: 5
     goldThreshold: 7
     prismThreshold: 9
-    description: "\uC804\uD22C\uC5D0 \uD568\uAED8\uD558\uB294 \uC815\uB839 \uACE8\uB168\uC744
+    description: "\uC804\uD22C\uC5D0 \uD568\uAED8\uD558\uB294 \uC815\uB839 \uACE8\uB818\uC744
       \uC18C\uD658\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uC815\uB839 \uACE8\uB168 1\uAE30.  \uB300\uBBF8\uC9C0 100%"
-    silverEffect: "\uC815\uB839 \uACE8\uB168 2\uAE30.  \uC774\uB3D9\uC18D\uB3C4 30%
+    bronzeEffect: "\uC815\uB839 \uACE8\uB818 1\uAE30.  \uB300\uBBF8\uC9C0 100%"
+    silverEffect: "\uC815\uB839 \uACE8\uB818 2\uAE30.  \uC774\uB3D9\uC18D\uB3C4 30%
       \uC99D\uAC00."
-    goldEffect: "\uC815\uB839 \uACE8\uB168 4\uAE30.  \uB300\uBBF8\uC9C0 200%"
+    goldEffect: "\uC815\uB839 \uACE8\uB818 4\uAE30.  \uB300\uBBF8\uC9C0 200%"
     prismEffect: "\uACE0\uB300 \uC815\uB839 1\uAE30.  \uB300\uBBF8\uC9C0 450%.  8\uCD08\uB9C8\uB2E4
       \uAD11\uC5ED \uACF5\uACA9"
   - type: 4
@@ -211,5 +211,5 @@ MonoBehaviour:
       50% \uAC10\uC18C"
     goldEffect: "10\uCD08\uB9C8\uB2E4 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4/\uD53C\uD574\uB7C9
       50% \uAC10\uC18C"
-    prismEffect: "\uCD08\uAC15\uB825 \uC2A4\uD0AC 3\uAC1C \uBB34\uD55C \uB09C\uC0AC.
+    prismEffect: "\uCD08\uAC15\uB825 \uC2A4\uD0AC 3\uAC1C \uBB34\uD55C \uB09C\uC0AC. 
       \uB300\uBBF8\uC9C0 1000%"
