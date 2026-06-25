@@ -483,10 +483,12 @@ namespace BagSurvivor.Monster
             int count = Random.Range(rule.minCount, rule.maxCount + 1);
             float hp = hpMul * Mathf.Max(0.01f, rule.hpMultiplier);   // 층별 차등 배율
             float atk = atkMul * Mathf.Max(0.01f, rule.attackMultiplier);
+            // 4층 미니보스만 보스 패턴(BossPatternDriver) 작동 — 2층 등 다른 곳은 일반 몬스터
+            bool bossPattern = floor == 4 && rc.roomType == RoomType.MiniBoss;
             for (int i = 0; i < count; i++)
             {
                 GameObject prefab = PickSpecialPrefab(rule);
-                SpawnOne(rc, prefab, hp, atk);
+                SpawnOne(rc, prefab, hp, atk, bossPattern);
             }
         }
 
@@ -508,7 +510,7 @@ namespace BagSurvivor.Monster
             return pick;
         }
 
-        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul)
+        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool enableBossPattern = false)
         {
             if (prefab == null) return;
 
@@ -521,6 +523,10 @@ namespace BagSurvivor.Monster
 
             MonsterController mc = pool.Get(prefab, pos, hpMul, atkMul);
             if (mc == null) return;
+
+            // 보스 패턴 구동기: 4층 미니보스만 켬(평소/풀재사용엔 꺼서 일반 몬스터로 동작)
+            var driver = mc.GetComponent<BossPatternDriver>();
+            if (driver != null) driver.enabled = enableBossPattern;
 
             activeMonsters.Add(mc);
 
