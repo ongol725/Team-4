@@ -1,0 +1,2145 @@
+fileFormatVersion: 2
+guid: 4f7b0ff0e4323664b8780f7a000d05aa
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8704716203671335241
+    second: ElectroShockwave.prefab_0
+  - first:
+      213: -7976542940839478848
+    second: ElectroShockwave.prefab_1
+  - first:
+      213: -9130827985342138397
+    second: ElectroShockwave.prefab_2
+  - first:
+      213: -1421972491902405258
+    second: ElectroShockwave.prefab_3
+  - first:
+      213: 1497745229589591664
+    second: ElectroShockwave.prefab_4
+  - first:
+      213: -8974511641980024844
+    second: ElectroShockwave.prefab_5
+  - first:
+      213: -1767677828317560968
+    second: ElectroShockwave.prefab_6
+  - first:
+      213: -3109060798204185905
+    second: ElectroShockwave.prefab_7
+  - first:
+      213: 7196314183195004077
+    second: ElectroShockwave.prefab_8
+  - first:
+      213: 6347475611523164820
+    second: ElectroShockwave.prefab_9
+  - first:
+      213: -7396080649913141887
+    second: ElectroShockwave.prefab_10
+  - first:
+      213: 3745656066033475026
+    second: ElectroShockwave.prefab_11
+  - first:
+      213: -4590069089519175904
+    second: ElectroShockwave.prefab_12
+  - first:
+      213: 6558147044202160424
+    second: ElectroShockwave.prefab_13
+  - first:
+      213: -4822280677429242546
+    second: ElectroShockwave.prefab_14
+  - first:
+      213: 8386251505611431303
+    second: ElectroShockwave.prefab_15
+  - first:
+      213: -6054473861436527865
+    second: ElectroShockwave.prefab_16
+  - first:
+      213: 824108386848761491
+    second: ElectroShockwave.prefab_17
+  - first:
+      213: -2811720171123055641
+    second: ElectroShockwave.prefab_18
+  - first:
+      213: 535392136645752176
+    second: ElectroShockwave.prefab_19
+  - first:
+      213: 2442207432633117365
+    second: ElectroShockwave.prefab_20
+  - first:
+      213: 5484811729570092811
+    second: ElectroShockwave.prefab_21
+  - first:
+      213: -349936332392327779
+    second: ElectroShockwave.prefab_22
+  - first:
+      213: -7541778487969796041
+    second: ElectroShockwave.prefab_23
+  - first:
+      213: -4609285308029958495
+    second: ElectroShockwave.prefab_24
+  - first:
+      213: -8428929292675059553
+    second: ElectroShockwave.prefab_25
+  - first:
+      213: 7227704596223024177
+    second: ElectroShockwave.prefab_26
+  - first:
+      213: -3474472990081070180
+    second: ElectroShockwave.prefab_27
+  - first:
+      213: -4626797185327510340
+    second: ElectroShockwave.prefab_28
+  - first:
+      213: 3509120898574362705
+    second: ElectroShockwave.prefab_29
+  - first:
+      213: 6590567547977712397
+    second: ElectroShockwave.prefab_30
+  - first:
+      213: 6233389627362761737
+    second: ElectroShockwave.prefab_31
+  - first:
+      213: -2402890183706242699
+    second: ElectroShockwave.prefab_32
+  - first:
+      213: 2282019232632986065
+    second: ElectroShockwave.prefab_33
+  - first:
+      213: 2751571715662851026
+    second: ElectroShockwave.prefab_34
+  - first:
+      213: -8562206372896116297
+    second: ElectroShockwave.prefab_35
+  - first:
+      213: 5581173864048673120
+    second: ElectroShockwave.prefab_36
+  - first:
+      213: -3630302418952585397
+    second: ElectroShockwave.prefab_37
+  - first:
+      213: -6217650794912681491
+    second: ElectroShockwave.prefab_38
+  - first:
+      213: 6653867581186790289
+    second: ElectroShockwave.prefab_39
+  - first:
+      213: 6859299622417317495
+    second: ElectroShockwave.prefab_40
+  - first:
+      213: 5144889387398995234
+    second: ElectroShockwave.prefab_41
+  - first:
+      213: 1382169850923754582
+    second: ElectroShockwave.prefab_42
+  - first:
+      213: 8678674093738574807
+    second: ElectroShockwave.prefab_43
+  - first:
+      213: 2757233141493980216
+    second: ElectroShockwave.prefab_44
+  - first:
+      213: -5349236462473395512
+    second: ElectroShockwave.prefab_45
+  - first:
+      213: 6082003201785702142
+    second: ElectroShockwave.prefab_46
+  - first:
+      213: 7353008675455664215
+    second: ElectroShockwave.prefab_47
+  - first:
+      213: 6088512282393795165
+    second: ElectroShockwave.prefab_48
+  - first:
+      213: 4922212085623328564
+    second: ElectroShockwave.prefab_49
+  - first:
+      213: 1565424795165354911
+    second: ElectroShockwave.prefab_50
+  - first:
+      213: -1761894256512233460
+    second: ElectroShockwave.prefab_51
+  - first:
+      213: 278473325033729413
+    second: ElectroShockwave.prefab_52
+  - first:
+      213: 952139409907891192
+    second: ElectroShockwave.prefab_53
+  - first:
+      213: 161686462384570247
+    second: ElectroShockwave.prefab_54
+  - first:
+      213: 5986256878318935537
+    second: ElectroShockwave.prefab_55
+  - first:
+      213: -4047778006996952590
+    second: ElectroShockwave.prefab_56
+  - first:
+      213: -3845129439644833150
+    second: ElectroShockwave.prefab_57
+  - first:
+      213: -2210097928840275805
+    second: ElectroShockwave.prefab_58
+  - first:
+      213: 665441414991846902
+    second: ElectroShockwave.prefab_59
+  - first:
+      213: 6077327205614521557
+    second: ElectroShockwave.prefab_60
+  - first:
+      213: 1720404309519791749
+    second: ElectroShockwave.prefab_61
+  - first:
+      213: 2448461531237480176
+    second: ElectroShockwave.prefab_62
+  - first:
+      213: 193693254644708988
+    second: ElectroShockwave.prefab_63
+  - first:
+      213: 9016494506702085762
+    second: ElectroShockwave.prefab_64
+  - first:
+      213: -8996812669795368926
+    second: ElectroShockwave.prefab_65
+  - first:
+      213: -7368677229250089996
+    second: ElectroShockwave.prefab_66
+  - first:
+      213: 5242021156790553914
+    second: ElectroShockwave.prefab_67
+  - first:
+      213: 3306444775641032250
+    second: ElectroShockwave.prefab_68
+  - first:
+      213: -7993049143682783521
+    second: ElectroShockwave.prefab_69
+  - first:
+      213: 2878498399150393353
+    second: ElectroShockwave.prefab_70
+  - first:
+      213: 2388443338041861807
+    second: ElectroShockwave.prefab_71
+  - first:
+      213: -7028983806229642190
+    second: ElectroShockwave.prefab_72
+  - first:
+      213: -5900996920555602326
+    second: ElectroShockwave.prefab_73
+  - first:
+      213: -8204825707227866957
+    second: ElectroShockwave.prefab_74
+  - first:
+      213: -6350470772613243318
+    second: ElectroShockwave.prefab_75
+  - first:
+      213: -168007039223543706
+    second: ElectroShockwave.prefab_76
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_0
+      rect:
+        serializedVersion: 2
+        x: 1268
+        y: 815
+        width: 593
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 941ba66844d5dc870800000000000000
+      internalID: 8704716203671335241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_1
+      rect:
+        serializedVersion: 2
+        x: 7420
+        y: 1812
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c9fc93f470ad4190800000000000000
+      internalID: -7976542940839478848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_2
+      rect:
+        serializedVersion: 2
+        x: 7972
+        y: 1744
+        width: 56
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e77c741358c84180800000000000000
+      internalID: -9130827985342138397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_3
+      rect:
+        serializedVersion: 2
+        x: 10526
+        y: 1820
+        width: 18
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 675b7c37d83244ce0800000000000000
+      internalID: -1421972491902405258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_4
+      rect:
+        serializedVersion: 2
+        x: 11070
+        y: 1835
+        width: 34
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07639b5d95f09c410800000000000000
+      internalID: 1497745229589591664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_5
+      rect:
+        serializedVersion: 2
+        x: 4201
+        y: 308
+        width: 758
+        height: 1507
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f74c2be531247380800000000000000
+      internalID: -8974511641980024844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_6
+      rect:
+        serializedVersion: 2
+        x: 7458
+        y: 1722
+        width: 25
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87f3cc57162f777e0800000000000000
+      internalID: -1767677828317560968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_7
+      rect:
+        serializedVersion: 2
+        x: 16965
+        y: 1419
+        width: 117
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc272f13da56ad4d0800000000000000
+      internalID: -3109060798204185905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_8
+      rect:
+        serializedVersion: 2
+        x: 20094
+        y: 1646
+        width: 48
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dac81753f917ed360800000000000000
+      internalID: 7196314183195004077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_9
+      rect:
+        serializedVersion: 2
+        x: 1261
+        y: 1457
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49a2b453073c61850800000000000000
+      internalID: 6347475611523164820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_10
+      rect:
+        serializedVersion: 2
+        x: 10443
+        y: 0
+        width: 774
+        height: 1520
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18579c3c5d7db5990800000000000000
+      internalID: -7396080649913141887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_11
+      rect:
+        serializedVersion: 2
+        x: 11214
+        y: 1472
+        width: 48
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dd56b2c85e3bf330800000000000000
+      internalID: 3745656066033475026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_12
+      rect:
+        serializedVersion: 2
+        x: 13353
+        y: 0
+        width: 1310
+        height: 1626
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02775b87b7ccc40c0800000000000000
+      internalID: -4590069089519175904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_13
+      rect:
+        serializedVersion: 2
+        x: 19580
+        y: 1419
+        width: 49
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 821a27a7df7330b50800000000000000
+      internalID: 6558147044202160424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_14
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1382
+        width: 56
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e45999ef541d31db0800000000000000
+      internalID: -4822280677429242546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_15
+      rect:
+        serializedVersion: 2
+        x: 7322
+        y: 0
+        width: 857
+        height: 1437
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78ddd05ef43f16470800000000000000
+      internalID: 8386251505611431303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_16
+      rect:
+        serializedVersion: 2
+        x: 16535
+        y: 1314
+        width: 55
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70b203bd9103afba0800000000000000
+      internalID: -6054473861436527865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_17
+      rect:
+        serializedVersion: 2
+        x: 7261
+        y: 1276
+        width: 71
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3966a862632df6b00800000000000000
+      internalID: 824108386848761491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_18
+      rect:
+        serializedVersion: 2
+        x: 10292
+        y: 1321
+        width: 41
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e3e868c663caf8d0800000000000000
+      internalID: -2811720171123055641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_19
+      rect:
+        serializedVersion: 2
+        x: 23729
+        y: 1306
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 075be48cf481e6700800000000000000
+      internalID: 535392136645752176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_20
+      rect:
+        serializedVersion: 2
+        x: 5002
+        y: 1223
+        width: 101
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ba6ae978b674e120800000000000000
+      internalID: 2442207432633117365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_21
+      rect:
+        serializedVersion: 2
+        x: 16996
+        y: 1253
+        width: 25
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b07dbe05537fd1c40800000000000000
+      internalID: 5484811729570092811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_22
+      rect:
+        serializedVersion: 2
+        x: 20366
+        y: 853
+        width: 245
+        height: 403
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9590cd72c6c42bf0800000000000000
+      internalID: -349936332392327779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_23
+      rect:
+        serializedVersion: 2
+        x: 22573
+        y: 1230
+        width: 26
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 730b0e95c68365790800000000000000
+      internalID: -7541778487969796041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_24
+      rect:
+        serializedVersion: 2
+        x: 22724
+        y: 1246
+        width: 18
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a68272fe678800c0800000000000000
+      internalID: -4609285308029958495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_25
+      rect:
+        serializedVersion: 2
+        x: 5100
+        y: 1170
+        width: 18
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f90f739777d660b80800000000000000
+      internalID: -8428929292675059553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_26
+      rect:
+        serializedVersion: 2
+        x: 8176
+        y: 1140
+        width: 18
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13cd4574907fd4460800000000000000
+      internalID: 7227704596223024177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_27
+      rect:
+        serializedVersion: 2
+        x: 11252
+        y: 1147
+        width: 25
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9b478c593138cfc0800000000000000
+      internalID: -3474472990081070180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_28
+      rect:
+        serializedVersion: 2
+        x: 16338
+        y: 0
+        width: 1348
+        height: 1195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbcc6c849705acfb0800000000000000
+      internalID: -4626797185327510340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_29
+      rect:
+        serializedVersion: 2
+        x: 5077
+        y: 1140
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 158ac697dd6e2b030800000000000000
+      internalID: 3509120898574362705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_30
+      rect:
+        serializedVersion: 2
+        x: 19558
+        y: 1094
+        width: 25
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d03cd6d3446667b50800000000000000
+      internalID: 6590567547977712397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_31
+      rect:
+        serializedVersion: 2
+        x: 7178
+        y: 1087
+        width: 41
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90cdf8517d2718650800000000000000
+      internalID: 6233389627362761737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_32
+      rect:
+        serializedVersion: 2
+        x: 7239
+        y: 1102
+        width: 25
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5719ae5eb1837aed0800000000000000
+      internalID: -2402890183706242699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_33
+      rect:
+        serializedVersion: 2
+        x: 10262
+        y: 1087
+        width: 33
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d9d2b3c66c5baf10800000000000000
+      internalID: 2282019232632986065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_34
+      rect:
+        serializedVersion: 2
+        x: 23737
+        y: 1064
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dba81e95eb8f2620800000000000000
+      internalID: 2751571715662851026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_35
+      rect:
+        serializedVersion: 2
+        x: 26851
+        y: 1087
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b1f0f91baeec2980800000000000000
+      internalID: -8562206372896116297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_36
+      rect:
+        serializedVersion: 2
+        x: 19338
+        y: 0
+        width: 1575
+        height: 1029
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 061c05c1f00547d40800000000000000
+      internalID: 5581173864048673120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_37
+      rect:
+        serializedVersion: 2
+        x: 23533
+        y: 1026
+        width: 48
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4ff6132f239e9dc0800000000000000
+      internalID: -3630302418952585397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_38
+      rect:
+        serializedVersion: 2
+        x: 22777
+        y: 936
+        width: 18
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de1fdc76b8776b9a0800000000000000
+      internalID: -6217650794912681491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_39
+      rect:
+        serializedVersion: 2
+        x: 10398
+        y: 883
+        width: 40
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1935027bf49475c50800000000000000
+      internalID: 6653867581186790289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_40
+      rect:
+        serializedVersion: 2
+        x: 11169
+        y: 807
+        width: 131
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77eb72a1aa0213f50800000000000000
+      internalID: 6859299622417317495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_41
+      rect:
+        serializedVersion: 2
+        x: 22460
+        y: 694
+        width: 146
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22d189893a1566740800000000000000
+      internalID: 5144889387398995234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_42
+      rect:
+        serializedVersion: 2
+        x: 25536
+        y: 747
+        width: 25
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 654a09708247e2310800000000000000
+      internalID: 1382169850923754582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_43
+      rect:
+        serializedVersion: 2
+        x: 27093
+        y: 769
+        width: 25
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d34cae4b18d07870800000000000000
+      internalID: 8678674093738574807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_44
+      rect:
+        serializedVersion: 2
+        x: 22687
+        y: 694
+        width: 48
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83cdea90fe8a34620800000000000000
+      internalID: 2757233141493980216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_45
+      rect:
+        serializedVersion: 2
+        x: 23019
+        y: 0
+        width: 441
+        height: 727
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c2c4b267c1b3c5b0800000000000000
+      internalID: -5349236462473395512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_46
+      rect:
+        serializedVersion: 2
+        x: 23767
+        y: 694
+        width: 18
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef6a93d20bd976450800000000000000
+      internalID: 6082003201785702142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_47
+      rect:
+        serializedVersion: 2
+        x: 23896
+        y: 716
+        width: 40
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75086e2be622b0660800000000000000
+      internalID: 7353008675455664215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_48
+      rect:
+        serializedVersion: 2
+        x: 26745
+        y: 679
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5a5faa99adbe7450800000000000000
+      internalID: 6088512282393795165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_49
+      rect:
+        serializedVersion: 2
+        x: 23548
+        y: 580
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43f86b810d53f4440800000000000000
+      internalID: 4922212085623328564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_50
+      rect:
+        serializedVersion: 2
+        x: 23646
+        y: 528
+        width: 71
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9b6b66ae8189b510800000000000000
+      internalID: 1565424795165354911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_51
+      rect:
+        serializedVersion: 2
+        x: 23828
+        y: 573
+        width: 25
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0099c4328e7c87e0800000000000000
+      internalID: -1761894256512233460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_52
+      rect:
+        serializedVersion: 2
+        x: 22762
+        y: 558
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58dae0283065dd300800000000000000
+      internalID: 278473325033729413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_53
+      rect:
+        serializedVersion: 2
+        x: 10428
+        y: 535
+        width: 18
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fbb538afbda63d00800000000000000
+      internalID: 952139409907891192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_54
+      rect:
+        serializedVersion: 2
+        x: 23442
+        y: 512
+        width: 26
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78ffb6b1bfc6e3200800000000000000
+      internalID: 161686462384570247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_55
+      rect:
+        serializedVersion: 2
+        x: 10421
+        y: 505
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fd507e0ae4731350800000000000000
+      internalID: 5986256878318935537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_56
+      rect:
+        serializedVersion: 2
+        x: 22671
+        y: 467
+        width: 34
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f9de43495763d7c0800000000000000
+      internalID: -4047778006996952590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_57
+      rect:
+        serializedVersion: 2
+        x: 23616
+        y: 482
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28aa292a52b53aac0800000000000000
+      internalID: -3845129439644833150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_58
+      rect:
+        serializedVersion: 2
+        x: 23548
+        y: 414
+        width: 56
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a816a0b4a72451e0800000000000000
+      internalID: -2210097928840275805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_59
+      rect:
+        serializedVersion: 2
+        x: 22437
+        y: 308
+        width: 63
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fd1c67f07f1c3900800000000000000
+      internalID: 665441414991846902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_60
+      rect:
+        serializedVersion: 2
+        x: 22906
+        y: 225
+        width: 93
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5dc887af4e0075450800000000000000
+      internalID: 6077327205614521557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_61
+      rect:
+        serializedVersion: 2
+        x: 23729
+        y: 308
+        width: 34
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5867afaba9a10e710800000000000000
+      internalID: 1720404309519791749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_62
+      rect:
+        serializedVersion: 2
+        x: 22717
+        y: 233
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f67e974aceaaf120800000000000000
+      internalID: 2448461531237480176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_63
+      rect:
+        serializedVersion: 2
+        x: 26186
+        y: 0
+        width: 237
+        height: 304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c76bc762df220b200800000000000000
+      internalID: 193693254644708988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_64
+      rect:
+        serializedVersion: 2
+        x: 22369
+        y: 0
+        width: 215
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28e1d3f7bf5012d70800000000000000
+      internalID: 9016494506702085762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_65
+      rect:
+        serializedVersion: 2
+        x: 22649
+        y: 82
+        width: 63
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2200d124b86e42380800000000000000
+      internalID: -8996812669795368926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_66
+      rect:
+        serializedVersion: 2
+        x: 23858
+        y: 59
+        width: 282
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fbe906d9133db990800000000000000
+      internalID: -7368677229250089996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_67
+      rect:
+        serializedVersion: 2
+        x: 25324
+        y: 97
+        width: 56
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3d459bf7766fb840800000000000000
+      internalID: 5242021156790553914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_68
+      rect:
+        serializedVersion: 2
+        x: 27297
+        y: 82
+        width: 71
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a36a781510ad2ed20800000000000000
+      internalID: 3306444775641032250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_69
+      rect:
+        serializedVersion: 2
+        x: 17706
+        y: 0
+        width: 124
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd62c8e172cf21190800000000000000
+      internalID: -7993049143682783521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_70
+      rect:
+        serializedVersion: 2
+        x: 24160
+        y: 0
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 908c3e70b0b72f720800000000000000
+      internalID: 2878498399150393353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_71
+      rect:
+        serializedVersion: 2
+        x: 25279
+        y: 14
+        width: 33
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa6222abf84752120800000000000000
+      internalID: 2388443338041861807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_72
+      rect:
+        serializedVersion: 2
+        x: 28249
+        y: 29
+        width: 10
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23485b92878047e90800000000000000
+      internalID: -7028983806229642190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_73
+      rect:
+        serializedVersion: 2
+        x: 29307
+        y: 0
+        width: 169
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6efb99c0927b1ea0800000000000000
+      internalID: -5900996920555602326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_74
+      rect:
+        serializedVersion: 2
+        x: 30675
+        y: 29
+        width: 10
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b890b48d7a922e80800000000000000
+      internalID: -8204825707227866957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_75
+      rect:
+        serializedVersion: 2
+        x: 23692
+        y: 0
+        width: 93
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4e13e18a789ed7a0800000000000000
+      internalID: -6350470772613243318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectroShockwave.prefab_76
+      rect:
+        serializedVersion: 2
+        x: 23828
+        y: 0
+        width: 101
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 668c05bec7e1badf0800000000000000
+      internalID: -168007039223543706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ElectroShockwave.prefab_0: 8704716203671335241
+      ElectroShockwave.prefab_1: -7976542940839478848
+      ElectroShockwave.prefab_10: -7396080649913141887
+      ElectroShockwave.prefab_11: 3745656066033475026
+      ElectroShockwave.prefab_12: -4590069089519175904
+      ElectroShockwave.prefab_13: 6558147044202160424
+      ElectroShockwave.prefab_14: -4822280677429242546
+      ElectroShockwave.prefab_15: 8386251505611431303
+      ElectroShockwave.prefab_16: -6054473861436527865
+      ElectroShockwave.prefab_17: 824108386848761491
+      ElectroShockwave.prefab_18: -2811720171123055641
+      ElectroShockwave.prefab_19: 535392136645752176
+      ElectroShockwave.prefab_2: -9130827985342138397
+      ElectroShockwave.prefab_20: 2442207432633117365
+      ElectroShockwave.prefab_21: 5484811729570092811
+      ElectroShockwave.prefab_22: -349936332392327779
+      ElectroShockwave.prefab_23: -7541778487969796041
+      ElectroShockwave.prefab_24: -4609285308029958495
+      ElectroShockwave.prefab_25: -8428929292675059553
+      ElectroShockwave.prefab_26: 7227704596223024177
+      ElectroShockwave.prefab_27: -3474472990081070180
+      ElectroShockwave.prefab_28: -4626797185327510340
+      ElectroShockwave.prefab_29: 3509120898574362705
+      ElectroShockwave.prefab_3: -1421972491902405258
+      ElectroShockwave.prefab_30: 6590567547977712397
+      ElectroShockwave.prefab_31: 6233389627362761737
+      ElectroShockwave.prefab_32: -2402890183706242699
+      ElectroShockwave.prefab_33: 2282019232632986065
+      ElectroShockwave.prefab_34: 2751571715662851026
+      ElectroShockwave.prefab_35: -8562206372896116297
+      ElectroShockwave.prefab_36: 5581173864048673120
+      ElectroShockwave.prefab_37: -3630302418952585397
+      ElectroShockwave.prefab_38: -6217650794912681491
+      ElectroShockwave.prefab_39: 6653867581186790289
+      ElectroShockwave.prefab_4: 1497745229589591664
+      ElectroShockwave.prefab_40: 6859299622417317495
+      ElectroShockwave.prefab_41: 5144889387398995234
+      ElectroShockwave.prefab_42: 1382169850923754582
+      ElectroShockwave.prefab_43: 8678674093738574807
+      ElectroShockwave.prefab_44: 2757233141493980216
+      ElectroShockwave.prefab_45: -5349236462473395512
+      ElectroShockwave.prefab_46: 6082003201785702142
+      ElectroShockwave.prefab_47: 7353008675455664215
+      ElectroShockwave.prefab_48: 6088512282393795165
+      ElectroShockwave.prefab_49: 4922212085623328564
+      ElectroShockwave.prefab_5: -8974511641980024844
+      ElectroShockwave.prefab_50: 1565424795165354911
+      ElectroShockwave.prefab_51: -1761894256512233460
+      ElectroShockwave.prefab_52: 278473325033729413
+      ElectroShockwave.prefab_53: 952139409907891192
+      ElectroShockwave.prefab_54: 161686462384570247
+      ElectroShockwave.prefab_55: 5986256878318935537
+      ElectroShockwave.prefab_56: -4047778006996952590
+      ElectroShockwave.prefab_57: -3845129439644833150
+      ElectroShockwave.prefab_58: -2210097928840275805
+      ElectroShockwave.prefab_59: 665441414991846902
+      ElectroShockwave.prefab_6: -1767677828317560968
+      ElectroShockwave.prefab_60: 6077327205614521557
+      ElectroShockwave.prefab_61: 1720404309519791749
+      ElectroShockwave.prefab_62: 2448461531237480176
+      ElectroShockwave.prefab_63: 193693254644708988
+      ElectroShockwave.prefab_64: 9016494506702085762
+      ElectroShockwave.prefab_65: -8996812669795368926
+      ElectroShockwave.prefab_66: -7368677229250089996
+      ElectroShockwave.prefab_67: 5242021156790553914
+      ElectroShockwave.prefab_68: 3306444775641032250
+      ElectroShockwave.prefab_69: -7993049143682783521
+      ElectroShockwave.prefab_7: -3109060798204185905
+      ElectroShockwave.prefab_70: 2878498399150393353
+      ElectroShockwave.prefab_71: 2388443338041861807
+      ElectroShockwave.prefab_72: -7028983806229642190
+      ElectroShockwave.prefab_73: -5900996920555602326
+      ElectroShockwave.prefab_74: -8204825707227866957
+      ElectroShockwave.prefab_75: -6350470772613243318
+      ElectroShockwave.prefab_76: -168007039223543706
+      ElectroShockwave.prefab_8: 7196314183195004077
+      ElectroShockwave.prefab_9: 6347475611523164820
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

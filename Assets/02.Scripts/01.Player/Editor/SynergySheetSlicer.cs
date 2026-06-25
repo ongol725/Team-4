@@ -39,6 +39,8 @@ namespace BagSurvivor.EditorTools
             ("OVERLOAD2_Pr",    8, 1),
             ("OVERLOAD2.1_Pr",  8, 1),
             ("StoneDrop_Common", 12, 1), // 12288×1536, 12프레임 (셀별 콘텐츠 검증)
+            // 일렉트로 번개 기둥: 30956×2048, 본체 중심 간격 ≈3090px → 10프레임 (셀 3095px, 빈 프레임 없음)
+            ("ElectroShockwave", 10, 1),
             // ── 4x4 그리드 ──
             ("Gold_Coin1", 4, 4), ("Gold_Coin2", 4, 4), ("Gold_Coin3", 4, 4), ("Gold_Coin4", 4, 4),
             ("RichCoin_BOMB1", 4, 4), ("RichCoin_BOMB2", 4, 4), ("RichCoin_BOMB3", 4, 4), ("RichCoin_BOMB4", 4, 4),
