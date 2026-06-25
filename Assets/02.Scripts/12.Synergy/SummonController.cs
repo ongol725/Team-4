@@ -85,7 +85,7 @@ public class SummonController : MonoBehaviour
                 {
                     SummonAIType.Bounce      => 0.25f, // 핀볼: 작은 공
                     SummonAIType.OrbitPlayer => 0.40f, // 페어리: 플레이어 주변 회전
-                    SummonAIType.GuardOffset => 0.45f, // 마왕 기어
+                    SummonAIType.GuardOffset => 0.1125f, // 마왕 기어 (0.45 → 4배 축소)
                     _                        => 0.60f, // 골렘·성역: 일반 크기
                 };
                 transform.localScale = Vector3.one * scale;
