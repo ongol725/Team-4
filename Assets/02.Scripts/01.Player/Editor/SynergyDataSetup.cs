@@ -87,14 +87,13 @@ namespace BagSurvivor.SynergyEditor
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
                 ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1, pierce:999);
 
-            // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / SidePillars (콘셉트 슬라이드 2) ──
-            // 캐릭터 좌·우에 번개 기둥을 세운다. extra = 기둥 수(브 2 / 실 4).
-            d["SK_ELEC_1"] = Sk("SK_ELEC_1", "번개 기둥 2개",
-                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.SidePillars,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:2);
-            d["SK_ELEC_2"] = Sk("SK_ELEC_2", "번개 기둥 4개",
-                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.SidePillars,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:4);
+            // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy (기획서: 무작위 낙뢰 1/3개) ──
+            d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
+                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:1);
+            d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
+                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:3);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
             d["SK_SCYTHE_1"] = Sk("SK_SCYTHE_1", "사신의 낫 (브론즈)",
@@ -308,9 +307,9 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 일렉트로 ────────────────────────────────────────
                 Th(SynergyType.Electro, "일렉트로", 2, 3, 3, 0,
-                    "2초마다 캐릭터 좌·우에 번개 기둥을 세워 범위 피해를 줍니다. 무기 공격력 총합에 비례.",
-                    "번개 기둥 2개 (좌·우)",
-                    "번개 기둥 4개",
+                    "가방 무기 공격력 총합에 비례하는 낙뢰를 2초마다 무작위 적에게 떨굽니다.",
+                    "마법 낙뢰 1개 투하",
+                    "마법 낙뢰 3개 투하",
                     ""),
 
                 // ── 핀볼 ────────────────────────────────────────────
