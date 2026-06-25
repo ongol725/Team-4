@@ -70,6 +70,9 @@ public class SynergyManager : MonoBehaviour
     private float _moveDistAccum = 0f;
     private const float MoveDropInterval = 1f; // 1유닛 이동마다 골드 드랍
 
+    // 테스트 패널이 적용 중이면 정식 로드아웃(방 진입 등) 발행을 무시해 덮어쓰기 방지
+    private bool _testLockActive = false;
+
     // ─────────────────────────────────────────────────────────────
 
     private void Start()
@@ -122,6 +125,12 @@ public class SynergyManager : MonoBehaviour
 
     private void OnLoadoutReady(BattleLoadout loadout)
     {
+        // 테스트 패널이 잠금 중이면 정식 로드아웃(방 진입 시 무기 0개 등)으로 덮어쓰지 않는다
+        if (_testLockActive)
+        {
+            Debug.Log("[SynergyManager] 테스트 잠금 중 — 정식 로드아웃 무시");
+            return;
+        }
         _loadout = loadout;
         Refresh();
     }
@@ -681,12 +690,24 @@ public class SynergyManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 테스트 전용 진입점 (SynergyTestPanel 에서 호출)
 
-    /// <summary>임의로 구성한 로드아웃을 즉시 적용해 시너지를 재구성한다.</summary>
+    /// <summary>임의로 구성한 로드아웃을 즉시 적용하고, 정식 로드아웃 덮어쓰기를 잠근다.</summary>
     public void ApplyLoadoutForTest(BattleLoadout loadout)
     {
+        _testLockActive = true;
         _loadout = loadout;
         if (_player == null) FindPlayerRefs();
         Refresh();
+    }
+
+    /// <summary>테스트 잠금을 풀고 현재 정식 로드아웃으로 복귀한다.</summary>
+    public void ReleaseTestLock()
+    {
+        _testLockActive = false;
+        if (_gm != null && _gm.CurrentLoadout != null)
+        {
+            _loadout = _gm.CurrentLoadout;
+            Refresh();
+        }
     }
 
     /// <summary>OnHitTaken 트리거(난공불락 등)를 강제 1회 발동.</summary>

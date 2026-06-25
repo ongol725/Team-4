@@ -112,8 +112,11 @@ public class SynergyTestPanel : MonoBehaviour
         // ── 액션 버튼 ───────────────────────────────────────
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("적용", GUILayout.Height(28))) Apply();
-        if (GUILayout.Button("전체 해제", GUILayout.Height(28)))
+        if (GUILayout.Button("해제(정식 복귀)", GUILayout.Height(28)))
+        {
             foreach (var s in Synergies) _sel[s.type] = -1;
+            _manager.ReleaseTestLock();
+        }
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
@@ -121,6 +124,8 @@ public class SynergyTestPanel : MonoBehaviour
         if (GUILayout.Button("이동 시뮬레이트")) _manager.TestSimulateMove();
         GUILayout.EndHorizontal();
 
+        GUILayout.Label("· [적용] 시 방 진입 등 정식 로드아웃 덮어쓰기를 잠금");
+        GUILayout.Label("· 게임 정상 진행하려면 [해제(정식 복귀)]");
         GUILayout.Label("· AutoTimer형(암살단·티탄 등)은 [적용] 후 자동 발동");
         GUILayout.Label("· 난공불락=피격, 대부호=이동 시 발동 → 시뮬레이트 버튼 사용");
 
