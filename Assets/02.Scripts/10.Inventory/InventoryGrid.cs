@@ -81,6 +81,10 @@ public class InventoryGrid : MonoBehaviour
         return true;
     }
 
+    /// <summary>외부에서 강제로 OnGridChanged 이벤트를 발행한다.
+    /// TryUpgrade 등 그리드 상태를 직접 수정한 뒤 InventoryAnalyzer에 갱신을 알릴 때 사용.</summary>
+    public void NotifyChanged() => OnGridChanged?.Invoke();
+
     public bool IsOccupied(Vector2Int cell) =>
         InBounds(cell) && _occupied[cell.x, cell.y];
 

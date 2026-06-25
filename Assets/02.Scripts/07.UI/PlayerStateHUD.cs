@@ -47,8 +47,7 @@ namespace BagSurvivor.UI
                 SetGold(mockGold);
             }
 
-            // 체력 초기값(곧 PlayerHealth가 실제 값으로 덮어씀)
-            if (useMockData) SetHealth(mockCurrentHP, mockMaxHP);
+            // 체력 초기값은 PlayerHealth.Start()가 설정한다 — 여기서 덮어쓰지 않음
         }
 
         private void OnDestroy()

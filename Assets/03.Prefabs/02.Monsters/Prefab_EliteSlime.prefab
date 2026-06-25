@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5063307457329041168}
   - component: {fileID: 698957191270943192}
   - component: {fileID: 6850902750091413693}
-  - component: {fileID: 6996593693606519729}
-  - component: {fileID: 6445125599930840954}
+  - component: {fileID: 581498561537518167}
+  - component: {fileID: 3736146279355546333}
   m_Layer: 8
   m_Name: Prefab_EliteSlime
   m_TagString: Monster
@@ -176,7 +176,7 @@ MonoBehaviour:
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
---- !u!114 &6996593693606519729
+--- !u!114 &581498561537518167
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.EliteMonster
   hpMultiplier: 5
   attackMultiplier: 1
---- !u!114 &6445125599930840954
+--- !u!114 &3736146279355546333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_SCYTHE_3
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_SCYTHE_3
+  skillName: "\uC0AC\uC2E0\uC758 \uB0AB (\uACE8\uB4DC)"
+  triggerType: 0
+  skillType: 2
+  targetType: 4
+  scalingStat: 2
+  dmgMultiplier: 1.3
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 0
+  rangeRadius: 20
+  duration: 0
+  cooldown: 3
+  fixedEffect: 3
+  fixedEffectValue: 15
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  animFrames:
+  - {fileID: 4743280954965882372, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 8209770601533402930, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 3494057364084134896, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 5805615973297511212, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1283332976936967601, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -5389337956894722059, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -3914816068076033661, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1025075011725996060, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1345891573472533464, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -9161502085843853626, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -641751990298922833, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -2354849781675960251, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -3887570755549538259, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -8840512706636815306, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 8648124436010180472, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -1877095274221625738, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  animFps: 12
+  visualSize: 0.8
+  dropFrames: []
+  dropFps: 8

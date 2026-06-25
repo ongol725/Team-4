@@ -1,0 +1,715 @@
+fileFormatVersion: 2
+guid: 2751b9e55cb8f794fa9f1386dc010745
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4421062331379601517
+    second: spirit_attack.prefab_0
+  - first:
+      213: -4602863917074197578
+    second: spirit_attack.prefab_1
+  - first:
+      213: 3071719586801174439
+    second: spirit_attack.prefab_2
+  - first:
+      213: -1317069503695146530
+    second: spirit_attack.prefab_3
+  - first:
+      213: -5783978958103855648
+    second: spirit_attack.prefab_4
+  - first:
+      213: 567006246580065128
+    second: spirit_attack.prefab_5
+  - first:
+      213: 9185333033193106824
+    second: spirit_attack.prefab_6
+  - first:
+      213: 1361873199102695609
+    second: spirit_attack.prefab_7
+  - first:
+      213: -4526712881592195439
+    second: spirit_attack.prefab_8
+  - first:
+      213: 443716257309272121
+    second: spirit_attack.prefab_9
+  - first:
+      213: 462056552758905414
+    second: spirit_attack.prefab_10
+  - first:
+      213: 1636582057988876033
+    second: spirit_attack.prefab_11
+  - first:
+      213: -2442959621430970282
+    second: spirit_attack.prefab_12
+  - first:
+      213: 7197266991324031219
+    second: spirit_attack.prefab_13
+  - first:
+      213: -4138717198940041181
+    second: spirit_attack.prefab_14
+  - first:
+      213: -4423247053355486621
+    second: spirit_attack.prefab_15
+  - first:
+      213: -6350380243790207732
+    second: spirit_attack.prefab_16
+  - first:
+      213: 3465153089041966555
+    second: spirit_attack.prefab_17
+  - first:
+      213: -3803012597921825272
+    second: spirit_attack.prefab_18
+  - first:
+      213: 7559697692208114486
+    second: spirit_attack.prefab_19
+  - first:
+      213: 872909797450481053
+    second: spirit_attack.prefab_20
+  - first:
+      213: 2503769092239357591
+    second: spirit_attack.prefab_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spirit_attack.prefab_0
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 1417
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d60ddbf34c4ca5d30800000000000000
+      internalID: 4421062331379601517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_1
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 1417
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b3545987a75f10c0800000000000000
+      internalID: -4602863917074197578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_2
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 1417
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a7c4e480b0f0aa20800000000000000
+      internalID: 3071719586801174439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_3
+      rect:
+        serializedVersion: 2
+        x: 1383
+        y: 1417
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed130c7b344d8bde0800000000000000
+      internalID: -1317069503695146530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_4
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 969
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0edb2ed48cd2bbfa0800000000000000
+      internalID: -5783978958103855648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_5
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 969
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86315d85d296ed700800000000000000
+      internalID: 567006246580065128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_6
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 969
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88de22b4abbd87f70800000000000000
+      internalID: 9185333033193106824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_7
+      rect:
+        serializedVersion: 2
+        x: 1383
+        y: 969
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b814a5857856e210800000000000000
+      internalID: 1361873199102695609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_8
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 521
+        width: 380
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19623842e92ed21c0800000000000000
+      internalID: -4526712881592195439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_9
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 521
+        width: 408
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9382cf9c595682600800000000000000
+      internalID: 443716257309272121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_10
+      rect:
+        serializedVersion: 2
+        x: 907
+        y: 521
+        width: 420
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64a06559cfd896600800000000000000
+      internalID: 462056552758905414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_11
+      rect:
+        serializedVersion: 2
+        x: 1347
+        y: 521
+        width: 434
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1076434f5be46b610800000000000000
+      internalID: 1636582057988876033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 255
+        width: 23
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 658fbfbea2dd81ed0800000000000000
+      internalID: -2442959621430970282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_13
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 73
+        width: 420
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f863832234d1e360800000000000000
+      internalID: 7197266991324031219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_14
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 291
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 320116ba2a25096c0800000000000000
+      internalID: -4138717198940041181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_15
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 267
+        width: 18
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 362f3f68d387d92c0800000000000000
+      internalID: -4423247053355486621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_16
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 73
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c05e93460daeed7a0800000000000000
+      internalID: -6350380243790207732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_17
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 73
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd5a1b41062b61030800000000000000
+      internalID: 3465153089041966555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_18
+      rect:
+        serializedVersion: 2
+        x: 1383
+        y: 73
+        width: 370
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80eb880013cf83bc0800000000000000
+      internalID: -3803012597921825272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_19
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 255
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63ba7618ff079e860800000000000000
+      internalID: 7559697692208114486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_20
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 243
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9d7efdf5d23d1c00800000000000000
+      internalID: 872909797450481053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spirit_attack.prefab_21
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 221
+        width: 30
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 796778e49bc2fb220800000000000000
+      internalID: 2503769092239357591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spirit_attack.prefab_0: 4421062331379601517
+      spirit_attack.prefab_1: -4602863917074197578
+      spirit_attack.prefab_10: 462056552758905414
+      spirit_attack.prefab_11: 1636582057988876033
+      spirit_attack.prefab_12: -2442959621430970282
+      spirit_attack.prefab_13: 7197266991324031219
+      spirit_attack.prefab_14: -4138717198940041181
+      spirit_attack.prefab_15: -4423247053355486621
+      spirit_attack.prefab_16: -6350380243790207732
+      spirit_attack.prefab_17: 3465153089041966555
+      spirit_attack.prefab_18: -3803012597921825272
+      spirit_attack.prefab_19: 7559697692208114486
+      spirit_attack.prefab_2: 3071719586801174439
+      spirit_attack.prefab_20: 872909797450481053
+      spirit_attack.prefab_21: 2503769092239357591
+      spirit_attack.prefab_3: -1317069503695146530
+      spirit_attack.prefab_4: -5783978958103855648
+      spirit_attack.prefab_5: 567006246580065128
+      spirit_attack.prefab_6: 9185333033193106824
+      spirit_attack.prefab_7: 1361873199102695609
+      spirit_attack.prefab_8: -4526712881592195439
+      spirit_attack.prefab_9: 443716257309272121
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

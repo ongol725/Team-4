@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -102,7 +102,7 @@ public class BattleLoadoutDebugUI : MonoBehaviour
         rt.sizeDelta        = new Vector2(255f, 0f);
         panel.GetComponent<Image>().color = new Color(0.06f, 0.07f, 0.12f, 0.93f);
 
-        var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        var font = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                 ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         var titleGo = new GameObject("Title", typeof(RectTransform), typeof(Text));

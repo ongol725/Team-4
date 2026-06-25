@@ -66,5 +66,7 @@ public enum SynergyType
     Pinball = 10,       // 핀볼
     Overload = 11,      // 과부화
     Electro = 12,       // 일렉트로
-    Impregnable = 13    // 난공불락
+    Impregnable = 13,   // 난공불락
+    Titan = 14,         // 티탄
+    Fairy = 15,         // 페어리
 }

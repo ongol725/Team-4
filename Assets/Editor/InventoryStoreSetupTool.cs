@@ -1,4 +1,4 @@
-// Team4 메뉴 → "Setup InventoryStore Scene" 실행 시
+﻿// Team4 메뉴 → "Setup InventoryStore Scene" 실행 시
 // 99.InventoryStore 씬에 인벤토리·상점 UI를 자동 구성합니다.
 // 모든 컴포넌트 참조(SerializeField)까지 자동 연결됩니다.
 
@@ -35,7 +35,7 @@ public static class InventoryStoreSetupTool
             "99.InventoryStore 씬을 열고 실행해 주세요.",
             "생성", "취소")) return;
 
-        _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        _font = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
              ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         // 기존 루트 삭제

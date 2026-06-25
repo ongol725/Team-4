@@ -14,12 +14,27 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     private bool isStunned = false;
     private bool _inventoryOpen = false;
+    private Vector2 _prevPosition;
 
-    void Start()
+    /// <summary>이동 거리(m)를 인자로 발행. SynergyManager 대부호 트리거 구독용.</summary>
+    public event System.Action<float> onDistanceMoved;
+
+    /// <summary>이동속도 배율. 과부화 패널티 등에서 일시 변경.</summary>
+    public float speedMultiplier = 1f;
+
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
-        if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        if (rb != null)
+        {
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+            _prevPosition = rb.position;
+        }
+    }
+
+    void Start()
+    {
         if (moveAction != null) moveAction.action.Enable();
 
         InventoryPopupToggle.onPopupToggled += OnInventoryToggled;
@@ -50,10 +65,15 @@ public class PlayerMovement : MonoBehaviour
         if (isStunned || _inventoryOpen)
         {
             rb.linearVelocity = Vector2.zero;
+            _prevPosition = rb.position;
             return;
         }
 
-        rb.linearVelocity = moveInput * moveSpeed;
+        rb.linearVelocity = moveInput * moveSpeed * speedMultiplier;
+
+        float dist = ((Vector2)rb.position - _prevPosition).magnitude;
+        if (dist > 0f) onDistanceMoved?.Invoke(dist);
+        _prevPosition = rb.position;
     }
 
         // 스턴시 얼마동안 이동불가 / 시간이 끝나면 다시

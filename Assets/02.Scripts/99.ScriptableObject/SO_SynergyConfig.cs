@@ -44,10 +44,12 @@ public class SynergyThreshold
     public int bronzeThreshold = 2;
     public int silverThreshold = 4;
     public int goldThreshold   = 6;
+    public int prismThreshold  = 0;
 
     [Header("효과 텍스트")]
     [TextArea(1, 3)] public string description;   // 시너지 공통 설명
     [TextArea(1, 3)] public string bronzeEffect;  // Bronze 등급 효과
     [TextArea(1, 3)] public string silverEffect;  // Silver 등급 효과
     [TextArea(1, 3)] public string goldEffect;    // Gold   등급 효과
+    [TextArea(1, 3)] public string prismEffect;   // Prism  등급 효과
 }

@@ -5,14 +5,24 @@ using BagSurvivor.Monster;
 public class ProjectileBase : MonoBehaviour
 {
     private int   _damage;
-    private int   _remainingHits;
+    private int   _remainingHits = 1;
     private float _knockbackForce;
+    private float _explosionRadius;
+    private bool  _exploded;
 
-    public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits, float knockbackForce = 0f)
+    // 적 타격 시 추가 효과(시너지 Burn/즉사 등)를 적용하는 선택적 콜백. 기본 null.
+    private System.Action<MonsterController> _onHit;
+
+    /// <summary>적에게 명중할 때마다 호출될 콜백을 설정한다(시너지 고정효과 전달용).</summary>
+    public void SetOnHit(System.Action<MonsterController> onHit) => _onHit = onHit;
+
+    public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
+        float knockbackForce = 0f, float explosionRadius = 0f)
     {
-        _damage         = damage;
-        _remainingHits  = Mathf.Max(1, maxHits);
-        _knockbackForce = knockbackForce;
+        _damage          = damage;
+        _remainingHits   = Mathf.Max(1, maxHits);
+        _knockbackForce  = knockbackForce;
+        _explosionRadius = explosionRadius;
 
         var rb = GetComponent<Rigidbody2D>();
         rb.gravityScale   = 0f;
@@ -25,9 +35,23 @@ public class ProjectileBase : MonoBehaviour
         Destroy(gameObject, lifetime);
     }
 
+    private void OnDestroy()
+    {
+        // lifetime 종료 시에도 폭발 범위 피해 적용
+        if (_explosionRadius > 0f && !_exploded && Application.isPlaying)
+            Explode();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player")) return;
+
+        if (_explosionRadius > 0f)
+        {
+            Explode();
+            Destroy(gameObject);
+            return;
+        }
 
         var mc = other.GetComponent<MonsterController>()
               ?? other.GetComponentInParent<MonsterController>();
@@ -35,8 +59,26 @@ public class ProjectileBase : MonoBehaviour
 
         Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
         mc.TakeDamage(_damage, _knockbackForce, kbDir);
+        _onHit?.Invoke(mc);
 
         if (--_remainingHits <= 0)
             Destroy(gameObject);
+    }
+
+    private void Explode()
+    {
+        if (_exploded) return;
+        _exploded = true;
+
+        var hits = Physics2D.OverlapCircleAll(transform.position, _explosionRadius);
+        foreach (var h in hits)
+        {
+            var mc = h.GetComponent<MonsterController>()
+                  ?? h.GetComponentInParent<MonsterController>();
+            if (mc == null || mc.IsDead) continue;
+            Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
+            mc.TakeDamage(_damage, _knockbackForce, kbDir);
+            _onHit?.Invoke(mc);
+        }
     }
 }

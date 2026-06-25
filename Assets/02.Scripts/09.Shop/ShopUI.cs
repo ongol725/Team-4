@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
@@ -213,7 +213,7 @@ public class ShopUI : MonoBehaviour
         handleRt.sizeDelta        = new Vector2(0f, 14f);
 
         var handleTxt = handleGo.GetComponent<Text>();
-        handleTxt.font               = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        handleTxt.font               = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
         handleTxt.text               = "≡ 상점 확률표";
         handleTxt.fontSize           = 9;
@@ -234,7 +234,7 @@ public class ShopUI : MonoBehaviour
         textRt.offsetMax = new Vector2(-6f, -16f);  // 상단 핸들 높이만큼 여백
 
         _statsText = textGo.GetComponent<Text>();
-        _statsText.font               = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
+        _statsText.font               = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                                    ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
         _statsText.fontSize           = 10;
         _statsText.color              = new Color(0.85f, 0.85f, 0.85f);

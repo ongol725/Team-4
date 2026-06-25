@@ -42,12 +42,40 @@ public class BattleLoadout
     /// <summary>배치된 무기 전체 (반지 인접 버프 적용 등급 포함)</summary>
     public readonly List<WeaponLoadoutEntry> Weapons         = new();
 
-    /// <summary>방어구 합산 체력 보너스</summary>
+    /// <summary>방어구 합산 체력 보너스 (반지 HP 버프 포함)</summary>
     public int TotalHpBonus;
+
+    /// <summary>방어구 전용 기본 체력 합산 (ARM_HP_SUM 시너지 스케일링 기준)</summary>
+    public int TotalArmorHp;
 
     /// <summary>방어구 합산 10초당 체력 재생</summary>
     public int TotalHpRegen;
 
     /// <summary>Bronze 이상 활성화된 시너지 목록 (Gold → Silver → Bronze 순 정렬)</summary>
     public readonly List<ActiveSynergyEntry> ActiveSynergies = new();
+
+    /// <summary>시너지 스케일링 기준 스탯 값 반환.</summary>
+    public int GetScaledBase(ScalingStatType stat)
+    {
+        switch (stat)
+        {
+            case ScalingStatType.WPN_ATK_SUM:
+            {
+                int sum = 0;
+                foreach (var w in Weapons) sum += w.attackPower;
+                return sum;
+            }
+            case ScalingStatType.WPN_ATK_AVG:
+            {
+                if (Weapons.Count == 0) return 0;
+                int sum = 0;
+                foreach (var w in Weapons) sum += w.attackPower;
+                return sum / Weapons.Count;
+            }
+            case ScalingStatType.ARM_HP_SUM:
+                return TotalArmorHp;
+            default:
+                return 0;
+        }
+    }
 }

@@ -76,7 +76,7 @@ public class InventoryPopupToggle : MonoBehaviour
     {
 #if ENABLE_INPUT_SYSTEM
         if (Keyboard.current == null) return;
-        if (Keyboard.current.iKey.wasPressedThisFrame)
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
             Toggle();
 #endif
     }

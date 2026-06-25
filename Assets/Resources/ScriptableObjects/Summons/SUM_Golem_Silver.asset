@@ -22,4 +22,15 @@ MonoBehaviour:
   uniqueSkill: {fileID: 0}
   uniqueSkillCooldown: 8
   modelPrefab: {fileID: 0}
+  icon: {fileID: 2044662942463612365, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  animFrames:
+  - {fileID: 2044662942463612365, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -2985112567063365680, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: 8366238621336920787, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -524694576540928402, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -6582405856281038687, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -6427117306431663934, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: -790838948123382306, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  - {fileID: 5346539683592780098, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
+  animFps: 10
   hp: 0
