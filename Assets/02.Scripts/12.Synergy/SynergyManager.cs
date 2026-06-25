@@ -645,17 +645,15 @@ public class SynergyManager : MonoBehaviour
     private List<MonsterController> GetEnemiesInRange(Vector3 center, float range)
     {
         var result = new List<MonsterController>();
-        var filter = new ContactFilter2D { useTriggers = true };
-        if (_enemyLayer != 0) filter.SetLayerMask(_enemyLayer);
-        else filter = ContactFilter2D.noFilter;
 
-        var cols = new List<Collider2D>();
-        Physics2D.OverlapCircle((Vector2)center, range, filter, cols);
+        // _enemyLayer 설정이 실제 몬스터 레이어와 어긋나도 적을 찾도록,
+        // 레이어 필터 없이 모든 콜라이더를 받은 뒤 MonsterController 컴포넌트로만 필터한다.
+        var cols = Physics2D.OverlapCircleAll((Vector2)center, range);
         foreach (var h in cols)
         {
             var mc = h.GetComponent<MonsterController>()
                   ?? h.GetComponentInParent<MonsterController>();
-            if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy)
+            if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy && !result.Contains(mc))
                 result.Add(mc);
         }
         return result;
