@@ -46,3 +46,5 @@ MonoBehaviour:
   - {fileID: 8861980239884498074, guid: 694b7826f3eedac498a143bb509d9b63, type: 3}
   animFps: 10
   hp: 0
+  attackEffectFrames: []
+  attackEffectFps: 12

@@ -32,3 +32,8 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
+  animFrames: []
+  animFps: 12
+  visualSize: 0.8
+  dropFrames: []
+  dropFps: 8

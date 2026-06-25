@@ -33,6 +33,20 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
   animFrames:
+  - {fileID: -1209024078395844683, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 5862099010598259677, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -5806571485615005472, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -8953299127035170492, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -5876357637638997447, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 1925853062893409135, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 8897044677577326068, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -3312385615103743565, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 4754935924412999247, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: 2162891647012308843, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  - {fileID: -1971812988695073952, guid: 1cdaf5ba660a74745918d9965cc34396, type: 3}
+  animFps: 12
+  visualSize: 0.8
+  dropFrames:
   - {fileID: 1802441802970508738, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
   - {fileID: -6697529884170365944, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
   - {fileID: -295642451700783646, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
@@ -47,5 +61,4 @@ MonoBehaviour:
   - {fileID: -5951648549312869222, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
   - {fileID: 3644475451823879185, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
   - {fileID: 4037727611758162905, guid: a345cbc4ae8554644991b5b03d687809, type: 3}
-  animFps: 12
-  visualSize: 0.8
+  dropFps: 8

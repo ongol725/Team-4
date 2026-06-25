@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(xargs grep -l \"InventoryGrid\")",
       "Bash(awk '/m_Name: InventoryStoreRoot/,/^---/' 99.InventoryStore.unity)",
