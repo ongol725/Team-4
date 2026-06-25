@@ -327,8 +327,6 @@ public class SynergyManager : MonoBehaviour
 
         Vector3 vfxPos = _player.position;
 
-        Debug.Log($"[SynergyDebug] ExecuteSkill {skill.skillName} type={skill.skillType} target={skill.targetType} dmg={damage} range={skill.rangeRadius}");
-
         switch (skill.targetType)
         {
             case SkillTargetType.RandomEnemy:
@@ -669,8 +667,6 @@ public class SynergyManager : MonoBehaviour
             if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy && !result.Contains(mc))
                 result.Add(mc);
         }
-
-        Debug.Log($"[SynergyDebug] 적탐색 range={range} center={center} → {result.Count}명");
         return result;
     }
 
