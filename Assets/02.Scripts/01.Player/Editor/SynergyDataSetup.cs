@@ -156,9 +156,11 @@ namespace BagSurvivor.SynergyEditor
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:20f,
                 fx:FixedEffectType.Burn, fxVal:0f, pierce:999);
+            // 연옥 소용돌이: 캐릭터를 감싸는 불꽃 고리(Devil_Slash)가 플레이어를 따라다니며 주변 적 타격
             d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥 소용돌이",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:0.5f, cd:1f, range:3f);
+                ScalingStatType.WPN_ATK_SUM, dmg:0.5f, cd:1f, range:3f,
+                followVfx:true, vSize:3f);
             d["SK_DEMON_3"] = Sk("SK_DEMON_3", "마왕의 멸천참(예비)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Self,
                 ScalingStatType.WPN_ATK_SUM, dmg:0.2f, cd:0.1f, range:8f);
@@ -524,7 +526,8 @@ namespace BagSurvivor.SynergyEditor
             ScalingStatType scaling, float dmg, float cd, float range,
             int hits = 1, float hitInterval = 0.1f, int extra = 0,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float duration = 0f, int pierce = 1)
+            float duration = 0f, int pierce = 1,
+            bool followVfx = false, float vSize = 0f)
         {
             string path = $"{SkillDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SkillData>(path);
@@ -544,6 +547,8 @@ namespace BagSurvivor.SynergyEditor
             asset.fixedEffectValue = fxVal;
             asset.duration         = duration;
             asset.pierceCount      = pierce;
+            asset.vfxFollowPlayer  = followVfx;
+            if (vSize > 0f) asset.visualSize = vSize;
             EditorUtility.SetDirty(asset);
             return asset;
         }
@@ -695,9 +700,10 @@ namespace BagSurvivor.SynergyEditor
                 // 난공불락: 브~골 일반 충격파, 프리즘은 강화 RED 충격파(콘셉트 슬라이드 14)
                 { "SK_FORTRESS_1", "Shockwave_Common" }, { "SK_FORTRESS_2", "Shockwave_Common" },
                 { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_RED" },
-                // 마왕(DemonLord) 누적 발동: 검기=Devil_Slash, 소용돌이=Devil_Fireball (기어=Devil_Wave는 소환수 아이콘)
-                { "SK_DEMON_1", "Devil_Slash" },    { "SK_DEMON_2", "Devil_Fireball" },
-                { "SK_DEMON_3", "Devil_Slash" },    { "SK_DEMON_4", "Devil_Slash" },
+                // 마왕(DemonLord): 투사체=Devil_Fireball(창/검기), 소용돌이=Devil_Slash(감싸는 불꽃 고리)
+                //                  (기어=Devil_Wave는 소환수 아이콘으로 별도 연결)
+                { "SK_DEMON_1", "Devil_Fireball" }, { "SK_DEMON_2", "Devil_Slash" },
+                { "SK_DEMON_3", "Devil_Fireball" }, { "SK_DEMON_4", "Devil_Fireball" },
                 // 과부화 프리즘 3종: 레이저=OVERLOAD3_Pr(빔형), 체인=OVERLOAD2_Pr, 비눗방울=OVERLOAD1_Pr
                 { "SK_OVERLOAD_LASER",  "OVERLOAD3_Pr" },
                 { "SK_OVERLOAD_CHAIN",  "OVERLOAD2_Pr" },

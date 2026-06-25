@@ -649,8 +649,19 @@ public class SynergyManager : MonoBehaviour
     private IEnumerator SheetVFX(SO_SkillData skill, Vector3 pos)
     {
         var go = new GameObject($"SynergyVFX_{skill.skillID}");
-        go.transform.SetParent(transform);
-        go.transform.position = pos;
+
+        // 플레이어를 감싸며 따라다니는 효과(마왕 소용돌이): 플레이어에 부착 + 루프 재생
+        bool follow = skill.vfxFollowPlayer && _player != null;
+        if (follow)
+        {
+            go.transform.SetParent(_player);
+            go.transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            go.transform.SetParent(transform);
+            go.transform.position = pos;
+        }
 
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sortingOrder = 10;
@@ -658,9 +669,12 @@ public class SynergyManager : MonoBehaviour
         float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 0.3f);
         NormalizeScale(go, sr.sprite, size);
 
-        go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
+        go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: follow);
 
-        float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
+        // 따라다니는 효과는 다음 시전까지(쿨타임) 유지해 끊김 없이 감싸도록 한다.
+        float life = follow
+            ? (skill.cooldown > 0f ? skill.cooldown : skill.animFrames.Length / Mathf.Max(1f, skill.animFps))
+            : skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
         yield return new WaitForSeconds(life);
         if (go != null) Destroy(go);
     }

@@ -61,6 +61,8 @@ public class SO_SkillData : ScriptableObject
     public float animFps = 12f;
     [Tooltip("월드 표시 크기(유닛). 투사체/이펙트 스프라이트의 목표 지름")]
     public float visualSize = 0.8f;
+    [Tooltip("true이면 이펙트가 플레이어에 부착되어 따라다니며 루프 재생된다(마왕 소용돌이처럼 캐릭터를 감싸는 효과)")]
+    public bool vfxFollowPlayer = false;
 
     [Header("대부호 골드 드롭 (OnMove 전용)")]
     [Tooltip("이동 시 떨구는 골드 코인 프레임(Gold_Coin 등급별). 비우면 코인 없이 폭발만")]
