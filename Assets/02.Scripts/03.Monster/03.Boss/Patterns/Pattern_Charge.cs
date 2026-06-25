@@ -78,6 +78,16 @@ namespace BagSurvivor.Monster
             Vector2 dir = DirToPlayer();
 
             GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
+            // DashWarn 류 경고선이면 돌진 거리만큼 앞으로 타일(자식 SpriteRenderer)
+            if (tele != null)
+            {
+                var sr = tele.GetComponentInChildren<SpriteRenderer>();
+                if (sr != null && sr.drawMode != SpriteDrawMode.Simple)
+                {
+                    sr.size = new Vector2(dashDistance, sr.size.y);
+                    sr.transform.localPosition = new Vector3(dashDistance * 0.5f, 0f, 0f);
+                }
+            }
             yield return new WaitForSeconds(telegraphSec);   // 경고선 동안 대기(대기 애니 유지)
             ReturnPooled(tele);
 
