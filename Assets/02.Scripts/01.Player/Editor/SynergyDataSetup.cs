@@ -194,7 +194,7 @@ namespace BagSurvivor.SynergyEditor
                 fx:FixedEffectType.SpeedPenalty, fxVal:50f);
             // 과부화 프리즘: 3종 효과 동시 발동 (콘셉트 슬라이드 24). 각각 Penalty 트리거로 무한 발동.
             d["SK_OVERLOAD_LASER"] = Sk("SK_OVERLOAD_LASER", "과부화 레이저 (프리즘)",
-                SynergyTriggerType.Penalty, SkillType.Projectile, SkillTargetType.Forward,
+                SynergyTriggerType.Penalty, SkillType.Projectile, SkillTargetType.FacingForward,
                 ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0.15f, range:30f, pierce:999);
             d["SK_OVERLOAD_CHAIN"] = Sk("SK_OVERLOAD_CHAIN", "과부화 체인라이트닝 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.ChainLightning,

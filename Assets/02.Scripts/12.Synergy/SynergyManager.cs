@@ -56,6 +56,7 @@ public class SynergyManager : MonoBehaviour
     private Transform                    _player;
     private PlayerHealth                 _playerHealth;
     private PlayerMovement               _playerMovement;
+    private PlayerAttack                 _playerAttack;
     private BattleLoadout                _loadout;
 
     private readonly List<Coroutine>         _skillRoutines = new();
@@ -113,6 +114,7 @@ public class SynergyManager : MonoBehaviour
         _player         = playerGO.transform;
         _playerHealth   = playerGO.GetComponent<PlayerHealth>();
         _playerMovement = playerGO.GetComponent<PlayerMovement>();
+        _playerAttack   = playerGO.GetComponent<PlayerAttack>();
     }
 
     private void SubscribePlayerEvents()
@@ -458,20 +460,34 @@ public class SynergyManager : MonoBehaviour
                 return; // 기둥별 VFX 처리 완료
             }
 
+            case SkillTargetType.FacingForward:
+            {
+                // 과부화 레이저: 적을 조준하지 않고 플레이어가 바라보는 방향으로 발사.
+                Vector2 dir = _playerAttack != null ? _playerAttack.FacingDirection : Vector2.right;
+                if (dir == Vector2.zero) dir = Vector2.right;
+                int pierce = skill.pierceCount > 0 ? skill.pierceCount : 1;
+                FireProjectileInDirection(skill, dir, damage, pierce);
+                return; // 투사체 스프라이트 자체가 비주얼
+            }
+
             case SkillTargetType.ChainLightning:
             {
                 // 과부화: 최근접 적부터 시작해 직전 적 기준 가장 가까운 적으로 연쇄 타격.
+                // 플레이어 → 적 → 적 … 을 번개 선으로 잇고, 명중 지점마다 임팩트 이펙트를 띄운다.
                 int hops = skill.extraCount > 0 ? skill.extraCount : 4;
                 var pool = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 50f : skill.rangeRadius);
+                var chainPts = new List<Vector3> { _player.position };
                 MonsterController cur = FindNearest(pool, _player.position);
                 while (hops-- > 0 && cur != null)
                 {
                     Vector3 hitPos = cur.transform.position;
                     HitEnemy(skill, cur, damage);
                     SpawnVFX(skill, hitPos);
+                    chainPts.Add(hitPos);
                     pool.Remove(cur);
                     cur = FindNearest(pool, hitPos); // 다음 홉은 직전 적 기준 최근접
                 }
+                if (chainPts.Count >= 2) SpawnChainLine(chainPts); // 적과 적을 잇는 번개 선
                 return; // 홉마다 VFX 처리 완료
             }
         }
@@ -697,6 +713,49 @@ public class SynergyManager : MonoBehaviour
 
         go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: true);
         _auraVFX.Add(go);
+    }
+
+    /// <summary>여러 지점을 잇는 번개 선(LineRenderer)을 생성해 짧게 표시 후 페이드아웃한다(체인라이트닝).</summary>
+    private void SpawnChainLine(List<Vector3> points)
+    {
+        if (points == null || points.Count < 2) return;
+
+        var go = new GameObject("ChainLightningLine");
+        go.transform.SetParent(transform);
+
+        var lr = go.AddComponent<LineRenderer>();
+        lr.useWorldSpace   = true;
+        lr.positionCount   = points.Count;
+        for (int i = 0; i < points.Count; i++) lr.SetPosition(i, points[i]);
+        lr.widthMultiplier = 0.18f;
+        lr.numCapVertices  = 2;
+        lr.numCornerVertices = 2;
+        lr.material        = new Material(Shader.Find("Sprites/Default"));
+        var col            = new Color(0.6f, 0.9f, 1f, 1f); // 밝은 하늘색 번개
+        lr.startColor = col; lr.endColor = col;
+        lr.sortingOrder = 11;
+
+        StartCoroutine(FadeChainLine(lr, go, 0.25f));
+    }
+
+    private IEnumerator FadeChainLine(LineRenderer lr, GameObject go, float dur)
+    {
+        Material mat = lr != null ? lr.material : null;
+        Color baseCol = lr != null ? lr.startColor : Color.white;
+        float t = 0f;
+        while (t < dur)
+        {
+            t += Time.deltaTime;
+            float a = Mathf.Lerp(1f, 0f, t / dur);
+            if (lr != null)
+            {
+                var c = new Color(baseCol.r, baseCol.g, baseCol.b, a);
+                lr.startColor = c; lr.endColor = c;
+            }
+            yield return null;
+        }
+        if (go  != null) Destroy(go);
+        if (mat != null) Destroy(mat); // 런타임 생성 머티리얼 누수 방지
     }
 
     private IEnumerator PlaceholderVFX(Vector3 pos, float radius)
