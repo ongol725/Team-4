@@ -399,18 +399,11 @@ public class SynergyManager : MonoBehaviour
 
             case SkillTargetType.ForwardDual:
             {
-                // 좌·우 방향으로 각각 가장 가까운 적 타격 (처형자)
-                var enemies = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 20f : skill.rangeRadius);
-                MonsterController nearest = FindNearest(enemies, _player.position);
-                if (nearest != null)
-                {
-                    vfxPos = nearest.transform.position;
-                    ApplyHit(skill, nearest, damage);
-                    // 두 번째 타격: 첫 번째와 다른 적
-                    enemies.Remove(nearest);
-                    MonsterController second = FindNearest(enemies, _player.position);
-                    if (second != null) ApplyHit(skill, second, damage);
-                }
+                // 처형자: 적을 조준하지 않고 플레이어 기준 좌·우 고정 방향으로 낫을 발사한다.
+                // 각 낫은 경로상의 적을 관통하며, 즉사 등 고정효과는 명중 시 적용된다.
+                const int pierceHits = 999; // 경로상 모든 적 관통
+                FireProjectileInDirection(skill, Vector2.left,  damage, pierceHits);
+                FireProjectileInDirection(skill, Vector2.right, damage, pierceHits);
                 break;
             }
 
@@ -454,6 +447,16 @@ public class SynergyManager : MonoBehaviour
         if (_player == null || target == null) return;
 
         Vector2 dir = ((Vector2)target.transform.position - (Vector2)_player.position).normalized;
+        FireProjectileInDirection(skill, dir, damage, maxHits: 1);
+    }
+
+    /// <summary>플레이어 위치에서 지정한 방향으로 투사체를 발사한다(ProjectileBase 재사용).
+    /// 적을 조준하지 않는 고정 방향 발사(예: 처형자 좌·우)에 사용한다.</summary>
+    private void FireProjectileInDirection(SO_SkillData skill, Vector2 dir, int damage, int maxHits = 1)
+    {
+        if (_player == null) return;
+
+        dir = dir.normalized;
         if (dir == Vector2.zero) dir = Vector2.right;
 
         GameObject go = skill.projectilePrefab != null
@@ -476,7 +479,7 @@ public class SynergyManager : MonoBehaviour
                     mc.TakeDamage(999999, 0f, Vector2.zero);
             });
 
-        proj.Init(dir, damage, speed, lifetime: 3f, maxHits: 1, knockbackForce: kbForce);
+        proj.Init(dir, damage, speed, lifetime: 3f, maxHits: maxHits, knockbackForce: kbForce);
     }
 
     /// <summary>프리팹이 없는 시너지 투사체용 임시 GameObject를 생성한다.
