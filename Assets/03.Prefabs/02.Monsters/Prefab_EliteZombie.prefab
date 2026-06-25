@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 9088870661389331258}
   - component: {fileID: 4978281423280123678}
   - component: {fileID: 9041298883266514048}
-  - component: {fileID: 2402204129708121402}
-  - component: {fileID: 7363842486405024257}
+  - component: {fileID: 2355656801338998943}
+  - component: {fileID: 6650880860263085744}
   m_Layer: 8
   m_Name: Prefab_EliteZombie
   m_TagString: Monster
@@ -176,7 +176,7 @@ MonoBehaviour:
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
---- !u!114 &2402204129708121402
+--- !u!114 &2355656801338998943
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.EliteMonster
   hpMultiplier: 5
   attackMultiplier: 1
---- !u!114 &7363842486405024257
+--- !u!114 &6650880860263085744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

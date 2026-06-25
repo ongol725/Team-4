@@ -24,6 +24,10 @@ public class PlayerStats : MonoBehaviour
     [Range(0f, 1f)]
     public float critChance   = 0.05f;
 
+    [Header("캐릭터 배율 (CharacterManager에서 자동 주입, 직접 수정 불필요)")]
+    [HideInInspector] public float attackMultiplier      = 1f;  // 최종 데미지 = 무기 데미지 × attackMultiplier
+    [HideInInspector] public float attackSpeedMultiplier = 1f;  // 최종 쿨타임 = 무기 쿨타임 / attackSpeedMultiplier
+
     [Header("방어구 보너스 (인벤토리 연동, 런타임 갱신)")]
     [HideInInspector] public int hpBonus;   // 방어구 합산 체력 보너스
     [HideInInspector] public int hpRegen;   // 10초당 체력 재생
@@ -44,6 +48,8 @@ public class PlayerStats : MonoBehaviour
 
     private void Awake()
     {
+        ApplyCharacterData();
+
         _baseMaxHp = maxHp;
         CurrentHp  = maxHp;
 
@@ -61,12 +67,38 @@ public class PlayerStats : MonoBehaviour
             if (_gameManager.CurrentLoadout != null)
                 OnLoadoutReady(_gameManager.CurrentLoadout);
         }
+
+        // 캐릭터 데이터가 적용된 초기 스탯을 스탯 패널에 반영
+        OnStatsChanged?.Invoke();
     }
 
     private void OnDestroy()
     {
         if (_gameManager != null)
             _gameManager.onLoadoutReady -= OnLoadoutReady;
+        if (_regenCoroutine != null)
+            StopCoroutine(_regenCoroutine);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+
+    private void ApplyCharacterData()
+    {
+        SO_CharacterData charData = CharacterManager.Instance?.SelectedCharacter;
+        if (charData == null) return;
+
+        maxHp                 = charData.maxHp;
+        moveSpeed             = charData.moveSpeed;
+        critChance            = charData.critChance;
+        attackMultiplier      = charData.attackMultiplier;
+        attackSpeedMultiplier = charData.attackSpeedMultiplier;
+
+        // 같은 GameObject의 PlayerHealth / PlayerMovement에도 즉시 반영
+        var ph = GetComponent<PlayerHealth>();
+        if (ph != null) ph.maxHP = charData.maxHp;
+
+        var pm = GetComponent<PlayerMovement>();
+        if (pm != null) pm.moveSpeed = charData.moveSpeed;
     }
 
     // ─────────────────────────────────────────────────────────────

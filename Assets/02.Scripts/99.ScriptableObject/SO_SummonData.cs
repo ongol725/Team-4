@@ -16,11 +16,23 @@ public class SO_SummonData : ScriptableObject
     public SummonAIType aiType;
 
     [Header("전투")]
-    [Tooltip("시너지 무기 총합 공격력 대비 배율 (1.0 = 100%)")]
+    [Tooltip("ScalingStatType에 따라 WPN_ATK_AVG/SUM 또는 ARM_HP_SUM 대비 배율")]
+    public ScalingStatType scalingStat = ScalingStatType.WPN_ATK_AVG;
+    [Tooltip("scalingStat 기준 대비 배율 (1.0 = 100%)")]
     public float atkMultiplier = 0.5f;
     public float moveSpeed    = 4f;
     public float atkCooldown  = 1.5f;
     public float atkRange     = 1.5f;
+
+    [Header("지속 시간")]
+    [Tooltip("-1 = 전투 내내 영구 유지, 양수 = N초 후 소멸")]
+    public float duration = -1f;
+
+    [Header("고유 고정 효과")]
+    [Tooltip("성기사단 성역처럼 대미지 외 추가 효과가 있는 경우")]
+    public FixedEffectType fixedEffect = FixedEffectType.None;
+    [Tooltip("fixedEffect 수치. 예: HealArmorHpPct=1 이면 방어구 HP 총합의 1% 회복")]
+    public float fixedEffectValue = 0f;
 
     [Header("특수 스킬")]
     [Tooltip("평타 외 주기적으로 시전하는 스킬. 없으면 null")]
@@ -30,6 +42,18 @@ public class SO_SummonData : ScriptableObject
 
     [Header("외형")]
     public GameObject modelPrefab;
+    [Tooltip("modelPrefab 없을 때 사용할 스프라이트 (스프라이트 시트 첫 프레임 등)")]
+    public Sprite icon;
+    [Tooltip("애니메이션 프레임 배열. ③ Fill Synergy Icons 메뉴로 자동 채워짐. 2개 이상이면 animFps 속도로 순환")]
+    public Sprite[] animFrames;
+    [Tooltip("초당 프레임 수 (animFrames 사용 시)")]
+    public float animFps = 10f;
     [Tooltip("소환수 체력 (0이면 무적)")]
     public int hp = 0;
+
+    [Header("공격 이펙트")]
+    [Tooltip("공격 명중 시 타겟 위치에 재생할 이펙트 프레임(정령 골렘 spirit_attack 등). ③ 메뉴로 자동 채움. 비우면 이펙트 없음")]
+    public Sprite[] attackEffectFrames;
+    [Tooltip("공격 이펙트 재생 속도(FPS)")]
+    public float attackEffectFps = 12f;
 }

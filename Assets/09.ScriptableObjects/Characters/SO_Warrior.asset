@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26608626e047c7f45b2373f43c65db0d, type: 3}
+  m_Name: SO_Warrior
+  m_EditorClassIdentifier: Assembly-CSharp::SO_CharacterData
+  characterType: 0
+  characterName: "\uC804\uC0AC"
+  description: "\uCCB4\uB825\uC774 \uB192\uC740 \uD0F1\uCEE4"
+  characterSprite: {fileID: 0}
+  maxHp: 25
+  attackMultiplier: 0.7
+  attackSpeedMultiplier: 0.9
+  moveSpeed: 7
+  critChance: 0

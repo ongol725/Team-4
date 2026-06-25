@@ -1,0 +1,533 @@
+fileFormatVersion: 2
+guid: d05e11ea1caeccf4ead6f441bf8873d4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -554125210310083391
+    second: Shockwave_Common.prefab_0
+  - first:
+      213: 8010534911690718414
+    second: Shockwave_Common.prefab_1
+  - first:
+      213: -7665309821659965822
+    second: Shockwave_Common.prefab_2
+  - first:
+      213: -4398785660453423327
+    second: Shockwave_Common.prefab_3
+  - first:
+      213: -5353216174772445155
+    second: Shockwave_Common.prefab_4
+  - first:
+      213: -1219179695940014719
+    second: Shockwave_Common.prefab_5
+  - first:
+      213: 6133939947003129352
+    second: Shockwave_Common.prefab_6
+  - first:
+      213: -7003278361801739674
+    second: Shockwave_Common.prefab_7
+  - first:
+      213: -7839868015602172723
+    second: Shockwave_Common.prefab_8
+  - first:
+      213: -7563700338825739097
+    second: Shockwave_Common.prefab_9
+  - first:
+      213: -913195227716871412
+    second: Shockwave_Common.prefab_10
+  - first:
+      213: 4770757976808068661
+    second: Shockwave_Common.prefab_11
+  - first:
+      213: 8928153464017660681
+    second: Shockwave_Common.prefab_12
+  - first:
+      213: -7957365137282632203
+    second: Shockwave_Common.prefab_13
+  - first:
+      213: 6925824740605897286
+    second: Shockwave_Common.prefab_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_0
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 1646
+        width: 64
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ccf06e9e0a5f48f0800000000000000
+      internalID: -554125210310083391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_1
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 1439
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eccb0308f032b2f60800000000000000
+      internalID: 8010534911690718414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_2
+      rect:
+        serializedVersion: 2
+        x: 1454
+        y: 1439
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28615aa64595f9590800000000000000
+      internalID: -7665309821659965822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_3
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 959
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12777916fbf54f2c0800000000000000
+      internalID: -4398785660453423327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_4
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 959
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1020d8604e85b5b0800000000000000
+      internalID: -5353216174772445155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_5
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 959
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18d602aa68a941fe0800000000000000
+      internalID: -1219179695940014719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_6
+      rect:
+        serializedVersion: 2
+        x: 1454
+        y: 959
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80e23bef1e1202550800000000000000
+      internalID: 6133939947003129352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_7
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 479
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 662b0a55f6b5fce90800000000000000
+      internalID: -7003278361801739674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_8
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 479
+        width: 457
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dccf514c391333390800000000000000
+      internalID: -7839868015602172723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_9
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 479
+        width: 461
+        height: 464
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a44ac4bd96580790800000000000000
+      internalID: -7563700338825739097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_10
+      rect:
+        serializedVersion: 2
+        x: 1454
+        y: 479
+        width: 466
+        height: 470
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0b9a5957cda353f0800000000000000
+      internalID: -913195227716871412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_11
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 0
+        width: 467
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53691057a13253240800000000000000
+      internalID: 4770757976808068661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_12
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 0
+        width: 467
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90b22faa54c27eb70800000000000000
+      internalID: 8928153464017660681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_13
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 0
+        width: 467
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f5f03c4192c19190800000000000000
+      internalID: -7957365137282632203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common.prefab_14
+      rect:
+        serializedVersion: 2
+        x: 1454
+        y: 0
+        width: 466
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64a2d6038e87d1060800000000000000
+      internalID: 6925824740605897286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Shockwave_Common.prefab_0: -554125210310083391
+      Shockwave_Common.prefab_1: 8010534911690718414
+      Shockwave_Common.prefab_10: -913195227716871412
+      Shockwave_Common.prefab_11: 4770757976808068661
+      Shockwave_Common.prefab_12: 8928153464017660681
+      Shockwave_Common.prefab_13: -7957365137282632203
+      Shockwave_Common.prefab_14: 6925824740605897286
+      Shockwave_Common.prefab_2: -7665309821659965822
+      Shockwave_Common.prefab_3: -4398785660453423327
+      Shockwave_Common.prefab_4: -5353216174772445155
+      Shockwave_Common.prefab_5: -1219179695940014719
+      Shockwave_Common.prefab_6: 6133939947003129352
+      Shockwave_Common.prefab_7: -7003278361801739674
+      Shockwave_Common.prefab_8: -7839868015602172723
+      Shockwave_Common.prefab_9: -7563700338825739097
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -122,6 +122,13 @@ namespace BagSurvivor.Monster
             // 6. 휴식 (3초, 제자리 정지 유지)
             yield return new WaitForSeconds(restDuration);
 
+            // 휴식 중 사망했으면 이동 제어 반환 없이 종료
+            if (controller == null || controller.IsDead)
+            {
+                isInChargeSequence = false;
+                yield break;
+            }
+
             // 7. 이동 제어 반환 → 추적 재개
             controller.EndExternalMovement();
             isInChargeSequence = false;

@@ -68,7 +68,7 @@ public class BattleLoadoutBuilder : MonoBehaviour
             if (inst.data is not SO_WeaponData wd) continue;
 
             int effectiveGrade = Mathf.Clamp(inst.gradeIndex + inst.RingGradeBonus, 0, 4);
-            var stats          = effectiveGrade < wd.gradeStats.Length
+            var stats          = (wd.gradeStats != null && effectiveGrade < wd.gradeStats.Length)
                                      ? wd.gradeStats[effectiveGrade]
                                      : null;
 

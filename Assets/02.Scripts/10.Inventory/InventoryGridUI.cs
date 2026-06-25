@@ -427,6 +427,8 @@ public class InventoryGridUI : MonoBehaviour
             if (existing.data != newInst.data || existing.gradeIndex != newInst.gradeIndex) continue;
             existing.TryUpgrade();
             RefreshItemBlockVisual(existing);
+            // TryUpgrade는 이벤트를 발행하지 않으므로 InventoryAnalyzer 갱신을 위해 명시적 통지
+            _grid.NotifyChanged();
             return true;
         }
 
@@ -438,6 +440,7 @@ public class InventoryGridUI : MonoBehaviour
                 if (block.Instance.data != newInst.data || block.Instance.gradeIndex != newInst.gradeIndex) continue;
                 block.Instance.TryUpgrade();
                 block.RefreshVisuals();
+                _grid.NotifyChanged();
                 return true;
             }
 

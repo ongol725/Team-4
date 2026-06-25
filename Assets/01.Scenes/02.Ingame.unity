@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9baae10591796e4c8afb78304f8be01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RoomMonsterSpawner
-  dungeonGenerator: {fileID: 1716958155}
+  dungeonGenerator: {fileID: 1966734777}
   pool: {fileID: 92913258}
   difficulty: {fileID: 92913257}
   normalMonsters:
@@ -233,7 +233,7 @@ MonoBehaviour:
   - roomType: 3
     floor: 1
     monsterPrefabs:
-    - {fileID: 439714262228731463, guid: b802cd5e3aa9e8249a1637fe397d2a1e, type: 3}
+    - {fileID: 439714262228731463, guid: 2e01cb712ec147447aaed11ec251d8c8, type: 3}
     noRepeatAcrossRooms: 0
     hpMultiplier: 1
     attackMultiplier: 1
@@ -242,7 +242,7 @@ MonoBehaviour:
   - roomType: 3
     floor: 3
     monsterPrefabs:
-    - {fileID: 6427610672282125992, guid: 16bc372123e71654086f06f8b0508703, type: 3}
+    - {fileID: 6427610672282125992, guid: b1af656e087bd7f469e5c084d3a3412c, type: 3}
     noRepeatAcrossRooms: 0
     hpMultiplier: 1
     attackMultiplier: 1
@@ -686,6 +686,7 @@ GameObject:
   m_Component:
   - component: {fileID: 830000002}
   - component: {fileID: 830000003}
+  - component: {fileID: 830000004}
   m_Layer: 0
   m_Name: SynergyManager
   m_TagString: Untagged
@@ -727,6 +728,90 @@ MonoBehaviour:
   - synergyType: 12
     grade: 2
     skill: {fileID: 11400000, guid: d0837518db863da4eb6833b8a13218dd, type: 2}
+  - synergyType: 13
+    grade: 0
+    skill: {fileID: 11400000, guid: d8fdb9f1e21e01d4ea14236221b6d8b9, type: 2}
+  - synergyType: 13
+    grade: 1
+    skill: {fileID: 11400000, guid: bf32973ba4b4f5b4593425a60161533f, type: 2}
+  - synergyType: 13
+    grade: 2
+    skill: {fileID: 11400000, guid: 4ae4b10f6f82a2c44a61bf065f7e8623, type: 2}
+  - synergyType: 13
+    grade: 3
+    skill: {fileID: 11400000, guid: 44f8a02ad22efd94ab277acabd444af3, type: 2}
+  - synergyType: 1
+    grade: 0
+    skill: {fileID: 11400000, guid: 9659d1b528d04e74798ec18d27c2c2df, type: 2}
+  - synergyType: 1
+    grade: 1
+    skill: {fileID: 11400000, guid: a0afae21b17875147944fb0b7b7199a8, type: 2}
+  - synergyType: 1
+    grade: 2
+    skill: {fileID: 11400000, guid: cb5944a0e2ba70347b0bdb9ba1142b61, type: 2}
+  - synergyType: 2
+    grade: 0
+    skill: {fileID: 11400000, guid: dbcf6ae7777d8e9448a171cd8c4aaeec, type: 2}
+  - synergyType: 2
+    grade: 1
+    skill: {fileID: 11400000, guid: ca86461d1c615fb4fb5d0d72a9e5823e, type: 2}
+  - synergyType: 2
+    grade: 2
+    skill: {fileID: 11400000, guid: 359de3c9b68142b4b917a7d15c5f9b0c, type: 2}
+  - synergyType: 4
+    grade: 0
+    skill: {fileID: 11400000, guid: b78ecbdf86770e54f8c2a8999808c49f, type: 2}
+  - synergyType: 4
+    grade: 1
+    skill: {fileID: 11400000, guid: 5e9283036ca091145bfb591ac656f349, type: 2}
+  - synergyType: 4
+    grade: 2
+    skill: {fileID: 11400000, guid: 70f23400203035740ad178870c04ddda, type: 2}
+  - synergyType: 4
+    grade: 3
+    skill: {fileID: 11400000, guid: 83f22fe4a8bd97d4797921080b7a71ad, type: 2}
+  - synergyType: 6
+    grade: 0
+    skill: {fileID: 11400000, guid: 13f2353281b57544391e164eb2a5aab1, type: 2}
+  - synergyType: 6
+    grade: 1
+    skill: {fileID: 11400000, guid: d24415b82db45cb438e10e2d22a4ea74, type: 2}
+  - synergyType: 6
+    grade: 2
+    skill: {fileID: 11400000, guid: 26765f6fec6ecf5408c16695b95fdc89, type: 2}
+  - synergyType: 6
+    grade: 3
+    skill: {fileID: 11400000, guid: 5e42ed1c3470cfb499f4004f4a198aa0, type: 2}
+  - synergyType: 7
+    grade: 0
+    skill: {fileID: 11400000, guid: 76d21c2472a78d94faae0d7f143b0003, type: 2}
+  - synergyType: 7
+    grade: 1
+    skill: {fileID: 11400000, guid: 19334b2cfd2ab234dbca7bf88ba9aa1f, type: 2}
+  - synergyType: 7
+    grade: 2
+    skill: {fileID: 11400000, guid: dded2a9ea90b2a94384ba18eb9a2e471, type: 2}
+  - synergyType: 11
+    grade: 0
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 1
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 2
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 3
+    skill: {fileID: 11400000, guid: 01715f8b20d39f949a653242c5515d4b, type: 2}
+  - synergyType: 14
+    grade: 0
+    skill: {fileID: 11400000, guid: 94aee6b541b3d4d4ab5ed07575d8be5c, type: 2}
+  - synergyType: 14
+    grade: 1
+    skill: {fileID: 11400000, guid: 5f9477afe1733f94fb0301c5522ea879, type: 2}
+  - synergyType: 14
+    grade: 2
+    skill: {fileID: 11400000, guid: 931d2ebea23dc5c48922dc276424d3d5, type: 2}
   _summonBindings:
   - synergyType: 8
     grade: 0
@@ -744,10 +829,62 @@ MonoBehaviour:
     grade: 3
     summon: {fileID: 11400000, guid: a7887a8b8794a91469352e1c9dbf9383, type: 2}
     count: 1
+  - synergyType: 10
+    grade: 0
+    summon: {fileID: 11400000, guid: 5ffa954434b8cfd46b38fd692102703f, type: 2}
+    count: 1
+  - synergyType: 10
+    grade: 1
+    summon: {fileID: 11400000, guid: 8224dc909ad7ded459c7b5cd23433f83, type: 2}
+    count: 2
+  - synergyType: 10
+    grade: 2
+    summon: {fileID: 11400000, guid: 8224dc909ad7ded459c7b5cd23433f83, type: 2}
+    count: 3
+  - synergyType: 3
+    grade: 0
+    summon: {fileID: 11400000, guid: 35991cf7e0ce4a44c98939310c0dbee8, type: 2}
+    count: 1
+  - synergyType: 3
+    grade: 1
+    summon: {fileID: 11400000, guid: be01a8ef0a0503a40b1828ce2e6895e3, type: 2}
+    count: 1
+  - synergyType: 3
+    grade: 2
+    summon: {fileID: 11400000, guid: 0e216001e240223458b071065c20c2a9, type: 2}
+    count: 1
+  - synergyType: 15
+    grade: 0
+    summon: {fileID: 11400000, guid: 83ed448cc24824540b3bd058c206219f, type: 2}
+    count: 1
+  - synergyType: 15
+    grade: 1
+    summon: {fileID: 11400000, guid: 003526dca1dca2740b6791b244f348ec, type: 2}
+    count: 2
+  - synergyType: 15
+    grade: 2
+    summon: {fileID: 11400000, guid: 0674475495319924f9907f10fc1b2aaf, type: 2}
+    count: 3
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 256
---- !u!1001 &865236342
+--- !u!114 &830000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c3e91a4b2d6f08498e1a5c3d7b609f2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _manager: {fileID: 0}
+  _toggleKey: 282
+  _wpnAtk: 100
+  _armHp: 100
+--- !u!1001 &994228888
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -755,145 +892,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorSingleChance
-      value: 0.04
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSetAttempts
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorSingleTiles.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorSingleTiles.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 5bf98a52fa01b5a4681a80fc0f97055c, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorSingleTiles.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: f9b3a314875a6cc429584f69655e3a17, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorSingleTiles.Array.data[2]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 4d4183769d631384fb20433d84fceea1, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorSingleTiles.Array.data[3]'
-      value: 
-      objectReference: {fileID: 11400000, guid: a7fb38bd0859628409bda427dda57659, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[0].name
-      value: set_126(3x2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[1].name
-      value: set_130(3x3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[0].width
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[1].width
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[0].height
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[1].height
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[0].tiles.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: floorDecorSets.Array.data[1].tiles.Array.size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[0].tiles.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: c9cf2a4ca7fd4eb4885b3e6dc66a7105, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[0].tiles.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 3e5c91043f71d434a9577e19478df3be, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[0].tiles.Array.data[2]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 5b9ffa1a6292e8e409a1e81df491e3ff, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[0].tiles.Array.data[3]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 0bd12d99a43f67f4187909102922aed4, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[0].tiles.Array.data[4]'
-      value: 
-      objectReference: {fileID: 11400000, guid: ec02e19b1612d914ea0ea35f273fbdae, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[0].tiles.Array.data[5]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 0635d9590e6595b4093dd749ddfe4bc7, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: bb384aefda67aef4ab777b4133c93407, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 29e1c38d2041e5348aa3e576d460b6ea, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[2]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 0662b2a3d57b6ec408a1574e6f9fefd1, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[3]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 8140936d3359a364e96f999bc970ff29, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[4]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 5aed1aeab83bf814fb04a6c1ba16d9bd, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[5]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 04d25ad2f10d6ef42afa76068d33a43b, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[6]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 2584d43bf5327994fb7b118a286b60b2, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[7]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 5a6876cd86abc39429064858e3ba57f0, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorDecorSets.Array.data[1].tiles.Array.data[8]'
-      value: 
-      objectReference: {fileID: 11400000, guid: be1928657fcf61e498a557a1c5906eec, type: 2}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorThemes.Array.data[0].advancedWallSprites.Array.data[0]'
-      value: 
-      objectReference: {fileID: -4596972127225251403, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
-    - target: {fileID: 1421781633991590451, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: 'floorThemes.Array.data[0].advancedWallSprites.Array.data[2]'
-      value: 
-      objectReference: {fileID: 406551859847576100, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
     - target: {fileID: 1873677519157473571, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1220.6935
+      value: 845.0437
       objectReference: {fileID: 0}
     - target: {fileID: 1873677519157473571, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 575.04474
+      value: 566.09454
       objectReference: {fileID: 0}
     - target: {fileID: 1873677519157473571, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -927,24 +932,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2500541725486549241, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: monsterPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2500541725486549241, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: 'monsterPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126022947026927154, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 5172927875404501766}
     - target: {fileID: 8380437479435598112, guid: 6364535931c3b474d9258dccd370598b, type: 3}
       propertyPath: m_Name
       value: Dungeon_Export_Group
       objectReference: {fileID: 0}
-    - target: {fileID: 8635619495784352158, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: m_SortingOrder
+    - target: {fileID: 8555633983462743653, guid: 6364535931c3b474d9258dccd370598b, type: 3}
+      propertyPath: m_CullTransparentMesh
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8816057791952058084, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: m_ChunkCullingBounds.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8816057791952058084, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-      propertyPath: m_ChunkCullingBounds.y
-      value: 0.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6915391288100759030, guid: 6364535931c3b474d9258dccd370598b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6364535931c3b474d9258dccd370598b, type: 3}
@@ -1204,12 +1214,32 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2893967303094336981, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       insertIndex: 0
       addedObject: {fileID: 1418145215}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2670288576129206443, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1954800508}
   m_SourcePrefab: {fileID: 100100000, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
---- !u!114 &1716958155 stripped
+--- !u!1 &1954800506 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2670288576129206443, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+  m_PrefabInstance: {fileID: 1449309142}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1954800508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954800506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4095f4a30e724324982e76aacc23a2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopStateButton
+--- !u!114 &1966734777 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4126022947026927154, guid: 6364535931c3b474d9258dccd370598b, type: 3}
-  m_PrefabInstance: {fileID: 865236342}
+  m_PrefabInstance: {fileID: 994228888}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -1416,14 +1446,15 @@ MonoBehaviour:
   onPlayerDeath:
     m_PersistentCalls:
       m_Calls: []
+  DamageReductionPct: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 269679927}
   - {fileID: 5172927875404501765}
-  - {fileID: 865236342}
   - {fileID: 1449309142}
+  - {fileID: 994228888}
   - {fileID: 254784477}
   - {fileID: 92913259}
   - {fileID: 810000002}

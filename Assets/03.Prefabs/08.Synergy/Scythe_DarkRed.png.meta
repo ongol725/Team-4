@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 68582e5dc49998d48a7ee9b224a4826d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4743280954965882372
+    second: Scythe_DarkRed.prefab_0
+  - first:
+      213: 8209770601533402930
+    second: Scythe_DarkRed.prefab_1
+  - first:
+      213: 3494057364084134896
+    second: Scythe_DarkRed.prefab_2
+  - first:
+      213: 5805615973297511212
+    second: Scythe_DarkRed.prefab_3
+  - first:
+      213: 1283332976936967601
+    second: Scythe_DarkRed.prefab_4
+  - first:
+      213: -5389337956894722059
+    second: Scythe_DarkRed.prefab_5
+  - first:
+      213: -3914816068076033661
+    second: Scythe_DarkRed.prefab_6
+  - first:
+      213: 1025075011725996060
+    second: Scythe_DarkRed.prefab_7
+  - first:
+      213: 1345891573472533464
+    second: Scythe_DarkRed.prefab_8
+  - first:
+      213: -9161502085843853626
+    second: Scythe_DarkRed.prefab_9
+  - first:
+      213: -641751990298922833
+    second: Scythe_DarkRed.prefab_10
+  - first:
+      213: -2354849781675960251
+    second: Scythe_DarkRed.prefab_11
+  - first:
+      213: -3887570755549538259
+    second: Scythe_DarkRed.prefab_12
+  - first:
+      213: -8840512706636815306
+    second: Scythe_DarkRed.prefab_13
+  - first:
+      213: 8648124436010180472
+    second: Scythe_DarkRed.prefab_14
+  - first:
+      213: -1877095274221625738
+    second: Scythe_DarkRed.prefab_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_0
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 827
+        width: 221
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 406fd96c5e483d140800000000000000
+      internalID: 4743280954965882372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_1
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 836
+        width: 224
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23fe7d76dd6fee170800000000000000
+      internalID: 8209770601533402930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 803
+        width: 206
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f3921b09a26d7030800000000000000
+      internalID: 3494057364084134896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_3
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 779
+        width: 167
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2b5bbed7f0b19050800000000000000
+      internalID: 5805615973297511212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_4
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 521
+        width: 113
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bd5fda0b805fc110800000000000000
+      internalID: 1283332976936967601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_5
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 530
+        width: 95
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f7b2c0aea93535b0800000000000000
+      internalID: -5389337956894722059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_6
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 542
+        width: 125
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38926551787cba9c0800000000000000
+      internalID: -3914816068076033661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_7
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 557
+        width: 188
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c10be06ca4cc93e00800000000000000
+      internalID: 1025075011725996060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_8
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 320
+        width: 221
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8db950751419da210800000000000000
+      internalID: 1345891573472533464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_9
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 329
+        width: 224
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ced644846ecbd080800000000000000
+      internalID: -9161502085843853626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_10
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 332
+        width: 206
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa0355807f90817f0800000000000000
+      internalID: -641751990298922833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_11
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 293
+        width: 167
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5485ccf9994e15fd0800000000000000
+      internalID: -2354849781675960251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_12
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 14
+        width: 113
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d28d54cbef29c0ac0800000000000000
+      internalID: -3887570755549538259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_13
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 2
+        width: 95
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 634e5984880305580800000000000000
+      internalID: -8840512706636815306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_14
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 8
+        width: 125
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87f13c5da5f440870800000000000000
+      internalID: 8648124436010180472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_DarkRed.prefab_15
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 32
+        width: 188
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67e947a1bc733f5e0800000000000000
+      internalID: -1877095274221625738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Scythe_DarkRed.prefab_0: 4743280954965882372
+      Scythe_DarkRed.prefab_1: 8209770601533402930
+      Scythe_DarkRed.prefab_10: -641751990298922833
+      Scythe_DarkRed.prefab_11: -2354849781675960251
+      Scythe_DarkRed.prefab_12: -3887570755549538259
+      Scythe_DarkRed.prefab_13: -8840512706636815306
+      Scythe_DarkRed.prefab_14: 8648124436010180472
+      Scythe_DarkRed.prefab_15: -1877095274221625738
+      Scythe_DarkRed.prefab_2: 3494057364084134896
+      Scythe_DarkRed.prefab_3: 5805615973297511212
+      Scythe_DarkRed.prefab_4: 1283332976936967601
+      Scythe_DarkRed.prefab_5: -5389337956894722059
+      Scythe_DarkRed.prefab_6: -3914816068076033661
+      Scythe_DarkRed.prefab_7: 1025075011725996060
+      Scythe_DarkRed.prefab_8: 1345891573472533464
+      Scythe_DarkRed.prefab_9: -9161502085843853626
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

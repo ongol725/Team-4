@@ -174,5 +174,25 @@ namespace BagSurvivor.Items
             g.transform.SetParent(poolRoot);
             pool.Push(g);
         }
+
+        /// <summary>
+        /// 층 전환 시 바닥에 남아있는 드랍 골드를 모두 풀로 회수합니다.
+        /// DungeonGenerator.RegenerateDungeon()에서 호출됩니다.
+        /// </summary>
+        public void ClearAllDropped()
+        {
+            if (poolRoot == null) return;
+            // 먼저 수집 후 일괄 처리 — Return 내부 SetParent 시 자식 인덱스 변경으로
+            // 역방향 루프가 항목을 건너뛰는 버그를 방지
+            var active = new List<GoldPickup>();
+            foreach (Transform child in poolRoot)
+            {
+                if (!child.gameObject.activeSelf) continue;
+                var g = child.GetComponent<GoldPickup>();
+                if (g != null) active.Add(g);
+                else child.gameObject.SetActive(false);
+            }
+            foreach (var g in active) Return(g);
+        }
     }
 }
