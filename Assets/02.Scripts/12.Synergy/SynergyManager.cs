@@ -318,6 +318,8 @@ public class SynergyManager : MonoBehaviour
 
         Vector3 vfxPos = _player.position;
 
+        Debug.Log($"[SynergyDebug] ExecuteSkill {skill.skillName} type={skill.skillType} target={skill.targetType} dmg={damage} range={skill.rangeRadius}");
+
         switch (skill.targetType)
         {
             case SkillTargetType.RandomEnemy:
@@ -646,9 +648,11 @@ public class SynergyManager : MonoBehaviour
     {
         var result = new List<MonsterController>();
 
-        // _enemyLayer 설정이 실제 몬스터 레이어와 어긋나도 적을 찾도록,
-        // 레이어 필터 없이 모든 콜라이더를 받은 뒤 MonsterController 컴포넌트로만 필터한다.
-        var cols = Physics2D.OverlapCircleAll((Vector2)center, range);
+        // 트리거 콜라이더 포함(useTriggers) + 레이어 필터 없음(useLayerMask=false)으로 검색.
+        // 적 Collider가 트리거이거나 _enemyLayer 설정이 어긋나도 잡히도록 한다.
+        var filter = new ContactFilter2D { useTriggers = true, useLayerMask = false, useDepth = false };
+        var cols   = new List<Collider2D>();
+        Physics2D.OverlapCircle((Vector2)center, range, filter, cols);
         foreach (var h in cols)
         {
             var mc = h.GetComponent<MonsterController>()
@@ -656,6 +660,8 @@ public class SynergyManager : MonoBehaviour
             if (mc != null && !mc.IsDead && mc.gameObject.activeInHierarchy && !result.Contains(mc))
                 result.Add(mc);
         }
+
+        Debug.Log($"[SynergyDebug] 적탐색 range={range} center={center} → {result.Count}명");
         return result;
     }
 
