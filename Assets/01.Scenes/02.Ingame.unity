@@ -837,11 +837,11 @@ MonoBehaviour:
   - synergyType: 10
     grade: 1
     summon: {fileID: 11400000, guid: 8224dc909ad7ded459c7b5cd23433f83, type: 2}
-    count: 2
+    count: 1
   - synergyType: 10
     grade: 2
     summon: {fileID: 11400000, guid: 8224dc909ad7ded459c7b5cd23433f83, type: 2}
-    count: 3
+    count: 1
   - synergyType: 3
     grade: 0
     summon: {fileID: 11400000, guid: 35991cf7e0ce4a44c98939310c0dbee8, type: 2}

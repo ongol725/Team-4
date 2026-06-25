@@ -286,7 +286,7 @@ namespace BagSurvivor.SynergyEditor
                     "맵 전체를 튕겨 다니며 적에게 피해를 주는 구체를 생성합니다.",
                     "핀볼 생성.  대미지 110%",
                     "핀볼 이동 속도 증가.  대미지 130%",
-                    ""),
+                    "핀볼 이동 속도 증가.  대미지 130%"),
 
                 // ── 처형자 ──────────────────────────────────────────
                 Th(SynergyType.Executioner, "처형자", 2, 4, 5, 0,
@@ -436,7 +436,9 @@ namespace BagSurvivor.SynergyEditor
             var map = new (SynergyType type, SynergyGrade grade, string assetName, int count)[]
             {
                 (SynergyType.Pinball,    SynergyGrade.Bronze, "SUM_PINBALL_1", 1),
-                (SynergyType.Pinball,    SynergyGrade.Silver, "SUM_PINBALL_2", 1),
+                // 핀볼은 공 개수가 늘지 않는다(기획): 등급↑ = 이동속도·대미지만 증가하므로 count는 항상 1.
+                // 임계값상 3개 = Gold 등급이므로 업그레이드 소환수(PINBALL_2)는 Gold에 바인딩한다.
+                (SynergyType.Pinball,    SynergyGrade.Gold,   "SUM_PINBALL_2", 1),
                 (SynergyType.Fairy,      SynergyGrade.Bronze, "SUM_FAIRY_1",   1),
                 (SynergyType.Fairy,      SynergyGrade.Silver, "SUM_FAIRY_2",   2),
                 (SynergyType.Fairy,      SynergyGrade.Gold,   "SUM_FAIRY_3",   3),
