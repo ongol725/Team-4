@@ -24,8 +24,8 @@ public class SummonController : MonoBehaviour
     private float   _wanderTimer;
     private const float WanderRadius    = 5f;   // 플레이어 주변 배회 반경
     private const float WanderInterval  = 2.5f; // 새 웨이포인트 갱신 간격
-    private const float DetectRange     = 8f;   // 적 감지 거리
-    private const float LeashRange      = 14f;  // 이 거리 이상 벗어나면 플레이어로 복귀
+    private const float DetectRange     = 5f;   // 적 감지 거리 (멀리 쫓아가지 않도록 축소)
+    private const float LeashRange      = 9f;   // 이 거리 이상 벗어나면 플레이어로 복귀
 
     // OrbitPlayer 전용
     private float _orbitAngle;

@@ -113,13 +113,13 @@ namespace BagSurvivor.SynergyEditor
             // ── 티탄 (Titan) — AutoTimer / WPN_ATK_AVG / RandomEnemy × N ──
             d["SK_METEOR_1"] = Sk("SK_METEOR_1", "돌 떨구기 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:50f, extra:3);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:3);
             d["SK_METEOR_2"] = Sk("SK_METEOR_2", "돌 떨구기 6개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:50f, extra:6);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:6);
             d["SK_METEOR_3"] = Sk("SK_METEOR_3", "돌 떨구기 9개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:50f, extra:9);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:9);
 
             // ── 난공불락 (Impregnable) — OnHitTaken / ARM_HP_SUM / Self + DamageReduction ──
             d["SK_FORTRESS_1"] = Sk("SK_FORTRESS_1", "충격파 (브론즈)",
