@@ -31,14 +31,14 @@ namespace BagSurvivor.EditorTools
             ("Devil_Slash",  8, 1),
             ("Devil_Wave",   8, 1),
             ("OVERLOAD1_Pr", 6, 1),   // 12288×2048, 6프레임
-            ("OVERLOAD3_Pr", 8, 1),   // 4096×512,   8프레임
-            // 6184×512: 12×512=6144 기준, 우측 여백 40px 무시
-            ("Devil_Fireball",  12, 1),
-            ("SwordWave",       12, 1),
-            ("spirit_attack",   12, 1),  // 6144×512, 정확히 12프레임
-            ("OVERLOAD2_Pr",    12, 1),
-            ("OVERLOAD2.1_Pr",  12, 1),
-            ("StoneDrop_Common", 8, 1),  // 12288×1536, 8프레임 (신규)
+            ("OVERLOAD3_Pr", 8, 1),   // 4096×512,   8프레임 (픽셀스캔 검증)
+            // 6184×512 = 8×773 (773은 소수 → 8프레임이 유일한 정수 그리드, 경계겹침 0%)
+            ("Devil_Fireball",  8, 1),
+            ("SwordWave",       8, 1),
+            ("spirit_attack",   12, 1),  // 6144×512, 12프레임 (셀별 콘텐츠 검증)
+            ("OVERLOAD2_Pr",    8, 1),
+            ("OVERLOAD2.1_Pr",  8, 1),
+            ("StoneDrop_Common", 12, 1), // 12288×1536, 12프레임 (셀별 콘텐츠 검증)
             // ── 4x4 그리드 ──
             ("Gold_Coin1", 4, 4), ("Gold_Coin2", 4, 4), ("Gold_Coin3", 4, 4), ("Gold_Coin4", 4, 4),
             ("RichCoin_BOMB1", 4, 4), ("RichCoin_BOMB2", 4, 4), ("RichCoin_BOMB3", 4, 4), ("RichCoin_BOMB4", 4, 4),
@@ -46,7 +46,7 @@ namespace BagSurvivor.EditorTools
             ("Shockwave_RED",    4, 4),  // 7340×7340, 16프레임
             ("Scythe_Black",     4, 4),  // 7340×7340, 16프레임
             ("Scythe_BlackRed",  4, 4),  // 7340×7340, 16프레임
-            ("Scythe_DarkRed",   1, 1),  // 1835×1835, 단일 스프라이트
+            ("Scythe_DarkRed",   4, 4),  // 1835×1835, 16프레임 (Black/BlackRed 동일 구조, 셀 459px)
         };
 
         [MenuItem("BagSurvivor/Setup/⓪ Slice Synergy Sheets (Grid)")]
