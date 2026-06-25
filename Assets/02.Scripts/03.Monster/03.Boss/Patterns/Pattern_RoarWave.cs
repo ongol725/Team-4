@@ -54,6 +54,9 @@ namespace BagSurvivor.Monster
             chance = 7f;
         }
 
+        // 텔레그래프 동안은 대기, 발사 시작 때 포효(인트로) 재생
+        protected override bool AutoPlayAnimOnExecute => false;
+
         protected override IEnumerator ExecuteRoutine()
         {
             // 발사 방향 = 시전 시점 플레이어 방향으로 고정
@@ -63,12 +66,18 @@ namespace BagSurvivor.Monster
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 
+            // 포효 인트로 1회 재생
+            if (bossAnimator != null) bossAnimator.PlayPattern("Roar");
+
             for (int i = 0; i < projectileCount; i++)
             {
                 FireCrescent(dir);
                 if (i < projectileCount - 1)
                     yield return new WaitForSeconds(fireInterval);
             }
+
+            // 발사 끝 → 마지막 '포효하는 부분'만 루프(입 벌리고 계속), 패턴 끝까지
+            if (bossAnimator != null) bossAnimator.PlayPattern("RoarLoop");
 
             // 발사 후 제자리 정지(숨 고르기)
             if (recoveryTime > 0f)

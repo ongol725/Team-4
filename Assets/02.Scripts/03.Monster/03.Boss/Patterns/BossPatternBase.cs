@@ -42,11 +42,20 @@ namespace BagSurvivor.Monster
         [Tooltip("2페이즈에서만 사용 가능(1페이즈에선 선택되지 않음). 신규 2페이즈 전용 패턴용")]
         public bool phase2Only = false;
 
+        [Header("애니메이션")]
+        [Tooltip("이 패턴 실행 시 재생할 BossAnimator 상태 이름(비우면 애니 전환 안 함)")]
+        public string animState = "";
+
         [Header("디버그")]
         [Tooltip("범위 기즈모 표시 여부")]
         public bool drawRangeGizmo = true;
 
         protected MonsterController controller;
+        protected BossAnimator bossAnimator;
+
+        /// <summary>true면 Execute 시작 즉시 animState 재생. false면 텔레그래프 동안 대기하고
+        /// 파생 패턴이 실제 동작 시점에 직접 재생(예: 돌진은 경고선 동안 대기 → 돌진 시 재생).</summary>
+        protected virtual bool AutoPlayAnimOnExecute => true;
         private float cooldownTimer;
         protected bool isRunning; // 패턴 실행 중 여부(플레이 중 기즈모는 실행 중인 패턴만 표시)
 
@@ -62,6 +71,7 @@ namespace BagSurvivor.Monster
         protected virtual void Awake()
         {
             controller = GetComponent<MonsterController>();
+            bossAnimator = GetComponent<BossAnimator>();
         }
 
         protected virtual void OnEnable()
@@ -100,7 +110,11 @@ namespace BagSurvivor.Monster
         {
             cooldownTimer = cooldown;
             isRunning = true;
+            if (bossAnimator == null) bossAnimator = GetComponent<BossAnimator>();
+            // 자동재생 패턴은 animState, 아니면 빈 문자열(=패턴 중이지만 대기 유지 → 파생이 동작 시 직접 재생)
+            if (bossAnimator != null) bossAnimator.PlayPattern(AutoPlayAnimOnExecute ? animState : "");
             yield return ExecuteRoutine();
+            if (bossAnimator != null) bossAnimator.BackToLocomotion();      // 끝나면 이동/대기 복귀
             isRunning = false;
         }
 

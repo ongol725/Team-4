@@ -43,6 +43,9 @@ namespace BagSurvivor.Monster
         [Tooltip("충돌 시 임팩트 이펙트(광역 피해 없음, 연출용)")]
         public GameObject impactEffectPrefab;
 
+        // 경고선(텔레그래프) 동안은 대기, 실제 돌진 시작 때 돌진 애니 재생
+        protected override bool AutoPlayAnimOnExecute => false;
+
         private void Reset()
         {
             patternName = "Charge";
@@ -75,8 +78,11 @@ namespace BagSurvivor.Monster
             Vector2 dir = DirToPlayer();
 
             GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
-            yield return new WaitForSeconds(telegraphSec);
+            yield return new WaitForSeconds(telegraphSec);   // 경고선 동안 대기(대기 애니 유지)
             ReturnPooled(tele);
+
+            // 실제 돌진 시작 → 돌진 애니(매 돌진마다 처음부터 재시작 → 2페이즈 2회 돌진 시 2번 출력)
+            if (bossAnimator != null) bossAnimator.PlayPattern(animState, true);
 
             float traveled = 0f;
             bool collided = false;

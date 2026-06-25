@@ -69,31 +69,28 @@ namespace BagSurvivor.Monster
                 : transform.position + (Vector3)DirToPlayer() * 5f;
             lastLanding = landing;
 
-            // 착지 지점 예고 표식을 도약 시작 시 띄우고 낙하까지 유지
-            GameObject tele = telegraphPrefab != null
-                ? SpawnFromPool(telegraphPrefab, landing, Quaternion.identity) : null;
-
-            // 도약 후 공중 체공(기획서: 1초)
             controller.BeginExternalMovement();
             controller.SetKnockbackImmune(true);
+
+            // 1) 점프 애니(Execute의 Leap) 동안 체공
             if (hoverTime > 0f) yield return new WaitForSeconds(hoverTime);
 
-            // 낙하: 착지 지점으로 보간 이동(기획서: 1.5초)
-            Vector3 start = transform.position;
-            float t = 0f;
-            while (t < jumpDuration)
-            {
-                if (controller == null || controller.IsDead) break;
-                t += Time.deltaTime;
-                float u = jumpDuration > 0f ? Mathf.Clamp01(t / jumpDuration) : 1f;
-                transform.position = Vector3.Lerp(start, landing, u);
-                yield return null;
-            }
+            // 2) 보스 완전히 사라짐 + 착지 범위(첫 동심원 크기) 예고 표식 표시
+            SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+            if (sr != null) sr.enabled = false;
+            GameObject tele = SpawnScaled(telegraphPrefab, landing, ring1Radius);
+
+            // 3) 범위를 보여주는 대기(낙하 예고)
+            if (jumpDuration > 0f) yield return new WaitForSeconds(jumpDuration);
+
+            // 4) 착지 지점에 재등장 + 착지(내려찍기) 애니 → 첫 범위에 맞춰 떨어짐
             transform.position = landing;
+            if (sr != null) sr.enabled = true;
+            if (bossAnimator != null) bossAnimator.PlayPattern("LeapLand");
+            ReturnPooled(tele);
 
             controller.SetKnockbackImmune(false);
             controller.EndExternalMovement();
-            ReturnPooled(tele);
 
             // 착지 → 3단 동심원 (중심부터 바깥으로). 각 단은 '경고 바닥 → 폭발' 순서(0.5초 간격).
             ringsActive = true;
@@ -105,6 +102,8 @@ namespace BagSurvivor.Monster
             if (phase2Mode)
             {
                 yield return new WaitForSeconds(phase2SecondWaveDelay);
+                // 2차 내려찍기: 착지 모션 한 번 더(바닥 찍는 느낌)
+                if (bossAnimator != null) bossAnimator.PlayPattern("LeapLand", true);
                 yield return BlastRing(landing, 0f, ring1Radius, phase2SecondWaveRingDelay);
                 yield return BlastRing(landing, ring1Radius, ring2Radius, phase2SecondWaveRingDelay);
                 yield return BlastRing(landing, ring2Radius, ring3Radius, phase2SecondWaveRingDelay);
