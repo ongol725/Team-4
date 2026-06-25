@@ -1,64 +1,187 @@
 fileFormatVersion: 2
-guid: 7fae31259d5dda748b256e2d47e878d1
+guid: 4d1cf0f98d351284bbbd230236c72de4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 777626916781001291
-    second: GiantGolem_0
+      213: 6328194883572112539
+    second: StoneDrop_Common_0
   - first:
-      213: 317282527511180478
-    second: GiantGolem_1
+      213: -420140681440451011
+    second: StoneDrop_Common_1
   - first:
-      213: -2488149590371059966
-    second: GiantGolem_2
+      213: 6619080777380302566
+    second: StoneDrop_Common_2
   - first:
-      213: -8816856637925587110
-    second: GiantGolem_3
+      213: -4983699484336963425
+    second: StoneDrop_Common_3
   - first:
-      213: -3551725715108243773
-    second: GiantGolem_4
+      213: -2558981407151301406
+    second: StoneDrop_Common_4
   - first:
-      213: -1469208271595097488
-    second: GiantGolem_5
+      213: -1830283540205227025
+    second: StoneDrop_Common_5
   - first:
-      213: -1174986234766995750
-    second: GiantGolem_6
+      213: 6403728944770616144
+    second: StoneDrop_Common_6
   - first:
-      213: 3976079370377909804
-    second: GiantGolem_7
+      213: -872484670356183940
+    second: StoneDrop_Common_7
   - first:
-      213: -1362926330403986608
-    second: GiantGolem_8
+      213: -9124044001284206145
+    second: StoneDrop_Common_8
   - first:
-      213: -6143252410015084115
-    second: GiantGolem_9
+      213: 7716287836269749318
+    second: StoneDrop_Common_9
   - first:
-      213: -3089435952628074490
-    second: GiantGolem_10
+      213: 1906025555115497183
+    second: StoneDrop_Common_10
   - first:
-      213: 6722216780600073671
-    second: GiantGolem_11
+      213: 4824816553780145393
+    second: StoneDrop_Common_11
   - first:
-      213: -6343338682915015375
-    second: GiantGolem_12
+      213: -7237150099642833623
+    second: StoneDrop_Common_12
   - first:
-      213: 7272407635511150971
-    second: GiantGolem_13
+      213: -5656991956057735911
+    second: StoneDrop_Common_13
   - first:
-      213: 8368075275777340079
-    second: GiantGolem_14
+      213: 2528339058541645172
+    second: StoneDrop_Common_14
   - first:
-      213: 3716192163457730468
-    second: GiantGolem_15
+      213: -935180984128033947
+    second: StoneDrop_Common_15
   - first:
-      213: -1399458655533732796
-    second: GiantGolem_16
+      213: -6514400584932048884
+    second: StoneDrop_Common_16
   - first:
-      213: -6488004743841648706
-    second: GiantGolem_17
+      213: 7126660519285043642
+    second: StoneDrop_Common_17
   - first:
-      213: -5653978230183329491
-    second: GiantGolem_18
+      213: -4888509839090030466
+    second: StoneDrop_Common_18
+  - first:
+      213: 9034227792622990976
+    second: StoneDrop_Common_19
+  - first:
+      213: 5927361262414959162
+    second: StoneDrop_Common_20
+  - first:
+      213: -5903295640654338742
+    second: StoneDrop_Common_21
+  - first:
+      213: -271101145123347800
+    second: StoneDrop_Common_22
+  - first:
+      213: 3894275194961154335
+    second: StoneDrop_Common_23
+  - first:
+      213: 6394851768251036563
+    second: StoneDrop_Common_24
+  - first:
+      213: 1756314603940493460
+    second: StoneDrop_Common_25
+  - first:
+      213: 8711197179221856613
+    second: StoneDrop_Common_26
+  - first:
+      213: -5821778613098035475
+    second: StoneDrop_Common_27
+  - first:
+      213: -5576927921586712125
+    second: StoneDrop_Common_28
+  - first:
+      213: -2303420031284012361
+    second: StoneDrop_Common_29
+  - first:
+      213: 3775966588201241689
+    second: StoneDrop_Common_30
+  - first:
+      213: -2686468413092946058
+    second: StoneDrop_Common_31
+  - first:
+      213: -1432451738808318690
+    second: StoneDrop_Common_32
+  - first:
+      213: 2953031480269804021
+    second: StoneDrop_Common_33
+  - first:
+      213: -7842866093488650704
+    second: StoneDrop_Common_34
+  - first:
+      213: -8310602525188195687
+    second: StoneDrop_Common_35
+  - first:
+      213: -1587685235585178186
+    second: StoneDrop_Common_36
+  - first:
+      213: 8659068732885250901
+    second: StoneDrop_Common_37
+  - first:
+      213: 6078624117450920722
+    second: StoneDrop_Common_38
+  - first:
+      213: -4550794153737289683
+    second: StoneDrop_Common_39
+  - first:
+      213: 7796743968646825088
+    second: StoneDrop_Common_40
+  - first:
+      213: -8543442188017909584
+    second: StoneDrop_Common_41
+  - first:
+      213: -3340444459035150513
+    second: StoneDrop_Common_42
+  - first:
+      213: -6229026740421206303
+    second: StoneDrop_Common_43
+  - first:
+      213: 7512348103842142418
+    second: StoneDrop_Common_44
+  - first:
+      213: -4741251859068000200
+    second: StoneDrop_Common_45
+  - first:
+      213: -4531360198180228920
+    second: StoneDrop_Common_46
+  - first:
+      213: 8553373169889061030
+    second: StoneDrop_Common_47
+  - first:
+      213: 5345825244634777868
+    second: StoneDrop_Common_48
+  - first:
+      213: 859448774656663702
+    second: StoneDrop_Common_49
+  - first:
+      213: -2174188235133130543
+    second: StoneDrop_Common_50
+  - first:
+      213: -303521939382459719
+    second: StoneDrop_Common_51
+  - first:
+      213: 9058352084866091172
+    second: StoneDrop_Common_52
+  - first:
+      213: -7480865644757323416
+    second: StoneDrop_Common_53
+  - first:
+      213: -3567893888400043471
+    second: StoneDrop_Common_54
+  - first:
+      213: -5302412592595514339
+    second: StoneDrop_Common_55
+  - first:
+      213: 2938597645975409417
+    second: StoneDrop_Common_56
+  - first:
+      213: -6467048036284207272
+    second: StoneDrop_Common_57
+  - first:
+      213: -427206930317654241
+    second: StoneDrop_Common_58
+  - first:
+      213: 1000725103093084470
+    second: StoneDrop_Common_59
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -180,13 +303,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GiantGolem_0
+      name: StoneDrop_Common_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 2048
-        height: 2048
+        width: 1536
+        height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,20 +318,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f9a88b01e1a46945a6a82039c094f9a
-      internalID: 777626916781001291
+      spriteID: 1491221755335a94180214d7329a7ddc
+      internalID: 6328194883572112539
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantGolem_1
+      name: StoneDrop_Common_1
       rect:
         serializedVersion: 2
-        x: 2048
+        x: 1536
         y: 0
-        width: 2048
-        height: 2048
+        width: 1536
+        height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -217,20 +340,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: def04dc43c33e6149adf9f8a7a92f84e
-      internalID: 317282527511180478
+      spriteID: 8019fc96b5783f1488aaeed9ebc49eb1
+      internalID: -420140681440451011
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantGolem_2
+      name: StoneDrop_Common_2
       rect:
         serializedVersion: 2
-        x: 4096
+        x: 3072
         y: 0
-        width: 2048
-        height: 2048
+        width: 1536
+        height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -239,20 +362,42 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6cf38a86b61933546986e24d0814b9d3
-      internalID: -2488149590371059966
+      spriteID: 3ec5a00b8e240044fa6762817a4c3a4f
+      internalID: 6619080777380302566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantGolem_3
+      name: StoneDrop_Common_3
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 0
+        width: 1536
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5eec00bece23934fa36b7cddf63ab28
+      internalID: -4983699484336963425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_4
       rect:
         serializedVersion: 2
         x: 6144
         y: 0
-        width: 2048
-        height: 2048
+        width: 1536
+        height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -261,20 +406,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 50b58f057a6407f438fef759b106e167
-      internalID: -8816856637925587110
+      spriteID: 923f9aa34b9941d4aa3ccd4add654cf1
+      internalID: -2558981407151301406
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantGolem_4
+      name: StoneDrop_Common_5
       rect:
         serializedVersion: 2
-        x: 8192
+        x: 7680
         y: 0
-        width: 2048
-        height: 2048
+        width: 1536
+        height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -283,20 +428,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47726e60a7d1b314f810d814bc34fb1e
-      internalID: -3551725715108243773
+      spriteID: a5beea76257ad5447ae641ede14c0557
+      internalID: -1830283540205227025
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantGolem_5
+      name: StoneDrop_Common_6
       rect:
         serializedVersion: 2
-        x: 10240
+        x: 9216
         y: 0
-        width: 2048
-        height: 2048
+        width: 1536
+        height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -305,20 +450,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cd48883be7acac8478ac5f3b286ab2ab
-      internalID: -1469208271595097488
+      spriteID: 2dcb395597e95394eb1a06d62e7a0f1f
+      internalID: 6403728944770616144
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantGolem_6
+      name: StoneDrop_Common_7
       rect:
         serializedVersion: 2
-        x: 12288
+        x: 10752
         y: 0
-        width: 2048
-        height: 2048
+        width: 1536
+        height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -327,30 +472,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bfd316d246a921b47bc34d9e2eb965b1
-      internalID: -1174986234766995750
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GiantGolem_7
-      rect:
-        serializedVersion: 2
-        x: 14336
-        y: 0
-        width: 2048
-        height: 2048
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 06fedb86d143d554182de518131b40c6
-      internalID: 3976079370377909804
+      spriteID: 07268c4ba2c111540bf0bdd73b9b0a37
+      internalID: -872484670356183940
       vertices: []
       indices: 
       edges: []
@@ -359,7 +482,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5cd14d6cd43d7704f99a4bc8312c3af8
+    spriteID: d2250915535092743bfcc6c5501694f9
     internalID: 0
     vertices: []
     indices: 
@@ -369,14 +492,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GiantGolem_0: 777626916781001291
-      GiantGolem_1: 317282527511180478
-      GiantGolem_2: -2488149590371059966
-      GiantGolem_3: -8816856637925587110
-      GiantGolem_4: -3551725715108243773
-      GiantGolem_5: -1469208271595097488
-      GiantGolem_6: -1174986234766995750
-      GiantGolem_7: 3976079370377909804
+      StoneDrop_Common_0: 6328194883572112539
+      StoneDrop_Common_1: -420140681440451011
+      StoneDrop_Common_2: 6619080777380302566
+      StoneDrop_Common_3: -4983699484336963425
+      StoneDrop_Common_4: -2558981407151301406
+      StoneDrop_Common_5: -1830283540205227025
+      StoneDrop_Common_6: 6403728944770616144
+      StoneDrop_Common_7: -872484670356183940
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

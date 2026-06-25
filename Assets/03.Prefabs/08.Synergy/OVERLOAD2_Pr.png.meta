@@ -144,7 +144,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -201,19 +201,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_0
       rect:
         serializedVersion: 2
-        x: 131
-        y: 397
-        width: 2806
-        height: 1369
+        x: 0
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c3974bfc1f268b2c0800000000000000
+      spriteID: 6e50a1a6a043a654dbcbcee4f7e85ec0
       internalID: -4415670643925419716
       vertices: []
       indices: 
@@ -223,19 +223,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_1
       rect:
         serializedVersion: 2
-        x: 7966
-        y: 1642
-        width: 34
-        height: 15
+        x: 515
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 638c4a94d37bb6880800000000000000
+      spriteID: c5ef7876d931fde48a2df07f56aea454
       internalID: -8616591988186888138
       vertices: []
       indices: 
@@ -245,19 +245,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_2
       rect:
         serializedVersion: 2
-        x: 11096
-        y: 1624
-        width: 39
-        height: 33
+        x: 1030
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: faa349a66bedd51c0800000000000000
+      spriteID: c7642d8a06df940418b6ff01565c514f
       internalID: -4513206376501855569
       vertices: []
       indices: 
@@ -267,19 +267,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_3
       rect:
         serializedVersion: 2
-        x: 12528
-        y: 367
-        width: 2806
-        height: 1362
+        x: 1545
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8e2f3cfdb183b0d20800000000000000
+      spriteID: fdbcf2d06a2724146880221890d77884
       internalID: 3245749648820007656
       vertices: []
       indices: 
@@ -289,19 +289,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_4
       rect:
         serializedVersion: 2
-        x: 7725
-        y: 1563
-        width: 15
-        height: 21
+        x: 2060
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6376e304de0c73330800000000000000
+      spriteID: 5ab7be548706942459a77f8680557614
       internalID: 3690630544871024438
       vertices: []
       indices: 
@@ -311,19 +311,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_5
       rect:
         serializedVersion: 2
-        x: 7840
-        y: 1461
-        width: 93
-        height: 160
+        x: 2575
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dc88d514ac8b5c7d0800000000000000
+      spriteID: 2907a3efa3bad9a41b9f4249d0eb8efd
       internalID: -2898707606323492659
       vertices: []
       indices: 
@@ -333,19 +333,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_6
       rect:
         serializedVersion: 2
-        x: 9489
-        y: 440
-        width: 2739
-        height: 1193
+        x: 3090
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: afdb0fe622e767a20800000000000000
+      spriteID: 67045151ebded384abeceb9eb235127e
       internalID: 3059771683200089594
       vertices: []
       indices: 
@@ -355,19 +355,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_7
       rect:
         serializedVersion: 2
-        x: 16696
-        y: 1539
-        width: 15
-        height: 15
+        x: 3605
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 29de7af635ce8b5f0800000000000000
+      spriteID: 17fa130c855f3f047817e92aa13c90ae
       internalID: -740582295602729582
       vertices: []
       indices: 
@@ -377,19 +377,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_8
       rect:
         serializedVersion: 2
-        x: 18678
-        y: 415
-        width: 2866
-        height: 1127
+        x: 4120
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bc51c7b05f4a3fce0800000000000000
+      spriteID: 90f3a629dc8f70241b98fc26abdbf26b
       internalID: -1372572089051245109
       vertices: []
       indices: 
@@ -399,19 +399,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_9
       rect:
         serializedVersion: 2
-        x: 5163
-        y: 1491
-        width: 15
-        height: 27
+        x: 4635
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d52d0f43415ec64d0800000000000000
+      spriteID: 7d58594cf6f0aed47a37c15de04d0184
       internalID: -3139882965233773987
       vertices: []
       indices: 
@@ -421,19 +421,19 @@ TextureImporter:
       name: OVERLOAD2_Pr_10
       rect:
         serializedVersion: 2
-        x: 6293
-        y: 512
-        width: 2848
-        height: 994
+        x: 5150
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 712956fceef7f7380800000000000000
+      spriteID: 1c1f16ca87f95d74ba24341072f6d2ea
       internalID: -8971311269040254441
       vertices: []
       indices: 
@@ -443,306 +443,20 @@ TextureImporter:
       name: OVERLOAD2_Pr_11
       rect:
         serializedVersion: 2
-        x: 22623
-        y: 1412
-        width: 15
-        height: 82
+        x: 5665
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0f52f9887b40ae360800000000000000
+      spriteID: c7add429817290c47b3db13a1be21b33
       internalID: 7199572140622816752
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_12
-      rect:
-        serializedVersion: 2
-        x: 3248
-        y: 464
-        width: 2782
-        height: 1024
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a391b8e293a3893f0800000000000000
-      internalID: -893900508764628678
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_13
-      rect:
-        serializedVersion: 2
-        x: 15627
-        y: 458
-        width: 2776
-        height: 1018
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0eddae867c114be60800000000000000
-      internalID: 7977020388136377824
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_14
-      rect:
-        serializedVersion: 2
-        x: 21795
-        y: 579
-        width: 2788
-        height: 812
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0091ef45f29cd5f50800000000000000
-      internalID: 6871869811563829504
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_15
-      rect:
-        serializedVersion: 2
-        x: 22707
-        y: 1382
-        width: 15
-        height: 27
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cf223b7270697c9b0800000000000000
-      internalID: -5059910698852474116
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_16
-      rect:
-        serializedVersion: 2
-        x: 23946
-        y: 1382
-        width: 27
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 59acd82f58e18aaa0800000000000000
-      internalID: -6149631730525549931
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_17
-      rect:
-        serializedVersion: 2
-        x: 3224
-        y: 899
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3dedaa75f216c86c0800000000000000
-      internalID: -4139827101498155309
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_18
-      rect:
-        serializedVersion: 2
-        x: 22580
-        y: 512
-        width: 46
-        height: 136
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 81c5878b123c0cfb0800000000000000
-      internalID: -4629485867340637160
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_19
-      rect:
-        serializedVersion: 2
-        x: 23849
-        y: 560
-        width: 21
-        height: 76
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7caac9582217df360800000000000000
-      internalID: 7205039371947125447
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_20
-      rect:
-        serializedVersion: 2
-        x: 24338
-        y: 554
-        width: 39
-        height: 94
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4da2d20350ba4d8a0800000000000000
-      internalID: -6281207541503546668
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_21
-      rect:
-        serializedVersion: 2
-        x: 7296
-        y: 476
-        width: 27
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b12302e18ca898270800000000000000
-      internalID: 8253280384236663323
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_22
-      rect:
-        serializedVersion: 2
-        x: 7834
-        y: 494
-        width: 14
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c4d27fdca1e1a1e60800000000000000
-      internalID: 7933686794040061260
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_23
-      rect:
-        serializedVersion: 2
-        x: 22538
-        y: 397
-        width: 27
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d761a6b839289cf50800000000000000
-      internalID: 6902191474132784765
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_24
-      rect:
-        serializedVersion: 2
-        x: 23885
-        y: 482
-        width: 27
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4e4f9e01ab3214f70800000000000000
-      internalID: 9169649598357697764
       vertices: []
       indices: 
       edges: []
@@ -751,7 +465,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: e0fbf3220fb782a4299af03b35365625
     internalID: 0
     vertices: []
     indices: 
@@ -765,20 +479,7 @@ TextureImporter:
       OVERLOAD2_Pr_1: -8616591988186888138
       OVERLOAD2_Pr_10: -8971311269040254441
       OVERLOAD2_Pr_11: 7199572140622816752
-      OVERLOAD2_Pr_12: -893900508764628678
-      OVERLOAD2_Pr_13: 7977020388136377824
-      OVERLOAD2_Pr_14: 6871869811563829504
-      OVERLOAD2_Pr_15: -5059910698852474116
-      OVERLOAD2_Pr_16: -6149631730525549931
-      OVERLOAD2_Pr_17: -4139827101498155309
-      OVERLOAD2_Pr_18: -4629485867340637160
-      OVERLOAD2_Pr_19: 7205039371947125447
       OVERLOAD2_Pr_2: -4513206376501855569
-      OVERLOAD2_Pr_20: -6281207541503546668
-      OVERLOAD2_Pr_21: 8253280384236663323
-      OVERLOAD2_Pr_22: 7933686794040061260
-      OVERLOAD2_Pr_23: 6902191474132784765
-      OVERLOAD2_Pr_24: 9169649598357697764
       OVERLOAD2_Pr_3: 3245749648820007656
       OVERLOAD2_Pr_4: 3690630544871024438
       OVERLOAD2_Pr_5: -2898707606323492659

@@ -1,4 +1,4 @@
-fileFormatVersion: 2
+﻿fileFormatVersion: 2
 guid: 52da82195f96439478d40abfe15f4b88
 TextureImporter:
   internalIDToNameTable:
@@ -96,7 +96,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 830
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,7 +117,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -171,353 +171,353 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Scythe_Black.prefab_0
+      name: Scythe_Black_0
       rect:
         serializedVersion: 2
-        x: 14
-        y: 827
-        width: 221
-        height: 113
+        x: 0
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 917468a316c622aa0800000000000000
-      internalID: -6187263773204134119
+      spriteID: 2894366db6b8d4941bca5ebd2f77e54b
+      internalID: -363682962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_1
+      name: Scythe_Black_1
       rect:
         serializedVersion: 2
-        x: 254
-        y: 836
-        width: 224
-        height: 95
+        x: 1835
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 138451280bf9e1fe0800000000000000
-      internalID: -1216359268897961935
+      spriteID: 3f3d7f88f43299b429af7c49c249f8a3
+      internalID: -592966130
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_2
+      name: Scythe_Black_2
       rect:
         serializedVersion: 2
-        x: 512
-        y: 803
-        width: 206
-        height: 125
+        x: 3670
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 46f216ca26b95a980800000000000000
-      internalID: -8528239471255015580
+      spriteID: d264830833558aa4db8085d75cacca17
+      internalID: -935864698
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_3
+      name: Scythe_Black_3
       rect:
         serializedVersion: 2
-        x: 788
-        y: 779
-        width: 167
-        height: 188
+        x: 5505
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f0889e3404db8d250800000000000000
-      internalID: 5969729389794527247
+      spriteID: 2233a719ae66ef94290bd6b7944a6bf5
+      internalID: -2122965293
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_4
+      name: Scythe_Black_4
       rect:
         serializedVersion: 2
-        x: 71
-        y: 521
-        width: 113
-        height: 221
+        x: 0
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dc6fc54642e4beab0800000000000000
-      internalID: -4977799044918348083
+      spriteID: c77ea8cda3f7fac40832d614a2e82952
+      internalID: 144733772
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_5
+      name: Scythe_Black_5
       rect:
         serializedVersion: 2
-        x: 332
-        y: 530
-        width: 95
-        height: 224
+        x: 1835
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: cf9eed16f38fc9700800000000000000
-      internalID: 548586205740984828
+      spriteID: 98793ccfb0f8e0145af4f530f896abba
+      internalID: -123841560
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_6
+      name: Scythe_Black_6
       rect:
         serializedVersion: 2
-        x: 551
-        y: 542
-        width: 125
-        height: 206
+        x: 3670
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3f9025851da32cdc0800000000000000
-      internalID: -3620266479648110093
+      spriteID: ba6953f412f3da7439c6b004da01d392
+      internalID: 573568716
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_7
+      name: Scythe_Black_7
       rect:
         serializedVersion: 2
-        x: 779
-        y: 557
-        width: 188
-        height: 167
+        x: 5505
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f347a55afac2695e0800000000000000
-      internalID: -1903284659612388289
+      spriteID: 873c1c23f482f174c9b0dc8933af1405
+      internalID: -1352166728
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_8
+      name: Scythe_Black_8
       rect:
         serializedVersion: 2
-        x: 17
-        y: 320
-        width: 221
-        height: 113
+        x: 0
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a5b4296dca1a5fc50800000000000000
-      internalID: 6698437784489839450
+      spriteID: c1830609903a7084ebe5093f2e1ae6f0
+      internalID: 865602545
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_9
+      name: Scythe_Black_9
       rect:
         serializedVersion: 2
-        x: 278
-        y: 329
-        width: 224
-        height: 95
+        x: 1835
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e39fdcf6d6298a2d0800000000000000
-      internalID: -3267200530932434626
+      spriteID: 50f9f11d26836c349aa770c53669cf1a
+      internalID: -1628303115
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_10
+      name: Scythe_Black_10
       rect:
         serializedVersion: 2
-        x: 542
-        y: 332
-        width: 206
-        height: 125
+        x: 3670
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 713fce1dfd615b740800000000000000
-      internalID: 5167061298032997143
+      spriteID: bac5a79449d9a124198930185352ea87
+      internalID: 1231159971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_11
+      name: Scythe_Black_11
       rect:
         serializedVersion: 2
-        x: 809
-        y: 293
-        width: 167
-        height: 188
+        x: 5505
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 683bc72d5112eeaf0800000000000000
-      internalID: -365318142161013882
+      spriteID: fba8032002bbcd843bfe3244352f9143
+      internalID: 630469287
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_12
+      name: Scythe_Black_12
       rect:
         serializedVersion: 2
-        x: 68
-        y: 14
-        width: 113
-        height: 221
+        x: 0
+        y: 0
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 01ae8fd8c8419e2c0800000000000000
-      internalID: -4401964566868071920
+      spriteID: 9a7bcc3592f1e2242b44c0f176665603
+      internalID: -1330825279
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_13
+      name: Scythe_Black_13
       rect:
         serializedVersion: 2
-        x: 329
-        y: 2
-        width: 95
-        height: 224
+        x: 1835
+        y: 0
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fb3f9089e3ef33b20800000000000000
-      internalID: 3113111312235361215
+      spriteID: 20adfbafc6ae533438671af7436f6977
+      internalID: 2145116909
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_14
+      name: Scythe_Black_14
       rect:
         serializedVersion: 2
-        x: 584
-        y: 8
-        width: 125
-        height: 206
+        x: 3670
+        y: 0
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c49a4656931a174a0800000000000000
-      internalID: -6597314711234762420
+      spriteID: 343d8636f4eae8d439296b5c3f888dd2
+      internalID: 371351340
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Scythe_Black.prefab_15
+      name: Scythe_Black_15
       rect:
         serializedVersion: 2
-        x: 797
-        y: 32
-        width: 188
-        height: 167
+        x: 5505
+        y: 0
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 23cc137d3d02d3f00800000000000000
-      internalID: 1098069978368822322
+      spriteID: 25cebeae2705a594e89a9196ac1deddf
+      internalID: 764367540
       vertices: []
       indices: 
       edges: []
@@ -526,7 +526,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: ec2bbd608ece7ff43b29df3db56682f4
     internalID: 0
     vertices: []
     indices: 
@@ -536,22 +536,22 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Scythe_Black.prefab_0: -6187263773204134119
-      Scythe_Black.prefab_1: -1216359268897961935
-      Scythe_Black.prefab_10: 5167061298032997143
-      Scythe_Black.prefab_11: -365318142161013882
-      Scythe_Black.prefab_12: -4401964566868071920
-      Scythe_Black.prefab_13: 3113111312235361215
-      Scythe_Black.prefab_14: -6597314711234762420
-      Scythe_Black.prefab_15: 1098069978368822322
-      Scythe_Black.prefab_2: -8528239471255015580
-      Scythe_Black.prefab_3: 5969729389794527247
-      Scythe_Black.prefab_4: -4977799044918348083
-      Scythe_Black.prefab_5: 548586205740984828
-      Scythe_Black.prefab_6: -3620266479648110093
-      Scythe_Black.prefab_7: -1903284659612388289
-      Scythe_Black.prefab_8: 6698437784489839450
-      Scythe_Black.prefab_9: -3267200530932434626
+      Scythe_Black_0: -363682962
+      Scythe_Black_1: -592966130
+      Scythe_Black_10: 1231159971
+      Scythe_Black_11: 630469287
+      Scythe_Black_12: -1330825279
+      Scythe_Black_13: 2145116909
+      Scythe_Black_14: 371351340
+      Scythe_Black_15: 764367540
+      Scythe_Black_2: -935864698
+      Scythe_Black_3: -2122965293
+      Scythe_Black_4: 144733772
+      Scythe_Black_5: -123841560
+      Scythe_Black_6: 573568716
+      Scythe_Black_7: -1352166728
+      Scythe_Black_8: 865602545
+      Scythe_Black_9: -1628303115
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -303,7 +303,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -360,19 +360,19 @@ TextureImporter:
       name: Devil_Fireball_0
       rect:
         serializedVersion: 2
-        x: 1122
-        y: 1231
-        width: 105
-        height: 63
+        x: 0
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5d97c64fd13aaf250800000000000000
+      spriteID: 85c24bb0cee957a42b5f64f90bdd0c7a
       internalID: 5979270804337883605
       vertices: []
       indices: 
@@ -382,19 +382,19 @@ TextureImporter:
       name: Devil_Fireball_1
       rect:
         serializedVersion: 2
-        x: 1466
-        y: 1231
-        width: 81
-        height: 51
+        x: 515
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 606ddd0f801906cb0800000000000000
+      spriteID: c68ba20f5d98a7c4fb8b3a463bc418ed
       internalID: -4872735329228040698
       vertices: []
       indices: 
@@ -404,19 +404,19 @@ TextureImporter:
       name: Devil_Fireball_2
       rect:
         serializedVersion: 2
-        x: 1665
-        y: 1279
-        width: 88
-        height: 45
+        x: 1030
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 634fc59b40433ce10800000000000000
+      spriteID: 1e8cdadf99841b945809ebdcabeb5a38
       internalID: 2216672636490806326
       vertices: []
       indices: 
@@ -426,19 +426,19 @@ TextureImporter:
       name: Devil_Fireball_3
       rect:
         serializedVersion: 2
-        x: 1919
-        y: 1243
-        width: 87
-        height: 45
+        x: 1545
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 44d55588e5977ea10800000000000000
+      spriteID: ec9ba86e7d94cbb47b975801af33907a
       internalID: 1938651611527470404
       vertices: []
       indices: 
@@ -448,19 +448,19 @@ TextureImporter:
       name: Devil_Fireball_4
       rect:
         serializedVersion: 2
-        x: 4088
-        y: 1237
-        width: 93
-        height: 57
+        x: 2060
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7599e329a6bdff820800000000000000
+      spriteID: 0368af0591dd2824ea762aae018b7cce
       internalID: 2954321131344927063
       vertices: []
       indices: 
@@ -470,19 +470,19 @@ TextureImporter:
       name: Devil_Fireball_5
       rect:
         serializedVersion: 2
-        x: 4396
-        y: 1255
-        width: 94
-        height: 57
+        x: 2575
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 409ba22aa553703b0800000000000000
+      spriteID: 914f34fedb3188e4eb514be09930dcc0
       internalID: -5546405752699438844
       vertices: []
       indices: 
@@ -492,19 +492,19 @@ TextureImporter:
       name: Devil_Fireball_6
       rect:
         serializedVersion: 2
-        x: 4710
-        y: 1207
-        width: 57
-        height: 99
+        x: 3090
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9e28f500a407c2030800000000000000
+      spriteID: 205d71e93ec740143843a4463780d79b
       internalID: 3471272875931960041
       vertices: []
       indices: 
@@ -514,19 +514,19 @@ TextureImporter:
       name: Devil_Fireball_7
       rect:
         serializedVersion: 2
-        x: 5133
-        y: 1249
-        width: 63
-        height: 45
+        x: 3605
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c3aec170e5a5ca840800000000000000
+      spriteID: d3e0c9cfe816b8a43914066800dbd098
       internalID: 5236659826617805372
       vertices: []
       indices: 
@@ -536,19 +536,19 @@ TextureImporter:
       name: Devil_Fireball_8
       rect:
         serializedVersion: 2
-        x: 7453
-        y: 1255
-        width: 87
-        height: 51
+        x: 4120
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d440069265122f4e0800000000000000
+      spriteID: dd5accf2a5605c94fa79df81bab17118
       internalID: -1949459034752940979
       vertices: []
       indices: 
@@ -558,19 +558,19 @@ TextureImporter:
       name: Devil_Fireball_9
       rect:
         serializedVersion: 2
-        x: 7924
-        y: 1249
-        width: 82
-        height: 57
+        x: 4635
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 84568c36306836320800000000000000
+      spriteID: 2989f5c4b2eb17b4d95ddf28b8a0cccb
       internalID: 2550029163138934088
       vertices: []
       indices: 
@@ -580,19 +580,19 @@ TextureImporter:
       name: Devil_Fireball_10
       rect:
         serializedVersion: 2
-        x: 10449
-        y: 1255
-        width: 76
-        height: 51
+        x: 5150
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0bbe8072c8357caf0800000000000000
+      spriteID: 0ed569038fb54834e8404f90b9af1a5f
       internalID: -376240182446724176
       vertices: []
       indices: 
@@ -602,1472 +602,20 @@ TextureImporter:
       name: Devil_Fireball_11
       rect:
         serializedVersion: 2
-        x: 10721
-        y: 1231
-        width: 94
-        height: 51
+        x: 5665
+        y: 0
+        width: 515
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e9694eae621d61030800000000000000
+      spriteID: ef3729e8309810e4199d95af493d7c72
       internalID: 3465186928387987102
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_12
-      rect:
-        serializedVersion: 2
-        x: 11150
-        y: 1237
-        width: 82
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 31220e184179f2d90800000000000000
-      internalID: -7120306371515375085
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_13
-      rect:
-        serializedVersion: 2
-        x: 16817
-        y: 1243
-        width: 69
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3f3d83125398f76a0800000000000000
-      internalID: -6449285280087616525
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_14
-      rect:
-        serializedVersion: 2
-        x: 19807
-        y: 1249
-        width: 106
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f2b00677436fa78d0800000000000000
-      internalID: -2847693109156902097
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_15
-      rect:
-        serializedVersion: 2
-        x: 20273
-        y: 1237
-        width: 39
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 11eacb8ad27b61430800000000000000
-      internalID: 3753388746192236049
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_16
-      rect:
-        serializedVersion: 2
-        x: 20321
-        y: 1249
-        width: 27
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 301c7027f300b2a00800000000000000
-      internalID: 732679636873888003
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_17
-      rect:
-        serializedVersion: 2
-        x: 23299
-        y: 1255
-        width: 82
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3f22446deeacdd650800000000000000
-      internalID: 6259382184260674291
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_18
-      rect:
-        serializedVersion: 2
-        x: 2155
-        y: 1219
-        width: 81
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e168d91be6415fdc0800000000000000
-      internalID: -3605953460981365218
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_19
-      rect:
-        serializedVersion: 2
-        x: 4873
-        y: 1237
-        width: 15
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0b35167072b028f10800000000000000
-      internalID: 2270389424403600304
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_20
-      rect:
-        serializedVersion: 2
-        x: 4891
-        y: 1249
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1190596c961911440800000000000000
-      internalID: 4904861352672430353
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_21
-      rect:
-        serializedVersion: 2
-        x: 7145
-        y: 1219
-        width: 63
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b477ca4a91060cbd0800000000000000
-      internalID: -2611982120621672629
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_22
-      rect:
-        serializedVersion: 2
-        x: 7809
-        y: 1249
-        width: 15
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: fa760807eb42f7bd0800000000000000
-      internalID: -2630343257011230801
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_23
-      rect:
-        serializedVersion: 2
-        x: 10963
-        y: 1237
-        width: 57
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b121129bb21d508f0800000000000000
-      internalID: -574823391700119013
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_24
-      rect:
-        serializedVersion: 2
-        x: 13416
-        y: 1213
-        width: 81
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ef9ca11be579c6bd0800000000000000
-      internalID: -2635565248964539906
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_25
-      rect:
-        serializedVersion: 2
-        x: 14056
-        y: 1255
-        width: 33
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6fdfae1b7db04c780800000000000000
-      internalID: -8663786762123149834
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_26
-      rect:
-        serializedVersion: 2
-        x: 16376
-        y: 1207
-        width: 75
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a6fe479093aff1f70800000000000000
-      internalID: 9160315289973616490
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_27
-      rect:
-        serializedVersion: 2
-        x: 17016
-        y: 1243
-        width: 39
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3119a8229a1c01420800000000000000
-      internalID: 2598789917165916435
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_28
-      rect:
-        serializedVersion: 2
-        x: 17282
-        y: 1231
-        width: 57
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 426291f2e2241c030800000000000000
-      internalID: 3513161950451803684
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_29
-      rect:
-        serializedVersion: 2
-        x: 17463
-        y: 1231
-        width: 76
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 189c682a36aff65b0800000000000000
-      internalID: -5372800524594263679
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_30
-      rect:
-        serializedVersion: 2
-        x: 20025
-        y: 1207
-        width: 87
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 40de61f1aabafeb80800000000000000
-      internalID: -8363277235849335548
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_31
-      rect:
-        serializedVersion: 2
-        x: 20532
-        y: 1231
-        width: 76
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 923068ce928ea9410800000000000000
-      internalID: 1484754293931508521
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_32
-      rect:
-        serializedVersion: 2
-        x: 22834
-        y: 1231
-        width: 81
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e261eb63b41880ba0800000000000000
-      internalID: -6122501533369231826
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_33
-      rect:
-        serializedVersion: 2
-        x: 23529
-        y: 1231
-        width: 81
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b1ee40776f784a830800000000000000
-      internalID: 4081536654933028379
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_34
-      rect:
-        serializedVersion: 2
-        x: 675
-        y: 814
-        width: 1869
-        height: 420
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2456ed55232563930800000000000000
-      internalID: 4122572885046748482
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_35
-      rect:
-        serializedVersion: 2
-        x: 3768
-        y: 814
-        width: 1857
-        height: 420
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ac90b952fdaf257c0800000000000000
-      internalID: -4083926075756049974
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_36
-      rect:
-        serializedVersion: 2
-        x: 6861
-        y: 754
-        width: 1827
-        height: 474
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 86165cf972a779a30800000000000000
-      internalID: 4221977486285955432
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_37
-      rect:
-        serializedVersion: 2
-        x: 9954
-        y: 820
-        width: 1876
-        height: 390
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 053faf9cd21f73670800000000000000
-      internalID: 8518542399159071568
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_38
-      rect:
-        serializedVersion: 2
-        x: 13047
-        y: 772
-        width: 1840
-        height: 456
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2b49b8f3e54d402d0800000000000000
-      internalID: -3313289924579715918
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_39
-      rect:
-        serializedVersion: 2
-        x: 16140
-        y: 814
-        width: 1864
-        height: 402
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d16cd1ab1bde6c2f0800000000000000
-      internalID: -952812923554773475
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_40
-      rect:
-        serializedVersion: 2
-        x: 19233
-        y: 790
-        width: 1876
-        height: 426
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 78f2de92bb76254d0800000000000000
-      internalID: -3147339136018600057
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_41
-      rect:
-        serializedVersion: 2
-        x: 22327
-        y: 814
-        width: 1815
-        height: 414
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e05c04165bd6815c0800000000000000
-      internalID: -4244522023008549618
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_42
-      rect:
-        serializedVersion: 2
-        x: 23106
-        y: 1207
-        width: 81
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9426c8c7e6f476fc0800000000000000
-      internalID: -3501742849302699447
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_43
-      rect:
-        serializedVersion: 2
-        x: 16038
-        y: 1062
-        width: 63
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bac3942676caa5b70800000000000000
-      internalID: 8888606374599670955
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_44
-      rect:
-        serializedVersion: 2
-        x: 19137
-        y: 1092
-        width: 39
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 12564e36a48291d80800000000000000
-      internalID: -8279542139975342815
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_45
-      rect:
-        serializedVersion: 2
-        x: 16044
-        y: 887
-        width: 57
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5e49c40f82b36c100800000000000000
-      internalID: 127854686442919141
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_46
-      rect:
-        serializedVersion: 2
-        x: 19149
-        y: 923
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 17cab621c6bb296b0800000000000000
-      internalID: -5290960539367003023
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_47
-      rect:
-        serializedVersion: 2
-        x: 1158
-        y: 766
-        width: 105
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 42fccfb8d9d42d880800000000000000
-      internalID: -8587716200388309212
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_48
-      rect:
-        serializedVersion: 2
-        x: 1442
-        y: 766
-        width: 81
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d19105271a206e160800000000000000
-      internalID: 7054328758753302813
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_49
-      rect:
-        serializedVersion: 2
-        x: 1683
-        y: 766
-        width: 82
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ad42bc4713ba7abe0800000000000000
-      internalID: -1466014924784589606
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_50
-      rect:
-        serializedVersion: 2
-        x: 1919
-        y: 766
-        width: 88
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ffa53ba0a0a5429b0800000000000000
-      internalID: -5105857078355600641
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_51
-      rect:
-        serializedVersion: 2
-        x: 2161
-        y: 790
-        width: 93
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c6cf3f290e09e6aa0800000000000000
-      internalID: -6165831545611092884
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_52
-      rect:
-        serializedVersion: 2
-        x: 4100
-        y: 772
-        width: 81
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6254f67b64dc20dc0800000000000000
-      internalID: -3674148642371975898
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_53
-      rect:
-        serializedVersion: 2
-        x: 4390
-        y: 766
-        width: 87
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 65e95ab28c33f7d80800000000000000
-      internalID: -8250819057500709290
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_54
-      rect:
-        serializedVersion: 2
-        x: 5175
-        y: 766
-        width: 82
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 115f857a2c41b2cd0800000000000000
-      internalID: -2581947135103011567
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_55
-      rect:
-        serializedVersion: 2
-        x: 10721
-        y: 772
-        width: 64
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e3f380343c0138330800000000000000
-      internalID: 3711828948712701758
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_56
-      rect:
-        serializedVersion: 2
-        x: 10957
-        y: 772
-        width: 63
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a96442fabd14892a0800000000000000
-      internalID: -6730557231313172838
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_57
-      rect:
-        serializedVersion: 2
-        x: 11186
-        y: 802
-        width: 27
-        height: 27
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2bf1eb2a38ed0ed20800000000000000
-      internalID: 3305886783442395058
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_58
-      rect:
-        serializedVersion: 2
-        x: 13373
-        y: 760
-        width: 112
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dba9375dbaf8ca5e0800000000000000
-      internalID: -1896983374846518595
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_59
-      rect:
-        serializedVersion: 2
-        x: 16376
-        y: 790
-        width: 39
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ae98b33abf83fec10800000000000000
-      internalID: 2084947805922363882
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_60
-      rect:
-        serializedVersion: 2
-        x: 17373
-        y: 802
-        width: 27
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6a506d25c06124760800000000000000
-      internalID: 7440533776554657190
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_61
-      rect:
-        serializedVersion: 2
-        x: 17554
-        y: 790
-        width: 45
-        height: 27
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dcfcc2a9990862290800000000000000
-      internalID: -7915497897852088371
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_62
-      rect:
-        serializedVersion: 2
-        x: 22774
-        y: 784
-        width: 75
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 17ba61e3995867430800000000000000
-      internalID: 3780355830442273649
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_63
-      rect:
-        serializedVersion: 2
-        x: 22991
-        y: 772
-        width: 88
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c7ee398e74044bb70800000000000000
-      internalID: 8913820240061918844
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_64
-      rect:
-        serializedVersion: 2
-        x: 23740
-        y: 790
-        width: 82
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0ace2b13336407510800000000000000
-      internalID: 1544811857879166112
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_65
-      rect:
-        serializedVersion: 2
-        x: 1339
-        y: 784
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4abf6360b86079760800000000000000
-      internalID: 7464442101564373924
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_66
-      rect:
-        serializedVersion: 2
-        x: 4674
-        y: 754
-        width: 81
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 43465e6e52afe4f90800000000000000
-      internalID: -6967356532801051596
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_67
-      rect:
-        serializedVersion: 2
-        x: 4952
-        y: 748
-        width: 51
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ebdc1c3407c1e4040800000000000000
-      internalID: 4633672335109508542
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_68
-      rect:
-        serializedVersion: 2
-        x: 7676
-        y: 736
-        width: 88
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bd42f677811e86300800000000000000
-      internalID: 245693674890929371
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_69
-      rect:
-        serializedVersion: 2
-        x: 11199
-        y: 754
-        width: 69
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3bcd256e375a50b70800000000000000
-      internalID: 8864673358752701619
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_70
-      rect:
-        serializedVersion: 2
-        x: 17161
-        y: 766
-        width: 70
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 49c19f5dfbcd3cf40800000000000000
-      internalID: 5747680265941621908
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_71
-      rect:
-        serializedVersion: 2
-        x: 20025
-        y: 742
-        width: 75
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 16abfb215db69e0c0800000000000000
-      internalID: -4545983785967043999
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_72
-      rect:
-        serializedVersion: 2
-        x: 23239
-        y: 760
-        width: 87
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e2c3157c0a36375f0800000000000000
-      internalID: -760154369905574866
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_73
-      rect:
-        serializedVersion: 2
-        x: 23517
-        y: 766
-        width: 93
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8a84f6a8913b22ed0800000000000000
-      internalID: -2440191125803284312
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_74
-      rect:
-        serializedVersion: 2
-        x: 7966
-        y: 742
-        width: 15
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e4004ebcce06ec520800000000000000
-      internalID: 2724221394754994254
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_75
-      rect:
-        serializedVersion: 2
-        x: 7985
-        y: 736
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 03eeb342a87b6cc00800000000000000
-      internalID: 920624977785122352
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_76
-      rect:
-        serializedVersion: 2
-        x: 10468
-        y: 736
-        width: 75
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c24287b668de6fbb0800000000000000
-      internalID: -4902469982761769940
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_77
-      rect:
-        serializedVersion: 2
-        x: 16732
-        y: 742
-        width: 70
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 52a39bf879ae55c40800000000000000
-      internalID: 5500560456575171109
       vertices: []
       indices: 
       edges: []
@@ -2076,7 +624,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 4a40ca3a2d7f34749ad127542771f55c
     internalID: 0
     vertices: []
     indices: 
@@ -2090,78 +638,12 @@ TextureImporter:
       Devil_Fireball_1: -4872735329228040698
       Devil_Fireball_10: -376240182446724176
       Devil_Fireball_11: 3465186928387987102
-      Devil_Fireball_12: -7120306371515375085
-      Devil_Fireball_13: -6449285280087616525
-      Devil_Fireball_14: -2847693109156902097
-      Devil_Fireball_15: 3753388746192236049
-      Devil_Fireball_16: 732679636873888003
-      Devil_Fireball_17: 6259382184260674291
-      Devil_Fireball_18: -3605953460981365218
-      Devil_Fireball_19: 2270389424403600304
       Devil_Fireball_2: 2216672636490806326
-      Devil_Fireball_20: 4904861352672430353
-      Devil_Fireball_21: -2611982120621672629
-      Devil_Fireball_22: -2630343257011230801
-      Devil_Fireball_23: -574823391700119013
-      Devil_Fireball_24: -2635565248964539906
-      Devil_Fireball_25: -8663786762123149834
-      Devil_Fireball_26: 9160315289973616490
-      Devil_Fireball_27: 2598789917165916435
-      Devil_Fireball_28: 3513161950451803684
-      Devil_Fireball_29: -5372800524594263679
       Devil_Fireball_3: 1938651611527470404
-      Devil_Fireball_30: -8363277235849335548
-      Devil_Fireball_31: 1484754293931508521
-      Devil_Fireball_32: -6122501533369231826
-      Devil_Fireball_33: 4081536654933028379
-      Devil_Fireball_34: 4122572885046748482
-      Devil_Fireball_35: -4083926075756049974
-      Devil_Fireball_36: 4221977486285955432
-      Devil_Fireball_37: 8518542399159071568
-      Devil_Fireball_38: -3313289924579715918
-      Devil_Fireball_39: -952812923554773475
       Devil_Fireball_4: 2954321131344927063
-      Devil_Fireball_40: -3147339136018600057
-      Devil_Fireball_41: -4244522023008549618
-      Devil_Fireball_42: -3501742849302699447
-      Devil_Fireball_43: 8888606374599670955
-      Devil_Fireball_44: -8279542139975342815
-      Devil_Fireball_45: 127854686442919141
-      Devil_Fireball_46: -5290960539367003023
-      Devil_Fireball_47: -8587716200388309212
-      Devil_Fireball_48: 7054328758753302813
-      Devil_Fireball_49: -1466014924784589606
       Devil_Fireball_5: -5546405752699438844
-      Devil_Fireball_50: -5105857078355600641
-      Devil_Fireball_51: -6165831545611092884
-      Devil_Fireball_52: -3674148642371975898
-      Devil_Fireball_53: -8250819057500709290
-      Devil_Fireball_54: -2581947135103011567
-      Devil_Fireball_55: 3711828948712701758
-      Devil_Fireball_56: -6730557231313172838
-      Devil_Fireball_57: 3305886783442395058
-      Devil_Fireball_58: -1896983374846518595
-      Devil_Fireball_59: 2084947805922363882
       Devil_Fireball_6: 3471272875931960041
-      Devil_Fireball_60: 7440533776554657190
-      Devil_Fireball_61: -7915497897852088371
-      Devil_Fireball_62: 3780355830442273649
-      Devil_Fireball_63: 8913820240061918844
-      Devil_Fireball_64: 1544811857879166112
-      Devil_Fireball_65: 7464442101564373924
-      Devil_Fireball_66: -6967356532801051596
-      Devil_Fireball_67: 4633672335109508542
-      Devil_Fireball_68: 245693674890929371
-      Devil_Fireball_69: 8864673358752701619
       Devil_Fireball_7: 5236659826617805372
-      Devil_Fireball_70: 5747680265941621908
-      Devil_Fireball_71: -4545983785967043999
-      Devil_Fireball_72: -760154369905574866
-      Devil_Fireball_73: -2440191125803284312
-      Devil_Fireball_74: 2724221394754994254
-      Devil_Fireball_75: 920624977785122352
-      Devil_Fireball_76: -4902469982761769940
-      Devil_Fireball_77: 5500560456575171109
       Devil_Fireball_8: -1949459034752940979
       Devil_Fireball_9: 2550029163138934088
   mipmapLimitGroupName: 

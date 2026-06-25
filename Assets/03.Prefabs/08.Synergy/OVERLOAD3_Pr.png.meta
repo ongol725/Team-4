@@ -129,7 +129,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -186,19 +186,19 @@ TextureImporter:
       name: OVERLOAD3_Pr_0
       rect:
         serializedVersion: 2
-        x: 196
-        y: 896
-        width: 3329
-        height: 2286
+        x: 0
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ebf49a53015ff9350800000000000000
+      spriteID: 4e6e84d9d63e1634794e44d27ea4d7e9
       internalID: 6025804276413583294
       vertices: []
       indices: 
@@ -208,19 +208,19 @@ TextureImporter:
       name: OVERLOAD3_Pr_1
       rect:
         serializedVersion: 2
-        x: 4808
-        y: 3172
-        width: 10
-        height: 10
+        x: 512
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 49cf5949c53e6f020800000000000000
+      spriteID: e231c59322aee6148a4f57c64c596036
       internalID: 2375335840253869204
       vertices: []
       indices: 
@@ -230,19 +230,19 @@ TextureImporter:
       name: OVERLOAD3_Pr_2
       rect:
         serializedVersion: 2
-        x: 4123
-        y: 988
-        width: 3442
-        height: 2149
+        x: 1024
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1d11852c43c2367b0800000000000000
+      spriteID: 1d88debfa782db544933c96bd1a05045
       internalID: -5232289736963911215
       vertices: []
       indices: 
@@ -252,19 +252,19 @@ TextureImporter:
       name: OVERLOAD3_Pr_3
       rect:
         serializedVersion: 2
-        x: 8019
-        y: 1018
-        width: 3442
-        height: 1852
+        x: 1536
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 52174e8626c932940800000000000000
+      spriteID: df03acac7a74af441a0a5fa983454af8
       internalID: 5270227935434141989
       vertices: []
       indices: 
@@ -274,19 +274,19 @@ TextureImporter:
       name: OVERLOAD3_Pr_4
       rect:
         serializedVersion: 2
-        x: 11999
-        y: 1049
-        width: 3351
-        height: 1905
+        x: 2048
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b120bf12666dc9190800000000000000
+      spriteID: 3e414e7731d56e34d85d69fd188f8232
       internalID: -7954247107698032101
       vertices: []
       indices: 
@@ -296,19 +296,19 @@ TextureImporter:
       name: OVERLOAD3_Pr_5
       rect:
         serializedVersion: 2
-        x: 24303
-        y: 2867
-        width: 18
-        height: 11
+        x: 2560
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 88e1f16526722ce30800000000000000
+      spriteID: adb8e4276e5424a4ea3481a0446175fd
       internalID: 4522220279138557576
       vertices: []
       indices: 
@@ -318,19 +318,19 @@ TextureImporter:
       name: OVERLOAD3_Pr_6
       rect:
         serializedVersion: 2
-        x: 28130
-        y: 2867
-        width: 26
-        height: 11
+        x: 3072
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b97a6491c1c353ac0800000000000000
+      spriteID: e9ceb26c41e9b2a43aa187a209f6e595
       internalID: -3876125812901632101
       vertices: []
       indices: 
@@ -340,284 +340,20 @@ TextureImporter:
       name: OVERLOAD3_Pr_7
       rect:
         serializedVersion: 2
-        x: 15720
-        y: 988
-        width: 3526
-        height: 1753
+        x: 3584
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f1dac73106893a580800000000000000
+      spriteID: fe145f6f42353304785f3104989dadd2
       internalID: -8817036107050078945
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_8
-      rect:
-        serializedVersion: 2
-        x: 16321
-        y: 2327
-        width: 109
-        height: 444
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7d5f536a5edeb7b50800000000000000
-      internalID: 6592124050178700759
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_9
-      rect:
-        serializedVersion: 2
-        x: 19745
-        y: 1125
-        width: 3381
-        height: 1585
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a1f98f46b5d05f400800000000000000
-      internalID: 357206431633022746
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_10
-      rect:
-        serializedVersion: 2
-        x: 23648
-        y: 1110
-        width: 3184
-        height: 1745
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 30a0a72e0a7c9d0c0800000000000000
-      internalID: -4550386454672831997
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_11
-      rect:
-        serializedVersion: 2
-        x: 27560
-        y: 1163
-        width: 3069
-        height: 1692
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9a04d9c290eb9dd00800000000000000
-      internalID: 998037739051761833
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_12
-      rect:
-        serializedVersion: 2
-        x: 23588
-        y: 2167
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0a83db3e2d2923d20800000000000000
-      internalID: 3256826915003906208
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_13
-      rect:
-        serializedVersion: 2
-        x: 11953
-        y: 2114
-        width: 33
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0c0c7f000aa1fe7f0800000000000000
-      internalID: -581216552394178368
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_14
-      rect:
-        serializedVersion: 2
-        x: 3598
-        y: 1939
-        width: 64
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0abe1af830b83e520800000000000000
-      internalID: 2730178646527568800
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_15
-      rect:
-        serializedVersion: 2
-        x: 26981
-        y: 1939
-        width: 57
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d98f90d584a245270800000000000000
-      internalID: 8238256108654426269
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_16
-      rect:
-        serializedVersion: 2
-        x: 3027
-        y: 1832
-        width: 574
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0e5dbc5f657769d90800000000000000
-      internalID: -7091349347873597984
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_17
-      rect:
-        serializedVersion: 2
-        x: 26525
-        y: 1840
-        width: 338
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ca75a8a0bc4c8bcb0800000000000000
-      internalID: -4847908622530095188
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_18
-      rect:
-        serializedVersion: 2
-        x: 20239
-        y: 1110
-        width: 11
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d466cb09f712355a0800000000000000
-      internalID: -6533841802611628467
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD3_Pr_19
-      rect:
-        serializedVersion: 2
-        x: 20262
-        y: 1087
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8b725c8d521900720800000000000000
-      internalID: 2810405759215806392
       vertices: []
       indices: 
       edges: []
@@ -626,7 +362,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 57a5012f27e5d7d46be3f565c298fd63
     internalID: 0
     vertices: []
     indices: 
@@ -638,24 +374,12 @@ TextureImporter:
     nameFileIdTable:
       OVERLOAD3_Pr_0: 6025804276413583294
       OVERLOAD3_Pr_1: 2375335840253869204
-      OVERLOAD3_Pr_10: -4550386454672831997
-      OVERLOAD3_Pr_11: 998037739051761833
-      OVERLOAD3_Pr_12: 3256826915003906208
-      OVERLOAD3_Pr_13: -581216552394178368
-      OVERLOAD3_Pr_14: 2730178646527568800
-      OVERLOAD3_Pr_15: 8238256108654426269
-      OVERLOAD3_Pr_16: -7091349347873597984
-      OVERLOAD3_Pr_17: -4847908622530095188
-      OVERLOAD3_Pr_18: -6533841802611628467
-      OVERLOAD3_Pr_19: 2810405759215806392
       OVERLOAD3_Pr_2: -5232289736963911215
       OVERLOAD3_Pr_3: 5270227935434141989
       OVERLOAD3_Pr_4: -7954247107698032101
       OVERLOAD3_Pr_5: 4522220279138557576
       OVERLOAD3_Pr_6: -3876125812901632101
       OVERLOAD3_Pr_7: -8817036107050078945
-      OVERLOAD3_Pr_8: 6592124050178700759
-      OVERLOAD3_Pr_9: 357206431633022746
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

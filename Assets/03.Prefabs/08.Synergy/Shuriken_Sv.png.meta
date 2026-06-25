@@ -1,4 +1,4 @@
-fileFormatVersion: 2
+﻿fileFormatVersion: 2
 guid: 31d5aacdf365f4348914ac3707498226
 TextureImporter:
   internalIDToNameTable:
@@ -84,7 +84,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 875
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -105,7 +105,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -159,265 +159,177 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_0
+      name: Shuriken_Sv_0
       rect:
         serializedVersion: 2
-        x: 11
-        y: 523
-        width: 234
-        height: 234
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e07987a4528642320800000000000000
-      internalID: 2532263399861557006
+      spriteID: 484d958d84da4424ba55cf20aba5468f
+      internalID: 211630849
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_1
+      name: Shuriken_Sv_1
       rect:
         serializedVersion: 2
-        x: 269
-        y: 525
-        width: 230
-        height: 230
+        x: 2048
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7ea9edbb7e4c3ea90800000000000000
-      internalID: -7285763272586913049
+      spriteID: 965cb535ee12dce4b9cf8564e4c2f60c
+      internalID: 1792015066
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_2
+      name: Shuriken_Sv_2
       rect:
         serializedVersion: 2
-        x: 527
-        y: 527
-        width: 226
-        height: 226
+        x: 4096
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8f5fd6b418ee00a40800000000000000
-      internalID: 5332524197890356728
+      spriteID: b144181c83025be47981bbf599be4dd5
+      internalID: -326488539
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_3
+      name: Shuriken_Sv_3
       rect:
         serializedVersion: 2
-        x: 783
-        y: 527
-        width: 226
-        height: 226
+        x: 6144
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4c9dad444552b63d0800000000000000
-      internalID: -3212432865336043068
+      spriteID: da3ecfd688dbcec4b9cead0f9899abca
+      internalID: -830190249
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_4
+      name: Shuriken_Sv_4
       rect:
         serializedVersion: 2
-        x: 12
-        y: 268
-        width: 232
-        height: 232
+        x: 8192
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d0206521cff434d50800000000000000
-      internalID: 6720303013024891405
+      spriteID: 56ea63d976a5be54d91e980bd3bb5eff
+      internalID: 730615498
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_5
+      name: Shuriken_Sv_5
       rect:
         serializedVersion: 2
-        x: 266
-        y: 266
-        width: 236
-        height: 236
+        x: 10240
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e9643b43c42ccb280800000000000000
-      internalID: -9026125920599849314
+      spriteID: b9338916b7873664bb60926f47d3f0f2
+      internalID: 1504892247
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_6
+      name: Shuriken_Sv_6
       rect:
         serializedVersion: 2
-        x: 521
-        y: 265
-        width: 238
-        height: 238
+        x: 12288
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6b556d2269e63b610800000000000000
-      internalID: 1635772680774243766
+      spriteID: d748940801599264694e98bcc9cae837
+      internalID: -490593829
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shuriken_Sv.prefab_7
+      name: Shuriken_Sv_7
       rect:
         serializedVersion: 2
-        x: 776
-        y: 264
-        width: 240
-        height: 240
+        x: 14336
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0c8601681dbe1c170800000000000000
-      internalID: 8197092081920927936
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shuriken_Sv.prefab_8
-      rect:
-        serializedVersion: 2
-        x: 7
-        y: 7
-        width: 242
-        height: 242
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d267a62ed9cc45a10800000000000000
-      internalID: 1897366321510381101
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shuriken_Sv.prefab_9
-      rect:
-        serializedVersion: 2
-        x: 264
-        y: 8
-        width: 240
-        height: 240
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3a13821c48340aa40800000000000000
-      internalID: 5377372192535753123
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shuriken_Sv.prefab_10
-      rect:
-        serializedVersion: 2
-        x: 520
-        y: 8
-        width: 240
-        height: 240
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a3faaf8347d0125a0800000000000000
-      internalID: -6547937590396670150
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shuriken_Sv.prefab_11
-      rect:
-        serializedVersion: 2
-        x: 777
-        y: 9
-        width: 238
-        height: 238
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c213ffc22db693e40800000000000000
-      internalID: 5636654959073112364
+      spriteID: a696c01467e1a6346bb4fe026ae0ce68
+      internalID: 1620639660
       vertices: []
       indices: 
       edges: []
@@ -426,7 +338,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: ef40ebdde16a7bb4099d09440f0188b3
     internalID: 0
     vertices: []
     indices: 
@@ -436,18 +348,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Shuriken_Sv.prefab_0: 2532263399861557006
-      Shuriken_Sv.prefab_1: -7285763272586913049
-      Shuriken_Sv.prefab_10: -6547937590396670150
-      Shuriken_Sv.prefab_11: 5636654959073112364
-      Shuriken_Sv.prefab_2: 5332524197890356728
-      Shuriken_Sv.prefab_3: -3212432865336043068
-      Shuriken_Sv.prefab_4: 6720303013024891405
-      Shuriken_Sv.prefab_5: -9026125920599849314
-      Shuriken_Sv.prefab_6: 1635772680774243766
-      Shuriken_Sv.prefab_7: 8197092081920927936
-      Shuriken_Sv.prefab_8: 1897366321510381101
-      Shuriken_Sv.prefab_9: 5377372192535753123
+      Shuriken_Sv_0: 211630849
+      Shuriken_Sv_1: 1792015066
+      Shuriken_Sv_2: -326488539
+      Shuriken_Sv_3: -830190249
+      Shuriken_Sv_4: 730615498
+      Shuriken_Sv_5: 1504892247
+      Shuriken_Sv_6: -490593829
+      Shuriken_Sv_7: 1620639660
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

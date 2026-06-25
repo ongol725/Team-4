@@ -123,7 +123,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -180,19 +180,19 @@ TextureImporter:
       name: Devil_Wave_0
       rect:
         serializedVersion: 2
-        x: 1591
-        y: 1923
-        width: 6
-        height: 6
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 501eab741138ac800800000000000000
+      spriteID: a94ac8e436503d84e8ce48f39e7495e6
       internalID: 633462807840088325
       vertices: []
       indices: 
@@ -202,19 +202,19 @@ TextureImporter:
       name: Devil_Wave_1
       rect:
         serializedVersion: 2
-        x: 291
-        y: 155
-        width: 1506
-        height: 1762
+        x: 2048
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1329025572a2fa4f0800000000000000
+      spriteID: b9ce3c86b700584409844b508f033782
       internalID: -815386659110481359
       vertices: []
       indices: 
@@ -224,19 +224,19 @@ TextureImporter:
       name: Devil_Wave_2
       rect:
         serializedVersion: 2
-        x: 1775
-        y: 1427
-        width: 42
-        height: 70
+        x: 4096
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 37b86f4a650b10250800000000000000
+      spriteID: 85d6b0650e0f4984a81d664edab23c8a
       internalID: 5909198072268098419
       vertices: []
       indices: 
@@ -246,19 +246,19 @@ TextureImporter:
       name: Devil_Wave_3
       rect:
         serializedVersion: 2
-        x: 2327
-        y: 143
-        width: 1538
-        height: 1762
+        x: 6144
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 50f49c8b7ce3abd20800000000000000
+      spriteID: 21f3180ebab2377439020098042e7400
       internalID: 3295015104894553861
       vertices: []
       indices: 
@@ -268,19 +268,19 @@ TextureImporter:
       name: Devil_Wave_4
       rect:
         serializedVersion: 2
-        x: 4367
-        y: 143
-        width: 1570
-        height: 1750
+        x: 8192
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b795ae5b82201fef0800000000000000
+      spriteID: b3072b956eb5d144491e2c71a37a5be7
       internalID: -76277344814605957
       vertices: []
       indices: 
@@ -290,19 +290,19 @@ TextureImporter:
       name: Devil_Wave_5
       rect:
         serializedVersion: 2
-        x: 6407
-        y: 163
-        width: 1554
-        height: 1698
+        x: 10240
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ee5a1847392e80170800000000000000
+      spriteID: 114e7e8120fcd9b40ad57ea7590a9597
       internalID: 8145009049042265582
       vertices: []
       indices: 
@@ -312,19 +312,19 @@ TextureImporter:
       name: Devil_Wave_6
       rect:
         serializedVersion: 2
-        x: 8475
-        y: 147
-        width: 1558
-        height: 1734
+        x: 12288
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f79ec616cff6d55a0800000000000000
+      spriteID: 5bc6c126c121e324ab2222f35b749f28
       internalID: -6530940754860381825
       vertices: []
       indices: 
@@ -334,240 +334,20 @@ TextureImporter:
       name: Devil_Wave_7
       rect:
         serializedVersion: 2
-        x: 10519
-        y: 151
-        width: 1518
-        height: 1666
+        x: 14336
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bdf4ba0905155a9a0800000000000000
+      spriteID: 154056ff857d9ab45a0ded9b1d61e6cd
       internalID: -6222477903676092453
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_8
-      rect:
-        serializedVersion: 2
-        x: 12559
-        y: 151
-        width: 1538
-        height: 1746
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0d239fd5515223140800000000000000
-      internalID: 4697858135002002128
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_9
-      rect:
-        serializedVersion: 2
-        x: 14607
-        y: 135
-        width: 1518
-        height: 1782
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 39497460fed723040800000000000000
-      internalID: 4625898232818930835
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_10
-      rect:
-        serializedVersion: 2
-        x: 16047
-        y: 1335
-        width: 98
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 333cf5caa077182f0800000000000000
-      internalID: -972365156809981133
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_11
-      rect:
-        serializedVersion: 2
-        x: 1775
-        y: 1071
-        width: 42
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1923bb6d1273f5c90800000000000000
-      internalID: -7178958662529240431
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_12
-      rect:
-        serializedVersion: 2
-        x: 12055
-        y: 1123
-        width: 18
-        height: 34
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 06f153d84b7d8a670800000000000000
-      internalID: 8550321063026040672
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_13
-      rect:
-        serializedVersion: 2
-        x: 16091
-        y: 1019
-        width: 42
-        height: 78
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8f508f56e3e9377a0800000000000000
-      internalID: -6380582256217946632
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_14
-      rect:
-        serializedVersion: 2
-        x: 8451
-        y: 835
-        width: 46
-        height: 102
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3917fc6bd12187190800000000000000
-      internalID: -7964596022174322285
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_15
-      rect:
-        serializedVersion: 2
-        x: 14095
-        y: 807
-        width: 10
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 31ec5fb57bbd4b490800000000000000
-      internalID: -7731313079719965165
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_16
-      rect:
-        serializedVersion: 2
-        x: 3867
-        y: 711
-        width: 14
-        height: 34
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 919d01a6c9edc9450800000000000000
-      internalID: 6096992758928562457
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Wave_17
-      rect:
-        serializedVersion: 2
-        x: 3863
-        y: 699
-        width: 6
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 87e2493baf95e8c00800000000000000
-      internalID: 904759508437577336
       vertices: []
       indices: 
       edges: []
@@ -576,7 +356,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 51b94bd21bdd80349823cb8c93e8d5f6
     internalID: 0
     vertices: []
     indices: 
@@ -588,22 +368,12 @@ TextureImporter:
     nameFileIdTable:
       Devil_Wave_0: 633462807840088325
       Devil_Wave_1: -815386659110481359
-      Devil_Wave_10: -972365156809981133
-      Devil_Wave_11: -7178958662529240431
-      Devil_Wave_12: 8550321063026040672
-      Devil_Wave_13: -6380582256217946632
-      Devil_Wave_14: -7964596022174322285
-      Devil_Wave_15: -7731313079719965165
-      Devil_Wave_16: 6096992758928562457
-      Devil_Wave_17: 904759508437577336
       Devil_Wave_2: 5909198072268098419
       Devil_Wave_3: 3295015104894553861
       Devil_Wave_4: -76277344814605957
       Devil_Wave_5: 8145009049042265582
       Devil_Wave_6: -6530940754860381825
       Devil_Wave_7: -6222477903676092453
-      Devil_Wave_8: 4697858135002002128
-      Devil_Wave_9: 4625898232818930835
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

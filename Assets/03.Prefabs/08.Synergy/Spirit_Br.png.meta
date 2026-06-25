@@ -1,4 +1,4 @@
-fileFormatVersion: 2
+﻿fileFormatVersion: 2
 guid: cdd9a8dd462251740a81e730038ac3d0
 TextureImporter:
   internalIDToNameTable:
@@ -72,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1089
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -93,7 +93,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -147,177 +147,177 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Spirit_Br.prefab_0
+      name: Spirit_Br_0
       rect:
         serializedVersion: 2
-        x: 41
-        y: 281
-        width: 158
-        height: 188
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a41b3a96ce0dff4e0800000000000000
-      internalID: -1945606800197570230
+      spriteID: 8dcb3ec20c36cc2458707ee9038d719b
+      internalID: -1067367415
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spirit_Br.prefab_1
+      name: Spirit_Br_1
       rect:
         serializedVersion: 2
-        x: 287
-        y: 281
-        width: 164
-        height: 188
+        x: 2048
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0f6065d6ac87ff460800000000000000
-      internalID: 7277668333667092208
+      spriteID: 0f435fe903984454a9fb1aa970fd720b
+      internalID: -2066925611
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spirit_Br.prefab_2
+      name: Spirit_Br_2
       rect:
         serializedVersion: 2
-        x: 533
-        y: 281
-        width: 158
-        height: 182
+        x: 4096
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f5ccdec71e943bbb0800000000000000
-      internalID: -4921508734973391777
+      spriteID: 2621d70b092f63442bee87eace622279
+      internalID: 1538061692
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spirit_Br.prefab_3
+      name: Spirit_Br_3
       rect:
         serializedVersion: 2
-        x: 767
-        y: 281
-        width: 164
-        height: 188
+        x: 6144
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3fed0d742ccf5f470800000000000000
-      internalID: 8427920189052477171
+      spriteID: 87433859581a1e1418d4c092db40ae9f
+      internalID: -1256772827
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spirit_Br.prefab_4
+      name: Spirit_Br_4
       rect:
         serializedVersion: 2
-        x: 41
-        y: 41
-        width: 158
-        height: 188
+        x: 8192
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 364eab6e620605640800000000000000
-      internalID: 5066655300987839587
+      spriteID: 260d204d2e8033143ba9088a60321233
+      internalID: 1813471881
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spirit_Br.prefab_5
+      name: Spirit_Br_5
       rect:
         serializedVersion: 2
-        x: 269
-        y: 41
-        width: 164
-        height: 188
+        x: 10240
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 59bbf9dc122717f10800000000000000
-      internalID: 2265717577053354901
+      spriteID: ed3382d30bf1b964e999ae524de5d1da
+      internalID: -1309072972
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spirit_Br.prefab_6
+      name: Spirit_Br_6
       rect:
         serializedVersion: 2
-        x: 509
-        y: 41
-        width: 158
-        height: 182
+        x: 12288
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ae2f23406bdcae6a0800000000000000
-      internalID: -6419092137225030934
+      spriteID: 7b7656f215f03d140a85af67665eb04f
+      internalID: 119257772
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spirit_Br.prefab_7
+      name: Spirit_Br_7
       rect:
         serializedVersion: 2
-        x: 749
-        y: 41
-        width: 164
-        height: 188
+        x: 14336
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0e8b299a035be7f70800000000000000
-      internalID: 9186979510490413280
+      spriteID: 57725d8cbb2dd7945b044aabfc37b831
+      internalID: -647027260
       vertices: []
       indices: 
       edges: []
@@ -326,7 +326,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 04a22b37a85fa6f4eb31d96eefa6e977
     internalID: 0
     vertices: []
     indices: 
@@ -336,14 +336,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Spirit_Br.prefab_0: -1945606800197570230
-      Spirit_Br.prefab_1: 7277668333667092208
-      Spirit_Br.prefab_2: -4921508734973391777
-      Spirit_Br.prefab_3: 8427920189052477171
-      Spirit_Br.prefab_4: 5066655300987839587
-      Spirit_Br.prefab_5: 2265717577053354901
-      Spirit_Br.prefab_6: -6419092137225030934
-      Spirit_Br.prefab_7: 9186979510490413280
+      Spirit_Br_0: -1067367415
+      Spirit_Br_1: -2066925611
+      Spirit_Br_2: 1538061692
+      Spirit_Br_3: -1256772827
+      Spirit_Br_4: 1813471881
+      Spirit_Br_5: -1309072972
+      Spirit_Br_6: 119257772
+      Spirit_Br_7: -647027260
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
