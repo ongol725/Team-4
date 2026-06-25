@@ -202,8 +202,8 @@ public class SynergyManager : MonoBehaviour
             }
 
             // ── 소환형 ─────────────────────────────────────────
-            var summonBinding = FindSummonBinding(entry.type, entry.grade);
-            if (summonBinding?.summon != null)
+            // 같은 (시너지·등급)에 여러 소환수를 바인딩할 수 있다(정령술사 원소별 누적 소환 등).
+            foreach (var summonBinding in FindSummonBindings(entry.type, entry.grade))
             {
                 var summon    = summonBinding.summon;
                 int summonAtk = Mathf.RoundToInt(_loadout.GetScaledBase(summon.scalingStat) * summon.atkMultiplier);
@@ -698,6 +698,14 @@ public class SynergyManager : MonoBehaviour
         foreach (var b in _summonBindings)
             if (b.synergyType == type && b.grade == grade && b.summon != null) return b;
         return null;
+    }
+
+    /// <summary>같은 (시너지·등급)에 바인딩된 모든 소환수 항목을 반환(원소별 누적 소환 지원).</summary>
+    private IEnumerable<SynergySummonBinding> FindSummonBindings(SynergyType type, SynergyGrade grade)
+    {
+        if (_summonBindings == null) yield break;
+        foreach (var b in _summonBindings)
+            if (b.synergyType == type && b.grade == grade && b.summon != null) yield return b;
     }
 
     private List<MonsterController> GetEnemiesInRange(Vector3 center, float range)

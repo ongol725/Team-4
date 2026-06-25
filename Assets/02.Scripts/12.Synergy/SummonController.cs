@@ -392,6 +392,23 @@ public class SummonController : MonoBehaviour
             var vfx = Instantiate(skill.vfxPrefab, transform.position, Quaternion.identity);
             Destroy(vfx, skill.duration > 0f ? skill.duration : 2f);
         }
+        else if (skill.animFrames != null && skill.animFrames.Length > 0)
+        {
+            // 대정령 광역 공격 등: 전용 프리팹이 없으면 스프라이트 시트로 영역 이펙트 재생
+            var go = new GameObject("SummonNovaFx");
+            go.transform.position = transform.position;
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sortingOrder = 6;
+            sr.sprite = skill.animFrames[0];
+
+            float size      = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 2f);
+            float maxExtent = sr.sprite != null ? Mathf.Max(sr.sprite.bounds.extents.x, sr.sprite.bounds.extents.y) : 0f;
+            go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (size * 0.5f / maxExtent) : Vector3.one * size;
+
+            go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
+            float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
+            Destroy(go, life);
+        }
 
         yield return null;
     }

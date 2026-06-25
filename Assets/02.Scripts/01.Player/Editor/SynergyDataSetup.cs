@@ -32,6 +32,15 @@ namespace BagSurvivor.SynergyEditor
 
             var skills  = BuildAllSkills();
             var summons = BuildAllSummons();
+
+            // 대정령 프리즘: 주기적 광역 공격 스킬을 uniqueSkill 로 연결
+            if (summons.TryGetValue("SUM_GIANT_GOLEM", out var giant) &&
+                skills.TryGetValue("SK_SPIRIT_NOVA", out var nova))
+            {
+                giant.uniqueSkill = nova;
+                EditorUtility.SetDirty(giant);
+            }
+
             BuildSynergyConfig(skills, summons);
 
             AssetDatabase.SaveAssets();
@@ -182,6 +191,12 @@ namespace BagSurvivor.SynergyEditor
             d["SK_OVERLOAD_PRISM"] = Sk("SK_OVERLOAD_PRISM", "초강력 난사 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.RandomEnemy,
                 ScalingStatType.WPN_ATK_AVG, dmg:10.0f, cd:0.33f, range:50f, extra:3);
+
+            // ── 대정령 광역(프리즘) — SUM_GIANT_GOLEM.uniqueSkill 로 연결 ──
+            // 콘셉트 슬라이드 18: 대정령이 주변 빨간 영역을 주기적으로 강타.
+            d["SK_SPIRIT_NOVA"] = Sk("SK_SPIRIT_NOVA", "대정령 광역 강타",
+                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.AreaCenter,
+                ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0f, range:5f);
 
             return d;
         }
@@ -334,10 +349,10 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 정령술사 ────────────────────────────────────────
                 Th(SynergyType.SpiritMage, "정령술사", 3, 5, 7, 9,
-                    "전투에 함께하는 정령 골렘을 소환합니다.",
-                    "정령 골렘 1기.  대미지 100%",
-                    "정령 골렘 2기.  이동속도 30% 증가.",
-                    "정령 골렘 4기.  대미지 200%",
+                    "전투에 함께하는 원소 정령을 소환합니다. 등급이 오를수록 정령이 추가됩니다.",
+                    "물 정령 1기.  대미지 100%",
+                    "물·불 정령 2기.",
+                    "물·불·바람 정령 3기.",
                     "고대 정령 1기.  대미지 450%.  8초마다 광역 공격"),
 
                 // ── 마왕 ────────────────────────────────────────────
@@ -446,9 +461,15 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.HolyKnight, SynergyGrade.Bronze, "SUM_SANCTUARY_1", 1),
                 (SynergyType.HolyKnight, SynergyGrade.Silver, "SUM_SANCTUARY_2", 1),
                 (SynergyType.HolyKnight, SynergyGrade.Gold,   "SUM_SANCTUARY_3", 1),
+                // 정령술사: 콘셉트(슬라이드 15~17)대로 등급이 오를수록 원소 정령이 누적된다.
+                //   브론즈 = 물(GOLEM_1) / 실버 = 물+불(GOLEM_1·2) / 골드 = 물+불+바람(GOLEM_1·2·3)
+                //   같은 (시너지·등급)에 여러 줄을 두면 SynergyManager가 모두 소환한다.
                 (SynergyType.SpiritMage, SynergyGrade.Bronze, "SUM_GOLEM_1",    1),
-                (SynergyType.SpiritMage, SynergyGrade.Silver, "SUM_GOLEM_2",    2),
-                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_3",    4),
+                (SynergyType.SpiritMage, SynergyGrade.Silver, "SUM_GOLEM_1",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Silver, "SUM_GOLEM_2",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_1",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_2",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_3",    1),
                 (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GIANT_GOLEM",1),
             };
 
@@ -656,6 +677,8 @@ namespace BagSurvivor.SynergyEditor
                 { "SK_OVERLOAD_PRISM", "OVERLOAD1_Pr" },
                 { "SK_GOLD_BOMB_1", "RichCoin_BOMB1" }, { "SK_GOLD_BOMB_2", "RichCoin_BOMB2" },
                 { "SK_GOLD_BOMB_3", "RichCoin_BOMB3" }, { "SK_GOLD_FAST", "RichCoin_BOMB4" },
+                // 대정령 광역 강타(프리즘) → 정령 공격 이펙트 시트 재사용
+                { "SK_SPIRIT_NOVA", "spirit_attack" },
             };
 
             var framesCache = new Dictionary<string, Sprite[]>();
