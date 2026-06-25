@@ -634,17 +634,21 @@ namespace BagSurvivor.SynergyEditor
         // ─────────────────────────────────────────────────────────────
         static void FillSkillAnimFrames(string sheetDir)
         {
-            // 스킬 ID → 스프라이트 시트 파일명 (Electro·Overload는 전용 시트 없음 → 노란 원 fallback)
+            // 스킬 ID → 스프라이트 시트 파일명 (Electro는 전용 시트 없음 → 노란 원 fallback)
             var skillSheetMap = new Dictionary<string, string>
             {
                 { "SK_ASS_1", "Shuriken_Sv" }, { "SK_ASS_2", "Shuriken_Sv" }, { "SK_ASS_3", "Shuriken_Sv" },
                 { "SK_SWORD_1", "SwordWave" }, { "SK_SWORD_2", "SwordWave" }, { "SK_SWORD_3", "SwordWave" },
                 { "SK_SCYTHE_1", "Scythe_Black" }, { "SK_SCYTHE_2", "Scythe_BlackRed" }, { "SK_SCYTHE_3", "Scythe_DarkRed" },
-                { "SK_METEOR_1", "Shockwave_RED" }, { "SK_METEOR_2", "Shockwave_RED" }, { "SK_METEOR_3", "Shockwave_RED" },
+                // 티탄 돌 떨구기 → 전용 StoneDrop_Common (신규)
+                { "SK_METEOR_1", "StoneDrop_Common" }, { "SK_METEOR_2", "StoneDrop_Common" }, { "SK_METEOR_3", "StoneDrop_Common" },
                 { "SK_FORTRESS_1", "Shockwave_Common" }, { "SK_FORTRESS_2", "Shockwave_Common" },
                 { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_Common" },
-                { "SK_DEMON_1", "Scythe_BlackRed" }, { "SK_DEMON_2", "Scythe_BlackRed" },
-                { "SK_DEMON_3", "Scythe_BlackRed" }, { "SK_DEMON_4", "Scythe_BlackRed" },
+                // 마왕(DemonLord) → 전용 Devil_* 시트 (신규). DEMON_4(프리즘)는 추천 기본값 Devil_Fireball — 기획 확인 후 조정.
+                { "SK_DEMON_1", "Devil_Fireball" }, { "SK_DEMON_2", "Devil_Wave" },
+                { "SK_DEMON_3", "Devil_Slash" },    { "SK_DEMON_4", "Devil_Fireball" },
+                // 과부화 프리즘 → 추천 기본값 OVERLOAD1_Pr — 기획 확인 후 조정.
+                { "SK_OVERLOAD_PRISM", "OVERLOAD1_Pr" },
                 { "SK_GOLD_BOMB_1", "RichCoin_BOMB1" }, { "SK_GOLD_BOMB_2", "RichCoin_BOMB2" },
                 { "SK_GOLD_BOMB_3", "RichCoin_BOMB3" }, { "SK_GOLD_FAST", "RichCoin_BOMB4" },
             };
@@ -731,7 +735,7 @@ namespace BagSurvivor.SynergyEditor
                 { "SUM_GOLEM_1",      $"{sheetDir}/Spirit_Br.png"    },
                 { "SUM_GOLEM_2",      $"{sheetDir}/Spirit_Sv.png"    },
                 { "SUM_GOLEM_3",      $"{sheetDir}/Spirit_Gd.png"    },
-                { "SUM_GIANT_GOLEM",  $"{sheetDir}/Spirit_Gd.png"    },
+                { "SUM_GIANT_GOLEM",  $"{sheetDir}/GiantGolem.png"   },
                 { "SUM_SANCTUARY_1",  $"{sheetDir}/Sanctuary_Br.png" },
                 { "SUM_SANCTUARY_2",  $"{sheetDir}/Sanctuary_Sv.png" },
                 { "SUM_SANCTUARY_3",  $"{sheetDir}/Sanctuary_Gd.png" },
