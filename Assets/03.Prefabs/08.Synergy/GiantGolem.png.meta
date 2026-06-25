@@ -1,0 +1,637 @@
+fileFormatVersion: 2
+guid: 7fae31259d5dda748b256e2d47e878d1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 777626916781001291
+    second: GiantGolem_0
+  - first:
+      213: 317282527511180478
+    second: GiantGolem_1
+  - first:
+      213: -2488149590371059966
+    second: GiantGolem_2
+  - first:
+      213: -8816856637925587110
+    second: GiantGolem_3
+  - first:
+      213: -3551725715108243773
+    second: GiantGolem_4
+  - first:
+      213: -1469208271595097488
+    second: GiantGolem_5
+  - first:
+      213: -1174986234766995750
+    second: GiantGolem_6
+  - first:
+      213: 3976079370377909804
+    second: GiantGolem_7
+  - first:
+      213: -1362926330403986608
+    second: GiantGolem_8
+  - first:
+      213: -6143252410015084115
+    second: GiantGolem_9
+  - first:
+      213: -3089435952628074490
+    second: GiantGolem_10
+  - first:
+      213: 6722216780600073671
+    second: GiantGolem_11
+  - first:
+      213: -6343338682915015375
+    second: GiantGolem_12
+  - first:
+      213: 7272407635511150971
+    second: GiantGolem_13
+  - first:
+      213: 8368075275777340079
+    second: GiantGolem_14
+  - first:
+      213: 3716192163457730468
+    second: GiantGolem_15
+  - first:
+      213: -1399458655533732796
+    second: GiantGolem_16
+  - first:
+      213: -6488004743841648706
+    second: GiantGolem_17
+  - first:
+      213: -5653978230183329491
+    second: GiantGolem_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GiantGolem_0
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 199
+        width: 1570
+        height: 1762
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4a838e8f8faaca00800000000000000
+      internalID: 777626916781001291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_1
+      rect:
+        serializedVersion: 2
+        x: 2299
+        y: 175
+        width: 1590
+        height: 1770
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb4fdb917c6376400800000000000000
+      internalID: 317282527511180478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_2
+      rect:
+        serializedVersion: 2
+        x: 9215
+        y: 1875
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20736ed5121587dd0800000000000000
+      internalID: -2488149590371059966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_3
+      rect:
+        serializedVersion: 2
+        x: 9239
+        y: 1871
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5786ecf99b34a580800000000000000
+      internalID: -8816856637925587110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_4
+      rect:
+        serializedVersion: 2
+        x: 10407
+        y: 155
+        width: 1730
+        height: 1774
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c65a5ba74cb5bec0800000000000000
+      internalID: -3551725715108243773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_5
+      rect:
+        serializedVersion: 2
+        x: 12487
+        y: 179
+        width: 1698
+        height: 1706
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07232867cd25c9be0800000000000000
+      internalID: -1469208271595097488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_6
+      rect:
+        serializedVersion: 2
+        x: 14595
+        y: 195
+        width: 1558
+        height: 1734
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ade4dbcae3c91bfe0800000000000000
+      internalID: -1174986234766995750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_7
+      rect:
+        serializedVersion: 2
+        x: 1679
+        y: 1251
+        width: 170
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2652260f1fdd2730800000000000000
+      internalID: 3976079370377909804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_8
+      rect:
+        serializedVersion: 2
+        x: 4343
+        y: 151
+        width: 1618
+        height: 1714
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0536e3d39b9e51de0800000000000000
+      internalID: -1362926330403986608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_9
+      rect:
+        serializedVersion: 2
+        x: 6327
+        y: 123
+        width: 1714
+        height: 1730
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da11d7f3b78cebaa0800000000000000
+      internalID: -6143252410015084115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_10
+      rect:
+        serializedVersion: 2
+        x: 8343
+        y: 123
+        width: 1730
+        height: 1750
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 608784f9e5e1025d0800000000000000
+      internalID: -3089435952628074490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_11
+      rect:
+        serializedVersion: 2
+        x: 16047
+        y: 1147
+        width: 162
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cd56decb8c1a4d50800000000000000
+      internalID: 6722216780600073671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_12
+      rect:
+        serializedVersion: 2
+        x: 14543
+        y: 1091
+        width: 138
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1353bda831fe7f7a0800000000000000
+      internalID: -6343338682915015375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_13
+      rect:
+        serializedVersion: 2
+        x: 4271
+        y: 855
+        width: 78
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b790b70b638cce460800000000000000
+      internalID: 7272407635511150971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_14
+      rect:
+        serializedVersion: 2
+        x: 14551
+        y: 919
+        width: 14
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa2ff6a9020612470800000000000000
+      internalID: 8368075275777340079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_15
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 739
+        width: 86
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a70dfb5511929330800000000000000
+      internalID: 3716192163457730468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_16
+      rect:
+        serializedVersion: 2
+        x: 2235
+        y: 795
+        width: 86
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44ce01774cf149ce0800000000000000
+      internalID: -1399458655533732796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_17
+      rect:
+        serializedVersion: 2
+        x: 4327
+        y: 615
+        width: 138
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebfe4467f0af5f5a0800000000000000
+      internalID: -6488004743841648706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GiantGolem_18
+      rect:
+        serializedVersion: 2
+        x: 14587
+        y: 679
+        width: 78
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d21812671c80981b0800000000000000
+      internalID: -5653978230183329491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GiantGolem_0: 777626916781001291
+      GiantGolem_1: 317282527511180478
+      GiantGolem_10: -3089435952628074490
+      GiantGolem_11: 6722216780600073671
+      GiantGolem_12: -6343338682915015375
+      GiantGolem_13: 7272407635511150971
+      GiantGolem_14: 8368075275777340079
+      GiantGolem_15: 3716192163457730468
+      GiantGolem_16: -1399458655533732796
+      GiantGolem_17: -6488004743841648706
+      GiantGolem_18: -5653978230183329491
+      GiantGolem_2: -2488149590371059966
+      GiantGolem_3: -8816856637925587110
+      GiantGolem_4: -3551725715108243773
+      GiantGolem_5: -1469208271595097488
+      GiantGolem_6: -1174986234766995750
+      GiantGolem_7: 3976079370377909804
+      GiantGolem_8: -1362926330403986608
+      GiantGolem_9: -6143252410015084115
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

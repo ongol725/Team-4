@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: 29c432feee8f59c488495101c30d86eb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -243174511328324721
+    second: OVERLOAD2.1_Pr_0
+  - first:
+      213: 5852631033080203020
+    second: OVERLOAD2.1_Pr_1
+  - first:
+      213: 4641146685836856505
+    second: OVERLOAD2.1_Pr_2
+  - first:
+      213: 7145088013402120013
+    second: OVERLOAD2.1_Pr_3
+  - first:
+      213: -1737474834988480667
+    second: OVERLOAD2.1_Pr_4
+  - first:
+      213: 5488495693519547433
+    second: OVERLOAD2.1_Pr_5
+  - first:
+      213: -6176684549568707801
+    second: OVERLOAD2.1_Pr_6
+  - first:
+      213: -1841895564931196476
+    second: OVERLOAD2.1_Pr_7
+  - first:
+      213: -541220461747379074
+    second: OVERLOAD2.1_Pr_8
+  - first:
+      213: 3191704914175540138
+    second: OVERLOAD2.1_Pr_9
+  - first:
+      213: -8776954459217405931
+    second: OVERLOAD2.1_Pr_10
+  - first:
+      213: -2314625802880427091
+    second: OVERLOAD2.1_Pr_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_0
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 144
+        width: 2698
+        height: 1785
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8398d1021210acf0800000000000000
+      internalID: -243174511328324721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_1
+      rect:
+        serializedVersion: 2
+        x: 3248
+        y: 186
+        width: 2740
+        height: 1755
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c074c208ae8b83150800000000000000
+      internalID: 5852631033080203020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_2
+      rect:
+        serializedVersion: 2
+        x: 6396
+        y: 186
+        width: 2673
+        height: 1688
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bc89c7225aa86040800000000000000
+      internalID: 4641146685836856505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_3
+      rect:
+        serializedVersion: 2
+        x: 9501
+        y: 156
+        width: 2625
+        height: 1525
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4f1cbf11b3782360800000000000000
+      internalID: 7145088013402120013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_4
+      rect:
+        serializedVersion: 2
+        x: 12715
+        y: 180
+        width: 2480
+        height: 1737
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 567c456d7df33e7e0800000000000000
+      internalID: -1737474834988480667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_5
+      rect:
+        serializedVersion: 2
+        x: 15826
+        y: 180
+        width: 2450
+        height: 1616
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92c6e7301cd0b2c40800000000000000
+      internalID: 5488495693519547433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_6
+      rect:
+        serializedVersion: 2
+        x: 18817
+        y: 210
+        width: 2534
+        height: 1640
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 723405da022084aa0800000000000000
+      internalID: -6176684549568707801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_7
+      rect:
+        serializedVersion: 2
+        x: 21922
+        y: 198
+        width: 2552
+        height: 1688
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c998e21eb54076e0800000000000000
+      internalID: -1841895564931196476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_8
+      rect:
+        serializedVersion: 2
+        x: 4994
+        y: 174
+        width: 9
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e74ef588bd23d78f0800000000000000
+      internalID: -541220461747379074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_9
+      rect:
+        serializedVersion: 2
+        x: 20919
+        y: 198
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aab3d4585b63b4c20800000000000000
+      internalID: 3191704914175540138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_10
+      rect:
+        serializedVersion: 2
+        x: 24048
+        y: 186
+        width: 21
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 518d090fb6ef13680800000000000000
+      internalID: -8776954459217405931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2.1_Pr_11
+      rect:
+        serializedVersion: 2
+        x: 22484
+        y: 162
+        width: 9
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dabdb5f781cc0efd0800000000000000
+      internalID: -2314625802880427091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      OVERLOAD2.1_Pr_0: -243174511328324721
+      OVERLOAD2.1_Pr_1: 5852631033080203020
+      OVERLOAD2.1_Pr_10: -8776954459217405931
+      OVERLOAD2.1_Pr_11: -2314625802880427091
+      OVERLOAD2.1_Pr_2: 4641146685836856505
+      OVERLOAD2.1_Pr_3: 7145088013402120013
+      OVERLOAD2.1_Pr_4: -1737474834988480667
+      OVERLOAD2.1_Pr_5: 5488495693519547433
+      OVERLOAD2.1_Pr_6: -6176684549568707801
+      OVERLOAD2.1_Pr_7: -1841895564931196476
+      OVERLOAD2.1_Pr_8: -541220461747379074
+      OVERLOAD2.1_Pr_9: 3191704914175540138
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
