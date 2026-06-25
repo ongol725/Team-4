@@ -50,4 +50,10 @@ public class SO_SummonData : ScriptableObject
     public float animFps = 10f;
     [Tooltip("소환수 체력 (0이면 무적)")]
     public int hp = 0;
+
+    [Header("공격 이펙트")]
+    [Tooltip("공격 명중 시 타겟 위치에 재생할 이펙트 프레임(정령 골렘 spirit_attack 등). ③ 메뉴로 자동 채움. 비우면 이펙트 없음")]
+    public Sprite[] attackEffectFrames;
+    [Tooltip("공격 이펙트 재생 속도(FPS)")]
+    public float attackEffectFps = 12f;
 }

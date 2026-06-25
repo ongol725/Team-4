@@ -213,7 +213,31 @@ public class SummonController : MonoBehaviour
             _atkTimer = 0f;
             Vector2 kb = ((Vector2)_chaseTarget.transform.position - (Vector2)transform.position).normalized;
             _chaseTarget.TakeDamage(_attackPower, 1f, kb);
+            SpawnAttackEffect(_chaseTarget.transform.position);
         }
+    }
+
+    /// <summary>공격 명중 위치에 공격 이펙트(정령 골렘 spirit_attack 등)를 재생한다.</summary>
+    private void SpawnAttackEffect(Vector3 pos)
+    {
+        var frames = _data.attackEffectFrames;
+        if (frames == null || frames.Length == 0) return;
+
+        var go = new GameObject("SummonAtkFx");
+        go.transform.position = pos;
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = 6;
+        sr.sprite = frames[0];
+        if (frames[0] != null)
+        {
+            float maxExtent = Mathf.Max(frames[0].bounds.extents.x, frames[0].bounds.extents.y);
+            go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (0.5f / maxExtent) : Vector3.one;
+        }
+
+        go.AddComponent<SpriteSheetAnimator>().Play(frames, _data.attackEffectFps, loop: false);
+        float life = frames.Length / Mathf.Max(1f, _data.attackEffectFps) + 0.1f;
+        Destroy(go, life);
     }
 
     private void PickNewWanderDest()
