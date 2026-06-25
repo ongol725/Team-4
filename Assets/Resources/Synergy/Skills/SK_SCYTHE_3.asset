@@ -32,23 +32,24 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
+  pierceCount: 999
   animFrames:
-  - {fileID: 4743280954965882372, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: 8209770601533402930, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: 3494057364084134896, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: 5805615973297511212, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: 1283332976936967601, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -5389337956894722059, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -3914816068076033661, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: 1025075011725996060, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: 1345891573472533464, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -9161502085843853626, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -641751990298922833, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -2354849781675960251, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -3887570755549538259, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -8840512706636815306, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: 8648124436010180472, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
-  - {fileID: -1877095274221625738, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -845927118, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1296038001, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1394116764, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1749412939, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 54109799, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -2031011343, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1595126147, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -426307947, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -931127365, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 547701861, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -1306626856, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -1432828949, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1443416000, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: -368050756, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 631913039, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
+  - {fileID: 1141593624, guid: 68582e5dc49998d48a7ee9b224a4826d, type: 3}
   animFps: 12
   visualSize: 0.8
   dropFrames: []

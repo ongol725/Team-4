@@ -32,19 +32,16 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
+  pierceCount: 999
   animFrames:
-  - {fileID: 2532263399861557006, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: -7285763272586913049, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: 5332524197890356728, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: -3212432865336043068, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: 6720303013024891405, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: -9026125920599849314, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: 1635772680774243766, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: 8197092081920927936, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: 1897366321510381101, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: 5377372192535753123, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: -6547937590396670150, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
-  - {fileID: 5636654959073112364, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: 211630849, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: 1792015066, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: -326488539, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: -830190249, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: 730615498, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: 1504892247, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: -490593829, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
+  - {fileID: 1620639660, guid: 31d5aacdf365f4348914ac3707498226, type: 3}
   animFps: 12
   visualSize: 0.8
   dropFrames: []

@@ -308,7 +308,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -318,7 +318,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1491221755335a94180214d7329a7ddc
+      spriteID: 50586753780419a459c0cc2f7d6b2ef9
       internalID: 6328194883572112539
       vertices: []
       indices: 
@@ -328,9 +328,9 @@ TextureImporter:
       name: StoneDrop_Common_1
       rect:
         serializedVersion: 2
-        x: 1536
+        x: 1024
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -340,7 +340,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8019fc96b5783f1488aaeed9ebc49eb1
+      spriteID: 740369f2889a7e546b3dc1ed82e934a5
       internalID: -420140681440451011
       vertices: []
       indices: 
@@ -350,9 +350,9 @@ TextureImporter:
       name: StoneDrop_Common_2
       rect:
         serializedVersion: 2
-        x: 3072
+        x: 2048
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -362,7 +362,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3ec5a00b8e240044fa6762817a4c3a4f
+      spriteID: 132e13df5c32e6d4c910f8aead94f45b
       internalID: 6619080777380302566
       vertices: []
       indices: 
@@ -372,9 +372,9 @@ TextureImporter:
       name: StoneDrop_Common_3
       rect:
         serializedVersion: 2
-        x: 4608
+        x: 3072
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -384,7 +384,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5eec00bece23934fa36b7cddf63ab28
+      spriteID: 757be7dd39ab9e64b903aec3a1bf7b26
       internalID: -4983699484336963425
       vertices: []
       indices: 
@@ -394,9 +394,9 @@ TextureImporter:
       name: StoneDrop_Common_4
       rect:
         serializedVersion: 2
-        x: 6144
+        x: 4096
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -406,7 +406,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 923f9aa34b9941d4aa3ccd4add654cf1
+      spriteID: 6b5ef125cb5d37b46af8326b8f28690b
       internalID: -2558981407151301406
       vertices: []
       indices: 
@@ -416,9 +416,9 @@ TextureImporter:
       name: StoneDrop_Common_5
       rect:
         serializedVersion: 2
-        x: 7680
+        x: 5120
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -428,7 +428,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5beea76257ad5447ae641ede14c0557
+      spriteID: 09ccc620463e98e48b7d27ae460811e8
       internalID: -1830283540205227025
       vertices: []
       indices: 
@@ -438,9 +438,9 @@ TextureImporter:
       name: StoneDrop_Common_6
       rect:
         serializedVersion: 2
-        x: 9216
+        x: 6144
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -450,7 +450,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2dcb395597e95394eb1a06d62e7a0f1f
+      spriteID: 211df83a2c83bb74fa36ac1029fcee09
       internalID: 6403728944770616144
       vertices: []
       indices: 
@@ -460,9 +460,9 @@ TextureImporter:
       name: StoneDrop_Common_7
       rect:
         serializedVersion: 2
-        x: 10752
+        x: 7168
         y: 0
-        width: 1536
+        width: 1024
         height: 1536
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -472,8 +472,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07268c4ba2c111540bf0bdd73b9b0a37
+      spriteID: 58efc0e8b3f710d47ae7b047eb52110e
       internalID: -872484670356183940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_8
+      rect:
+        serializedVersion: 2
+        x: 8192
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0385101912b1cca4392812c5ebc6052e
+      internalID: 870755703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_9
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 999989e58b0ffc1468cd885f8dca3aa0
+      internalID: -1265806832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_10
+      rect:
+        serializedVersion: 2
+        x: 10240
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 383795ecc8b065b45b8ace1c0cf2fb3c
+      internalID: -2026981445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_11
+      rect:
+        serializedVersion: 2
+        x: 11264
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a661eace635f624e9a3c0028451c4cf
+      internalID: 579267106
       vertices: []
       indices: 
       edges: []
@@ -494,12 +582,16 @@ TextureImporter:
     nameFileIdTable:
       StoneDrop_Common_0: 6328194883572112539
       StoneDrop_Common_1: -420140681440451011
+      StoneDrop_Common_10: -2026981445
+      StoneDrop_Common_11: 579267106
       StoneDrop_Common_2: 6619080777380302566
       StoneDrop_Common_3: -4983699484336963425
       StoneDrop_Common_4: -2558981407151301406
       StoneDrop_Common_5: -1830283540205227025
       StoneDrop_Common_6: 6403728944770616144
       StoneDrop_Common_7: -872484670356183940
+      StoneDrop_Common_8: 870755703
+      StoneDrop_Common_9: -1265806832
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

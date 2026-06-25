@@ -362,7 +362,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -372,7 +372,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 85c24bb0cee957a42b5f64f90bdd0c7a
+      spriteID: ddf130d6cd4ddc04c9724d890f3033b7
       internalID: 5979270804337883605
       vertices: []
       indices: 
@@ -382,9 +382,9 @@ TextureImporter:
       name: Devil_Fireball_1
       rect:
         serializedVersion: 2
-        x: 515
+        x: 773
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -394,7 +394,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c68ba20f5d98a7c4fb8b3a463bc418ed
+      spriteID: 65ee5c68e42ed884db71a6723504755e
       internalID: -4872735329228040698
       vertices: []
       indices: 
@@ -404,9 +404,9 @@ TextureImporter:
       name: Devil_Fireball_2
       rect:
         serializedVersion: 2
-        x: 1030
+        x: 1546
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -416,7 +416,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1e8cdadf99841b945809ebdcabeb5a38
+      spriteID: ff4a03f2e8da1744aa37cb81f0961567
       internalID: 2216672636490806326
       vertices: []
       indices: 
@@ -426,9 +426,9 @@ TextureImporter:
       name: Devil_Fireball_3
       rect:
         serializedVersion: 2
-        x: 1545
+        x: 2319
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -438,7 +438,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ec9ba86e7d94cbb47b975801af33907a
+      spriteID: e0a5947e7b4dc404d8feb3ee3e485305
       internalID: 1938651611527470404
       vertices: []
       indices: 
@@ -448,9 +448,9 @@ TextureImporter:
       name: Devil_Fireball_4
       rect:
         serializedVersion: 2
-        x: 2060
+        x: 3092
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -460,7 +460,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0368af0591dd2824ea762aae018b7cce
+      spriteID: 5228ead7c3648bf4ea95cfba30a5a9db
       internalID: 2954321131344927063
       vertices: []
       indices: 
@@ -470,9 +470,9 @@ TextureImporter:
       name: Devil_Fireball_5
       rect:
         serializedVersion: 2
-        x: 2575
+        x: 3865
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -482,7 +482,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 914f34fedb3188e4eb514be09930dcc0
+      spriteID: f3bb4829d3df79448b5d565354765dbf
       internalID: -5546405752699438844
       vertices: []
       indices: 
@@ -492,9 +492,9 @@ TextureImporter:
       name: Devil_Fireball_6
       rect:
         serializedVersion: 2
-        x: 3090
+        x: 4638
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -504,7 +504,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 205d71e93ec740143843a4463780d79b
+      spriteID: 061ea5b4ba8485a4c80e25dec4b47443
       internalID: 3471272875931960041
       vertices: []
       indices: 
@@ -514,9 +514,9 @@ TextureImporter:
       name: Devil_Fireball_7
       rect:
         serializedVersion: 2
-        x: 3605
+        x: 5411
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -526,96 +526,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d3e0c9cfe816b8a43914066800dbd098
+      spriteID: b796b814cba35eb498346c80c323f745
       internalID: 5236659826617805372
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_8
-      rect:
-        serializedVersion: 2
-        x: 4120
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd5accf2a5605c94fa79df81bab17118
-      internalID: -1949459034752940979
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_9
-      rect:
-        serializedVersion: 2
-        x: 4635
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2989f5c4b2eb17b4d95ddf28b8a0cccb
-      internalID: 2550029163138934088
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_10
-      rect:
-        serializedVersion: 2
-        x: 5150
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0ed569038fb54834e8404f90b9af1a5f
-      internalID: -376240182446724176
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Devil_Fireball_11
-      rect:
-        serializedVersion: 2
-        x: 5665
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ef3729e8309810e4199d95af493d7c72
-      internalID: 3465186928387987102
       vertices: []
       indices: 
       edges: []
@@ -636,16 +548,12 @@ TextureImporter:
     nameFileIdTable:
       Devil_Fireball_0: 5979270804337883605
       Devil_Fireball_1: -4872735329228040698
-      Devil_Fireball_10: -376240182446724176
-      Devil_Fireball_11: 3465186928387987102
       Devil_Fireball_2: 2216672636490806326
       Devil_Fireball_3: 1938651611527470404
       Devil_Fireball_4: 2954321131344927063
       Devil_Fireball_5: -5546405752699438844
       Devil_Fireball_6: 3471272875931960041
       Devil_Fireball_7: 5236659826617805372
-      Devil_Fireball_8: -1949459034752940979
-      Devil_Fireball_9: 2550029163138934088
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

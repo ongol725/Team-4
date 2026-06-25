@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_SPIRIT_NOVA
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_SPIRIT_NOVA
+  skillName: "\uB300\uC815\uB839 \uAD11\uC5ED \uAC15\uD0C0"
+  triggerType: 0
+  skillType: 1
+  targetType: 3
+  scalingStat: 1
+  dmgMultiplier: 3
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 0
+  rangeRadius: 5
+  duration: 0
+  cooldown: 0
+  fixedEffect: 0
+  fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  pierceCount: 1
+  animFrames:
+  - {fileID: -870172473, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 1935560912, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 775155163, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: -1951039476, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 128767272, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 623683165, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 478662497, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: -541071719, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 1950537486, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 328261890, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 816300311, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 8495549, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  animFps: 12
+  visualSize: 0.8
+  dropFrames: []
+  dropFps: 8

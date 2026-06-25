@@ -1,4 +1,4 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 96ea068cb7a5a2c40915e5c691bb7dd7
 TextureImporter:
   internalIDToNameTable:
@@ -188,7 +188,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -198,7 +198,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4ad3c91f058ece04599f11c04fe6b59a
+      spriteID: 8b28263f6726dd34ea999751ebdd86bf
       internalID: 109942617
       vertices: []
       indices: 
@@ -208,9 +208,9 @@ TextureImporter:
       name: SwordWave_1
       rect:
         serializedVersion: 2
-        x: 515
+        x: 773
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -220,7 +220,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df9ab41e836f7424e9045c3c280813ef
+      spriteID: 214199fe429a14748a4011909e082ca1
       internalID: -1301186219
       vertices: []
       indices: 
@@ -230,9 +230,9 @@ TextureImporter:
       name: SwordWave_2
       rect:
         serializedVersion: 2
-        x: 1030
+        x: 1546
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -242,7 +242,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ba70e7e19f0ca184fb0122482ad21e40
+      spriteID: 88213e2be7192d14790d41f5e071ae51
       internalID: -562498353
       vertices: []
       indices: 
@@ -252,9 +252,9 @@ TextureImporter:
       name: SwordWave_3
       rect:
         serializedVersion: 2
-        x: 1545
+        x: 2319
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -264,7 +264,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df91a6e14aec1a342ad64c5737eec8f2
+      spriteID: ff77858fcd1e90a479b3452b29b8f8e1
       internalID: 502116684
       vertices: []
       indices: 
@@ -274,9 +274,9 @@ TextureImporter:
       name: SwordWave_4
       rect:
         serializedVersion: 2
-        x: 2060
+        x: 3092
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -286,7 +286,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af06ef426f7ad1644b9366d089de396b
+      spriteID: bd1e44248a203f741b1d7226a51d36ec
       internalID: -381104040
       vertices: []
       indices: 
@@ -296,9 +296,9 @@ TextureImporter:
       name: SwordWave_5
       rect:
         serializedVersion: 2
-        x: 2575
+        x: 3865
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -308,7 +308,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e72bebf93a2b6454e8f94e645aeaf1ed
+      spriteID: e51ef3d525858a74ba68e14ed33f4467
       internalID: -1707099930
       vertices: []
       indices: 
@@ -318,9 +318,9 @@ TextureImporter:
       name: SwordWave_6
       rect:
         serializedVersion: 2
-        x: 3090
+        x: 4638
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -330,7 +330,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d06ed47b6eb15f84b82ed837b44d6904
+      spriteID: 3d1dd6b4edd757140b518137596201fc
       internalID: 1109029539
       vertices: []
       indices: 
@@ -340,9 +340,9 @@ TextureImporter:
       name: SwordWave_7
       rect:
         serializedVersion: 2
-        x: 3605
+        x: 5411
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -352,96 +352,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d7f98b6fbfeb7b241897b405508a994a
+      spriteID: c90e01370d11b974ebb419239b57ce85
       internalID: -1932667270
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SwordWave_8
-      rect:
-        serializedVersion: 2
-        x: 4120
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 73ce1c7959747f14db856c86e338c2da
-      internalID: 981555201
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SwordWave_9
-      rect:
-        serializedVersion: 2
-        x: 4635
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4096cd3feeb39c64b802bea9f4dc5cd0
-      internalID: -1211459062
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SwordWave_10
-      rect:
-        serializedVersion: 2
-        x: 5150
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 70e7c0227988416439975dfedb7fe9ea
-      internalID: -638867138
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SwordWave_11
-      rect:
-        serializedVersion: 2
-        x: 5665
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a7aff9ee0d95f004c928ed56b14b713a
-      internalID: 1153097397
       vertices: []
       indices: 
       edges: []
@@ -462,16 +374,12 @@ TextureImporter:
     nameFileIdTable:
       SwordWave_0: 109942617
       SwordWave_1: -1301186219
-      SwordWave_10: -638867138
-      SwordWave_11: 1153097397
       SwordWave_2: -562498353
       SwordWave_3: 502116684
       SwordWave_4: -381104040
       SwordWave_5: -1707099930
       SwordWave_6: 1109029539
       SwordWave_7: -1932667270
-      SwordWave_8: 981555201
-      SwordWave_9: -1211459062
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -203,7 +203,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -213,7 +213,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e50a1a6a043a654dbcbcee4f7e85ec0
+      spriteID: 01d7afe5431427f438d061185b14d040
       internalID: -4415670643925419716
       vertices: []
       indices: 
@@ -223,9 +223,9 @@ TextureImporter:
       name: OVERLOAD2_Pr_1
       rect:
         serializedVersion: 2
-        x: 515
+        x: 773
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -235,7 +235,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c5ef7876d931fde48a2df07f56aea454
+      spriteID: 969bccabcad4f9b4190f6b65ecb18b82
       internalID: -8616591988186888138
       vertices: []
       indices: 
@@ -245,9 +245,9 @@ TextureImporter:
       name: OVERLOAD2_Pr_2
       rect:
         serializedVersion: 2
-        x: 1030
+        x: 1546
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -257,7 +257,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7642d8a06df940418b6ff01565c514f
+      spriteID: cd7098376715e9c4f8d72e0ec2d960b5
       internalID: -4513206376501855569
       vertices: []
       indices: 
@@ -267,9 +267,9 @@ TextureImporter:
       name: OVERLOAD2_Pr_3
       rect:
         serializedVersion: 2
-        x: 1545
+        x: 2319
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -279,7 +279,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fdbcf2d06a2724146880221890d77884
+      spriteID: a095a668bb2e831459e3d05cdc41007e
       internalID: 3245749648820007656
       vertices: []
       indices: 
@@ -289,9 +289,9 @@ TextureImporter:
       name: OVERLOAD2_Pr_4
       rect:
         serializedVersion: 2
-        x: 2060
+        x: 3092
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -301,7 +301,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ab7be548706942459a77f8680557614
+      spriteID: 7cc751e77bb3b1546ba2c11fa0ff6316
       internalID: 3690630544871024438
       vertices: []
       indices: 
@@ -311,9 +311,9 @@ TextureImporter:
       name: OVERLOAD2_Pr_5
       rect:
         serializedVersion: 2
-        x: 2575
+        x: 3865
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -323,7 +323,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2907a3efa3bad9a41b9f4249d0eb8efd
+      spriteID: 872c095c50e975a488c55ec5cbbf944b
       internalID: -2898707606323492659
       vertices: []
       indices: 
@@ -333,9 +333,9 @@ TextureImporter:
       name: OVERLOAD2_Pr_6
       rect:
         serializedVersion: 2
-        x: 3090
+        x: 4638
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -345,7 +345,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67045151ebded384abeceb9eb235127e
+      spriteID: 9641b0ac9bdceaa42abc63b92d90ee18
       internalID: 3059771683200089594
       vertices: []
       indices: 
@@ -355,9 +355,9 @@ TextureImporter:
       name: OVERLOAD2_Pr_7
       rect:
         serializedVersion: 2
-        x: 3605
+        x: 5411
         y: 0
-        width: 515
+        width: 773
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -367,96 +367,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 17fa130c855f3f047817e92aa13c90ae
+      spriteID: 57ccea85f21f4ff4ba8e2f3d805e97ae
       internalID: -740582295602729582
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_8
-      rect:
-        serializedVersion: 2
-        x: 4120
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 90f3a629dc8f70241b98fc26abdbf26b
-      internalID: -1372572089051245109
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_9
-      rect:
-        serializedVersion: 2
-        x: 4635
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7d58594cf6f0aed47a37c15de04d0184
-      internalID: -3139882965233773987
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_10
-      rect:
-        serializedVersion: 2
-        x: 5150
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c1f16ca87f95d74ba24341072f6d2ea
-      internalID: -8971311269040254441
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OVERLOAD2_Pr_11
-      rect:
-        serializedVersion: 2
-        x: 5665
-        y: 0
-        width: 515
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c7add429817290c47b3db13a1be21b33
-      internalID: 7199572140622816752
       vertices: []
       indices: 
       edges: []
@@ -477,16 +389,12 @@ TextureImporter:
     nameFileIdTable:
       OVERLOAD2_Pr_0: -4415670643925419716
       OVERLOAD2_Pr_1: -8616591988186888138
-      OVERLOAD2_Pr_10: -8971311269040254441
-      OVERLOAD2_Pr_11: 7199572140622816752
       OVERLOAD2_Pr_2: -4513206376501855569
       OVERLOAD2_Pr_3: 3245749648820007656
       OVERLOAD2_Pr_4: 3690630544871024438
       OVERLOAD2_Pr_5: -2898707606323492659
       OVERLOAD2_Pr_6: 3059771683200089594
       OVERLOAD2_Pr_7: -740582295602729582
-      OVERLOAD2_Pr_8: -1372572089051245109
-      OVERLOAD2_Pr_9: -3139882965233773987
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -26,24 +26,16 @@ MonoBehaviour:
   uniqueSkill: {fileID: 0}
   uniqueSkillCooldown: 8
   modelPrefab: {fileID: 0}
-  icon: {fileID: -8794681838325113743, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  icon: {fileID: 216805022, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
   animFrames:
-  - {fileID: -8794681838325113743, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: 3548270735272551330, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -7119676255022055996, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: 2717771104610761796, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -5671545569337942426, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -423064369058207134, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: 8153742529241509658, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: 8749354135015402517, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -7957411943464433763, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: 1285647238273880457, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -8851422383021661771, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: 3056128904291157074, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -5808198893027165987, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: 6323193764763214031, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -5707779042869791483, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
-  - {fileID: -5319991778577857716, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: 216805022, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: -1318170472, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: -1091884752, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: -82985271, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: 293276258, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: -1666365226, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: 521047538, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
+  - {fileID: 1398628042, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
   animFps: 10
   hp: 0
   attackEffectFrames: []
