@@ -637,14 +637,14 @@ namespace BagSurvivor.SynergyEditor
             {
                 { "SK_ASS_1", "Shuriken_Sv" }, { "SK_ASS_2", "Shuriken_Sv" }, { "SK_ASS_3", "Shuriken_Sv" },
                 { "SK_SWORD_1", "SwordWave" }, { "SK_SWORD_2", "SwordWave" }, { "SK_SWORD_3", "SwordWave" },
-                { "SK_SCYTHE_1", "Scythe_Black" }, { "SK_SCYTHE_2", "Scythe_Black" }, { "SK_SCYTHE_3", "Scythe_Black" },
+                { "SK_SCYTHE_1", "Scythe_Black" }, { "SK_SCYTHE_2", "Scythe_BlackRed" }, { "SK_SCYTHE_3", "Scythe_DarkRed" },
                 { "SK_METEOR_1", "Shockwave_RED" }, { "SK_METEOR_2", "Shockwave_RED" }, { "SK_METEOR_3", "Shockwave_RED" },
                 { "SK_FORTRESS_1", "Shockwave_Common" }, { "SK_FORTRESS_2", "Shockwave_Common" },
                 { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_Common" },
                 { "SK_DEMON_1", "Scythe_BlackRed" }, { "SK_DEMON_2", "Scythe_BlackRed" },
                 { "SK_DEMON_3", "Scythe_BlackRed" }, { "SK_DEMON_4", "Scythe_BlackRed" },
-                { "SK_GOLD_BOMB_1", "Gold_Coin1" }, { "SK_GOLD_BOMB_2", "Gold_Coin1" },
-                { "SK_GOLD_BOMB_3", "Gold_Coin1" }, { "SK_GOLD_FAST", "Gold_Coin1" },
+                { "SK_GOLD_BOMB_1", "RichCoin_BOMB1" }, { "SK_GOLD_BOMB_2", "RichCoin_BOMB2" },
+                { "SK_GOLD_BOMB_3", "RichCoin_BOMB3" }, { "SK_GOLD_FAST", "RichCoin_BOMB4" },
             };
 
             var framesCache = new Dictionary<string, Sprite[]>();
