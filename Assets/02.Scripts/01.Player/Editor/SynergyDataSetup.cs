@@ -638,12 +638,15 @@ namespace BagSurvivor.SynergyEditor
             var skillSheetMap = new Dictionary<string, string>
             {
                 { "SK_ASS_1", "Shuriken_Sv" }, { "SK_ASS_2", "Shuriken_Sv" }, { "SK_ASS_3", "Shuriken_Sv" },
+                // 일렉트로 번개 기둥 → 전용 ElectroShockwave 시트(10프레임, 신규)
+                { "SK_ELEC_1", "ElectroShockwave" }, { "SK_ELEC_2", "ElectroShockwave" },
                 { "SK_SWORD_1", "SwordWave" }, { "SK_SWORD_2", "SwordWave" }, { "SK_SWORD_3", "SwordWave" },
                 { "SK_SCYTHE_1", "Scythe_Black" }, { "SK_SCYTHE_2", "Scythe_BlackRed" }, { "SK_SCYTHE_3", "Scythe_DarkRed" },
                 // 티탄 돌 떨구기 → 전용 StoneDrop_Common (신규)
                 { "SK_METEOR_1", "StoneDrop_Common" }, { "SK_METEOR_2", "StoneDrop_Common" }, { "SK_METEOR_3", "StoneDrop_Common" },
+                // 난공불락: 브~골 일반 충격파, 프리즘은 강화 RED 충격파(콘셉트 슬라이드 14)
                 { "SK_FORTRESS_1", "Shockwave_Common" }, { "SK_FORTRESS_2", "Shockwave_Common" },
-                { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_Common" },
+                { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_RED" },
                 // 마왕(DemonLord) → 전용 Devil_* 시트 (신규). DEMON_4(프리즘)는 추천 기본값 Devil_Fireball — 기획 확인 후 조정.
                 { "SK_DEMON_1", "Devil_Fireball" }, { "SK_DEMON_2", "Devil_Wave" },
                 { "SK_DEMON_3", "Devil_Slash" },    { "SK_DEMON_4", "Devil_Fireball" },
