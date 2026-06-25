@@ -249,8 +249,46 @@ public class SynergyManager : MonoBehaviour
         {
             _moveDistAccum -= MoveDropInterval;
             foreach (var (skill, dmg) in _onMoveSkills)
-                ExecuteSkill(skill, dmg);
+                DropGoldCoins(skill, dmg);
         }
+    }
+
+    // ── 대부호: 이동 시 골드 코인을 떨구고 일정 시간 후 폭발 ──────────
+    private void DropGoldCoins(SO_SkillData skill, int damage)
+    {
+        if (_player == null) return;
+        int   count = skill.extraCount > 0 ? skill.extraCount : 3;
+        float delay = skill.duration   > 0f ? skill.duration   : 2f;
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 offset = Random.insideUnitCircle * 1.5f;
+            StartCoroutine(GoldCoinRoutine(skill, (Vector2)_player.position + offset, damage, delay));
+        }
+    }
+
+    private IEnumerator GoldCoinRoutine(SO_SkillData skill, Vector3 pos, int damage, float delay)
+    {
+        // 골드 코인 비주얼 (Gold_Coin 등급별)
+        GameObject coin = null;
+        if (skill.dropFrames != null && skill.dropFrames.Length > 0)
+        {
+            coin = new GameObject("GoldCoin");
+            coin.transform.SetParent(transform);
+            coin.transform.position = pos;
+            var sr = coin.AddComponent<SpriteRenderer>();
+            sr.sortingOrder = 9;
+            sr.sprite = skill.dropFrames[0];
+            NormalizeScale(coin, sr.sprite, 0.4f);
+            coin.AddComponent<SpriteSheetAnimator>().Play(skill.dropFrames, skill.dropFps);
+        }
+
+        yield return new WaitForSeconds(delay);
+        if (coin != null) Destroy(coin);
+
+        // 폭발: 범위 데미지 + 폭발 VFX(animFrames = RichCoin_BOMB)
+        float radius = skill.rangeRadius > 0f ? skill.rangeRadius : 3f;
+        foreach (var mc in GetEnemiesInRange(pos, radius)) HitEnemy(skill, mc, damage);
+        SpawnVFX(skill, pos);
     }
 
     // ─────────────────────────────────────────────────────────────

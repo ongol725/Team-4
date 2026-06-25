@@ -673,6 +673,23 @@ namespace BagSurvivor.SynergyEditor
                 filled++;
             }
 
+            // ── 대부호 골드 코인 드롭 프레임 (Gold_Coin 등급별) ──────────
+            var dropSheetMap = new Dictionary<string, string>
+            {
+                { "SK_GOLD_BOMB_1", "Gold_Coin1" }, { "SK_GOLD_BOMB_2", "Gold_Coin2" },
+                { "SK_GOLD_BOMB_3", "Gold_Coin3" }, { "SK_GOLD_FAST", "Gold_Coin4" },
+            };
+            foreach (var kvp in dropSheetMap)
+            {
+                var skill = AssetDatabase.LoadAssetAtPath<SO_SkillData>($"{SkillDir}/{kvp.Key}.asset");
+                if (skill == null) continue;
+                var coinFrames = LoadLargeFramesSorted($"{sheetDir}/{kvp.Value}.png");
+                if (coinFrames.Length == 0) continue;
+                skill.dropFrames = coinFrames;
+                if (skill.dropFps <= 0f) skill.dropFps = 8f;
+                EditorUtility.SetDirty(skill);
+            }
+
             AssetDatabase.SaveAssets();
             Debug.Log($"[SynergyDataSetup] 스킬 발동 비주얼(시트 애니메이션) {filled}개 적용 완료");
         }

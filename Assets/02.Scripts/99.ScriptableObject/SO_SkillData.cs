@@ -59,4 +59,10 @@ public class SO_SkillData : ScriptableObject
     public float animFps = 12f;
     [Tooltip("월드 표시 크기(유닛). 투사체/이펙트 스프라이트의 목표 지름")]
     public float visualSize = 0.8f;
+
+    [Header("대부호 골드 드롭 (OnMove 전용)")]
+    [Tooltip("이동 시 떨구는 골드 코인 프레임(Gold_Coin 등급별). 비우면 코인 없이 폭발만")]
+    public Sprite[] dropFrames;
+    [Tooltip("골드 코인 애니메이션 속도(FPS)")]
+    public float dropFps = 8f;
 }
