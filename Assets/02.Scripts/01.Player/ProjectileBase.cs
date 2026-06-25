@@ -55,7 +55,14 @@ public class ProjectileBase : MonoBehaviour
 
         var mc = other.GetComponent<MonsterController>()
               ?? other.GetComponentInParent<MonsterController>();
-        if (mc == null || mc.IsDead) return;
+        if (mc == null)
+        {
+            // 몬스터가 아닌 단단한 충돌체(벽 등 비트리거)에 맞으면 투사체 소멸.
+            // 몬스터·픽업·이펙트 등은 트리거 콜라이더이므로 통과한다.
+            if (!other.isTrigger) Destroy(gameObject);
+            return;
+        }
+        if (mc.IsDead) return;
 
         Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
         mc.TakeDamage(_damage, _knockbackForce, kbDir);
