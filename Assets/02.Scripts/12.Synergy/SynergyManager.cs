@@ -62,6 +62,9 @@ public class SynergyManager : MonoBehaviour
     private readonly List<SummonController>  _summons       = new();
     private Transform                        _summonRoot;
 
+    // 플레이어를 감싸며 따라다니는 영구 이펙트(마왕 소용돌이 등). Refresh/파괴 시 정리.
+    private readonly List<GameObject>        _auraVFX       = new();
+
     // OnHitTaken 트리거 등록 목록 (난공불락)
     private readonly List<(SO_SkillData skill, int dmg)> _onHitSkills = new();
 
@@ -95,6 +98,9 @@ public class SynergyManager : MonoBehaviour
         if (_gm != null) _gm.onLoadoutReady -= OnLoadoutReady;
         UnsubscribePlayerEvents();
         if (_playerHealth != null) _playerHealth.DamageReductionPct = 0f;
+        // 플레이어에 부착된 영구 오라는 매니저 파괴 시 함께 정리
+        foreach (var v in _auraVFX) if (v != null) Destroy(v);
+        _auraVFX.Clear();
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -143,6 +149,8 @@ public class SynergyManager : MonoBehaviour
         _skillRoutines.Clear();
         foreach (var s in _summons) if (s != null) Destroy(s.gameObject);
         _summons.Clear();
+        foreach (var v in _auraVFX) if (v != null) Destroy(v);
+        _auraVFX.Clear();
         // 코루틴 정리 직후 패널티 해제 — Refresh 도중 PenaltyLoop가 중단돼도 이동속도가 복구됨
         RemoveOverloadPenalty();
 
@@ -175,6 +183,8 @@ public class SynergyManager : MonoBehaviour
                 {
                     case SynergyTriggerType.AutoTimer:
                         _skillRoutines.Add(StartCoroutine(SkillLoop(skill, dmgBase)));
+                        // 플레이어를 감싸는 효과는 영구 오라로 1회 생성(깜빡임 방지). 데미지는 SkillLoop가 담당.
+                        if (skill.vfxFollowPlayer) SpawnPersistentAura(skill);
                         Debug.Log($"[SynergyManager] AutoTimer: {entry.type} {entry.grade} — {skill.skillName}");
                         break;
 
@@ -466,8 +476,9 @@ public class SynergyManager : MonoBehaviour
             }
         }
 
-        // Projectile/Slash는 투사체 스프라이트 자체가 비주얼 → 발동 위치 VFX 생략
-        if (skill.skillType != SkillType.Projectile && skill.skillType != SkillType.Slash)
+        // Projectile/Slash는 투사체 스프라이트 자체가 비주얼 → 발동 위치 VFX 생략.
+        // 플레이어 추종 오라(vfxFollowPlayer)는 영구 오라가 이미 표시 중이므로 매 시전 VFX 생략(깜빡임 방지).
+        if (skill.skillType != SkillType.Projectile && skill.skillType != SkillType.Slash && !skill.vfxFollowPlayer)
             SpawnVFX(skill, vfxPos);
     }
 
@@ -649,19 +660,8 @@ public class SynergyManager : MonoBehaviour
     private IEnumerator SheetVFX(SO_SkillData skill, Vector3 pos)
     {
         var go = new GameObject($"SynergyVFX_{skill.skillID}");
-
-        // 플레이어를 감싸며 따라다니는 효과(마왕 소용돌이): 플레이어에 부착 + 루프 재생
-        bool follow = skill.vfxFollowPlayer && _player != null;
-        if (follow)
-        {
-            go.transform.SetParent(_player);
-            go.transform.localPosition = Vector3.zero;
-        }
-        else
-        {
-            go.transform.SetParent(transform);
-            go.transform.position = pos;
-        }
+        go.transform.SetParent(transform);
+        go.transform.position = pos;
 
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sortingOrder = 10;
@@ -669,14 +669,34 @@ public class SynergyManager : MonoBehaviour
         float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 0.3f);
         NormalizeScale(go, sr.sprite, size);
 
-        go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: follow);
+        go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
 
-        // 따라다니는 효과는 다음 시전까지(쿨타임) 유지해 끊김 없이 감싸도록 한다.
-        float life = follow
-            ? (skill.cooldown > 0f ? skill.cooldown : skill.animFrames.Length / Mathf.Max(1f, skill.animFps))
-            : skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
+        float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
         yield return new WaitForSeconds(life);
         if (go != null) Destroy(go);
+    }
+
+    /// <summary>
+    /// 플레이어에 부착되어 끊김 없이 루프 재생되는 영구 오라를 1회 생성한다(마왕 소용돌이).
+    /// 데미지는 별도 SkillLoop가 처리하며, 이 오라는 순수 비주얼이다. Refresh/파괴 시 정리된다.
+    /// </summary>
+    private void SpawnPersistentAura(SO_SkillData skill)
+    {
+        if (_player == null) FindPlayerRefs();
+        if (_player == null || skill.animFrames == null || skill.animFrames.Length == 0) return;
+
+        var go = new GameObject($"SynergyAura_{skill.skillID}");
+        go.transform.SetParent(_player);
+        go.transform.localPosition = Vector3.zero;
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = 9; // 플레이어 뒤/주변을 감싸도록 약간 낮게
+        sr.sprite = skill.animFrames[0];
+        float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius);
+        NormalizeScale(go, sr.sprite, size);
+
+        go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: true);
+        _auraVFX.Add(go);
     }
 
     private IEnumerator PlaceholderVFX(Vector3 pos, float radius)
