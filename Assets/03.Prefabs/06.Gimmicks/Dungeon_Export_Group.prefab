@@ -194,7 +194,8 @@ MonoBehaviour:
   minTrapsPerRoom: 0
   maxTrapsPerRoom: 2
   stairPrefab: {fileID: 2114701223535933209, guid: 5a523b54bc7521842a7506081228ae02, type: 3}
-  monsterPrefabs: []
+  monsterPrefabs:
+  - {fileID: 0}
   doorSprite: {fileID: 7482667652216324306, guid: 29a58acb0ba946f4fa38032e224d4a0c, type: 3}
   doorSortingOrder: 10
   corridorWidth: 2
@@ -219,20 +220,27 @@ MonoBehaviour:
     altFloorTile: {fileID: 0}
     wallTile: {fileID: 0}
     advancedWallSprites:
-    - {fileID: 7077877577408827300, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: -674329127134476731, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: 4974684681448242637, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: 1061123398, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: -1117931509, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: 1824685796, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: -18091554, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: 339210107, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
-    - {fileID: -529655488, guid: 75c9801ed1cbea146b858a60ef04a5fc, type: 3}
+    - {fileID: 406551859847576100, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: 8547944860168327704, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: -4596972127225251403, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: 577644691, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: -949963521, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: 577644691, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: 402408137, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: 8547944860168327704, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: 371411483, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    pillarSprites:
+    - {fileID: -1627749167, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: 100798028, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    - {fileID: -374405025, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+    wallFaceSprite: {fileID: 156473342, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
   - themeName: 
     floorTile: {fileID: 0}
     altFloorTile: {fileID: 0}
     wallTile: {fileID: 0}
     advancedWallSprites: []
+    pillarSprites: []
+    wallFaceSprite: {fileID: 0}
   defaultFloorTile: {fileID: 11400000, guid: ed14e0a1193e17847bc6f5d7823ddec1, type: 2}
   defaultAltFloorTile: {fileID: 11400000, guid: ed14e0a1193e17847bc6f5d7823ddec1, type: 2}
   defaultWallTile: {fileID: 11400000, guid: 042ad26b9f26e9f4c97f315fa94561ce, type: 2}
@@ -745,7 +753,7 @@ Transform:
   m_GameObject: {fileID: 8380437479435598112}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.90454, y: 0.40202, z: 0}
+  m_LocalPosition: {x: 845.0437, y: 566.09454, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -754,7 +762,6 @@ Transform:
   - {fileID: 7332284647781857352}
   - {fileID: 7383932430989203057}
   - {fileID: 4235426242538550027}
-  - {fileID: 59525319179632686}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8628831059586399016
@@ -957,65 +964,3 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!1001 &4777093914638800047
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1873677519157473571}
-    m_Modifications:
-    - target: {fileID: 2140267717648347481, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.90454
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.40202
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
---- !u!4 &59525319179632686 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4798827761800172673, guid: 858cc6aec08659f4f9576cab951ecb47, type: 3}
-  m_PrefabInstance: {fileID: 4777093914638800047}
-  m_PrefabAsset: {fileID: 0}

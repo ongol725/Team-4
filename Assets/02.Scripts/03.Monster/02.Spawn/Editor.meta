@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/02.Scripts/03.Monster/02.Spawn/Editor.meta
 guid: 8f9c9838233be884cb59cd0fef30bbab
-========
-guid: cb845706a09db2e46a7b0699e4f320b3
->>>>>>>> b021405 ([Feat] 시너지 아이콘 자동 할당 기능 추가):Assets/02.Scripts/03.Monster/02.Spawn.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
