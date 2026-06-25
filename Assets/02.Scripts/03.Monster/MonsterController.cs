@@ -402,7 +402,39 @@ namespace BagSurvivor.Monster
                 return;
             }
 
-            rb.linearVelocity = (toPlayer / dist) * monsterData.moveSpeed * _speedMultiplier;
+            Vector2 dir = AvoidPillar(toPlayer / dist);
+            rb.linearVelocity = dir * monsterData.moveSpeed * _speedMultiplier;
+        }
+
+        // 기둥 받침(PillarBlock 트리거)을 '돌아서' 가는 국소 회피. 물리 충돌이 아니라 레이캐스트 감지 +
+        // 한 방향으로 커밋(경로가 뚫릴 때까지 유지)해 매끄럽게 우회 → 비비적댐/떨림 없음.
+        private static int pillarMaskCache = -1; // -1=미초기화, 0=레이어없음, 그외=레이어마스크
+        private int avoidSide;                    // 0=비회피, +1=좌측 접선, -1=우측 접선(커밋)
+
+        private Vector2 AvoidPillar(Vector2 dir)
+        {
+            if (pillarMaskCache < 0)
+            {
+                int l = LayerMask.NameToLayer("PillarBlock");
+                pillarMaskCache = l < 0 ? 0 : (1 << l);
+            }
+            if (pillarMaskCache == 0) return dir;
+
+            const float look = 2.5f;
+            Vector2 pos = transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(pos, dir, look, pillarMaskCache);
+            if (!hit) { avoidSide = 0; return dir; }   // 경로 깨끗 → 회피 해제(직진)
+
+            Vector2 left = new Vector2(-dir.y, dir.x);
+            if (avoidSide == 0)
+            {
+                // 받침이 왼쪽이면 오른쪽으로, 오른쪽이면 왼쪽으로 돈다(한 번 정하면 통과까지 유지)
+                Vector2 toHit = hit.point - pos;
+                avoidSide = Vector2.Dot(left, toHit) > 0f ? -1 : 1;
+            }
+            Vector2 tangent = avoidSide > 0 ? left : -left;
+            float t = Mathf.Clamp01(hit.distance / look);   // 0=코앞(접선 위주) … 1=멀리(전진 위주)
+            return (tangent * (1f - t) + dir * t).normalized;
         }
 
         // ==========================================

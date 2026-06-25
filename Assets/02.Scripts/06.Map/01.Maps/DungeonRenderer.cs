@@ -32,7 +32,13 @@ public class DungeonRenderer : MonoBehaviour
     [Header("렌더링 연결")]
     public Tilemap floorTilemap;
     public Tilemap wallTilemap;
-    
+    [Tooltip("기둥 윗부분(몸통/머리) 전용 타일맵. 비우면 런타임에 자동 생성(콜라이더 없음, 캐릭터 앞에 렌더)")]
+    public Tilemap pillarTopTilemap;
+    [Tooltip("기둥 윗부분 렌더 정렬순서(캐릭터=10보다 커야 캐릭터가 뒤로 지나감)")]
+    public int pillarTopSortingOrder = 11;
+    // 기둥 받침 몬스터 차단용 콜라이더 타일맵(렌더 없음, 레이어 PillarBlock). 런타임 생성.
+    private Tilemap pillarBlockTilemap;
+
     [Header("층별 테마 타일 설정 (1층부터 순서대로)")]
     public FloorTheme[] floorThemes;
 
@@ -97,12 +103,41 @@ public class DungeonRenderer : MonoBehaviour
             if (floorRenderer != null) floorRenderer.sortingOrder = 0; // 바닥은 맨 아래
         }
         
-        if (wallTilemap != null) 
+        if (wallTilemap != null)
         {
             wallTilemap.ClearAllTiles();
             TilemapRenderer wallRenderer = wallTilemap.GetComponent<TilemapRenderer>();
             if (wallRenderer != null) wallRenderer.sortingOrder = 1; // 벽은 바닥보다 위
         }
+
+        // 기둥 윗부분 타일맵: 없으면 wallTilemap과 같은 Grid 아래에 생성(콜라이더 없음 → 통과 가능,
+        // sortingOrder를 캐릭터보다 위로 → 캐릭터가 기둥 뒤로 지나감)
+        if (pillarTopTilemap == null && wallTilemap != null && wallTilemap.transform.parent != null)
+        {
+            var go = new GameObject("PillarTop");
+            go.transform.SetParent(wallTilemap.transform.parent, false);
+            pillarTopTilemap = go.AddComponent<Tilemap>();
+            go.AddComponent<TilemapRenderer>();
+        }
+        if (pillarTopTilemap != null)
+        {
+            pillarTopTilemap.ClearAllTiles();
+            TilemapRenderer topRenderer = pillarTopTilemap.GetComponent<TilemapRenderer>();
+            if (topRenderer != null) topRenderer.sortingOrder = pillarTopSortingOrder;
+        }
+
+        // 기둥 받침 감지용 타일맵(렌더 없음). 레이어=PillarBlock, 트리거 → 물리 차단은 안 하고
+        // 몬스터 회피 레이캐스트가 감지만 함(물리 충돌이 없어 떨림/비비적댐 없음).
+        if (pillarBlockTilemap == null && wallTilemap != null && wallTilemap.transform.parent != null)
+        {
+            var go = new GameObject("PillarBlockMap");
+            go.transform.SetParent(wallTilemap.transform.parent, false);
+            int blockLayer = LayerMask.NameToLayer("PillarBlock");
+            if (blockLayer >= 0) go.layer = blockLayer;
+            pillarBlockTilemap = go.AddComponent<Tilemap>();
+            go.AddComponent<TilemapCollider2D>().isTrigger = true; // 감지 전용(레이캐스트는 트리거도 맞힘)
+        }
+        if (pillarBlockTilemap != null) pillarBlockTilemap.ClearAllTiles();
 
         // 타일 캐싱 (성능 최적화: 스프라이트당 하나의 Tile 객체만 생성하여 재사용)
         Dictionary<Sprite, Tile> tileCache = new Dictionary<Sprite, Tile>();
@@ -187,19 +222,14 @@ public class DungeonRenderer : MonoBehaviour
                     if (useAdvancedAutoTiling && activePillarSprites != null
                         && activePillarSprites.Length >= 3 && wallTilemap != null)
                     {
-                        // [0]=받침(아래) [1]=몸통(중간) [2]=머리(위), 위(y+)로 쌓는다
-                        for (int i = 0; i < 3; i++)
-                        {
-                            Sprite ps = activePillarSprites[i];
-                            if (ps == null) continue;
-                            if (!tileCache.ContainsKey(ps))
-                            {
-                                Tile pt = ScriptableObject.CreateInstance<Tile>();
-                                pt.sprite = ps;
-                                tileCache[ps] = pt;
-                            }
-                            wallTilemap.SetTile(new Vector3Int(x, y + i, 0), tileCache[ps]);
-                        }
+                        // [0]=받침→Wallmap(렌더+플레이어 차단) + PillarBlockMap(몬스터 차단)
+                        PlacePillarTile(activePillarSprites[0], new Vector3Int(x, y, 0), wallTilemap, Tile.ColliderType.Grid);
+                        if (pillarBlockTilemap != null)
+                            PlacePillarTile(activePillarSprites[0], new Vector3Int(x, y, 0), pillarBlockTilemap, Tile.ColliderType.Grid);
+                        // [1]몸통 [2]머리→PillarTop: 콜라이더 없음(통과) + 캐릭터보다 위에 렌더(뒤로 지나감)
+                        Tilemap topMap = pillarTopTilemap != null ? pillarTopTilemap : wallTilemap;
+                        PlacePillarTile(activePillarSprites[1], new Vector3Int(x, y + 1, 0), topMap, Tile.ColliderType.None);
+                        PlacePillarTile(activePillarSprites[2], new Vector3Int(x, y + 2, 0), topMap, Tile.ColliderType.None);
                     }
                 }
             }
@@ -210,6 +240,17 @@ public class DungeonRenderer : MonoBehaviour
             FloorDecorPlacer.Apply(floorTilemap, mapWidth, mapHeight,
                 (cx, cy) => mapData[cx, cy] == 1,
                 floorSingleTiles, floorSingleChance, floorDecorSets, floorDecorSetAttempts);
+    }
+
+    /// <summary>기둥 한 칸을 지정 타일맵에 배치. collider=Grid면 전체 셀 벽(막힘), None이면 통과 가능.
+    /// 기둥은 방당 소수라 캐시 없이 생성(비용 무시).</summary>
+    private void PlacePillarTile(Sprite ps, Vector3Int pos, Tilemap map, Tile.ColliderType collider)
+    {
+        if (ps == null || map == null) return;
+        Tile pt = ScriptableObject.CreateInstance<Tile>();
+        pt.sprite = ps;
+        pt.colliderType = collider;
+        map.SetTile(pos, pt);
     }
 
     // 비트마스크(Bitmask)를 이용해 맵 데이터를 분석하여 올바른 벽 스프라이트를 반환합니다.
