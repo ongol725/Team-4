@@ -47,8 +47,16 @@ public class SO_SkillData : ScriptableObject
 
     [Header("이펙트")]
     public GameObject vfxPrefab;
-    [Tooltip("Projectile 스킬용 투사체 프리팹. 비우면 임시 투사체(원)로 발사된다.")]
+    [Tooltip("Projectile 스킬용 투사체 프리팹. 비우면 임시 투사체(원/시트 애니메이션)로 발사된다.")]
     public GameObject projectilePrefab;
     [Tooltip("Projectile 투사체 속도(유닛/초). 0 이하이면 기본 15 적용")]
     public float projectileSpeed = 15f;
+
+    [Header("발동 비주얼 (스프라이트 시트 애니메이션)")]
+    [Tooltip("투사체/이펙트로 재생할 스프라이트 프레임 배열(③ 메뉴로 자동 채움). 비우면 노란 원 fallback")]
+    public Sprite[] animFrames;
+    [Tooltip("프레임 재생 속도(FPS)")]
+    public float animFps = 12f;
+    [Tooltip("월드 표시 크기(유닛). 투사체/이펙트 스프라이트의 목표 지름")]
+    public float visualSize = 0.8f;
 }

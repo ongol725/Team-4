@@ -382,7 +382,9 @@ public class SynergyManager : MonoBehaviour
             }
         }
 
-        SpawnVFX(skill, vfxPos);
+        // Projectile/Slash는 투사체 스프라이트 자체가 비주얼 → 발동 위치 VFX 생략
+        if (skill.skillType != SkillType.Projectile && skill.skillType != SkillType.Slash)
+            SpawnVFX(skill, vfxPos);
     }
 
     /// <summary>
@@ -392,7 +394,8 @@ public class SynergyManager : MonoBehaviour
     private void ApplyHit(SO_SkillData skill, MonsterController mc, int damage)
     {
         if (mc == null) return;
-        if (skill.skillType == SkillType.Projectile)
+        // Projectile(수리검)·Slash(검기/낫)는 타겟 방향으로 날아가는 투사체로 처리
+        if (skill.skillType == SkillType.Projectile || skill.skillType == SkillType.Slash)
             FireProjectileAt(skill, mc, damage);
         else
             HitEnemy(skill, mc, damage);
@@ -416,23 +419,42 @@ public class SynergyManager : MonoBehaviour
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
 
-        // 명중 시 시너지 고정효과 적용 (마왕 불씨 등의 Burn)
+        // 명중 시 시너지 고정효과 적용
         if (skill.fixedEffect == FixedEffectType.Burn)
             proj.SetOnHit(mc => StartCoroutine(ApplyBurn(mc, Mathf.Max(1, damage / 5), 3f, 1f)));
+        else if (skill.fixedEffect == FixedEffectType.InstantDeath && skill.fixedEffectValue > 0f)
+            proj.SetOnHit(mc =>
+            {
+                if (mc != null && !mc.IsDead && mc.HpRatio <= skill.fixedEffectValue / 100f)
+                    mc.TakeDamage(999999, 0f, Vector2.zero);
+            });
 
         proj.Init(dir, damage, speed, lifetime: 3f, maxHits: 1, knockbackForce: kbForce);
     }
 
-    /// <summary>프리팹이 없는 시너지 투사체용 임시 GameObject(노란 원)를 생성한다.</summary>
+    /// <summary>프리팹이 없는 시너지 투사체용 임시 GameObject를 생성한다.
+    /// animFrames가 있으면 시트 애니메이션, 없으면 노란 원 fallback.</summary>
     private GameObject BuildTempProjectile(SO_SkillData skill)
     {
         var go = new GameObject($"SynergyProj_{skill.skillID}");
 
         var sr          = go.AddComponent<SpriteRenderer>();
-        sr.sprite       = GetCircleSprite();
-        sr.color        = new Color(1f, 0.9f, 0.1f); // 노란 원 정책 유지
         sr.sortingOrder = 10;
-        go.transform.localScale = Vector3.one * 0.4f;
+        float size      = skill.visualSize > 0f ? skill.visualSize : 0.8f;
+
+        if (skill.animFrames != null && skill.animFrames.Length > 0)
+        {
+            sr.sprite = skill.animFrames[0];
+            sr.color  = Color.white;
+            NormalizeScale(go, sr.sprite, size);
+            go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps);
+        }
+        else
+        {
+            sr.sprite = GetCircleSprite();
+            sr.color  = new Color(1f, 0.9f, 0.1f); // 노란 원 fallback
+            go.transform.localScale = Vector3.one * (size * 0.5f);
+        }
 
         var rb          = go.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
@@ -442,6 +464,16 @@ public class SynergyManager : MonoBehaviour
         col.radius      = 0.3f;
 
         return go;
+    }
+
+    /// <summary>스프라이트의 실제 월드 크기를 targetSize(지름)에 맞춰 스케일 보정.</summary>
+    private static void NormalizeScale(GameObject go, Sprite sprite, float targetSize)
+    {
+        if (sprite == null) { go.transform.localScale = Vector3.one * targetSize; return; }
+        float maxExtent = Mathf.Max(sprite.bounds.extents.x, sprite.bounds.extents.y);
+        go.transform.localScale = maxExtent > 0.001f
+            ? Vector3.one * (targetSize * 0.5f / maxExtent)
+            : Vector3.one * targetSize;
     }
 
     // 임시 투사체용 흰 원 스프라이트 (최초 1회 생성 후 캐싱, color로 틴트)
@@ -510,7 +542,32 @@ public class SynergyManager : MonoBehaviour
             Destroy(vfx, skill.duration > 0f ? skill.duration : 2f);
             return;
         }
+        // 시트 애니메이션 이펙트 (돌·낙뢰·충격파 등)
+        if (skill.animFrames != null && skill.animFrames.Length > 0)
+        {
+            StartCoroutine(SheetVFX(skill, pos));
+            return;
+        }
         StartCoroutine(PlaceholderVFX(pos, skill.rangeRadius));
+    }
+
+    private IEnumerator SheetVFX(SO_SkillData skill, Vector3 pos)
+    {
+        var go = new GameObject($"SynergyVFX_{skill.skillID}");
+        go.transform.SetParent(transform);
+        go.transform.position = pos;
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = 10;
+        sr.sprite = skill.animFrames[0];
+        float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 0.3f);
+        NormalizeScale(go, sr.sprite, size);
+
+        go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
+
+        float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
+        yield return new WaitForSeconds(life);
+        if (go != null) Destroy(go);
     }
 
     private IEnumerator PlaceholderVFX(Vector3 pos, float radius)

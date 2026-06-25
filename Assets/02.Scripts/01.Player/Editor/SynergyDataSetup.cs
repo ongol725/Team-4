@@ -622,6 +622,81 @@ namespace BagSurvivor.SynergyEditor
 
             // ── 소환수 아이콘도 함께 할당 ──────────────────────────────
             FillSummonIcons(SheetDir);
+
+            // ── 스킬 발동 비주얼(시트 애니메이션) 할당 ───────────────
+            FillSkillAnimFrames(SheetDir);
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // 스킬 발동 비주얼 — 투사체/이펙트용 시트 프레임 배열 할당
+        // ─────────────────────────────────────────────────────────────
+        static void FillSkillAnimFrames(string sheetDir)
+        {
+            // 스킬 ID → 스프라이트 시트 파일명 (Electro·Overload는 전용 시트 없음 → 노란 원 fallback)
+            var skillSheetMap = new Dictionary<string, string>
+            {
+                { "SK_ASS_1", "Shuriken_Sv" }, { "SK_ASS_2", "Shuriken_Sv" }, { "SK_ASS_3", "Shuriken_Sv" },
+                { "SK_SWORD_1", "SwordWave" }, { "SK_SWORD_2", "SwordWave" }, { "SK_SWORD_3", "SwordWave" },
+                { "SK_SCYTHE_1", "Scythe_Black" }, { "SK_SCYTHE_2", "Scythe_Black" }, { "SK_SCYTHE_3", "Scythe_Black" },
+                { "SK_METEOR_1", "Shockwave_RED" }, { "SK_METEOR_2", "Shockwave_RED" }, { "SK_METEOR_3", "Shockwave_RED" },
+                { "SK_FORTRESS_1", "Shockwave_Common" }, { "SK_FORTRESS_2", "Shockwave_Common" },
+                { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_Common" },
+                { "SK_DEMON_1", "Scythe_BlackRed" }, { "SK_DEMON_2", "Scythe_BlackRed" },
+                { "SK_DEMON_3", "Scythe_BlackRed" }, { "SK_DEMON_4", "Scythe_BlackRed" },
+                { "SK_GOLD_BOMB_1", "Gold_Coin1" }, { "SK_GOLD_BOMB_2", "Gold_Coin1" },
+                { "SK_GOLD_BOMB_3", "Gold_Coin1" }, { "SK_GOLD_FAST", "Gold_Coin1" },
+            };
+
+            var framesCache = new Dictionary<string, Sprite[]>();
+            int filled = 0;
+            foreach (var kvp in skillSheetMap)
+            {
+                var skillPath = $"{SkillDir}/{kvp.Key}.asset";
+                var skill = AssetDatabase.LoadAssetAtPath<SO_SkillData>(skillPath);
+                if (skill == null) continue;
+
+                var sheetPath = $"{sheetDir}/{kvp.Value}.png";
+                if (!framesCache.TryGetValue(sheetPath, out var frames))
+                {
+                    frames = LoadLargeFramesSorted(sheetPath);
+                    framesCache[sheetPath] = frames;
+                }
+                if (frames == null || frames.Length == 0)
+                {
+                    Debug.LogWarning($"[SynergyDataSetup] 스킬 프레임 없음: {sheetPath}");
+                    continue;
+                }
+
+                skill.animFrames = frames;
+                if (skill.animFps <= 0f) skill.animFps = 12f;
+                EditorUtility.SetDirty(skill);
+                filled++;
+            }
+
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[SynergyDataSetup] 스킬 발동 비주얼(시트 애니메이션) {filled}개 적용 완료");
+        }
+
+        // 시트에서 충분히 큰 프레임만 골라 번호순 정렬해 반환 (작은 점/잔상 프레임 제외)
+        static Sprite[] LoadLargeFramesSorted(string sheetPath)
+        {
+            var all = new System.Collections.Generic.List<Sprite>();
+            foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(sheetPath))
+                if (asset is Sprite sp) all.Add(sp);
+            if (all.Count == 0) return new Sprite[0];
+
+            // 최대 프레임 면적의 40% 미만인 작은 프레임(점·잔상)은 제외
+            float maxArea = 0f;
+            foreach (var sp in all) maxArea = Mathf.Max(maxArea, sp.rect.width * sp.rect.height);
+            float threshold = maxArea * 0.4f;
+
+            var big = new System.Collections.Generic.List<Sprite>();
+            foreach (var sp in all)
+                if (sp.rect.width * sp.rect.height >= threshold) big.Add(sp);
+            if (big.Count == 0) big = all;
+
+            big.Sort((a, b) => ExtractTrailingNumber(a.name).CompareTo(ExtractTrailingNumber(b.name)));
+            return big.ToArray();
         }
 
         static void FillSummonIcons(string sheetDir)
