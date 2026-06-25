@@ -155,19 +155,19 @@ namespace BagSurvivor.SynergyEditor
             d["SK_DEMON_1"] = Sk("SK_DEMON_1", "지옥 검기 (투사체)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:20f,
-                fx:FixedEffectType.Burn, fxVal:0f, pierce:999);
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:1.6f);
             // 연옥 소용돌이: 캐릭터를 감싸는 불꽃 고리(Devil_Slash)가 플레이어를 따라다니며 주변 적 타격
             d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥 소용돌이",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.WPN_ATK_SUM, dmg:0.5f, cd:1f, range:3f,
-                followVfx:true, vSize:3f);
+                followVfx:true, vSize:6f);
             d["SK_DEMON_3"] = Sk("SK_DEMON_3", "마왕의 멸천참(예비)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:0.2f, cd:0.1f, range:8f);
+                ScalingStatType.WPN_ATK_SUM, dmg:0.2f, cd:0.1f, range:8f, vSize:1.6f);
             d["SK_DEMON_4"] = Sk("SK_DEMON_4", "지옥 검기 3연 (프리즘)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.ForwardTriple,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.5f, cd:2f, range:50f,
-                fx:FixedEffectType.Burn, fxVal:0f, pierce:999);
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:1.6f);
 
             // ── 대부호 (Tycoon) — OnMove / WPN_ATK_SUM / 골드 드랍 ──
             d["SK_GOLD_BOMB_1"] = Sk("SK_GOLD_BOMB_1", "골드 폭발 (브론즈)",
