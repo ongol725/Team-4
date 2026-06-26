@@ -482,7 +482,7 @@ public class SynergyManager : MonoBehaviour
                 {
                     Vector3 hitPos = cur.transform.position;
                     HitEnemy(skill, cur, damage);
-                    SpawnVFX(skill, hitPos);
+                    // 노드별 전기 이펙트는 생략 — 적과 적을 잇는 체인(연결선)만으로 표현
                     chainPts.Add(hitPos);
                     pool.Remove(cur);
                     cur = FindNearest(pool, hitPos); // 다음 홉은 직전 적 기준 최근접
