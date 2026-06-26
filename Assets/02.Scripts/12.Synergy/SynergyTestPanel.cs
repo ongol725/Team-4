@@ -27,6 +27,7 @@ public class SynergyTestPanel : MonoBehaviour
     [SerializeField] private int _armHp = 100;
 
     private bool _show = true;
+    private bool _minimized = false;
     private Vector2 _scroll;
 
     // 시너지별 선택 등급 (-1 = 해제, 0~3 = Bronze/Silver/Gold/Prism)
@@ -67,9 +68,23 @@ public class SynergyTestPanel : MonoBehaviour
     {
         if (!_show) return;
 
+        // ── 최소화 상태: 작은 복원 버튼만 표시 ──────────────
+        if (_minimized)
+        {
+            GUILayout.BeginArea(new Rect(10, 10, 150, 30), GUI.skin.box);
+            if (GUILayout.Button("시너지 테스트 ▢")) _minimized = false;
+            GUILayout.EndArea();
+            return;
+        }
+
         GUILayout.BeginArea(new Rect(10, 10, 380, Screen.height - 20), GUI.skin.box);
 
+        // ── 헤더 (제목 + 최소화 버튼) ───────────────────────
+        GUILayout.BeginHorizontal();
         GUILayout.Label($"시너지 테스트 패널  ({_toggleKey} 토글)");
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("─", GUILayout.Width(28))) _minimized = true;
+        GUILayout.EndHorizontal();
 
         if (_manager == null)
         {
