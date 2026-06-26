@@ -44,5 +44,6 @@ MonoBehaviour:
   - {fileID: -1932667270, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
   animFps: 12
   visualSize: 4.8
+  visualStretchY: 2
   dropFrames: []
   dropFps: 8

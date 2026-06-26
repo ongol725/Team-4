@@ -61,6 +61,8 @@ public class SO_SkillData : ScriptableObject
     public float animFps = 12f;
     [Tooltip("월드 표시 크기(유닛). 투사체/이펙트 스프라이트의 목표 지름")]
     public float visualSize = 0.8f;
+    [Tooltip("스프라이트 세로(로컬 Y) 추가 배율. 1=정사각 유지, 2=세로 2배(소드마스터 검기 등 비균등 확대)")]
+    public float visualStretchY = 1f;
     [Tooltip("true이면 이펙트가 플레이어에 부착되어 따라다니며 루프 재생된다(마왕 소용돌이처럼 캐릭터를 감싸는 효과)")]
     public bool vfxFollowPlayer = false;
     [Tooltip("이펙트 스프라이트 정렬 순서. 기본 10. 난공불락 충격파처럼 바닥에 깔리는 효과는 -1 등 낮은 값")]

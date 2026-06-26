@@ -112,16 +112,16 @@ namespace BagSurvivor.SynergyEditor
                 fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999, vSize:1.6f);
 
             // ── 소드마스터 (SwordMaster) — AutoTimer / WPN_ATK_AVG / Forward ──
-            // 검기: 투사체 표시 크기 확대(기본 0.8 → 4.8), 바라보는 방향(FacingForward) 발사
+            // 검기: 크기 확대(0.8→4.8) + 세로 2배(stretchY) + 바라보는 방향(FacingForward) 발사
             d["SK_SWORD_1"] = Sk("SK_SWORD_1", "검기 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f, vSize:4.8f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f, vSize:4.8f, stretchY:2f);
             d["SK_SWORD_2"] = Sk("SK_SWORD_2", "대형 검기 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, vSize:4.8f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, vSize:4.8f, stretchY:2f);
             d["SK_SWORD_3"] = Sk("SK_SWORD_3", "연속 검기 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:4.8f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:4.8f, stretchY:2f);
 
             // ── 티탄 (Titan) — AutoTimer / WPN_ATK_AVG / RandomEnemy × N ──
             d["SK_METEOR_1"] = Sk("SK_METEOR_1", "돌 떨구기 3개",
@@ -537,7 +537,7 @@ namespace BagSurvivor.SynergyEditor
             int hits = 1, float hitInterval = 0.1f, int extra = 0,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
             float duration = 0f, int pierce = 1,
-            bool followVfx = false, float vSize = 0f, int vfxSort = 10)
+            bool followVfx = false, float vSize = 0f, int vfxSort = 10, float stretchY = 1f)
         {
             string path = $"{SkillDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SkillData>(path);
@@ -559,6 +559,7 @@ namespace BagSurvivor.SynergyEditor
             asset.pierceCount      = pierce;
             asset.vfxFollowPlayer  = followVfx;
             asset.vfxSortingOrder  = vfxSort;
+            asset.visualStretchY   = stretchY;
             if (vSize > 0f) asset.visualSize = vSize;
             EditorUtility.SetDirty(asset);
             return asset;

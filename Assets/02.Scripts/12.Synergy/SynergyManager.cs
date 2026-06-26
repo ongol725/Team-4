@@ -578,6 +578,13 @@ public class SynergyManager : MonoBehaviour
             go.transform.localScale = Vector3.one * (size * 0.5f);
         }
 
+        // 세로(로컬 Y) 비균등 확대 — 투사체는 진행방향으로 회전하므로 진행방향 수직 두께가 늘어난다(소드마스터 검기)
+        if (skill.visualStretchY > 0f && skill.visualStretchY != 1f)
+        {
+            var s = go.transform.localScale;
+            go.transform.localScale = new Vector3(s.x, s.y * skill.visualStretchY, s.z);
+        }
+
         var rb          = go.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
 
