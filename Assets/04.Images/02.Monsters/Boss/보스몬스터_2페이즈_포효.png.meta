@@ -1,25 +1,31 @@
 fileFormatVersion: 2
-guid: 847a240fb85cec34daa2e371ca1efd35
+guid: 122a1d82087e8f743b99ea1ef3bb5c56
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2490108972170446661
-    second: KakaoTalk_20260624_162150730_0
+      213: 5734898640166801593
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_0"
   - first:
-      213: -6321655523161033199
-    second: KakaoTalk_20260624_162150730_1
+      213: -3086368397318193288
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_1"
   - first:
-      213: 5490230760309746838
-    second: KakaoTalk_20260624_162150730_2
+      213: -4504387600002998559
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_2"
   - first:
-      213: 7308753319183372726
-    second: KakaoTalk_20260624_162150730_3
+      213: 9067334240026396503
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_3"
   - first:
-      213: 6066433081461841215
-    second: KakaoTalk_20260624_162150730_4
+      213: -8485899072393390880
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_4"
   - first:
-      213: -8930543898697054831
-    second: KakaoTalk_20260624_162150730_5
+      213: -5325110951544819995
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_5"
+  - first:
+      213: 1398689696426881535
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_6"
+  - first:
+      213: -4356422537018674383
+    second: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_7"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -66,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 566
+  spritePixelsToUnits: 67.63954
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -87,7 +93,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 8192
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -141,13 +147,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_0"
+      name: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 566
-        height: 1248
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +162,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c285494cd5816d419e3c3649a1785fa
-      internalID: 210492377
+      spriteID: 0716001fa1e39bc4da061409f48d885b
+      internalID: 5734898640166801593
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_1"
+      name: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_1"
       rect:
         serializedVersion: 2
-        x: 566
+        x: 512
         y: 0
-        width: 566
-        height: 1248
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 317364aa102fdfa45b468701bf3a9363
-      internalID: 1865723386
+      spriteID: df220ec989184a14aa15c94102825479
+      internalID: -1244273381
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_2"
+      name: "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_2"
       rect:
         serializedVersion: 2
-        x: 1132
+        x: 1024
         y: 0
-        width: 566
-        height: 1248
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,74 +206,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 84556221390e3324885e6b2c1f931e9d
-      internalID: 550210728
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_3"
-      rect:
-        serializedVersion: 2
-        x: 1698
-        y: 0
-        width: 566
-        height: 1248
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6040af8dadffadc4db6fc7bc1f5abaf3
-      internalID: 345987024
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_4"
-      rect:
-        serializedVersion: 2
-        x: 2264
-        y: 0
-        width: 566
-        height: 1248
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b44733598f70f1f47a9e58a51e50f92e
-      internalID: -993564678
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_5"
-      rect:
-        serializedVersion: 2
-        x: 2830
-        y: 0
-        width: 566
-        height: 1248
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 835a9e0bf75116547bd2b8fb55d64fb8
-      internalID: 2097305716
+      spriteID: 8166ccf553ceaab4fba0cb5cff4f90ac
+      internalID: 992322913
       vertices: []
       indices: 
       edges: []
@@ -276,7 +216,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 7c76e3f03fde64842af9c57ee0125173
     internalID: 0
     vertices: []
     indices: 
@@ -286,14 +226,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":1.0},"gridSpriteSize":{"x":566.0,"y":1248.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":3.0,"y":1.0},"gridSpriteSize":{"x":512.0,"y":512.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_0": 210492377
-      "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_1": 1865723386
-      "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_2": 550210728
-      "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_3": 345987024
-      "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_4": -993564678
-      "\uBCF4\uC2A4\uD328\uD134\uBC94\uC704\uC774\uD399\uD2B8_5": 2097305716
+      "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_0": 5734898640166801593
+      "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_1": -1244273381
+      "\uBCF4\uC2A4\uBAAC\uC2A4\uD130_2\uD398\uC774\uC988_\uD3EC\uD6A8_2": 992322913
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
