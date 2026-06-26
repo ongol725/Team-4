@@ -22,11 +22,11 @@ namespace BagSurvivor.Monster
 
         [Header("동심원 충격파(밴드 바깥 반경, m)")]
         [Tooltip("1단 바깥 반경")]
-        public float ring1Radius = 5f;
+        public float ring1Radius = 4.5f;
         [Tooltip("2단 바깥 반경")]
-        public float ring2Radius = 10f;
+        public float ring2Radius = 7f;
         [Tooltip("3단 바깥 반경")]
-        public float ring3Radius = 15f;
+        public float ring3Radius = 11.5f;
 
         [Tooltip("각 동심원 폭발 전 경고 바닥 표시 시간(초, Hit_Delay). 단계 간 간격도 됨")]
         public float ringWarningTime = 0.5f;
@@ -41,11 +41,17 @@ namespace BagSurvivor.Monster
         [Tooltip("착지 지점 예고 표식(낙하 지점)")]
         public GameObject telegraphPrefab;
 
-        [Tooltip("각 동심원 폭발 전 경고 바닥 표식")]
+        [Tooltip("1단(중심 원) 경고 바닥 표식")]
         public GameObject ringWarningPrefab;
+
+        [Tooltip("2·3단(바깥 링) 경고 바닥 표식(이미 링 모양이라 마스크 불필요). 비우면 ringWarningPrefab 사용")]
+        public GameObject ringWarningPrefabOuter;
 
         [Tooltip("단계별 충격파(폭발) 이펙트")]
         public GameObject ringEffectPrefab;
+
+        [Tooltip("2단+ 동심원에서 안쪽(이미 터진) 범위를 가리는 SpriteMask 프리팹 → 밴드(도넛)만 표시")]
+        public GameObject ringMaskPrefab;
 
         private void Reset()
         {
@@ -69,45 +75,45 @@ namespace BagSurvivor.Monster
                 : transform.position + (Vector3)DirToPlayer() * 5f;
             lastLanding = landing;
 
-            // 착지 지점 예고 표식을 도약 시작 시 띄우고 낙하까지 유지
-            GameObject tele = telegraphPrefab != null
-                ? SpawnFromPool(telegraphPrefab, landing, Quaternion.identity) : null;
-
-            // 도약 후 공중 체공(기획서: 1초)
             controller.BeginExternalMovement();
             controller.SetKnockbackImmune(true);
+
+            // 1) 점프 애니(Execute의 Leap) 동안 체공
             if (hoverTime > 0f) yield return new WaitForSeconds(hoverTime);
 
-            // 낙하: 착지 지점으로 보간 이동(기획서: 1.5초)
-            Vector3 start = transform.position;
-            float t = 0f;
-            while (t < jumpDuration)
-            {
-                if (controller == null || controller.IsDead) break;
-                t += Time.deltaTime;
-                float u = jumpDuration > 0f ? Mathf.Clamp01(t / jumpDuration) : 1f;
-                transform.position = Vector3.Lerp(start, landing, u);
-                yield return null;
-            }
+            // 2) 보스 완전히 사라짐 + 착지 범위(첫 동심원 크기) 예고 표식 표시
+            SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+            if (sr != null) sr.enabled = false;
+            GameObject tele = SpawnScaled(telegraphPrefab, landing, ring1Radius);
+
+            // 3) 범위를 보여주는 대기(낙하 예고)
+            if (jumpDuration > 0f) yield return new WaitForSeconds(jumpDuration);
+
+            // 4) 착지 지점에 재등장 + 착지(내려찍기) 애니 → 첫 범위에 맞춰 떨어짐
             transform.position = landing;
+            if (sr != null) sr.enabled = true;
+            if (bossAnimator != null) bossAnimator.PlayPattern("LeapLand");
+            ReturnPooled(tele);
 
             controller.SetKnockbackImmune(false);
             controller.EndExternalMovement();
-            ReturnPooled(tele);
 
             // 착지 → 3단 동심원 (중심부터 바깥으로). 각 단은 '경고 바닥 → 폭발' 순서(0.5초 간격).
             ringsActive = true;
-            yield return BlastRing(landing, 0f, ring1Radius, ringWarningTime);
-            yield return BlastRing(landing, ring1Radius, ring2Radius, ringWarningTime);
-            yield return BlastRing(landing, ring2Radius, ring3Radius, ringWarningTime);
+            GameObject outerWarn = ringWarningPrefabOuter != null ? ringWarningPrefabOuter : ringWarningPrefab;
+            yield return BlastRing(landing, 0f, ring1Radius, ringWarningTime, ringWarningPrefab);   // 1단: 보스바닥경고
+            yield return BlastRing(landing, ring1Radius, ring2Radius, ringWarningTime, outerWarn);  // 2단: 테두리
+            yield return BlastRing(landing, ring2Radius, ring3Radius, ringWarningTime, outerWarn);  // 3단: 테두리
 
             // 2페이즈 강화: 0.7초 후 2차 폭발 — 1·2·3단을 빠르게(0.2초 간격) 연속 "퍼버벙"
             if (phase2Mode)
             {
                 yield return new WaitForSeconds(phase2SecondWaveDelay);
-                yield return BlastRing(landing, 0f, ring1Radius, phase2SecondWaveRingDelay);
-                yield return BlastRing(landing, ring1Radius, ring2Radius, phase2SecondWaveRingDelay);
-                yield return BlastRing(landing, ring2Radius, ring3Radius, phase2SecondWaveRingDelay);
+                // 2차 내려찍기: 착지 모션 한 번 더(바닥 찍는 느낌)
+                if (bossAnimator != null) bossAnimator.PlayPattern("LeapLand", true);
+                yield return BlastRing(landing, 0f, ring1Radius, phase2SecondWaveRingDelay, ringWarningPrefab);
+                yield return BlastRing(landing, ring1Radius, ring2Radius, phase2SecondWaveRingDelay, outerWarn);
+                yield return BlastRing(landing, ring2Radius, ring3Radius, phase2SecondWaveRingDelay, outerWarn);
             }
 
             ringsActive = false;
@@ -124,12 +130,15 @@ namespace BagSurvivor.Monster
         }
 
         /// <summary>경고 바닥(outer 크기) 표시 → warningTime 후 폭발 + (inner,outer] 밴드 타격.</summary>
-        private IEnumerator BlastRing(Vector3 center, float inner, float outer, float warningTime)
+        private IEnumerator BlastRing(Vector3 center, float inner, float outer, float warningTime, GameObject warnPrefab)
         {
             // 폭발 전 경고 바닥(밴드 바깥 반경 크기로 스케일)
-            GameObject warn = SpawnScaled(ringWarningPrefab, center, outer);
+            GameObject warn = SpawnScaled(warnPrefab, center, outer);
+            // 2단+ : 안쪽(이미 터진) 범위를 SpriteMask로 가려 도넛(밴드)만 보이게
+            GameObject mask = (inner > 0f && ringMaskPrefab != null) ? SpawnScaled(ringMaskPrefab, center, inner) : null;
             if (warningTime > 0f) yield return new WaitForSeconds(warningTime);
             ReturnPooled(warn);
+            ReturnPooled(mask);
 
             // 폭발 이펙트 + 타격
             SpawnScaled(ringEffectPrefab, center, outer);
@@ -141,11 +150,15 @@ namespace BagSurvivor.Monster
             }
         }
 
-        /// <summary>풀에서 꺼내 지름=2*radius로 스케일해 배치(더미 1유닛 스프라이트가 범위를 덮도록).</summary>
+        /// <summary>풀에서 꺼내 '월드 지름 = 2*radius(m)'가 되도록 스케일. 스프라이트의 실제 크기(PPU 무관)로
+        /// 나눠 맞추므로, 슬라이스/PPU가 어떻든 반지름이 유니티 월드 유닛 그대로 나온다.</summary>
         private GameObject SpawnScaled(GameObject prefab, Vector3 pos, float radius)
         {
             GameObject go = SpawnFromPool(prefab, pos, Quaternion.identity);
-            if (go != null) go.transform.localScale = Vector3.one * (radius * 2f);
+            if (go == null) return null;
+            var sr = go.GetComponentInChildren<SpriteRenderer>();
+            float native = (sr != null && sr.sprite != null) ? sr.sprite.bounds.size.x : 1f; // 스프라이트 실제 폭(월드 유닛)
+            go.transform.localScale = Vector3.one * (native > 0.0001f ? (radius * 2f) / native : radius * 2f);
             return go;
         }
     }

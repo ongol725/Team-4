@@ -16,7 +16,7 @@ using BagSurvivor.Monster;
 public static class EliteSetup
 {
     private const string MonsterDir = "Assets/03.Prefabs/02.Monsters/";
-    private const string DataDir = "Assets/Resources/Data/";
+    private const string DataDir = "Assets/Resources/ScriptableObjects/Monsters/";
     private const string ImgPath = "Assets/04.Images/02.Monsters/EliteWarning.png";
 
     private const string SlimeData = DataDir + "MonsterData_1003_Slime.asset";

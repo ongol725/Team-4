@@ -28,6 +28,9 @@ namespace BagSurvivor.Monster
         [Tooltip("무적 상태로 멈춰 있는 전환 연출 시간(초)")]
         public float transitionDuration = 2f;
 
+        [Tooltip("전환 시 내려앉을 가운데 = 스폰 위치 + 이 오프셋. 예: (0,-8,0)이면 아래로 8 이동")]
+        public Vector3 phaseCenterOffset = Vector3.zero;
+
         [Header("2페이즈")]
         [Tooltip("진입 시 바닥에 생성할 영구 장판 프리팹(선택)")]
         public GameObject floorHazardPrefab;
@@ -37,6 +40,8 @@ namespace BagSurvivor.Monster
 
         private MonsterController controller;
         private BossPatternDriver driver;
+        private BossAnimator bossAnimator;
+        private Vector3 phaseCenter;   // 전환 시 내려앉을 가운데 = 스폰(시작) 위치
         private bool transitioning;
         private bool transitioned;
 
@@ -47,6 +52,7 @@ namespace BagSurvivor.Monster
         {
             controller = GetComponent<MonsterController>();
             driver = GetComponent<BossPatternDriver>();
+            bossAnimator = GetComponent<BossAnimator>();
         }
 
         private void OnEnable()
@@ -54,6 +60,7 @@ namespace BagSurvivor.Monster
             // 풀 재사용/재시작 대비 초기화
             transitioning = false;
             transitioned = false;
+            phaseCenter = transform.position + phaseCenterOffset; // 스폰 위치 + 오프셋 = 전환 시 내려앉을 가운데
         }
 
         private void Update()
@@ -78,25 +85,43 @@ namespace BagSurvivor.Monster
                 yield return null;
             }
 
-            // 패턴 종료 → 전환 진행: 무적(아직이면 지금 부여) + 패턴 정지(제자리)
+            // 패턴 종료 → 전환 진행: 무적 + 패턴 정지 + 이동 제어 위임
             controller.SetInvincible(true);
             if (driver != null) driver.Halt();
+            controller.BeginExternalMovement();
+            controller.SetKnockbackImmune(true);
 
-            // 전환 연출 시간
-            if (transitionDuration > 0f)
-                yield return new WaitForSeconds(transitionDuration);
+            Vector3 start = transform.position;
+            float half = Mathf.Max(0.1f, transitionDuration * 0.5f);
 
-            // 바닥 영구 장판 생성 (영구 지속이므로 풀 대신 직접 생성)
+            // 1) 1페이즈 점프 모션(체공)
+            if (bossAnimator != null) bossAnimator.PlayPattern("Leap");
+            yield return new WaitForSeconds(half);
+
+            // 2) 2페이즈 전환 → 착지 모션으로 가운데(스폰 위치)로 하강 이동
+            ApplyPhase2Strengthen();
+            transitioned = true;                 // IsPhase2 → BossAnimator가 P2 컨트롤러로 스왑
+            yield return null;                   // 스왑 한 프레임 대기
+            if (bossAnimator != null) bossAnimator.PlayPattern("LeapLand");
+            float t = 0f;
+            while (t < half)
+            {
+                t += Time.deltaTime;
+                transform.position = Vector3.Lerp(start, phaseCenter, Mathf.Clamp01(t / half));
+                yield return null;
+            }
+            transform.position = phaseCenter;    // 바닥 위치 고정(가운데)
+
+            // 바닥 영구 장판(가운데, 영구 지속이므로 풀 대신 직접 생성)
             if (floorHazardPrefab != null)
                 Instantiate(floorHazardPrefab, transform.position, Quaternion.identity);
 
-            // 2페이즈 강화: 기존 패턴 쿨다운 단축
-            ApplyPhase2Strengthen();
-
-            transitioned = true;
             transitioning = false;
 
-            // 무적 해제 + 패턴 재개
+            // 제어/무적 해제 + locomotion 복귀 + 패턴 재개
+            controller.SetKnockbackImmune(false);
+            controller.EndExternalMovement();
+            if (bossAnimator != null) bossAnimator.BackToLocomotion();
             controller.SetInvincible(false);
             if (driver != null) driver.Resume();
         }

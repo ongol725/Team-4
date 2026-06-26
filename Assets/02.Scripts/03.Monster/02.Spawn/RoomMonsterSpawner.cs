@@ -108,11 +108,9 @@ namespace BagSurvivor.Monster
         [Header("특수방 스폰 (Elite / MiniBoss / Boss)")]
         public List<SpecialRoomRule> specialRules = new List<SpecialRoomRule>();
 
-        [Header("밴드 경계 (시작방→특수방 거리비율 t)")]
-        [Tooltip("t < 이 값 → 가까운(near) 밴드")]
-        [Range(0f, 1f)] public float nearThreshold = 0.4f;
-        [Tooltip("t < 이 값 → 중간(mid) 밴드, 그 이상은 먼(far) 밴드")]
-        [Range(0f, 1f)] public float midThreshold = 0.75f;
+        [Header("밴드 분류 (near=시작방 인접 / far=잠긴방 최근접 / 나머지=mid)")]
+        [Tooltip("near 링 폭: 시작방에서 가장 가까운 일반방 거리의 이 배수 이내면 near로 간주(방 연결 그래프가 없어 거리로 근사). 클수록 near 방이 많아짐")]
+        public float nearRingFactor = 1.5f;
 
         [Header("스폰 위치 옵션")]
         [Tooltip("방 가장자리(벽)와 띄울 그리드 여백")]
@@ -147,6 +145,19 @@ namespace BagSurvivor.Monster
         // 같은 씬에서 층 이동(던전 재생성)해도 이 스폰러 인스턴스는 유지됨 → 중간보스 직전 선택을
         // 인스턴스 필드로 기억해 2↔4층 중복을 방지. (타입별 마지막 선택 프리팹)
         private readonly Dictionary<RoomType, GameObject> lastSpecialPick = new Dictionary<RoomType, GameObject>();
+
+        // 외부 기믹(분열 등)이 디스폰 추적에 등록할 수 있도록 노출
+        public static RoomMonsterSpawner Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance == null) Instance = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
 
         private IEnumerator Start()
         {
@@ -257,6 +268,19 @@ namespace BagSurvivor.Monster
                 foreach (GameObject p in r.monsterPrefabs)
                     if (p != null) pool.Prewarm(p, Mathf.Max(1, r.maxCount));
             }
+        }
+
+        /// <summary>외부(분열 슬라임 등)에서 만든 몬스터를 디스폰 추적에만 등록합니다.
+        /// 방 클리어 카운트에는 넣지 않음(보너스). 플레이어가 방을 떠나면 일반 몬스터와 함께 회수됩니다.</summary>
+        public void TrackExternalMonster(MonsterController mc)
+        {
+            if (mc == null || pool == null) return;
+            activeMonsters.Add(mc);
+            mc.SetDeathCallback(m =>
+            {
+                activeMonsters.Remove(m);
+                pool.Return(m);
+            });
         }
 
         /// <summary>현재 활성 몬스터를 모두 풀로 반환합니다. (사망이 아닌 디스폰이라 방 클리어는 통지하지 않음)</summary>
@@ -389,22 +413,41 @@ namespace BagSurvivor.Monster
             }
         }
 
-        /// <summary>시작방→특수방(Elite/MiniBoss/Boss) 거리비율 t로 밴드(0=near,1=mid,2=far)를 결정.</summary>
+        /// <summary>밴드(0=near,1=mid,2=far)를 결정.
+        /// far = 잠긴 특수방에 가장 가까운 일반방, near = 시작방 최근접 링, 나머지 = mid.
+        /// (방 연결 그래프가 없어 방 중심 거리로 근사)</summary>
         private int ComputeBand(RoomController rc)
         {
             RoomController start = FindRoomOfType(RoomType.Start);
             RoomController lockRoom = FindLockedRoom();
-            if (start == null || lockRoom == null) return 0;
+            if (start == null || lockRoom == null) return 1; // 기준 없으면 mid
 
-            Vector2 c = rc.roomBounds.center;
-            float dStart = Vector2.Distance(c, start.roomBounds.center);
-            float dLock = Vector2.Distance(c, lockRoom.roomBounds.center);
-            float sum = dStart + dLock;
-            float t = sum > 0.001f ? Mathf.Clamp01(dStart / sum) : 0f; // 0=시작방 근처, 1=특수방 근처
+            Vector2 startC = start.roomBounds.center;
+            Vector2 lockC = lockRoom.roomBounds.center;
 
-            if (t < nearThreshold) return 0;
-            if (t < midThreshold) return 1;
-            return 2;
+            // 모든 일반방을 훑어 (a) 잠긴방 최근접 방(far), (b) 시작방 최소거리(near 링 기준)를 찾음
+            RoomController farRoom = null;
+            float bestLock = float.MaxValue;
+            float minStart = float.MaxValue;
+            foreach (RoomController r in subscribed)
+            {
+                if (r == null || r.roomType != RoomType.Normal) continue;
+                Vector2 rc2 = r.roomBounds.center;
+                float dl = Vector2.Distance(rc2, lockC);
+                if (dl < bestLock) { bestLock = dl; farRoom = r; }
+                float ds = Vector2.Distance(rc2, startC);
+                if (ds < minStart) minStart = ds;
+            }
+
+            // far: 잠긴방(보스/엘리트/중간보스)에 가장 가까운 일반방 1개
+            if (rc == farRoom) return 2;
+
+            // near: 시작방에서 가장 가까운 링(최소거리의 nearRingFactor 배 이내)
+            float dStartRc = Vector2.Distance(rc.roomBounds.center, startC);
+            if (minStart < float.MaxValue && dStartRc <= minStart * Mathf.Max(1f, nearRingFactor)) return 0;
+
+            // 나머지는 전부 mid
+            return 1;
         }
 
         private RoomController FindRoomOfType(RoomType type)
@@ -440,10 +483,12 @@ namespace BagSurvivor.Monster
             int count = Random.Range(rule.minCount, rule.maxCount + 1);
             float hp = hpMul * Mathf.Max(0.01f, rule.hpMultiplier);   // 층별 차등 배율
             float atk = atkMul * Mathf.Max(0.01f, rule.attackMultiplier);
+            // 4층 미니보스만 보스 패턴(BossPatternDriver) 작동 — 2층 등 다른 곳은 일반 몬스터
+            bool bossPattern = floor == 4 && rc.roomType == RoomType.MiniBoss;
             for (int i = 0; i < count; i++)
             {
                 GameObject prefab = PickSpecialPrefab(rule);
-                SpawnOne(rc, prefab, hp, atk);
+                SpawnOne(rc, prefab, hp, atk, bossPattern);
             }
         }
 
@@ -465,7 +510,7 @@ namespace BagSurvivor.Monster
             return pick;
         }
 
-        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul)
+        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool enableBossPattern = false)
         {
             if (prefab == null) return;
 
@@ -478,6 +523,10 @@ namespace BagSurvivor.Monster
 
             MonsterController mc = pool.Get(prefab, pos, hpMul, atkMul);
             if (mc == null) return;
+
+            // 보스 패턴 구동기: 4층 미니보스만 켬(평소/풀재사용엔 꺼서 일반 몬스터로 동작)
+            var driver = mc.GetComponent<BossPatternDriver>();
+            if (driver != null) driver.enabled = enableBossPattern;
 
             activeMonsters.Add(mc);
 

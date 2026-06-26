@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using BagSurvivor.Monster; // RoomMonsterSpawner (디스폰/재스폰 연동)
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class RoomController : MonoBehaviour
@@ -29,6 +30,9 @@ public class RoomController : MonoBehaviour
     private Transform playerTf;         // 진입한 플레이어 (안쪽 진입 판정용)
     private Collider2D roomCol;         // 방 트리거 콜라이더 (월드 bounds 판정용)
     private Coroutine confirmCo;        // 특수방 진입 확인 대기 코루틴
+    private Coroutine guardCo;          // 잠금 후 플레이어 존재 가드 코루틴
+    private bool doorClosed = false;    // 현재 문이 닫혀(잠겨) 있는가
+    private bool roomCleared = false;   // 방 클리어(영구 개방)되었는가
     private int monsterCount = 0;
 
     // 특수 방 여부: 문/계단 시스템이 작동하는 방
@@ -91,12 +95,73 @@ public class RoomController : MonoBehaviour
         if (door != null)
         {
             door.Close();
+            doorClosed = true;
             Debug.Log($"[{roomType}] 문 잠금");
 
             // 몬스터가 등록되지 않은 상태면 (스폰 규칙 없음 등) 즉시 클리어
             if (monsterCount <= 0)
                 ClearRoom();
+            else
+                guardCo = StartCoroutine(PresenceGuard()); // 잠금 후 존재 가드 시작
         }
+    }
+
+    /// <summary>잠금 후 안전장치(히스테리시스):
+    ///  - 닫힘 중 플레이어가 방 콜라이더를 '완전히' 벗어나면(밀려남 등) → 재개방(자가 치유)
+    ///  - 다시 '충분히 안쪽'으로 들어오고 몬스터가 남아있으면 → 재잠금
+    /// 잠금 기준(well-inside)과 해제 기준(콜라이더 완전 이탈)을 다르게 둬 문턱 떨림을 방지.</summary>
+    private IEnumerator PresenceGuard()
+    {
+        var wait = new WaitForSeconds(0.1f);
+        while (!roomCleared)
+        {
+            bool inside = IsPlayerInsideCollider();
+
+            if (doorClosed && !inside)
+            {
+                // 잠겼는데 플레이어가 완전히 밖 → 재개방 + 몬스터 디스폰(따라 나오지 못하게)
+                if (door != null) door.Open();
+                doorClosed = false;
+                DespawnRoomMonsters();
+                Debug.Log($"[{roomType}] 플레이어가 밖에 있어 문 임시 개방 + 몬스터 디스폰");
+            }
+            else if (!doorClosed && IsPlayerWellInside())
+            {
+                // 다시 깊이 들어옴 → 재잠금 + 재스폰(처음부터)
+                if (door != null) door.Close();
+                doorClosed = true;
+                RespawnRoomMonsters();
+                Debug.Log($"[{roomType}] 플레이어 재진입 → 문 재잠금 + 재스폰");
+            }
+
+            yield return wait;
+        }
+        guardCo = null;
+    }
+
+    /// <summary>플레이어가 방 트리거 콜라이더 안에 (여백 없이) 있는지. 해제 판정용.</summary>
+    private bool IsPlayerInsideCollider()
+    {
+        if (playerTf == null) return false;
+        if (roomCol == null) roomCol = GetComponent<Collider2D>();
+        if (roomCol == null) return false;
+        return roomCol.OverlapPoint(playerTf.position);
+    }
+
+    /// <summary>이 방 몬스터를 풀로 회수(문 밖으로 따라 나오지 못하게). 카운트도 0으로 초기화.</summary>
+    private void DespawnRoomMonsters()
+    {
+        // 특수방에 있을 땐 스폰러의 활성 목록 = 이 방 몬스터뿐(일반방 몬스터는 진입 시 이미 디스폰됨)
+        if (RoomMonsterSpawner.Instance != null)
+            RoomMonsterSpawner.Instance.DespawnAllMonsters();
+        monsterCount = 0; // 디스폰은 사망 콜백을 안 거치므로 직접 초기화
+    }
+
+    /// <summary>재진입 시 이 방을 처음부터 다시 스폰(스폰러가 OnPlayerEnterRoom을 듣고 SpawnForRoom 실행).</summary>
+    private void RespawnRoomMonsters()
+    {
+        monsterCount = 0;
+        OnPlayerEnterRoom?.Invoke();
     }
 
     /// <summary>플레이어가 방 가장자리에서 safeInnerMargin 이상 안쪽에 있는지(문에 안 걸침).
@@ -134,6 +199,8 @@ public class RoomController : MonoBehaviour
 
     private void ClearRoom()
     {
+        roomCleared = true;          // 존재 가드 종료 신호
+        doorClosed = false;
         if (door != null) door.Open();
         if (stairs != null) stairs.SetActive(true);
         Debug.Log($"[{roomType}] 방 클리어!");

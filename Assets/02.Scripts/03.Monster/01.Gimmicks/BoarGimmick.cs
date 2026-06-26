@@ -31,6 +31,10 @@ namespace BagSurvivor.Monster
         [Tooltip("돌진 후 휴식 시간 (초)")]
         public float restDuration = 3f;
 
+        [Header("돌진 경고선(에셋, 선택)")]
+        [Tooltip("DashWarn 같은 경고선 프리팹. 없으면 기존 빨간 LineRenderer로 폴백(에셋 미보유 팀원 대응)")]
+        public GameObject chargeWarnPrefab;
+
         // ==========================================
         // 내부 변수
         // ==========================================
@@ -40,6 +44,8 @@ namespace BagSurvivor.Monster
 
         // 돌진 시각 효과용 (빨간 집중선)
         private LineRenderer chargeLine;
+        // 돌진 경고선 프리팹 인스턴스(1회 생성 후 재사용 — 풀링 대용)
+        private GameObject warnInstance;
 
         private void Awake()
         {
@@ -149,6 +155,24 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void ShowChargeLine(Vector2 direction)
         {
+            // 경고선 프리팹이 있으면 그걸 사용(돌진 방향 회전 + 길이만큼 타일)
+            if (chargeWarnPrefab != null)
+            {
+                if (warnInstance == null)
+                    warnInstance = Instantiate(chargeWarnPrefab, transform);
+                warnInstance.transform.position = transform.position;
+                float ang = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                warnInstance.transform.rotation = Quaternion.Euler(0f, 0f, ang);
+                var wsr = warnInstance.GetComponentInChildren<SpriteRenderer>();
+                if (wsr != null && wsr.drawMode != SpriteDrawMode.Simple)
+                {
+                    wsr.size = new Vector2(chargeMaxDistance, wsr.size.y);
+                    wsr.transform.localPosition = new Vector3(chargeMaxDistance * 0.5f, 0f, 0f);
+                }
+                warnInstance.SetActive(true);
+                return;
+            }
+
             if (chargeLine == null)
             {
                 GameObject lineObj = new GameObject("ChargeLine");
@@ -173,10 +197,8 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void HideChargeLine()
         {
-            if (chargeLine != null)
-            {
-                chargeLine.enabled = false;
-            }
+            if (warnInstance != null) warnInstance.SetActive(false);
+            if (chargeLine != null) chargeLine.enabled = false;
         }
 
         private void OnDisable()

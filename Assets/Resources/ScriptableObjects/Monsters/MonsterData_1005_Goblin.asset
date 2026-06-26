@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b67114c1ce0f79438995e960a7b26c9, type: 3}
+  m_Name: MonsterData_1005_Goblin
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterData
+  index: 1005
+  monsterName: "\uACE0\uBE14\uB9B0"
+  englishName: Goblin
+  grade: 0
+  maxHP: 75
+  attack: 10
+  defense: 2
+  attackStyle: 0
+  attackPattern: 0
+  moveSpeed: 2.5
+  movePattern: 0
+  kbResist: 0.1
+  kbCooldown: 0
+  spawnType: 1
+  spawnInterval: 5
+  spawnCount: 6
+  dropItemID: Item_001
+  dropItemValue: 20
+  prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Goblin.prefab
