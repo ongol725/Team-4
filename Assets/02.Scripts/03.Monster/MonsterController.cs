@@ -44,8 +44,8 @@ namespace BagSurvivor.Monster
         private const float KNOCKBACK_DURATION = 0.3f;
 
         [Header("사망 설정")]
-        [Tooltip("사망 이펙트 후 풀 반환까지 대기 시간 (초)")]
-        private const float DEATH_DELAY = 0.1f;
+        [Tooltip("사망 모션/이펙트 재생 후 풀 반환까지 대기 시간 (초). 보스는 길게(예: 5)")]
+        public float deathDelay = 0.1f;
 
         // ==========================================
         // 런타임 변수
@@ -402,7 +402,47 @@ namespace BagSurvivor.Monster
                 return;
             }
 
-            rb.linearVelocity = (toPlayer / dist) * monsterData.moveSpeed * _speedMultiplier;
+            Vector2 dir = AvoidPillar(toPlayer / dist);
+            rb.linearVelocity = dir * monsterData.moveSpeed * _speedMultiplier;
+        }
+
+        /// <summary>스프라이트를 좌우 방향(dirX)에 맞춰 뒤집습니다. 돌진 등 외부제어 패턴 중 방향 고정용
+        /// (외부제어 동안엔 ChasePlayer가 안 돌아 flipX가 자동 갱신되지 않으므로 패턴이 직접 호출).</summary>
+        public void FaceDirection(float dirX)
+        {
+            if (spriteRenderer != null && Mathf.Abs(dirX) > 0.01f)
+                spriteRenderer.flipX = dirX < 0f;
+        }
+
+        // 기둥 받침(PillarBlock 트리거)을 '돌아서' 가는 국소 회피. 물리 충돌이 아니라 레이캐스트 감지 +
+        // 한 방향으로 커밋(경로가 뚫릴 때까지 유지)해 매끄럽게 우회 → 비비적댐/떨림 없음.
+        private static int pillarMaskCache = -1; // -1=미초기화, 0=레이어없음, 그외=레이어마스크
+        private int avoidSide;                    // 0=비회피, +1=좌측 접선, -1=우측 접선(커밋)
+
+        private Vector2 AvoidPillar(Vector2 dir)
+        {
+            if (pillarMaskCache < 0)
+            {
+                int l = LayerMask.NameToLayer("PillarBlock");
+                pillarMaskCache = l < 0 ? 0 : (1 << l);
+            }
+            if (pillarMaskCache == 0) return dir;
+
+            const float look = 2.5f;
+            Vector2 pos = transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(pos, dir, look, pillarMaskCache);
+            if (!hit) { avoidSide = 0; return dir; }   // 경로 깨끗 → 회피 해제(직진)
+
+            Vector2 left = new Vector2(-dir.y, dir.x);
+            if (avoidSide == 0)
+            {
+                // 받침이 왼쪽이면 오른쪽으로, 오른쪽이면 왼쪽으로 돈다(한 번 정하면 통과까지 유지)
+                Vector2 toHit = hit.point - pos;
+                avoidSide = Vector2.Dot(left, toHit) > 0f ? -1 : 1;
+            }
+            Vector2 tangent = avoidSide > 0 ? left : -left;
+            float t = Mathf.Clamp01(hit.distance / look);   // 0=코앞(접선 위주) … 1=멀리(전진 위주)
+            return (tangent * (1f - t) + dir * t).normalized;
         }
 
         // ==========================================
@@ -533,20 +573,8 @@ namespace BagSurvivor.Monster
             if (col != null) col.enabled = false;
             rb.linearVelocity = Vector2.zero;
 
-            // 2. 사망 이펙트 (0.1초)
-            // TODO: 폭발 파티클 등 사망 이펙트 추가
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
-            }
-
-            yield return new WaitForSeconds(DEATH_DELAY);
-
-            // 3. 드롭 아이템 스폰
-            SpawnDropItem();
-
-            // 3-1. 사망 이벤트 통지 (분열 등 기믹이 사망 위치에서 반응). 풀 반환 전에 호출.
-            // try-finally: OnDeath 핸들러에서 예외가 발생해도 deathCallback이 반드시 실행되도록 보장
+            // 2. 사망 모션/이펙트 시작 — 대기 '전'에 호출해 deathDelay 동안 사망 애니가 보이게.
+            //    (분열 등 기믹도 여기서 반응. OnDeath → deathCallback 순서는 방 클리어 카운트에 중요)
             try
             {
                 OnDeath?.Invoke(this);
@@ -555,14 +583,16 @@ namespace BagSurvivor.Monster
             {
                 Debug.LogError($"[MonsterController] OnDeath 핸들러 예외: {e}");
             }
-            finally
-            {
-                // 4. 사망 통지 / 오브젝트 풀 반환
-                if (deathCallback != null)
-                    deathCallback.Invoke(this);
-                else
-                    gameObject.SetActive(false);
-            }
+
+            // 3. 사망 연출 시간(보스는 길게) — 이 동안 Death 애니/이펙트 표시
+            yield return new WaitForSeconds(deathDelay);
+
+            // 4. 드롭 + 사망 통지 / 풀 반환
+            SpawnDropItem();
+            if (deathCallback != null)
+                deathCallback.Invoke(this);
+            else
+                gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -672,17 +702,28 @@ namespace BagSurvivor.Monster
         public bool IsInvincible => isInvincible;
 
         /// <summary>일정 시간 동안 받는 피해를 reductionPercent(0~1)만큼 감소시킵니다(보스 강화 버프 등).</summary>
+        [Tooltip("데미지 감소 버프 동안 보스 위에 표시할 이펙트(선택). 반투명 권장)")]
+        public GameObject damageReductionVfxPrefab;
+        private GameObject damageReductionVfx;
+
         public void ApplyDamageReduction(float reductionPercent, float duration)
         {
             if (damageReductionCo != null) StopCoroutine(damageReductionCo);
+            if (damageReductionVfx != null) Destroy(damageReductionVfx); // 중복 적용 시 이전 이펙트 정리
             damageReductionCo = StartCoroutine(DamageReductionRoutine(Mathf.Clamp01(reductionPercent), duration));
         }
 
         private IEnumerator DamageReductionRoutine(float reduction, float duration)
         {
             damageTakenMultiplier = 1f - reduction;
+            if (damageReductionVfxPrefab != null)
+            {
+                damageReductionVfx = Instantiate(damageReductionVfxPrefab, transform); // 자식 → 보스 따라다님
+                damageReductionVfx.transform.localPosition = Vector3.zero;
+            }
             yield return new WaitForSeconds(duration);
             damageTakenMultiplier = 1f;
+            if (damageReductionVfx != null) { Destroy(damageReductionVfx); damageReductionVfx = null; }
             damageReductionCo = null;
         }
 

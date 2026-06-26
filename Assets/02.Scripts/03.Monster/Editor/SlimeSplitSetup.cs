@@ -14,7 +14,7 @@ public static class SlimeSplitSetup
 {
     private const string SlimePath     = "Assets/03.Prefabs/02.Monsters/Prefab_Slime.prefab";
     private const string SplitPath     = "Assets/03.Prefabs/02.Monsters/Prefab_SplitSlime.prefab";
-    private const string SplitDataPath = "Assets/Resources/Data/MonsterData_1004_SplitSlime.asset";
+    private const string SplitDataPath = "Assets/Resources/ScriptableObjects/Monsters/MonsterData_1004_SplitSlime.asset";
     private const float  SplitScale    = 0.5f;
     private const int    SplitCount    = 4;
 

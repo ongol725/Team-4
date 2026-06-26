@@ -51,8 +51,12 @@ namespace BagSurvivor.Monster
                 MonsterController split = MonsterPool.Instance.Get(splitPrefab, pos);
                 if (split == null) continue;
 
-                // 보너스 처리: 방 클리어 통지는 하지 않고, 사망 시 풀 반환만.
-                split.SetDeathCallback(m => MonsterPool.Instance.Return(m));
+                // 보너스 처리: 방 클리어 통지는 하지 않음.
+                // 스폰러에 디스폰 추적용으로 등록 → 플레이어가 방을 떠나면(복도 진입) 일반 몬스터처럼 같이 회수.
+                if (RoomMonsterSpawner.Instance != null)
+                    RoomMonsterSpawner.Instance.TrackExternalMonster(split);
+                else
+                    split.SetDeathCallback(m => MonsterPool.Instance.Return(m)); // 폴백: 스폰러 없으면 풀 반환만
             }
         }
     }

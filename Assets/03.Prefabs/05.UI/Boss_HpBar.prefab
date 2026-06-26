@@ -368,11 +368,10 @@ MonoBehaviour:
   hpText: {fileID: 94891405520464340}
   delayBeforeCatch: 0.2
   catchDuration: 0.4
-  demoMode: 0
-  demoMaxHP: 1000
-  demoCurHP: 1000
-  demoInterval: 1.2
-  demoHitPercent: 0.12
+  growInterval: 30
+  growAmount: 125
+  standaloneMaxHP: 5000
+  standaloneCurHP: 5000
 --- !u!1 &6155140266208001385
 GameObject:
   m_ObjectHideFlags: 0

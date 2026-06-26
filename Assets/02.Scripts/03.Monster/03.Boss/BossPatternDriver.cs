@@ -39,10 +39,10 @@ namespace BagSurvivor.Monster
         public float decisionInterval = 0.2f;
 
         [Header("디버그(검증용)")]
-        [Tooltip("켜면 자동 패턴 선택을 멈추고, 숫자키(1~N)로 패턴을 직접 발동. 쿨다운·확률·사거리 무시.")]
+        [Tooltip("수동(연습) 모드: 자동 선택을 멈추고 숫자키(1~N)로 패턴 직접 발동. 게임 중 화면 버튼으로 토글 가능.")]
         public bool debugManualMode = false;
 
-        [Tooltip("디버그 키 매핑 범례를 화면 좌상단에 표시")]
+        [Tooltip("화면 좌상단에 모드 전환 버튼/범례 표시(끄면 버튼도 숨김)")]
         public bool debugShowLegend = true;
 
         private MonsterController controller;
@@ -225,14 +225,24 @@ namespace BagSurvivor.Monster
 
         private void OnGUI()
         {
-            if (!debugManualMode || !debugShowLegend) return;
+            if (!debugShowLegend) return;
 
-            int n = Mathf.Min(all.Count, 9);
-            GUILayout.BeginArea(new Rect(10, 10, 320, 24 + n * 20 + (executing ? 22 : 0)));
-            GUILayout.Label("[디버그] 숫자키로 패턴 발동");
-            for (int i = 0; i < n; i++)
-                GUILayout.Label($"  {i + 1} : {all[i].patternName}{(all[i].IsSpecial ? " (특수)" : "")}");
-            if (executing) GUILayout.Label("  ▶ 실행 중...");
+            int n = debugManualMode ? Mathf.Min(all.Count, 9) : 0;
+            GUILayout.BeginArea(new Rect(10, 10, 320, 40 + n * 20 + (executing ? 22 : 0)));
+
+            // 항상 보이는 모드 전환 버튼 (자동=확률 ↔ 수동=연습)
+            string label = debugManualMode ? "▶ 수동(연습) 모드 — 자동(확률)으로 전환"
+                                           : "▶ 자동(확률) 모드 — 수동(연습)으로 전환";
+            if (GUILayout.Button(label, GUILayout.Width(300), GUILayout.Height(26)))
+                debugManualMode = !debugManualMode;
+
+            if (debugManualMode)
+            {
+                GUILayout.Label("숫자키(1~N)로 패턴 발동:");
+                for (int i = 0; i < n; i++)
+                    GUILayout.Label($"  {i + 1} : {all[i].patternName}{(all[i].IsSpecial ? " (특수)" : "")}");
+                if (executing) GUILayout.Label("  ▶ 실행 중...");
+            }
             GUILayout.EndArea();
         }
 

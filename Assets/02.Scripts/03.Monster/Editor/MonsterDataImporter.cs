@@ -15,7 +15,7 @@ namespace BagSurvivor.Monster
         // CSV 파일 기본 경로
         private string csvPath = "Docs/MonsterDataBase.csv";
         // SO 에셋 저장 경로
-        private string outputPath = "Assets/Resources/Data";
+        private string outputPath = "Assets/Resources/ScriptableObjects/Monsters";
 
         [MenuItem("BagSurvivor/몬스터 데이터 가져오기")]
         public static void ShowWindow()

@@ -119,6 +119,9 @@ namespace BagSurvivor.UI
                 displayedDelayed = cur;
                 SetDelayed(cur);
             }
+
+            // 보스 미연결(던전)일 때만: 오른 최대 체력을 보스룸으로 이월 기록
+            if (target == null) BossHpCarry.Set(standaloneMaxHP);
         }
 
         // 현재 HP(정수)와 최대 HP(정수)를 반환 (연결된 보스 우선, 없으면 standalone)

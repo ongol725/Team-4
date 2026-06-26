@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private bool isStunned = false;
+
+    /// <summary>현재 이동 입력(-1~1). 방향 애니메이션 등에서 참조.</summary>
+    public Vector2 MoveInput => moveInput;
     private bool _inventoryOpen = false;
     private Vector2 _prevPosition;
 

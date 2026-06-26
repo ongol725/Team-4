@@ -42,6 +42,9 @@ namespace BagSurvivor.Monster
             chance = 30f;
         }
 
+        // 텔레그래프 동안은 대기, 실제 타격 때 할퀴기 모션 재생
+        protected override bool AutoPlayAnimOnExecute => false;
+
         private Vector2 lockedDir = Vector2.right; // 시전 시점 고정 방향(기즈모용)
 
         protected override IEnumerator ExecuteRoutine()
@@ -50,20 +53,28 @@ namespace BagSurvivor.Monster
             lockedDir = dir;
 
             // 텔레그래프(예고) — 플레이어 방향으로 표시
-            GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
+            // 부채꼴: 꼭짓점이 보스에 붙고 +Y(이미지 위)가 펼침 방향 → +Y를 플레이어 방향으로 회전.
+            // 크기는 프리팹에 hitRange 기준(콘텐츠 reach=hitRange)으로 베이크돼 있으니 런타임 스케일 X.
+            float fanAng = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+            GameObject tele = SpawnFromPool(telegraphPrefab, transform.position, Quaternion.Euler(0f, 0f, fanAng));
+            // 텔레그래프 동안 돌진대기 모션
+            if (bossAnimator != null) bossAnimator.PlayPattern("ChargeIdle");
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 
             // 방향은 시전(텔레그래프) 시점에 고정. 이후 타격마다 재조준하지 않음(Tracking X).
             for (int i = 0; i < hitCount; i++)
             {
+                // 데미지 들어가는 순간 할퀴기 모션 재생(매 타격마다 처음부터)
+                if (bossAnimator != null) bossAnimator.PlayPattern(animState, true);
+
                 if (hitEffectPrefab != null)
                     SpawnFromPool(hitEffectPrefab, transform.position, Quaternion.identity);
 
                 TryHitPlayer(transform.position, hitRange, attackAngle, dir);
 
-                // 기획서: 1타→2타 사이에만 딜레이(0.4초), 2타→3타는 0초(연속)
-                if (i == 0 && hitCount > 1)
+                // 3회가 각각 보이도록 매 타격 사이 간격(0.4초)
+                if (i < hitCount - 1)
                     yield return new WaitForSeconds(firstHitInterval);
             }
 

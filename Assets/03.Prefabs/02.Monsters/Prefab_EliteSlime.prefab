@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf294353192db024495301a61c865821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.EliteMonster
-  hpMultiplier: 5
+  hpMultiplier: 15
   attackMultiplier: 1
 --- !u!114 &3736146279355546333
 MonoBehaviour:
