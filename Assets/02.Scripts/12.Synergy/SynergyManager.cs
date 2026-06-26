@@ -295,7 +295,7 @@ public class SynergyManager : MonoBehaviour
             coin.transform.SetParent(transform);
             coin.transform.position = pos;
             var sr = coin.AddComponent<SpriteRenderer>();
-            sr.sortingOrder = 9;
+            sr.sortingOrder = SynergyLayers.Ground; // 골드 코인은 바닥에 깔림
             sr.sprite = skill.dropFrames[0];
             NormalizeScale(coin, sr.sprite, 0.4f);
             coin.AddComponent<SpriteSheetAnimator>().Play(skill.dropFrames, skill.dropFps);
@@ -561,7 +561,7 @@ public class SynergyManager : MonoBehaviour
         var go = new GameObject($"SynergyProj_{skill.skillID}");
 
         var sr          = go.AddComponent<SpriteRenderer>();
-        sr.sortingOrder = 10;
+        sr.sortingOrder = SynergyLayers.Effect; // 투사체는 캐릭터 위
         float size      = skill.visualSize > 0f ? skill.visualSize : 0.8f;
 
         if (skill.animFrames != null && skill.animFrames.Length > 0)
@@ -713,7 +713,7 @@ public class SynergyManager : MonoBehaviour
         go.transform.localPosition = Vector3.zero;
 
         var sr = go.AddComponent<SpriteRenderer>();
-        sr.sortingOrder = 9; // 플레이어 뒤/주변을 감싸도록 약간 낮게
+        sr.sortingOrder = SynergyLayers.BelowChar; // 마왕 소용돌이: 캐릭터 아래
         sr.sprite = skill.animFrames[0];
         float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius);
         NormalizeScale(go, sr.sprite, size);
@@ -740,7 +740,7 @@ public class SynergyManager : MonoBehaviour
         lr.material        = new Material(Shader.Find("Sprites/Default"));
         var col            = new Color(0.6f, 0.9f, 1f, 1f); // 밝은 하늘색 번개
         lr.startColor = col; lr.endColor = col;
-        lr.sortingOrder = 11;
+        lr.sortingOrder = SynergyLayers.Link;
 
         StartCoroutine(FadeChainLine(lr, go, 0.25f));
     }
@@ -783,7 +783,7 @@ public class SynergyManager : MonoBehaviour
         }
         tex.Apply();
         sr.sprite       = Sprite.Create(tex, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f), 64f);
-        sr.sortingOrder = 10;
+        sr.sortingOrder = SynergyLayers.Effect;
         float scale = Mathf.Max(0.5f, radius * 0.08f);
         go.transform.localScale = Vector3.one * scale;
 

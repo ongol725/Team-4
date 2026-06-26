@@ -246,7 +246,7 @@ public class SummonController : MonoBehaviour
         go.transform.position = pos;
 
         var sr = go.AddComponent<SpriteRenderer>();
-        sr.sortingOrder = 6;
+        sr.sortingOrder = SynergyLayers.Effect; // 공격 이펙트는 캐릭터 위
         sr.sprite = frames[0];
         if (frames[0] != null)
         {
@@ -444,7 +444,7 @@ public class SummonController : MonoBehaviour
             var go = new GameObject("SummonNovaFx");
             go.transform.position = transform.position;
             var sr = go.AddComponent<SpriteRenderer>();
-            sr.sortingOrder = 6;
+            sr.sortingOrder = SynergyLayers.Effect; // 대정령 광역 VFX는 캐릭터 위
             sr.sprite = skill.animFrames[0];
 
             float size      = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 2f);
