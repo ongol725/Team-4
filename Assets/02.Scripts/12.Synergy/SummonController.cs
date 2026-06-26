@@ -342,6 +342,10 @@ public class SummonController : MonoBehaviour
         // 이동
         transform.position += (Vector3)(_bounceVel * Time.deltaTime);
 
+        // 진행 방향에 맞춰 스프라이트 좌우 반전 (먼지 등 애니메이션이 이동 방향을 따르도록)
+        if (_mainSr != null && Mathf.Abs(_bounceVel.x) > 0.01f)
+            _mainSr.flipX = _bounceVel.x < 0f;
+
         // 카메라 경계에서 반사 (Camera.main 대신 캐싱된 _mainCam 사용)
         var cam = _mainCam != null ? _mainCam : (_mainCam = Camera.main);
         if (cam != null)
