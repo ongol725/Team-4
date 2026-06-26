@@ -39,18 +39,6 @@ MonoBehaviour:
   - {fileID: 3976079370377909804, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
   animFps: 10
   hp: 0
-  attackEffectFrames:
-  - {fileID: -870172473, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 1935560912, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 775155163, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -1951039476, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 128767272, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 623683165, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 478662497, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -541071719, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 1950537486, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 328261890, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 816300311, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 8495549, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  attackEffectFrames: []
   attackEffectFps: 12
   attackEffectScale: 3

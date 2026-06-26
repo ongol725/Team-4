@@ -879,20 +879,7 @@ namespace BagSurvivor.SynergyEditor
                 filled++;
             }
 
-            // ── 정령 골렘 공격 이펙트(spirit_attack) 연결 ──────────────
-            var golemAtkFrames = LoadLargeFramesSorted($"{sheetDir}/spirit_attack.png");
-            if (golemAtkFrames.Length > 0)
-            {
-                foreach (var id in new[] { "SUM_GOLEM_1", "SUM_GOLEM_2", "SUM_GOLEM_3", "SUM_GIANT_GOLEM" })
-                {
-                    var golem = AssetDatabase.LoadAssetAtPath<SO_SummonData>($"{SummonDir}/{id}.asset");
-                    if (golem == null) continue;
-                    golem.attackEffectFrames = golemAtkFrames;
-                    golem.attackEffectFps    = 12f;
-                    EditorUtility.SetDirty(golem);
-                }
-                Debug.Log($"[SynergyDataSetup] 정령 골렘 공격 이펙트(spirit_attack) {golemAtkFrames.Length}프레임 적용");
-            }
+            // 정령 골렘·고대 정령은 공격 투사체(spirit_attack) 미사용 — 연결하지 않음.
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[SynergyDataSetup] 소환수 아이콘 {filled}개 적용 완료");
