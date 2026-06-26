@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SK_ELEC_1
   m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
   skillID: SK_ELEC_1
-  skillName: "\uB9C8\uBC95 \uB099\uB8B0 1\uAC1C"
+  skillName: "\uBC88\uAC1C \uAE30\uB465 2\uAC1C"
   triggerType: 0
   skillType: 1
   targetType: 1
@@ -32,8 +32,19 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
-  animFrames: []
+  pierceCount: 1
+  animFrames:
+  - {fileID: 114886176, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -763380930, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1264151998, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -2089584348, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -3579798, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1755044947, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: 603464056, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: 1359859732, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1776054465, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1292816762, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
   animFps: 12
-  visualSize: 0.8
+  visualSize: 1.6
   dropFrames: []
   dropFps: 8

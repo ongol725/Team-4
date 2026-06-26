@@ -14,45 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_SummonData
   summonID: SUM_GIANT_GOLEM
   summonName: "\uACE0\uB300 \uC815\uB839 (\uD504\uB9AC\uC998)"
-  aiType: 0
+  aiType: 4
   scalingStat: 1
   atkMultiplier: 4.5
-  moveSpeed: 3.5
+  moveSpeed: 0
   atkCooldown: 2
-  atkRange: 2
+  atkRange: 6
   duration: -1
   fixedEffect: 0
   fixedEffectValue: 0
-  uniqueSkill: {fileID: 0}
+  uniqueSkill: {fileID: 11400000, guid: 051477e475db18a438c630a941a01f9c, type: 2}
   uniqueSkillCooldown: 8
+  displayScale: 0.3
   modelPrefab: {fileID: 0}
-  icon: {fileID: -7051637413459098524, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
+  icon: {fileID: 777626916781001291, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
   animFrames:
-  - {fileID: -7051637413459098524, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
-  - {fileID: -4198710700657238017, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
-  - {fileID: -1643770350145264169, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
-  - {fileID: -7988392345539682880, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
-  - {fileID: -5848772092492176524, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
-  - {fileID: -3790501327414028711, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
-  - {fileID: 2699876562489712814, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
-  - {fileID: 7736947622845490462, guid: fc8e8b08e2ef5a14f8f8172adb93b0bb, type: 3}
+  - {fileID: 777626916781001291, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: 317282527511180478, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -2488149590371059966, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -8816856637925587110, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -3551725715108243773, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -1469208271595097488, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -1174986234766995750, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: 3976079370377909804, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
   animFps: 10
   hp: 0
-  attackEffectFrames:
-  - {fileID: 4421062331379601517, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -4602863917074197578, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 3071719586801174439, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -1317069503695146530, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -5783978958103855648, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 567006246580065128, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 9185333033193106824, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 1361873199102695609, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -4526712881592195439, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 443716257309272121, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 462056552758905414, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 1636582057988876033, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 7197266991324031219, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -6350380243790207732, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 3465153089041966555, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -3803012597921825272, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  attackEffectFrames: []
   attackEffectFps: 12
+  attackEffectScale: 3

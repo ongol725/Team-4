@@ -20,6 +20,8 @@ public class PlayerAttack : MonoBehaviour
     private Rigidbody2D              _rb;
     private GameManager              _gm;
     private Vector2                  _lastMoveDir = Vector2.right;
+    /// <summary>플레이어가 마지막으로 이동(=바라보는)한 방향. 시너지 등 외부에서 발사 방향으로 사용.</summary>
+    public Vector2 FacingDirection => _lastMoveDir;
     private readonly List<Coroutine> _loops = new();
     private BattleLoadout            _currentLoadout;
     private bool                     _paused;

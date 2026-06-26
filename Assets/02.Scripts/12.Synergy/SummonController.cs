@@ -27,13 +27,24 @@ public class SummonController : MonoBehaviour
     private const float DetectRange     = 5f;   // 적 감지 거리 (멀리 쫓아가지 않도록 축소)
     private const float LeashRange      = 9f;   // 이 거리 이상 벗어나면 플레이어로 복귀
 
-    // OrbitPlayer 전용
+    // OrbitPlayer 전용 (페어리) — 콘셉트(슬라이드 6~8): 타원 궤도 + 요정별 교차 궤도
     private float _orbitAngle;
-    private const float OrbitRadius = 2.5f;
+    private float _orbitTilt;                  // 요정별 타원 궤도면 회전각(교차 궤도용)
+    private const float OrbitRadiusX = 3.0f;   // 타원 가로 반경
+    private const float OrbitRadiusY = 1.4f;   // 타원 세로 반경
 
     // Bounce 전용
     private Vector2 _bounceVel;
     private const float BounceContactRadius = 0.6f;
+
+    // GuardOffset 전용 — 플레이어 기준 고정 위치 유지(+공전). 공전 속도는 data.moveSpeed(초당 도).
+    // 마왕 기어: moveSpeed>0 → 공전 / 대정령: moveSpeed=0 → 머리 위 고정
+    private float _guardAngle;                    // 현재 공전 각도(도)
+    private const float GuardRadius = 2.2f;       // 플레이어로부터의 거리
+
+    // 본체 스프라이트/평상 애니메이션 — 광역 발동 시 발동 모션으로 잠시 교체(대정령)
+    private SpriteRenderer _mainSr;
+    private Coroutine      _idleAnimCo;
 
     // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
     private Camera _mainCam;
@@ -58,6 +69,8 @@ public class SummonController : MonoBehaviour
         // 여러 요정 소환 시 균등 배치: 0°, 120°, 240° 등
         if (siblingCount > 1)
             _orbitAngle = 360f / siblingCount * siblingIndex;
+        // 요정별 타원 궤도면 회전각 — 서로 교차하는 궤도를 만든다 (2마리→0°,90° / 3마리→0°,60°,120°)
+        _orbitTilt = siblingCount > 1 ? 180f / siblingCount * siblingIndex : 0f;
 
         if (data.modelPrefab != null)
         {
@@ -67,23 +80,26 @@ public class SummonController : MonoBehaviour
         else if (GetComponentInChildren<SpriteRenderer>() == null)
         {
             var sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sortingOrder = 5;
+            sr.sortingOrder = data.sortingOrder; // 성역 등 바닥 효과는 낮은 값으로 깔림
 
             if (data.icon != null)
             {
                 sr.sprite = data.icon;
-                // AI 타입별 표시 크기 정규화
-                float scale = data.aiType switch
+                // 표시 크기: displayScale 지정 시 우선, 아니면 AI 타입별 기본값
+                float scale = data.displayScale > 0f ? data.displayScale : data.aiType switch
                 {
                     SummonAIType.Bounce      => 0.25f, // 핀볼: 작은 공
                     SummonAIType.OrbitPlayer => 0.40f, // 페어리: 플레이어 주변 회전
+                    SummonAIType.GuardOffset => 0.1125f, // 마왕 기어 (0.45 → 4배 축소)
                     _                        => 0.60f, // 골렘·성역: 일반 크기
                 };
                 transform.localScale = Vector3.one * scale;
 
+                _mainSr = sr; // 광역 발동 시 본체 스프라이트를 교체하기 위해 보관
+
                 // 프레임이 2개 이상이면 애니메이션 코루틴 시작
                 if (data.animFrames != null && data.animFrames.Length > 1)
-                    StartCoroutine(PlaySpriteAnim(sr, data.animFrames, data.animFps));
+                    _idleAnimCo = StartCoroutine(PlaySpriteAnim(sr, data.animFrames, data.animFps));
             }
             else
             {
@@ -107,6 +123,14 @@ public class SummonController : MonoBehaviour
         // Bounce 초기 방향 설정
         if (data.aiType == SummonAIType.Bounce)
             _bounceVel = Random.insideUnitCircle.normalized * data.moveSpeed;
+
+        // GuardOffset(마왕 기어): 플레이어 주변을 균등 각도로 시작해 공전 (위쪽 12시부터)
+        if (data.aiType == SummonAIType.GuardOffset)
+        {
+            _guardAngle = (siblingCount > 0 ? 360f / siblingCount * siblingIndex : 0f) + 90f;
+            float rad = _guardAngle * Mathf.Deg2Rad;
+            transform.position = (Vector2)player.position + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * GuardRadius;
+        }
     }
 
     private void OnDestroy()
@@ -128,6 +152,7 @@ public class SummonController : MonoBehaviour
             case SummonAIType.OrbitPlayer:  UpdateOrbitPlayer();  break;
             case SummonAIType.Stationary:   UpdateStationary();   break;
             case SummonAIType.Bounce:       UpdateBounce();       break;
+            case SummonAIType.GuardOffset:  UpdateGuardOffset();  break;
         }
 
         if (_data.uniqueSkill != null && _uniqueSkillTimer >= _data.uniqueSkillCooldown)
@@ -227,12 +252,13 @@ public class SummonController : MonoBehaviour
         go.transform.position = pos;
 
         var sr = go.AddComponent<SpriteRenderer>();
-        sr.sortingOrder = 6;
+        sr.sortingOrder = SynergyLayers.Effect; // 공격 이펙트는 캐릭터 위
         sr.sprite = frames[0];
         if (frames[0] != null)
         {
-            float maxExtent = Mathf.Max(frames[0].bounds.extents.x, frames[0].bounds.extents.y);
-            go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (0.5f / maxExtent) : Vector3.one;
+            float target    = _data.attackEffectScale > 0f ? _data.attackEffectScale : 0.5f;
+            float maxExtent  = Mathf.Max(frames[0].bounds.extents.x, frames[0].bounds.extents.y);
+            go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (target / maxExtent) : Vector3.one * target;
         }
 
         go.AddComponent<SpriteSheetAnimator>().Play(frames, _data.attackEffectFps, loop: false);
@@ -255,8 +281,13 @@ public class SummonController : MonoBehaviour
     {
         _orbitAngle += _data.moveSpeed * Time.deltaTime;
         float rad = _orbitAngle * Mathf.Deg2Rad;
-        transform.position = (Vector2)_player.position
-            + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * OrbitRadius;
+
+        // 타원 로컬 좌표(가로>세로) → 요정별 궤도면 회전 적용 → 플레이어 기준 배치
+        Vector2 local = new Vector2(Mathf.Cos(rad) * OrbitRadiusX, Mathf.Sin(rad) * OrbitRadiusY);
+        float t  = _orbitTilt * Mathf.Deg2Rad;
+        float ct = Mathf.Cos(t), st = Mathf.Sin(t);
+        Vector2 rot = new Vector2(local.x * ct - local.y * st, local.x * st + local.y * ct);
+        transform.position = (Vector2)_player.position + rot;
 
         if (_atkTimer >= _data.atkCooldown)
         {
@@ -355,6 +386,29 @@ public class SummonController : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────
+    // GuardOffset (마왕 기어) — 플레이어 기준 고정 위치를 부드럽게 따라가며 원거리 공격
+
+    private void UpdateGuardOffset()
+    {
+        // moveSpeed(초당 도)만큼 공전 — 0이면 시작 각도에 고정(대정령 머리 위). 이동하는 플레이어도 추종.
+        _guardAngle += _data.moveSpeed * Time.deltaTime;
+        float rad = _guardAngle * Mathf.Deg2Rad;
+        transform.position = (Vector2)_player.position + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * GuardRadius;
+
+        if (_atkTimer >= _data.atkCooldown)
+        {
+            var enemy = FindNearest(_data.atkRange);
+            if (enemy != null)
+            {
+                _atkTimer = 0f;
+                Vector2 kb = ((Vector2)enemy.transform.position - (Vector2)transform.position).normalized;
+                enemy.TakeDamage(_attackPower, 1f, kb);
+                SpawnAttackEffect(enemy.transform.position);
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
     // 유니크 스킬
 
     private IEnumerator ExecuteSkill(SO_SkillData skill)
@@ -370,6 +424,7 @@ public class SummonController : MonoBehaviour
                 break;
             case SkillTargetType.AreaCenter:
             case SkillTargetType.Self:
+                // 대정령 광역기: 화면 내 모든 적에게 대량 피해 (노드 이펙트 없음)
                 foreach (var mc in enemies) ApplySkillHit(skill, mc, damage);
                 break;
             case SkillTargetType.Forward:
@@ -383,8 +438,48 @@ public class SummonController : MonoBehaviour
             var vfx = Instantiate(skill.vfxPrefab, transform.position, Quaternion.identity);
             Destroy(vfx, skill.duration > 0f ? skill.duration : 2f);
         }
+        else if (_mainSr != null && skill.animFrames != null && skill.animFrames.Length > 0)
+        {
+            // 광역 발동: 본체 스프라이트를 발동 모션으로 잠시 "대체"(같은 위치·크기·레이어, 평상 애니메이션은 잠시 사라짐)
+            StartCoroutine(PlayCastMotion(skill.animFrames, skill.animFps));
+        }
 
         yield return null;
+    }
+
+    /// <summary>평상 애니메이션을 멈추고 발동 모션을 1회 재생한 뒤 평상 애니메이션을 복구한다(대정령 광역).</summary>
+    private IEnumerator PlayCastMotion(Sprite[] castFrames, float fps)
+    {
+        if (_mainSr == null || castFrames == null || castFrames.Length == 0) yield break;
+
+        if (_idleAnimCo != null) StopCoroutine(_idleAnimCo); // 평상 애니메이션 정지(잠시 사라짐 = 대체)
+
+        // 발동 모션 스프라이트의 원본 크기가 평상(대정령)과 달라도 같은 표시 크기가 되도록 스케일 보정
+        Vector3 baseScale = transform.localScale;
+        Sprite  idleRef   = (_data.animFrames != null && _data.animFrames.Length > 0) ? _data.animFrames[0] : _data.icon;
+        float   idleDisplayed = idleRef != null
+            ? Mathf.Max(idleRef.bounds.extents.x, idleRef.bounds.extents.y) * baseScale.x : 0f;
+        float   castExtent    = Mathf.Max(castFrames[0].bounds.extents.x, castFrames[0].bounds.extents.y);
+        if (castExtent > 0.001f && idleDisplayed > 0.0001f)
+            transform.localScale = Vector3.one * (idleDisplayed / castExtent);
+
+        var wait = new WaitForSeconds(1f / Mathf.Max(1f, fps));
+        for (int i = 0; i < castFrames.Length; i++)
+        {
+            if (_mainSr == null) { transform.localScale = baseScale; yield break; }
+            _mainSr.sprite = castFrames[i];
+            yield return wait;
+        }
+
+        transform.localScale = baseScale; // 평상 크기 복구
+
+        // 평상 애니메이션 복구
+        if (_mainSr != null && _data.animFrames != null && _data.animFrames.Length > 1)
+            _idleAnimCo = StartCoroutine(PlaySpriteAnim(_mainSr, _data.animFrames, _data.animFps));
+        else if (_mainSr != null && _data.animFrames != null && _data.animFrames.Length == 1)
+            _mainSr.sprite = _data.animFrames[0];
+        else if (_mainSr != null && _data.icon != null)
+            _mainSr.sprite = _data.icon;
     }
 
     private void ApplySkillHit(SO_SkillData skill, MonsterController mc, int damage)

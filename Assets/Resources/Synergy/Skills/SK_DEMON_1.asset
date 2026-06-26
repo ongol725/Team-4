@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: SK_DEMON_1
   m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
   skillID: SK_DEMON_1
-  skillName: "\uC9C0\uC625\uBD88 \uBD88\uC528"
+  skillName: "\uC9C0\uC625 \uAC80\uAE30 (\uD22C\uC0AC\uCCB4)"
   triggerType: 0
   skillType: 0
-  targetType: 1
+  targetType: 0
   scalingStat: 2
   dmgMultiplier: 1
   hitCount: 1
   hitInterval: 0.1
   extraCount: 0
-  rangeRadius: 50
+  rangeRadius: 20
   duration: 0
   cooldown: 2
   fixedEffect: 1
@@ -32,24 +32,17 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
+  pierceCount: 999
   animFrames:
-  - {fileID: -8754867915087685011, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 8679542853494697340, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 6366917469315340877, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 242848130262823738, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 6881369859824921196, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 1255622092432382496, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: -5454437971888522140, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 419736884663942202, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: -3178720267876325065, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 6685651074201436903, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: 4959334719234670812, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: -5672818014027213603, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: -3881794552604655563, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: -4231670396659074079, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: -7897053593728127965, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  - {fileID: -4009304207767384383, guid: 98da75eed8a704f439c61185104545a6, type: 3}
+  - {fileID: 5979270804337883605, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
+  - {fileID: -4872735329228040698, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
+  - {fileID: 2216672636490806326, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
+  - {fileID: 1938651611527470404, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
+  - {fileID: 2954321131344927063, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
+  - {fileID: -5546405752699438844, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
+  - {fileID: 3471272875931960041, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
+  - {fileID: 5236659826617805372, guid: b9e6bee2b5d155c48805ab45a3f1646a, type: 3}
   animFps: 12
-  visualSize: 0.8
+  visualSize: 1.6
   dropFrames: []
   dropFps: 8

@@ -72,7 +72,10 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = moveInput * moveSpeed * speedMultiplier;
 
         float dist = ((Vector2)rb.position - _prevPosition).magnitude;
-        if (dist > 0f) onDistanceMoved?.Invoke(dist);
+        // 한 물리 스텝의 정상 보행 한계(여유 4배). 이를 넘는 변위는 층 전환 등 순간이동으로 간주하여
+        // 이동 거리 이벤트에서 제외한다(대부호 코인이 한꺼번에 쏟아지는 버그 방지).
+        float maxWalkStep = moveSpeed * speedMultiplier * Time.fixedDeltaTime * 4f;
+        if (dist > 0f && dist <= maxWalkStep) onDistanceMoved?.Invoke(dist);
         _prevPosition = rb.position;
     }
 

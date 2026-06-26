@@ -16,6 +16,9 @@ public enum SkillTargetType
     AreaCenter,    // 화면 중앙
     ForwardDual,   // 좌·우 각각 가장 가까운 적 2명 (처형자)
     ForwardTriple, // 가장 가까운 적 3명 순차 타격 (마왕 프리즘)
+    SidePillars,   // 플레이어 좌·우 고정 위치에 기둥 생성 (일렉트로)
+    ChainLightning,// 최근접 적부터 차례로 연쇄 타격 (과부화 체인라이트닝)
+    FacingForward, // 플레이어가 바라보는 방향으로 발사 (과부화 레이저)
 }
 
 /// <summary>피격 시 부여되는 상태이상</summary>
@@ -66,4 +69,5 @@ public enum SummonAIType
     OrbitPlayer,   // 플레이어 주변 회전
     Stationary,    // 고정형 토템
     Bounce,        // 맵을 튕겨 다니며 접촉 피해 (핀볼)
+    GuardOffset,   // 플레이어 기준 고정 오프셋 유지 + 원거리 공격 (마왕 기어)
 }

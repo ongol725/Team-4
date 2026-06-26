@@ -96,7 +96,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 390
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,7 +117,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -171,353 +171,353 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_0
+      name: Shockwave_RED_0
       rect:
         serializedVersion: 2
-        x: 229
-        y: 1673
-        width: 18
-        height: 16
+        x: 0
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dc70a34e2b2f72f70800000000000000
-      internalID: 9162558817055672269
+      spriteID: b4203509dc070fe48af14da75d98fbfa
+      internalID: 78604188
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_1
+      name: Shockwave_RED_1
       rect:
         serializedVersion: 2
-        x: 682
-        y: 1640
-        width: 76
-        height: 80
+        x: 1835
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e054e344761be5fb0800000000000000
-      internalID: -4657089907569834738
+      spriteID: 589caf0e75e51b1489fa5d37a06142d7
+      internalID: -425589350
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_2
+      name: Shockwave_RED_2
       rect:
         serializedVersion: 2
-        x: 968
-        y: 1439
-        width: 469
-        height: 469
+        x: 3670
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 22a1b0504965b21e0800000000000000
-      internalID: -2221586797437445598
+      spriteID: 3992fa9839379a549a25ae4fca4acf50
+      internalID: -1811191531
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_3
+      name: Shockwave_RED_3
       rect:
         serializedVersion: 2
-        x: 1447
-        y: 1439
-        width: 471
-        height: 470
+        x: 5505
+        y: 5505
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d5f278de1e0035210800000000000000
-      internalID: 1320400086102388573
+      spriteID: c586802e7360ce04ca1d9ff7101f4f9d
+      internalID: 2080562186
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_4
+      name: Shockwave_RED_4
       rect:
         serializedVersion: 2
-        x: 7
-        y: 959
-        width: 471
-        height: 470
+        x: 0
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: aa1d0d6d0953e7d60800000000000000
-      internalID: 7889802493395259818
+      spriteID: acdc5046babc5c843b8f302811180cb4
+      internalID: -1214893591
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_5
+      name: Shockwave_RED_5
       rect:
         serializedVersion: 2
-        x: 487
-        y: 959
-        width: 471
-        height: 470
+        x: 1835
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4827e8384eecc2540800000000000000
-      internalID: 4984586368447312516
+      spriteID: 0f1317f84ab24fc409998fd30449fe6f
+      internalID: -1777411727
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_6
+      name: Shockwave_RED_6
       rect:
         serializedVersion: 2
-        x: 967
-        y: 959
-        width: 471
-        height: 470
+        x: 3670
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c7f2cc1918f3c26b0800000000000000
-      internalID: -5319807234101989508
+      spriteID: b9ea14d339ae1a64288d8901b2b79fe6
+      internalID: 1900581830
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_7
+      name: Shockwave_RED_7
       rect:
         serializedVersion: 2
-        x: 1447
-        y: 959
-        width: 471
-        height: 470
+        x: 5505
+        y: 3670
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 339fdbc1681a47320800000000000000
-      internalID: 2554844486005815603
+      spriteID: 8ea718947378f3d4a8a89bf4ff0db361
+      internalID: -2094002634
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_8
+      name: Shockwave_RED_8
       rect:
         serializedVersion: 2
-        x: 7
-        y: 479
-        width: 471
-        height: 470
+        x: 0
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 210639b21679d6a70800000000000000
-      internalID: 8821873688687370258
+      spriteID: 13f47f9a7141b844fad6c3623700e3d0
+      internalID: -602830738
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_9
+      name: Shockwave_RED_9
       rect:
         serializedVersion: 2
-        x: 487
-        y: 479
-        width: 471
-        height: 470
+        x: 1835
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 520c54d20a9152710800000000000000
-      internalID: 1667767412755644453
+      spriteID: 671b60f0d68637947acf5db7ecc014d2
+      internalID: 96993488
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_10
+      name: Shockwave_RED_10
       rect:
         serializedVersion: 2
-        x: 967
-        y: 479
-        width: 473
-        height: 470
+        x: 3670
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 87d27fe7824224bc0800000000000000
-      internalID: -3800435379199857288
+      spriteID: 2fe10d5f30b481f4a847ec24ada0e60a
+      internalID: -352258352
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_11
+      name: Shockwave_RED_11
       rect:
         serializedVersion: 2
-        x: 1447
-        y: 479
-        width: 473
-        height: 473
+        x: 5505
+        y: 1835
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1ab75e4cce5637370800000000000000
-      internalID: 8319105004273499041
+      spriteID: 11ac69dbfcbe0d246a09baa8f72c7e37
+      internalID: -1568862676
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_12
+      name: Shockwave_RED_12
       rect:
         serializedVersion: 2
-        x: 7
+        x: 0
         y: 0
-        width: 474
-        height: 474
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1ddbbf52759455210800000000000000
-      internalID: 1321042704351346129
+      spriteID: f2094b67ec7f4df4e8f15a2b73f2f5cd
+      internalID: -660733938
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_13
+      name: Shockwave_RED_13
       rect:
         serializedVersion: 2
-        x: 487
+        x: 1835
         y: 0
-        width: 474
-        height: 474
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 49e3424751537d8d0800000000000000
-      internalID: -2821728275265208684
+      spriteID: f16e7c695adae4641953ebf177c0aa44
+      internalID: -818551254
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_14
+      name: Shockwave_RED_14
       rect:
         serializedVersion: 2
-        x: 967
+        x: 3670
         y: 0
-        width: 474
-        height: 474
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c5d1b5c5f01972590800000000000000
-      internalID: -7699025542806561444
+      spriteID: 5b74504a5e8225d428df3e6f30811e21
+      internalID: 379727494
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shockwave_RED.prefab_15
+      name: Shockwave_RED_15
       rect:
         serializedVersion: 2
-        x: 1447
+        x: 5505
         y: 0
-        width: 473
-        height: 474
+        width: 1835
+        height: 1835
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e46406c0d3c526df0800000000000000
-      internalID: -188486817125743026
+      spriteID: 178e2989533db5844bb92e8ae1b7cf94
+      internalID: -1554939736
       vertices: []
       indices: 
       edges: []
@@ -526,7 +526,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7c668eaffc8888b498192d1f78b9d119
     internalID: 0
     vertices: []
     indices: 
@@ -536,22 +536,22 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Shockwave_RED.prefab_0: 9162558817055672269
-      Shockwave_RED.prefab_1: -4657089907569834738
-      Shockwave_RED.prefab_10: -3800435379199857288
-      Shockwave_RED.prefab_11: 8319105004273499041
-      Shockwave_RED.prefab_12: 1321042704351346129
-      Shockwave_RED.prefab_13: -2821728275265208684
-      Shockwave_RED.prefab_14: -7699025542806561444
-      Shockwave_RED.prefab_15: -188486817125743026
-      Shockwave_RED.prefab_2: -2221586797437445598
-      Shockwave_RED.prefab_3: 1320400086102388573
-      Shockwave_RED.prefab_4: 7889802493395259818
-      Shockwave_RED.prefab_5: 4984586368447312516
-      Shockwave_RED.prefab_6: -5319807234101989508
-      Shockwave_RED.prefab_7: 2554844486005815603
-      Shockwave_RED.prefab_8: 8821873688687370258
-      Shockwave_RED.prefab_9: 1667767412755644453
+      Shockwave_RED_0: 78604188
+      Shockwave_RED_1: -425589350
+      Shockwave_RED_10: -352258352
+      Shockwave_RED_11: -1568862676
+      Shockwave_RED_12: -660733938
+      Shockwave_RED_13: -818551254
+      Shockwave_RED_14: 379727494
+      Shockwave_RED_15: -1554939736
+      Shockwave_RED_2: -1811191531
+      Shockwave_RED_3: 2080562186
+      Shockwave_RED_4: -1214893591
+      Shockwave_RED_5: -1777411727
+      Shockwave_RED_6: 1900581830
+      Shockwave_RED_7: -2094002634
+      Shockwave_RED_8: -602830738
+      Shockwave_RED_9: 96993488
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
