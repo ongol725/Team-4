@@ -487,7 +487,9 @@ public class SynergyManager : MonoBehaviour
                     pool.Remove(cur);
                     cur = FindNearest(pool, hitPos); // 다음 홉은 직전 적 기준 최근접
                 }
-                if (chainPts.Count >= 2) SpawnChainLine(chainPts); // 적과 적을 잇는 번개 선
+                // 적과 적을 잇는 번개 — 스킬 시트(OVERLOAD2_Pr)의 프레임을 거리만큼 반복(타일)
+                Sprite chainSeg = (skill.animFrames != null && skill.animFrames.Length > 0) ? skill.animFrames[0] : null;
+                if (chainPts.Count >= 2) SpawnChainLine(chainPts, chainSeg);
                 return; // 홉마다 VFX 처리 완료
             }
         }
@@ -722,11 +724,49 @@ public class SynergyManager : MonoBehaviour
         _auraVFX.Add(go);
     }
 
-    /// <summary>여러 지점을 잇는 번개 선(LineRenderer)을 생성해 짧게 표시 후 페이드아웃한다(체인라이트닝).</summary>
-    private void SpawnChainLine(List<Vector3> points)
+    /// <summary>
+    /// 적과 적을 잇는 번개를 그린다(체인라이트닝).
+    /// seg 스프라이트가 있으면 구간 길이만큼 이미지를 반복(타일)해 깔고, 없으면 단색 LineRenderer로 대체한다.
+    /// </summary>
+    private void SpawnChainLine(List<Vector3> points, Sprite seg)
     {
         if (points == null || points.Count < 2) return;
 
+        // seg 없거나 크기 이상 → 단색 선 fallback
+        if (seg == null || seg.bounds.size.y < 0.001f) { SpawnChainLineColored(points); return; }
+
+        const float thickness = 0.5f;                 // 번개 두께(월드 유닛)
+        float nativeH = seg.bounds.size.y;            // 스프라이트 1장 높이(스케일1 기준)
+        float scale   = thickness / nativeH;          // 두께에 맞춘 스케일
+
+        for (int i = 0; i < points.Count - 1; i++)
+        {
+            Vector2 a = points[i], b = points[i + 1];
+            Vector2 dir = b - a;
+            float len = dir.magnitude;
+            if (len < 0.01f) continue;
+
+            var go = new GameObject("ChainSeg");
+            go.transform.SetParent(transform);
+            go.transform.position   = (a + b) * 0.5f;
+            go.transform.rotation   = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
+            go.transform.localScale = Vector3.one * scale;
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite       = seg;
+            sr.sortingOrder = SynergyLayers.Link;
+            sr.drawMode     = SpriteDrawMode.Tiled;     // 길이만큼 가로로 반복
+            sr.tileMode     = SpriteTileMode.Continuous;
+            // 로컬 size: 가로=구간 길이를 스케일로 환산, 세로=원본 높이(→ 월드 두께)
+            sr.size = new Vector2(len / scale, nativeH);
+
+            StartCoroutine(FadeSprite(sr, go, 0.25f));
+        }
+    }
+
+    /// <summary>seg 스프라이트가 없을 때의 단색 LineRenderer 번개(대체).</summary>
+    private void SpawnChainLineColored(List<Vector3> points)
+    {
         var go = new GameObject("ChainLightningLine");
         go.transform.SetParent(transform);
 
@@ -738,11 +778,25 @@ public class SynergyManager : MonoBehaviour
         lr.numCapVertices  = 2;
         lr.numCornerVertices = 2;
         lr.material        = new Material(Shader.Find("Sprites/Default"));
-        var col            = new Color(0.6f, 0.9f, 1f, 1f); // 밝은 하늘색 번개
+        var col            = new Color(0.6f, 0.9f, 1f, 1f);
         lr.startColor = col; lr.endColor = col;
         lr.sortingOrder = SynergyLayers.Link;
 
         StartCoroutine(FadeChainLine(lr, go, 0.25f));
+    }
+
+    /// <summary>SpriteRenderer 알파 페이드 후 파괴(체인 세그먼트용).</summary>
+    private IEnumerator FadeSprite(SpriteRenderer sr, GameObject go, float dur)
+    {
+        Color baseCol = sr != null ? sr.color : Color.white;
+        float t = 0f;
+        while (t < dur)
+        {
+            t += Time.deltaTime;
+            if (sr != null) sr.color = new Color(baseCol.r, baseCol.g, baseCol.b, Mathf.Lerp(1f, 0f, t / dur));
+            yield return null;
+        }
+        if (go != null) Destroy(go);
     }
 
     private IEnumerator FadeChainLine(LineRenderer lr, GameObject go, float dur)
