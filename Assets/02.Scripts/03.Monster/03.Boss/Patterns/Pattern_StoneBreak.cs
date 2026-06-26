@@ -137,8 +137,10 @@ namespace BagSurvivor.Monster
             // 5) 결과 처리
             if (success)
             {
-                // 그로기(무력화): 제자리에서 일정 시간 정지(피해는 받는 상태)
+                // 그로기(무력화): 스턴 모션 재생 + 제자리 정지(피해는 받는 상태)
+                if (bossAnimator != null) bossAnimator.PlayStun();
                 yield return new WaitForSeconds(stunDuration);
+                if (bossAnimator != null) bossAnimator.StopStun();
             }
             else
             {

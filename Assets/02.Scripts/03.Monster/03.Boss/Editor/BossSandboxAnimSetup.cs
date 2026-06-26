@@ -51,17 +51,24 @@ public static class BossSandboxAnimSetup
 
         foreach (string png in pngs)
         {
-            int cols = SliceGrid(png);
-            if (cols <= 0) { Debug.LogWarning("[BossAnim] 슬라이스 실패: " + png); continue; }
+            // [가드] 이미 Multiple(수동 슬라이스)로 설정된 파일은 절대 재임포트/재슬라이스하지 않는다.
+            // (SliceGrid가 PPU·maxTextureSize·필터·프레임분할 등 설정을 덮어써 수동 작업을 날리는 사고 방지)
+            // Single 등 아직 안 잘린 파일만 자동 슬라이스한다.
+            var imp = AssetImporter.GetAtPath(png) as TextureImporter;
+            bool alreadySliced = imp != null && imp.spriteImportMode == SpriteImportMode.Multiple;
+            if (!alreadySliced)
+            {
+                if (SliceGrid(png) <= 0) { Debug.LogWarning("[BossAnim] 자동 슬라이스 실패(수동으로 잘라주세요): " + png); continue; }
+            }
 
             Sprite[] frames = LoadSpritesSorted(png);
-            if (frames.Length == 0) { Debug.LogWarning("[BossAnim] 프레임 없음: " + png); continue; }
+            if (frames.Length == 0) { Debug.LogWarning("[BossAnim] 슬라이스된 프레임 없음(Sprite Editor에서 Apply 했는지 확인): " + png); continue; }
 
             string baseName = Path.GetFileNameWithoutExtension(png);
             bool loop = LoopKeywords.Any(k => baseName.Contains(k));
             AnimationClip clip = CreateClip(frames, baseName, loop);
             clips.Add(clip);
-            if (baseName.Contains("대기")) idleClip = clip;
+            if (baseName.Contains("대기") && !baseName.Contains("돌진")) idleClip = clip; // '돌진대기' 오탐 제외
             Debug.Log($"[BossAnim] {baseName}: {frames.Length}프레임, loop={loop}");
         }
 
@@ -136,6 +143,61 @@ public static class BossSandboxAnimSetup
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
         Debug.Log($"[BossAnim] 전체 {clips.Count}개 모션을 격자로 배치(전부 루프). Play로 동시에 움직임 확인하세요.");
+    }
+
+    // ── 크기 통일: 모든 보스 시트를 '2페이즈 이동' 크기에 맞춤 (PPU만 변경) ──
+    // PNG를 직접 디코드해 콘텐츠 높이를 재고, spritePixelsPerUnit만 바꾼다.
+    // 슬라이스 사각형/모드/기타 임포트 설정은 전혀 건드리지 않는다(PPU는 독립 설정).
+    [MenuItem("Team4/보스 애니 크기 통일 (2p 이동 기준)")]
+    public static void NormalizeSizes()
+    {
+        if (!Directory.Exists(ImgDir)) { Debug.LogError("[BossAnim] 이미지 폴더 없음: " + ImgDir); return; }
+        string[] pngs = Directory.GetFiles(ImgDir, "*.png").Select(p => p.Replace('\\', '/'))
+            .Where(p => Path.GetFileName(p).Contains("보스몬스터")).ToArray();
+
+        // 기준 = 2페이즈 이동
+        string refPng = pngs.FirstOrDefault(p => { var n = Path.GetFileName(p); return n.Contains("2페이즈") && n.Contains("이동"); });
+        if (refPng == null) { Debug.LogError("[BossAnim] 기준 '2페이즈 이동' 파일을 못 찾음"); return; }
+        int refH = ContentHeight(refPng);
+        if (refH <= 0) { Debug.LogError("[BossAnim] 기준 콘텐츠 높이 측정 실패"); return; }
+        var refImp = AssetImporter.GetAtPath(refPng) as TextureImporter;
+        float refPpu = refImp != null ? refImp.spritePixelsPerUnit : 256f;
+
+        int done = 0;
+        foreach (string png in pngs)
+        {
+            int h = ContentHeight(png);
+            if (h <= 0) { Debug.LogWarning("[BossAnim] 콘텐츠 높이 측정 실패: " + Path.GetFileName(png)); continue; }
+            var imp = AssetImporter.GetAtPath(png) as TextureImporter;
+            if (imp == null) continue;
+            float ppu = refPpu * h / refH;                 // 높이 비례 → 같은 표시 크기
+            if (Mathf.Abs(imp.spritePixelsPerUnit - ppu) < 0.05f) continue;
+            imp.spritePixelsPerUnit = ppu;                 // PPU만 변경(슬라이스 보존)
+            imp.SaveAndReimport();
+            done++;
+            Debug.Log($"[BossAnim] {Path.GetFileName(png)}: 콘텐츠H={h} → PPU={ppu:F1}");
+        }
+        Debug.Log($"[BossAnim] 크기 통일 완료 — {done}개 PPU 조정(2p 이동={refH}px 기준). " +
+                  "이펙트 큰 시트(포효/탄막/늑대/햘퀴기/석상)는 보스 몸이 작아 보이면 개별 조정 요청하세요.");
+    }
+
+    /// <summary>PNG 파일을 직접 디코드(임포트 설정 무관)해 비투명 콘텐츠의 세로 높이(px)를 반환.</summary>
+    private static int ContentHeight(string path)
+    {
+        byte[] bytes = File.ReadAllBytes(path);
+        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 0; }
+        int w = tex.width, hh = tex.height;
+        var px = tex.GetPixels32();
+        int minY = int.MaxValue, maxY = int.MinValue;
+        for (int y = 0; y < hh; y++)
+        {
+            int row = y * w; bool any = false;
+            for (int x = 0; x < w; x += 4) { if (px[row + x].a > 10) { any = true; break; } }
+            if (any) { if (y < minY) minY = y; if (y > maxY) maxY = y; }
+        }
+        Object.DestroyImmediate(tex);
+        return (maxY >= minY) ? (maxY - minY + 1) : 0;
     }
 
     // ── 슬라이스 (Unity 6 ISpriteEditorDataProvider) ──────────────
@@ -277,32 +339,23 @@ public static class BossSandboxAnimSetup
     }
 
     // ── 씬 배치 ──────────────────────────────────────────────────
+    // SandboxBoss 미리보기 오브젝트는 더 이상 만들지 않는다 — 실제 보스(WolfBoss)와 중복돼
+    // '맵 중앙에 또 다른 보스'처럼 보였고, idle 오탐으로 돌진대기를 반복했음. 남아있던 미리보기만 제거.
     private static void PlaceInScene(AnimatorController ctrl, AnimationClip idle)
     {
         Scene scene = EditorSceneManager.GetActiveScene();
         if (scene.path != ScenePath)
         {
-            if (!File.Exists(ScenePath)) { Debug.LogWarning("[BossAnim] 샌드박스 씬 없음(클립/컨트롤러만 생성): " + ScenePath); return; }
+            if (!File.Exists(ScenePath)) return;
             scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
         }
-
         var existing = GameObject.Find("SandboxBoss");
-        if (existing != null) Object.DestroyImmediate(existing);
-
-        var go = new GameObject("SandboxBoss");
-        var sr = go.AddComponent<SpriteRenderer>();
-        var idleFrames = AnimationUtility.GetObjectReferenceCurve(
-            idle, EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite"));
-        if (idleFrames != null && idleFrames.Length > 0) sr.sprite = idleFrames[0].value as Sprite;
-        sr.sortingOrder = 10;
-
-        var anim = go.AddComponent<Animator>();
-        anim.runtimeAnimatorController = ctrl;
-        go.transform.position = Vector3.zero;
-
-        Selection.activeGameObject = go;
-        EditorSceneManager.MarkSceneDirty(scene);
-        EditorSceneManager.SaveScene(scene);
+        if (existing != null)
+        {
+            Object.DestroyImmediate(existing);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+        }
     }
 
     private static void CreateFolderRecursive(string folder)

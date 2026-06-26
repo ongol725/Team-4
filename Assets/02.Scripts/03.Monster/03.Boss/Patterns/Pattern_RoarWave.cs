@@ -27,8 +27,11 @@ namespace BagSurvivor.Monster
         [Tooltip("투사체 최대 비행 거리(m, Attack_Range)")]
         public float maxRange = 30f;
 
-        [Tooltip("발사 후 제자리 정지 시간(초)")]
-        public float recoveryTime = 2f;
+        [Tooltip("발사 후 제자리 정지 시간(초). 포효 반복 구간 — 마무리모션 자리 확보 위해 살짝 줄임")]
+        public float recoveryTime = 1.4f;
+
+        [Tooltip("포효 마무리 모션 재생 시간(초)")]
+        public float roarOutroTime = 0.6f;
 
         [Header("2페이즈 강화")]
         [Tooltip("사용 후 보스가 받는 피해 감소율(0~1). 0.3 = 30% 감소")]
@@ -63,11 +66,13 @@ namespace BagSurvivor.Monster
             Vector2 dir = DirToPlayer();
 
             GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
+            // 앞 모션(걷기) 빼고 텔레그래프 동안 대기
+            if (bossAnimator != null) bossAnimator.PlayPattern("Idle");
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 
-            // 포효 인트로 1회 재생
-            if (bossAnimator != null) bossAnimator.PlayPattern("Roar");
+            // 발사 시작 → 포효 인트로(1회) → 컨트롤러가 포효 루프로 자동 전환(패턴 끝까지 유지)
+            if (bossAnimator != null) bossAnimator.PlayPattern("RoarIntro");
 
             for (int i = 0; i < projectileCount; i++)
             {
@@ -76,12 +81,13 @@ namespace BagSurvivor.Monster
                     yield return new WaitForSeconds(fireInterval);
             }
 
-            // 발사 끝 → 마지막 '포효하는 부분'만 루프(입 벌리고 계속), 패턴 끝까지
-            if (bossAnimator != null) bossAnimator.PlayPattern("RoarLoop");
-
-            // 발사 후 제자리 정지(숨 고르기)
+            // 발사 후 제자리 정지(숨 고르기) — 포효 루프 유지
             if (recoveryTime > 0f)
                 yield return new WaitForSeconds(recoveryTime);
+
+            // 포효 마무리 모션(1회) — 루프 끝내고 마무리
+            if (bossAnimator != null) bossAnimator.PlayPattern("RoarOutro");
+            if (roarOutroTime > 0f) yield return new WaitForSeconds(roarOutroTime);
 
             // 2페이즈 강화: 사용 종료 후 일정 시간 받는 피해 감소(방어 버프)
             if (phase2Mode && controller != null)

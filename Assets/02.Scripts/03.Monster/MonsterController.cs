@@ -406,6 +406,14 @@ namespace BagSurvivor.Monster
             rb.linearVelocity = dir * monsterData.moveSpeed * _speedMultiplier;
         }
 
+        /// <summary>스프라이트를 좌우 방향(dirX)에 맞춰 뒤집습니다. 돌진 등 외부제어 패턴 중 방향 고정용
+        /// (외부제어 동안엔 ChasePlayer가 안 돌아 flipX가 자동 갱신되지 않으므로 패턴이 직접 호출).</summary>
+        public void FaceDirection(float dirX)
+        {
+            if (spriteRenderer != null && Mathf.Abs(dirX) > 0.01f)
+                spriteRenderer.flipX = dirX < 0f;
+        }
+
         // 기둥 받침(PillarBlock 트리거)을 '돌아서' 가는 국소 회피. 물리 충돌이 아니라 레이캐스트 감지 +
         // 한 방향으로 커밋(경로가 뚫릴 때까지 유지)해 매끄럽게 우회 → 비비적댐/떨림 없음.
         private static int pillarMaskCache = -1; // -1=미초기화, 0=레이어없음, 그외=레이어마스크

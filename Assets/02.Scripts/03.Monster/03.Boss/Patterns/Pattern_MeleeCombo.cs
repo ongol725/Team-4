@@ -53,7 +53,12 @@ namespace BagSurvivor.Monster
             lockedDir = dir;
 
             // 텔레그래프(예고) — 플레이어 방향으로 표시
-            GameObject tele = ShowTelegraph(telegraphPrefab, transform.position, dir);
+            // 부채꼴: 꼭짓점이 보스에 붙고 +Y(이미지 위)가 펼침 방향 → +Y를 플레이어 방향으로 회전.
+            // 크기는 프리팹에 hitRange 기준(콘텐츠 reach=hitRange)으로 베이크돼 있으니 런타임 스케일 X.
+            float fanAng = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+            GameObject tele = SpawnFromPool(telegraphPrefab, transform.position, Quaternion.Euler(0f, 0f, fanAng));
+            // 텔레그래프 동안 돌진대기 모션
+            if (bossAnimator != null) bossAnimator.PlayPattern("ChargeIdle");
             yield return new WaitForSeconds(telegraphTime);
             ReturnPooled(tele);
 

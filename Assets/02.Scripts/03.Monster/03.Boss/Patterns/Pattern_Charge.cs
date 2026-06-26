@@ -88,10 +88,13 @@ namespace BagSurvivor.Monster
                     sr.transform.localPosition = new Vector3(dashDistance * 0.5f, 0f, 0f);
                 }
             }
-            yield return new WaitForSeconds(telegraphSec);   // 경고선 동안 대기(대기 애니 유지)
+            // 경고선 동안 '돌진 전 대기'(ChargeIdle) 반복 재생
+            if (bossAnimator != null) bossAnimator.PlayPattern("ChargeIdle");
+            yield return new WaitForSeconds(telegraphSec);
             ReturnPooled(tele);
 
-            // 실제 돌진 시작 → 돌진 애니(매 돌진마다 처음부터 재시작 → 2페이즈 2회 돌진 시 2번 출력)
+            // 실제 돌진 시작 → 돌진 방향으로 스프라이트 뒤집기 + 돌진 애니(매 돌진마다 처음부터 재시작)
+            if (controller != null) controller.FaceDirection(dir.x);
             if (bossAnimator != null) bossAnimator.PlayPattern(animState, true);
 
             float traveled = 0f;

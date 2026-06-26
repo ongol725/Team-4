@@ -27,21 +27,21 @@ public static class BossAnimApply
     private const string ScenePath = "Assets/01.Scenes/Sandbox/BossSandbox.unity";
     private const string StatuePng = "Assets/04.Images/02.Monsters/Boss/보스몬스터_석상.png";
 
-    // 상태명, 루프 여부, 클립 검색 키워드
-    private static readonly (string name, bool loop, string[] kws)[] States =
+    // 상태명, 루프, 포함 키워드(kws), 제외 키워드(not). 포효는 인트로→루프라 커스텀(AddRoarStates).
+    private static readonly (string name, bool loop, string[] kws, string[] not)[] States =
     {
-        ("Idle",     true,  new[]{"대기"}),
-        ("Move",     true,  new[]{"이동"}),
-        ("Stun",     true,  new[]{"스턴"}),
-        ("Death",    false, new[]{"사망"}),
-        ("Charge",   false, new[]{"돌진"}),
-        ("Melee",    false, new[]{"퀴"}),          // 할퀴기(파일명 '햘퀴기' 대응)
-        ("Energy",   true,  new[]{"탄막"}),  // 패턴 끝날 때까지 루프
-        ("Phantom",  true,  new[]{"늑대"}),  // 패턴 끝날 때까지 루프
-        ("Roar",     true,  new[]{"포효"}),  // 반복 애니(입 벌리고 포효) — 패턴 끝까지 루프
-        ("Leap",     false, new[]{"점프"}),
-        ("LeapLand", true,  new[]{"착지"}),  // 착지 후 동심원 동안 루프
-        ("Cast",     false, new[]{"석상","소환"}), // 석상 소환 (HealTotem·StoneBreak 공유)
+        ("Idle",       true,  new[]{"탄막"},     null),          // 대기 모션 = 탄막패턴(기 모으기) 사용
+        ("ChargeIdle", true,  new[]{"돌진대기"}, null),          // 돌진 전 대기(신규)
+        ("Move",       true,  new[]{"이동"},     null),
+        ("Stun",       true,  new[]{"스턴"},     null),
+        ("Death",      false, new[]{"사망"},     null),
+        ("Charge",     false, new[]{"돌진"},     new[]{"대기"}), // 돌진(대시), 돌진대기 제외
+        ("Melee",      false, new[]{"퀴"},       null),          // 할퀴기(파일명 '햘퀴기' 대응)
+        ("Energy",     true,  new[]{"탄막"},     null),          // 패턴 끝까지 루프
+        ("Phantom",    true,  new[]{"늑대"},     null),          // 패턴 끝까지 루프
+        ("Leap",       false, new[]{"점프"},     null),
+        ("LeapLand",   true,  new[]{"착지"},     null),          // 착지 후 동심원 동안 루프
+        ("Cast",       true,  new[]{"탄막"},     null),          // 힐토템/돌석상: 기모으기(탄막) 반복
     };
 
     [MenuItem("Team4/보스 애니 적용 (샌드박스)")]
@@ -88,6 +88,9 @@ public static class BossAnimApply
         ApplyTotem(boss, statueClip);
         ApplyLeapWarning(boss);
         ApplyDashWarn(boss);
+        ApplyPhantomWolf(boss);
+        ApplyMeleeWarn(boss);
+        ApplyFloorHazard(boss);
 
         EditorUtility.SetDirty(boss);
         EditorSceneManager.MarkSceneDirty(scene);
@@ -100,9 +103,10 @@ public static class BossAnimApply
     /// <summary>primaryPhase 클립 우선, 없으면 otherPhase 폴백으로 컨트롤러 빌드.</summary>
     private static AnimatorController BuildController(string path, string primaryPhase, string otherPhase, List<AnimationClip> clips)
     {
-        AnimationClip Pick(string[] kws)
+        AnimationClip Pick(string[] kws, string[] not)
         {
-            bool Match(AnimationClip c, string ph) => c.name.Contains(ph) && kws.All(k => c.name.Contains(k));
+            bool Match(AnimationClip c, string ph) => c.name.Contains(ph) && kws.All(k => c.name.Contains(k))
+                && (not == null || !not.Any(n => c.name.Contains(n)));
             return clips.FirstOrDefault(c => Match(c, primaryPhase)) ?? clips.FirstOrDefault(c => Match(c, otherPhase));
         }
 
@@ -111,9 +115,9 @@ public static class BossAnimApply
         var sm = ctrl.layers[0].stateMachine;
         AnimatorState idle = null;
 
-        foreach (var (name, loop, kws) in States)
+        foreach (var (name, loop, kws, not) in States)
         {
-            var clip = Pick(kws);
+            var clip = Pick(kws, not);
             if (clip == null) { Debug.LogWarning($"[BossAnimApply] {primaryPhase} '{name}' 클립 없음(폴백도 실패)"); continue; }
             var s = AnimationUtility.GetAnimationClipSettings(clip);
             if (s.loopTime != loop) { s.loopTime = loop; AnimationUtility.SetAnimationClipSettings(clip, s); EditorUtility.SetDirty(clip); }
@@ -123,8 +127,43 @@ public static class BossAnimApply
             var st = sm.AddState(name); st.motion = clip;
             if (name == "Idle") idle = st;
         }
+        AddRoarStates(sm, primaryPhase, otherPhase, clips);
+
         if (idle != null) sm.defaultState = idle;
         return ctrl;
+    }
+
+    /// <summary>포효: 인트로(1회) → 루프(반복) 두 상태 + 자동전환. Pattern_RoarWave는 "RoarIntro"만 재생.
+    /// 1p: 포효(인트로)→포효(1)(루프) / 2p: 포효 전체모션(인트로)→포효(루프).</summary>
+    private static void AddRoarStates(AnimatorStateMachine sm, string primary, string other, List<AnimationClip> clips)
+    {
+        // 포효는 새 파일(보스몬스터_{phase}_*)만 사용. 전체모션(1회) → 포효(반복) → 마무리모션(1회).
+        string prefix = primary == "1페이즈" ? "보스몬스터_1페이즈" : "보스몬스터_2페이즈";
+        AnimationClip Pick(System.Func<string, bool> extra) =>
+            clips.FirstOrDefault(c => c.name.Contains(prefix) && c.name.Contains("포효") && extra(c.name));
+
+        AnimationClip intro = Pick(n => n.Contains("전체"));                                        // 포효 전체모션
+        AnimationClip loopC = Pick(n => !n.Contains("(1)") && !n.Contains("전체") && !n.Contains("마무리")) // 포효(반복)
+                           ?? Pick(n => n.Contains("(1)"));
+        AnimationClip outro = Pick(n => n.Contains("마무리"));                                       // 포효 마무리모션
+        if (intro == null) intro = loopC;
+        if (loopC == null) loopC = intro;
+        if (intro == null) { Debug.LogWarning($"[BossAnimApply] {primary} 포효 클립 없음 — Roar 생략"); return; }
+
+        SetClipLoop(intro, false);
+        SetClipLoop(loopC, true);
+        var introSt = sm.AddState("RoarIntro"); introSt.motion = intro;
+        var loopSt  = sm.AddState("RoarLoop");  loopSt.motion = loopC;
+        var tr = introSt.AddTransition(loopSt);
+        tr.hasExitTime = true; tr.exitTime = 1f; tr.duration = 0f;
+
+        if (outro != null) { SetClipLoop(outro, false); sm.AddState("RoarOutro").motion = outro; } // 패턴 끝에 1회(RoarWave가 재생)
+    }
+
+    private static void SetClipLoop(AnimationClip clip, bool loop)
+    {
+        var s = AnimationUtility.GetAnimationClipSettings(clip);
+        if (s.loopTime != loop) { s.loopTime = loop; AnimationUtility.SetAnimationClipSettings(clip, s); EditorUtility.SetDirty(clip); }
     }
 
     private const string RangeFxPng      = "Assets/04.Images/02.Monsters/Boss/보스패턴범위이펙트.png";
@@ -134,53 +173,239 @@ public static class BossAnimApply
     private const string RangeMaskPrefab = AnimDir + "/RangeMask.prefab";
     private const int    RangeFxFrames   = 6;   // 가로 6프레임(투명 간격 검출 기준)
 
-    /// <summary>LeapBlast 경고 바닥(telegraph·ringWarning)을 '보스패턴범위이펙트' 반복 애니 프리팹으로 교체.
-    /// (다른 패턴이 공유하는 telePrefab은 안 건드림)</summary>
+    private const string FloorWarnPng     = "Assets/04.Images/02.Monsters/Boss/보스바닥경고.png";
+    private const string FloorWarnEdgePng = "Assets/04.Images/02.Monsters/Boss/보스바닥경고테두리.png";
+    private const int    FloorWarnFrames  = 8;   // 4096x512 = 8프레임
+
+    /// <summary>LeapBlast 경고 바닥 교체: 1단=보스바닥경고(꽉 찬 원), 2·3단=보스바닥경고테두리(링, 마스크 없음). 둘 다 8프레임 루프.</summary>
     private static void ApplyLeapWarning(GameObject boss)
     {
         var leap = boss.GetComponent<Pattern_LeapBlast>();
         if (leap == null) return;
-        if (AssetImporter.GetAtPath(RangeFxPng) == null) { Debug.LogWarning("[BossAnimApply] 보스패턴범위이펙트.png 없음 — 경고 바닥 교체 생략"); return; }
 
-        Sprite[] frames = SliceStrip(RangeFxPng, RangeFxFrames);
-        if (frames.Length == 0) { Debug.LogWarning("[BossAnimApply] 범위이펙트 슬라이스 실패"); return; }
+        var floorWarn = BuildFloorWarn(FloorWarnPng, FloorWarnFrames, "FloorWarn");
+        if (floorWarn == null) { Debug.LogWarning("[BossAnimApply] 보스바닥경고 프리팹 생성 실패 — LeapBlast 경고 생략"); return; }
+        var floorEdge = BuildFloorWarn(FloorWarnEdgePng, FloorWarnFrames, "FloorWarnEdge");
 
-        // 반복 클립
+        leap.telegraphPrefab        = floorWarn;                              // 착지 예고(첫 범위)
+        leap.ringWarningPrefab      = floorWarn;                              // 1단(중심 원)
+        leap.ringWarningPrefabOuter = floorEdge != null ? floorEdge : floorWarn; // 2·3단(테두리)
+        leap.ringMaskPrefab         = null;                                  // 테두리가 이미 링 → 마스크 불필요
+        leap.ringEffectPrefab       = null;
+        leap.ring1Radius = 4.5f; leap.ring2Radius = 7f; leap.ring3Radius = 11.5f; // 바닥 크기 축소
+        EditorUtility.SetDirty(leap);
+    }
+
+    /// <summary>가로 스트립 PNG를 cols프레임 루프 애니 프리팹으로 빌드(SpriteRenderer+Animator+PooledObject).</summary>
+    private static GameObject BuildFloorWarn(string png, int cols, string baseName)
+    {
+        var imp = AssetImporter.GetAtPath(png) as TextureImporter;
+        if (imp == null) { Debug.LogWarning($"[BossAnimApply] {png} 없음"); return null; }
+        // 이미 Multiple(수동 슬라이스)이면 그대로 사용, 아니면 자동 슬라이스(가드 — 수동 작업 보존)
+        Sprite[] frames = imp.spriteImportMode == SpriteImportMode.Multiple
+            ? AssetDatabase.LoadAllAssetsAtPath(png).OfType<Sprite>().OrderBy(s => s.rect.x).ToArray()
+            : SliceStrip(png, cols);
+        if (frames.Length == 0) { Debug.LogWarning($"[BossAnimApply] {png} 슬라이스 실패/없음"); return null; }
+
+        // 콘텐츠(원/링)가 프레임보다 작으면(투명 여백) 그만큼 보정 — 실제 원이 반지름에 맞게.
+        float ratio = ContentWidthRatio(png, cols);
+        float comp = ratio > 0.05f ? 1f / ratio : 1f;
+
+        string animPath = $"{AnimDir}/{baseName}.anim", ctrlPath = $"{AnimDir}/{baseName}.controller", prefabPath = $"{AnimDir}/{baseName}.prefab";
         var clip = new AnimationClip { frameRate = 12f };
-        var binding = EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite");
+        var binding = EditorCurveBinding.PPtrCurve("Fx", typeof(SpriteRenderer), "m_Sprite"); // 자식 Fx 대상(여백 보정 스케일 적용)
         var keys = new ObjectReferenceKeyframe[frames.Length];
         for (int i = 0; i < frames.Length; i++) keys[i] = new ObjectReferenceKeyframe { time = i / 12f, value = frames[i] };
         AnimationUtility.SetObjectReferenceCurve(clip, binding, keys);
         var cs = AnimationUtility.GetAnimationClipSettings(clip); cs.loopTime = true; AnimationUtility.SetAnimationClipSettings(clip, cs);
-        AssetDatabase.DeleteAsset(RangeWarnAnim); AssetDatabase.CreateAsset(clip, RangeWarnAnim);
+        AssetDatabase.DeleteAsset(animPath); AssetDatabase.CreateAsset(clip, animPath);
 
-        AssetDatabase.DeleteAsset(RangeWarnCtrl);
-        var ctrl = AnimatorController.CreateAnimatorControllerAtPath(RangeWarnCtrl);
-        var st = ctrl.layers[0].stateMachine.AddState("RangeWarn"); st.motion = clip;
+        AssetDatabase.DeleteAsset(ctrlPath);
+        var ctrl = AnimatorController.CreateAnimatorControllerAtPath(ctrlPath);
+        var st = ctrl.layers[0].stateMachine.AddState(baseName); st.motion = clip;
         ctrl.layers[0].stateMachine.defaultState = st;
 
-        var go = new GameObject("RangeWarn");
-        var sr = go.AddComponent<SpriteRenderer>(); sr.sprite = frames[0]; sr.sortingOrder = 4;
-        sr.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask; // 마스크(안쪽) 밖만 표시 → 도넛
+        var go = new GameObject(baseName);
         var an = go.AddComponent<Animator>(); an.runtimeAnimatorController = ctrl;
         go.AddComponent<PooledObject>();
-        AssetDatabase.DeleteAsset(RangeWarnPrefab);
-        var prefab = PrefabUtility.SaveAsPrefabAsset(go, RangeWarnPrefab);
+        var fx = new GameObject("Fx"); fx.transform.SetParent(go.transform, false);
+        fx.transform.localScale = Vector3.one * comp;   // 여백 보정 → SpawnScaled가 root를 반지름에 맞춰도 실제 원이 정확
+        var sr = fx.AddComponent<SpriteRenderer>(); sr.sprite = frames[0]; sr.sortingOrder = 4;
+        AssetDatabase.DeleteAsset(prefabPath);
+        var prefab = PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
         Object.DestroyImmediate(go);
+        return prefab;
+    }
 
-        // 안쪽(이미 터진 범위) 가리개 — SpriteMask 프리팹
-        var mgo = new GameObject("RangeMask");
-        var sm = mgo.AddComponent<SpriteMask>(); sm.sprite = frames[0];
-        mgo.AddComponent<PooledObject>();
-        AssetDatabase.DeleteAsset(RangeMaskPrefab);
-        var maskPrefab = PrefabUtility.SaveAsPrefabAsset(mgo, RangeMaskPrefab);
-        Object.DestroyImmediate(mgo);
+    /// <summary>스트립 PNG 프레임0의 비투명 콘텐츠 가로폭 / 프레임 가로폭(≤1). 여백 보정용.</summary>
+    private static float ContentWidthRatio(string png, int cols)
+    {
+        byte[] bytes = File.ReadAllBytes(png);
+        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 1f; }
+        int w = tex.width, h = tex.height, fw = Mathf.Max(1, w / Mathf.Max(1, cols));
+        var px = tex.GetPixels32();
+        int minX = int.MaxValue, maxX = int.MinValue;
+        for (int y = 0; y < h; y += 4)
+            for (int x = 0; x < fw; x += 2)            // 프레임0만 검사
+                if (px[y * w + x].a > 10) { if (x < minX) minX = x; if (x > maxX) maxX = x; }
+        Object.DestroyImmediate(tex);
+        return (maxX >= minX) ? (maxX - minX + 1) / (float)fw : 1f;
+    }
 
-        leap.telegraphPrefab = prefab;   // 착지 예고(첫 범위, 마스크 없음 → 꽉 찬 원)
-        leap.ringWarningPrefab = prefab; // 동심원 경고 바닥
-        leap.ringMaskPrefab = maskPrefab; // 2단+ 안쪽 가림 → 도넛
-        leap.ringEffectPrefab = null;    // 원래 더미 네모 폭발 제거(범위 애니가 시각 담당)
-        EditorUtility.SetDirty(leap);
+    private const string MeleeFanPng = "Assets/04.Images/02.Monsters/Boss/보스몬스터 부채꼴.png";
+
+    /// <summary>할퀴기(MeleeCombo) 경고를 '보스몬스터 부채꼴'(수동 슬라이스) 반복 애니로 연결.
+    /// 꼭짓점(이미지 중앙 아랫부분)을 프리팹 root 원점에 맞춰, 보스 위치에서 +Y로 펼쳐지게 한다
+    /// (MeleeCombo가 +Y를 플레이어 방향으로 회전·hitRange로 스케일).</summary>
+    private static void ApplyMeleeWarn(GameObject boss)
+    {
+        var melee = boss.GetComponent<Pattern_MeleeCombo>();
+        if (melee == null) return;
+        var imp = AssetImporter.GetAtPath(MeleeFanPng) as TextureImporter;
+        if (imp == null) { Debug.LogWarning("[BossAnimApply] 보스몬스터 부채꼴.png 없음"); return; }
+        Sprite[] frames = imp.spriteImportMode == SpriteImportMode.Multiple
+            ? AssetDatabase.LoadAllAssetsAtPath(MeleeFanPng).OfType<Sprite>().OrderBy(s => s.rect.x).ToArray()
+            : SliceStrip(MeleeFanPng, 8);
+        if (frames.Length == 0) { Debug.LogWarning("[BossAnimApply] 부채꼴 슬라이스 없음"); return; }
+
+        string animP = AnimDir + "/MeleeWarn.anim", ctrlP = AnimDir + "/MeleeWarn.controller", prefabP = AnimDir + "/MeleeWarn.prefab";
+        var clip = new AnimationClip { frameRate = 12f };
+        var binding = EditorCurveBinding.PPtrCurve("Fx", typeof(SpriteRenderer), "m_Sprite");
+        var keys = new ObjectReferenceKeyframe[frames.Length];
+        for (int i = 0; i < frames.Length; i++) keys[i] = new ObjectReferenceKeyframe { time = i / 12f, value = frames[i] };
+        AnimationUtility.SetObjectReferenceCurve(clip, binding, keys);
+        var cs = AnimationUtility.GetAnimationClipSettings(clip); cs.loopTime = true; AnimationUtility.SetAnimationClipSettings(clip, cs);
+        AssetDatabase.DeleteAsset(animP); AssetDatabase.CreateAsset(clip, animP);
+
+        AssetDatabase.DeleteAsset(ctrlP);
+        var ctrl = AnimatorController.CreateAnimatorControllerAtPath(ctrlP);
+        var st = ctrl.layers[0].stateMachine.AddState("MeleeWarn"); st.motion = clip;
+        ctrl.layers[0].stateMachine.defaultState = st;
+
+        // 콘텐츠(부채꼴) 실제 bbox로 크기/꼭짓점을 맞춘다 — 투명 여백 때문에 '보는 것보다 멀리 때리는' 문제 해결.
+        float ppu = frames[0].pixelsPerUnit;
+        Rect rect = frames[0].rect;
+        Vector2 pivot = frames[0].pivot; // rect 좌하단 기준 px
+        var bb = ContentBBox(MeleeFanPng, rect);
+        // 꼭짓점 = 이미지(프레임) 아래중앙 — 이 점이 몬스터에 붙어야 함(콘텐츠 아래끝이 아니라 프레임 아래변)
+        float apexX = (rect.width * 0.5f - pivot.x) / ppu;
+        float apexY = (0f - pivot.y) / ppu;
+        // 시각 사거리 = 프레임 아래변 → 콘텐츠 위끝(부채꼴 호) = hitRange 가 되게 스케일
+        float reachWorld = bb.ok ? bb.maxY / ppu : rect.height / ppu;
+        float scale = reachWorld > 0.0001f ? melee.hitRange / reachWorld : 1f;
+
+        var root = new GameObject("MeleeWarn");
+        var an = root.AddComponent<Animator>(); an.runtimeAnimatorController = ctrl;
+        root.AddComponent<PooledObject>();
+        var fx = new GameObject("Fx"); fx.transform.SetParent(root.transform, false);
+        fx.transform.localScale = Vector3.one * scale;
+        fx.transform.localPosition = new Vector3(-apexX * scale, -apexY * scale, 0f); // 꼭짓점을 root 원점으로
+        var sr = fx.AddComponent<SpriteRenderer>(); sr.sprite = frames[0]; sr.sortingOrder = 4;
+        AssetDatabase.DeleteAsset(prefabP);
+        var prefab = PrefabUtility.SaveAsPrefabAsset(root, prefabP);
+        Object.DestroyImmediate(root);
+
+        melee.telegraphPrefab = prefab;
+        EditorUtility.SetDirty(melee);
+    }
+
+    /// <summary>스트립 PNG에서 한 sprite rect 내 비투명 콘텐츠 bbox(px, rect 좌하단 기준, Y up).</summary>
+    private static (float minX, float maxX, float minY, float maxY, bool ok) ContentBBox(string png, Rect rect)
+    {
+        byte[] bytes = File.ReadAllBytes(png);
+        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return (0, 0, 0, 0, false); }
+        int W = tex.width;
+        var px = tex.GetPixels32();
+        int rx = (int)rect.x, ry = (int)rect.y, rw = (int)rect.width, rh = (int)rect.height;
+        int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
+        for (int y = 0; y < rh; y += 2)
+            for (int x = 0; x < rw; x += 2)
+                if (px[(ry + y) * W + (rx + x)].a > 10)
+                { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
+        Object.DestroyImmediate(tex);
+        return (maxX >= minX) ? (minX, maxX, minY, maxY, true) : (0, 0, 0, 0, false);
+    }
+
+    private const string FloorPlatePng    = "Assets/04.Images/02.Monsters/Boss/바닥장판.png";
+    private const string FloorHazardPrefab = AnimDir + "/FloorHazard.prefab";
+
+    /// <summary>페이즈 전환 바닥 장판: '바닥장판' 애니를 오른쪽에, 좌우반전해 왼쪽에(같은 크기) 배치.
+    /// FloorHazard(데미지) + 트리거 콜라이더(전체 폭)는 유지. BossPhaseController.floorHazardPrefab에 연결.</summary>
+    private static void ApplyFloorHazard(GameObject boss)
+    {
+        var phase = boss.GetComponent<BossPhaseController>();
+        if (phase == null) return;
+        var imp = AssetImporter.GetAtPath(FloorPlatePng) as TextureImporter;
+        if (imp == null) { Debug.LogWarning("[BossAnimApply] 바닥장판.png 없음"); return; }
+        Sprite[] frames = imp.spriteImportMode == SpriteImportMode.Multiple
+            ? AssetDatabase.LoadAllAssetsAtPath(FloorPlatePng).OfType<Sprite>().OrderBy(s => s.rect.x).ToArray()
+            : SliceStrip(FloorPlatePng, 12);
+        if (frames.Length == 0) { Debug.LogWarning("[BossAnimApply] 바닥장판 슬라이스 없음"); return; }
+
+        // 오른쪽/왼쪽 두 SpriteRenderer를 같은 프레임으로 동기 애니
+        string animP = AnimDir + "/FloorHazard.anim", ctrlP = AnimDir + "/FloorHazard.controller";
+        var clip = new AnimationClip { frameRate = 12f };
+        var keys = new ObjectReferenceKeyframe[frames.Length];
+        for (int i = 0; i < frames.Length; i++) keys[i] = new ObjectReferenceKeyframe { time = i / 12f, value = frames[i] };
+        AnimationUtility.SetObjectReferenceCurve(clip, EditorCurveBinding.PPtrCurve("Right", typeof(SpriteRenderer), "m_Sprite"), keys);
+        AnimationUtility.SetObjectReferenceCurve(clip, EditorCurveBinding.PPtrCurve("Left", typeof(SpriteRenderer), "m_Sprite"), keys);
+        var cs = AnimationUtility.GetAnimationClipSettings(clip); cs.loopTime = true; AnimationUtility.SetAnimationClipSettings(clip, cs);
+        AssetDatabase.DeleteAsset(animP); AssetDatabase.CreateAsset(clip, animP);
+
+        AssetDatabase.DeleteAsset(ctrlP);
+        var ctrl = AnimatorController.CreateAnimatorControllerAtPath(ctrlP);
+        var st = ctrl.layers[0].stateMachine.AddState("FloorHazard"); st.motion = clip;
+        ctrl.layers[0].stateMachine.defaultState = st;
+
+        float w = frames[0].bounds.size.x, h = frames[0].bounds.size.y, halfW = w * 0.5f;
+        var root = new GameObject("FloorHazard");
+        var col = root.AddComponent<BoxCollider2D>(); col.isTrigger = true; col.size = new Vector2(w * 2f, h); // 전체 폭(오른+왼)
+        root.AddComponent<FloorHazard>();   // 데미지(기본값 5/0.5)
+        var an = root.AddComponent<Animator>(); an.runtimeAnimatorController = ctrl;
+
+        var right = new GameObject("Right"); right.transform.SetParent(root.transform, false);
+        right.transform.localPosition = new Vector3(halfW, 0f, 0f);
+        var rsr = right.AddComponent<SpriteRenderer>(); rsr.sprite = frames[0]; rsr.sortingOrder = 2;
+
+        var left = new GameObject("Left"); left.transform.SetParent(root.transform, false);
+        left.transform.localPosition = new Vector3(-halfW, 0f, 0f);
+        var lsr = left.AddComponent<SpriteRenderer>(); lsr.sprite = frames[0]; lsr.sortingOrder = 2; lsr.flipX = true; // 좌우반전
+
+        AssetDatabase.DeleteAsset(FloorHazardPrefab);
+        var prefab = PrefabUtility.SaveAsPrefabAsset(root, FloorHazardPrefab);
+        Object.DestroyImmediate(root);
+
+        phase.floorHazardPrefab = prefab;
+        EditorUtility.SetDirty(phase);
+        Debug.Log("[BossAnimApply] 바닥장판(오른쪽+좌우반전 왼쪽) FloorHazard 생성 + 연결");
+    }
+
+    private const string WolfPrefabPath    = "Assets/03.Prefabs/02.Monsters/Prefab_Wolf.prefab";
+    private const string PhantomWolfPrefab = AnimDir + "/PhantomWolf.prefab";
+
+    /// <summary>PhantomDash: 보라 네모 대신 실제 늑대(Prefab_Wolf) + PhantomWolfDash + 하늘색 반투명(영혼)으로
+    /// PhantomWolf 프리팹을 만들어 연결. Prefab_Wolf 원본은 건드리지 않는다.</summary>
+    private static void ApplyPhantomWolf(GameObject boss)
+    {
+        var phantom = boss.GetComponent<Pattern_PhantomDash>();
+        if (phantom == null) return;
+        if (AssetDatabase.LoadAssetAtPath<GameObject>(WolfPrefabPath) == null) { Debug.LogWarning("[BossAnimApply] Prefab_Wolf 없음 — PhantomDash 생략"); return; }
+
+        var contents = PrefabUtility.LoadPrefabContents(WolfPrefabPath);
+        if (contents.GetComponent<PhantomWolfDash>() == null) contents.AddComponent<PhantomWolfDash>();
+        var sr = contents.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null) sr.color = new Color(0.35f, 0.85f, 1f, 0.85f); // 더 진한 하늘색 영혼(잘 보이게) — MonsterController가 baseColor로 유지
+        var mc = contents.GetComponent<MonsterController>();
+        if (mc != null) mc.hpBarPrefab = null; // 팬텀은 체력바 숨김
+        AssetDatabase.DeleteAsset(PhantomWolfPrefab);
+        var prefab = PrefabUtility.SaveAsPrefabAsset(contents, PhantomWolfPrefab);
+        PrefabUtility.UnloadPrefabContents(contents);
+
+        phantom.wolfPrefab = prefab;
+        EditorUtility.SetDirty(phantom);
+        Debug.Log("[BossAnimApply] PhantomWolf(하늘색 영혼 늑대) 생성 + PhantomDash 연결");
     }
 
     private const string PathPng        = "Assets/FreePixelEffect/Path.png";   // 에셋스토어(gitignore)
