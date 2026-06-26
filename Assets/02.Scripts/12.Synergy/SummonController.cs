@@ -42,6 +42,10 @@ public class SummonController : MonoBehaviour
     private float _guardAngle;                    // 현재 공전 각도(도)
     private const float GuardRadius = 2.2f;       // 플레이어로부터의 거리
 
+    // 본체 스프라이트/평상 애니메이션 — 광역 발동 시 발동 모션으로 잠시 교체(대정령)
+    private SpriteRenderer _mainSr;
+    private Coroutine      _idleAnimCo;
+
     // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
     private Camera _mainCam;
     // 메모리: Init에서 생성한 임시 Texture2D를 OnDestroy에서 명시적으로 해제
@@ -91,9 +95,11 @@ public class SummonController : MonoBehaviour
                 };
                 transform.localScale = Vector3.one * scale;
 
+                _mainSr = sr; // 광역 발동 시 본체 스프라이트를 교체하기 위해 보관
+
                 // 프레임이 2개 이상이면 애니메이션 코루틴 시작
                 if (data.animFrames != null && data.animFrames.Length > 1)
-                    StartCoroutine(PlaySpriteAnim(sr, data.animFrames, data.animFps));
+                    _idleAnimCo = StartCoroutine(PlaySpriteAnim(sr, data.animFrames, data.animFps));
             }
             else
             {
@@ -432,25 +438,37 @@ public class SummonController : MonoBehaviour
             var vfx = Instantiate(skill.vfxPrefab, transform.position, Quaternion.identity);
             Destroy(vfx, skill.duration > 0f ? skill.duration : 2f);
         }
-        else if (skill.animFrames != null && skill.animFrames.Length > 0)
+        else if (_mainSr != null && skill.animFrames != null && skill.animFrames.Length > 0)
         {
-            // 광역기 발동 시 소환수(대정령) 위치에 공격발동 모션을 1회 재생 → 대정령이 공격하는 연출
-            var go = new GameObject("SummonCastFx");
-            go.transform.position = transform.position;
-            var sr = go.AddComponent<SpriteRenderer>();
-            sr.sortingOrder = SynergyLayers.Effect;
-            sr.sprite = skill.animFrames[0];
-
-            float size      = skill.visualSize > 0f ? skill.visualSize : 3f;
-            float maxExtent = sr.sprite != null ? Mathf.Max(sr.sprite.bounds.extents.x, sr.sprite.bounds.extents.y) : 0f;
-            go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (size * 0.5f / maxExtent) : Vector3.one * size;
-
-            go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
-            float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
-            Destroy(go, life);
+            // 광역 발동: 본체 스프라이트를 발동 모션으로 잠시 "대체"(같은 위치·크기·레이어, 평상 애니메이션은 잠시 사라짐)
+            StartCoroutine(PlayCastMotion(skill.animFrames, skill.animFps));
         }
 
         yield return null;
+    }
+
+    /// <summary>평상 애니메이션을 멈추고 발동 모션을 1회 재생한 뒤 평상 애니메이션을 복구한다(대정령 광역).</summary>
+    private IEnumerator PlayCastMotion(Sprite[] castFrames, float fps)
+    {
+        if (_mainSr == null || castFrames == null || castFrames.Length == 0) yield break;
+
+        if (_idleAnimCo != null) StopCoroutine(_idleAnimCo); // 평상 애니메이션 정지(잠시 사라짐 = 대체)
+
+        var wait = new WaitForSeconds(1f / Mathf.Max(1f, fps));
+        for (int i = 0; i < castFrames.Length; i++)
+        {
+            if (_mainSr == null) yield break;
+            _mainSr.sprite = castFrames[i];
+            yield return wait;
+        }
+
+        // 평상 애니메이션 복구
+        if (_mainSr != null && _data.animFrames != null && _data.animFrames.Length > 1)
+            _idleAnimCo = StartCoroutine(PlaySpriteAnim(_mainSr, _data.animFrames, _data.animFps));
+        else if (_mainSr != null && _data.animFrames != null && _data.animFrames.Length == 1)
+            _mainSr.sprite = _data.animFrames[0];
+        else if (_mainSr != null && _data.icon != null)
+            _mainSr.sprite = _data.icon;
     }
 
     private void ApplySkillHit(SO_SkillData skill, MonsterController mc, int damage)
