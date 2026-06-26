@@ -196,6 +196,8 @@ public class DungeonRenderer : MonoBehaviour
                             {
                                 Tile pt = ScriptableObject.CreateInstance<Tile>();
                                 pt.sprite = ps;
+                                // 받침(i==0)만 충돌, 중간/최상단(i>=1)은 캐릭터가 통과 가능
+                                pt.colliderType = (i == 0) ? Tile.ColliderType.Sprite : Tile.ColliderType.None;
                                 tileCache[ps] = pt;
                             }
                             wallTilemap.SetTile(new Vector3Int(x, y + i, 0), tileCache[ps]);
