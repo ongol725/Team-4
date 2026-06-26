@@ -91,10 +91,10 @@ namespace BagSurvivor.SynergyEditor
             // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy (기획서: 무작위 낙뢰 1/3개) ──
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:1);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:1, vSize:1.6f);
             d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:3);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:3, vSize:1.6f);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
             // 낫: 투사체 표시 크기 2배(기본 0.8 → 1.6)
