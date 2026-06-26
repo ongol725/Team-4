@@ -454,13 +454,24 @@ public class SummonController : MonoBehaviour
 
         if (_idleAnimCo != null) StopCoroutine(_idleAnimCo); // 평상 애니메이션 정지(잠시 사라짐 = 대체)
 
+        // 발동 모션 스프라이트의 원본 크기가 평상(대정령)과 달라도 같은 표시 크기가 되도록 스케일 보정
+        Vector3 baseScale = transform.localScale;
+        Sprite  idleRef   = (_data.animFrames != null && _data.animFrames.Length > 0) ? _data.animFrames[0] : _data.icon;
+        float   idleDisplayed = idleRef != null
+            ? Mathf.Max(idleRef.bounds.extents.x, idleRef.bounds.extents.y) * baseScale.x : 0f;
+        float   castExtent    = Mathf.Max(castFrames[0].bounds.extents.x, castFrames[0].bounds.extents.y);
+        if (castExtent > 0.001f && idleDisplayed > 0.0001f)
+            transform.localScale = Vector3.one * (idleDisplayed / castExtent);
+
         var wait = new WaitForSeconds(1f / Mathf.Max(1f, fps));
         for (int i = 0; i < castFrames.Length; i++)
         {
-            if (_mainSr == null) yield break;
+            if (_mainSr == null) { transform.localScale = baseScale; yield break; }
             _mainSr.sprite = castFrames[i];
             yield return wait;
         }
+
+        transform.localScale = baseScale; // 평상 크기 복구
 
         // 평상 애니메이션 복구
         if (_mainSr != null && _data.animFrames != null && _data.animFrames.Length > 1)
