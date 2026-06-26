@@ -43,6 +43,8 @@ public class SO_SummonData : ScriptableObject
     [Header("외형")]
     [Tooltip("표시 스케일 직접 지정. 0이면 AI 타입별 기본 크기를 사용한다")]
     public float displayScale = 0f;
+    [Tooltip("스프라이트 정렬 순서. 기본 5. 성역처럼 바닥에 깔리는 효과는 -1 등 낮은 값")]
+    public int sortingOrder = 5;
     public GameObject modelPrefab;
     [Tooltip("modelPrefab 없을 때 사용할 스프라이트 (스프라이트 시트 첫 프레임 등)")]
     public Sprite icon;

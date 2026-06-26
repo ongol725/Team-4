@@ -26,6 +26,7 @@ MonoBehaviour:
   uniqueSkill: {fileID: 0}
   uniqueSkillCooldown: 8
   displayScale: 1.8
+  sortingOrder: -1
   modelPrefab: {fileID: 0}
   icon: {fileID: 216805022, guid: 2cf2892d46b302e46b6bf17e77cbba91, type: 3}
   animFrames:

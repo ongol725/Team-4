@@ -76,7 +76,7 @@ public class SummonController : MonoBehaviour
         else if (GetComponentInChildren<SpriteRenderer>() == null)
         {
             var sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sortingOrder = 5;
+            sr.sortingOrder = data.sortingOrder; // 성역 등 바닥 효과는 낮은 값으로 깔림
 
             if (data.icon != null)
             {

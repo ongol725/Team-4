@@ -680,7 +680,7 @@ public class SynergyManager : MonoBehaviour
         go.transform.position = pos;
 
         var sr = go.AddComponent<SpriteRenderer>();
-        sr.sortingOrder = 10;
+        sr.sortingOrder = skill.vfxSortingOrder; // 바닥 효과(난공불락)는 낮은 값
         sr.sprite = skill.animFrames[0];
         float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 0.3f);
         NormalizeScale(go, sr.sprite, size);

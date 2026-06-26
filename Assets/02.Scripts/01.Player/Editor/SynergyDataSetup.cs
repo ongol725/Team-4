@@ -134,23 +134,23 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:9);
 
             // ── 난공불락 (Impregnable) — OnHitTaken / ARM_HP_SUM / Self + DamageReduction ──
-            // 충격파: 표시 크기 5배(기본 0.8 → 4.0)
+            // 충격파: 표시 크기 5배(기본 0.8 → 4.0), 바닥 깔림(vfxSort -1)
             d["SK_FORTRESS_1"] = Sk("SK_FORTRESS_1", "충격파 (브론즈)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:5f,
-                fx:FixedEffectType.DamageReduction, fxVal:10f, vSize:4f);
+                fx:FixedEffectType.DamageReduction, fxVal:10f, vSize:4f, vfxSort:-1);
             d["SK_FORTRESS_2"] = Sk("SK_FORTRESS_2", "거대 충격파 (실버)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:4f);
+                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:4f, vfxSort:-1);
             d["SK_FORTRESS_3"] = Sk("SK_FORTRESS_3", "파멸 충격파 (골드)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:13.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:4f);
+                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:4f, vfxSort:-1);
             d["SK_FORTRESS_4"] = Sk("SK_FORTRESS_4", "무적 충격파 (프리즘)",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:20.0f, cd:0.5f, range:30f,
-                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:4f);
+                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:4f, vfxSort:-1);
 
             // ── 마왕 (DemonLord) — 누적형 동시 발동 (콘셉트 19~22) ──
             // 투사체(검기)·소용돌이는 스킬, 기어는 소환수(SUM_DEMON_GEAR)로 구성한다.
@@ -262,19 +262,19 @@ namespace BagSurvivor.SynergyEditor
                 atk:0.5f, spd:10f, atkCd:1.0f, atkRange:6f, dur:-1f);
 
             // ── 성기사단 (HolyKnight) — Stationary + HealArmorHpPct ──
-            // 성역 장판: 기본 0.6 → 3배 확대(scale 1.8)
+            // 성역 장판: 기본 0.6 → 3배 확대(scale 1.8), 바닥 깔림(sortOrder -1)
             d["SUM_SANCTUARY_1"] = Sum("SUM_SANCTUARY_1", "성역 장판 (브론즈)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.5f, spd:0f, atkCd:1.0f, atkRange:5f, dur:5f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f, scale:1.8f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f, scale:1.8f, sortOrder:-1);
             d["SUM_SANCTUARY_2"] = Sum("SUM_SANCTUARY_2", "성역 장판 (실버)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.6f, spd:0f, atkCd:1.0f, atkRange:5f, dur:8f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f, scale:1.8f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f, scale:1.8f, sortOrder:-1);
             d["SUM_SANCTUARY_3"] = Sum("SUM_SANCTUARY_3", "성역 장판 (골드)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.7f, spd:0f, atkCd:1.0f, atkRange:5f, dur:11f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f, scale:1.8f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f, scale:1.8f, sortOrder:-1);
 
             return d;
         }
@@ -530,7 +530,7 @@ namespace BagSurvivor.SynergyEditor
             int hits = 1, float hitInterval = 0.1f, int extra = 0,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
             float duration = 0f, int pierce = 1,
-            bool followVfx = false, float vSize = 0f)
+            bool followVfx = false, float vSize = 0f, int vfxSort = 10)
         {
             string path = $"{SkillDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SkillData>(path);
@@ -551,6 +551,7 @@ namespace BagSurvivor.SynergyEditor
             asset.duration         = duration;
             asset.pierceCount      = pierce;
             asset.vfxFollowPlayer  = followVfx;
+            asset.vfxSortingOrder  = vfxSort;
             if (vSize > 0f) asset.visualSize = vSize;
             EditorUtility.SetDirty(asset);
             return asset;
@@ -561,7 +562,7 @@ namespace BagSurvivor.SynergyEditor
             SummonAIType ai, ScalingStatType scaling,
             float atk, float spd, float atkCd, float atkRange, float dur,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float uniqueSkillCd = 8f, float scale = 0f)
+            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 5)
         {
             string path = $"{SummonDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SummonData>(path);
@@ -578,6 +579,7 @@ namespace BagSurvivor.SynergyEditor
             asset.fixedEffectValue  = fxVal;
             asset.uniqueSkillCooldown = uniqueSkillCd;
             asset.displayScale        = scale;
+            asset.sortingOrder        = sortOrder;
             EditorUtility.SetDirty(asset);
             return asset;
         }

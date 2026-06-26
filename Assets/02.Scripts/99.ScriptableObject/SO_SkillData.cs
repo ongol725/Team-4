@@ -63,6 +63,8 @@ public class SO_SkillData : ScriptableObject
     public float visualSize = 0.8f;
     [Tooltip("true이면 이펙트가 플레이어에 부착되어 따라다니며 루프 재생된다(마왕 소용돌이처럼 캐릭터를 감싸는 효과)")]
     public bool vfxFollowPlayer = false;
+    [Tooltip("이펙트 스프라이트 정렬 순서. 기본 10. 난공불락 충격파처럼 바닥에 깔리는 효과는 -1 등 낮은 값")]
+    public int vfxSortingOrder = 10;
 
     [Header("대부호 골드 드롭 (OnMove 전용)")]
     [Tooltip("이동 시 떨구는 골드 코인 프레임(Gold_Coin 등급별). 비우면 코인 없이 폭발만")]
