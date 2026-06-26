@@ -207,10 +207,10 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_AVG, dmg:4.0f, cd:0.4f, range:50f, extra:3);
 
             // ── 대정령 광역(프리즘) — SUM_GIANT_GOLEM.uniqueSkill 로 연결 ──
-            // 콘셉트 슬라이드 18: 대정령이 주변 빨간 영역을 주기적으로 강타.
+            // 스펙: 8초마다 화면 내 모든 적에게 대량 피해(range 100 = 전체 화면 커버).
             d["SK_SPIRIT_NOVA"] = Sk("SK_SPIRIT_NOVA", "대정령 광역 강타",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.AreaCenter,
-                ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0f, range:5f);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:0f, range:100f);
 
             return d;
         }

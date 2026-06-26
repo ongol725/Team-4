@@ -408,6 +408,7 @@ public class SummonController : MonoBehaviour
     {
         int damage  = Mathf.RoundToInt(_attackPower * skill.dmgMultiplier);
         var enemies = GetEnemiesInRange(skill.rangeRadius);
+        bool perEnemyFx = false; // 광역기는 적마다 공격 모션을 직접 띄운다
 
         switch (skill.targetType)
         {
@@ -417,7 +418,13 @@ public class SummonController : MonoBehaviour
                 break;
             case SkillTargetType.AreaCenter:
             case SkillTargetType.Self:
-                foreach (var mc in enemies) ApplySkillHit(skill, mc, damage);
+                // 대정령 광역기: 화면 내 모든 적에게 대량 피해 + 각 적에게 공격 모션(spirit_attack)
+                foreach (var mc in enemies)
+                {
+                    ApplySkillHit(skill, mc, damage);
+                    SpawnAttackEffect(mc.transform.position);
+                }
+                perEnemyFx = true;
                 break;
             case SkillTargetType.Forward:
                 var nearest = FindNearest(skill.rangeRadius);
@@ -430,7 +437,7 @@ public class SummonController : MonoBehaviour
             var vfx = Instantiate(skill.vfxPrefab, transform.position, Quaternion.identity);
             Destroy(vfx, skill.duration > 0f ? skill.duration : 2f);
         }
-        else if (skill.animFrames != null && skill.animFrames.Length > 0)
+        else if (!perEnemyFx && skill.animFrames != null && skill.animFrames.Length > 0)
         {
             // 대정령 광역 공격 등: 전용 프리팹이 없으면 스프라이트 시트로 영역 이펙트 재생
             var go = new GameObject("SummonNovaFx");
