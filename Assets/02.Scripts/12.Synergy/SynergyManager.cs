@@ -908,6 +908,18 @@ public class SynergyManager : MonoBehaviour
         }
     }
 
+    /// <summary>해당 (시너지·등급)에 실제 바인딩(스킬/소환수)이 존재하는지 — 테스트 패널 버튼 표시용.</summary>
+    public bool HasBindingFor(SynergyType type, SynergyGrade grade)
+    {
+        if (_skillBindings != null)
+            foreach (var b in _skillBindings)
+                if (b.synergyType == type && b.grade == grade && b.skill != null) return true;
+        if (_summonBindings != null)
+            foreach (var b in _summonBindings)
+                if (b.synergyType == type && b.grade == grade && b.summon != null) return true;
+        return false;
+    }
+
     /// <summary>OnHitTaken 트리거(난공불락 등)를 강제 1회 발동.</summary>
     public void TestSimulateHit() => OnPlayerHit(10);
 

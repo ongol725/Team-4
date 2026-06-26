@@ -97,11 +97,15 @@ public class SynergyTestPanel : MonoBehaviour
             GUILayout.BeginHorizontal();
             GUILayout.Label(s.name, GUILayout.Width(72));
             int cur = _sel[s.type];
-            for (int g = -1; g <= 3; g++)
+
+            // '해제'는 항상 표시
+            DrawGradeToggle(s.type, -1, cur);
+
+            // 실제 바인딩된 등급만 버튼으로 표시(존재하지 않는 등급은 숨김 → 혼란 방지)
+            for (int g = 0; g <= 3; g++)
             {
-                bool on  = cur == g;
-                bool now = GUILayout.Toggle(on, GradeLabels[g + 1], GUI.skin.button, GUILayout.Width(48));
-                if (now && !on) _sel[s.type] = g;
+                if (!_manager.HasBindingFor(s.type, (SynergyGrade)g)) continue;
+                DrawGradeToggle(s.type, g, cur);
             }
             GUILayout.EndHorizontal();
         }
@@ -128,6 +132,7 @@ public class SynergyTestPanel : MonoBehaviour
         GUILayout.Label("· 게임 정상 진행하려면 [해제(정식 복귀)]");
         GUILayout.Label("· AutoTimer형(암살단·티탄 등)은 [적용] 후 자동 발동");
         GUILayout.Label("· 난공불락=피격, 대부호=이동 시 발동 → 시뮬레이트 버튼 사용");
+        GUILayout.Label("· 각 시너지는 실제 존재하는 등급 버튼만 표시됨");
 
         GUILayout.EndArea();
     }
@@ -136,6 +141,14 @@ public class SynergyTestPanel : MonoBehaviour
     {
         string s = GUILayout.TextField(value.ToString(), GUILayout.Width(width));
         return int.TryParse(s, out int v) ? Mathf.Max(0, v) : value;
+    }
+
+    /// <summary>등급 토글 버튼 1개 렌더링. grade: -1=해제, 0~3=브/실/골/프리즘.</summary>
+    private void DrawGradeToggle(SynergyType type, int grade, int cur)
+    {
+        bool on  = cur == grade;
+        bool now = GUILayout.Toggle(on, GradeLabels[grade + 1], GUI.skin.button, GUILayout.Width(48));
+        if (now && !on) _sel[type] = grade;
     }
 
     private void Apply()
