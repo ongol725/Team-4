@@ -60,8 +60,13 @@ public class SynergyManager : MonoBehaviour
     private BattleLoadout                _loadout;
 
     private readonly List<Coroutine>         _skillRoutines = new();
+    private readonly List<Coroutine>         _summonRoutines = new(); // duration>0 소환수 재시전 루프
     private readonly List<SummonController>  _summons       = new();
     private Transform                        _summonRoot;
+
+    // 지속시간 소환수(성역 등)가 소멸한 뒤 다시 시전될 때까지의 빈 시간(초).
+    // 실제 재시전 주기 = data.duration + 이 값. (등급↑ = duration↑ → 가동률↑)
+    private const float SummonRecastGap = 2f;
 
     // 플레이어를 감싸며 따라다니는 영구 이펙트(마왕 소용돌이 등). Refresh/파괴 시 정리.
     private readonly List<GameObject>        _auraVFX       = new();
@@ -149,6 +154,8 @@ public class SynergyManager : MonoBehaviour
         // 기존 루프/소환 전부 정리
         foreach (var co in _skillRoutines) if (co != null) StopCoroutine(co);
         _skillRoutines.Clear();
+        foreach (var co in _summonRoutines) if (co != null) StopCoroutine(co);
+        _summonRoutines.Clear();
         foreach (var s in _summons) if (s != null) Destroy(s.gameObject);
         _summons.Clear();
         foreach (var v in _auraVFX) if (v != null) Destroy(v);
@@ -219,7 +226,11 @@ public class SynergyManager : MonoBehaviour
             {
                 var summon    = summonBinding.summon;
                 int summonAtk = Mathf.RoundToInt(_loadout.GetScaledBase(summon.scalingStat) * summon.atkMultiplier);
-                SpawnMinions(summon, summonBinding.count, summonAtk);
+                if (summon.duration > 0f)
+                    // 지속시간형(성역): 소멸 후 주기적으로 재시전
+                    _summonRoutines.Add(StartCoroutine(SummonRespawnLoop(summon, summonBinding.count, summonAtk)));
+                else
+                    SpawnMinions(summon, summonBinding.count, summonAtk);
                 Debug.Log($"[SynergyManager] Summon: {entry.type} {entry.grade} — {summon.summonName} x{summonBinding.count}");
             }
         }
@@ -854,10 +865,24 @@ public class SynergyManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 소환형
 
+    /// <summary>지속시간 소환수(성역)를 소멸 후 SummonRecastGap 만큼 쉬었다가 다시 시전하는 루프.</summary>
+    private IEnumerator SummonRespawnLoop(SO_SummonData data, int count, int atkPower)
+    {
+        while (true)
+        {
+            SpawnMinions(data, count, atkPower);
+            // 소환수는 data.duration 후 스스로 소멸 → 빈 시간(Gap) 뒤 재시전
+            yield return new WaitForSeconds(data.duration + SummonRecastGap);
+        }
+    }
+
     private void SpawnMinions(SO_SummonData data, int count, int atkPower)
     {
         if (_player == null) FindPlayerRefs();
         if (_player == null) return;
+
+        // 자가 소멸한(파괴된) 소환수의 null 항목 제거 — 재시전 누적으로 리스트가 무한히 커지는 것 방지
+        _summons.RemoveAll(s => s == null);
 
         for (int i = 0; i < count; i++)
         {
