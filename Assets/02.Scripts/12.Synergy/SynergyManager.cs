@@ -705,6 +705,13 @@ public class SynergyManager : MonoBehaviour
         float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 0.3f);
         NormalizeScale(go, sr.sprite, size);
 
+        // 세로(Y) 비균등 확대 — 일렉트로 번개 기둥처럼 위로 길게 늘릴 때 사용
+        if (skill.visualStretchY > 0f && skill.visualStretchY != 1f)
+        {
+            var s = go.transform.localScale;
+            go.transform.localScale = new Vector3(s.x, s.y * skill.visualStretchY, s.z);
+        }
+
         go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
 
         float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
