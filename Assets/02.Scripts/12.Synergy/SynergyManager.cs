@@ -405,9 +405,13 @@ public class SynergyManager : MonoBehaviour
                 for (int i = 0; i < count && enemies.Count > 0; i++)
                 {
                     var target = enemies[Random.Range(0, enemies.Count)];
-                    ApplyHit(skill, target, damage);
                     // 다수 대상(티탄 돌·과부화 비눗방울 등)은 명중 지점마다 이펙트를 띄운다.
                     if (!isProj) SpawnVFX(skill, target.transform.position);
+                    // damageDelay > 0 이면 VFX(연출) 진행 후 데미지 적용 (티탄: 돌이 떨어진 뒤 타격)
+                    if (skill.damageDelay > 0f)
+                        StartCoroutine(DelayedHit(skill, target, damage, skill.damageDelay));
+                    else
+                        ApplyHit(skill, target, damage);
                     enemies.Remove(target);
                 }
                 return; // VFX를 대상별로 처리했으므로 하단 공용 VFX 생략
@@ -523,6 +527,15 @@ public class SynergyManager : MonoBehaviour
             FireProjectileAt(skill, mc, damage);
         else
             HitEnemy(skill, mc, damage);
+    }
+
+    /// <summary>VFX 연출이 진행된 뒤(delay초 후) 데미지를 적용한다(티탄 돌 떨구기 등).
+    /// 지연 중 대상이 죽거나 사라지면 안전하게 무시한다.</summary>
+    private IEnumerator DelayedHit(SO_SkillData skill, MonsterController mc, int damage, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (mc == null || mc.IsDead || !mc.gameObject.activeInHierarchy) yield break;
+        ApplyHit(skill, mc, damage);
     }
 
     /// <summary>플레이어 위치에서 타겟 방향으로 투사체를 발사한다(ProjectileBase 재사용).</summary>
@@ -714,7 +727,9 @@ public class SynergyManager : MonoBehaviour
 
         go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
 
-        float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
+        // 애니 재생 시간 + 마지막 프레임 유지 시간(vfxLingerTime) 후 소멸
+        float linger = skill.vfxLingerTime > 0f ? skill.vfxLingerTime : 0.1f;
+        float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + linger;
         yield return new WaitForSeconds(life);
         if (go != null) Destroy(go);
     }

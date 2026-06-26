@@ -28,6 +28,8 @@ public class SO_SkillData : ScriptableObject
     public float hitInterval = 0.1f;
     [Tooltip("RandomEnemy 등 다수 대상 수. 0이면 1로 처리")]
     public int   extraCount = 0;
+    [Tooltip("VFX 생성 후 데미지가 들어가기까지의 지연(초). 0=즉시. 티탄 돌 떨구기처럼 연출이 진행된 뒤 타격하고 싶을 때 사용")]
+    public float damageDelay = 0f;
 
     [Header("범위 & 지속")]
     public float rangeRadius = 5f;
@@ -59,6 +61,8 @@ public class SO_SkillData : ScriptableObject
     public Sprite[] animFrames;
     [Tooltip("프레임 재생 속도(FPS)")]
     public float animFps = 12f;
+    [Tooltip("애니메이션 종료 후 마지막 프레임을 유지하다 사라지기까지의 시간(초). 기본 0.1")]
+    public float vfxLingerTime = 0.1f;
     [Tooltip("월드 표시 크기(유닛). 투사체/이펙트 스프라이트의 목표 지름")]
     public float visualSize = 0.8f;
     [Tooltip("스프라이트 세로(로컬 Y) 추가 배율. 1=정사각 유지, 2=세로 2배(소드마스터 검기 등 비균등 확대)")]
