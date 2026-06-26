@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: "\uC5F0\uC18D \uAC80\uAE30 (\uACE8\uB4DC)"
   triggerType: 0
   skillType: 2
-  targetType: 0
+  targetType: 8
   scalingStat: 1
   dmgMultiplier: 1.3
   hitCount: 2
@@ -43,6 +43,6 @@ MonoBehaviour:
   - {fileID: 1109029539, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
   - {fileID: -1932667270, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
   animFps: 12
-  visualSize: 2.4
+  visualSize: 4.8
   dropFrames: []
   dropFps: 8

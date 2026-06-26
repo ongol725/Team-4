@@ -76,17 +76,17 @@ namespace BagSurvivor.SynergyEditor
             var d = new Dictionary<string, SO_SkillData>();
 
             // ── 암살단 (Assassin) — AutoTimer / WPN_ATK_AVG / Forward ──
-            // 수리검은 콘셉트(슬라이드 1)대로 적을 관통(pierce 999)하며 날아간다.
+            // 수리검은 콘셉트(슬라이드 1)대로 적을 관통(pierce 999)하며 날아간다. 투사체 크기 2배(0.8→1.6)
             d["SK_ASS_1"] = Sk("SK_ASS_1", "수리검 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:3f, range:15f, pierce:999);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:3f, range:15f, pierce:999, vSize:1.6f);
             d["SK_ASS_2"] = Sk("SK_ASS_2", "수리검 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:3f, range:15f, pierce:999);
-            // 골드 '거대 수리검': 기획서대로 크기 ×1.5 (기본 0.8 → 1.2)
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:3f, range:15f, pierce:999, vSize:1.6f);
+            // 골드 '거대 수리검': 1.2(×1.5)에서 추가로 2배 → 2.4
             d["SK_ASS_3"] = Sk("SK_ASS_3", "거대 수리검 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1, pierce:999, vSize:1.2f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1, pierce:999, vSize:2.4f);
 
             // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy (기획서: 무작위 낙뢰 1/3개) ──
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
@@ -97,30 +97,31 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:3);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
+            // 낫: 투사체 표시 크기 2배(기본 0.8 → 1.6)
             d["SK_SCYTHE_1"] = Sk("SK_SCYTHE_1", "사신의 낫 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:5f, pierce:999);
+                fx:FixedEffectType.InstantDeath, fxVal:5f, pierce:999, vSize:1.6f);
             d["SK_SCYTHE_2"] = Sk("SK_SCYTHE_2", "사신의 낫 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.1f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:10f, pierce:999);
+                fx:FixedEffectType.InstantDeath, fxVal:10f, pierce:999, vSize:1.6f);
             d["SK_SCYTHE_3"] = Sk("SK_SCYTHE_3", "사신의 낫 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.3f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999);
+                fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999, vSize:1.6f);
 
             // ── 소드마스터 (SwordMaster) — AutoTimer / WPN_ATK_AVG / Forward ──
-            // 검기: 표시 크기 3배(기본 0.8 → 2.4)
+            // 검기: 투사체 표시 크기 확대(기본 0.8 → 4.8), 바라보는 방향(FacingForward) 발사
             d["SK_SWORD_1"] = Sk("SK_SWORD_1", "검기 (브론즈)",
-                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f, vSize:2.4f);
+                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f, vSize:4.8f);
             d["SK_SWORD_2"] = Sk("SK_SWORD_2", "대형 검기 (실버)",
-                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, vSize:2.4f);
+                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, vSize:4.8f);
             d["SK_SWORD_3"] = Sk("SK_SWORD_3", "연속 검기 (골드)",
-                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:2.4f);
+                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:4.8f);
 
             // ── 티탄 (Titan) — AutoTimer / WPN_ATK_AVG / RandomEnemy × N ──
             d["SK_METEOR_1"] = Sk("SK_METEOR_1", "돌 떨구기 3개",
@@ -223,12 +224,13 @@ namespace BagSurvivor.SynergyEditor
             var d = new Dictionary<string, SO_SummonData>();
 
             // ── 핀볼 (Pinball) — Bounce ──
+            // 핀볼: 기본 0.25 → 2배(displayScale 0.5)
             d["SUM_PINBALL_1"] = Sum("SUM_PINBALL_1", "핀볼 (브론즈)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f);
+                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:0.5f);
             d["SUM_PINBALL_2"] = Sum("SUM_PINBALL_2", "핀볼 (실버)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f);
+                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:0.5f);
 
             // ── 페어리 (Fairy) — OrbitPlayer ──
             d["SUM_FAIRY_1"] = Sum("SUM_FAIRY_1", "요정 (브론즈)",
