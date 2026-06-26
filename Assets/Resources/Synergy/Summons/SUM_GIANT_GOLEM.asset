@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_SummonData
   summonID: SUM_GIANT_GOLEM
   summonName: "\uACE0\uB300 \uC815\uB839 (\uD504\uB9AC\uC998)"
-  aiType: 0
+  aiType: 4
   scalingStat: 1
   atkMultiplier: 4.5
-  moveSpeed: 3.5
+  moveSpeed: 0
   atkCooldown: 2
-  atkRange: 2
+  atkRange: 6
   duration: -1
   fixedEffect: 0
   fixedEffectValue: 0

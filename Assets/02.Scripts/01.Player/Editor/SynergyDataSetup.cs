@@ -251,15 +251,16 @@ namespace BagSurvivor.SynergyEditor
             d["SUM_GOLEM_3"] = Sum("SUM_GOLEM_3", "정령 골렘 (골드)",
                 SummonAIType.FollowAttack, ScalingStatType.WPN_ATK_AVG,
                 atk:2.0f, spd:5.2f, atkCd:1.0f, atkRange:1.5f, dur:-1f);
+            // 대정령: 캐릭터 머리 위 고정(GuardOffset + spd 0 = 공전 안 함). 주기 광역(uniqueSkill)으로 공격.
             d["SUM_GIANT_GOLEM"] = Sum("SUM_GIANT_GOLEM", "고대 정령 (프리즘)",
-                SummonAIType.FollowAttack, ScalingStatType.WPN_ATK_AVG,
-                atk:4.5f, spd:3.5f, atkCd:2.0f, atkRange:2.0f, dur:-1f,
+                SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_AVG,
+                atk:4.5f, spd:0f, atkCd:2.0f, atkRange:6.0f, dur:-1f,
                 uniqueSkillCd:8f, scale:0.3f); // 기본 0.6 → 2배 축소
 
             // ── 마왕 기어 (DemonLord) — GuardOffset, 플레이어 주변 고정 위치 원거리 공격 ──
             d["SUM_DEMON_GEAR"] = Sum("SUM_DEMON_GEAR", "지옥 기어",
                 SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_SUM,
-                atk:0.5f, spd:10f, atkCd:1.0f, atkRange:6f, dur:-1f);
+                atk:0.5f, spd:120f, atkCd:1.0f, atkRange:6f, dur:-1f); // spd=공전 속도(도/초)
 
             // ── 성기사단 (HolyKnight) — Stationary + HealArmorHpPct ──
             // 성역 장판: 기본 0.6 → 3배 확대(scale 1.8), 바닥 깔림(sortOrder -1)
@@ -500,6 +501,10 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_1",    1),
                 (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_2",    1),
                 (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_3",    1),
+                // 프리즘 = 골드의 3정령(물·불·바람) + 대정령(머리 위)
+                (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GOLEM_1",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GOLEM_2",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GOLEM_3",    1),
                 (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GIANT_GOLEM",1),
             };
 

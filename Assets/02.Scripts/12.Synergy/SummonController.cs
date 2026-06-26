@@ -37,10 +37,10 @@ public class SummonController : MonoBehaviour
     private Vector2 _bounceVel;
     private const float BounceContactRadius = 0.6f;
 
-    // GuardOffset 전용 (마왕 기어) — 플레이어 주변을 공전하며 원거리 공격
+    // GuardOffset 전용 — 플레이어 기준 고정 위치 유지(+공전). 공전 속도는 data.moveSpeed(초당 도).
+    // 마왕 기어: moveSpeed>0 → 공전 / 대정령: moveSpeed=0 → 머리 위 고정
     private float _guardAngle;                    // 현재 공전 각도(도)
-    private const float GuardRadius = 2.2f;       // 공전 반경
-    private const float GuardOrbitSpeed = 120f;   // 공전 속도(초당 도)
+    private const float GuardRadius = 2.2f;       // 플레이어로부터의 거리
 
     // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
     private Camera _mainCam;
@@ -383,8 +383,8 @@ public class SummonController : MonoBehaviour
 
     private void UpdateGuardOffset()
     {
-        // 플레이어 주변을 공전 — 매 프레임 각도를 돌려 위치를 갱신(이동하는 플레이어도 정확히 추종)
-        _guardAngle += GuardOrbitSpeed * Time.deltaTime;
+        // moveSpeed(초당 도)만큼 공전 — 0이면 시작 각도에 고정(대정령 머리 위). 이동하는 플레이어도 추종.
+        _guardAngle += _data.moveSpeed * Time.deltaTime;
         float rad = _guardAngle * Mathf.Deg2Rad;
         transform.position = (Vector2)_player.position + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * GuardRadius;
 
