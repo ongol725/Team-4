@@ -224,13 +224,13 @@ namespace BagSurvivor.SynergyEditor
             var d = new Dictionary<string, SO_SummonData>();
 
             // ── 핀볼 (Pinball) — Bounce ──
-            // 핀볼: 기본 0.25 → 2배(displayScale 0.5)
+            // 핀볼: 기존 0.5 → 가로세로 2배(displayScale 1.0)
             d["SUM_PINBALL_1"] = Sum("SUM_PINBALL_1", "핀볼 (브론즈)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:0.5f);
+                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:1.0f);
             d["SUM_PINBALL_2"] = Sum("SUM_PINBALL_2", "핀볼 (실버)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:0.5f);
+                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:1.0f);
 
             // ── 페어리 (Fairy) — OrbitPlayer ──
             d["SUM_FAIRY_1"] = Sum("SUM_FAIRY_1", "요정 (브론즈)",
