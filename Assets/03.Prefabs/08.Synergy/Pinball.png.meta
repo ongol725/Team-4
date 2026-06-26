@@ -120,7 +120,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 914
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -141,7 +141,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -195,529 +195,177 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Pinball.prefab_0
+      name: Pinball_0
       rect:
         serializedVersion: 2
-        x: 16
-        y: 784
-        width: 224
-        height: 224
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2b90d7b7d7b35cab0800000000000000
-      internalID: -4988515602114213454
+      spriteID: ad618f759bff4824eb39486a21cac5a2
+      internalID: -1531829968
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinball.prefab_1
+      name: Pinball_1
       rect:
         serializedVersion: 2
-        x: 272
-        y: 784
-        width: 224
-        height: 224
+        x: 2048
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: cf0e9184f590682f0800000000000000
-      internalID: -971078364815564548
+      spriteID: 5e951a07d40afb544949b3c5b66c7334
+      internalID: -1494769004
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinball.prefab_2
+      name: Pinball_2
       rect:
         serializedVersion: 2
-        x: 528
-        y: 784
-        width: 224
-        height: 224
+        x: 4096
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c648d7a0e46cd7dd0800000000000000
-      internalID: -2486613380752898964
+      spriteID: 830452c3cfa1db54aaf9b44b6f54016f
+      internalID: -2040503933
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinball.prefab_3
+      name: Pinball_3
       rect:
         serializedVersion: 2
-        x: 784
-        y: 784
-        width: 224
-        height: 224
+        x: 6144
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 49b7df61e3fe10ae0800000000000000
-      internalID: -1584722543904982124
+      spriteID: ed3b31b1fead4d6498104b7175bb24ff
+      internalID: -381467200
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinball.prefab_4
+      name: Pinball_4
       rect:
         serializedVersion: 2
-        x: 1040
-        y: 784
-        width: 224
-        height: 224
+        x: 8192
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e364a9eb4f0056200800000000000000
-      internalID: 172545211893433918
+      spriteID: b8b82f6947b731e4a940b5c693471dad
+      internalID: 1880427318
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinball.prefab_5
+      name: Pinball_5
       rect:
         serializedVersion: 2
-        x: 1296
-        y: 784
-        width: 224
-        height: 224
+        x: 10240
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 17813e3b8f2d41990800000000000000
-      internalID: -7416070720760637327
+      spriteID: a5bec51c90ceb9549827a0781123727d
+      internalID: -2077737027
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinball.prefab_6
+      name: Pinball_6
       rect:
         serializedVersion: 2
-        x: 16
-        y: 528
-        width: 224
-        height: 224
+        x: 12288
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 25829b985d3145580800000000000000
-      internalID: -8839418360761866158
+      spriteID: 91d2bae72efc3284c85f617d699d216f
+      internalID: 585052489
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pinball.prefab_7
+      name: Pinball_7
       rect:
         serializedVersion: 2
-        x: 272
-        y: 528
-        width: 224
-        height: 224
+        x: 14336
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 38a87d96f27a11b20800000000000000
-      internalID: 3103445440316017283
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_8
-      rect:
-        serializedVersion: 2
-        x: 528
-        y: 528
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: da99a54f00d00bf80800000000000000
-      internalID: -8092954232634041939
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_9
-      rect:
-        serializedVersion: 2
-        x: 784
-        y: 528
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 56c576d06c4db02c0800000000000000
-      internalID: -4464240658514224027
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_10
-      rect:
-        serializedVersion: 2
-        x: 1040
-        y: 528
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 203656b0f58339000800000000000000
-      internalID: 41438802440708866
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_11
-      rect:
-        serializedVersion: 2
-        x: 1296
-        y: 528
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: aaa502e8793f92770800000000000000
-      internalID: 8586661996808657578
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_12
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 272
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2e69efa871aebcdc0800000000000000
-      internalID: -3617540488824973598
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_13
-      rect:
-        serializedVersion: 2
-        x: 272
-        y: 272
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: fe71b394973ec4700800000000000000
-      internalID: 526045366554662895
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_14
-      rect:
-        serializedVersion: 2
-        x: 528
-        y: 272
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c4c13a953b0818690800000000000000
-      internalID: -7601653188233323444
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_15
-      rect:
-        serializedVersion: 2
-        x: 784
-        y: 272
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7c7704259caba4530800000000000000
-      internalID: 3840087006117918663
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_16
-      rect:
-        serializedVersion: 2
-        x: 1040
-        y: 272
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dba4fd3457cf5f2e0800000000000000
-      internalID: -2092488871263647043
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_17
-      rect:
-        serializedVersion: 2
-        x: 1296
-        y: 272
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: beb676f041fa3e460800000000000000
-      internalID: 7269846724198755307
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_18
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 16
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8edcd85bdb14a8a50800000000000000
-      internalID: 6524099293250178536
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_19
-      rect:
-        serializedVersion: 2
-        x: 272
-        y: 16
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: acc407974519c5000800000000000000
-      internalID: 26055489858063562
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_20
-      rect:
-        serializedVersion: 2
-        x: 528
-        y: 16
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d779db457ebfdaa40800000000000000
-      internalID: 5381234100755339133
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_21
-      rect:
-        serializedVersion: 2
-        x: 784
-        y: 16
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6bf86246514cd8a30800000000000000
-      internalID: 4219244022069628854
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_22
-      rect:
-        serializedVersion: 2
-        x: 1040
-        y: 16
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 875247fab0584bde0800000000000000
-      internalID: -1318282505677953672
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Pinball.prefab_23
-      rect:
-        serializedVersion: 2
-        x: 1296
-        y: 16
-        width: 224
-        height: 224
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0e8c37bfe7a8afd90800000000000000
-      internalID: -7063180787588020000
+      spriteID: df3b58f0c64b88d48b6d3f30b047366b
+      internalID: -644176552
       vertices: []
       indices: 
       edges: []
@@ -726,7 +374,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 435a87282f3d86a4c9e1c1a4bf9dc1f8
     internalID: 0
     vertices: []
     indices: 
@@ -736,30 +384,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Pinball.prefab_0: -4988515602114213454
-      Pinball.prefab_1: -971078364815564548
-      Pinball.prefab_10: 41438802440708866
-      Pinball.prefab_11: 8586661996808657578
-      Pinball.prefab_12: -3617540488824973598
-      Pinball.prefab_13: 526045366554662895
-      Pinball.prefab_14: -7601653188233323444
-      Pinball.prefab_15: 3840087006117918663
-      Pinball.prefab_16: -2092488871263647043
-      Pinball.prefab_17: 7269846724198755307
-      Pinball.prefab_18: 6524099293250178536
-      Pinball.prefab_19: 26055489858063562
-      Pinball.prefab_2: -2486613380752898964
-      Pinball.prefab_20: 5381234100755339133
-      Pinball.prefab_21: 4219244022069628854
-      Pinball.prefab_22: -1318282505677953672
-      Pinball.prefab_23: -7063180787588020000
-      Pinball.prefab_3: -1584722543904982124
-      Pinball.prefab_4: 172545211893433918
-      Pinball.prefab_5: -7416070720760637327
-      Pinball.prefab_6: -8839418360761866158
-      Pinball.prefab_7: 3103445440316017283
-      Pinball.prefab_8: -8092954232634041939
-      Pinball.prefab_9: -4464240658514224027
+      Pinball_0: -1531829968
+      Pinball_1: -1494769004
+      Pinball_2: -2040503933
+      Pinball_3: -381467200
+      Pinball_4: 1880427318
+      Pinball_5: -2077737027
+      Pinball_6: 585052489
+      Pinball_7: -644176552
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

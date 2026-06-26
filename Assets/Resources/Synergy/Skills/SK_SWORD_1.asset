@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: "\uAC80\uAE30 (\uBE0C\uB860\uC988)"
   triggerType: 0
   skillType: 2
-  targetType: 0
+  targetType: 8
   scalingStat: 1
   dmgMultiplier: 1
   hitCount: 1
@@ -32,20 +32,18 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
+  pierceCount: 1
   animFrames:
-  - {fileID: -6396920090767046450, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: -1140119825554999357, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: -3775535705050807342, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: -5415449223971354714, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: 4429619745803587987, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: -4518314169681718716, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: 5205797594410604231, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: 1850009166319848077, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: 5528597359183025346, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: -1045935456595090405, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: -2965455852859209428, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
-  - {fileID: 50924733264574085, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 109942617, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1301186219, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -562498353, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 502116684, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -381104040, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1707099930, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 1109029539, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1932667270, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
   animFps: 12
-  visualSize: 0.8
+  visualSize: 4.8
+  visualStretchY: 2
   dropFrames: []
   dropFps: 8

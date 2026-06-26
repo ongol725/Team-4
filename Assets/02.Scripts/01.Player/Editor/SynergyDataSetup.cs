@@ -32,6 +32,15 @@ namespace BagSurvivor.SynergyEditor
 
             var skills  = BuildAllSkills();
             var summons = BuildAllSummons();
+
+            // 대정령 프리즘: 주기적 광역 공격 스킬을 uniqueSkill 로 연결
+            if (summons.TryGetValue("SUM_GIANT_GOLEM", out var giant) &&
+                skills.TryGetValue("SK_SPIRIT_NOVA", out var nova))
+            {
+                giant.uniqueSkill = nova;
+                EditorUtility.SetDirty(giant);
+            }
+
             BuildSynergyConfig(skills, summons);
 
             AssetDatabase.SaveAssets();
@@ -67,48 +76,52 @@ namespace BagSurvivor.SynergyEditor
             var d = new Dictionary<string, SO_SkillData>();
 
             // ── 암살단 (Assassin) — AutoTimer / WPN_ATK_AVG / Forward ──
+            // 수리검은 콘셉트(슬라이드 1)대로 적을 관통(pierce 999)하며 날아간다. 투사체 크기 2배(0.8→1.6)
             d["SK_ASS_1"] = Sk("SK_ASS_1", "수리검 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:3f, range:15f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:3f, range:15f, pierce:999, vSize:1.6f);
             d["SK_ASS_2"] = Sk("SK_ASS_2", "수리검 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:3f, range:15f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:3f, range:15f, pierce:999, vSize:1.6f);
+            // 골드 '거대 수리검': 1.2(×1.5)에서 추가로 2배 → 2.4
             d["SK_ASS_3"] = Sk("SK_ASS_3", "거대 수리검 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1, pierce:999, vSize:2.4f);
 
-            // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy ──
+            // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy (기획서: 무작위 낙뢰 1/3개) ──
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:1);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:1, vSize:1.6f);
             d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:3);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f, extra:3, vSize:1.6f);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
+            // 낫: 투사체 표시 크기 2배(기본 0.8 → 1.6)
             d["SK_SCYTHE_1"] = Sk("SK_SCYTHE_1", "사신의 낫 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:5f);
+                fx:FixedEffectType.InstantDeath, fxVal:5f, pierce:999, vSize:1.6f);
             d["SK_SCYTHE_2"] = Sk("SK_SCYTHE_2", "사신의 낫 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.1f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:10f);
+                fx:FixedEffectType.InstantDeath, fxVal:10f, pierce:999, vSize:1.6f);
             d["SK_SCYTHE_3"] = Sk("SK_SCYTHE_3", "사신의 낫 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.3f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:15f);
+                fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999, vSize:1.6f);
 
             // ── 소드마스터 (SwordMaster) — AutoTimer / WPN_ATK_AVG / Forward ──
+            // 검기: 크기 확대(0.8→4.8) + 세로 2배(stretchY) + 바라보는 방향(FacingForward) 발사
             d["SK_SWORD_1"] = Sk("SK_SWORD_1", "검기 (브론즈)",
-                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f);
+                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f, vSize:4.8f, stretchY:2f);
             d["SK_SWORD_2"] = Sk("SK_SWORD_2", "대형 검기 (실버)",
-                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f);
+                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, vSize:4.8f, stretchY:2f);
             d["SK_SWORD_3"] = Sk("SK_SWORD_3", "연속 검기 (골드)",
-                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f);
+                SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:4.8f, stretchY:2f);
 
             // ── 티탄 (Titan) — AutoTimer / WPN_ATK_AVG / RandomEnemy × N ──
             d["SK_METEOR_1"] = Sk("SK_METEOR_1", "돌 떨구기 3개",
@@ -122,38 +135,42 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:9);
 
             // ── 난공불락 (Impregnable) — OnHitTaken / ARM_HP_SUM / Self + DamageReduction ──
+            // 충격파: 표시 크기 5배(기본 0.8 → 4.0), 바닥 깔림(vfxSort -1)
             d["SK_FORTRESS_1"] = Sk("SK_FORTRESS_1", "충격파 (브론즈)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:5f,
-                fx:FixedEffectType.DamageReduction, fxVal:10f);
+                fx:FixedEffectType.DamageReduction, fxVal:10f, vSize:4f, vfxSort:-20);
             d["SK_FORTRESS_2"] = Sk("SK_FORTRESS_2", "거대 충격파 (실버)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:20f);
+                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:4f, vfxSort:-20);
             d["SK_FORTRESS_3"] = Sk("SK_FORTRESS_3", "파멸 충격파 (골드)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:13.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:35f);
+                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:4f, vfxSort:-20);
             d["SK_FORTRESS_4"] = Sk("SK_FORTRESS_4", "무적 충격파 (프리즘)",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:20.0f, cd:0.5f, range:30f,
-                fx:FixedEffectType.DamageReduction, fxVal:60f);
+                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:4f, vfxSort:-20);
 
-            // ── 마왕 (DemonLord) — AutoTimer / WPN_ATK_SUM ──
-            d["SK_DEMON_1"] = Sk("SK_DEMON_1", "지옥불 불씨",
-                SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:50f,
-                fx:FixedEffectType.Burn, fxVal:0f);
-            d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥의 파도",
+            // ── 마왕 (DemonLord) — 누적형 동시 발동 (콘셉트 19~22) ──
+            // 투사체(검기)·소용돌이는 스킬, 기어는 소환수(SUM_DEMON_GEAR)로 구성한다.
+            d["SK_DEMON_1"] = Sk("SK_DEMON_1", "지옥 검기 (투사체)",
+                SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:20f,
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:1.6f);
+            // 연옥 소용돌이: 캐릭터를 감싸는 불꽃 고리(Devil_Slash)가 플레이어를 따라다니며 주변 적 타격
+            d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥 소용돌이",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:1f, range:8f);
-            d["SK_DEMON_3"] = Sk("SK_DEMON_3", "마왕의 멸천참",
+                ScalingStatType.WPN_ATK_SUM, dmg:0.5f, cd:1f, range:3f,
+                followVfx:true, vSize:3f);
+            d["SK_DEMON_3"] = Sk("SK_DEMON_3", "마왕의 멸천참(예비)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:0.2f, cd:0.1f, range:8f);
-            d["SK_DEMON_4"] = Sk("SK_DEMON_4", "마왕 강림 (프리즘)",
-                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.ForwardTriple,
+                ScalingStatType.WPN_ATK_SUM, dmg:0.2f, cd:0.1f, range:8f, vSize:1.6f);
+            d["SK_DEMON_4"] = Sk("SK_DEMON_4", "지옥 검기 3연 (프리즘)",
+                SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.ForwardTriple,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.5f, cd:2f, range:50f,
-                extra:3, fx:FixedEffectType.Burn, fxVal:0f);
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:1.6f);
 
             // ── 대부호 (Tycoon) — OnMove / WPN_ATK_SUM / 골드 드랍 ──
             d["SK_GOLD_BOMB_1"] = Sk("SK_GOLD_BOMB_1", "골드 폭발 (브론즈)",
@@ -178,9 +195,22 @@ namespace BagSurvivor.SynergyEditor
                 SynergyTriggerType.Penalty, SkillType.Buff, SkillTargetType.Self,
                 ScalingStatType.None, dmg:0f, cd:10f, range:0f,
                 fx:FixedEffectType.SpeedPenalty, fxVal:50f);
-            d["SK_OVERLOAD_PRISM"] = Sk("SK_OVERLOAD_PRISM", "초강력 난사 (프리즘)",
+            // 과부화 프리즘: 3종 효과 동시 발동 (콘셉트 슬라이드 24). 각각 Penalty 트리거로 무한 발동.
+            d["SK_OVERLOAD_LASER"] = Sk("SK_OVERLOAD_LASER", "과부화 레이저 (프리즘)",
+                SynergyTriggerType.Penalty, SkillType.Projectile, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0.15f, range:30f, pierce:999);
+            d["SK_OVERLOAD_CHAIN"] = Sk("SK_OVERLOAD_CHAIN", "과부화 체인라이트닝 (프리즘)",
+                SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.ChainLightning,
+                ScalingStatType.WPN_ATK_AVG, dmg:6.0f, cd:0.5f, range:50f, extra:4);
+            d["SK_OVERLOAD_BUBBLE"] = Sk("SK_OVERLOAD_BUBBLE", "과부화 비눗방울 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:10.0f, cd:0.33f, range:50f, extra:3);
+                ScalingStatType.WPN_ATK_AVG, dmg:4.0f, cd:0.4f, range:50f, extra:3);
+
+            // ── 대정령 광역(프리즘) — SUM_GIANT_GOLEM.uniqueSkill 로 연결 ──
+            // 스펙: 8초마다 화면 내 모든 적에게 대량 피해(range 100 = 전체 화면 커버).
+            d["SK_SPIRIT_NOVA"] = Sk("SK_SPIRIT_NOVA", "대정령 광역 강타",
+                SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.AreaCenter,
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:0f, range:100f, vSize:3f); // 발동 모션 크기
 
             return d;
         }
@@ -194,12 +224,13 @@ namespace BagSurvivor.SynergyEditor
             var d = new Dictionary<string, SO_SummonData>();
 
             // ── 핀볼 (Pinball) — Bounce ──
+            // 핀볼: 기본 0.25 → 2배(displayScale 0.5)
             d["SUM_PINBALL_1"] = Sum("SUM_PINBALL_1", "핀볼 (브론즈)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f);
+                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:0.5f);
             d["SUM_PINBALL_2"] = Sum("SUM_PINBALL_2", "핀볼 (실버)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f);
+                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:0.5f);
 
             // ── 페어리 (Fairy) — OrbitPlayer ──
             d["SUM_FAIRY_1"] = Sum("SUM_FAIRY_1", "요정 (브론즈)",
@@ -222,24 +253,31 @@ namespace BagSurvivor.SynergyEditor
             d["SUM_GOLEM_3"] = Sum("SUM_GOLEM_3", "정령 골렘 (골드)",
                 SummonAIType.FollowAttack, ScalingStatType.WPN_ATK_AVG,
                 atk:2.0f, spd:5.2f, atkCd:1.0f, atkRange:1.5f, dur:-1f);
+            // 대정령: 캐릭터 머리 위 고정(GuardOffset + spd 0 = 공전 안 함). 주기 광역(uniqueSkill)으로 공격.
             d["SUM_GIANT_GOLEM"] = Sum("SUM_GIANT_GOLEM", "고대 정령 (프리즘)",
-                SummonAIType.FollowAttack, ScalingStatType.WPN_ATK_AVG,
-                atk:4.5f, spd:3.5f, atkCd:2.0f, atkRange:2.0f, dur:-1f,
-                uniqueSkillCd:8f);
+                SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_AVG,
+                atk:4.5f, spd:0f, atkCd:2.0f, atkRange:6.0f, dur:-1f,
+                uniqueSkillCd:8f, scale:0.3f, atkFxScale:3f); // 크기 축소 / 공격 모션은 크게
+
+            // ── 마왕 기어 (DemonLord) — GuardOffset, 플레이어 주변 고정 위치 원거리 공격 ──
+            d["SUM_DEMON_GEAR"] = Sum("SUM_DEMON_GEAR", "지옥 기어",
+                SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_SUM,
+                atk:0.5f, spd:120f, atkCd:1.0f, atkRange:6f, dur:-1f, sortOrder:5); // spd=공전속도, 기어는 캐릭터 아래
 
             // ── 성기사단 (HolyKnight) — Stationary + HealArmorHpPct ──
+            // 성역 장판: 기본 0.6 → 3배 확대(scale 1.8), 바닥 깔림(sortOrder -1)
             d["SUM_SANCTUARY_1"] = Sum("SUM_SANCTUARY_1", "성역 장판 (브론즈)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.5f, spd:0f, atkCd:1.0f, atkRange:5f, dur:5f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f, scale:1.8f, sortOrder:-20);
             d["SUM_SANCTUARY_2"] = Sum("SUM_SANCTUARY_2", "성역 장판 (실버)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.6f, spd:0f, atkCd:1.0f, atkRange:5f, dur:8f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f, scale:1.8f, sortOrder:-20);
             d["SUM_SANCTUARY_3"] = Sum("SUM_SANCTUARY_3", "성역 장판 (골드)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.7f, spd:0f, atkCd:1.0f, atkRange:5f, dur:11f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f, scale:1.8f, sortOrder:-20);
 
             return d;
         }
@@ -276,7 +314,7 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 일렉트로 ────────────────────────────────────────
                 Th(SynergyType.Electro, "일렉트로", 2, 3, 3, 0,
-                    "가방 무기 공격력 총합에 비례하는 낙뢰를 2초마다 떨굽니다.\n낙뢰가 적을 처치하면 쿨타임 50% 감소.",
+                    "가방 무기 공격력 총합에 비례하는 낙뢰를 2초마다 무작위 적에게 떨굽니다.",
                     "마법 낙뢰 1개 투하",
                     "마법 낙뢰 3개 투하",
                     ""),
@@ -286,7 +324,7 @@ namespace BagSurvivor.SynergyEditor
                     "맵 전체를 튕겨 다니며 적에게 피해를 주는 구체를 생성합니다.",
                     "핀볼 생성.  대미지 110%",
                     "핀볼 이동 속도 증가.  대미지 130%",
-                    ""),
+                    "핀볼 이동 속도 증가.  대미지 130%"),
 
                 // ── 처형자 ──────────────────────────────────────────
                 Th(SynergyType.Executioner, "처형자", 2, 4, 5, 0,
@@ -333,19 +371,19 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 정령술사 ────────────────────────────────────────
                 Th(SynergyType.SpiritMage, "정령술사", 3, 5, 7, 9,
-                    "전투에 함께하는 정령 골렘을 소환합니다.",
-                    "정령 골렘 1기.  대미지 100%",
-                    "정령 골렘 2기.  이동속도 30% 증가.",
-                    "정령 골렘 4기.  대미지 200%",
+                    "전투에 함께하는 원소 정령을 소환합니다. 등급이 오를수록 정령이 추가됩니다.",
+                    "물 정령 1기.  대미지 100%",
+                    "물·불 정령 2기.",
+                    "물·불·바람 정령 3기.",
                     "고대 정령 1기.  대미지 450%.  8초마다 광역 공격"),
 
                 // ── 마왕 ────────────────────────────────────────────
                 Th(SynergyType.DemonLord, "마왕", 2, 4, 6, 8,
-                    "마왕의 스킬이 발동됩니다. 등급이 오를수록 스킬 형태가 강화됩니다.",
-                    "지옥불 불씨.  2초당 1회.  대미지 100%",
-                    "연옥의 파도.  초당 1회.  대미지 100%",
-                    "마왕의 멸천참.  0.1초당 20% 대미지",
-                    "전 스킬 합산 + 강화.  대미지 150%↑"),
+                    "마왕의 권능이 누적 발동됩니다. 등급이 오를수록 효과가 더해집니다.",
+                    "지옥 검기를 전방으로 발사.  대미지 100%",
+                    "검기 + 지옥 기어 2기 추가.",
+                    "검기 + 기어 2기 + 연옥 소용돌이.",
+                    "3연 검기 + 기어 4기 + 소용돌이.  강림."),
 
                 // ── 대부호 ──────────────────────────────────────────
                 Th(SynergyType.Tycoon, "대부호", 5, 7, 8, 9,
@@ -361,7 +399,7 @@ namespace BagSurvivor.SynergyEditor
                     "10초마다 1초간 이동속도/피해량 50% 감소",
                     "10초마다 1초간 이동속도/피해량 50% 감소",
                     "10초마다 1초간 이동속도/피해량 50% 감소",
-                    "초강력 스킬 3개 무한 난사.  대미지 1000%"),
+                    "레이저 + 체인라이트닝 + 비눗방울 3종 무한 발동.  신이 됩니다."),
             };
 
             // 보존된 아이콘 복원
@@ -402,10 +440,14 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Impregnable, SynergyGrade.Silver, "SK_FORTRESS_2"),
                 (SynergyType.Impregnable, SynergyGrade.Gold,   "SK_FORTRESS_3"),
                 (SynergyType.Impregnable, SynergyGrade.Prism,  "SK_FORTRESS_4"),
-                (SynergyType.DemonLord,   SynergyGrade.Bronze, "SK_DEMON_1"),
-                (SynergyType.DemonLord,   SynergyGrade.Silver, "SK_DEMON_2"),
-                (SynergyType.DemonLord,   SynergyGrade.Gold,   "SK_DEMON_3"),
-                (SynergyType.DemonLord,   SynergyGrade.Prism,  "SK_DEMON_4"),
+                // 마왕: 누적 발동 — 등급이 오를수록 검기에 소용돌이가 더해지고 프리즘은 3연 검기.
+                //   (기어는 소환형 바인딩 SUM_DEMON_GEAR 로 별도 추가)
+                (SynergyType.DemonLord,   SynergyGrade.Bronze, "SK_DEMON_1"),                       // 검기
+                (SynergyType.DemonLord,   SynergyGrade.Silver, "SK_DEMON_1"),                       // 검기(+기어2)
+                (SynergyType.DemonLord,   SynergyGrade.Gold,   "SK_DEMON_1"),                       // 검기
+                (SynergyType.DemonLord,   SynergyGrade.Gold,   "SK_DEMON_2"),                       // +소용돌이(+기어2)
+                (SynergyType.DemonLord,   SynergyGrade.Prism,  "SK_DEMON_4"),                       // 3연 검기
+                (SynergyType.DemonLord,   SynergyGrade.Prism,  "SK_DEMON_2"),                       // +소용돌이(+기어4)
                 (SynergyType.Tycoon,      SynergyGrade.Bronze, "SK_GOLD_BOMB_1"),
                 (SynergyType.Tycoon,      SynergyGrade.Silver, "SK_GOLD_BOMB_2"),
                 (SynergyType.Tycoon,      SynergyGrade.Gold,   "SK_GOLD_BOMB_3"),
@@ -413,7 +455,10 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Overload,    SynergyGrade.Bronze, "SK_OVERLOAD_PENALTY"),
                 (SynergyType.Overload,    SynergyGrade.Silver, "SK_OVERLOAD_PENALTY"),
                 (SynergyType.Overload,    SynergyGrade.Gold,   "SK_OVERLOAD_PENALTY"),
-                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_PRISM"),
+                // 프리즘: 레이저 + 체인라이트닝 + 비눗방울 3종 동시 발동
+                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_LASER"),
+                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_CHAIN"),
+                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_BUBBLE"),
             };
 
             var prop = so.FindProperty("_skillBindings");
@@ -436,16 +481,32 @@ namespace BagSurvivor.SynergyEditor
             var map = new (SynergyType type, SynergyGrade grade, string assetName, int count)[]
             {
                 (SynergyType.Pinball,    SynergyGrade.Bronze, "SUM_PINBALL_1", 1),
-                (SynergyType.Pinball,    SynergyGrade.Silver, "SUM_PINBALL_2", 1),
+                // 핀볼은 공 개수가 늘지 않는다(기획): 등급↑ = 이동속도·대미지만 증가하므로 count는 항상 1.
+                // 임계값상 3개 = Gold 등급이므로 업그레이드 소환수(PINBALL_2)는 Gold에 바인딩한다.
+                (SynergyType.Pinball,    SynergyGrade.Gold,   "SUM_PINBALL_2", 1),
                 (SynergyType.Fairy,      SynergyGrade.Bronze, "SUM_FAIRY_1",   1),
                 (SynergyType.Fairy,      SynergyGrade.Silver, "SUM_FAIRY_2",   2),
                 (SynergyType.Fairy,      SynergyGrade.Gold,   "SUM_FAIRY_3",   3),
+                // 마왕 기어: 실버·골드 2기, 프리즘 4기 (검기·소용돌이 스킬과 함께 누적 발동)
+                (SynergyType.DemonLord,  SynergyGrade.Silver, "SUM_DEMON_GEAR", 2),
+                (SynergyType.DemonLord,  SynergyGrade.Gold,   "SUM_DEMON_GEAR", 2),
+                (SynergyType.DemonLord,  SynergyGrade.Prism,  "SUM_DEMON_GEAR", 4),
                 (SynergyType.HolyKnight, SynergyGrade.Bronze, "SUM_SANCTUARY_1", 1),
                 (SynergyType.HolyKnight, SynergyGrade.Silver, "SUM_SANCTUARY_2", 1),
                 (SynergyType.HolyKnight, SynergyGrade.Gold,   "SUM_SANCTUARY_3", 1),
+                // 정령술사: 콘셉트(슬라이드 15~17)대로 등급이 오를수록 원소 정령이 누적된다.
+                //   브론즈 = 물(GOLEM_1) / 실버 = 물+불(GOLEM_1·2) / 골드 = 물+불+바람(GOLEM_1·2·3)
+                //   같은 (시너지·등급)에 여러 줄을 두면 SynergyManager가 모두 소환한다.
                 (SynergyType.SpiritMage, SynergyGrade.Bronze, "SUM_GOLEM_1",    1),
-                (SynergyType.SpiritMage, SynergyGrade.Silver, "SUM_GOLEM_2",    2),
-                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_3",    4),
+                (SynergyType.SpiritMage, SynergyGrade.Silver, "SUM_GOLEM_1",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Silver, "SUM_GOLEM_2",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_1",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_2",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Gold,   "SUM_GOLEM_3",    1),
+                // 프리즘 = 골드의 3정령(물·불·바람) + 대정령(머리 위)
+                (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GOLEM_1",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GOLEM_2",    1),
+                (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GOLEM_3",    1),
                 (SynergyType.SpiritMage, SynergyGrade.Prism,  "SUM_GIANT_GOLEM",1),
             };
 
@@ -475,7 +536,8 @@ namespace BagSurvivor.SynergyEditor
             ScalingStatType scaling, float dmg, float cd, float range,
             int hits = 1, float hitInterval = 0.1f, int extra = 0,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float duration = 0f)
+            float duration = 0f, int pierce = 1,
+            bool followVfx = false, float vSize = 0f, int vfxSort = 30, float stretchY = 1f)
         {
             string path = $"{SkillDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SkillData>(path);
@@ -494,6 +556,11 @@ namespace BagSurvivor.SynergyEditor
             asset.fixedEffect      = fx;
             asset.fixedEffectValue = fxVal;
             asset.duration         = duration;
+            asset.pierceCount      = pierce;
+            asset.vfxFollowPlayer  = followVfx;
+            asset.vfxSortingOrder  = vfxSort;
+            asset.visualStretchY   = stretchY;
+            if (vSize > 0f) asset.visualSize = vSize;
             EditorUtility.SetDirty(asset);
             return asset;
         }
@@ -503,7 +570,7 @@ namespace BagSurvivor.SynergyEditor
             SummonAIType ai, ScalingStatType scaling,
             float atk, float spd, float atkCd, float atkRange, float dur,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float uniqueSkillCd = 8f)
+            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 5, float atkFxScale = 0.5f)
         {
             string path = $"{SummonDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SummonData>(path);
@@ -519,6 +586,9 @@ namespace BagSurvivor.SynergyEditor
             asset.fixedEffect       = fx;
             asset.fixedEffectValue  = fxVal;
             asset.uniqueSkillCooldown = uniqueSkillCd;
+            asset.displayScale        = scale;
+            asset.sortingOrder        = sortOrder;
+            asset.attackEffectScale   = atkFxScale;
             EditorUtility.SetDirty(asset);
             return asset;
         }
@@ -632,19 +702,31 @@ namespace BagSurvivor.SynergyEditor
         // ─────────────────────────────────────────────────────────────
         static void FillSkillAnimFrames(string sheetDir)
         {
-            // 스킬 ID → 스프라이트 시트 파일명 (Electro·Overload는 전용 시트 없음 → 노란 원 fallback)
+            // 스킬 ID → 스프라이트 시트 파일명 (Electro는 전용 시트 없음 → 노란 원 fallback)
             var skillSheetMap = new Dictionary<string, string>
             {
                 { "SK_ASS_1", "Shuriken_Sv" }, { "SK_ASS_2", "Shuriken_Sv" }, { "SK_ASS_3", "Shuriken_Sv" },
+                // 일렉트로 번개 기둥 → 전용 ElectroShockwave 시트(10프레임, 신규)
+                { "SK_ELEC_1", "ElectroShockwave" }, { "SK_ELEC_2", "ElectroShockwave" },
                 { "SK_SWORD_1", "SwordWave" }, { "SK_SWORD_2", "SwordWave" }, { "SK_SWORD_3", "SwordWave" },
                 { "SK_SCYTHE_1", "Scythe_Black" }, { "SK_SCYTHE_2", "Scythe_BlackRed" }, { "SK_SCYTHE_3", "Scythe_DarkRed" },
-                { "SK_METEOR_1", "Shockwave_RED" }, { "SK_METEOR_2", "Shockwave_RED" }, { "SK_METEOR_3", "Shockwave_RED" },
+                // 티탄 돌 떨구기 → 전용 StoneDrop_Common (신규)
+                { "SK_METEOR_1", "StoneDrop_Common" }, { "SK_METEOR_2", "StoneDrop_Common" }, { "SK_METEOR_3", "StoneDrop_Common" },
+                // 난공불락: 브~골 일반 충격파, 프리즘은 강화 RED 충격파(콘셉트 슬라이드 14)
                 { "SK_FORTRESS_1", "Shockwave_Common" }, { "SK_FORTRESS_2", "Shockwave_Common" },
-                { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_Common" },
-                { "SK_DEMON_1", "Scythe_BlackRed" }, { "SK_DEMON_2", "Scythe_BlackRed" },
-                { "SK_DEMON_3", "Scythe_BlackRed" }, { "SK_DEMON_4", "Scythe_BlackRed" },
+                { "SK_FORTRESS_3", "Shockwave_Common" }, { "SK_FORTRESS_4", "Shockwave_RED" },
+                // 마왕(DemonLord): 투사체=Devil_Fireball(창/검기), 소용돌이=Devil_Slash(감싸는 불꽃 고리)
+                //                  (기어=Devil_Wave는 소환수 아이콘으로 별도 연결)
+                { "SK_DEMON_1", "Devil_Fireball" }, { "SK_DEMON_2", "Devil_Slash" },
+                { "SK_DEMON_3", "Devil_Fireball" }, { "SK_DEMON_4", "Devil_Fireball" },
+                // 과부화 프리즘 3종: 레이저=OVERLOAD3_Pr(빔형), 체인=OVERLOAD2_Pr, 비눗방울=OVERLOAD1_Pr
+                { "SK_OVERLOAD_LASER",  "OVERLOAD3_Pr" },
+                { "SK_OVERLOAD_CHAIN",  "OVERLOAD2_Pr" },
+                { "SK_OVERLOAD_BUBBLE", "OVERLOAD1_Pr" },
                 { "SK_GOLD_BOMB_1", "RichCoin_BOMB1" }, { "SK_GOLD_BOMB_2", "RichCoin_BOMB2" },
                 { "SK_GOLD_BOMB_3", "RichCoin_BOMB3" }, { "SK_GOLD_FAST", "RichCoin_BOMB4" },
+                // 대정령 광역 강타(프리즘) → 정령 공격 이펙트 시트 재사용
+                { "SK_SPIRIT_NOVA", "spirit_attack" },
             };
 
             var framesCache = new Dictionary<string, Sprite[]>();
@@ -729,7 +811,8 @@ namespace BagSurvivor.SynergyEditor
                 { "SUM_GOLEM_1",      $"{sheetDir}/Spirit_Br.png"    },
                 { "SUM_GOLEM_2",      $"{sheetDir}/Spirit_Sv.png"    },
                 { "SUM_GOLEM_3",      $"{sheetDir}/Spirit_Gd.png"    },
-                { "SUM_GIANT_GOLEM",  $"{sheetDir}/Spirit_Gd.png"    },
+                { "SUM_GIANT_GOLEM",  $"{sheetDir}/GiantGolem.png"   },
+                { "SUM_DEMON_GEAR",   $"{sheetDir}/Devil_Wave.png"   },
                 { "SUM_SANCTUARY_1",  $"{sheetDir}/Sanctuary_Br.png" },
                 { "SUM_SANCTUARY_2",  $"{sheetDir}/Sanctuary_Sv.png" },
                 { "SUM_SANCTUARY_3",  $"{sheetDir}/Sanctuary_Gd.png" },
@@ -796,20 +879,7 @@ namespace BagSurvivor.SynergyEditor
                 filled++;
             }
 
-            // ── 정령 골렘 공격 이펙트(spirit_attack) 연결 ──────────────
-            var golemAtkFrames = LoadLargeFramesSorted($"{sheetDir}/spirit_attack.png");
-            if (golemAtkFrames.Length > 0)
-            {
-                foreach (var id in new[] { "SUM_GOLEM_1", "SUM_GOLEM_2", "SUM_GOLEM_3", "SUM_GIANT_GOLEM" })
-                {
-                    var golem = AssetDatabase.LoadAssetAtPath<SO_SummonData>($"{SummonDir}/{id}.asset");
-                    if (golem == null) continue;
-                    golem.attackEffectFrames = golemAtkFrames;
-                    golem.attackEffectFps    = 12f;
-                    EditorUtility.SetDirty(golem);
-                }
-                Debug.Log($"[SynergyDataSetup] 정령 골렘 공격 이펙트(spirit_attack) {golemAtkFrames.Length}프레임 적용");
-            }
+            // 정령 골렘·고대 정령은 공격 투사체(spirit_attack) 미사용 — 연결하지 않음.
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[SynergyDataSetup] 소환수 아이콘 {filled}개 적용 완료");

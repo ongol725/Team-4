@@ -32,21 +32,20 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
+  pierceCount: 1
   animFrames:
-  - {fileID: -2221586797437445598, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 1320400086102388573, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 7889802493395259818, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 4984586368447312516, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: -5319807234101989508, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 2554844486005815603, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 8821873688687370258, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 1667767412755644453, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: -3800435379199857288, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 8319105004273499041, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: 1321042704351346129, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: -2821728275265208684, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: -7699025542806561444, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
-  - {fileID: -188486817125743026, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: 6328194883572112539, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: -420140681440451011, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: 6619080777380302566, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: -4983699484336963425, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: -2558981407151301406, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: -1830283540205227025, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: 6403728944770616144, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: -872484670356183940, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: 870755703, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: -1265806832, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: -2026981445, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
+  - {fileID: 579267106, guid: 4d1cf0f98d351284bbbd230236c72de4, type: 3}
   animFps: 12
   visualSize: 0.8
   dropFrames: []

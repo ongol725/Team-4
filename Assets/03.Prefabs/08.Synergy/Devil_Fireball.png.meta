@@ -1,0 +1,561 @@
+fileFormatVersion: 2
+guid: b9e6bee2b5d155c48805ab45a3f1646a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5979270804337883605
+    second: Devil_Fireball_0
+  - first:
+      213: -4872735329228040698
+    second: Devil_Fireball_1
+  - first:
+      213: 2216672636490806326
+    second: Devil_Fireball_2
+  - first:
+      213: 1938651611527470404
+    second: Devil_Fireball_3
+  - first:
+      213: 2954321131344927063
+    second: Devil_Fireball_4
+  - first:
+      213: -5546405752699438844
+    second: Devil_Fireball_5
+  - first:
+      213: 3471272875931960041
+    second: Devil_Fireball_6
+  - first:
+      213: 5236659826617805372
+    second: Devil_Fireball_7
+  - first:
+      213: -1949459034752940979
+    second: Devil_Fireball_8
+  - first:
+      213: 2550029163138934088
+    second: Devil_Fireball_9
+  - first:
+      213: -376240182446724176
+    second: Devil_Fireball_10
+  - first:
+      213: 3465186928387987102
+    second: Devil_Fireball_11
+  - first:
+      213: -7120306371515375085
+    second: Devil_Fireball_12
+  - first:
+      213: -6449285280087616525
+    second: Devil_Fireball_13
+  - first:
+      213: -2847693109156902097
+    second: Devil_Fireball_14
+  - first:
+      213: 3753388746192236049
+    second: Devil_Fireball_15
+  - first:
+      213: 732679636873888003
+    second: Devil_Fireball_16
+  - first:
+      213: 6259382184260674291
+    second: Devil_Fireball_17
+  - first:
+      213: -3605953460981365218
+    second: Devil_Fireball_18
+  - first:
+      213: 2270389424403600304
+    second: Devil_Fireball_19
+  - first:
+      213: 4904861352672430353
+    second: Devil_Fireball_20
+  - first:
+      213: -2611982120621672629
+    second: Devil_Fireball_21
+  - first:
+      213: -2630343257011230801
+    second: Devil_Fireball_22
+  - first:
+      213: -574823391700119013
+    second: Devil_Fireball_23
+  - first:
+      213: -2635565248964539906
+    second: Devil_Fireball_24
+  - first:
+      213: -8663786762123149834
+    second: Devil_Fireball_25
+  - first:
+      213: 9160315289973616490
+    second: Devil_Fireball_26
+  - first:
+      213: 2598789917165916435
+    second: Devil_Fireball_27
+  - first:
+      213: 3513161950451803684
+    second: Devil_Fireball_28
+  - first:
+      213: -5372800524594263679
+    second: Devil_Fireball_29
+  - first:
+      213: -8363277235849335548
+    second: Devil_Fireball_30
+  - first:
+      213: 1484754293931508521
+    second: Devil_Fireball_31
+  - first:
+      213: -6122501533369231826
+    second: Devil_Fireball_32
+  - first:
+      213: 4081536654933028379
+    second: Devil_Fireball_33
+  - first:
+      213: 4122572885046748482
+    second: Devil_Fireball_34
+  - first:
+      213: -4083926075756049974
+    second: Devil_Fireball_35
+  - first:
+      213: 4221977486285955432
+    second: Devil_Fireball_36
+  - first:
+      213: 8518542399159071568
+    second: Devil_Fireball_37
+  - first:
+      213: -3313289924579715918
+    second: Devil_Fireball_38
+  - first:
+      213: -952812923554773475
+    second: Devil_Fireball_39
+  - first:
+      213: -3147339136018600057
+    second: Devil_Fireball_40
+  - first:
+      213: -4244522023008549618
+    second: Devil_Fireball_41
+  - first:
+      213: -3501742849302699447
+    second: Devil_Fireball_42
+  - first:
+      213: 8888606374599670955
+    second: Devil_Fireball_43
+  - first:
+      213: -8279542139975342815
+    second: Devil_Fireball_44
+  - first:
+      213: 127854686442919141
+    second: Devil_Fireball_45
+  - first:
+      213: -5290960539367003023
+    second: Devil_Fireball_46
+  - first:
+      213: -8587716200388309212
+    second: Devil_Fireball_47
+  - first:
+      213: 7054328758753302813
+    second: Devil_Fireball_48
+  - first:
+      213: -1466014924784589606
+    second: Devil_Fireball_49
+  - first:
+      213: -5105857078355600641
+    second: Devil_Fireball_50
+  - first:
+      213: -6165831545611092884
+    second: Devil_Fireball_51
+  - first:
+      213: -3674148642371975898
+    second: Devil_Fireball_52
+  - first:
+      213: -8250819057500709290
+    second: Devil_Fireball_53
+  - first:
+      213: -2581947135103011567
+    second: Devil_Fireball_54
+  - first:
+      213: 3711828948712701758
+    second: Devil_Fireball_55
+  - first:
+      213: -6730557231313172838
+    second: Devil_Fireball_56
+  - first:
+      213: 3305886783442395058
+    second: Devil_Fireball_57
+  - first:
+      213: -1896983374846518595
+    second: Devil_Fireball_58
+  - first:
+      213: 2084947805922363882
+    second: Devil_Fireball_59
+  - first:
+      213: 7440533776554657190
+    second: Devil_Fireball_60
+  - first:
+      213: -7915497897852088371
+    second: Devil_Fireball_61
+  - first:
+      213: 3780355830442273649
+    second: Devil_Fireball_62
+  - first:
+      213: 8913820240061918844
+    second: Devil_Fireball_63
+  - first:
+      213: 1544811857879166112
+    second: Devil_Fireball_64
+  - first:
+      213: 7464442101564373924
+    second: Devil_Fireball_65
+  - first:
+      213: -6967356532801051596
+    second: Devil_Fireball_66
+  - first:
+      213: 4633672335109508542
+    second: Devil_Fireball_67
+  - first:
+      213: 245693674890929371
+    second: Devil_Fireball_68
+  - first:
+      213: 8864673358752701619
+    second: Devil_Fireball_69
+  - first:
+      213: 5747680265941621908
+    second: Devil_Fireball_70
+  - first:
+      213: -4545983785967043999
+    second: Devil_Fireball_71
+  - first:
+      213: -760154369905574866
+    second: Devil_Fireball_72
+  - first:
+      213: -2440191125803284312
+    second: Devil_Fireball_73
+  - first:
+      213: 2724221394754994254
+    second: Devil_Fireball_74
+  - first:
+      213: 920624977785122352
+    second: Devil_Fireball_75
+  - first:
+      213: -4902469982761769940
+    second: Devil_Fireball_76
+  - first:
+      213: 5500560456575171109
+    second: Devil_Fireball_77
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Devil_Fireball_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ddf130d6cd4ddc04c9724d890f3033b7
+      internalID: 5979270804337883605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Devil_Fireball_1
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65ee5c68e42ed884db71a6723504755e
+      internalID: -4872735329228040698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Devil_Fireball_2
+      rect:
+        serializedVersion: 2
+        x: 1546
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff4a03f2e8da1744aa37cb81f0961567
+      internalID: 2216672636490806326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Devil_Fireball_3
+      rect:
+        serializedVersion: 2
+        x: 2319
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0a5947e7b4dc404d8feb3ee3e485305
+      internalID: 1938651611527470404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Devil_Fireball_4
+      rect:
+        serializedVersion: 2
+        x: 3092
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5228ead7c3648bf4ea95cfba30a5a9db
+      internalID: 2954321131344927063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Devil_Fireball_5
+      rect:
+        serializedVersion: 2
+        x: 3865
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3bb4829d3df79448b5d565354765dbf
+      internalID: -5546405752699438844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Devil_Fireball_6
+      rect:
+        serializedVersion: 2
+        x: 4638
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 061ea5b4ba8485a4c80e25dec4b47443
+      internalID: 3471272875931960041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Devil_Fireball_7
+      rect:
+        serializedVersion: 2
+        x: 5411
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b796b814cba35eb498346c80c323f745
+      internalID: 5236659826617805372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4a40ca3a2d7f34749ad127542771f55c
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Devil_Fireball_0: 5979270804337883605
+      Devil_Fireball_1: -4872735329228040698
+      Devil_Fireball_2: 2216672636490806326
+      Devil_Fireball_3: 1938651611527470404
+      Devil_Fireball_4: 2954321131344927063
+      Devil_Fireball_5: -5546405752699438844
+      Devil_Fireball_6: 3471272875931960041
+      Devil_Fireball_7: 5236659826617805372
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

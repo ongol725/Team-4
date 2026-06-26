@@ -51,6 +51,8 @@ public class SO_SkillData : ScriptableObject
     public GameObject projectilePrefab;
     [Tooltip("Projectile 투사체 속도(유닛/초). 0 이하이면 기본 15 적용")]
     public float projectileSpeed = 15f;
+    [Tooltip("투사체 관통 횟수. 1=첫 명중 후 소멸, 999=경로상 모든 적 관통(암살단 수리검·처형자 낫 등)")]
+    public int pierceCount = 1;
 
     [Header("발동 비주얼 (스프라이트 시트 애니메이션)")]
     [Tooltip("투사체/이펙트로 재생할 스프라이트 프레임 배열(③ 메뉴로 자동 채움). 비우면 노란 원 fallback")]
@@ -59,6 +61,12 @@ public class SO_SkillData : ScriptableObject
     public float animFps = 12f;
     [Tooltip("월드 표시 크기(유닛). 투사체/이펙트 스프라이트의 목표 지름")]
     public float visualSize = 0.8f;
+    [Tooltip("스프라이트 세로(로컬 Y) 추가 배율. 1=정사각 유지, 2=세로 2배(소드마스터 검기 등 비균등 확대)")]
+    public float visualStretchY = 1f;
+    [Tooltip("true이면 이펙트가 플레이어에 부착되어 따라다니며 루프 재생된다(마왕 소용돌이처럼 캐릭터를 감싸는 효과)")]
+    public bool vfxFollowPlayer = false;
+    [Tooltip("이펙트 스프라이트 정렬 순서. 기본 30(캐릭터 위 스킬 효과). 난공불락 충격파 등 바닥 효과는 -20")]
+    public int vfxSortingOrder = 30;
 
     [Header("대부호 골드 드롭 (OnMove 전용)")]
     [Tooltip("이동 시 떨구는 골드 코인 프레임(Gold_Coin 등급별). 비우면 코인 없이 폭발만")]

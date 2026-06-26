@@ -32,7 +32,13 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
-  animFrames: []
+  animFrames:
+  - {fileID: 4396129195666348273, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
+  - {fileID: 3917156698382879817, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
+  - {fileID: -6138790528890826355, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
+  - {fileID: 1019749802612493638, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
+  - {fileID: 2318329741740190952, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
+  - {fileID: 4933604200605161345, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
   animFps: 12
   visualSize: 0.8
   dropFrames: []

@@ -1,0 +1,599 @@
+fileFormatVersion: 2
+guid: 4d1cf0f98d351284bbbd230236c72de4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6328194883572112539
+    second: StoneDrop_Common_0
+  - first:
+      213: -420140681440451011
+    second: StoneDrop_Common_1
+  - first:
+      213: 6619080777380302566
+    second: StoneDrop_Common_2
+  - first:
+      213: -4983699484336963425
+    second: StoneDrop_Common_3
+  - first:
+      213: -2558981407151301406
+    second: StoneDrop_Common_4
+  - first:
+      213: -1830283540205227025
+    second: StoneDrop_Common_5
+  - first:
+      213: 6403728944770616144
+    second: StoneDrop_Common_6
+  - first:
+      213: -872484670356183940
+    second: StoneDrop_Common_7
+  - first:
+      213: -9124044001284206145
+    second: StoneDrop_Common_8
+  - first:
+      213: 7716287836269749318
+    second: StoneDrop_Common_9
+  - first:
+      213: 1906025555115497183
+    second: StoneDrop_Common_10
+  - first:
+      213: 4824816553780145393
+    second: StoneDrop_Common_11
+  - first:
+      213: -7237150099642833623
+    second: StoneDrop_Common_12
+  - first:
+      213: -5656991956057735911
+    second: StoneDrop_Common_13
+  - first:
+      213: 2528339058541645172
+    second: StoneDrop_Common_14
+  - first:
+      213: -935180984128033947
+    second: StoneDrop_Common_15
+  - first:
+      213: -6514400584932048884
+    second: StoneDrop_Common_16
+  - first:
+      213: 7126660519285043642
+    second: StoneDrop_Common_17
+  - first:
+      213: -4888509839090030466
+    second: StoneDrop_Common_18
+  - first:
+      213: 9034227792622990976
+    second: StoneDrop_Common_19
+  - first:
+      213: 5927361262414959162
+    second: StoneDrop_Common_20
+  - first:
+      213: -5903295640654338742
+    second: StoneDrop_Common_21
+  - first:
+      213: -271101145123347800
+    second: StoneDrop_Common_22
+  - first:
+      213: 3894275194961154335
+    second: StoneDrop_Common_23
+  - first:
+      213: 6394851768251036563
+    second: StoneDrop_Common_24
+  - first:
+      213: 1756314603940493460
+    second: StoneDrop_Common_25
+  - first:
+      213: 8711197179221856613
+    second: StoneDrop_Common_26
+  - first:
+      213: -5821778613098035475
+    second: StoneDrop_Common_27
+  - first:
+      213: -5576927921586712125
+    second: StoneDrop_Common_28
+  - first:
+      213: -2303420031284012361
+    second: StoneDrop_Common_29
+  - first:
+      213: 3775966588201241689
+    second: StoneDrop_Common_30
+  - first:
+      213: -2686468413092946058
+    second: StoneDrop_Common_31
+  - first:
+      213: -1432451738808318690
+    second: StoneDrop_Common_32
+  - first:
+      213: 2953031480269804021
+    second: StoneDrop_Common_33
+  - first:
+      213: -7842866093488650704
+    second: StoneDrop_Common_34
+  - first:
+      213: -8310602525188195687
+    second: StoneDrop_Common_35
+  - first:
+      213: -1587685235585178186
+    second: StoneDrop_Common_36
+  - first:
+      213: 8659068732885250901
+    second: StoneDrop_Common_37
+  - first:
+      213: 6078624117450920722
+    second: StoneDrop_Common_38
+  - first:
+      213: -4550794153737289683
+    second: StoneDrop_Common_39
+  - first:
+      213: 7796743968646825088
+    second: StoneDrop_Common_40
+  - first:
+      213: -8543442188017909584
+    second: StoneDrop_Common_41
+  - first:
+      213: -3340444459035150513
+    second: StoneDrop_Common_42
+  - first:
+      213: -6229026740421206303
+    second: StoneDrop_Common_43
+  - first:
+      213: 7512348103842142418
+    second: StoneDrop_Common_44
+  - first:
+      213: -4741251859068000200
+    second: StoneDrop_Common_45
+  - first:
+      213: -4531360198180228920
+    second: StoneDrop_Common_46
+  - first:
+      213: 8553373169889061030
+    second: StoneDrop_Common_47
+  - first:
+      213: 5345825244634777868
+    second: StoneDrop_Common_48
+  - first:
+      213: 859448774656663702
+    second: StoneDrop_Common_49
+  - first:
+      213: -2174188235133130543
+    second: StoneDrop_Common_50
+  - first:
+      213: -303521939382459719
+    second: StoneDrop_Common_51
+  - first:
+      213: 9058352084866091172
+    second: StoneDrop_Common_52
+  - first:
+      213: -7480865644757323416
+    second: StoneDrop_Common_53
+  - first:
+      213: -3567893888400043471
+    second: StoneDrop_Common_54
+  - first:
+      213: -5302412592595514339
+    second: StoneDrop_Common_55
+  - first:
+      213: 2938597645975409417
+    second: StoneDrop_Common_56
+  - first:
+      213: -6467048036284207272
+    second: StoneDrop_Common_57
+  - first:
+      213: -427206930317654241
+    second: StoneDrop_Common_58
+  - first:
+      213: 1000725103093084470
+    second: StoneDrop_Common_59
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: StoneDrop_Common_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50586753780419a459c0cc2f7d6b2ef9
+      internalID: 6328194883572112539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 740369f2889a7e546b3dc1ed82e934a5
+      internalID: -420140681440451011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_2
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 132e13df5c32e6d4c910f8aead94f45b
+      internalID: 6619080777380302566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_3
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 757be7dd39ab9e64b903aec3a1bf7b26
+      internalID: -4983699484336963425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_4
+      rect:
+        serializedVersion: 2
+        x: 4096
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b5ef125cb5d37b46af8326b8f28690b
+      internalID: -2558981407151301406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_5
+      rect:
+        serializedVersion: 2
+        x: 5120
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09ccc620463e98e48b7d27ae460811e8
+      internalID: -1830283540205227025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_6
+      rect:
+        serializedVersion: 2
+        x: 6144
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 211df83a2c83bb74fa36ac1029fcee09
+      internalID: 6403728944770616144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_7
+      rect:
+        serializedVersion: 2
+        x: 7168
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58efc0e8b3f710d47ae7b047eb52110e
+      internalID: -872484670356183940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_8
+      rect:
+        serializedVersion: 2
+        x: 8192
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0385101912b1cca4392812c5ebc6052e
+      internalID: 870755703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_9
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 999989e58b0ffc1468cd885f8dca3aa0
+      internalID: -1265806832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_10
+      rect:
+        serializedVersion: 2
+        x: 10240
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 383795ecc8b065b45b8ace1c0cf2fb3c
+      internalID: -2026981445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StoneDrop_Common_11
+      rect:
+        serializedVersion: 2
+        x: 11264
+        y: 0
+        width: 1024
+        height: 1536
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a661eace635f624e9a3c0028451c4cf
+      internalID: 579267106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d2250915535092743bfcc6c5501694f9
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      StoneDrop_Common_0: 6328194883572112539
+      StoneDrop_Common_1: -420140681440451011
+      StoneDrop_Common_10: -2026981445
+      StoneDrop_Common_11: 579267106
+      StoneDrop_Common_2: 6619080777380302566
+      StoneDrop_Common_3: -4983699484336963425
+      StoneDrop_Common_4: -2558981407151301406
+      StoneDrop_Common_5: -1830283540205227025
+      StoneDrop_Common_6: 6403728944770616144
+      StoneDrop_Common_7: -872484670356183940
+      StoneDrop_Common_8: 870755703
+      StoneDrop_Common_9: -1265806832
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

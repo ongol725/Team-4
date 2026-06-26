@@ -117,7 +117,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -138,7 +138,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -192,507 +192,177 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fairy.prefab_0
+      name: Fairy_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 743
-        width: 186
-        height: 194
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 128323a4e2e4e5b20800000000000000
-      internalID: 3125021152161970209
+      spriteID: dbdd5c9b74a14024a83b172637cc2d66
+      internalID: -80967579
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy.prefab_1
+      name: Fairy_1
       rect:
         serializedVersion: 2
-        x: 267
-        y: 739
-        width: 186
-        height: 194
+        x: 2048
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 945901204f13060c0800000000000000
-      internalID: -4584609496586742455
+      spriteID: fd5344319027c7b4d992acf246073439
+      internalID: 861703070
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy.prefab_2
+      name: Fairy_2
       rect:
         serializedVersion: 2
-        x: 507
-        y: 739
-        width: 186
-        height: 198
+        x: 4096
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6e63f8495922b0000800000000000000
-      internalID: 3134250581702374
+      spriteID: d44557045d15c4e45b70f8c32ec11993
+      internalID: 1391837025
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy.prefab_3
+      name: Fairy_3
       rect:
         serializedVersion: 2
-        x: 747
-        y: 735
-        width: 186
-        height: 198
+        x: 6144
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c02a56f5ff7b3da10800000000000000
-      internalID: 1933090972517114380
+      spriteID: 5c264ea9abfdfa6459502208c6be7435
+      internalID: 1307097488
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy.prefab_4
+      name: Fairy_4
       rect:
         serializedVersion: 2
-        x: 923
-        y: 843
-        width: 14
-        height: 14
+        x: 8192
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f293802dcabf40930800000000000000
-      internalID: 4108685479745435951
+      spriteID: 8d690ca4dcdbcfb409bd5613b2a9fa15
+      internalID: 66102138
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy.prefab_5
+      name: Fairy_5
       rect:
         serializedVersion: 2
-        x: 27
-        y: 627
-        width: 14
-        height: 14
+        x: 10240
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f0936c2130d86da20800000000000000
-      internalID: 3086809638948452623
+      spriteID: 6a3bb4b21cb962148a9e4a13f0e501f2
+      internalID: 1690685717
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy.prefab_6
+      name: Fairy_6
       rect:
         serializedVersion: 2
-        x: 31
-        y: 495
-        width: 178
-        height: 198
+        x: 12288
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 87f4a06f3321e4390800000000000000
-      internalID: -7832302687570210952
+      spriteID: a63a6484f7540614d9979dd993e3f72e
+      internalID: -240947322
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fairy.prefab_7
+      name: Fairy_7
       rect:
         serializedVersion: 2
-        x: 271
-        y: 491
-        width: 178
-        height: 202
+        x: 14336
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a9782d1dbac92ac40800000000000000
-      internalID: 5522148354883225498
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_8
-      rect:
-        serializedVersion: 2
-        x: 511
-        y: 495
-        width: 178
-        height: 202
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: aa74023f0acb15be0800000000000000
-      internalID: -1490202602223155286
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_9
-      rect:
-        serializedVersion: 2
-        x: 751
-        y: 495
-        width: 178
-        height: 202
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 32152278b1304b520800000000000000
-      internalID: 2716799891977425187
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_10
-      rect:
-        serializedVersion: 2
-        x: 923
-        y: 607
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a87ed456f90d0a400800000000000000
-      internalID: 333495755443398538
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_11
-      rect:
-        serializedVersion: 2
-        x: 27
-        y: 395
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2ab43179406999ff0800000000000000
-      internalID: -28826976142537822
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_12
-      rect:
-        serializedVersion: 2
-        x: 31
-        y: 259
-        width: 178
-        height: 202
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2bff44c21b4dd1ca0800000000000000
-      internalID: -6044441267444318286
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_13
-      rect:
-        serializedVersion: 2
-        x: 271
-        y: 263
-        width: 178
-        height: 202
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a30798eed70eb6db0800000000000000
-      internalID: -4797494146555613126
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_14
-      rect:
-        serializedVersion: 2
-        x: 511
-        y: 263
-        width: 178
-        height: 202
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6ec4729d9b58cc6b0800000000000000
-      internalID: -5274694030299018010
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_15
-      rect:
-        serializedVersion: 2
-        x: 751
-        y: 267
-        width: 178
-        height: 202
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1bb2725985d9215b0800000000000000
-      internalID: -5399079999478748239
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_16
-      rect:
-        serializedVersion: 2
-        x: 923
-        y: 379
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4d5a949734d127710800000000000000
-      internalID: 1689444985852241364
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_17
-      rect:
-        serializedVersion: 2
-        x: 27
-        y: 163
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4f5a3b35524c0e370800000000000000
-      internalID: 8349889373742015988
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_18
-      rect:
-        serializedVersion: 2
-        x: 31
-        y: 31
-        width: 178
-        height: 198
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1cc702711ad2218f0800000000000000
-      internalID: -571344032821642047
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_19
-      rect:
-        serializedVersion: 2
-        x: 267
-        y: 31
-        width: 186
-        height: 198
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d8749d872f90c1b60800000000000000
-      internalID: 7718054798420428685
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_20
-      rect:
-        serializedVersion: 2
-        x: 507
-        y: 27
-        width: 186
-        height: 198
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4b6e9117b3e26a220800000000000000
-      internalID: 2496733876258989748
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_21
-      rect:
-        serializedVersion: 2
-        x: 747
-        y: 27
-        width: 186
-        height: 194
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0c7fe789bd32d7210800000000000000
-      internalID: 1332260490834802624
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fairy.prefab_22
-      rect:
-        serializedVersion: 2
-        x: 923
-        y: 135
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4943745f9d503eeb0800000000000000
-      internalID: -4691899953108798316
+      spriteID: c4cc7e0e05a19524498d70332f5b007f
+      internalID: -1454418011
       vertices: []
       indices: 
       edges: []
@@ -701,7 +371,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: dd12567e294e9b048a672e41a55d0047
     internalID: 0
     vertices: []
     indices: 
@@ -711,29 +381,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fairy.prefab_0: 3125021152161970209
-      Fairy.prefab_1: -4584609496586742455
-      Fairy.prefab_10: 333495755443398538
-      Fairy.prefab_11: -28826976142537822
-      Fairy.prefab_12: -6044441267444318286
-      Fairy.prefab_13: -4797494146555613126
-      Fairy.prefab_14: -5274694030299018010
-      Fairy.prefab_15: -5399079999478748239
-      Fairy.prefab_16: 1689444985852241364
-      Fairy.prefab_17: 8349889373742015988
-      Fairy.prefab_18: -571344032821642047
-      Fairy.prefab_19: 7718054798420428685
-      Fairy.prefab_2: 3134250581702374
-      Fairy.prefab_20: 2496733876258989748
-      Fairy.prefab_21: 1332260490834802624
-      Fairy.prefab_22: -4691899953108798316
-      Fairy.prefab_3: 1933090972517114380
-      Fairy.prefab_4: 4108685479745435951
-      Fairy.prefab_5: 3086809638948452623
-      Fairy.prefab_6: -7832302687570210952
-      Fairy.prefab_7: 5522148354883225498
-      Fairy.prefab_8: -1490202602223155286
-      Fairy.prefab_9: 2716799891977425187
+      Fairy_0: -80967579
+      Fairy_1: 861703070
+      Fairy_2: 1391837025
+      Fairy_3: 1307097488
+      Fairy_4: 66102138
+      Fairy_5: 1690685717
+      Fairy_6: -240947322
+      Fairy_7: -1454418011
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

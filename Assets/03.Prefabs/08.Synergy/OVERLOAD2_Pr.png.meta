@@ -1,0 +1,402 @@
+fileFormatVersion: 2
+guid: 9d97fc7f04786e943a01e6ef34df5caa
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4415670643925419716
+    second: OVERLOAD2_Pr_0
+  - first:
+      213: -8616591988186888138
+    second: OVERLOAD2_Pr_1
+  - first:
+      213: -4513206376501855569
+    second: OVERLOAD2_Pr_2
+  - first:
+      213: 3245749648820007656
+    second: OVERLOAD2_Pr_3
+  - first:
+      213: 3690630544871024438
+    second: OVERLOAD2_Pr_4
+  - first:
+      213: -2898707606323492659
+    second: OVERLOAD2_Pr_5
+  - first:
+      213: 3059771683200089594
+    second: OVERLOAD2_Pr_6
+  - first:
+      213: -740582295602729582
+    second: OVERLOAD2_Pr_7
+  - first:
+      213: -1372572089051245109
+    second: OVERLOAD2_Pr_8
+  - first:
+      213: -3139882965233773987
+    second: OVERLOAD2_Pr_9
+  - first:
+      213: -8971311269040254441
+    second: OVERLOAD2_Pr_10
+  - first:
+      213: 7199572140622816752
+    second: OVERLOAD2_Pr_11
+  - first:
+      213: -893900508764628678
+    second: OVERLOAD2_Pr_12
+  - first:
+      213: 7977020388136377824
+    second: OVERLOAD2_Pr_13
+  - first:
+      213: 6871869811563829504
+    second: OVERLOAD2_Pr_14
+  - first:
+      213: -5059910698852474116
+    second: OVERLOAD2_Pr_15
+  - first:
+      213: -6149631730525549931
+    second: OVERLOAD2_Pr_16
+  - first:
+      213: -4139827101498155309
+    second: OVERLOAD2_Pr_17
+  - first:
+      213: -4629485867340637160
+    second: OVERLOAD2_Pr_18
+  - first:
+      213: 7205039371947125447
+    second: OVERLOAD2_Pr_19
+  - first:
+      213: -6281207541503546668
+    second: OVERLOAD2_Pr_20
+  - first:
+      213: 8253280384236663323
+    second: OVERLOAD2_Pr_21
+  - first:
+      213: 7933686794040061260
+    second: OVERLOAD2_Pr_22
+  - first:
+      213: 6902191474132784765
+    second: OVERLOAD2_Pr_23
+  - first:
+      213: 9169649598357697764
+    second: OVERLOAD2_Pr_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01d7afe5431427f438d061185b14d040
+      internalID: -4415670643925419716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_1
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 969bccabcad4f9b4190f6b65ecb18b82
+      internalID: -8616591988186888138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_2
+      rect:
+        serializedVersion: 2
+        x: 1546
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd7098376715e9c4f8d72e0ec2d960b5
+      internalID: -4513206376501855569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_3
+      rect:
+        serializedVersion: 2
+        x: 2319
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a095a668bb2e831459e3d05cdc41007e
+      internalID: 3245749648820007656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_4
+      rect:
+        serializedVersion: 2
+        x: 3092
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cc751e77bb3b1546ba2c11fa0ff6316
+      internalID: 3690630544871024438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_5
+      rect:
+        serializedVersion: 2
+        x: 3865
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 872c095c50e975a488c55ec5cbbf944b
+      internalID: -2898707606323492659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_6
+      rect:
+        serializedVersion: 2
+        x: 4638
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9641b0ac9bdceaa42abc63b92d90ee18
+      internalID: 3059771683200089594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OVERLOAD2_Pr_7
+      rect:
+        serializedVersion: 2
+        x: 5411
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57ccea85f21f4ff4ba8e2f3d805e97ae
+      internalID: -740582295602729582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: e0fbf3220fb782a4299af03b35365625
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      OVERLOAD2_Pr_0: -4415670643925419716
+      OVERLOAD2_Pr_1: -8616591988186888138
+      OVERLOAD2_Pr_2: -4513206376501855569
+      OVERLOAD2_Pr_3: 3245749648820007656
+      OVERLOAD2_Pr_4: 3690630544871024438
+      OVERLOAD2_Pr_5: -2898707606323492659
+      OVERLOAD2_Pr_6: 3059771683200089594
+      OVERLOAD2_Pr_7: -740582295602729582
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

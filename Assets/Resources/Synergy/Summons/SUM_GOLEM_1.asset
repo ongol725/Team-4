@@ -26,33 +26,17 @@ MonoBehaviour:
   uniqueSkill: {fileID: 0}
   uniqueSkillCooldown: 8
   modelPrefab: {fileID: 0}
-  icon: {fileID: -1945606800197570230, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  icon: {fileID: -1067367415, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
   animFrames:
-  - {fileID: -1945606800197570230, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
-  - {fileID: 7277668333667092208, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
-  - {fileID: -4921508734973391777, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
-  - {fileID: 8427920189052477171, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
-  - {fileID: 5066655300987839587, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
-  - {fileID: 2265717577053354901, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
-  - {fileID: -6419092137225030934, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
-  - {fileID: 9186979510490413280, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: -1067367415, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: -2066925611, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: 1538061692, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: -1256772827, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: 1813471881, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: -1309072972, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: 119257772, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
+  - {fileID: -647027260, guid: cdd9a8dd462251740a81e730038ac3d0, type: 3}
   animFps: 10
   hp: 0
-  attackEffectFrames:
-  - {fileID: 4421062331379601517, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -4602863917074197578, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 3071719586801174439, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -1317069503695146530, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -5783978958103855648, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 567006246580065128, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 9185333033193106824, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 1361873199102695609, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -4526712881592195439, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 443716257309272121, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 462056552758905414, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 1636582057988876033, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 7197266991324031219, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -6350380243790207732, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: 3465153089041966555, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
-  - {fileID: -3803012597921825272, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  attackEffectFrames: []
   attackEffectFps: 12

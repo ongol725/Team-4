@@ -32,6 +32,7 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
+  pierceCount: 1
   animFrames: []
   animFps: 12
   visualSize: 0.8
