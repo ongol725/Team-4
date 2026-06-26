@@ -257,7 +257,7 @@ namespace BagSurvivor.SynergyEditor
             d["SUM_GIANT_GOLEM"] = Sum("SUM_GIANT_GOLEM", "고대 정령 (프리즘)",
                 SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_AVG,
                 atk:4.5f, spd:0f, atkCd:2.0f, atkRange:6.0f, dur:-1f,
-                uniqueSkillCd:8f, scale:0.3f); // 기본 0.6 → 2배 축소
+                uniqueSkillCd:8f, scale:0.3f, atkFxScale:3f); // 크기 축소 / 공격 모션은 크게
 
             // ── 마왕 기어 (DemonLord) — GuardOffset, 플레이어 주변 고정 위치 원거리 공격 ──
             d["SUM_DEMON_GEAR"] = Sum("SUM_DEMON_GEAR", "지옥 기어",
@@ -570,7 +570,7 @@ namespace BagSurvivor.SynergyEditor
             SummonAIType ai, ScalingStatType scaling,
             float atk, float spd, float atkCd, float atkRange, float dur,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 5)
+            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 5, float atkFxScale = 0.5f)
         {
             string path = $"{SummonDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SummonData>(path);
@@ -588,6 +588,7 @@ namespace BagSurvivor.SynergyEditor
             asset.uniqueSkillCooldown = uniqueSkillCd;
             asset.displayScale        = scale;
             asset.sortingOrder        = sortOrder;
+            asset.attackEffectScale   = atkFxScale;
             EditorUtility.SetDirty(asset);
             return asset;
         }

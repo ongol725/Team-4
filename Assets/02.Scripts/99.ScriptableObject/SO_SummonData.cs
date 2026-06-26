@@ -60,4 +60,6 @@ public class SO_SummonData : ScriptableObject
     public Sprite[] attackEffectFrames;
     [Tooltip("공격 이펙트 재생 속도(FPS)")]
     public float attackEffectFps = 12f;
+    [Tooltip("공격 이펙트 표시 크기(지름, 유닛). 기본 0.5. 대정령처럼 크게 보여야 하면 키운다")]
+    public float attackEffectScale = 0.5f;
 }

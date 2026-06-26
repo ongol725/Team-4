@@ -250,8 +250,9 @@ public class SummonController : MonoBehaviour
         sr.sprite = frames[0];
         if (frames[0] != null)
         {
-            float maxExtent = Mathf.Max(frames[0].bounds.extents.x, frames[0].bounds.extents.y);
-            go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (0.5f / maxExtent) : Vector3.one;
+            float target    = _data.attackEffectScale > 0f ? _data.attackEffectScale : 0.5f;
+            float maxExtent  = Mathf.Max(frames[0].bounds.extents.x, frames[0].bounds.extents.y);
+            go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (target / maxExtent) : Vector3.one * target;
         }
 
         go.AddComponent<SpriteSheetAnimator>().Play(frames, _data.attackEffectFps, loop: false);

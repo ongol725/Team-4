@@ -53,3 +53,4 @@ MonoBehaviour:
   - {fileID: 816300311, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
   - {fileID: 8495549, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
   attackEffectFps: 12
+  attackEffectScale: 3
