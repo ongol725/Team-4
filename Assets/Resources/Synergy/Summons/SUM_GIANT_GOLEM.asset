@@ -25,6 +25,7 @@ MonoBehaviour:
   fixedEffectValue: 0
   uniqueSkill: {fileID: 11400000, guid: 051477e475db18a438c630a941a01f9c, type: 2}
   uniqueSkillCooldown: 8
+  displayScale: 0.3
   modelPrefab: {fileID: 0}
   icon: {fileID: 777626916781001291, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
   animFrames:

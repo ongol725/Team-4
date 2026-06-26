@@ -81,8 +81,8 @@ public class SummonController : MonoBehaviour
             if (data.icon != null)
             {
                 sr.sprite = data.icon;
-                // AI 타입별 표시 크기 정규화
-                float scale = data.aiType switch
+                // 표시 크기: displayScale 지정 시 우선, 아니면 AI 타입별 기본값
+                float scale = data.displayScale > 0f ? data.displayScale : data.aiType switch
                 {
                     SummonAIType.Bounce      => 0.25f, // 핀볼: 작은 공
                     SummonAIType.OrbitPlayer => 0.40f, // 페어리: 플레이어 주변 회전

@@ -111,15 +111,16 @@ namespace BagSurvivor.SynergyEditor
                 fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999);
 
             // ── 소드마스터 (SwordMaster) — AutoTimer / WPN_ATK_AVG / Forward ──
+            // 검기: 표시 크기 3배(기본 0.8 → 2.4)
             d["SK_SWORD_1"] = Sk("SK_SWORD_1", "검기 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f, vSize:2.4f);
             d["SK_SWORD_2"] = Sk("SK_SWORD_2", "대형 검기 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, vSize:2.4f);
             d["SK_SWORD_3"] = Sk("SK_SWORD_3", "연속 검기 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:2.4f);
 
             // ── 티탄 (Titan) — AutoTimer / WPN_ATK_AVG / RandomEnemy × N ──
             d["SK_METEOR_1"] = Sk("SK_METEOR_1", "돌 떨구기 3개",
@@ -133,22 +134,23 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:9);
 
             // ── 난공불락 (Impregnable) — OnHitTaken / ARM_HP_SUM / Self + DamageReduction ──
+            // 충격파: 표시 크기 5배(기본 0.8 → 4.0)
             d["SK_FORTRESS_1"] = Sk("SK_FORTRESS_1", "충격파 (브론즈)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:5f,
-                fx:FixedEffectType.DamageReduction, fxVal:10f);
+                fx:FixedEffectType.DamageReduction, fxVal:10f, vSize:4f);
             d["SK_FORTRESS_2"] = Sk("SK_FORTRESS_2", "거대 충격파 (실버)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:20f);
+                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:4f);
             d["SK_FORTRESS_3"] = Sk("SK_FORTRESS_3", "파멸 충격파 (골드)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:13.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:35f);
+                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:4f);
             d["SK_FORTRESS_4"] = Sk("SK_FORTRESS_4", "무적 충격파 (프리즘)",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:20.0f, cd:0.5f, range:30f,
-                fx:FixedEffectType.DamageReduction, fxVal:60f);
+                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:4f);
 
             // ── 마왕 (DemonLord) — 누적형 동시 발동 (콘셉트 19~22) ──
             // 투사체(검기)·소용돌이는 스킬, 기어는 소환수(SUM_DEMON_GEAR)로 구성한다.
@@ -252,7 +254,7 @@ namespace BagSurvivor.SynergyEditor
             d["SUM_GIANT_GOLEM"] = Sum("SUM_GIANT_GOLEM", "고대 정령 (프리즘)",
                 SummonAIType.FollowAttack, ScalingStatType.WPN_ATK_AVG,
                 atk:4.5f, spd:3.5f, atkCd:2.0f, atkRange:2.0f, dur:-1f,
-                uniqueSkillCd:8f);
+                uniqueSkillCd:8f, scale:0.3f); // 기본 0.6 → 2배 축소
 
             // ── 마왕 기어 (DemonLord) — GuardOffset, 플레이어 주변 고정 위치 원거리 공격 ──
             d["SUM_DEMON_GEAR"] = Sum("SUM_DEMON_GEAR", "지옥 기어",
@@ -260,18 +262,19 @@ namespace BagSurvivor.SynergyEditor
                 atk:0.5f, spd:10f, atkCd:1.0f, atkRange:6f, dur:-1f);
 
             // ── 성기사단 (HolyKnight) — Stationary + HealArmorHpPct ──
+            // 성역 장판: 기본 0.6 → 3배 확대(scale 1.8)
             d["SUM_SANCTUARY_1"] = Sum("SUM_SANCTUARY_1", "성역 장판 (브론즈)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.5f, spd:0f, atkCd:1.0f, atkRange:5f, dur:5f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f, scale:1.8f);
             d["SUM_SANCTUARY_2"] = Sum("SUM_SANCTUARY_2", "성역 장판 (실버)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.6f, spd:0f, atkCd:1.0f, atkRange:5f, dur:8f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f, scale:1.8f);
             d["SUM_SANCTUARY_3"] = Sum("SUM_SANCTUARY_3", "성역 장판 (골드)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.7f, spd:0f, atkCd:1.0f, atkRange:5f, dur:11f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f, scale:1.8f);
 
             return d;
         }
@@ -558,7 +561,7 @@ namespace BagSurvivor.SynergyEditor
             SummonAIType ai, ScalingStatType scaling,
             float atk, float spd, float atkCd, float atkRange, float dur,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float uniqueSkillCd = 8f)
+            float uniqueSkillCd = 8f, float scale = 0f)
         {
             string path = $"{SummonDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SummonData>(path);
@@ -574,6 +577,7 @@ namespace BagSurvivor.SynergyEditor
             asset.fixedEffect       = fx;
             asset.fixedEffectValue  = fxVal;
             asset.uniqueSkillCooldown = uniqueSkillCd;
+            asset.displayScale        = scale;
             EditorUtility.SetDirty(asset);
             return asset;
         }
