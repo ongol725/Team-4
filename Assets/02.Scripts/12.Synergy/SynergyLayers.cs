@@ -7,8 +7,9 @@
 /// </summary>
 public static class SynergyLayers
 {
-    /// <summary>바닥 깔개 — 성역·난공불락 충격파·대부호 골드코인 (캐릭터 아래로 깔림)</summary>
-    public const int Ground    = -20;
+    /// <summary>바닥 깔개 — 성역·난공불락 충격파·대부호 골드코인.
+    /// 바닥 타일맵(Default/order 0) 바로 위, 캐릭터 아래. (-20이면 바닥 타일에 가려짐)</summary>
+    public const int Ground    = 1;
     /// <summary>캐릭터 뒤 — 소환수 전반(골렘·페어리·핀볼·대정령·기어)·마왕 소용돌이</summary>
     public const int BelowChar = 5;
     /// <summary>캐릭터 평면 — 플레이어·몬스터</summary>

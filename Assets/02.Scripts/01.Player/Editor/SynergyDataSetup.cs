@@ -139,19 +139,19 @@ namespace BagSurvivor.SynergyEditor
             d["SK_FORTRESS_1"] = Sk("SK_FORTRESS_1", "충격파 (브론즈)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:5f,
-                fx:FixedEffectType.DamageReduction, fxVal:10f, vSize:4f, vfxSort:-20);
+                fx:FixedEffectType.DamageReduction, fxVal:10f, vSize:4f, vfxSort:1);
             d["SK_FORTRESS_2"] = Sk("SK_FORTRESS_2", "거대 충격파 (실버)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:4f, vfxSort:-20);
+                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:4f, vfxSort:1);
             d["SK_FORTRESS_3"] = Sk("SK_FORTRESS_3", "파멸 충격파 (골드)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:13.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:4f, vfxSort:-20);
+                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:4f, vfxSort:1);
             d["SK_FORTRESS_4"] = Sk("SK_FORTRESS_4", "무적 충격파 (프리즘)",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
                 ScalingStatType.ARM_HP_SUM, dmg:20.0f, cd:0.5f, range:30f,
-                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:4f, vfxSort:-20);
+                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:4f, vfxSort:1);
 
             // ── 마왕 (DemonLord) — 누적형 동시 발동 (콘셉트 19~22) ──
             // 투사체(검기)·소용돌이는 스킬, 기어는 소환수(SUM_DEMON_GEAR)로 구성한다.
@@ -269,15 +269,15 @@ namespace BagSurvivor.SynergyEditor
             d["SUM_SANCTUARY_1"] = Sum("SUM_SANCTUARY_1", "성역 장판 (브론즈)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.5f, spd:0f, atkCd:1.0f, atkRange:5f, dur:5f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f, scale:1.8f, sortOrder:-20);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f, scale:1.8f, sortOrder:1);
             d["SUM_SANCTUARY_2"] = Sum("SUM_SANCTUARY_2", "성역 장판 (실버)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.6f, spd:0f, atkCd:1.0f, atkRange:5f, dur:8f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f, scale:1.8f, sortOrder:-20);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f, scale:1.8f, sortOrder:1);
             d["SUM_SANCTUARY_3"] = Sum("SUM_SANCTUARY_3", "성역 장판 (골드)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0.7f, spd:0f, atkCd:1.0f, atkRange:5f, dur:11f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f, scale:1.8f, sortOrder:-20);
+                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f, scale:1.8f, sortOrder:1);
 
             return d;
         }
