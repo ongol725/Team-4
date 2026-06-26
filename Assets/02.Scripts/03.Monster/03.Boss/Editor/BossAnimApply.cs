@@ -409,9 +409,10 @@ public static class BossAnimApply
     }
 
     private const string PathPng        = "Assets/FreePixelEffect/Path.png";   // 에셋스토어(gitignore)
-    private const string DashWarnPrefab = AnimDir + "/DashWarn.prefab";
-    private const string DashWarnAnim   = AnimDir + "/DashWarn.anim";
-    private const string DashWarnCtrl   = AnimDir + "/DashWarn.controller";
+    private const string DashWarnDir    = "Assets/03.Prefabs/06.Gimmicks";     // 커밋 위치(팀원 공유 — Path는 각자 임포트)
+    private const string DashWarnPrefab = DashWarnDir + "/DashWarn.prefab";
+    private const string DashWarnAnim   = DashWarnDir + "/DashWarn.anim";
+    private const string DashWarnCtrl   = DashWarnDir + "/DashWarn.controller";
     private const string BoarPrefab     = "Assets/03.Prefabs/02.Monsters/Prefab_Boar.prefab";
 
     /// <summary>FreePixelEffect/Path(흐르는 쉐브론)로 빨간 돌진 경고선 프리팹을 만들고
