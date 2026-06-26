@@ -28,6 +28,9 @@ namespace BagSurvivor.Monster
         [Tooltip("무적 상태로 멈춰 있는 전환 연출 시간(초)")]
         public float transitionDuration = 2f;
 
+        [Tooltip("전환 시 내려앉을 가운데 = 스폰 위치 + 이 오프셋. 예: (0,-8,0)이면 아래로 8 이동")]
+        public Vector3 phaseCenterOffset = Vector3.zero;
+
         [Header("2페이즈")]
         [Tooltip("진입 시 바닥에 생성할 영구 장판 프리팹(선택)")]
         public GameObject floorHazardPrefab;
@@ -57,7 +60,7 @@ namespace BagSurvivor.Monster
             // 풀 재사용/재시작 대비 초기화
             transitioning = false;
             transitioned = false;
-            phaseCenter = transform.position; // 스폰 위치 = 전환 시 내려앉을 가운데
+            phaseCenter = transform.position + phaseCenterOffset; // 스폰 위치 + 오프셋 = 전환 시 내려앉을 가운데
         }
 
         private void Update()

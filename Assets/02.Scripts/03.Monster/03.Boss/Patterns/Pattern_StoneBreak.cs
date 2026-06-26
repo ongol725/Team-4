@@ -87,8 +87,8 @@ namespace BagSurvivor.Monster
             controller.BeginExternalMovement();
             controller.SetKnockbackImmune(true);
 
-            // 1) 맵 중앙으로 이동
-            yield return MoveTo(mapCenter, 0.5f);
+            // 1) 제자리에서 실행(중앙으로 이동하지 않음) — 보스 현재 위치 기준
+            Vector3 origin = transform.position;
 
             // 2) 돌 4개 생성 (1개에 아이템)
             int itemIndex = Random.Range(0, Mathf.Max(1, stoneCount));
@@ -97,7 +97,7 @@ namespace BagSurvivor.Monster
             for (int i = 0; i < stoneCount; i++)
             {
                 float ang = (360f / Mathf.Max(1, stoneCount)) * i * Mathf.Deg2Rad;
-                Vector3 pos = mapCenter + new Vector3(Mathf.Cos(ang), Mathf.Sin(ang), 0f) * stoneRadius;
+                Vector3 pos = origin + new Vector3(Mathf.Cos(ang), Mathf.Sin(ang), 0f) * stoneRadius;
                 GameObject go = SpawnFromPool(stonePrefab, pos, Quaternion.identity);
                 if (go == null) continue;
                 var h = go.GetComponent<HittableObject>();

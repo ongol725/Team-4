@@ -175,6 +175,7 @@ MonoBehaviour:
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
+  damageReductionVfxPrefab: {fileID: 0}
 --- !u!114 &5409243780121177183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,4 +193,4 @@ MonoBehaviour:
   chargeMaxDistance: 10
   chargeSpeedMultiplier: 3
   restDuration: 3
-  chargeWarnPrefab: {fileID: 4381295841929657121, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
+  chargeWarnPrefab: {fileID: 4275581020290162337, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}

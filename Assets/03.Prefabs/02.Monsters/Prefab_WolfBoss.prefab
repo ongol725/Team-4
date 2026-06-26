@@ -1,0 +1,554 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8417251158332801010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6229177348368665835}
+  - component: {fileID: 63698587524294150}
+  - component: {fileID: 7457377885136236156}
+  - component: {fileID: 7312380570596521373}
+  - component: {fileID: 7838291019276022285}
+  - component: {fileID: 1839172850203504646}
+  - component: {fileID: 6151717189659811340}
+  - component: {fileID: 8148719600609751913}
+  - component: {fileID: 4556135943655275093}
+  - component: {fileID: 1489519259286567960}
+  - component: {fileID: 3827026974784414885}
+  - component: {fileID: 1951138826211289386}
+  - component: {fileID: 1487902901000544307}
+  - component: {fileID: 2831693946660462046}
+  - component: {fileID: 2264858839795742331}
+  - component: {fileID: 3635094568382575677}
+  - component: {fileID: 8453252658399560253}
+  - component: {fileID: 5566964395880596950}
+  - component: {fileID: 8580647108978387040}
+  m_Layer: 0
+  m_Name: Prefab_WolfBoss
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6229177348368665835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.29629633, y: 0.29629633, z: 0.29629633}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &63698587524294150
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: -2424553518018739129, guid: ac8fb03f50bc9154b93d99156f418f8f, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!50 &7457377885136236156
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!58 &7312380570596521373
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 1
+--- !u!114 &7838291019276022285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b50149cacca0e42a1ba8d7be053c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
+  monsterData: {fileID: 11400000, guid: e2be5a3fc4c632544bcea3bbb5766135, type: 2}
+  hpBarPrefab: {fileID: 0}
+  sortingOrder: 10
+  stopDistance: 0
+  approachOverlap: 0.4
+  deathDelay: 5
+  damageReductionVfxPrefab: {fileID: 6879586962923623183, guid: 311dc9ef5818be749afc110f39477ae2, type: 3}
+--- !u!114 &1839172850203504646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53537b42d063ba47a057d5a9ecba58e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_MeleeCombo
+  patternName: MeleeCombo
+  isSpecial: 0
+  useRange: 0.59259266
+  telegraphTime: 2.5
+  cooldown: 10
+  chance: 30
+  phase2Mode: 0
+  phase2Only: 0
+  animState: Melee
+  drawRangeGizmo: 1
+  hitCount: 3
+  firstHitInterval: 0.4
+  hitRange: 2.962963
+  attackAngle: 120
+  telegraphPrefab: {fileID: 5757945224208542710, guid: 9b8ec2a68b0d6c8408c5c8f8531d9e8b, type: 3}
+  hitEffectPrefab: {fileID: 3774408115409620830, guid: bd31730943a8b14499c94f4943fd1c8d, type: 3}
+--- !u!114 &6151717189659811340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4209c818cf98e1b47b30a83feee1481d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_Charge
+  patternName: Charge
+  isSpecial: 0
+  useRange: 2.3703706
+  telegraphTime: 2
+  cooldown: 10
+  chance: 18
+  phase2Mode: 0
+  phase2Only: 0
+  animState: Charge
+  drawRangeGizmo: 1
+  dashDistance: 5.925926
+  dashSpeed: 6.5185194
+  bodyHitRadius: 0.35555562
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 0
+  wallProbe: 0.8
+  stopOnHit: 0.3
+  phase2SecondDashTelegraph: 0.5
+  telegraphPrefab: {fileID: 4275581020290162337, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
+  impactEffectPrefab: {fileID: 3774408115409620830, guid: bd31730943a8b14499c94f4943fd1c8d, type: 3}
+--- !u!114 &8148719600609751913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c10c3983bdc3b4585e80037e49c193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_EnergyBlast
+  patternName: EnergyBlast
+  isSpecial: 0
+  useRange: 2.962963
+  telegraphTime: 1
+  cooldown: 12
+  chance: 25
+  phase2Mode: 0
+  phase2Only: 0
+  animState: Energy
+  drawRangeGizmo: 1
+  projectilesPerVolley: 6
+  volleyCount: 3
+  volleyInterval: 0.3
+  angleStepPerVolley: -20
+  projectileSpeed: 2.3703706
+  phase2BurstDuration: 3
+  phase2BurstGap: 0.5
+  projectilePrefab: {fileID: 1044820649197100113, guid: 176e1107f92ad4946865a622eebf5daf, type: 3}
+  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+--- !u!114 &4556135943655275093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3da659f10abe246a23204dc0d53fe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_RoarWave
+  patternName: RoarWave
+  isSpecial: 1
+  useRange: 4.4444447
+  telegraphTime: 1.5
+  cooldown: 15
+  chance: 7
+  phase2Mode: 0
+  phase2Only: 0
+  animState: Roar
+  drawRangeGizmo: 1
+  projectileCount: 5
+  fireInterval: 0.5
+  projectileSpeed: 3.5555558
+  maxRange: 8.888889
+  recoveryTime: 2
+  roarOutroTime: 0.6
+  phase2DamageReduction: 0.3
+  phase2BuffDuration: 10
+  projectilePrefab: {fileID: 1044820649197100113, guid: 176e1107f92ad4946865a622eebf5daf, type: 3}
+  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+--- !u!114 &1489519259286567960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c74e4bd4009b7d4ab7831d2070bf41f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_PhantomDash
+  patternName: PhantomDash
+  isSpecial: 1
+  useRange: 4.4444447
+  telegraphTime: 2
+  cooldown: 20
+  chance: 7
+  phase2Mode: 0
+  phase2Only: 0
+  animState: Phantom
+  drawRangeGizmo: 1
+  summonCount: 3
+  summonInterval: 0.5
+  summonRadius: 0.59259266
+  phase2SummonCount: 5
+  phase1WolfStartDelay: 2
+  phase2WolfStartDelay: 0.3
+  wolfPrefab: {fileID: 290890298631119085, guid: 9dca9bd5780ada44c961e111ad73ee05, type: 3}
+  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+--- !u!114 &3827026974784414885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3e3229a03963844a5bb5260dbd67c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_LeapBlast
+  patternName: LeapBlast
+  isSpecial: 1
+  useRange: 8.888889
+  telegraphTime: 2.5
+  cooldown: 25
+  chance: 6
+  phase2Mode: 0
+  phase2Only: 0
+  animState: Leap
+  drawRangeGizmo: 1
+  hoverTime: 1
+  jumpDuration: 1.5
+  ring1Radius: 1.3333334
+  ring2Radius: 2.0740743
+  ring3Radius: 3.4074078
+  ringWarningTime: 0.5
+  phase2SecondWaveDelay: 0.7
+  phase2SecondWaveRingDelay: 0.2
+  telegraphPrefab: {fileID: 5519743591050941184, guid: 431b65e9a8a892d4b90598cd8af4c257, type: 3}
+  ringWarningPrefab: {fileID: 5519743591050941184, guid: 431b65e9a8a892d4b90598cd8af4c257, type: 3}
+  ringWarningPrefabOuter: {fileID: 6865670735945794169, guid: ae79a09fd11d8f842ac4b1fd1e389690, type: 3}
+  ringEffectPrefab: {fileID: 0}
+  ringMaskPrefab: {fileID: 0}
+--- !u!114 &1951138826211289386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e98ac52a4ae58034e9cb374d8ae96f30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_HealTotem
+  patternName: HealTotem
+  isSpecial: 1
+  useRange: 29.629635
+  telegraphTime: 1.5
+  cooldown: 35
+  chance: 10
+  phase2Mode: 0
+  phase2Only: 1
+  animState: Cast
+  drawRangeGizmo: 1
+  totemCount: 5
+  summonRadius: 1.1851853
+  totemPrefab: {fileID: 6931323245288364574, guid: a13144b011078824cb331aa5dcff7dcc, type: 3}
+  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+--- !u!114 &1487902901000544307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd0f8dc721eaeb4f9624f39c095963b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.Pattern_StoneBreak
+  patternName: StoneBreak
+  isSpecial: 1
+  useRange: 29.629635
+  telegraphTime: 1.5
+  cooldown: 45
+  chance: 10
+  phase2Mode: 0
+  phase2Only: 1
+  animState: Cast
+  drawRangeGizmo: 1
+  stoneCount: 4
+  stoneRadius: 1.7777779
+  mapCenter: {x: 0, y: 0, z: 0}
+  dashCount: 6
+  dashTelegraph: 1.5
+  dashSpeed: 6.5185194
+  dashDistance: 3.5555558
+  dashRestTime: 1
+  bodyHitRadius: 0.35555562
+  stoneBreakRadius: 0.44444448
+  stunDuration: 5
+  failDamagePercent: 0.6
+  stonePrefab: {fileID: 5574503645699197074, guid: a119e75919e9abb46b86d7958058143e, type: 3}
+  itemPickupPrefab: {fileID: 3966691219984321219, guid: 0e101020fca72c5439f594d949355531, type: 3}
+  itemMarkerPrefab: {fileID: 0}
+  dashTelegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+--- !u!114 &2831693946660462046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf92c2d5df591a7439597640d8292870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.BossPatternDriver
+  detectionRange: 2.962963
+  basicChance: 0.8
+  basicGap: 1
+  specialGap: 10
+  decisionInterval: 0.2
+  debugManualMode: 1
+  debugShowLegend: 1
+--- !u!114 &2264858839795742331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 480ad83da0bb9f641b4e8c4240381740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.BossPhaseController
+  phase2Threshold: 0.4
+  invincibleThreshold: 0.35
+  transitionDuration: 2
+  phaseCenterOffset: {x: 0, y: -8, z: 0}
+  floorHazardPrefab: {fileID: 7573604675588430897, guid: 6a74ab13879a2fa4eb805af7699087b9, type: 3}
+  phase2BasicChance: 0.6
+--- !u!114 &3635094568382575677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844d8b7b4d46d6a409bf191533c09ed7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.SandboxBossDebug
+  damageKey: 25
+  damagePerPress: 2000
+  togglePhase2Key: 30
+--- !u!95 &8453252658399560253
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1e50ba697cdb7924ea0008424cde4317, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5566964395880596950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6656d180d45be894bb0711a3925dbd52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.BossAnimator
+  animator: {fileID: 8453252658399560253}
+  phase1Controller: {fileID: 9100000, guid: 1e50ba697cdb7924ea0008424cde4317, type: 2}
+  phase2Controller: {fileID: 9100000, guid: 7c5617ed11a4e234ab48b39548b541e2, type: 2}
+  idleState: Idle
+  moveState: Move
+  stunState: Stun
+  deathState: Death
+  moveThreshold: 0.1
+  crossFade: 0.05
+--- !u!114 &8580647108978387040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417251158332801010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04200a0b843c07f439965995ef649dd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.BossHpBarLink
+  bossName: "\uBCF4\uC2A4"
+  stopGrowOnLink: 1
