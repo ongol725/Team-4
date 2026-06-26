@@ -9,9 +9,9 @@ public static class SynergyLayers
 {
     /// <summary>바닥 깔개 — 성역·난공불락 충격파·대부호 골드코인 (캐릭터 아래로 깔림)</summary>
     public const int Ground    = -20;
-    /// <summary>캐릭터 아래 효과 — 마왕 소용돌이·기어</summary>
+    /// <summary>캐릭터 뒤 — 소환수 전반(골렘·페어리·핀볼·대정령·기어)·마왕 소용돌이</summary>
     public const int BelowChar = 5;
-    /// <summary>캐릭터 평면 — 플레이어·몬스터·소환수</summary>
+    /// <summary>캐릭터 평면 — 플레이어·몬스터</summary>
     public const int Character = 10;
     /// <summary>스킬 효과 — 투사체·낙뢰·광역 VFX·공격 이펙트 (캐릭터 위)</summary>
     public const int Effect    = 30;

@@ -47,6 +47,6 @@ MonoBehaviour:
   - {fileID: 816300311, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
   - {fileID: 8495549, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
   animFps: 12
-  visualSize: 0.8
+  visualSize: 3
   dropFrames: []
   dropFps: 8

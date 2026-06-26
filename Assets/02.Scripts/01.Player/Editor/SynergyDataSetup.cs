@@ -210,7 +210,7 @@ namespace BagSurvivor.SynergyEditor
             // 스펙: 8초마다 화면 내 모든 적에게 대량 피해(range 100 = 전체 화면 커버).
             d["SK_SPIRIT_NOVA"] = Sk("SK_SPIRIT_NOVA", "대정령 광역 강타",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.AreaCenter,
-                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:0f, range:100f);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:0f, range:100f, vSize:3f); // 발동 모션 크기
 
             return d;
         }
@@ -570,7 +570,7 @@ namespace BagSurvivor.SynergyEditor
             SummonAIType ai, ScalingStatType scaling,
             float atk, float spd, float atkCd, float atkRange, float dur,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 10, float atkFxScale = 0.5f)
+            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 5, float atkFxScale = 0.5f)
         {
             string path = $"{SummonDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SummonData>(path);
