@@ -4,7 +4,7 @@
 // Unity 메뉴: BagSurvivor > Setup > Create Character System
 //
 // 한 번 실행하면:
-//  1) Assets/09.ScriptableObjects/Characters/ 에 SO 에셋 3개 생성
+//  1) Assets/Resources/ScriptableObjects/Characters/ 에 SO 에셋 3개 생성
 //  2) Assets/03.Prefabs/06.Gimmicks/CharacterManager.prefab 생성
 //  3) Assets/03.Prefabs/05.UI/CharacterSelectUI.prefab 생성
 // ============================================================
@@ -18,7 +18,7 @@ namespace BagSurvivor.CharacterEditor
 {
     public static class CharacterSystemSetup
     {
-        private const string SoFolder      = "Assets/09.ScriptableObjects/Characters";
+        private const string SoFolder      = "Assets/Resources/ScriptableObjects/Characters";
         private const string GimmickFolder = "Assets/03.Prefabs/06.Gimmicks";
         private const string UiFolder      = "Assets/03.Prefabs/05.UI";
 

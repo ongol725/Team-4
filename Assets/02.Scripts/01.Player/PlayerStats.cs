@@ -84,7 +84,7 @@ public class PlayerStats : MonoBehaviour
 
     private void ApplyCharacterData()
     {
-        SO_CharacterData charData = CharacterManager.Instance?.SelectedCharacter;
+        SO_CharacterData charData = CharacterManager.GetSelectedOrDefault();
         if (charData == null) return;
 
         maxHp                 = charData.maxHp;

@@ -18,11 +18,11 @@ MonoBehaviour:
   skillType: 1
   targetType: 2
   scalingStat: 3
-  dmgMultiplier: 10
+  dmgMultiplier: 5
   hitCount: 1
   hitInterval: 0.1
   extraCount: 0
-  rangeRadius: 5
+  rangeRadius: 2
   duration: 0
   cooldown: 0
   fixedEffect: 4

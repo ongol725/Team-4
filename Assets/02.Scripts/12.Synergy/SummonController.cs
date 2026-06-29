@@ -13,6 +13,7 @@ public class SummonController : MonoBehaviour
 
     private float _atkTimer;
     private float _uniqueSkillTimer;
+    private float _lifeTimer;   // data.duration > 0 인 소환수의 누적 생존 시간
 
     // ── FollowAttack FSM ─────────────────────────────────────────
     private enum SummonState { Wander, Chase }
@@ -64,6 +65,7 @@ public class SummonController : MonoBehaviour
 
         _atkTimer         = 0f;
         _uniqueSkillTimer = 0f;
+        _lifeTimer        = 0f;
         _mainCam          = Camera.main;
 
         // 여러 요정 소환 시 균등 배치: 0°, 120°, 240° 등
@@ -142,6 +144,13 @@ public class SummonController : MonoBehaviour
     private void Update()
     {
         if (_data == null || _player == null) return;
+
+        // 지속시간 소환수: data.duration 경과 시 소멸 (성역 등). -1 이하면 영구 유지.
+        if (_data.duration > 0f)
+        {
+            _lifeTimer += Time.deltaTime;
+            if (_lifeTimer >= _data.duration) { Destroy(gameObject); return; }
+        }
 
         _atkTimer         += Time.deltaTime;
         _uniqueSkillTimer += Time.deltaTime;
@@ -317,12 +326,11 @@ public class SummonController : MonoBehaviour
             _playerHealth.Heal(healAmt);
         }
 
-        // 일반 근거리 공격
-        var target = FindNearest(_data.atkRange);
-        if (target != null)
+        // 광역 공격: 성역(atkRange) 안의 모든 적을 동시에 타격 (단일 대상이 아님)
+        foreach (var mc in GetEnemiesInRange(_data.atkRange))
         {
-            Vector2 kb = ((Vector2)target.transform.position - (Vector2)transform.position).normalized;
-            target.TakeDamage(_attackPower, 1f, kb);
+            Vector2 kb = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
+            mc.TakeDamage(_attackPower, 1f, kb);
         }
     }
 
@@ -333,6 +341,10 @@ public class SummonController : MonoBehaviour
     {
         // 이동
         transform.position += (Vector3)(_bounceVel * Time.deltaTime);
+
+        // 진행 방향에 맞춰 스프라이트 좌우 반전 (먼지 등 애니메이션이 이동 방향을 따르도록)
+        if (_mainSr != null && Mathf.Abs(_bounceVel.x) > 0.01f)
+            _mainSr.flipX = _bounceVel.x < 0f;
 
         // 카메라 경계에서 반사 (Camera.main 대신 캐싱된 _mainCam 사용)
         var cam = _mainCam != null ? _mainCam : (_mainCam = Camera.main);

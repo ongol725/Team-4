@@ -56,12 +56,22 @@ public class SynergyManager : MonoBehaviour
     private Transform                    _player;
     private PlayerHealth                 _playerHealth;
     private PlayerMovement               _playerMovement;
+    private PlayerStats                  _playerStats;
     private PlayerAttack                 _playerAttack;
     private BattleLoadout                _loadout;
 
+    // 과부화 패널티: 진입 직전 피해량 배율을 저장해 두고 해제 시 원래 값으로 복구
+    // (캐릭터 고유 배율이 1이 아닐 수 있으므로 1f로 강제하지 않는다)
+    private float _savedAtkMul = 1f;
+
     private readonly List<Coroutine>         _skillRoutines = new();
+    private readonly List<Coroutine>         _summonRoutines = new(); // duration>0 소환수 재시전 루프
     private readonly List<SummonController>  _summons       = new();
     private Transform                        _summonRoot;
+
+    // 지속시간 소환수(성역 등)가 소멸한 뒤 다시 시전될 때까지의 빈 시간(초).
+    // 실제 재시전 주기 = data.duration + 이 값. (등급↑ = duration↑ → 가동률↑)
+    private const float SummonRecastGap = 2f;
 
     // 플레이어를 감싸며 따라다니는 영구 이펙트(마왕 소용돌이 등). Refresh/파괴 시 정리.
     private readonly List<GameObject>        _auraVFX       = new();
@@ -114,6 +124,7 @@ public class SynergyManager : MonoBehaviour
         _player         = playerGO.transform;
         _playerHealth   = playerGO.GetComponent<PlayerHealth>();
         _playerMovement = playerGO.GetComponent<PlayerMovement>();
+        _playerStats    = playerGO.GetComponent<PlayerStats>();
         _playerAttack   = playerGO.GetComponent<PlayerAttack>();
     }
 
@@ -149,6 +160,8 @@ public class SynergyManager : MonoBehaviour
         // 기존 루프/소환 전부 정리
         foreach (var co in _skillRoutines) if (co != null) StopCoroutine(co);
         _skillRoutines.Clear();
+        foreach (var co in _summonRoutines) if (co != null) StopCoroutine(co);
+        _summonRoutines.Clear();
         foreach (var s in _summons) if (s != null) Destroy(s.gameObject);
         _summons.Clear();
         foreach (var v in _auraVFX) if (v != null) Destroy(v);
@@ -180,6 +193,14 @@ public class SynergyManager : MonoBehaviour
             {
                 var skill = skillBinding.skill;
                 dmgBase = Mathf.RoundToInt(_loadout.GetScaledBase(skill.scalingStat) * skill.dmgMultiplier);
+
+                // 지속 빔(과부화 레이저): 트리거별 발사 루프 대신 추종 빔 1개 생성 → 지속 데미지
+                if (skill.skillType == SkillType.Beam)
+                {
+                    SpawnBeam(skill, dmgBase);
+                    Debug.Log($"[SynergyManager] Beam: {entry.type} {entry.grade} — {skill.skillName}");
+                    continue;
+                }
 
                 switch (skill.triggerType)
                 {
@@ -219,7 +240,11 @@ public class SynergyManager : MonoBehaviour
             {
                 var summon    = summonBinding.summon;
                 int summonAtk = Mathf.RoundToInt(_loadout.GetScaledBase(summon.scalingStat) * summon.atkMultiplier);
-                SpawnMinions(summon, summonBinding.count, summonAtk);
+                if (summon.duration > 0f)
+                    // 지속시간형(성역): 소멸 후 주기적으로 재시전
+                    _summonRoutines.Add(StartCoroutine(SummonRespawnLoop(summon, summonBinding.count, summonAtk)));
+                else
+                    SpawnMinions(summon, summonBinding.count, summonAtk);
                 Debug.Log($"[SynergyManager] Summon: {entry.type} {entry.grade} — {summon.summonName} x{summonBinding.count}");
             }
         }
@@ -361,17 +386,24 @@ public class SynergyManager : MonoBehaviour
         }
     }
 
-    private void ApplyOverloadPenalty(float speedRate)
+    private void ApplyOverloadPenalty(float rate)
     {
         if (_playerMovement != null)
-            _playerMovement.speedMultiplier = speedRate;
-        Debug.Log($"[과부화] 패널티 발동 (이동속도 ×{speedRate:F2})");
+            _playerMovement.speedMultiplier = rate;
+        if (_playerStats != null)
+        {
+            _savedAtkMul = _playerStats.attackMultiplier;
+            _playerStats.attackMultiplier *= rate;
+        }
+        Debug.Log($"[과부화] 패널티 발동 (이동속도·피해량 ×{rate:F2})");
     }
 
     private void RemoveOverloadPenalty()
     {
         if (_playerMovement != null)
             _playerMovement.speedMultiplier = 1f;
+        if (_playerStats != null)
+            _playerStats.attackMultiplier = _savedAtkMul;
         Debug.Log("[과부화] 패널티 해제");
     }
 
@@ -394,12 +426,32 @@ public class SynergyManager : MonoBehaviour
                 for (int i = 0; i < count && enemies.Count > 0; i++)
                 {
                     var target = enemies[Random.Range(0, enemies.Count)];
-                    ApplyHit(skill, target, damage);
                     // 다수 대상(티탄 돌·과부화 비눗방울 등)은 명중 지점마다 이펙트를 띄운다.
                     if (!isProj) SpawnVFX(skill, target.transform.position);
+                    // damageDelay > 0 이면 VFX(연출) 진행 후 데미지 적용 (티탄: 돌이 떨어진 뒤 타격)
+                    if (skill.damageDelay > 0f)
+                        StartCoroutine(DelayedHit(skill, target, damage, skill.damageDelay));
+                    else
+                        ApplyHit(skill, target, damage);
                     enemies.Remove(target);
                 }
                 return; // VFX를 대상별로 처리했으므로 하단 공용 VFX 생략
+            }
+
+            case SkillTargetType.RandomAroundSelf:
+            {
+                // 과부화 비눗방울: 적을 조준하지 않고 플레이어 주변 랜덤 위치에 흩뿌린 뒤 그 자리 적을 타격.
+                // rangeRadius = 흩뿌리는 반경, visualSize = 비눗방울 지름(타격 반경 = 그 절반).
+                int   count   = skill.extraCount > 0 ? skill.extraCount : 1;
+                float scatter = skill.rangeRadius  > 0f ? skill.rangeRadius  : 4f;
+                float hitR    = skill.visualSize   > 0f ? skill.visualSize * 0.5f : 1f;
+                for (int i = 0; i < count; i++)
+                {
+                    Vector3 pos = (Vector2)_player.position + Random.insideUnitCircle * scatter;
+                    SpawnVFX(skill, pos);
+                    foreach (var mc in GetEnemiesInRange(pos, hitR)) HitEnemy(skill, mc, damage);
+                }
+                return; // 비눗방울별 VFX 처리 완료
             }
 
             case SkillTargetType.AreaCenter:
@@ -482,7 +534,11 @@ public class SynergyManager : MonoBehaviour
                 {
                     Vector3 hitPos = cur.transform.position;
                     HitEnemy(skill, cur, damage);
-                    // 노드별 전기 이펙트는 생략 — 적과 적을 잇는 체인(연결선)만으로 표현
+                    // 노드 임팩트: 타격 지점마다 nodeFrames(과부화=OVERLOAD2.1_Pr) 1회 재생. 비어 있으면 연결선만.
+                    if (skill.nodeFrames != null && skill.nodeFrames.Length > 0)
+                        SpawnFramesVFX(skill.nodeFrames, hitPos,
+                                       skill.visualSize > 0f ? skill.visualSize : 1.5f,
+                                       skill.animFps * 2f, SynergyLayers.Link); // 2배속 재생 → 재생시간 절반
                     chainPts.Add(hitPos);
                     pool.Remove(cur);
                     cur = FindNearest(pool, hitPos); // 다음 홉은 직전 적 기준 최근접
@@ -512,6 +568,15 @@ public class SynergyManager : MonoBehaviour
             FireProjectileAt(skill, mc, damage);
         else
             HitEnemy(skill, mc, damage);
+    }
+
+    /// <summary>VFX 연출이 진행된 뒤(delay초 후) 데미지를 적용한다(티탄 돌 떨구기 등).
+    /// 지연 중 대상이 죽거나 사라지면 안전하게 무시한다.</summary>
+    private IEnumerator DelayedHit(SO_SkillData skill, MonsterController mc, int damage, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (mc == null || mc.IsDead || !mc.gameObject.activeInHierarchy) yield break;
+        ApplyHit(skill, mc, damage);
     }
 
     /// <summary>플레이어 위치에서 타겟 방향으로 투사체를 발사한다(ProjectileBase 재사용).</summary>
@@ -694,9 +759,51 @@ public class SynergyManager : MonoBehaviour
         float size = skill.visualSize > 0f ? skill.visualSize : Mathf.Max(1f, skill.rangeRadius * 0.3f);
         NormalizeScale(go, sr.sprite, size);
 
+        // 세로(Y) 비균등 확대 — 일렉트로 번개 기둥처럼 위로 길게 늘릴 때 사용
+        if (skill.visualStretchY > 0f && skill.visualStretchY != 1f)
+        {
+            var s = go.transform.localScale;
+            go.transform.localScale = new Vector3(s.x, s.y * skill.visualStretchY, s.z);
+        }
+
+        // 하단 앵커: 중심이 아니라 스프라이트 하단이 대상에 닿도록 위로 절반만큼 올린다(낙뢰 등).
+        if (skill.vfxAnchorBottom)
+        {
+            float h = sr.sprite.bounds.size.y * go.transform.localScale.y;
+            go.transform.position = pos + new Vector3(0f, h * 0.5f, 0f);
+        }
+
         go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
 
-        float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + 0.1f;
+        // 애니 재생 시간 + 마지막 프레임 유지 시간(vfxLingerTime) 후 소멸
+        float linger = skill.vfxLingerTime > 0f ? skill.vfxLingerTime : 0.1f;
+        float life = skill.animFrames.Length / Mathf.Max(1f, skill.animFps) + linger;
+        yield return new WaitForSeconds(life);
+        if (go != null) Destroy(go);
+    }
+
+    /// <summary>지정한 프레임 배열을 pos에서 1회 재생하는 일회성 VFX(체인 노드 임팩트 등).</summary>
+    private void SpawnFramesVFX(Sprite[] frames, Vector3 pos, float size, float fps, int sortingOrder)
+    {
+        if (frames == null || frames.Length == 0) return;
+        StartCoroutine(FramesVFXRoutine(frames, pos, size, fps, sortingOrder));
+    }
+
+    private IEnumerator FramesVFXRoutine(Sprite[] frames, Vector3 pos, float size, float fps, int sortingOrder)
+    {
+        var go = new GameObject("SynergyNodeVFX");
+        go.transform.SetParent(transform);
+        go.transform.position = pos;
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = sortingOrder;
+        sr.sprite = frames[0];
+        NormalizeScale(go, sr.sprite, size > 0f ? size : 1f);
+
+        float useFps = fps > 0f ? fps : 12f;
+        go.AddComponent<SpriteSheetAnimator>().Play(frames, useFps, loop: false);
+
+        float life = frames.Length / Mathf.Max(1f, useFps) + 0.1f;
         yield return new WaitForSeconds(life);
         if (go != null) Destroy(go);
     }
@@ -725,6 +832,27 @@ public class SynergyManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 지속 빔(과부화 레이저)을 1개 생성한다. 플레이어가 바라보는 방향을 추적하며 주기적으로
+    /// 빔 경로의 적에게 데미지를 준다. Refresh/파괴 시 _auraVFX 정리 루틴이 함께 제거한다.
+    /// rangeRadius=빔 길이, visualSize=빔 두께, cooldown=데미지 틱 간격으로 해석한다.
+    /// </summary>
+    private void SpawnBeam(SO_SkillData skill, int damage)
+    {
+        if (_player == null) FindPlayerRefs();
+        if (_player == null) return;
+
+        var go   = new GameObject($"SynergyBeam_{skill.skillID}");
+        go.transform.SetParent(transform);
+        var beam = go.AddComponent<SynergyBeam>();
+        beam.Init(_player, _playerAttack,
+                  length: skill.rangeRadius, width: skill.visualSize,
+                  damage: damage, tickInterval: skill.cooldown,
+                  frames: skill.animFrames, fps: skill.animFps,
+                  sortingOrder: skill.vfxSortingOrder);
+        _auraVFX.Add(go);
+    }
+
+    /// <summary>
     /// 적과 적을 잇는 번개를 그린다(체인라이트닝).
     /// seg 스프라이트가 있으면 구간 길이만큼 이미지를 반복(타일)해 깔고, 없으면 단색 LineRenderer로 대체한다.
     /// </summary>
@@ -735,9 +863,11 @@ public class SynergyManager : MonoBehaviour
         // seg 없거나 크기 이상 → 단색 선 fallback
         if (seg == null || seg.bounds.size.y < 0.001f) { SpawnChainLineColored(points); return; }
 
-        const float thickness = 0.5f;                 // 번개 두께(월드 유닛)
+        const float thickness = 1.0f;                 // 번개 두께(월드 유닛)
         float nativeH = seg.bounds.size.y;            // 스프라이트 1장 높이(스케일1 기준)
         float scale   = thickness / nativeH;          // 두께에 맞춘 스케일
+        // 이음새 빈틈 보정: 각 구간을 번개 이미지 1장 길이의 5/10 만큼 늘려 이웃 구간과 겹치게 한다.
+        float overlap = seg.bounds.size.x * scale * 0.5f;
 
         for (int i = 0; i < points.Count - 1; i++)
         {
@@ -757,8 +887,8 @@ public class SynergyManager : MonoBehaviour
             sr.sortingOrder = SynergyLayers.Link;
             sr.drawMode     = SpriteDrawMode.Tiled;     // 길이만큼 가로로 반복
             sr.tileMode     = SpriteTileMode.Continuous;
-            // 로컬 size: 가로=구간 길이를 스케일로 환산, 세로=원본 높이(→ 월드 두께)
-            sr.size = new Vector2(len / scale, nativeH);
+            // 로컬 size: 가로=구간 길이(+겹침 보정)를 스케일로 환산, 세로=원본 높이(→ 월드 두께)
+            sr.size = new Vector2((len + overlap) / scale, nativeH);
 
             StartCoroutine(FadeSprite(sr, go, 0.25f));
         }
@@ -774,7 +904,7 @@ public class SynergyManager : MonoBehaviour
         lr.useWorldSpace   = true;
         lr.positionCount   = points.Count;
         for (int i = 0; i < points.Count; i++) lr.SetPosition(i, points[i]);
-        lr.widthMultiplier = 0.18f;
+        lr.widthMultiplier = 0.36f;
         lr.numCapVertices  = 2;
         lr.numCornerVertices = 2;
         lr.material        = new Material(Shader.Find("Sprites/Default"));
@@ -854,10 +984,24 @@ public class SynergyManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 소환형
 
+    /// <summary>지속시간 소환수(성역)를 소멸 후 SummonRecastGap 만큼 쉬었다가 다시 시전하는 루프.</summary>
+    private IEnumerator SummonRespawnLoop(SO_SummonData data, int count, int atkPower)
+    {
+        while (true)
+        {
+            SpawnMinions(data, count, atkPower);
+            // 소환수는 data.duration 후 스스로 소멸 → 빈 시간(Gap) 뒤 재시전
+            yield return new WaitForSeconds(data.duration + SummonRecastGap);
+        }
+    }
+
     private void SpawnMinions(SO_SummonData data, int count, int atkPower)
     {
         if (_player == null) FindPlayerRefs();
         if (_player == null) return;
+
+        // 자가 소멸한(파괴된) 소환수의 null 항목 제거 — 재시전 누적으로 리스트가 무한히 커지는 것 방지
+        _summons.RemoveAll(s => s == null);
 
         for (int i = 0; i < count; i++)
         {

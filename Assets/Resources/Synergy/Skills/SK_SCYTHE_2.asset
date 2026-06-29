@@ -31,7 +31,7 @@ MonoBehaviour:
   effectValue: 0
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
-  projectileSpeed: 15
+  projectileSpeed: 7.5
   pierceCount: 999
   animFrames:
   - {fileID: -794989471, guid: 98da75eed8a704f439c61185104545a6, type: 3}
@@ -50,7 +50,7 @@ MonoBehaviour:
   - {fileID: -693005756, guid: 98da75eed8a704f439c61185104545a6, type: 3}
   - {fileID: -379721359, guid: 98da75eed8a704f439c61185104545a6, type: 3}
   - {fileID: -1213615547, guid: 98da75eed8a704f439c61185104545a6, type: 3}
-  animFps: 12
-  visualSize: 1.6
+  animFps: 30
+  visualSize: 2.4
   dropFrames: []
   dropFps: 8

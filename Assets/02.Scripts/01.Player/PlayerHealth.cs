@@ -42,6 +42,14 @@ public class PlayerHealth : MonoBehaviour
     private Color baseColor = Color.white;
     private Coroutine flashCoroutine;
 
+    // 방어구 HP/재생 자체 적용 (전투 씬에 PlayerStats가 없을 때 PlayerHealth가 직접 브릿지)
+    private int         _baseMaxHP;       // 캐릭터 기본 최대체력(방어구 보너스 제외)
+    private bool        _selfBridge;      // PlayerStats가 없으면 true → 직접 로드아웃 반영
+    private GameManager _gm;
+    private Coroutine   _regenCoroutine;
+    private int         _currentRegen = 0;   // 현재 적용 중인 10초당 재생량
+    private bool        _inCombat     = false; // 전투 구역 내 여부 — 비전투 시 재생 정지
+
     public int CurrentHP => currentHP;
     public int MaxHP => maxHP;
     public bool IsDead => isDead;
@@ -51,9 +59,13 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (spriteRenderer != null) baseColor = spriteRenderer.color;
 
-        // PlayerStats 없이도 캐릭터 maxHp 반영
-        var charData = CharacterManager.Instance?.SelectedCharacter;
+        // PlayerStats 없이도 캐릭터 maxHp 반영 (미선택/씬에 CharacterManager 없으면 전사 폴백)
+        var charData = CharacterManager.GetSelectedOrDefault();
         if (charData != null) maxHP = charData.maxHp;
+
+        _baseMaxHP  = maxHP;
+        // PlayerStats가 같은 GameObject에 있으면 그쪽이 방어구 HP를 처리 → 중복 방지
+        _selfBridge = GetComponent<PlayerStats>() == null;
     }
 
     private void Start()
@@ -63,8 +75,70 @@ public class PlayerHealth : MonoBehaviour
 
         currentHP = maxHP;
         isDead = false;
+
+        // 전투 구역 진입/이탈 추적 — 비전투 상태에서는 체력 재생을 멈춘다.
+        CombatZone.onCombatStateChanged += OnCombatStateChanged;
+
+        // PlayerStats가 없으면 PlayerHealth가 직접 방어구 HP/재생을 반영한다.
+        if (_selfBridge)
+        {
+            _gm = GameManager.Instance;
+            if (_gm != null)
+            {
+                _gm.onLoadoutReady += OnLoadoutReady;
+                if (_gm.CurrentLoadout != null) OnLoadoutReady(_gm.CurrentLoadout);
+            }
+        }
+
         // 모든 Start() 완료 후 갱신 — PlayerStateHUD.Start()의 mock 값보다 늦게 실행 보장
         StartCoroutine(InitHudLate());
+    }
+
+    private void OnDestroy()
+    {
+        if (_gm != null) _gm.onLoadoutReady -= OnLoadoutReady;
+        CombatZone.onCombatStateChanged -= OnCombatStateChanged;
+        if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);
+    }
+
+    private void OnCombatStateChanged(bool inCombat) => _inCombat = inCombat;
+
+    /// <summary>전투 로드아웃의 방어구 HP 보너스/재생을 체력에 반영한다(PlayerStats 부재 시).</summary>
+    private void OnLoadoutReady(BattleLoadout loadout)
+    {
+        if (loadout == null) return;
+
+        int newMax = Mathf.Max(1, _baseMaxHP + loadout.TotalHpBonus);
+        // 현재 체력 "비율"을 유지하며 최대체력을 변경한다.
+        // (장착/해제를 반복해도 풀피로 회복되지 않게 — 재장착 익스플로잇 방지)
+        float ratio = maxHP > 0 ? (float)currentHP / maxHP : 1f;
+        maxHP = newMax;
+        int newCur = Mathf.RoundToInt(newMax * ratio);
+        if (currentHP > 0 && newCur < 1) newCur = 1; // 살아있으면 최소 1 보장
+        currentHP = Mathf.Clamp(newCur, 0, maxHP);
+        UpdateHud();
+
+        // 재생량이 바뀐 경우에만 루프를 재시작한다.
+        // (실시간 전달로 OnLoadoutReady가 자주 호출돼도 10초 타이머가 리셋되지 않도록)
+        if (loadout.TotalHpRegen != _currentRegen)
+        {
+            _currentRegen = loadout.TotalHpRegen;
+            if (_regenCoroutine != null) { StopCoroutine(_regenCoroutine); _regenCoroutine = null; }
+            if (_currentRegen > 0)
+                _regenCoroutine = StartCoroutine(RegenLoop());
+        }
+    }
+
+    // 10초마다 _currentRegen만큼 회복 (재생량은 OnLoadoutReady에서 갱신)
+    private IEnumerator RegenLoop()
+    {
+        var wait = new WaitForSeconds(10f);
+        while (!isDead && _currentRegen > 0)
+        {
+            yield return wait;
+            if (_inCombat) Heal(_currentRegen); // 전투 상태에서만 재생
+        }
+        _regenCoroutine = null;
     }
 
     private System.Collections.IEnumerator InitHudLate()
