@@ -534,7 +534,11 @@ public class SynergyManager : MonoBehaviour
                 {
                     Vector3 hitPos = cur.transform.position;
                     HitEnemy(skill, cur, damage);
-                    // 노드별 전기 이펙트는 생략 — 적과 적을 잇는 체인(연결선)만으로 표현
+                    // 노드 임팩트: 타격 지점마다 nodeFrames(과부화=OVERLOAD2.1_Pr) 1회 재생. 비어 있으면 연결선만.
+                    if (skill.nodeFrames != null && skill.nodeFrames.Length > 0)
+                        SpawnFramesVFX(skill.nodeFrames, hitPos,
+                                       skill.visualSize > 0f ? skill.visualSize : 1.5f,
+                                       skill.animFps * 2f, SynergyLayers.Link); // 2배속 재생 → 재생시간 절반
                     chainPts.Add(hitPos);
                     pool.Remove(cur);
                     cur = FindNearest(pool, hitPos); // 다음 홉은 직전 적 기준 최근접
@@ -771,6 +775,32 @@ public class SynergyManager : MonoBehaviour
         if (go != null) Destroy(go);
     }
 
+    /// <summary>지정한 프레임 배열을 pos에서 1회 재생하는 일회성 VFX(체인 노드 임팩트 등).</summary>
+    private void SpawnFramesVFX(Sprite[] frames, Vector3 pos, float size, float fps, int sortingOrder)
+    {
+        if (frames == null || frames.Length == 0) return;
+        StartCoroutine(FramesVFXRoutine(frames, pos, size, fps, sortingOrder));
+    }
+
+    private IEnumerator FramesVFXRoutine(Sprite[] frames, Vector3 pos, float size, float fps, int sortingOrder)
+    {
+        var go = new GameObject("SynergyNodeVFX");
+        go.transform.SetParent(transform);
+        go.transform.position = pos;
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = sortingOrder;
+        sr.sprite = frames[0];
+        NormalizeScale(go, sr.sprite, size > 0f ? size : 1f);
+
+        float useFps = fps > 0f ? fps : 12f;
+        go.AddComponent<SpriteSheetAnimator>().Play(frames, useFps, loop: false);
+
+        float life = frames.Length / Mathf.Max(1f, useFps) + 0.1f;
+        yield return new WaitForSeconds(life);
+        if (go != null) Destroy(go);
+    }
+
     /// <summary>
     /// 플레이어에 부착되어 끊김 없이 루프 재생되는 영구 오라를 1회 생성한다(마왕 소용돌이).
     /// 데미지는 별도 SkillLoop가 처리하며, 이 오라는 순수 비주얼이다. Refresh/파괴 시 정리된다.
@@ -829,6 +859,8 @@ public class SynergyManager : MonoBehaviour
         const float thickness = 1.0f;                 // 번개 두께(월드 유닛)
         float nativeH = seg.bounds.size.y;            // 스프라이트 1장 높이(스케일1 기준)
         float scale   = thickness / nativeH;          // 두께에 맞춘 스케일
+        // 이음새 빈틈 보정: 각 구간을 번개 이미지 1장 길이의 5/10 만큼 늘려 이웃 구간과 겹치게 한다.
+        float overlap = seg.bounds.size.x * scale * 0.5f;
 
         for (int i = 0; i < points.Count - 1; i++)
         {
@@ -848,8 +880,8 @@ public class SynergyManager : MonoBehaviour
             sr.sortingOrder = SynergyLayers.Link;
             sr.drawMode     = SpriteDrawMode.Tiled;     // 길이만큼 가로로 반복
             sr.tileMode     = SpriteTileMode.Continuous;
-            // 로컬 size: 가로=구간 길이를 스케일로 환산, 세로=원본 높이(→ 월드 두께)
-            sr.size = new Vector2(len / scale, nativeH);
+            // 로컬 size: 가로=구간 길이(+겹침 보정)를 스케일로 환산, 세로=원본 높이(→ 월드 두께)
+            sr.size = new Vector2((len + overlap) / scale, nativeH);
 
             StartCoroutine(FadeSprite(sr, go, 0.25f));
         }

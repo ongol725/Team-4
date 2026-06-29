@@ -782,6 +782,22 @@ namespace BagSurvivor.SynergyEditor
                 EditorUtility.SetDirty(skill);
             }
 
+            // ── 노드 임팩트 프레임 (체인라이트닝 등) ──────────────────────
+            // 연결선은 animFrames(OVERLOAD2_Pr), 노드 임팩트는 nodeFrames(OVERLOAD2.1_Pr)로 분리.
+            var nodeSheetMap = new Dictionary<string, string>
+            {
+                { "SK_OVERLOAD_CHAIN", "OVERLOAD2.1_Pr" },
+            };
+            foreach (var kvp in nodeSheetMap)
+            {
+                var skill = AssetDatabase.LoadAssetAtPath<SO_SkillData>($"{SkillDir}/{kvp.Key}.asset");
+                if (skill == null) continue;
+                var nodeFrames = LoadLargeFramesSorted($"{sheetDir}/{kvp.Value}.png");
+                if (nodeFrames.Length == 0) continue;
+                skill.nodeFrames = nodeFrames;
+                EditorUtility.SetDirty(skill);
+            }
+
             AssetDatabase.SaveAssets();
             Debug.Log($"[SynergyDataSetup] 스킬 발동 비주얼(시트 애니메이션) {filled}개 적용 완료");
         }
