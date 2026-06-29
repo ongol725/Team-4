@@ -90,13 +90,13 @@ namespace BagSurvivor.SynergyEditor
 
             // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy (기획서: 무작위 낙뢰 1/3개) ──
             // 번개: 가로:세로 = 1:1.5 비율 유지(stretchY 1.5), 전체 크기 vSize 2.4
-            // 낙뢰: 캐릭터 주변 일정 반경(range=6) 내 랜덤 적 타격, 애니 2배속(fps 24)
+            // 낙뢰: 캐릭터 주변 일정 반경(range=6) 내 랜덤 적 타격, 애니 4배속(fps 48)
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:1, vSize:2.4f, stretchY:1.5f, fps:24f);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:1, vSize:2.4f, stretchY:1.5f, fps:48f);
             d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:3, vSize:2.4f, stretchY:1.5f, fps:24f);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:3, vSize:2.4f, stretchY:1.5f, fps:48f);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
             // 낫: 투사체 표시 크기 2배(기본 0.8 → 1.6)
