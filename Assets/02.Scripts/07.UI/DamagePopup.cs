@@ -1,0 +1,109 @@
+// ============================================================
+// DamagePopup.cs
+// 몬스터 피격 시 머리 위에 데미지 숫자를 띄우는 플로팅 텍스트 (메이플식)
+//  - World-space TextMeshPro (캔버스 불필요)
+//  - 자체 정적 풀(Queue) 내장 → 모든 씬에서 안전, GC 최소화
+//  - 폰트: Resources/Fonts/BoldDunggeunmo SDF Damage (외곽선 머티리얼 포함)
+//  - 사용: DamagePopup.Show(worldPos, amount);
+// ============================================================
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+namespace BagSurvivor
+{
+    public class DamagePopup : MonoBehaviour
+    {
+        // ── 튜닝 값 (느낌 보고 조절) ──────────────────────────
+        const float Lifetime = 0.8f;     // 총 표시 시간(초)
+        const float RiseSpeed = 1.8f;    // 위로 떠오르는 초기 속도
+        const float Gravity = 2.2f;      // 떠오른 뒤 살짝 감속(아치 느낌)
+        const float FontSize = 6f;       // 월드 폰트 크기 (작으면 키울 것)
+        const float HitYOffset = 0.7f;   // 피격 위치에서 위로 띄울 높이
+        const int SortingOrder = 100;    // 스프라이트/이펙트(≈10) 위로 보이게
+        static readonly Color NormalColor = Color.white;
+        static readonly Color CritColor = new Color(1f, 0.82f, 0.2f);
+
+        // ── 풀 ───────────────────────────────────────────────
+        static readonly Queue<DamagePopup> pool = new Queue<DamagePopup>();
+        static TMP_FontAsset font;
+
+        TextMeshPro tmp;
+        float age;
+        Vector3 vel;
+        Color baseColor;
+
+        /// <summary>피격 지점(월드)에 데미지 숫자를 띄웁니다. overrideColor 지정 시 그 색으로(예: 플레이어 피격=연한 빨강).</summary>
+        public static void Show(Vector3 worldPos, int amount, bool isCritical = false, Color? overrideColor = null)
+        {
+            DamagePopup p = pool.Count > 0 ? pool.Dequeue() : Create();
+            if (p == null) return;
+
+            // 겹치는 숫자가 완전히 포개지지 않도록 살짝 흩뿌림
+            Vector3 pos = worldPos + new Vector3(Random.Range(-0.2f, 0.2f), HitYOffset, 0f);
+            p.Setup(pos, amount, isCritical, overrideColor);
+        }
+
+        static DamagePopup Create()
+        {
+            if (font == null)
+            {
+                font = Resources.Load<TMP_FontAsset>("Fonts/BoldDunggeunmo SDF Damage");
+                if (font == null)
+                    Debug.LogWarning("[DamagePopup] 폰트를 찾지 못했습니다: Resources/Fonts/BoldDunggeunmo SDF Damage");
+            }
+
+            GameObject go = new GameObject("DamagePopup");
+            DontDestroyOnLoad(go); // 씬 전환에도 풀(정적 Queue) 유효성 유지
+
+            DamagePopup p = go.AddComponent<DamagePopup>();
+            TextMeshPro tmp = go.AddComponent<TextMeshPro>();
+            if (font != null) tmp.font = font; // 폰트 기본 머티리얼(외곽선) 자동 적용
+            tmp.fontSize = FontSize;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.enableWordWrapping = false;
+
+            MeshRenderer mr = go.GetComponent<MeshRenderer>();
+            if (mr != null) mr.sortingOrder = SortingOrder;
+
+            p.tmp = tmp;
+            go.SetActive(false);
+            return p;
+        }
+
+        void Setup(Vector3 pos, int amount, bool crit, Color? overrideColor)
+        {
+            transform.position = pos;
+            transform.localScale = Vector3.one;
+            age = 0f;
+            vel = Vector3.up * RiseSpeed;
+            baseColor = overrideColor ?? (crit ? CritColor : NormalColor);
+
+            tmp.text = amount.ToString();
+            tmp.fontSize = crit ? FontSize * 1.4f : FontSize;
+            tmp.color = baseColor;
+
+            gameObject.SetActive(true);
+        }
+
+        void Update()
+        {
+            age += Time.deltaTime;
+            if (age >= Lifetime)
+            {
+                gameObject.SetActive(false);
+                pool.Enqueue(this);
+                return;
+            }
+
+            transform.position += vel * Time.deltaTime;
+            vel.y -= Gravity * Time.deltaTime;
+
+            // 뒤쪽 40% 구간에서 서서히 사라짐
+            float t = age / Lifetime;
+            Color c = baseColor;
+            c.a = t < 0.6f ? 1f : Mathf.Clamp01(1f - (t - 0.6f) / 0.4f);
+            tmp.color = c;
+        }
+    }
+}

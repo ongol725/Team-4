@@ -14,8 +14,10 @@ public class DungeonPopulator : MonoBehaviour
     public GameObject[] monsterPrefabs;
 
     [Header("문(Door) 비주얼")]
-    [Tooltip("문에 표시할 스프라이트 (없으면 투명)")]
-    public Sprite doorSprite;
+    [Tooltip("닫힌 문 3x2 스프라이트: [0]좌상 [1]중상 [2]우상 [3]좌하 [4]중하 [5]우하")]
+    public Sprite[] closedDoorSprites = new Sprite[6];
+    [Tooltip("열린 문 3x2 스프라이트: [0]좌상 [1]중상 [2]우상 [3]좌하 [4]중하 [5]우하")]
+    public Sprite[] openDoorSprites = new Sprite[6];
     [Tooltip("문 렌더링 순서 (타일맵보다 높게 설정)")]
     public int doorSortingOrder = 10;
 
@@ -188,24 +190,17 @@ public class DungeonPopulator : MonoBehaviour
 
                     bool isVerticalCorridor = (room.entranceDir == 0 || room.entranceDir == 2);
 
-                    // localScale로 전체 크기 조정 → 콜라이더도 함께 스케일되므로 size는 (1,1) 고정
-                    doorObj.transform.localScale = isVerticalCorridor
-                        ? new Vector3(corridorWidth, 1f, 1f)
-                        : new Vector3(1f, corridorWidth, 1f);
+                    // 문 가로 칸 수 = 통로 폭 + 양옆 1칸씩 여유 → 개구부를 완전히 덮어 옆으로 못 샘
+                    int doorWidthTiles = corridorWidth + 2;
 
+                    // 차단은 콜라이더가 담당. size는 로컬 기준(width×1) → 가로 통로면 90° 회전으로 세로 벽이 됨.
                     BoxCollider2D doorCol = doorObj.AddComponent<BoxCollider2D>();
-                    doorCol.size = new Vector2(1f, 1f); // localScale이 곱해져 실제 크기 = corridorWidth×1
+                    doorCol.size = new Vector2(doorWidthTiles, 1f);
                     doorCol.enabled = false; // 초기에는 열린 상태
 
-                    // 스프라이트가 지정된 경우 SpriteRenderer 추가
-                    if (doorSprite != null)
-                    {
-                        SpriteRenderer sr = doorObj.AddComponent<SpriteRenderer>();
-                        sr.sprite = doorSprite;
-                        sr.sortingOrder = doorSortingOrder;
-                    }
-
+                    // 문 비주얼 + 열림/닫힘 토글 (가로 통로면 아트 90° 회전해 재사용)
                     DoorController doorController = doorObj.AddComponent<DoorController>();
+                    doorController.Init(closedDoorSprites, openDoorSprites, !isVerticalCorridor, doorSortingOrder, doorWidthTiles);
                     controller.door = doorController;
                 }
 

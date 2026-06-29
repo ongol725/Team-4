@@ -160,6 +160,10 @@ public class PlayerHealth : MonoBehaviour
         }
 
         currentHP = Mathf.Max(0, currentHP - amount);
+
+        // 플레이어 머리 위에 받은 데미지 표시 (연한 빨강으로 구분, 몬스터와 동일 풀 재사용)
+        BagSurvivor.DamagePopup.Show(transform.position, amount, false, new Color(1f, 0.55f, 0.55f));
+
         onDamageTaken?.Invoke(amount);
         UpdateHud();
 
