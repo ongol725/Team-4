@@ -466,6 +466,9 @@ namespace BagSurvivor.Monster
                 finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * damageTakenMultiplier));
             currentHP -= finalDamage;
 
+            // 데미지 숫자 띄우기 (모든 데미지 소스가 이 메서드로 모임)
+            DamagePopup.Show(transform.position, finalDamage);
+
             // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음)
             StartCoroutine(HitEffectCoroutine());
 
