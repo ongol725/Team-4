@@ -18,11 +18,11 @@ MonoBehaviour:
   skillType: 1
   targetType: 2
   scalingStat: 3
-  dmgMultiplier: 20
+  dmgMultiplier: 15
   hitCount: 1
   hitInterval: 0.1
   extraCount: 0
-  rangeRadius: 30
+  rangeRadius: 6
   duration: 0
   cooldown: 0.5
   fixedEffect: 4
@@ -51,7 +51,7 @@ MonoBehaviour:
   - {fileID: 379727494, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
   - {fileID: -1554939736, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
   animFps: 12
-  visualSize: 4
+  visualSize: 12
   vfxSortingOrder: 1
   dropFrames: []
   dropFps: 8

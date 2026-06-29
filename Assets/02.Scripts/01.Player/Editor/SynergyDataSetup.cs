@@ -141,20 +141,20 @@ namespace BagSurvivor.SynergyEditor
             // 충격파: 표시 크기 5배(기본 0.8 → 4.0), 바닥 깔림(vfxSort -1)
             d["SK_FORTRESS_1"] = Sk("SK_FORTRESS_1", "충격파 (브론즈)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:5f,
+                ScalingStatType.ARM_HP_SUM, dmg:5.0f, cd:0f, range:2f,
                 fx:FixedEffectType.DamageReduction, fxVal:10f, vSize:4f, vfxSort:1);
             d["SK_FORTRESS_2"] = Sk("SK_FORTRESS_2", "거대 충격파 (실버)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.ARM_HP_SUM, dmg:10.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:4f, vfxSort:1);
+                ScalingStatType.ARM_HP_SUM, dmg:7.0f, cd:0f, range:4f,
+                fx:FixedEffectType.DamageReduction, fxVal:20f, vSize:8f, vfxSort:1);
             d["SK_FORTRESS_3"] = Sk("SK_FORTRESS_3", "파멸 충격파 (골드)",
                 SynergyTriggerType.OnHitTaken, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.ARM_HP_SUM, dmg:13.0f, cd:0f, range:10f,
-                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:4f, vfxSort:1);
+                ScalingStatType.ARM_HP_SUM, dmg:9.0f, cd:0f, range:4f,
+                fx:FixedEffectType.DamageReduction, fxVal:35f, vSize:8f, vfxSort:1);
             d["SK_FORTRESS_4"] = Sk("SK_FORTRESS_4", "무적 충격파 (프리즘)",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.ARM_HP_SUM, dmg:20.0f, cd:0.5f, range:30f,
-                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:4f, vfxSort:1);
+                ScalingStatType.ARM_HP_SUM, dmg:15.0f, cd:0.5f, range:6f,
+                fx:FixedEffectType.DamageReduction, fxVal:60f, vSize:12f, vfxSort:1);
 
             // ── 마왕 (DemonLord) — 누적형 동시 발동 (콘셉트 19~22) ──
             // 투사체(검기)·소용돌이는 스킬, 기어는 소환수(SUM_DEMON_GEAR)로 구성한다.
@@ -367,10 +367,10 @@ namespace BagSurvivor.SynergyEditor
                 // ── 난공불락 ────────────────────────────────────────
                 Th(SynergyType.Impregnable, "난공불락", 3, 6, 9, 12,
                     "피격 시 충격파를 발산하고 받는 피해를 감소시킵니다.\n방어구 체력 총합에 비례합니다.",
-                    "충격파.  피해 감소 10%.  대미지 1000%",
-                    "충격파 크기 ×2.  피해 감소 20%.  대미지 1000%",
-                    "충격파 강화.  피해 감소 35%.  대미지 1300%",
-                    "0.5초마다 자동 발동.  피해 감소 60%.  대미지 2000%"),
+                    "충격파.  피해 감소 10%.  대미지 500%",
+                    "충격파 크기 ×2.  피해 감소 20%.  대미지 700%",
+                    "충격파 강화.  피해 감소 35%.  대미지 900%",
+                    "충격파 크기 ×3.  0.5초마다 자동 발동.  피해 감소 60%.  대미지 1500%"),
 
                 // ── 정령술사 ────────────────────────────────────────
                 Th(SynergyType.SpiritMage, "정령술사", 3, 5, 7, 9,
