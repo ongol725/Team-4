@@ -336,16 +336,17 @@ public class PlayerAttack : MonoBehaviour
             {
                 if (id == "WPN_012")
                 {
-                    // 마도서: 가장 가까운 적 위치에 마법진 투척 → 착탄 폭발
+                    // 마도서: 대상 위치에 마법진을 띄워 애니 1회 재생 → 형성 시점에 범위 폭발
+                    //         (빠른 투사체로 날리면 거의 안 보여서 고정 연출로 변경)
                     float dropRange = range > 0f ? range : 5f;
                     float explodeR  = dropRange * 0.5f;
                     if (g5) explodeR *= 1.5f; // 5단계: 폭발 반경 1.5배
 
-                    var    nearest = FindNearest(dropRange);
-                    Vector2 dir    = nearest != null
-                        ? ((Vector2)nearest.transform.position - (Vector2)transform.position).normalized
-                        : _lastMoveDir;
-                    SpawnExplosive(entry, dir, dropRange, explodeR);
+                    var     nearest = FindNearest(dropRange);
+                    Vector3 pos     = nearest != null
+                        ? nearest.transform.position
+                        : (Vector3)((Vector2)transform.position + _lastMoveDir * dropRange);
+                    SpawnMagicCircle(entry, pos, explodeR);
                 }
                 else if (id == "WPN_013")
                 {
@@ -624,6 +625,57 @@ public class PlayerAttack : MonoBehaviour
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, rawSpeed, lifetime, 1, explosionRadius: explodeRadius);
+    }
+
+    /// <summary>
+    /// 대상 위치에 마법진(시트 애니)을 고정 생성해 1회 재생하고, 형성 시점에 범위 폭발 피해를 준다(마도서).
+    /// 원의 표시 지름은 피해 반경(explodeRadius)의 2배로 맞춰 시각과 판정이 일치한다.
+    /// </summary>
+    private void SpawnMagicCircle(WeaponLoadoutEntry entry, Vector3 pos, float explodeRadius)
+    {
+        var   wd       = entry.data;
+        int   damage   = ScaleDamage(entry.attackPower);
+        float diameter = Mathf.Max(1f, explodeRadius * 2f);
+        bool  animated = wd.attackFrames != null && wd.attackFrames.Length > 0;
+
+        const float dur = 0.6f; // 마법진 형성 애니 시간
+        GameObject go;
+        if (animated)
+        {
+            float fps = wd.attackFrames.Length / dur; // 시트 전체를 dur 안에 1회 재생
+            go = BuildAnimatedGO(wd.attackFrames, fps, $"MagicCircle_{wd.itemName}",
+                                 diameter, loop: false, withBody: false);
+        }
+        else
+        {
+            go = new GameObject($"MagicCircle_{wd.itemName}");
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = wd.itemImage; sr.sortingOrder = 10;
+            float ext = wd.itemImage != null
+                ? Mathf.Max(wd.itemImage.bounds.extents.x, wd.itemImage.bounds.extents.y) : 0.5f;
+            go.transform.localScale = Vector3.one * (ext > 0.001f ? diameter * 0.5f / ext : diameter);
+        }
+        go.transform.position = pos;
+        Destroy(go, dur + 0.1f);
+
+        // 원이 형성되는 시점(애니 60%)에 1회 범위 피해
+        StartCoroutine(DelayedExplodeAt(pos, explodeRadius, damage, dur * 0.6f));
+    }
+
+    /// <summary>delay초 후 pos 중심 radius 내 모든 적에게 1회 범위 피해를 적용한다.</summary>
+    private IEnumerator DelayedExplodeAt(Vector3 pos, float radius, int damage, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        var hits = _enemyLayer == 0
+            ? Physics2D.OverlapCircleAll(pos, radius)
+            : Physics2D.OverlapCircleAll(pos, radius, _enemyLayer);
+        foreach (var h in hits)
+        {
+            var mc = h.GetComponent<MonsterController>() ?? h.GetComponentInParent<MonsterController>();
+            if (mc == null || mc.IsDead) continue;
+            Vector2 kb = ((Vector2)mc.transform.position - (Vector2)pos).normalized;
+            mc.TakeDamage(damage, 0f, kb);
+        }
     }
 
     /// <summary>
