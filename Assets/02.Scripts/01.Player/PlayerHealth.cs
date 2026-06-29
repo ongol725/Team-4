@@ -48,6 +48,7 @@ public class PlayerHealth : MonoBehaviour
     private GameManager _gm;
     private Coroutine   _regenCoroutine;
     private int         _currentRegen = 0;   // 현재 적용 중인 10초당 재생량
+    private bool        _inCombat     = false; // 전투 구역 내 여부 — 비전투 시 재생 정지
 
     public int CurrentHP => currentHP;
     public int MaxHP => maxHP;
@@ -75,6 +76,9 @@ public class PlayerHealth : MonoBehaviour
         currentHP = maxHP;
         isDead = false;
 
+        // 전투 구역 진입/이탈 추적 — 비전투 상태에서는 체력 재생을 멈춘다.
+        CombatZone.onCombatStateChanged += OnCombatStateChanged;
+
         // PlayerStats가 없으면 PlayerHealth가 직접 방어구 HP/재생을 반영한다.
         if (_selfBridge)
         {
@@ -93,8 +97,11 @@ public class PlayerHealth : MonoBehaviour
     private void OnDestroy()
     {
         if (_gm != null) _gm.onLoadoutReady -= OnLoadoutReady;
+        CombatZone.onCombatStateChanged -= OnCombatStateChanged;
         if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);
     }
+
+    private void OnCombatStateChanged(bool inCombat) => _inCombat = inCombat;
 
     /// <summary>전투 로드아웃의 방어구 HP 보너스/재생을 체력에 반영한다(PlayerStats 부재 시).</summary>
     private void OnLoadoutReady(BattleLoadout loadout)
@@ -129,7 +136,7 @@ public class PlayerHealth : MonoBehaviour
         while (!isDead && _currentRegen > 0)
         {
             yield return wait;
-            Heal(_currentRegen);
+            if (_inCombat) Heal(_currentRegen); // 전투 상태에서만 재생
         }
         _regenCoroutine = null;
     }
