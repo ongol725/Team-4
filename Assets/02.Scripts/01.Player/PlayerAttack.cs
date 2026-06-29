@@ -346,7 +346,7 @@ public class PlayerAttack : MonoBehaviour
                     Vector3 pos     = nearest != null
                         ? nearest.transform.position
                         : (Vector3)((Vector2)transform.position + _lastMoveDir * dropRange);
-                    SpawnMagicCircle(entry, pos, explodeR);
+                    SpawnTargetedExplosion(entry, pos, explodeR);
                 }
                 else if (id == "WPN_013")
                 {
@@ -373,15 +373,22 @@ public class PlayerAttack : MonoBehaviour
                     if (id == "WPN_017") explodeR *= 1.5f; // 바주카: 폭발 범위 1.5배
                 }
 
-                var     nearest = FindNearest(range * 2f);
-                Vector2 center  = nearest != null
-                    ? ((Vector2)nearest.transform.position - (Vector2)transform.position).normalized
-                    : _lastMoveDir;
+                var     nearest  = FindNearest(range * 2f);
+                // 대상까지의 벡터(없으면 전방 range 거리). 폭발 애니가 있으면 그 지점에 고정 폭발한다.
+                Vector2 toTarget  = nearest != null
+                    ? ((Vector2)nearest.transform.position - (Vector2)transform.position)
+                    : _lastMoveDir * range;
+                bool    animated  = entry.data.attackFrames != null && entry.data.attackFrames.Length > 0;
 
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 dir = count > 1 ? Rotate(center, (i - count / 2) * 20f) : center;
-                    SpawnExplosive(entry, dir, range, explodeR);
+                    Vector2 v = count > 1 ? Rotate(toTarget, (i - count / 2) * 20f) : toTarget;
+                    if (animated)
+                        // 그레네이드 등: 대상 지점에 폭발 애니 1회 재생 + 범위 피해(날아가며 사라지지 않게)
+                        SpawnTargetedExplosion(entry, (Vector3)((Vector2)transform.position + v), explodeR);
+                    else
+                        // 시트 없는 투척물(바주카 등): 기존 비행 투사체 폭발
+                        SpawnExplosive(entry, v.normalized, range, explodeR);
                 }
                 break;
             }
@@ -628,27 +635,28 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 대상 위치에 마법진(시트 애니)을 고정 생성해 1회 재생하고, 형성 시점에 범위 폭발 피해를 준다(마도서).
-    /// 원의 표시 지름은 피해 반경(explodeRadius)의 2배로 맞춰 시각과 판정이 일치한다.
+    /// 대상 위치에 시트 애니(마법진/폭발 등)를 고정 생성해 1회 재생하고, 형성 시점에 범위 피해를 준다.
+    /// 마도서·그레네이드처럼 "날아가지 않고 그 자리에서 터지는" 연출에 사용한다.
+    /// 표시 지름은 피해 반경(explodeRadius)의 2배로 맞춰 시각과 판정이 일치한다.
     /// </summary>
-    private void SpawnMagicCircle(WeaponLoadoutEntry entry, Vector3 pos, float explodeRadius)
+    private void SpawnTargetedExplosion(WeaponLoadoutEntry entry, Vector3 pos, float explodeRadius)
     {
         var   wd       = entry.data;
         int   damage   = ScaleDamage(entry.attackPower);
         float diameter = Mathf.Max(1f, explodeRadius * 2f);
         bool  animated = wd.attackFrames != null && wd.attackFrames.Length > 0;
 
-        const float dur = 0.6f; // 마법진 형성 애니 시간
+        const float dur = 0.6f; // 애니 재생 시간
         GameObject go;
         if (animated)
         {
             float fps = wd.attackFrames.Length / dur; // 시트 전체를 dur 안에 1회 재생
-            go = BuildAnimatedGO(wd.attackFrames, fps, $"MagicCircle_{wd.itemName}",
+            go = BuildAnimatedGO(wd.attackFrames, fps, $"Burst_{wd.itemName}",
                                  diameter, loop: false, withBody: false);
         }
         else
         {
-            go = new GameObject($"MagicCircle_{wd.itemName}");
+            go = new GameObject($"Burst_{wd.itemName}");
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = wd.itemImage; sr.sortingOrder = 10;
             float ext = wd.itemImage != null
