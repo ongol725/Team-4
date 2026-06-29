@@ -194,6 +194,14 @@ public class SynergyManager : MonoBehaviour
                 var skill = skillBinding.skill;
                 dmgBase = Mathf.RoundToInt(_loadout.GetScaledBase(skill.scalingStat) * skill.dmgMultiplier);
 
+                // 지속 빔(과부화 레이저): 트리거별 발사 루프 대신 추종 빔 1개 생성 → 지속 데미지
+                if (skill.skillType == SkillType.Beam)
+                {
+                    SpawnBeam(skill, dmgBase);
+                    Debug.Log($"[SynergyManager] Beam: {entry.type} {entry.grade} — {skill.skillName}");
+                    continue;
+                }
+
                 switch (skill.triggerType)
                 {
                     case SynergyTriggerType.AutoTimer:
@@ -428,6 +436,22 @@ public class SynergyManager : MonoBehaviour
                     enemies.Remove(target);
                 }
                 return; // VFX를 대상별로 처리했으므로 하단 공용 VFX 생략
+            }
+
+            case SkillTargetType.RandomAroundSelf:
+            {
+                // 과부화 비눗방울: 적을 조준하지 않고 플레이어 주변 랜덤 위치에 흩뿌린 뒤 그 자리 적을 타격.
+                // rangeRadius = 흩뿌리는 반경, visualSize = 비눗방울 지름(타격 반경 = 그 절반).
+                int   count   = skill.extraCount > 0 ? skill.extraCount : 1;
+                float scatter = skill.rangeRadius  > 0f ? skill.rangeRadius  : 4f;
+                float hitR    = skill.visualSize   > 0f ? skill.visualSize * 0.5f : 1f;
+                for (int i = 0; i < count; i++)
+                {
+                    Vector3 pos = (Vector2)_player.position + Random.insideUnitCircle * scatter;
+                    SpawnVFX(skill, pos);
+                    foreach (var mc in GetEnemiesInRange(pos, hitR)) HitEnemy(skill, mc, damage);
+                }
+                return; // 비눗방울별 VFX 처리 완료
             }
 
             case SkillTargetType.AreaCenter:
@@ -771,6 +795,27 @@ public class SynergyManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 지속 빔(과부화 레이저)을 1개 생성한다. 플레이어가 바라보는 방향을 추적하며 주기적으로
+    /// 빔 경로의 적에게 데미지를 준다. Refresh/파괴 시 _auraVFX 정리 루틴이 함께 제거한다.
+    /// rangeRadius=빔 길이, visualSize=빔 두께, cooldown=데미지 틱 간격으로 해석한다.
+    /// </summary>
+    private void SpawnBeam(SO_SkillData skill, int damage)
+    {
+        if (_player == null) FindPlayerRefs();
+        if (_player == null) return;
+
+        var go   = new GameObject($"SynergyBeam_{skill.skillID}");
+        go.transform.SetParent(transform);
+        var beam = go.AddComponent<SynergyBeam>();
+        beam.Init(_player, _playerAttack,
+                  length: skill.rangeRadius, width: skill.visualSize,
+                  damage: damage, tickInterval: skill.cooldown,
+                  frames: skill.animFrames, fps: skill.animFps,
+                  sortingOrder: skill.vfxSortingOrder);
+        _auraVFX.Add(go);
+    }
+
+    /// <summary>
     /// 적과 적을 잇는 번개를 그린다(체인라이트닝).
     /// seg 스프라이트가 있으면 구간 길이만큼 이미지를 반복(타일)해 깔고, 없으면 단색 LineRenderer로 대체한다.
     /// </summary>
@@ -781,7 +826,7 @@ public class SynergyManager : MonoBehaviour
         // seg 없거나 크기 이상 → 단색 선 fallback
         if (seg == null || seg.bounds.size.y < 0.001f) { SpawnChainLineColored(points); return; }
 
-        const float thickness = 0.5f;                 // 번개 두께(월드 유닛)
+        const float thickness = 1.0f;                 // 번개 두께(월드 유닛)
         float nativeH = seg.bounds.size.y;            // 스프라이트 1장 높이(스케일1 기준)
         float scale   = thickness / nativeH;          // 두께에 맞춘 스케일
 
@@ -820,7 +865,7 @@ public class SynergyManager : MonoBehaviour
         lr.useWorldSpace   = true;
         lr.positionCount   = points.Count;
         for (int i = 0; i < points.Count; i++) lr.SetPosition(i, points[i]);
-        lr.widthMultiplier = 0.18f;
+        lr.widthMultiplier = 0.36f;
         lr.numCapVertices  = 2;
         lr.numCornerVertices = 2;
         lr.material        = new Material(Shader.Find("Sprites/Default"));

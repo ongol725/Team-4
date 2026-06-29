@@ -5,6 +5,7 @@ public enum SkillType
     AoE,          // 장판/범위
     Slash,        // 즉발 참격
     Buff,         // 플레이어 강화
+    Beam,         // 지속 빔 — 발사가 아니라 바라보는 방향으로 생성되어 지속 데미지 (과부화 레이저)
 }
 
 /// <summary>스킬 발동 시 조준 대상 / 생성 위치</summary>
@@ -19,6 +20,7 @@ public enum SkillTargetType
     SidePillars,   // 플레이어 좌·우 고정 위치에 기둥 생성 (일렉트로)
     ChainLightning,// 최근접 적부터 차례로 연쇄 타격 (과부화 체인라이트닝)
     FacingForward, // 플레이어가 바라보는 방향으로 발사 (과부화 레이저)
+    RandomAroundSelf, // 플레이어 주변 랜덤 위치에 생성 후 그 자리 적 타격 (과부화 비눗방울)
 }
 
 /// <summary>피격 시 부여되는 상태이상</summary>

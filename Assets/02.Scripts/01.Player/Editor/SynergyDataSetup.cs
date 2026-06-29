@@ -199,15 +199,19 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.None, dmg:0f, cd:10f, range:0f,
                 fx:FixedEffectType.SpeedPenalty, fxVal:50f);
             // 과부화 프리즘: 3종 효과 동시 발동 (콘셉트 슬라이드 24). 각각 Penalty 트리거로 무한 발동.
+            // 레이저: 발사형 투사체가 아니라 바라보는 방향으로 생성되는 지속 빔.
+            // range=빔 길이, vSize=빔 두께, cd=데미지 틱 간격으로 해석된다(SynergyBeam).
             d["SK_OVERLOAD_LASER"] = Sk("SK_OVERLOAD_LASER", "과부화 레이저 (프리즘)",
-                SynergyTriggerType.Penalty, SkillType.Projectile, SkillTargetType.FacingForward,
-                ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0.15f, range:30f, pierce:999);
+                SynergyTriggerType.Penalty, SkillType.Beam, SkillTargetType.FacingForward,
+                ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0.2f, range:4f, vSize:2f);
             d["SK_OVERLOAD_CHAIN"] = Sk("SK_OVERLOAD_CHAIN", "과부화 체인라이트닝 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.ChainLightning,
                 ScalingStatType.WPN_ATK_AVG, dmg:6.0f, cd:0.5f, range:50f, extra:4);
+            // 비눗방울: 적 조준이 아니라 플레이어 주변 랜덤 위치에 흩뿌려 그 자리 적을 타격.
+            // range=흩뿌리는 반경, vSize=비눗방울 지름(타격 반경=절반).
             d["SK_OVERLOAD_BUBBLE"] = Sk("SK_OVERLOAD_BUBBLE", "과부화 비눗방울 (프리즘)",
-                SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:4.0f, cd:0.4f, range:50f, extra:3);
+                SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.RandomAroundSelf,
+                ScalingStatType.WPN_ATK_AVG, dmg:4.0f, cd:0.4f, range:4f, extra:3, vSize:1.6f);
 
             // ── 대정령 광역(프리즘) — SUM_GIANT_GOLEM.uniqueSkill 로 연결 ──
             // 스펙: 8초마다 화면 내 모든 적에게 대량 피해(range 100 = 전체 화면 커버).
