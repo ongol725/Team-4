@@ -804,14 +804,14 @@ MonoBehaviour:
     grade: 0
     skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
   - synergyType: 11
-    grade: 1
-    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
-  - synergyType: 11
-    grade: 2
-    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+    grade: 3
+    skill: {fileID: 11400000, guid: a90e833125348d34ebddb967d2d28d41, type: 2}
   - synergyType: 11
     grade: 3
-    skill: {fileID: 11400000, guid: 01715f8b20d39f949a653242c5515d4b, type: 2}
+    skill: {fileID: 11400000, guid: ce426ce2950550c43b8107bee4427706, type: 2}
+  - synergyType: 11
+    grade: 3
+    skill: {fileID: 11400000, guid: 074d93efc5bd7dd48be3c7c3aded92c0, type: 2}
   _summonBindings:
   - synergyType: 10
     grade: 0

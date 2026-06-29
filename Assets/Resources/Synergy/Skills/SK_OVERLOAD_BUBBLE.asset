@@ -16,13 +16,13 @@ MonoBehaviour:
   skillName: "\uACFC\uBD80\uD654 \uBE44\uB217\uBC29\uC6B8 (\uD504\uB9AC\uC998)"
   triggerType: 4
   skillType: 1
-  targetType: 1
+  targetType: 9
   scalingStat: 1
   dmgMultiplier: 4
   hitCount: 1
   hitInterval: 0.1
   extraCount: 3
-  rangeRadius: 50
+  rangeRadius: 4
   duration: 0
   cooldown: 0.4
   fixedEffect: 0
@@ -41,6 +41,6 @@ MonoBehaviour:
   - {fileID: 2318329741740190952, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
   - {fileID: 4933604200605161345, guid: c7d0392fc0d1cad4e9af4106a87a8c8d, type: 3}
   animFps: 12
-  visualSize: 0.8
+  visualSize: 1.6
   dropFrames: []
   dropFps: 8

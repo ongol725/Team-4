@@ -15,16 +15,16 @@ MonoBehaviour:
   skillID: SK_OVERLOAD_LASER
   skillName: "\uACFC\uBD80\uD654 \uB808\uC774\uC800 (\uD504\uB9AC\uC998)"
   triggerType: 4
-  skillType: 0
+  skillType: 4
   targetType: 8
   scalingStat: 1
   dmgMultiplier: 3
   hitCount: 1
   hitInterval: 0.1
   extraCount: 0
-  rangeRadius: 30
+  rangeRadius: 4
   duration: 0
-  cooldown: 0.15
+  cooldown: 0.2
   fixedEffect: 0
   fixedEffectValue: 0
   statusEffect: 0
@@ -43,6 +43,6 @@ MonoBehaviour:
   - {fileID: -3876125812901632101, guid: 3c3e39c6a38ab764db249553ff26f1d8, type: 3}
   - {fileID: -8817036107050078945, guid: 3c3e39c6a38ab764db249553ff26f1d8, type: 3}
   animFps: 12
-  visualSize: 0.8
+  visualSize: 2
   dropFrames: []
   dropFps: 8
