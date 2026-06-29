@@ -19,7 +19,8 @@ MonoBehaviour:
   atkMultiplier: 1
   moveSpeed: 90
   atkCooldown: 0.2
-  atkRange: 1.5
+  atkRange: 0.75
+  displayScale: 0.8
   duration: -1
   fixedEffect: 0
   fixedEffectValue: 0

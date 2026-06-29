@@ -241,15 +241,16 @@ namespace BagSurvivor.SynergyEditor
                 atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:1.5f);
 
             // ── 페어리 (Fairy) — OrbitPlayer ──
+            // 크기 ×2(scale 0.4→0.8), 타격 범위를 시각 크기에 맞춤(atkRange 1.5→0.75 = 시각 반경)
             d["SUM_FAIRY_1"] = Sum("SUM_FAIRY_1", "요정 (브론즈)",
                 SummonAIType.OrbitPlayer, ScalingStatType.WPN_ATK_SUM,
-                atk:1.0f, spd:90f, atkCd:0.2f, atkRange:1.5f, dur:-1f);
+                atk:1.0f, spd:90f, atkCd:0.2f, atkRange:0.75f, dur:-1f, scale:0.8f);
             d["SUM_FAIRY_2"] = Sum("SUM_FAIRY_2", "요정 (실버)",
                 SummonAIType.OrbitPlayer, ScalingStatType.WPN_ATK_SUM,
-                atk:1.0f, spd:90f, atkCd:0.2f, atkRange:1.5f, dur:-1f);
+                atk:1.0f, spd:90f, atkCd:0.2f, atkRange:0.75f, dur:-1f, scale:0.8f);
             d["SUM_FAIRY_3"] = Sum("SUM_FAIRY_3", "고속 요정 (골드)",
                 SummonAIType.OrbitPlayer, ScalingStatType.WPN_ATK_SUM,
-                atk:1.0f, spd:150f, atkCd:0.15f, atkRange:1.5f, dur:-1f);
+                atk:1.0f, spd:150f, atkCd:0.15f, atkRange:0.75f, dur:-1f, scale:0.8f);
 
             // ── 정령술사 (SpiritMage) — FollowAttack ──
             d["SUM_GOLEM_1"] = Sum("SUM_GOLEM_1", "정령 골렘 (브론즈)",
