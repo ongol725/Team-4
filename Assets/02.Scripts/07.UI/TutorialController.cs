@@ -120,7 +120,7 @@ namespace BagSurvivor.UI
 
             if (_prevButton != null) _prevButton.interactable = i > 0;
             if (_nextLabel != null)
-                _nextLabel.text = (i >= _activePages.Length - 1) ? "닫기" : "다음 ▶";
+                _nextLabel.text = (i >= _activePages.Length - 1) ? "닫기" : "다음";
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -231,14 +231,14 @@ namespace BagSurvivor.UI
             indRT.anchoredPosition = new Vector2(0f, 26f);
 
             // ── 버튼: 이전 / 다음(닫기) / 닫기(X) ──
-            _prevButton = MakeButton(_panel.transform, "PrevButton", "◀ 이전",
+            _prevButton = MakeButton(_panel.transform, "PrevButton", "이전",
                 new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f),
                 new Vector2(150f, 56f), new Vector2(110f, 28f), out _);
-            _nextButton = MakeButton(_panel.transform, "NextButton", "다음 ▶",
+            _nextButton = MakeButton(_panel.transform, "NextButton", "다음",
                 new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(1f, 0f),
                 new Vector2(150f, 56f), new Vector2(-110f, 28f), out _nextLabel);
 
-            var closeButton = MakeButton(_panel.transform, "CloseButton", "✕",
+            var closeButton = MakeButton(_panel.transform, "CloseButton", "X",
                 new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(1f, 1f),
                 new Vector2(48f, 48f), new Vector2(-30f, -30f), out _);
 
