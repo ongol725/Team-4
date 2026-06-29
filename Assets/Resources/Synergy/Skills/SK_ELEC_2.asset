@@ -22,7 +22,7 @@ MonoBehaviour:
   hitCount: 1
   hitInterval: 0.1
   extraCount: 3
-  rangeRadius: 50
+  rangeRadius: 6
   duration: 0
   cooldown: 2
   fixedEffect: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
   - {fileID: 1359859732, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
   - {fileID: -1776054465, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
   - {fileID: -1292816762, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
-  animFps: 12
+  animFps: 24
   visualSize: 2.4
   visualStretchY: 1.5
   dropFrames: []
