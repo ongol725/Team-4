@@ -56,8 +56,13 @@ public class SynergyManager : MonoBehaviour
     private Transform                    _player;
     private PlayerHealth                 _playerHealth;
     private PlayerMovement               _playerMovement;
+    private PlayerStats                  _playerStats;
     private PlayerAttack                 _playerAttack;
     private BattleLoadout                _loadout;
+
+    // 과부화 패널티: 진입 직전 피해량 배율을 저장해 두고 해제 시 원래 값으로 복구
+    // (캐릭터 고유 배율이 1이 아닐 수 있으므로 1f로 강제하지 않는다)
+    private float _savedAtkMul = 1f;
 
     private readonly List<Coroutine>         _skillRoutines = new();
     private readonly List<Coroutine>         _summonRoutines = new(); // duration>0 소환수 재시전 루프
@@ -119,6 +124,7 @@ public class SynergyManager : MonoBehaviour
         _player         = playerGO.transform;
         _playerHealth   = playerGO.GetComponent<PlayerHealth>();
         _playerMovement = playerGO.GetComponent<PlayerMovement>();
+        _playerStats    = playerGO.GetComponent<PlayerStats>();
         _playerAttack   = playerGO.GetComponent<PlayerAttack>();
     }
 
@@ -372,17 +378,24 @@ public class SynergyManager : MonoBehaviour
         }
     }
 
-    private void ApplyOverloadPenalty(float speedRate)
+    private void ApplyOverloadPenalty(float rate)
     {
         if (_playerMovement != null)
-            _playerMovement.speedMultiplier = speedRate;
-        Debug.Log($"[과부화] 패널티 발동 (이동속도 ×{speedRate:F2})");
+            _playerMovement.speedMultiplier = rate;
+        if (_playerStats != null)
+        {
+            _savedAtkMul = _playerStats.attackMultiplier;
+            _playerStats.attackMultiplier *= rate;
+        }
+        Debug.Log($"[과부화] 패널티 발동 (이동속도·피해량 ×{rate:F2})");
     }
 
     private void RemoveOverloadPenalty()
     {
         if (_playerMovement != null)
             _playerMovement.speedMultiplier = 1f;
+        if (_playerStats != null)
+            _playerStats.attackMultiplier = _savedAtkMul;
         Debug.Log("[과부화] 패널티 해제");
     }
 
