@@ -398,10 +398,10 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 과부화 ──────────────────────────────────────────
                 Th(SynergyType.Overload, "과부화", 1, 2, 7, 8,
-                    "왕귀형 콘셉트. 브~골드는 패널티만 있고 프리즘 달성 시 신이 됩니다.",
+                    "왕귀형 콘셉트. 브론즈만 디버프, 실버·골드는 효과 없음, 프리즘 달성 시 신이 됩니다.",
                     "10초마다 1초간 이동속도/피해량 50% 감소",
-                    "10초마다 1초간 이동속도/피해량 50% 감소",
-                    "10초마다 1초간 이동속도/피해량 50% 감소",
+                    "효과 없음 (프리즘 도달 시 각성)",
+                    "효과 없음 (프리즘 도달 시 각성)",
                     "레이저 + 체인라이트닝 + 비눗방울 3종 무한 발동.  신이 됩니다."),
             };
 
@@ -455,9 +455,8 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Tycoon,      SynergyGrade.Silver, "SK_GOLD_BOMB_2"),
                 (SynergyType.Tycoon,      SynergyGrade.Gold,   "SK_GOLD_BOMB_3"),
                 (SynergyType.Tycoon,      SynergyGrade.Prism,  "SK_GOLD_FAST"),
+                // 브론즈만 디버프, 실버·골드는 무효과(바인딩 없음) — 프리즘 도달 시 각성
                 (SynergyType.Overload,    SynergyGrade.Bronze, "SK_OVERLOAD_PENALTY"),
-                (SynergyType.Overload,    SynergyGrade.Silver, "SK_OVERLOAD_PENALTY"),
-                (SynergyType.Overload,    SynergyGrade.Gold,   "SK_OVERLOAD_PENALTY"),
                 // 프리즘: 레이저 + 체인라이트닝 + 비눗방울 3종 동시 발동
                 (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_LASER"),
                 (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_CHAIN"),
