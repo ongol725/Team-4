@@ -594,7 +594,9 @@ public class PlayerAttack : MonoBehaviour
 
         GameObject go = wd.projectile != null
             ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
-            : BuildTempGO(wd.itemImage, wd.itemName);
+            : (wd.attackFrames != null && wd.attackFrames.Length > 0
+                ? BuildAnimatedGO(wd.attackFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
+                : BuildTempGO(wd.itemImage, wd.itemName));
 
         go.transform.position = transform.position; // BuildTempGO는 위치를 설정하지 않으므로 항상 보정
 
@@ -615,11 +617,49 @@ public class PlayerAttack : MonoBehaviour
 
         GameObject go = wd.projectile != null
             ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
-            : BuildTempGO(wd.itemImage, wd.itemName);
+            : (wd.attackFrames != null && wd.attackFrames.Length > 0
+                ? BuildAnimatedGO(wd.attackFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
+                : BuildTempGO(wd.itemImage, wd.itemName));
         go.transform.position = transform.position;
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, rawSpeed, lifetime, 1, explosionRadius: explodeRadius);
+    }
+
+    /// <summary>
+    /// 시트 프레임을 SpriteSheetAnimator로 재생하는 GameObject를 만든다.
+    /// 스프라이트는 자식에 두고 중심을 루트에 맞춰(피벗 무관) targetSize 지름으로 정규화한다.
+    /// withBody=true면 투사체용 Rigidbody2D+트리거 콜라이더를 루트에 부착한다.
+    /// </summary>
+    private static GameObject BuildAnimatedGO(Sprite[] frames, float fps, string name,
+        float targetSize, bool loop, bool withBody)
+    {
+        var go = new GameObject(name);
+
+        if (withBody)
+        {
+            var rb = go.AddComponent<Rigidbody2D>();
+            rb.gravityScale = 0f;
+            var col = go.AddComponent<CircleCollider2D>();
+            col.isTrigger = true;
+            col.radius    = 0.3f;
+        }
+
+        var child = new GameObject("Sprite");
+        child.transform.SetParent(go.transform, false);
+        var sr = child.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = 10;
+        sr.sprite = frames[0];
+
+        // 목표 지름으로 정규화 + 스프라이트 중심을 루트 원점에 정렬(피벗이 모서리여도 회전 중심 일치)
+        var   b         = frames[0].bounds;
+        float maxExtent = Mathf.Max(b.extents.x, b.extents.y);
+        float scale     = maxExtent > 0.001f ? targetSize * 0.5f / maxExtent : targetSize;
+        child.transform.localScale    = Vector3.one * scale;
+        child.transform.localPosition = -(Vector3)b.center * scale;
+
+        child.AddComponent<SpriteSheetAnimator>().Play(frames, fps > 0f ? fps : 12f, loop);
+        return go;
     }
 
     private static GameObject BuildTempGO(Sprite icon, string weaponName)
@@ -658,29 +698,42 @@ public class PlayerAttack : MonoBehaviour
     private IEnumerator ShowMeleeFlash(SO_WeaponData wd, Vector2 dir,
         float range, float scaleMult = 1f)
     {
-        var go      = new GameObject($"Melee_{wd.itemName}");
-        Destroy(go, 0.15f); // 코루틴 중단 시에도 반드시 소멸되도록 즉시 예약
+        bool        animated = wd.attackFrames != null && wd.attackFrames.Length > 0;
+        const float meleeDur = 0.35f;                       // 근접 이펙트 표시 시간
+        float       life     = animated ? meleeDur : 0.15f;
+
+        GameObject go;
+        if (animated)
+        {
+            // 시트 전체를 표시 시간 안에 1회 재생 (휘두르는 모션). 크기 2.0유닛 기준 정규화.
+            float fps = wd.attackFrames.Length / meleeDur;
+            go = BuildAnimatedGO(wd.attackFrames, fps, $"Melee_{wd.itemName}",
+                                 2.0f * scaleMult, loop: false, withBody: false);
+        }
+        else
+        {
+            go = new GameObject($"Melee_{wd.itemName}");
+            var sr          = go.AddComponent<SpriteRenderer>();
+            sr.sprite       = wd.itemImage;
+            sr.sortingOrder = 10;
+            if (wd.itemImage != null)
+            {
+                float maxExtent  = Mathf.Max(wd.itemImage.bounds.extents.x, wd.itemImage.bounds.extents.y);
+                float normalized = maxExtent > 0.001f ? 0.6f / maxExtent : 0.6f;
+                go.transform.localScale = Vector3.one * normalized * scaleMult;
+            }
+            else
+            {
+                go.transform.localScale = Vector3.one * 0.6f * scaleMult;
+            }
+        }
+
+        Destroy(go, life); // 코루틴 중단 시에도 반드시 소멸되도록 즉시 예약
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         go.transform.position = (Vector2)transform.position + dir * (range * 0.6f);
         go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        var sr          = go.AddComponent<SpriteRenderer>();
-        sr.sprite       = wd.itemImage;
-        sr.sortingOrder = 10;
-
-        // 스프라이트 크기 정규화 후 적정 크기로 표시 (range * 0.8f는 너무 커서 0.6 유닛으로 고정)
-        if (wd.itemImage != null)
-        {
-            float maxExtent = Mathf.Max(wd.itemImage.bounds.extents.x, wd.itemImage.bounds.extents.y);
-            float normalized = maxExtent > 0.001f ? 0.6f / maxExtent : 0.6f;
-            go.transform.localScale = Vector3.one * normalized * scaleMult;
-        }
-        else
-        {
-            go.transform.localScale = Vector3.one * 0.6f * scaleMult;
-        }
-
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(life);
     }
 
     // ─────────────────────────────────────────────────────────────
