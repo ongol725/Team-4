@@ -99,19 +99,19 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:3, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
-            // 낫: 투사체 표시 크기 2배(기본 0.8 → 1.6)
+            // 낫: 투사체 크기 ×1.5(1.6→2.4), 이동속도 -50%(15→7.5), 애니 2.5배속(12→30)
             d["SK_SCYTHE_1"] = Sk("SK_SCYTHE_1", "사신의 낫 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:5f, pierce:999, vSize:1.6f);
+                fx:FixedEffectType.InstantDeath, fxVal:5f, pierce:999, vSize:2.4f, fps:30f, projSpeed:7.5f);
             d["SK_SCYTHE_2"] = Sk("SK_SCYTHE_2", "사신의 낫 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.1f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:10f, pierce:999, vSize:1.6f);
+                fx:FixedEffectType.InstantDeath, fxVal:10f, pierce:999, vSize:2.4f, fps:30f, projSpeed:7.5f);
             d["SK_SCYTHE_3"] = Sk("SK_SCYTHE_3", "사신의 낫 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.ForwardDual,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.3f, cd:3f, range:20f,
-                fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999, vSize:1.6f);
+                fx:FixedEffectType.InstantDeath, fxVal:15f, pierce:999, vSize:2.4f, fps:30f, projSpeed:7.5f);
 
             // ── 소드마스터 (SwordMaster) — AutoTimer / WPN_ATK_AVG / Forward ──
             // 검기: 크기 확대(0.8→4.8) + 세로 2배(stretchY) + 바라보는 방향(FacingForward) 발사
@@ -162,7 +162,7 @@ namespace BagSurvivor.SynergyEditor
             d["SK_DEMON_1"] = Sk("SK_DEMON_1", "지옥 검기 (투사체)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:20f,
-                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:1.6f);
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:3.2f);
             // 연옥 소용돌이: 캐릭터를 감싸는 불꽃 고리(Devil_Slash)가 플레이어를 따라다니며 주변 적 타격
             d["SK_DEMON_2"] = Sk("SK_DEMON_2", "연옥 소용돌이",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.Self,
@@ -174,7 +174,7 @@ namespace BagSurvivor.SynergyEditor
             d["SK_DEMON_4"] = Sk("SK_DEMON_4", "지옥 검기 3연 (프리즘)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.ForwardTriple,
                 ScalingStatType.WPN_ATK_SUM, dmg:1.5f, cd:2f, range:50f,
-                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:1.6f);
+                fx:FixedEffectType.Burn, fxVal:0f, pierce:999, vSize:3.2f);
 
             // ── 대부호 (Tycoon) — OnMove / WPN_ATK_SUM / 골드 드랍 ──
             d["SK_GOLD_BOMB_1"] = Sk("SK_GOLD_BOMB_1", "골드 폭발 (브론즈)",
@@ -232,13 +232,13 @@ namespace BagSurvivor.SynergyEditor
             var d = new Dictionary<string, SO_SummonData>();
 
             // ── 핀볼 (Pinball) — Bounce ──
-            // 핀볼: 기존 0.5 → 가로세로 2배(displayScale 1.0)
+            // 핀볼: 오브젝트 크기 ×1.5 (displayScale 1.0 → 1.5)
             d["SUM_PINBALL_1"] = Sum("SUM_PINBALL_1", "핀볼 (브론즈)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:1.0f);
+                atk:1.1f, spd:12f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:1.5f);
             d["SUM_PINBALL_2"] = Sum("SUM_PINBALL_2", "핀볼 (실버)",
                 SummonAIType.Bounce, ScalingStatType.WPN_ATK_AVG,
-                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:1.0f);
+                atk:1.3f, spd:18f, atkCd:0.2f, atkRange:1f, dur:-1f, scale:1.5f);
 
             // ── 페어리 (Fairy) — OrbitPlayer ──
             d["SUM_FAIRY_1"] = Sum("SUM_FAIRY_1", "요정 (브론즈)",
@@ -545,7 +545,8 @@ namespace BagSurvivor.SynergyEditor
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
             float duration = 0f, int pierce = 1,
             bool followVfx = false, float vSize = 0f, int vfxSort = 30, float stretchY = 1f,
-            float dmgDelay = 0f, float fps = 0f, float linger = -1f, bool anchorBottom = false)
+            float dmgDelay = 0f, float fps = 0f, float linger = -1f, bool anchorBottom = false,
+            float projSpeed = 0f)
         {
             string path = $"{SkillDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SkillData>(path);
@@ -572,6 +573,7 @@ namespace BagSurvivor.SynergyEditor
             asset.damageDelay      = dmgDelay;
             if (vSize > 0f) asset.visualSize = vSize;
             if (fps   > 0f) asset.animFps    = fps;
+            if (projSpeed > 0f) asset.projectileSpeed = projSpeed;
             if (linger >= 0f) asset.vfxLingerTime = linger;
             EditorUtility.SetDirty(asset);
             return asset;
