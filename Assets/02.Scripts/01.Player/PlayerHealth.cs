@@ -42,6 +42,12 @@ public class PlayerHealth : MonoBehaviour
     private Color baseColor = Color.white;
     private Coroutine flashCoroutine;
 
+    // 방어구 HP/재생 자체 적용 (전투 씬에 PlayerStats가 없을 때 PlayerHealth가 직접 브릿지)
+    private int         _baseMaxHP;       // 캐릭터 기본 최대체력(방어구 보너스 제외)
+    private bool        _selfBridge;      // PlayerStats가 없으면 true → 직접 로드아웃 반영
+    private GameManager _gm;
+    private Coroutine   _regenCoroutine;
+
     public int CurrentHP => currentHP;
     public int MaxHP => maxHP;
     public bool IsDead => isDead;
@@ -54,6 +60,10 @@ public class PlayerHealth : MonoBehaviour
         // PlayerStats 없이도 캐릭터 maxHp 반영 (미선택/씬에 CharacterManager 없으면 전사 폴백)
         var charData = CharacterManager.GetSelectedOrDefault();
         if (charData != null) maxHP = charData.maxHp;
+
+        _baseMaxHP  = maxHP;
+        // PlayerStats가 같은 GameObject에 있으면 그쪽이 방어구 HP를 처리 → 중복 방지
+        _selfBridge = GetComponent<PlayerStats>() == null;
     }
 
     private void Start()
@@ -63,8 +73,56 @@ public class PlayerHealth : MonoBehaviour
 
         currentHP = maxHP;
         isDead = false;
+
+        // PlayerStats가 없으면 PlayerHealth가 직접 방어구 HP/재생을 반영한다.
+        if (_selfBridge)
+        {
+            _gm = GameManager.Instance;
+            if (_gm != null)
+            {
+                _gm.onLoadoutReady += OnLoadoutReady;
+                if (_gm.CurrentLoadout != null) OnLoadoutReady(_gm.CurrentLoadout);
+            }
+        }
+
         // 모든 Start() 완료 후 갱신 — PlayerStateHUD.Start()의 mock 값보다 늦게 실행 보장
         StartCoroutine(InitHudLate());
+    }
+
+    private void OnDestroy()
+    {
+        if (_gm != null) _gm.onLoadoutReady -= OnLoadoutReady;
+        if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);
+    }
+
+    /// <summary>전투 로드아웃의 방어구 HP 보너스/재생을 체력에 반영한다(PlayerStats 부재 시).</summary>
+    private void OnLoadoutReady(BattleLoadout loadout)
+    {
+        if (loadout == null) return;
+
+        int newMax = _baseMaxHP + loadout.TotalHpBonus;
+        int delta  = newMax - maxHP;
+        maxHP = newMax;
+        // 방어구 장착으로 최대체력이 늘면 현재 체력도 같은 만큼 올려준다(빼면 클램프).
+        currentHP = Mathf.Clamp(currentHP + Mathf.Max(0, delta), 0, maxHP);
+        if (currentHP > maxHP) currentHP = maxHP;
+        UpdateHud();
+
+        if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);
+        if (loadout.TotalHpRegen > 0)
+            _regenCoroutine = StartCoroutine(RegenLoop(loadout.TotalHpRegen));
+    }
+
+    // 10초마다 regen만큼 회복
+    private IEnumerator RegenLoop(int regen)
+    {
+        var wait = new WaitForSeconds(10f);
+        while (!isDead)
+        {
+            yield return wait;
+            Heal(regen);
+        }
+        _regenCoroutine = null;
     }
 
     private System.Collections.IEnumerator InitHudLate()

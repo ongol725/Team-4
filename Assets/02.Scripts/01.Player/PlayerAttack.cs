@@ -30,10 +30,25 @@ public class PlayerAttack : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────────
 
+    // PlayerStats가 없을 때 사용할 캐릭터 배율 폴백 (전사 등)
+    private float _charAtkMul    = 1f;
+    private float _charAtkSpdMul = 1f;
+
     private void Awake()
     {
         _stats = GetComponent<PlayerStats>();
         _rb    = GetComponent<Rigidbody2D>();
+
+        // PlayerStats가 없으면 캐릭터 데이터(미선택 시 전사 폴백)에서 공격/공속 배율을 직접 읽는다.
+        if (_stats == null)
+        {
+            var cd = CharacterManager.GetSelectedOrDefault();
+            if (cd != null)
+            {
+                _charAtkMul    = cd.attackMultiplier;
+                _charAtkSpdMul = cd.attackSpeedMultiplier;
+            }
+        }
     }
 
     private void Start()
@@ -109,7 +124,7 @@ public class PlayerAttack : MonoBehaviour
         string id          = entry.data.itemID;
         float  baseAps     = _stats != null ? _stats.attackSpeed : 1f;
         float  weaponAps   = entry.attackSpeed > 0f ? entry.attackSpeed : 1f;
-        float  charSpeedMul = _stats != null ? _stats.attackSpeedMultiplier : 1f;
+        float  charSpeedMul = _stats != null ? _stats.attackSpeedMultiplier : _charAtkSpdMul;
 
         // 5단계 공격 속도 보정
         float spdBoost = 1f;
@@ -741,7 +756,7 @@ public class PlayerAttack : MonoBehaviour
     /// <summary>무기 기본 데미지에 캐릭터 공격 배율과 추가 배율을 곱해 최종 데미지를 반환.</summary>
     private int ScaleDamage(int baseDamage, float extraMult = 1f)
     {
-        float charMul = _stats != null ? _stats.attackMultiplier : 1f;
+        float charMul = _stats != null ? _stats.attackMultiplier : _charAtkMul;
         return Mathf.RoundToInt(baseDamage * charMul * extraMult);
     }
 }
