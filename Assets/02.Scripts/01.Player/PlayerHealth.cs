@@ -100,12 +100,14 @@ public class PlayerHealth : MonoBehaviour
     {
         if (loadout == null) return;
 
-        int newMax = _baseMaxHP + loadout.TotalHpBonus;
-        int delta  = newMax - maxHP;
+        int newMax = Mathf.Max(1, _baseMaxHP + loadout.TotalHpBonus);
+        // 현재 체력 "비율"을 유지하며 최대체력을 변경한다.
+        // (장착/해제를 반복해도 풀피로 회복되지 않게 — 재장착 익스플로잇 방지)
+        float ratio = maxHP > 0 ? (float)currentHP / maxHP : 1f;
         maxHP = newMax;
-        // 방어구 장착으로 최대체력이 늘면 현재 체력도 같은 만큼 올려준다(빼면 클램프).
-        currentHP = Mathf.Clamp(currentHP + Mathf.Max(0, delta), 0, maxHP);
-        if (currentHP > maxHP) currentHP = maxHP;
+        int newCur = Mathf.RoundToInt(newMax * ratio);
+        if (currentHP > 0 && newCur < 1) newCur = 1; // 살아있으면 최소 1 보장
+        currentHP = Mathf.Clamp(newCur, 0, maxHP);
         UpdateHud();
 
         if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);

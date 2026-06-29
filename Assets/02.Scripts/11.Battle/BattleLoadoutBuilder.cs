@@ -22,6 +22,19 @@ public class BattleLoadoutBuilder : MonoBehaviour
         if (_synergyCalc == null) _synergyCalc = GetComponent<SynergyCalculator>();
     }
 
+    private void OnEnable()
+    {
+        // 아이템을 배치/이동/제거하는 즉시 전투에 반영(실시간). 편집 중엔 전투가 일시정지되므로 부담이 적다.
+        if (_analyzer != null) _analyzer.OnSnapshotChanged += OnSnapshotChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (_analyzer != null) _analyzer.OnSnapshotChanged -= OnSnapshotChanged;
+    }
+
+    private void OnSnapshotChanged(InventorySnapshot _) => BuildAndDeliver(log: false);
+
     // ─────────────────────────────────────────────────────────────
 
     /// <summary>
@@ -46,17 +59,19 @@ public class BattleLoadoutBuilder : MonoBehaviour
     /// BattleLoadout을 빌드하고 OnLoadoutReady 이벤트를 발행한다.
     /// ShopUI.Close()에서 호출한다.
     /// </summary>
-    public void BuildAndDeliver()
+    public void BuildAndDeliver() => BuildAndDeliver(log: true);
+
+    private void BuildAndDeliver(bool log)
     {
         var loadout = Build();
         if (loadout == null)
         {
-            Debug.LogWarning("[BattleLoadoutBuilder] 스냅샷을 가져올 수 없습니다.");
+            if (log) Debug.LogWarning("[BattleLoadoutBuilder] 스냅샷을 가져올 수 없습니다.");
             return;
         }
         GameManager.Instance?.ApplyLoadout(loadout);   // 씬 간 브릿지
         OnLoadoutReady?.Invoke(loadout);
-        LogLoadout(loadout);
+        if (log) LogLoadout(loadout);                  // 실시간 갱신(log:false) 시 로그 스팸 방지
     }
 
     // ─────────────────────────────────────────────────────────────
