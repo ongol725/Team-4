@@ -47,5 +47,6 @@ MonoBehaviour:
   animFps: 48
   visualSize: 2.4
   visualStretchY: 1.5
+  vfxAnchorBottom: 1
   dropFrames: []
   dropFps: 8

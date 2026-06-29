@@ -71,6 +71,8 @@ public class SO_SkillData : ScriptableObject
     public bool vfxFollowPlayer = false;
     [Tooltip("이펙트 스프라이트 정렬 순서. 기본 30(캐릭터 위 스킬 효과). 난공불락 충격파 등 바닥 효과는 -20")]
     public int vfxSortingOrder = 30;
+    [Tooltip("true이면 이펙트를 중앙이 아니라 하단 기준으로 배치(위로 뻗음). 낙뢰처럼 하늘에서 내려와 끝(하단)이 대상에 닿게 할 때 사용")]
+    public bool vfxAnchorBottom = false;
 
     [Header("노드 임팩트 (체인라이트닝 등)")]
     [Tooltip("타격 지점(노드)마다 1회 재생할 임팩트 시트 프레임. 비우면 노드 이펙트 없음(연결선만). 과부화 체인라이트닝=OVERLOAD2.1_Pr")]

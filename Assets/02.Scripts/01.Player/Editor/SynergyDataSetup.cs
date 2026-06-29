@@ -93,10 +93,10 @@ namespace BagSurvivor.SynergyEditor
             // 낙뢰: 캐릭터 주변 일정 반경(range=6) 내 랜덤 적 타격, 애니 4배속(fps 48)
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:1, vSize:2.4f, stretchY:1.5f, fps:48f);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:1, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
             d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:3, vSize:2.4f, stretchY:1.5f, fps:48f);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:3, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
             // 낫: 투사체 표시 크기 2배(기본 0.8 → 1.6)
@@ -545,7 +545,7 @@ namespace BagSurvivor.SynergyEditor
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
             float duration = 0f, int pierce = 1,
             bool followVfx = false, float vSize = 0f, int vfxSort = 30, float stretchY = 1f,
-            float dmgDelay = 0f, float fps = 0f, float linger = -1f)
+            float dmgDelay = 0f, float fps = 0f, float linger = -1f, bool anchorBottom = false)
         {
             string path = $"{SkillDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SkillData>(path);
@@ -567,6 +567,7 @@ namespace BagSurvivor.SynergyEditor
             asset.pierceCount      = pierce;
             asset.vfxFollowPlayer  = followVfx;
             asset.vfxSortingOrder  = vfxSort;
+            asset.vfxAnchorBottom  = anchorBottom;
             asset.visualStretchY   = stretchY;
             asset.damageDelay      = dmgDelay;
             if (vSize > 0f) asset.visualSize = vSize;

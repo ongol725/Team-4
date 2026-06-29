@@ -766,6 +766,13 @@ public class SynergyManager : MonoBehaviour
             go.transform.localScale = new Vector3(s.x, s.y * skill.visualStretchY, s.z);
         }
 
+        // 하단 앵커: 중심이 아니라 스프라이트 하단이 대상에 닿도록 위로 절반만큼 올린다(낙뢰 등).
+        if (skill.vfxAnchorBottom)
+        {
+            float h = sr.sprite.bounds.size.y * go.transform.localScale.y;
+            go.transform.position = pos + new Vector3(0f, h * 0.5f, 0f);
+        }
+
         go.AddComponent<SpriteSheetAnimator>().Play(skill.animFrames, skill.animFps, loop: false);
 
         // 애니 재생 시간 + 마지막 프레임 유지 시간(vfxLingerTime) 후 소멸
