@@ -47,6 +47,7 @@ public class PlayerHealth : MonoBehaviour
     private bool        _selfBridge;      // PlayerStats가 없으면 true → 직접 로드아웃 반영
     private GameManager _gm;
     private Coroutine   _regenCoroutine;
+    private int         _currentRegen = 0;   // 현재 적용 중인 10초당 재생량
 
     public int CurrentHP => currentHP;
     public int MaxHP => maxHP;
@@ -110,19 +111,25 @@ public class PlayerHealth : MonoBehaviour
         currentHP = Mathf.Clamp(newCur, 0, maxHP);
         UpdateHud();
 
-        if (_regenCoroutine != null) StopCoroutine(_regenCoroutine);
-        if (loadout.TotalHpRegen > 0)
-            _regenCoroutine = StartCoroutine(RegenLoop(loadout.TotalHpRegen));
+        // 재생량이 바뀐 경우에만 루프를 재시작한다.
+        // (실시간 전달로 OnLoadoutReady가 자주 호출돼도 10초 타이머가 리셋되지 않도록)
+        if (loadout.TotalHpRegen != _currentRegen)
+        {
+            _currentRegen = loadout.TotalHpRegen;
+            if (_regenCoroutine != null) { StopCoroutine(_regenCoroutine); _regenCoroutine = null; }
+            if (_currentRegen > 0)
+                _regenCoroutine = StartCoroutine(RegenLoop());
+        }
     }
 
-    // 10초마다 regen만큼 회복
-    private IEnumerator RegenLoop(int regen)
+    // 10초마다 _currentRegen만큼 회복 (재생량은 OnLoadoutReady에서 갱신)
+    private IEnumerator RegenLoop()
     {
         var wait = new WaitForSeconds(10f);
-        while (!isDead)
+        while (!isDead && _currentRegen > 0)
         {
             yield return wait;
-            Heal(regen);
+            Heal(_currentRegen);
         }
         _regenCoroutine = null;
     }
