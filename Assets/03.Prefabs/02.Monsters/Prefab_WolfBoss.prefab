@@ -550,5 +550,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04200a0b843c07f439965995ef649dd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.BossHpBarLink
-  bossName: "\uBCF4\uC2A4"
+  bossName: "\uB2EC\uBE5B\uC758 \uB3C4\uC0B4\uC790 \uBCFC\uCE78"
   stopGrowOnLink: 1
