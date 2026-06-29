@@ -11,6 +11,9 @@ public class StatInfoPanelUI : MonoBehaviour
     [Header("참조 (전투 씬에서 Player에 연결)")]
     [SerializeField] private PlayerStats _playerStats;
 
+    [Header("참조 (인벤토리 씬 — 방어구 HP 반영용. 비우면 자동 탐색)")]
+    [SerializeField] private InventoryAnalyzer _analyzer;
+
     [Header("값 텍스트")]
     [SerializeField] private Text _hpText;
     [SerializeField] private Text _attackPowerText;
@@ -35,6 +38,11 @@ public class StatInfoPanelUI : MonoBehaviour
     {
         if (_playerStats != null)
             _playerStats.OnStatsChanged += Refresh;
+
+        // 인벤토리 씬: 방어구를 놓거나 뺄 때(스냅샷 변경) 패널을 갱신하도록 구독
+        if (_analyzer == null) _analyzer = FindFirstObjectByType<InventoryAnalyzer>();
+        if (_analyzer != null) _analyzer.OnSnapshotChanged += OnSnapshotChanged;
+
         Refresh();
     }
 
@@ -42,13 +50,17 @@ public class StatInfoPanelUI : MonoBehaviour
     {
         if (_playerStats != null)
             _playerStats.OnStatsChanged -= Refresh;
+        if (_analyzer != null)
+            _analyzer.OnSnapshotChanged -= OnSnapshotChanged;
     }
+
+    private void OnSnapshotChanged(InventorySnapshot _) => Refresh();
 
     /// <summary>외부(InventoryAnalyzer.OnSnapshotChanged 등)에서 갱신 요청 시 호출한다.</summary>
     public void Refresh()
     {
-        // CharacterManager에서 선택된 캐릭터를 직접 읽음 (PlayerStats 미연결 / 적용 실패 시 폴백)
-        SO_CharacterData charData = CharacterManager.Instance?.SelectedCharacter;
+        // 선택된 캐릭터(없으면 전사 폴백)를 읽음
+        SO_CharacterData charData = CharacterManager.GetSelectedOrDefault();
 
         if (_playerStats != null)
         {
@@ -63,10 +75,15 @@ public class StatInfoPanelUI : MonoBehaviour
         }
         else if (charData != null)
         {
-            // PlayerStats 미연결 씬에서도 캐릭터 데이터 표시
-            Apply(charData.maxHp, charData.maxHp,
+            // PlayerStats 미연결 씬(인벤토리/상점): 캐릭터 기본 HP + 방어구 hpBonus를 합산해 표시
+            var snap = _analyzer != null ? (_analyzer.LatestSnapshot ?? _analyzer.Analyze()) : null;
+            int armorHp = snap != null ? snap.TotalHpBonus : 0;
+            int regen   = snap != null ? snap.TotalHpRegen : 0;
+            int maxHp   = charData.maxHp + armorHp;
+
+            Apply(maxHp, maxHp,
                   charData.attackMultiplier, charData.attackSpeedMultiplier,
-                  charData.moveSpeed, charData.critChance);
+                  charData.moveSpeed, charData.critChance, regen);
         }
         else if (_useMock)
         {
