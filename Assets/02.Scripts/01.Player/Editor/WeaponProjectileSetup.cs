@@ -87,17 +87,50 @@ public static class WeaponProjectileSetup
         return (i < name.Length && int.TryParse(name.Substring(i), out int n)) ? n : 0;
     }
 
-    /// <summary>지정 png를 cols×rows 균등 그리드로 재슬라이스한다(중심 피벗). 프레임명 = 파일명_인덱스.</summary>
+    /// <summary>
+    /// 지정 png를 cols×rows 균등 그리드로 재슬라이스한다(중심 피벗).
+    /// 추가로 모든 셀의 '내용물 영역'을 셀 로컬 좌표로 합집합해 공통 투명 여백을 잘라낸다(트림).
+    /// → 정규화 시 그림이 꽉 차 보이고, 모든 프레임이 같은 창을 써서 애니메이션 크기가 일관된다.
+    /// </summary>
     private static void GridSlice(string pngPath, int cols, int rows)
     {
         var importer = AssetImporter.GetAtPath(pngPath) as TextureImporter;
         if (importer == null) { Debug.LogWarning($"[WeaponProjectileSetup] 임포터 없음: {pngPath}"); return; }
 
+        // 픽셀 분석을 위해 임시로 읽기 가능 활성화 후 리임포트
+        bool prevReadable = importer.isReadable;
+        if (!prevReadable) { importer.isReadable = true; importer.SaveAndReimport(); }
+
         var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pngPath);
         if (tex == null) { Debug.LogWarning($"[WeaponProjectileSetup] 텍스처 로드 실패: {pngPath}"); return; }
 
-        int cw = tex.width / cols, ch = tex.height / rows;
+        int W = tex.width, H = tex.height;
+        int cw = W / cols, ch = H / rows;
         if (cw <= 0 || ch <= 0) return;
+
+        // 셀 로컬 내용물 합집합 창 (모든 프레임 공통). 알파>임계 픽셀의 경계.
+        const byte THR = 10;
+        int ux0 = cw, uy0 = ch, ux1 = -1, uy1 = -1;
+        Color32[] px = null;
+        try { px = tex.GetPixels32(); } catch { px = null; } // GetPixels32: 좌하단 원점, index=y*W+x
+        if (px != null)
+        {
+            for (int r = 0; r < rows; r++)
+                for (int c = 0; c < cols; c++)
+                {
+                    int ox = c * cw, oy = H - (r + 1) * ch; // 셀 원점(좌하단)
+                    for (int ly = 0; ly < ch; ly++)
+                        for (int lx = 0; lx < cw; lx++)
+                            if (px[(oy + ly) * W + (ox + lx)].a > THR)
+                            {
+                                if (lx < ux0) ux0 = lx; if (lx > ux1) ux1 = lx;
+                                if (ly < uy0) uy0 = ly; if (ly > uy1) uy1 = ly;
+                            }
+                }
+        }
+        bool trim = ux1 >= ux0 && uy1 >= uy0;
+        int wx = trim ? ux0 : 0, wy = trim ? uy0 : 0;
+        int ww = trim ? (ux1 - ux0 + 1) : cw, wh = trim ? (uy1 - uy0 + 1) : ch;
 
         string prefix = Path.GetFileNameWithoutExtension(pngPath);
         var metas = new List<SpriteMetaData>();
@@ -105,11 +138,11 @@ public static class WeaponProjectileSetup
         for (int r = 0; r < rows; r++)
             for (int c = 0; c < cols; c++)
             {
+                int ox = c * cw, oy = H - (r + 1) * ch;
                 metas.Add(new SpriteMetaData
                 {
                     name      = $"{prefix}_{idx}",
-                    // Unity 텍스처 좌표는 좌하단 기준 → 위쪽 행부터 채우기 위해 y를 뒤집는다
-                    rect      = new Rect(c * cw, tex.height - (r + 1) * ch, cw, ch),
+                    rect      = new Rect(ox + wx, oy + wy, ww, wh),
                     alignment = (int)SpriteAlignment.Center,
                     pivot     = new Vector2(0.5f, 0.5f),
                 });
@@ -117,11 +150,12 @@ public static class WeaponProjectileSetup
             }
 
         importer.spriteImportMode = SpriteImportMode.Multiple;
+        importer.isReadable       = prevReadable; // 원복(보통 false)
 #pragma warning disable CS0618 // spritesheet은 deprecated이나 그리드 일괄 슬라이스에 여전히 동작
         importer.spritesheet = metas.ToArray();
 #pragma warning restore CS0618
         EditorUtility.SetDirty(importer);
         importer.SaveAndReimport();
-        Debug.Log($"[WeaponProjectileSetup] 재슬라이스: {prefix} → {cols}x{rows} ({metas.Count}프레임)");
+        Debug.Log($"[WeaponProjectileSetup] 재슬라이스: {prefix} → {cols}x{rows}, 셀 {cw}x{ch} → 트림창 {ww}x{wh}");
     }
 }
