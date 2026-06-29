@@ -126,17 +126,17 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:4.8f, stretchY:2f);
 
             // ── 티탄 (Titan) — AutoTimer / WPN_ATK_AVG / RandomEnemy × N ──
-            // 돌: 크기 5배(vSize 0.8→4.0), 낙하 애니 5배 빠르게(fps 12→60; 총 1초→0.2초),
-            //     착지 시점 타격(dmgDelay 0.12초 = 애니의 60% 지점), 착지 후 0.5초 잔류(linger)
+            // 돌: 크기 5배(vSize 0.8→4.0), 낙하 애니 2배속(fps 60→120; 총 0.2→0.1초),
+            //     하단 앵커(돌 하단이 적 중심에 착지), 착지 시점 타격(dmgDelay 0.06초), 착지 후 0.5초 잔류(linger)
             d["SK_METEOR_1"] = Sk("SK_METEOR_1", "돌 떨구기 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:3, vSize:4f, dmgDelay:0.12f, fps:60f, linger:0.5f);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:3, vSize:4f, dmgDelay:0.06f, fps:120f, linger:0.5f, anchorBottom:true);
             d["SK_METEOR_2"] = Sk("SK_METEOR_2", "돌 떨구기 6개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:6, vSize:4f, dmgDelay:0.12f, fps:60f, linger:0.5f);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:6, vSize:4f, dmgDelay:0.06f, fps:120f, linger:0.5f, anchorBottom:true);
             d["SK_METEOR_3"] = Sk("SK_METEOR_3", "돌 떨구기 9개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:9, vSize:4f, dmgDelay:0.12f, fps:60f, linger:0.5f);
+                ScalingStatType.WPN_ATK_AVG, dmg:5.0f, cd:4f, range:18f, extra:9, vSize:4f, dmgDelay:0.06f, fps:120f, linger:0.5f, anchorBottom:true);
 
             // ── 난공불락 (Impregnable) — OnHitTaken / ARM_HP_SUM / Self + DamageReduction ──
             // 충격파: 표시 크기 5배(기본 0.8 → 4.0), 바닥 깔림(vfxSort -1)
