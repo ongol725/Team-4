@@ -768,7 +768,7 @@ public class PlayerAttack : MonoBehaviour
             rb.gravityScale = 0f;
             var col = go.AddComponent<CircleCollider2D>();
             col.isTrigger = true;
-            col.radius    = 0.3f;
+            col.radius    = targetSize * 0.5f; // 피격 반경을 표시 반경(targetSize/2)에 일치 → 투사체 크기=피격범위
         }
 
         // 삭제/누락 프레임 방어 — 유효한 게 없으면 빈 오브젝트만 반환(크래시 방지)
