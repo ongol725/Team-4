@@ -28,9 +28,13 @@ public class BlobShadow : MonoBehaviour
     SpriteRenderer ownerSprite;  // 부모의 메인(가장 큰) 스프라이트
     SpriteRenderer shadowSr;     // 그림자 렌더러
     bool isPlayer;               // true면 playerWidthMultiplier 추가 적용
+    float widthMul = 1f;         // 개별(몬스터별) 폭 배수 — 여백 큰 스프라이트 보정용
 
     /// <summary>플레이어가 부착 직후 호출 — 플레이어 전용 폭 배수를 적용한다.</summary>
     public void MarkAsPlayer() { isPlayer = true; Refresh(); }
+
+    /// <summary>개별 폭 배수 지정(예: 엘리트 슬라임처럼 스프라이트 여백이 커 그림자가 과대한 경우).</summary>
+    public void SetWidthMul(float m) { widthMul = m; Refresh(); }
 
     /// <summary>외부에서 스케일 변경 후 그림자 크기·위치를 다시 맞춘다(예: 슬라임 분열).</summary>
     public void Refit() => Refresh();
@@ -67,6 +71,7 @@ public class BlobShadow : MonoBehaviour
         float alpha       = st != null ? st.alpha       : DefAlpha;
         float feetY       = st != null ? st.feetYOffset : DefFeetYOffset;
         if (isPlayer && st != null) widthRatio *= st.playerWidthMultiplier; // 플레이어 전용 축소/확대
+        widthRatio *= widthMul; // 개별 몬스터 폭 배수
 
         // 메인 스프라이트 = 자식 중 가장 폭이 큰 스프라이트(그림자 자신 제외)
         if (ownerSprite == null)
