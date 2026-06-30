@@ -256,16 +256,24 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
-                AttackMeleeFan(entry, range, angle, kb, flashScale);
+                // 메이스: 쇠구슬이 전방 오프셋만큼 더 나가므로 판정 반경을 그만큼 여유있게(range+오프셋), 표시 크기는 유지
+                if (id == "WPN_023")
+                {
+                    float maceReach = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
+                    ApplyMeleeFan(entry, FacingDir(range), range + maceReach, angle, kb, flashScale, visualRange: range);
+                }
+                else
+                    AttackMeleeFan(entry, range, angle, kb, flashScale);
 
                 // 플레일 5단계: 정면뿐 아니라 후면에도 부채꼴 타격(두 부채꼴)
                 if (g5 && id == "WPN_022")
                     AttackMeleeFanDir(entry, range, angle, kb, flashScale, -FacingDir(range));
 
-                // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1초
+                // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1초 (판정 반경과 동일하게 여유있게)
                 if (g5 && id == "WPN_023")
                 {
-                    foreach (var mc in FindInFan(FacingDir(range), range, angle))
+                    float maceReach = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
+                    foreach (var mc in GetEnemiesInRange(range + maceReach))
                         mc.ApplyStun(1f);
                 }
                 // 워해머 5단계: 전방위 적 이동속도 1/4 (2초)
@@ -496,7 +504,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     private void ApplyMeleeFan(WeaponLoadoutEntry entry, Vector2 facing,
-        float range, float angleDeg, float knockback, float flashScale)
+        float range, float angleDeg, float knockback, float flashScale, float visualRange = -1f)
     {
         var enemies = angleDeg >= 360f
             ? GetEnemiesInRange(range)
@@ -508,7 +516,8 @@ public class PlayerAttack : MonoBehaviour
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(meleeDmg, knockback, kbDir);
         }
-        StartCoroutine(ShowMeleeFlash(entry.data, facing, range, flashScale));
+        // 표시 반경을 판정 반경과 분리 가능(visualRange). 미지정 시 판정 반경과 동일.
+        StartCoroutine(ShowMeleeFlash(entry.data, facing, visualRange > 0f ? visualRange : range, flashScale));
     }
 
     private IEnumerator DelayedFanDir(WeaponLoadoutEntry entry, float range,
@@ -850,10 +859,7 @@ public class PlayerAttack : MonoBehaviour
         var pivot = new GameObject($"MeleePivot_{wd.itemName}");
         pivot.transform.position = transform.position;
         wpn.transform.SetParent(pivot.transform, false);
-        // 메이스(쇠구슬 휘두름)는 플레이어 중심으로 휘돌아야 판정(전방위 반경)과 일치 → 오프셋 0.
-        // 그 외 근접은 공격 방향 앞쪽으로 reach만큼 띄움(중앙 겹침 해소).
-        float fwd = wd.itemID == "WPN_023" ? 0f : reach;
-        wpn.transform.localPosition = new Vector3(0f, fwd, 0f);
+        wpn.transform.localPosition = new Vector3(0f, reach, 0f); // 공격 방향 앞쪽으로 reach만큼 띄움(중앙 겹침 해소)
         Destroy(pivot, dur + 0.05f);
 
         float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
