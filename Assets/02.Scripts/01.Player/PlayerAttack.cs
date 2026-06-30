@@ -849,15 +849,6 @@ public class PlayerAttack : MonoBehaviour
         float hitDiameter = 2f * (range > 0f ? range : _meleeRange);
         var  wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", hitDiameter * scaleMult, loop: false, withBody: false);
 
-        // 무기별 표시 비율(가로,세로). 자식 스케일이라 피벗 회전과 무관하게 형태 유지(전단 없음).
-        Vector2 vShape = wd.itemID switch
-        {
-            "WPN_002" => new Vector2(1.5f, 4f), // 장검: 가로 ×1.5 · 세로 ×4
-            _         => Vector2.one,
-        };
-        if (vShape != Vector2.one)
-            wpn.transform.localScale = new Vector3(vShape.x, vShape.y, 1f);
-
         var pivot = new GameObject($"MeleePivot_{wd.itemName}");
         pivot.transform.position = transform.position;
         wpn.transform.SetParent(pivot.transform, false);
