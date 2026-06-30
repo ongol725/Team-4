@@ -48,6 +48,11 @@ public class RoomController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
+
+        // 방 진입 시 0.5초 무적 — 바로 앞에 스폰된 몹과 충돌해 즉시 피해받는 것 방지
+        var ph = collision.GetComponentInParent<PlayerHealth>();
+        if (ph != null) ph.GrantInvincibility(0.5f);
+
         playerInside = true;
         playerTf = collision.transform;
         if (activated) return; // 이미 활성화된 방은 무시(전투 중 재진입 등)
