@@ -25,12 +25,12 @@ MonoBehaviour:
   - {x: 1, y: 0}
   gradeStats:
   - hpBonus: 150
-    hpRegen: 2
-  - hpBonus: 225
     hpRegen: 3
-  - hpBonus: 338
-    hpRegen: 5
   - hpBonus: 225
-    hpRegen: 7
+    hpRegen: 5
   - hpBonus: 338
-    hpRegen: 10
+    hpRegen: 8
+  - hpBonus: 225
+    hpRegen: 11
+  - hpBonus: 338
+    hpRegen: 15
