@@ -206,6 +206,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_004" => 90f,
                     "WPN_019" => 180f, // 대검: 180도
                     "WPN_020" => 120f,
+                    "WPN_021" => 30f,  // 스피어: 좁은 직선 찌르기(전방 관통)
                     "WPN_022" => 120f, // 플레일: 전방 범위
                     "WPN_023" => 360f, // 메이스: 쇠구슬이 휘도는 전방위 — 쇠구슬 위치까지 판정 포함
                     "WPN_024" => 180f, // 몽둥이: 전방 180도
@@ -224,6 +225,7 @@ public class PlayerAttack : MonoBehaviour
                         // 장검002·사이드030의 5단계는 쿨타임 감소(AttackLoop)로 처리 — 각도/애니 변경 없음
                         case "WPN_019": kb        = 10f;   break; // 대검: 넉백 +10 (이속저하는 후처리)
                         case "WPN_020": flashScale = 2f;   break; // 카타나: 이펙트 크기 +100%
+                        case "WPN_021": range     *= 1.5f; break; // 스피어 5단계: 사거리 1.5배(관통은 부채꼴 기본)
                         case "WPN_022": range     *= 1.5f; break; // 플레일: 범위 +50% (후면 타격은 후처리)
                         case "WPN_024": kb        *= 4f;   break; // 몽둥이: 넉백 4배
                     }
