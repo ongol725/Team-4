@@ -274,14 +274,8 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
-                // 메이스: 쇠구슬이 전방 오프셋만큼 더 나가므로 판정 반경을 그만큼 여유있게(range+오프셋), 표시 크기는 유지
-                if (id == "WPN_023")
-                {
-                    float maceReach = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
-                    ApplyMeleeFan(entry, FacingDir(range), range + maceReach, angle, kb, flashScale, visualRange: range);
-                }
-                else
-                    AttackMeleeFan(entry, range, angle, kb, flashScale);
+                // 판정 반경엔 ApplyMeleeFan이 전방 오프셋(reach)을 더해 보이는 무기와 일치시킴
+                AttackMeleeFan(entry, range, angle, kb, flashScale);
 
                 // 플레일 5단계: 정면뿐 아니라 후면에도 부채꼴 타격(두 부채꼴)
                 if (g5 && id == "WPN_022")
@@ -527,9 +521,12 @@ public class PlayerAttack : MonoBehaviour
     private void ApplyMeleeFan(WeaponLoadoutEntry entry, Vector2 facing,
         float range, float angleDeg, float knockback, float flashScale, float visualRange = -1f)
     {
+        // 표시는 앞쪽으로 reach만큼 띄워지므로(대검·몽둥이·메이스 등) 판정 반경에 reach를 더해 보이는 무기와 일치시킴
+        float reach    = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
+        float hitRange = range + reach;
         var enemies = angleDeg >= 360f
-            ? GetEnemiesInRange(range)
-            : FindInFan(facing, range, angleDeg);
+            ? GetEnemiesInRange(hitRange)
+            : FindInFan(facing, hitRange, angleDeg);
 
         int meleeDmg = ScaleDamage(entry.attackPower);
         foreach (var mc in enemies)
@@ -550,7 +547,10 @@ public class PlayerAttack : MonoBehaviour
 
     private void AttackMeleeSingle(WeaponLoadoutEntry entry, float range, bool splash = false, float scaleMult = 1f)
     {
-        var    target = FindNearest(range);
+        // 표시가 앞쪽으로 reach만큼 띄워지므로 판정 반경에 reach를 더해 일치시킴
+        float reach    = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
+        float hitRange = range + reach;
+        var    target = FindNearest(hitRange);
         Vector2 dir   = target != null
             ? ((Vector2)target.transform.position - (Vector2)transform.position).normalized
             : _lastMoveDir;
@@ -561,7 +561,7 @@ public class PlayerAttack : MonoBehaviour
 
             if (splash)
             {
-                foreach (var mc in GetEnemiesInRange(range))
+                foreach (var mc in GetEnemiesInRange(hitRange))
                 {
                     if (mc == target) continue;
                     Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
