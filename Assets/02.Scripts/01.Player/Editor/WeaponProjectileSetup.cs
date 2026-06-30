@@ -18,6 +18,84 @@ public static class WeaponProjectileSetup
     private const string SheetDir  = "Assets/03.Prefabs/03.Weapons";
     private const string WeaponDir = "Assets/Resources/ScriptableObjects/Weapons";
 
+    // ── 실험: w02(8프레임 검 스윙 시트)를 장검(WPN_002)에 적용 ──
+    [MenuItem("BagSurvivor/Setup/⑤ Test: w02 → 장검(WPN_002)")]
+    public static void TestW02ToLongsword()
+    {
+        string png = $"{SheetDir}/w02.png";
+        if (AssetImporter.GetAtPath(png) == null) { Debug.LogError($"[Test] 파일 없음: {png}"); return; }
+
+        // 8프레임 · 256셀 · 2px 간격 · 가로 1줄 · 중앙 피벗 (maxTex 4096로 다운스케일 방지)
+        GridSliceBySize(png, 256, 256, 2, 0, 8, 1);
+
+        var w = LoadWeaponByItemID("WPN_002");
+        if (w == null) { Debug.LogError("[Test] WPN_002(장검) SO를 찾지 못함"); return; }
+
+        var frames = LoadFramesSorted(png);
+        if (frames.Length == 0) { Debug.LogError("[Test] w02 슬라이스 결과 없음"); return; }
+
+        w.attackFrames = frames;
+        if (w.attackFps <= 0f) w.attackFps = 12f;
+        w.meleeMotion = MeleeMotionType.Swing; // 스윙
+        EditorUtility.SetDirty(w);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log($"[Test] w02({frames.Length}프레임) → 장검(WPN_002) 스윙 적용 완료. 인게임에서 장검 장착 후 공격해보세요.");
+    }
+
+    private static SO_WeaponData LoadWeaponByItemID(string id)
+    {
+        foreach (var guid in AssetDatabase.FindAssets("t:SO_WeaponData", new[] { WeaponDir }))
+        {
+            var w = AssetDatabase.LoadAssetAtPath<SO_WeaponData>(AssetDatabase.GUIDToAssetPath(guid));
+            if (w != null && w.itemID == id) return w;
+        }
+        return null;
+    }
+
+    /// <summary>셀 크기 + 간격 기반 그리드 슬라이스(중앙 피벗). 임포트 설정도 권장값으로 강제.</summary>
+    private static void GridSliceBySize(string pngPath, int cellW, int cellH, int gapX, int gapY, int cols, int rows)
+    {
+        var importer = AssetImporter.GetAtPath(pngPath) as TextureImporter;
+        if (importer == null) { Debug.LogWarning($"[Slice] 임포터 없음: {pngPath}"); return; }
+
+        importer.textureType         = TextureImporterType.Sprite;
+        importer.spriteImportMode    = SpriteImportMode.Multiple;
+        importer.spritePixelsPerUnit = 100;
+        importer.mipmapEnabled       = false;
+        importer.alphaIsTransparency = true;
+        importer.filterMode          = FilterMode.Bilinear;
+        importer.maxTextureSize      = 4096; // 2062px 등 2048 초과분 다운스케일 방지(좌표 어긋남 차단)
+        importer.SaveAndReimport();
+
+        var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pngPath);
+        int H = tex != null ? tex.height : (cellH * rows + gapY * (rows - 1));
+
+        string prefix = Path.GetFileNameWithoutExtension(pngPath);
+        var metas = new List<SpriteMetaData>();
+        int idx = 0;
+        for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++)
+            {
+                int x = c * (cellW + gapX);
+                int y = H - (r + 1) * cellH - r * gapY; // 위 행부터(좌하단 원점)
+                metas.Add(new SpriteMetaData
+                {
+                    name      = $"{prefix}_{idx}",
+                    rect      = new Rect(x, y, cellW, cellH),
+                    alignment = (int)SpriteAlignment.Center,
+                    pivot     = new Vector2(0.5f, 0.5f),
+                });
+                idx++;
+            }
+#pragma warning disable CS0618
+        importer.spritesheet = metas.ToArray();
+#pragma warning restore CS0618
+        EditorUtility.SetDirty(importer);
+        importer.SaveAndReimport();
+        Debug.Log($"[Slice] {prefix}: {cols}x{rows}, 셀 {cellW}x{cellH}, 간격 {gapX}px, 프레임 {metas.Count}개");
+    }
+
     [MenuItem("BagSurvivor/Setup/④ Fill Weapon Attack Frames")]
     public static void FillWeaponAttackFrames()
     {
