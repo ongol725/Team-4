@@ -22,11 +22,13 @@ public class ProjectileBase : MonoBehaviour
     private Transform _owner;
     private float     _age;
     private float     _outTime;
+    private float     _spinSpeed; // 0이 아니면 비행 중 초당 이 각도만큼 자전(예: 수리검)
 
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
         float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
-        bool boomerang = false, Transform owner = null)
+        bool boomerang = false, Transform owner = null, float spinSpeed = 0f)
     {
+        _spinSpeed       = spinSpeed;
         _damage          = damage;
         _remainingHits   = Mathf.Max(1, maxHits);
         _knockbackForce  = knockbackForce;
@@ -54,6 +56,10 @@ public class ProjectileBase : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // 자전(수리검 등): 진행과 무관하게 제자리에서 빙글빙글
+        if (_spinSpeed != 0f)
+            transform.Rotate(0f, 0f, _spinSpeed * Time.fixedDeltaTime);
+
         var rb = GetComponent<Rigidbody2D>();
 
         // 부메랑: 전진 후 플레이어에게 복귀

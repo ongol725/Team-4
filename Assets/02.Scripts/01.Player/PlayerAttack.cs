@@ -688,9 +688,10 @@ public class PlayerAttack : MonoBehaviour
         if (scaleMult != 1f)
             go.transform.localScale *= scaleMult;
 
+        float spin = wd.itemID == "WPN_016" ? 1080f : 0f; // 수리검: 비행 중 자전(초당 3바퀴)
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
-                  homing: homing, boomerang: boomerang, owner: boomerang ? transform : null);
+                  homing: homing, boomerang: boomerang, owner: boomerang ? transform : null, spinSpeed: spin);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,
