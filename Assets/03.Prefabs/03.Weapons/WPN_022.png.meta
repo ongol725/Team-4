@@ -198,12 +198,12 @@ TextureImporter:
       name: WPN_022_0
       rect:
         serializedVersion: 2
-        x: 199
+        x: 0
         y: 0
-        width: 131
-        height: 153
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -220,12 +220,12 @@ TextureImporter:
       name: WPN_022_1
       rect:
         serializedVersion: 2
-        x: 527
+        x: 329
         y: 0
-        width: 132
-        height: 161
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -242,12 +242,12 @@ TextureImporter:
       name: WPN_022_2
       rect:
         serializedVersion: 2
-        x: 854
+        x: 658
         y: 0
-        width: 134
-        height: 178
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -264,12 +264,12 @@ TextureImporter:
       name: WPN_022_3
       rect:
         serializedVersion: 2
-        x: 1177
+        x: 987
         y: 0
-        width: 140
-        height: 198
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -286,12 +286,12 @@ TextureImporter:
       name: WPN_022_4
       rect:
         serializedVersion: 2
-        x: 1500
+        x: 1316
         y: 0
-        width: 146
-        height: 205
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -308,12 +308,12 @@ TextureImporter:
       name: WPN_022_5
       rect:
         serializedVersion: 2
-        x: 1796
+        x: 1645
         y: 0
-        width: 179
-        height: 215
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -330,12 +330,12 @@ TextureImporter:
       name: WPN_022_6
       rect:
         serializedVersion: 2
-        x: 2105
+        x: 1974
         y: 0
-        width: 199
-        height: 247
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -352,12 +352,12 @@ TextureImporter:
       name: WPN_022_7
       rect:
         serializedVersion: 2
-        x: 2427
-        y: 8
-        width: 206
-        height: 262
+        x: 2303
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -374,12 +374,12 @@ TextureImporter:
       name: WPN_022_8
       rect:
         serializedVersion: 2
-        x: 2751
-        y: 30
-        width: 211
-        height: 248
+        x: 2632
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -396,12 +396,12 @@ TextureImporter:
       name: WPN_022_9
       rect:
         serializedVersion: 2
-        x: 3046
-        y: 60
-        width: 244
-        height: 218
+        x: 2961
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -418,12 +418,12 @@ TextureImporter:
       name: WPN_022_10
       rect:
         serializedVersion: 2
-        x: 3346
-        y: 75
-        width: 266
-        height: 203
+        x: 3290
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -440,12 +440,12 @@ TextureImporter:
       name: WPN_022_11
       rect:
         serializedVersion: 2
-        x: 3650
-        y: 75
-        width: 271
-        height: 203
+        x: 3619
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -462,12 +462,12 @@ TextureImporter:
       name: WPN_022_12
       rect:
         serializedVersion: 2
-        x: 3960
-        y: 75
-        width: 256
-        height: 203
+        x: 3948
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -484,12 +484,12 @@ TextureImporter:
       name: WPN_022_13
       rect:
         serializedVersion: 2
-        x: 4276
-        y: 69
-        width: 234
-        height: 209
+        x: 4277
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -506,12 +506,12 @@ TextureImporter:
       name: WPN_022_14
       rect:
         serializedVersion: 2
-        x: 4605
-        y: 27
-        width: 213
-        height: 251
+        x: 4606
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -528,12 +528,12 @@ TextureImporter:
       name: WPN_022_15
       rect:
         serializedVersion: 2
-        x: 4934
-        y: 8
-        width: 213
-        height: 264
+        x: 4935
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -550,12 +550,12 @@ TextureImporter:
       name: WPN_022_16
       rect:
         serializedVersion: 2
-        x: 5263
+        x: 5264
         y: 0
-        width: 213
-        height: 254
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -572,12 +572,12 @@ TextureImporter:
       name: WPN_022_17
       rect:
         serializedVersion: 2
-        x: 5592
+        x: 5593
         y: 0
-        width: 213
-        height: 226
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -594,12 +594,12 @@ TextureImporter:
       name: WPN_022_18
       rect:
         serializedVersion: 2
-        x: 5921
+        x: 5922
         y: 0
-        width: 227
-        height: 189
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -616,12 +616,12 @@ TextureImporter:
       name: WPN_022_19
       rect:
         serializedVersion: 2
-        x: 6250
+        x: 6251
         y: 0
-        width: 248
-        height: 173
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -638,12 +638,12 @@ TextureImporter:
       name: WPN_022_20
       rect:
         serializedVersion: 2
-        x: 6599
+        x: 6580
         y: 0
-        width: 240
-        height: 173
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -660,12 +660,12 @@ TextureImporter:
       name: WPN_022_21
       rect:
         serializedVersion: 2
-        x: 6968
+        x: 6909
         y: 0
-        width: 203
-        height: 173
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -682,12 +682,12 @@ TextureImporter:
       name: WPN_022_22
       rect:
         serializedVersion: 2
-        x: 7331
+        x: 7238
         y: 0
-        width: 169
-        height: 173
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -704,12 +704,12 @@ TextureImporter:
       name: WPN_022_23
       rect:
         serializedVersion: 2
-        x: 7688
-        y: 4
-        width: 141
-        height: 169
+        x: 7567
+        y: 0
+        width: 329
+        height: 278
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
