@@ -172,7 +172,12 @@ public class PlayerAttack : MonoBehaviour
                 int   shots      = 1;
                 float dmgMult    = 1f;
                 float spdMult    = 1f;
-                float scaleMult  = (id == "WPN_001" || id == "WPN_009") ? 2f : 1f; // 단검·활: 투사체 크기 ×2(가로세로 각각)
+                float scaleMult  = id switch
+                {
+                    "WPN_016"              => 3f, // 수리검: 투사체 크기 ×3(가로세로 각각)
+                    "WPN_001" or "WPN_009" => 2f, // 단검·활: ×2(가로세로 각각)
+                    _                      => 1f,
+                };
                 int   pierce     = 0;
                 bool  homing     = id == "WPN_011"; // 지팡이: 유도 투사체
 
@@ -188,7 +193,7 @@ public class PlayerAttack : MonoBehaviour
                         case "WPN_006": pierce    = 10;         break; // 쇠뇌: 관통 +10
                         case "WPN_007": dmgMult   = 6f;         break; // 권총: 데미지 +500%
                         case "WPN_011": shots     = 3;          break; // 지팡이: 3발 (유도)
-                        case "WPN_016": scaleMult = 3f; pierce = 5; break; // 수리검: 크기 ×3, 관통 +5
+                        case "WPN_016": pierce = 5; break; // 수리검 5단계: 관통 +5 (크기는 기본 ×3)
                     }
                 }
 
