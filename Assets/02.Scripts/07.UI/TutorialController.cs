@@ -28,6 +28,8 @@ namespace BagSurvivor.UI
         [SerializeField] private TutorialPage[] pages;
 
         [Header("동작 설정")]
+        [Tooltip("켜면 PlayerPrefs를 무시하고 플레이할 때마다 항상 표시 (개발/테스트용 — 출시 전 끌 것)")]
+        [SerializeField] private bool alwaysShowOnPlay = false;
         [Tooltip("최초 1회 자동 표시 여부 (PlayerPrefs로 관람 여부 기록)")]
         [SerializeField] private bool autoShowOnFirstVisit = true;
         [Tooltip("자동 표시 여부 판단에 쓰는 PlayerPrefs 키")]
@@ -63,6 +65,11 @@ namespace BagSurvivor.UI
         private void Start()
         {
             // BuildUI는 Awake에서 끝나므로 추가 대기 없이 첫 프레임에 바로 표시한다.
+            if (alwaysShowOnPlay)
+            {
+                Open(); // PlayerPrefs 무시하고 매번 표시
+                return;
+            }
             if (autoShowOnFirstVisit && PlayerPrefs.GetInt(seenPrefKey, 0) == 0)
             {
                 Open();
