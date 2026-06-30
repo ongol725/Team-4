@@ -57,12 +57,12 @@ MonoBehaviour:
   meleeMotionDuration: 0.2
   gradeStats:
   - attackPower: 5
-    attackSpeed: 0.11
+    attackSpeed: 0.33
   - attackPower: 7
-    attackSpeed: 0.11
+    attackSpeed: 0.33
   - attackPower: 9
-    attackSpeed: 0.11
+    attackSpeed: 0.33
   - attackPower: 10
-    attackSpeed: 0.11
+    attackSpeed: 0.33
   - attackPower: 12
-    attackSpeed: 0.11
+    attackSpeed: 0.33
