@@ -197,7 +197,17 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
 
-                AttackSingleTarget(entry, range, shots, dmgMult, spdMult, scaleMult, pierce, homing);
+                // 도끼 5단계: 던진 도끼가 명중 지점에서 스플래시(폭발)
+                if (g5 && id == "WPN_005")
+                {
+                    var     axeTgt = FindNearest(range);
+                    Vector2 axeDir = axeTgt != null
+                        ? ((Vector2)axeTgt.transform.position - (Vector2)transform.position).normalized
+                        : _lastMoveDir;
+                    SpawnExplosive(entry, axeDir, range, 2f);
+                }
+                else
+                    AttackSingleTarget(entry, range, shots, dmgMult, spdMult, scaleMult, pierce, homing);
                 break;
             }
 
@@ -320,7 +330,6 @@ public class PlayerAttack : MonoBehaviour
                 if (g5)
                 {
                     if (id == "WPN_003") scaleMult = 2f;   // 철퇴: 이펙트 크기 +100%
-                    if (id == "WPN_005") splash    = true; // 도끼: 스플래시
                     if (id == "WPN_025") burst     = 5;    // 너클: 5연타
                 }
 
