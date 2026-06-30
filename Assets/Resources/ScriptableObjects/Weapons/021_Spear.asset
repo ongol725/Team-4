@@ -34,6 +34,13 @@ MonoBehaviour:
   maxTargets: 0
   attackFrames:
   - {fileID: 9125765898052600260, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 3580868461300293157, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 1967298386148559448, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 5810492157068194621, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 4463175394604954203, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: -2379392859722537828, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: -8938477231262207154, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 3439166741069129841, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
   attackFps: 12
   meleeMotion: 0
   meleeSwingAngle: 90
