@@ -202,17 +202,7 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
 
-                // 도끼 5단계: 던진 도끼가 명중 지점에서 스플래시(폭발)
-                if (g5 && id == "WPN_005")
-                {
-                    var     axeTgt = FindNearest(range);
-                    Vector2 axeDir = axeTgt != null
-                        ? ((Vector2)axeTgt.transform.position - (Vector2)transform.position).normalized
-                        : _lastMoveDir;
-                    SpawnExplosive(entry, axeDir, range, 2f);
-                }
-                else
-                    AttackSingleTarget(entry, range, shots, dmgMult, spdMult, scaleMult, pierce, homing);
+                AttackSingleTarget(entry, range, shots, dmgMult, spdMult, scaleMult, pierce, homing);
                 break;
             }
 
@@ -227,14 +217,15 @@ public class PlayerAttack : MonoBehaviour
                 float angle = id switch
                 {
                     "WPN_002" => 90f,
-                    "WPN_004" => 90f,
+                    "WPN_004" => 120f, // 채찍: 우측 120도
+                    "WPN_005" => 120f, // 도끼: 전방 120도 회전
                     "WPN_019" => 180f, // 대검: 180도
                     "WPN_020" => 120f,
                     "WPN_021" => 30f,  // 스피어: 좁은 직선 찌르기(전방 관통)
                     "WPN_022" => 120f, // 플레일: 전방 범위
-                    "WPN_023" => 360f, // 메이스: 쇠구슬이 휘도는 전방위 — 쇠구슬 위치까지 판정 포함
+                    "WPN_023" => 90f,  // 메이스: 전방 90도
                     "WPN_024" => 180f, // 몽둥이: 전방 180도
-                    "WPN_027" => 120f, // 할버드: 넓은 부채꼴
+                    "WPN_027" => 180f, // 할버드: 180도 회전(이후 찌르기 콤보)
                     "WPN_029" => 360f, // 워해머: 전방위
                     "WPN_030" => 180f, // 사이드: 반원
                     _         => 90f,
@@ -273,11 +264,11 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
-                // 할버드: 근접 부채꼴만(투사체 콤보 제거). 근접 크기 0.2배
+                // 할버드: 180° 회전 → 찌르기 콤보(근접). 근접 크기 0.2배
                 if (id == "WPN_027")
                 {
                     range *= 0.2f; // 근접 크기 0.2배(표시·피격 함께)
-                    AttackMeleeFan(entry, range, angle, kb, flashScale);
+                    StartCoroutine(HalberdCombo(entry, range, angle, kb, flashScale));
                     break;
                 }
 
@@ -550,6 +541,26 @@ public class PlayerAttack : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         AttackMeleeFanDir(entry, range, angleDeg, knockback, flashScale, dir);
+    }
+
+    // 할버드: 전방 angleDeg(180)° 부채꼴 회전 → 잠시 후 앞으로 찌르기(전방 좁은 판정 + 찌르기 모션).
+    private IEnumerator HalberdCombo(WeaponLoadoutEntry entry, float range,
+        float angleDeg, float kb, float flashScale)
+    {
+        // 1타: 180° 회전 (무기 시트 재생 = 무기 기본 모션)
+        AttackMeleeFan(entry, range, angleDeg, kb, flashScale);
+        yield return new WaitForSeconds(0.25f);
+
+        // 2타: 앞으로 찌르기 — 전방 좁은 판정 + Thrust 모션 비주얼
+        Vector2 dir   = FacingDir(range);
+        float   reach = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
+        int     dmg   = ScaleDamage(entry.attackPower);
+        foreach (var mc in FindInFan(dir, range + reach, 40f))
+        {
+            Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
+            mc.TakeDamage(dmg, kb, kbDir);
+        }
+        StartCoroutine(ShowMeleeFlash(entry.data, dir, range, flashScale, MeleeMotionType.Thrust));
     }
 
     private void AttackMeleeSingle(WeaponLoadoutEntry entry, float range, bool splash = false, float scaleMult = 1f)
@@ -856,7 +867,7 @@ public class PlayerAttack : MonoBehaviour
     // 무기 스프라이트는 12시 기준 → 피벗을 (공격방향 − 90°)로 돌려 날이 공격 방향을 향하게 한다.
     // attackFrames 있으면 시트 1회 재생, 없으면 itemImage 정적 표시. (데미지는 ApplyMeleeFan이 별도 처리)
     private IEnumerator ShowMeleeFlash(SO_WeaponData wd, Vector2 dir,
-        float range, float scaleMult = 1f)
+        float range, float scaleMult = 1f, MeleeMotionType? motionOverride = null)
     {
         var       af       = ValidFrames(wd.attackFrames);   // 삭제된 프레임 방어
         bool      animated = af.Length > 0;
@@ -870,7 +881,8 @@ public class PlayerAttack : MonoBehaviour
         float fps   = animated ? af.Length / dur : 1f;
 
         // 무기 비주얼(스프라이트 중심이 root 원점) — 플레이어 중심 피벗에 매달아 앞쪽으로 띄운다.
-        bool baked = wd.meleeMotion == MeleeMotionType.Baked; // 모션이 프레임에 포함 → 스윕 없이 방향만 정렬
+        MeleeMotionType motion = motionOverride ?? wd.meleeMotion; // 콤보 등에서 모션 강제 가능
+        bool baked = motion == MeleeMotionType.Baked; // 모션이 프레임에 포함 → 스윕 없이 방향만 정렬
         // 이미지 크기 = 타격범위에 일치: 표시 지름 = 2 × 타격 반경(range). (range≤0이면 기본 근접범위)
         float hitDiameter = 2f * (range > 0f ? range : _meleeRange);
         var  wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", hitDiameter * scaleMult, loop: false, withBody: false);
@@ -878,7 +890,9 @@ public class PlayerAttack : MonoBehaviour
         var pivot = new GameObject($"MeleePivot_{wd.itemName}");
         pivot.transform.position = transform.position;
         wpn.transform.SetParent(pivot.transform, false);
-        wpn.transform.localPosition = new Vector3(0f, reach, 0f); // 공격 방향 앞쪽으로 reach만큼 띄움(중앙 겹침 해소)
+        // 무기 안쪽 끝이 캐릭터를 벗어나도록: 표시 반경(=지름/2) + 여유. 큰 무기일수록 더 멀리 띄움.
+        float standoff = hitDiameter * scaleMult * 0.5f + 0.6f;
+        wpn.transform.localPosition = new Vector3(0f, standoff, 0f);
         Destroy(pivot, dur + 0.05f);
 
         float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
@@ -889,11 +903,11 @@ public class PlayerAttack : MonoBehaviour
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / dur);
             pivot.transform.position = transform.position; // 플레이어 이동에 즉시 따라오게(매 프레임 동기화)
-            if (wd.meleeMotion == MeleeMotionType.Thrust)
+            if (motion == MeleeMotionType.Thrust)
             {
                 pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle);
                 float lunge = Mathf.Sin(k * Mathf.PI);                 // 0→1→0 전진·복귀
-                wpn.transform.localPosition = new Vector3(0f, reach + lunge * reach, 0f);
+                wpn.transform.localPosition = new Vector3(0f, standoff + lunge * reach, 0f);
             }
             else if (baked)
             {
