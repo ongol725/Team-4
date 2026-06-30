@@ -265,12 +265,11 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
-                // 할버드: 부채꼴 → 일직선 찌르기 콤보(기본). 5단계엔 찌르기 시 검기(투사체) 방출
+                // 할버드: 근접 부채꼴만(투사체 콤보 제거). 근접 크기 0.2배
                 if (id == "WPN_027")
                 {
-                    AttackMeleeFan(entry, range, angle, kb, flashScale);          // 1타: 넓은 부채꼴
-                    AttackPierceLine(entry, range, 99);                           // 2타: 일직선 찌르기(관통)
-                    if (g5) SpawnProjectile(entry, FacingDir(range), pierce: 99); // 5단계: 검기 투사체
+                    range *= 0.2f; // 근접 크기 0.2배(표시·피격 함께)
+                    AttackMeleeFan(entry, range, angle, kb, flashScale);
                     break;
                 }
 
@@ -443,7 +442,7 @@ public class PlayerAttack : MonoBehaviour
                 Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
                 _boomerangGoLeft = !_boomerangGoLeft;
                 // 던졌다가 플레이어에게 회전하며 복귀
-                SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 2f, boomerang: true); // 부메랑: 투사체 크기 ×2(콜라이더 동반 → 피격범위도)
+                SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 3f, boomerang: true); // 부메랑: 투사체 크기 ×3(콜라이더 동반 → 피격범위도)
                 break;
             }
 
