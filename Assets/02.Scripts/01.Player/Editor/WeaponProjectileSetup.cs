@@ -18,15 +18,15 @@ public static class WeaponProjectileSetup
     private const string SheetDir  = "Assets/03.Prefabs/03.Weapons";
     private const string WeaponDir = "Assets/Resources/ScriptableObjects/Weapons";
 
-    // ── 실험: w02(8프레임 검 스윙 시트)를 장검(WPN_002)에 적용 ──
-    [MenuItem("BagSurvivor/Setup/⑤ Test: w02 → 장검(WPN_002)")]
+    // ── 실험: WPN02(8프레임 검 스윙 시트, 4×2)를 장검(WPN_002)에 적용 ──
+    [MenuItem("BagSurvivor/Setup/⑤ Test: WPN02 → 장검(WPN_002)")]
     public static void TestW02ToLongsword()
     {
-        string png = $"{SheetDir}/w02.png";
+        string png = $"{SheetDir}/WPN02.png";
         if (AssetImporter.GetAtPath(png) == null) { Debug.LogError($"[Test] 파일 없음: {png}"); return; }
 
-        // 8프레임 · 256셀 · 2px 간격 · 가로 1줄 · 중앙 피벗 (maxTex 4096로 다운스케일 방지)
-        GridSliceBySize(png, 256, 256, 2, 0, 8, 1);
+        // 8프레임 · 256셀 · 2px 간격 · 4열×2행 · 중앙 피벗 (행 우선: 위 4 → 아래 4)
+        GridSliceBySize(png, 256, 256, 2, 2, 4, 2);
 
         var w = LoadWeaponByItemID("WPN_002");
         if (w == null) { Debug.LogError("[Test] WPN_002(장검) SO를 찾지 못함"); return; }
