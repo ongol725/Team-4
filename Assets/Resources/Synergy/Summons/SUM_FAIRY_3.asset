@@ -17,7 +17,7 @@ MonoBehaviour:
   aiType: 1
   scalingStat: 2
   atkMultiplier: 1
-  moveSpeed: 150
+  moveSpeed: 90
   atkCooldown: 0.15
   atkRange: 0.75
   duration: -1
