@@ -220,22 +220,12 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
 
-                // 화염방사기: 부채꼴 범위 내 즉시 피해 + 화상 DoT (넉백 없음)
+                // 화염방사기: 채널형 — 일정 시간 동안 부채꼴 근접 도트(쿨타임은 무기 공격속도로)
                 if (id == "WPN_026")
                 {
-                    const float flamRange = 4f;
-                    float flamAngle = g5 ? 120f : 90f;
-                    int   burnTicks = g5 ? 6 : 4;
-
-                    Vector2 faceDir = FacingDir(flamRange);
-                    int     meleeDmg = ScaleDamage(entry.attackPower);
-                    foreach (var mc in FindInFan(faceDir, flamRange, flamAngle))
-                    {
-                        Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
-                        mc.TakeDamage(meleeDmg, 0f, kbDir);
-                        mc.ApplyBurn(meleeDmg, 0.5f, burnTicks);
-                    }
-                    StartCoroutine(ShowMeleeFlash(entry.data, faceDir, flamRange));
+                    float dur  = g5 ? 5f : 3f;     // 분사 지속(5단계 5초)
+                    float tick = g5 ? 0.1f : 0.5f; // 도트 주기(5단계 0.1초)
+                    StartCoroutine(FlamethrowerChannel(entry, dur, tick, 120f, 4f));
                     break;
                 }
 
@@ -248,19 +238,19 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
-                // 할버드 5단계: 부채꼴 + 찌르기 검기 방출
-                if (g5 && id == "WPN_027")
+                // 할버드: 부채꼴 → 일직선 찌르기 콤보(기본). 5단계엔 찌르기 시 검기(투사체) 방출
+                if (id == "WPN_027")
                 {
-                    AttackMeleeFan(entry, range, angle, kb, flashScale);
-                    AttackPierceLine(entry, range, 99);
+                    AttackMeleeFan(entry, range, angle, kb, flashScale);          // 1타: 넓은 부채꼴
+                    AttackPierceLine(entry, range, 99);                           // 2타: 일직선 찌르기(관통)
+                    if (g5) SpawnProjectile(entry, FacingDir(range), pierce: 99); // 5단계: 검기 투사체
                     break;
                 }
 
-                // 플레일 5단계: 전방위 근접 + 투사체 1발 방출
-                if (g5 && id == "WPN_022")
+                // 플레일: 전방으로 철퇴를 던져 직선 범위 타격. 5단계엔 회전하며 복귀(부메랑식 추가타)
+                if (id == "WPN_022")
                 {
-                    AttackMeleeFan(entry, range, angle, kb, flashScale);
-                    SpawnProjectile(entry, FacingDir(range * 3f));
+                    SpawnProjectile(entry, FacingDir(range), pierce: 99, boomerang: g5);
                     break;
                 }
 
@@ -777,6 +767,32 @@ public class PlayerAttack : MonoBehaviour
         col.radius      = 0.3f;
 
         return go;
+    }
+
+    // 화염방사기: dur초 동안 tick마다 전방 부채꼴 도트 피해 + 분사 비주얼.
+    private IEnumerator FlamethrowerChannel(WeaponLoadoutEntry entry, float dur, float tick, float fanAngle, float fanRange)
+    {
+        var   wait = new WaitForSeconds(tick);
+        float elapsed = 0f;
+        float visualTimer = 0f;
+        while (elapsed < dur)
+        {
+            Vector2 faceDir = FacingDir(fanRange);
+            int     dmg     = ScaleDamage(entry.attackPower);
+            foreach (var mc in FindInFan(faceDir, fanRange, fanAngle))
+                mc.TakeDamage(dmg, 0f, Vector2.zero);
+
+            // 분사 비주얼은 과도한 생성을 막기 위해 약 0.25초 간격으로만 갱신
+            visualTimer -= tick;
+            if (visualTimer <= 0f)
+            {
+                StartCoroutine(ShowMeleeFlash(entry.data, faceDir, fanRange));
+                visualTimer = 0.25f;
+            }
+
+            yield return wait;
+            elapsed += tick;
+        }
     }
 
     // 근접 비주얼: 플레이어 중심 외부 피벗으로 무기를 띄우고, 모션 타입에 따라 스윙(호 회전)/찌르기(전진·복귀).
