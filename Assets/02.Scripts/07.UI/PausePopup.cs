@@ -40,11 +40,13 @@ namespace BagSurvivor.UI
         public float punchTime = 0.18f;
 
         private bool isPaused;
+        private bool _bagOpen;   // 가방(인벤토리) 열림 상태 — ESC/일시정지 버튼 게이트
 
         private void OnDestroy()
         {
             // 씬 전환 등 외부 경로로 파괴될 때 timeScale 복구
             if (isPaused) Time.timeScale = 1f;
+            InventoryPopupToggle.onPopupToggled -= OnBagToggled;
         }
 
         private void Awake()
@@ -60,6 +62,9 @@ namespace BagSurvivor.UI
             if (lobbyButton != null) lobbyButton.onClick.AddListener(OnLobby);
             if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnLobbyConfirm);
             if (lobbyConfirmNoButton != null) lobbyConfirmNoButton.onClick.AddListener(OnLobbyCancel);
+
+            // 가방(인벤토리) 열림/닫힘 구독 — 열리면 일시정지 버튼 UI·기능 끔, 닫히면 복구
+            InventoryPopupToggle.onPopupToggled += OnBagToggled;
 
             // 인벤토리 등 다른 Canvas(sortingOrder 10)보다 위에 렌더링되도록 Canvas override 설정.
             // 모달(설정/로비확인)은 일시정지 메뉴보다 더 위 → 클릭 가능하도록 정렬값 분리.
@@ -94,8 +99,18 @@ namespace BagSurvivor.UI
         {
 #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-                Toggle();
+            {
+                if (_bagOpen) InventoryPopupToggle.Instance?.CloseBag(); // 가방 열림 중엔 ESC = 가방 닫기
+                else Toggle();                                          // 그 외엔 일시정지 토글
+            }
 #endif
+        }
+
+        // 가방 열림 시 일시정지 버튼 UI/기능 비활성, 닫히면 복구
+        private void OnBagToggled(bool open)
+        {
+            _bagOpen = open;
+            if (mainPauseButton != null) mainPauseButton.gameObject.SetActive(!open);
         }
 
         public void Toggle() { if (isPaused) Close(); else Open(); }
