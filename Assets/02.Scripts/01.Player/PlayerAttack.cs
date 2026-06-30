@@ -214,6 +214,7 @@ public class PlayerAttack : MonoBehaviour
             // ── MeleeFan ───────────────────────────────────────────
             case WeaponAttackStyleType.MeleeFan:
             {
+                if (id == "WPN_021") range *= 0.5f; // 스피어: 크기 0.5배(표시·피격 함께)
                 // 무기별 기본 각도
                 float angle = id switch
                 {
@@ -325,12 +326,14 @@ public class PlayerAttack : MonoBehaviour
             {
                 bool  splash    = false;
                 int   burst     = id == "WPN_025" ? 2 : 1;        // 너클: 기본 2연타
-                float scaleMult = id == "WPN_025" ? 0.5f : 1f;    // 너클: 이펙트 크기 ×0.5
+                float scaleMult = 1f;
+                // 크기 조정은 range로 → 표시(2×range)와 피격(반경 range)이 함께 변함
+                if (id == "WPN_025") range *= 0.5f; // 너클: 크기 0.5배
+                if (id == "WPN_003") range *= 2f;   // 철퇴: 크기 2배
 
                 if (g5)
                 {
-                    if (id == "WPN_003") scaleMult = 2f;   // 철퇴: 이펙트 크기 +100%
-                    if (id == "WPN_025") burst     = 5;    // 너클: 5연타
+                    if (id == "WPN_025") burst = 5;    // 너클: 5연타
                 }
 
                 if (burst > 1)
@@ -345,8 +348,9 @@ public class PlayerAttack : MonoBehaviour
             {
                 float spreadAngle = 60f;
                 int   bullets     = 3;
+                float pelletScale = id == "WPN_008" ? 2f : 1f; // 산탄총: 투사체 크기 ×2(콜라이더 동반 → 피격범위도)
                 if (g5 && id == "WPN_008") { spreadAngle = 120f; bullets = 6; }
-                AttackSpread(entry, range, spreadAngle, bullets);
+                AttackSpread(entry, range, spreadAngle, bullets, pelletScale);
                 break;
             }
 
@@ -356,12 +360,13 @@ public class PlayerAttack : MonoBehaviour
                 int   count     = id == "WPN_018" ? 4 : 3; // 레일건 4발, 라이플 3발
                 int   volleys   = id == "WPN_015" ? 2 : 1; // 라이플: 3발×2회
                 float kbPerShot = id == "WPN_015" ? 0.3f : 0f; // 라이플: 넉백
+                float bulletScale = id == "WPN_015" ? 2f : 1f; // 라이플: 투사체 크기 ×2(콜라이더 동반 → 피격범위도)
                 if (g5)
                 {
                     if (id == "WPN_015") { count = 5; volleys = 3; kbPerShot = 0.6f; } // 5발×3회, 넉백 2배
                     if (id == "WPN_018") count = 8;
                 }
-                StartCoroutine(AttackBurst(entry, range, count, kbPerShot, volleys));
+                StartCoroutine(AttackBurst(entry, range, count, kbPerShot, volleys, bulletScale));
                 break;
             }
 
@@ -444,7 +449,7 @@ public class PlayerAttack : MonoBehaviour
                 Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
                 _boomerangGoLeft = !_boomerangGoLeft;
                 // 던졌다가 플레이어에게 회전하며 복귀
-                SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 3f, boomerang: true); // 부메랑: 투사체 크기 ×3
+                SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 2f, boomerang: true); // 부메랑: 투사체 크기 ×2(콜라이더 동반 → 피격범위도)
                 break;
             }
 
@@ -578,7 +583,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     private void AttackSpread(WeaponLoadoutEntry entry, float range,
-        float totalAngle, int bulletCount)
+        float totalAngle, int bulletCount, float scaleMult = 1f)
     {
         var nearest = FindNearest(range);
         Vector2 center = nearest != null
@@ -588,13 +593,13 @@ public class PlayerAttack : MonoBehaviour
         float start = -totalAngle * 0.5f;
         float step  = bulletCount > 1 ? totalAngle / (bulletCount - 1) : 0f;
         for (int i = 0; i < bulletCount; i++)
-            SpawnProjectile(entry, Rotate(center, start + step * i));
+            SpawnProjectile(entry, Rotate(center, start + step * i), scaleMult: scaleMult);
     }
 
     private static readonly WaitForSeconds _waitBurst  = new(0.1f);
     private static readonly WaitForSeconds _waitVolley = new(0.25f);
     private IEnumerator AttackBurst(WeaponLoadoutEntry entry, float range,
-        int count, float kbPerShot = 0f, int volleys = 1)
+        int count, float kbPerShot = 0f, int volleys = 1, float scaleMult = 1f)
     {
         for (int v = 0; v < volleys; v++)
         {
@@ -605,7 +610,7 @@ public class PlayerAttack : MonoBehaviour
 
             for (int i = 0; i < count; i++)
             {
-                SpawnProjectile(entry, dir, knockbackForce: kbPerShot);
+                SpawnProjectile(entry, dir, knockbackForce: kbPerShot, scaleMult: scaleMult);
                 yield return _waitBurst;
             }
             if (v < volleys - 1) yield return _waitVolley; // 회차 간 간격
