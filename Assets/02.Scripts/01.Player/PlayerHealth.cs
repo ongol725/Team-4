@@ -59,6 +59,11 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (spriteRenderer != null) baseColor = spriteRenderer.color;
 
+        // 발밑 그림자 자동 부착 (플레이어 전용 폭 배수 적용)
+        var shadow = GetComponent<BlobShadow>();
+        if (shadow == null) shadow = gameObject.AddComponent<BlobShadow>();
+        shadow.MarkAsPlayer();
+
         // PlayerStats 없이도 캐릭터 maxHp 반영 (미선택/씬에 CharacterManager 없으면 전사 폴백)
         var charData = CharacterManager.GetSelectedOrDefault();
         if (charData != null) maxHP = charData.maxHp;

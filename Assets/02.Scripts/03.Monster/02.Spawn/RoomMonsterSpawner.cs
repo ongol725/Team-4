@@ -39,11 +39,23 @@ namespace BagSurvivor.Monster
             [Tooltip("먼 방(특수방 직전, 가장 어려움): 등장 몬스터 프리팹")]
             public GameObject[] farMonsters;
 
-            [Tooltip("방 1개당 동시 생존 상한 (지속 스폰 시 이 수를 유지하며 죽은 만큼 보충)")]
+            [Tooltip("방 1개당 동시 생존 상한 (지속 스폰 시 이 수를 유지하며 죽은 만큼 보충) — 밴드별 값이 0일 때 기본값으로 쓰임")]
             public int maxAlive = 6;
+
+            [Tooltip("밴드별 동시 생존 상한 (0이면 위 maxAlive 사용). 구역별로 스폰 수를 다르게 줄 때 설정")]
+            public int nearMaxAlive = 0;
+            public int midMaxAlive = 0;
+            public int farMaxAlive = 0;
 
             [Tooltip("보충 스폰 주기(초)")]
             public float spawnInterval = 2f;
+
+            /// <summary>밴드별 동시 생존 상한 (밴드 값이 0이면 maxAlive로 폴백).</summary>
+            public int BandMaxAlive(int band)
+            {
+                int v = band == 0 ? nearMaxAlive : band == 1 ? midMaxAlive : farMaxAlive;
+                return v > 0 ? v : maxAlive;
+            }
 
             /// <summary>밴드 인덱스(0=near,1=mid,2=far)에 해당하는 풀을 반환. 비면 상위 밴드로 폴백.</summary>
             public GameObject[] BandPool(int band)
@@ -393,7 +405,7 @@ namespace BagSurvivor.Monster
             GameObject[] pool2 = cfg.BandPool(band);
             if (pool2 == null || pool2.Length == 0) yield break;
 
-            int maxAlive = Mathf.Max(1, cfg.maxAlive);
+            int maxAlive = Mathf.Max(1, cfg.BandMaxAlive(band)); // 밴드별 상한(미설정 시 maxAlive)
             float interval = Mathf.Max(0.1f, cfg.spawnInterval);
             var wait = new WaitForSeconds(interval);
 
@@ -420,31 +432,12 @@ namespace BagSurvivor.Monster
         {
             RoomController start = FindRoomOfType(RoomType.Start);
             RoomController lockRoom = FindLockedRoom();
-            if (start == null || lockRoom == null) return 1; // 기준 없으면 mid
 
-            Vector2 startC = start.roomBounds.center;
-            Vector2 lockC = lockRoom.roomBounds.center;
+            // near 우선: 시작방과 복도 1칸으로 직접 연결된 방 (시작방 인접 = 항상 near)
+            if (start != null && start.connectedRooms.Contains(rc)) return 0;
 
-            // 모든 일반방을 훑어 (a) 잠긴방 최근접 방(far), (b) 시작방 최소거리(near 링 기준)를 찾음
-            RoomController farRoom = null;
-            float bestLock = float.MaxValue;
-            float minStart = float.MaxValue;
-            foreach (RoomController r in subscribed)
-            {
-                if (r == null || r.roomType != RoomType.Normal) continue;
-                Vector2 rc2 = r.roomBounds.center;
-                float dl = Vector2.Distance(rc2, lockC);
-                if (dl < bestLock) { bestLock = dl; farRoom = r; }
-                float ds = Vector2.Distance(rc2, startC);
-                if (ds < minStart) minStart = ds;
-            }
-
-            // far: 잠긴방(보스/엘리트/중간보스)에 가장 가까운 일반방 1개
-            if (rc == farRoom) return 2;
-
-            // near: 시작방에서 가장 가까운 링(최소거리의 nearRingFactor 배 이내)
-            float dStartRc = Vector2.Distance(rc.roomBounds.center, startC);
-            if (minStart < float.MaxValue && dStartRc <= minStart * Mathf.Max(1f, nearRingFactor)) return 0;
+            // far: 잠긴 특수방(보스/엘리트/중간보스)과 복도 1칸으로 직접 연결된 방
+            if (lockRoom != null && lockRoom.connectedRooms.Contains(rc)) return 2;
 
             // 나머지는 전부 mid
             return 1;

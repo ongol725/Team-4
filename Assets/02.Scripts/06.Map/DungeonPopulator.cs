@@ -150,6 +150,9 @@ public class DungeonPopulator : MonoBehaviour
         if (floorTilemap != null)
             roomsParent.transform.SetParent(floorTilemap.layoutGrid.transform);
 
+        // Room → RoomController 매핑 (인접 그래프를 런타임 컨트롤러로 옮기기 위해)
+        var roomToController = new Dictionary<Room, RoomController>(generatedRooms.Count);
+
         foreach (Room room in generatedRooms)
         {
             Vector3 localPos = new Vector3(room.bounds.center.x, room.bounds.center.y, 0f);
@@ -168,6 +171,7 @@ public class DungeonPopulator : MonoBehaviour
             RoomController controller = roomObj.AddComponent<RoomController>();
             controller.roomType = room.type;
             controller.roomBounds = room.bounds;
+            roomToController[room] = controller;
 
             // 특수 방: 입구에 문(Door) + 상단 중앙에 계단(Stairs) 생성
             bool isSpecial = room.type == RoomType.Elite ||
@@ -243,6 +247,14 @@ public class DungeonPopulator : MonoBehaviour
                     controller.stairs = stairObj;
                 }
             }
+        }
+
+        // 생성된 인접 그래프(Room.connections)를 RoomController로 옮긴다 (near/far 밴드 판정용)
+        foreach (var kv in roomToController)
+        {
+            foreach (Room neighbor in kv.Key.connections)
+                if (roomToController.TryGetValue(neighbor, out RoomController nc))
+                    kv.Value.connectedRooms.Add(nc);
         }
     }
 }
