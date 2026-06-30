@@ -755,45 +755,50 @@ public class PlayerAttack : MonoBehaviour
         return go;
     }
 
+    // 근접 비주얼: 플레이어 중심 외부 피벗으로 무기를 띄우고, 모션 타입에 따라 스윙(호 회전)/찌르기(전진·복귀).
+    // 무기 스프라이트는 12시 기준 → 피벗을 (공격방향 − 90°)로 돌려 날이 공격 방향을 향하게 한다.
+    // attackFrames 있으면 시트 1회 재생, 없으면 itemImage 정적 표시. (데미지는 ApplyMeleeFan이 별도 처리)
     private IEnumerator ShowMeleeFlash(SO_WeaponData wd, Vector2 dir,
         float range, float scaleMult = 1f)
     {
-        bool        animated = wd.attackFrames != null && wd.attackFrames.Length > 0;
-        const float meleeDur = 0.35f;                       // 근접 이펙트 표시 시간
-        float       life     = animated ? meleeDur : 0.15f;
+        bool      animated = wd.attackFrames != null && wd.attackFrames.Length > 0;
+        Sprite[]  frames   = animated ? wd.attackFrames
+                                      : (wd.itemImage != null ? new[] { wd.itemImage } : null);
+        if (frames == null) yield break;
 
-        GameObject go;
-        if (animated)
+        float dur   = wd.meleeMotionDuration > 0f ? wd.meleeMotionDuration : 0.2f;
+        float reach = wd.meleeReach          > 0f ? wd.meleeReach          : 0.8f;
+        float arc   = wd.meleeSwingAngle      > 0f ? wd.meleeSwingAngle      : 90f;
+        float fps   = animated ? wd.attackFrames.Length / dur : 1f;
+
+        // 무기 비주얼(스프라이트 중심이 root 원점) — 플레이어 중심 피벗에 매달아 앞쪽으로 띄운다.
+        var wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", 2.0f * scaleMult, loop: false, withBody: false);
+        var pivot = new GameObject($"MeleePivot_{wd.itemName}");
+        pivot.transform.position = transform.position;
+        wpn.transform.SetParent(pivot.transform, false);
+        wpn.transform.localPosition = new Vector3(0f, reach, 0f); // 12시 방향 앞쪽
+        Destroy(pivot, dur + 0.05f);
+
+        float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
+
+        float t = 0f;
+        while (t < dur)
         {
-            // 시트 전체를 표시 시간 안에 1회 재생 (휘두르는 모션). 크기 2.0유닛 기준 정규화.
-            float fps = wd.attackFrames.Length / meleeDur;
-            go = BuildAnimatedGO(wd.attackFrames, fps, $"Melee_{wd.itemName}",
-                                 2.0f * scaleMult, loop: false, withBody: false);
-        }
-        else
-        {
-            go = new GameObject($"Melee_{wd.itemName}");
-            var sr          = go.AddComponent<SpriteRenderer>();
-            sr.sprite       = wd.itemImage;
-            sr.sortingOrder = 10;
-            if (wd.itemImage != null)
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / dur);
+            if (wd.meleeMotion == MeleeMotionType.Thrust)
             {
-                float maxExtent  = Mathf.Max(wd.itemImage.bounds.extents.x, wd.itemImage.bounds.extents.y);
-                float normalized = maxExtent > 0.001f ? 0.6f / maxExtent : 0.6f;
-                go.transform.localScale = Vector3.one * normalized * scaleMult;
+                pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle);
+                float lunge = Mathf.Sin(k * Mathf.PI);                 // 0→1→0 전진·복귀
+                wpn.transform.localPosition = new Vector3(0f, reach + lunge * reach, 0f);
             }
-            else
+            else // Swing
             {
-                go.transform.localScale = Vector3.one * 0.6f * scaleMult;
+                float off = Mathf.Lerp(-arc * 0.5f, arc * 0.5f, k);    // 호로 휘두름
+                pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle + off);
             }
+            yield return null;
         }
-
-        Destroy(go, life); // 코루틴 중단 시에도 반드시 소멸되도록 즉시 예약
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        go.transform.position = (Vector2)transform.position + dir * (range * 0.6f);
-        go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
-        yield return new WaitForSeconds(life);
     }
 
     // ─────────────────────────────────────────────────────────────

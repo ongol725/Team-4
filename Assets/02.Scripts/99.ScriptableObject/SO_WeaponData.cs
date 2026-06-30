@@ -32,6 +32,16 @@ public class SO_WeaponData : SO_ItemData
     [Tooltip("공격 애니메이션 재생 속도(FPS)")]
     public float    attackFps = 12f;
 
+    [Header("근접 모션 (플레이어 중심 외부 회전, 무기는 12시 기준)")]
+    [Tooltip("Swing=호로 휘두르기 / Thrust=앞으로 찌르기. 무기별로 지정(기본 Swing)")]
+    public MeleeMotionType meleeMotion = MeleeMotionType.Swing;
+    [Tooltip("스윙 호 각도(도). 0이면 90 사용. 등급별 확장은 추후")]
+    public float meleeSwingAngle = 90f;
+    [Tooltip("무기를 플레이어 앞쪽으로 띄우는 거리(유닛). 찌르기 전진 거리에도 사용. 0이면 0.8")]
+    public float meleeReach = 0.8f;
+    [Tooltip("근접 모션 1회 시간(초). 0이면 0.2")]
+    public float meleeMotionDuration = 0.2f;
+
     [Header("합성 등급별 스탯 (인덱스 0 = 1등급 ~ 4 = 5등급)")]
     public WeaponGradeStats[] gradeStats = new WeaponGradeStats[5];
 }
