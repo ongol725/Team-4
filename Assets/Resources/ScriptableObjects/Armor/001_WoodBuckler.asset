@@ -26,10 +26,10 @@ MonoBehaviour:
   - hpBonus: 100
     hpRegen: 2
   - hpBonus: 150
-    hpRegen: 3
+    hpRegen: 4
   - hpBonus: 225
-    hpRegen: 5
-  - hpBonus: 150
     hpRegen: 6
+  - hpBonus: 150
+    hpRegen: 8
   - hpBonus: 225
-    hpRegen: 9
+    hpRegen: 12
