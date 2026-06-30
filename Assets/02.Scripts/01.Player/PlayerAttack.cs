@@ -832,7 +832,9 @@ public class PlayerAttack : MonoBehaviour
 
         // 무기 비주얼(스프라이트 중심이 root 원점) — 플레이어 중심 피벗에 매달아 앞쪽으로 띄운다.
         bool baked = wd.meleeMotion == MeleeMotionType.Baked; // 모션이 프레임에 포함 → 제자리 재생(이동·회전 없음)
-        var  wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", 2.0f * scaleMult, loop: false, withBody: false);
+        // 이미지 크기 = 타격범위에 일치: 표시 지름 = 2 × 타격 반경(range). (range≤0이면 기본 근접범위)
+        float hitDiameter = 2f * (range > 0f ? range : _meleeRange);
+        var  wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", hitDiameter * scaleMult, loop: false, withBody: false);
 
         // 무기별 표시 비율(가로,세로). 기본 1:1. 회전 없는 Baked에서만 비대칭 적용(전단 방지).
         Vector2 vShape = wd.itemID switch
