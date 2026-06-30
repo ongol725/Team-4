@@ -20,12 +20,13 @@ MonoBehaviour:
   moveSpeed: 90
   atkCooldown: 0.2
   atkRange: 0.75
-  displayScale: 0.8
   duration: -1
   fixedEffect: 0
   fixedEffectValue: 0
   uniqueSkill: {fileID: 0}
   uniqueSkillCooldown: 8
+  displayScale: 0.8
+  sortingOrder: 5
   modelPrefab: {fileID: 0}
   icon: {fileID: -80967579, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
   animFrames:
@@ -41,3 +42,4 @@ MonoBehaviour:
   hp: 0
   attackEffectFrames: []
   attackEffectFps: 12
+  attackEffectScale: 0.5

@@ -165,7 +165,12 @@ namespace BagSurvivor.Monster
             if (GetComponent<BlobShadow>() == null) gameObject.AddComponent<BlobShadow>();
 
             // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
-            if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+            // + 빠른 넉백에도 벽을 통과(터널링)하지 않도록 연속 충돌 감지
+            if (rb != null)
+            {
+                rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+                rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            }
         }
 
         private void OnEnable()

@@ -22,6 +22,7 @@ MonoBehaviour:
   hitCount: 1
   hitInterval: 0.1
   extraCount: 0
+  damageDelay: 0
   rangeRadius: 0
   duration: 0
   cooldown: 10
@@ -35,6 +36,12 @@ MonoBehaviour:
   pierceCount: 1
   animFrames: []
   animFps: 12
+  vfxLingerTime: 0.1
   visualSize: 0.8
+  visualStretchY: 1
+  vfxFollowPlayer: 0
+  vfxSortingOrder: 30
+  vfxAnchorBottom: 0
+  nodeFrames: []
   dropFrames: []
   dropFps: 8

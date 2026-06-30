@@ -30,6 +30,9 @@ namespace BagSurvivor.Monster
         [Tooltip("발사 쿨다운(초)")]
         public float fireCooldown = 1.5f;
 
+        [Tooltip("스폰(태어난) 직후 첫 발사까지 대기시간(초)")]
+        public float spawnDelay = 0.5f;
+
         [Tooltip("투사체 속도(m/s)")]
         public float projectileSpeed = 8f;
 
@@ -50,7 +53,7 @@ namespace BagSurvivor.Monster
 
         private void OnEnable()
         {
-            cooldownTimer = 0f;
+            cooldownTimer = spawnDelay; // 태어나자마자 쏘지 않고 spawnDelay만큼 대기 후 첫 발사
         }
 
         private void Update()

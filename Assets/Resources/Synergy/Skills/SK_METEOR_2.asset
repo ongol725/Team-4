@@ -50,6 +50,10 @@ MonoBehaviour:
   animFps: 120
   vfxLingerTime: 0.5
   visualSize: 4
+  visualStretchY: 1
+  vfxFollowPlayer: 0
+  vfxSortingOrder: 30
   vfxAnchorBottom: 1
+  nodeFrames: []
   dropFrames: []
   dropFps: 8

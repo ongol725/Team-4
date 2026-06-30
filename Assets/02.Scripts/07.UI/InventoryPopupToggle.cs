@@ -14,6 +14,9 @@ public class InventoryPopupToggle : MonoBehaviour
     /// <summary>인벤토리가 열리거나 닫힐 때 발행. true = 열림, false = 닫힘</summary>
     public static event System.Action<bool> onPopupToggled;
 
+    /// <summary>외부(PausePopup 등)에서 가방을 닫기 위해 접근하는 인스턴스.</summary>
+    public static InventoryPopupToggle Instance { get; private set; }
+
     [SerializeField] private BattleLoadoutBuilder _loadoutBuilder;
 
     private Canvas               _popupCanvas;   // InventoryStoreRoot 의 Canvas 컴포넌트
@@ -26,6 +29,7 @@ public class InventoryPopupToggle : MonoBehaviour
 
     private void Start()
     {
+        Instance = this;
         var root = GameObject.Find("InventoryStoreRoot");
         if (root != null) _popupCanvas = root.GetComponent<Canvas>();
 
@@ -49,6 +53,13 @@ public class InventoryPopupToggle : MonoBehaviour
     private void OnDestroy()
     {
         CombatZone.onCombatStateChanged -= OnCombatStateChanged;
+        if (Instance == this) Instance = null;
+    }
+
+    /// <summary>가방이 열려 있으면 닫는다(닫기 경로 = Toggle, 로드아웃 확정 포함). 외부에서 ESC로 닫을 때 사용.</summary>
+    public void CloseBag()
+    {
+        if (IsOpen) Toggle();
     }
 
     private void OnCombatStateChanged(bool inCombat)

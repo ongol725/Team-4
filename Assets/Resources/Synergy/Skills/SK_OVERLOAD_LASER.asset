@@ -22,6 +22,7 @@ MonoBehaviour:
   hitCount: 1
   hitInterval: 0.1
   extraCount: 0
+  damageDelay: 0
   rangeRadius: 4
   duration: 0
   cooldown: 0.2
@@ -32,7 +33,7 @@ MonoBehaviour:
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15
-  pierceCount: 999
+  pierceCount: 1
   animFrames:
   - {fileID: 6025804276413583294, guid: 3c3e39c6a38ab764db249553ff26f1d8, type: 3}
   - {fileID: 2375335840253869204, guid: 3c3e39c6a38ab764db249553ff26f1d8, type: 3}
@@ -43,6 +44,12 @@ MonoBehaviour:
   - {fileID: -3876125812901632101, guid: 3c3e39c6a38ab764db249553ff26f1d8, type: 3}
   - {fileID: -8817036107050078945, guid: 3c3e39c6a38ab764db249553ff26f1d8, type: 3}
   animFps: 12
+  vfxLingerTime: 0.1
   visualSize: 2
+  visualStretchY: 1
+  vfxFollowPlayer: 0
+  vfxSortingOrder: 30
+  vfxAnchorBottom: 0
+  nodeFrames: []
   dropFrames: []
   dropFps: 8

@@ -38,6 +38,8 @@ public class PlayerHealth : MonoBehaviour
 
     private int currentHP;
     private bool isDead;
+    private bool _invincible;            // true면 데미지 무시 (방 진입 무적 등)
+    private Coroutine _invincibleCo;
     private SpriteRenderer spriteRenderer;
     private Color baseColor = Color.white;
     private Coroutine flashCoroutine;
@@ -153,10 +155,26 @@ public class PlayerHealth : MonoBehaviour
         UpdateHud();
     }
 
+    /// <summary>지정 시간 동안 무적 부여 (방 진입 시 바로 앞 스폰 몹 접촉 방지용).</summary>
+    public void GrantInvincibility(float seconds)
+    {
+        if (seconds <= 0f) return;
+        if (_invincibleCo != null) StopCoroutine(_invincibleCo);
+        _invincibleCo = StartCoroutine(InvincibilityRoutine(seconds));
+    }
+
+    private IEnumerator InvincibilityRoutine(float seconds)
+    {
+        _invincible = true;
+        yield return new WaitForSeconds(seconds);
+        _invincible = false;
+        _invincibleCo = null;
+    }
+
     /// <summary>데미지를 받습니다. (몬스터 접촉 등에서 호출)</summary>
     public void TakeDamage(int amount)
     {
-        if (isDead || amount <= 0) return;
+        if (isDead || _invincible || amount <= 0) return;
 
         if (DamageReductionPct > 0f)
         {
