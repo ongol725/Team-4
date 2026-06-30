@@ -13,6 +13,7 @@ public class Room
     public RoomShape shape;
     public Vector2Int entranceGridPos = new Vector2Int(-1, -1); // 입구 타일 그리드 좌표
     public int entranceDir = -1; // 방 기준 입구 방향: 0=북(위), 1=동(우), 2=남(아래), 3=서(좌)
+    [System.NonSerialized] public List<Room> connections = new List<Room>(); // 복도로 직접 연결된 방들(인접 그래프)
 }
 
 public class DungeonGenerator : MonoBehaviour
@@ -386,6 +387,10 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             DrawRoom(newGeneratedRoom);
+
+            // 인접 그래프: 새 방 ↔ 출발 방(baseRoom)을 복도로 연결
+            newGeneratedRoom.connections.Add(baseRoom);
+            baseRoom.connections.Add(newGeneratedRoom);
 
             generatedRooms.Add(newGeneratedRoom);
             return true;

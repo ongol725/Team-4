@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3afaf163e204bc64ba1681e7ec5f7400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RangedAttackGimmick
-  aimMode: 1
+  aimMode: 0
   attackRange: 7
   fireCooldown: 1.5
   projectileSpeed: 8
