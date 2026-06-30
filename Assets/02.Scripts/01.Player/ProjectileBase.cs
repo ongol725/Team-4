@@ -16,11 +16,16 @@ public class ProjectileBase : MonoBehaviour
     /// <summary>적에게 명중할 때마다 호출될 콜백을 설정한다(시너지 고정효과 전달용).</summary>
     public void SetOnHit(System.Action<MonsterController> onHit) => _onHit = onHit;
 
-    private bool  _homing;
-    private float _speed;
+    private bool      _homing;
+    private float     _speed;
+    private bool      _boomerang;
+    private Transform _owner;
+    private float     _age;
+    private float     _outTime;
 
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
-        float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false)
+        float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
+        bool boomerang = false, Transform owner = null)
     {
         _damage          = damage;
         _remainingHits   = Mathf.Max(1, maxHits);
@@ -28,6 +33,10 @@ public class ProjectileBase : MonoBehaviour
         _explosionRadius = explosionRadius;
         _homing          = homing;
         _speed           = speed;
+        _boomerang       = boomerang;
+        _owner           = owner;
+        _age             = 0f;
+        _outTime         = lifetime * 0.5f; // 절반은 전진, 절반은 복귀
 
         var rb = GetComponent<Rigidbody2D>();
         rb.gravityScale   = 0f;
@@ -37,15 +46,33 @@ public class ProjectileBase : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
+        // 부메랑은 적을 관통하며 왕복하므로 일찍 소멸하지 않도록 다수 명중 허용
+        if (boomerang) _remainingHits = Mathf.Max(_remainingHits, 999);
+
         Destroy(gameObject, lifetime);
     }
 
-    // 유도(지팡이): 매 물리프레임 가장 가까운 적 방향으로 속도를 서서히 꺾는다.
     private void FixedUpdate()
     {
-        if (!_homing) return;
         var rb = GetComponent<Rigidbody2D>();
 
+        // 부메랑: 전진 후 플레이어에게 복귀
+        if (_boomerang)
+        {
+            _age += Time.fixedDeltaTime;
+            if (_age >= _outTime && _owner != null)
+            {
+                Vector2 back = ((Vector2)_owner.position - (Vector2)transform.position).normalized * _speed;
+                Vector2 vb = Vector2.Lerp(rb.linearVelocity, back, 8f * Time.fixedDeltaTime);
+                rb.linearVelocity = vb;
+                transform.Rotate(0f, 0f, 720f * Time.fixedDeltaTime); // 회전하며 복귀
+                if (Vector2.Distance(transform.position, _owner.position) < 0.6f) Destroy(gameObject);
+            }
+            return;
+        }
+
+        // 유도(지팡이): 매 물리프레임 가장 가까운 적 방향으로 속도를 서서히 꺾는다.
+        if (!_homing) return;
         MonsterController best = null; float bd = float.MaxValue;
         foreach (var h in Physics2D.OverlapCircleAll(transform.position, 12f))
         {

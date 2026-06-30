@@ -275,11 +275,17 @@ public class PlayerAttack : MonoBehaviour
 
                 AttackMeleeFan(entry, range, angle, kb, flashScale);
 
-                // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1.5초 적용
+                // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1초
                 if (g5 && id == "WPN_023")
                 {
                     foreach (var mc in FindInFan(FacingDir(range), range, angle))
                         mc.ApplyStun(1f);
+                }
+                // 워해머 5단계: 전방위 적에게 이동속도 저하(50%, 2초)
+                if (g5 && id == "WPN_029")
+                {
+                    foreach (var mc in GetEnemiesInRange(range))
+                        mc.ApplySlow(0.5f, 2f);
                 }
 
                 break;
@@ -406,10 +412,11 @@ public class PlayerAttack : MonoBehaviour
             // ── Boomerang ──────────────────────────────────────────
             case WeaponAttackStyleType.Boomerang:
             {
-                float   spdM = g5 ? 1.5f : 1f;
+                float   spdM = g5 ? 3f : 1f; // 5단계: 투사체 속도 +200%(×3)
                 Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
                 _boomerangGoLeft = !_boomerangGoLeft;
-                SpawnProjectile(entry, dir, spdMult: spdM);
+                // 던졌다가 플레이어에게 회전하며 복귀
+                SpawnProjectile(entry, dir, spdMult: spdM, boomerang: true);
                 break;
             }
 
@@ -590,7 +597,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void SpawnProjectile(WeaponLoadoutEntry entry, Vector2 dir,
         float dmgMult = 1f, float spdMult = 1f, float scaleMult = 1f,
-        int pierce = 0, float knockbackForce = 0f, bool homing = false)
+        int pierce = 0, float knockbackForce = 0f, bool homing = false, bool boomerang = false)
     {
         var   wd       = entry.data;
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
@@ -614,7 +621,8 @@ public class PlayerAttack : MonoBehaviour
             go.transform.localScale *= scaleMult;
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
-        proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce, homing: homing);
+        proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
+                  homing: homing, boomerang: boomerang, owner: boomerang ? transform : null);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,
