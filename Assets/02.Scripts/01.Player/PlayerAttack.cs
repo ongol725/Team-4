@@ -172,7 +172,7 @@ public class PlayerAttack : MonoBehaviour
                 int   shots      = 1;
                 float dmgMult    = 1f;
                 float spdMult    = 1f;
-                float scaleMult  = id == "WPN_001" ? 2f : 1f; // 단검: 투사체 크기 ×2
+                float scaleMult  = (id == "WPN_001" || id == "WPN_009") ? 2f : 1f; // 단검·활: 투사체 크기 ×2(가로세로 각각)
                 int   pierce     = 0;
                 bool  homing     = id == "WPN_011"; // 지팡이: 유도 투사체
 
