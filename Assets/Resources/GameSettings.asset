@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a284839fb47d9aa87ce7fbc9a8288, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: Assembly-CSharp::SO_GameSettings
-  startingGold: 100000
+  startingGold: 220
