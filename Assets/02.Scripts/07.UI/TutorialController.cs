@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 #endif
 
 namespace BagSurvivor.UI
@@ -58,8 +60,22 @@ namespace BagSurvivor.UI
         private void Awake()
         {
             _font = Resources.Load<TMP_FontAsset>("Fonts/BoldDunggeunmo SDF Damage");
+            EnsureEventSystem();
             BuildUI();
             SetVisible(false);
+        }
+
+        /// <summary>씬에 EventSystem이 없으면 생성한다(없으면 버튼 클릭이 동작하지 않음).</summary>
+        private static void EnsureEventSystem()
+        {
+            if (FindObjectOfType<EventSystem>() != null) return;
+            var go = new GameObject("EventSystem");
+            go.AddComponent<EventSystem>();
+#if ENABLE_INPUT_SYSTEM
+            go.AddComponent<InputSystemUIInputModule>();
+#else
+            go.AddComponent<StandaloneInputModule>();
+#endif
         }
 
         private void Start()
