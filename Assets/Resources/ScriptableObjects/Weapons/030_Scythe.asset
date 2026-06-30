@@ -49,7 +49,7 @@ MonoBehaviour:
   - {fileID: -816977379570324380, guid: 5e304fd2e6465394e9efa093fb42ae15, type: 3}
   - {fileID: 4483003871887850225, guid: 5e304fd2e6465394e9efa093fb42ae15, type: 3}
   attackFps: 12
-  meleeMotion: 2
+  meleeMotion: 0
   meleeSwingAngle: 90
   meleeReach: 1.6
   meleeMotionDuration: 0.2

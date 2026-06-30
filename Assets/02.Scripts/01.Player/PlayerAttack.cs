@@ -532,8 +532,8 @@ public class PlayerAttack : MonoBehaviour
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(meleeDmg, knockback, kbDir);
         }
-        // 표시 반경을 판정 반경과 분리 가능(visualRange). 미지정 시 판정 반경과 동일.
-        StartCoroutine(ShowMeleeFlash(entry.data, facing, visualRange > 0f ? visualRange : range, flashScale));
+        // 표시 반경을 판정 반경과 분리 가능(visualRange). 스윙 호 각도는 데미지 부채꼴 각도(angleDeg)와 일치.
+        StartCoroutine(ShowMeleeFlash(entry.data, facing, visualRange > 0f ? visualRange : range, flashScale, swingArc: angleDeg));
     }
 
     private IEnumerator DelayedFanDir(WeaponLoadoutEntry entry, float range,
@@ -878,7 +878,7 @@ public class PlayerAttack : MonoBehaviour
     // 무기 스프라이트는 12시 기준 → 피벗을 (공격방향 − 90°)로 돌려 날이 공격 방향을 향하게 한다.
     // attackFrames 있으면 시트 1회 재생, 없으면 itemImage 정적 표시. (데미지는 ApplyMeleeFan이 별도 처리)
     private IEnumerator ShowMeleeFlash(SO_WeaponData wd, Vector2 dir,
-        float range, float scaleMult = 1f, MeleeMotionType? motionOverride = null)
+        float range, float scaleMult = 1f, MeleeMotionType? motionOverride = null, float swingArc = -1f)
     {
         var       af       = ValidFrames(wd.attackFrames);   // 삭제된 프레임 방어
         bool      useIcon  = UsesShopIcon(wd.itemID);         // A그룹: 상점 정적 아이콘 사용(시트 무시)
@@ -889,7 +889,7 @@ public class PlayerAttack : MonoBehaviour
 
         float dur   = wd.meleeMotionDuration > 0f ? wd.meleeMotionDuration : 0.2f;
         float reach = wd.meleeReach          > 0f ? wd.meleeReach          : 1.6f;
-        float arc   = wd.meleeSwingAngle      > 0f ? wd.meleeSwingAngle      : 90f;
+        float arc   = swingArc > 0f ? swingArc : (wd.meleeSwingAngle > 0f ? wd.meleeSwingAngle : 90f);
         float fps   = animated ? af.Length / dur : 1f;
 
         // 무기 비주얼(스프라이트 중심이 root 원점) — 플레이어 중심 피벗에 매달아 앞쪽으로 띄운다.
