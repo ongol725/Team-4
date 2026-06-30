@@ -833,12 +833,12 @@ public class PlayerAttack : MonoBehaviour
         float fps   = animated ? af.Length / dur : 1f;
 
         // 무기 비주얼(스프라이트 중심이 root 원점) — 플레이어 중심 피벗에 매달아 앞쪽으로 띄운다.
-        bool baked = wd.meleeMotion == MeleeMotionType.Baked; // 모션이 프레임에 포함 → 제자리 재생(이동·회전 없음)
+        bool baked = wd.meleeMotion == MeleeMotionType.Baked; // 모션이 프레임에 포함 → 스윕 없이 방향만 정렬
         // 이미지 크기 = 타격범위에 일치: 표시 지름 = 2 × 타격 반경(range). (range≤0이면 기본 근접범위)
         float hitDiameter = 2f * (range > 0f ? range : _meleeRange);
         var  wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", hitDiameter * scaleMult, loop: false, withBody: false);
 
-        // 무기별 표시 비율(가로,세로). 기본 1:1. 회전 없는 Baked에서만 비대칭 적용(전단 방지).
+        // 무기별 표시 비율(가로,세로). 자식 스케일이라 피벗 회전과 무관하게 형태 유지(전단 없음).
         Vector2 vShape = wd.itemID switch
         {
             "WPN_002" => new Vector2(1.5f, 4f), // 장검: 가로 ×1.5 · 세로 ×4
@@ -850,8 +850,7 @@ public class PlayerAttack : MonoBehaviour
         var pivot = new GameObject($"MeleePivot_{wd.itemName}");
         pivot.transform.position = transform.position;
         wpn.transform.SetParent(pivot.transform, false);
-        // Baked는 제자리(플레이어 중심) 재생, 그 외에는 12시 방향 앞쪽으로 띄움
-        wpn.transform.localPosition = baked ? Vector3.zero : new Vector3(0f, reach, 0f);
+        wpn.transform.localPosition = new Vector3(0f, reach, 0f); // 공격 방향 앞쪽으로 reach만큼 띄움(중앙 겹침 해소)
         Destroy(pivot, dur + 0.05f);
 
         float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
@@ -861,6 +860,7 @@ public class PlayerAttack : MonoBehaviour
         {
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / dur);
+            pivot.transform.position = transform.position; // 플레이어 이동에 즉시 따라오게(매 프레임 동기화)
             if (wd.meleeMotion == MeleeMotionType.Thrust)
             {
                 pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle);
@@ -869,7 +869,8 @@ public class PlayerAttack : MonoBehaviour
             }
             else if (baked)
             {
-                // 제자리 재생: 이동·회전 없이 프레임만 재생(이펙트가 프레임에 포함됨)
+                // C-1: 공격 방향으로만 고정 정렬(스윕 없음) — 프레임에 담긴 모션을 그대로 재생
+                pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle);
             }
             else // Swing
             {
