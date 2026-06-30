@@ -162,7 +162,7 @@ public class PlayerAttack : MonoBehaviour
                 float spdMult    = 1f;
                 float scaleMult  = 1f;
                 int   pierce     = 0;
-                int   targetCnt  = 1;
+                bool  homing     = id == "WPN_011"; // 지팡이: 유도 투사체
 
                 // 쇠뇌: 4단계(effectiveGrade≥3)부터 무제한 관통
                 if (id == "WPN_006" && entry.effectiveGrade >= 3)
@@ -172,17 +172,15 @@ public class PlayerAttack : MonoBehaviour
                 {
                     switch (id)
                     {
-                        case "WPN_001": shots     = 2;     break; // 단검: 2발 투척
-                        case "WPN_007": dmgMult   = 1.3f;  break; // 권총: 데미지 +30%
-                        case "WPN_011": targetCnt = 2;    break; // 지팡이: 적 2명
-                        case "WPN_016": scaleMult = 1.5f; pierce = 1; break; // 수리검: 크기 + 관통
+                        case "WPN_001": shots     = 2;          break; // 단검: 투사체 +1
+                        case "WPN_006": pierce    = 100;        break; // 쇠뇌: 관통 +100
+                        case "WPN_007": dmgMult   = 6f;         break; // 권총: 데미지 +500%
+                        case "WPN_011": shots     = 3;          break; // 지팡이: 3발 (유도)
+                        case "WPN_016": scaleMult = 3f; pierce = 5; break; // 수리검: 크기 ×3, 관통 +5
                     }
                 }
 
-                if (targetCnt > 1)
-                    AttackMultiTarget(entry, range, targetCnt, dmgMult, spdMult, scaleMult, pierce);
-                else
-                    AttackSingleTarget(entry, range, shots, dmgMult, spdMult, scaleMult, pierce);
+                AttackSingleTarget(entry, range, shots, dmgMult, spdMult, scaleMult, pierce, homing);
                 break;
             }
 
@@ -431,7 +429,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void AttackSingleTarget(WeaponLoadoutEntry entry, float range,
         int shots = 1, float dmgMult = 1f, float spdMult = 1f,
-        float scaleMult = 1f, int pierce = 0)
+        float scaleMult = 1f, int pierce = 0, bool homing = false)
     {
         var    nearest = FindNearest(range);
         Vector2 center = nearest != null
@@ -440,14 +438,14 @@ public class PlayerAttack : MonoBehaviour
 
         if (shots <= 1)
         {
-            SpawnProjectile(entry, center, dmgMult, spdMult, scaleMult, pierce);
+            SpawnProjectile(entry, center, dmgMult, spdMult, scaleMult, pierce, homing: homing);
         }
         else
         {
             float spread = 15f;
             float step   = shots > 1 ? spread * 2f / (shots - 1) : 0f;
             for (int i = 0; i < shots; i++)
-                SpawnProjectile(entry, Rotate(center, -spread + step * i), dmgMult, spdMult, scaleMult, pierce);
+                SpawnProjectile(entry, Rotate(center, -spread + step * i), dmgMult, spdMult, scaleMult, pierce, homing: homing);
         }
     }
 
@@ -589,7 +587,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void SpawnProjectile(WeaponLoadoutEntry entry, Vector2 dir,
         float dmgMult = 1f, float spdMult = 1f, float scaleMult = 1f,
-        int pierce = 0, float knockbackForce = 0f)
+        int pierce = 0, float knockbackForce = 0f, bool homing = false)
     {
         var   wd       = entry.data;
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
@@ -613,7 +611,7 @@ public class PlayerAttack : MonoBehaviour
             go.transform.localScale *= scaleMult;
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
-        proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce);
+        proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce, homing: homing);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,

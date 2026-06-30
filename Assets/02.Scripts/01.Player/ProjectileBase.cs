@@ -16,13 +16,18 @@ public class ProjectileBase : MonoBehaviour
     /// <summary>적에게 명중할 때마다 호출될 콜백을 설정한다(시너지 고정효과 전달용).</summary>
     public void SetOnHit(System.Action<MonsterController> onHit) => _onHit = onHit;
 
+    private bool  _homing;
+    private float _speed;
+
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
-        float knockbackForce = 0f, float explosionRadius = 0f)
+        float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false)
     {
         _damage          = damage;
         _remainingHits   = Mathf.Max(1, maxHits);
         _knockbackForce  = knockbackForce;
         _explosionRadius = explosionRadius;
+        _homing          = homing;
+        _speed           = speed;
 
         var rb = GetComponent<Rigidbody2D>();
         rb.gravityScale   = 0f;
@@ -33,6 +38,28 @@ public class ProjectileBase : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         Destroy(gameObject, lifetime);
+    }
+
+    // 유도(지팡이): 매 물리프레임 가장 가까운 적 방향으로 속도를 서서히 꺾는다.
+    private void FixedUpdate()
+    {
+        if (!_homing) return;
+        var rb = GetComponent<Rigidbody2D>();
+
+        MonsterController best = null; float bd = float.MaxValue;
+        foreach (var h in Physics2D.OverlapCircleAll(transform.position, 12f))
+        {
+            var mc = h.GetComponent<MonsterController>() ?? h.GetComponentInParent<MonsterController>();
+            if (mc == null || mc.IsDead) continue;
+            float d = Vector2.Distance(transform.position, mc.transform.position);
+            if (d < bd) { bd = d; best = mc; }
+        }
+        if (best == null) return;
+
+        Vector2 desired = ((Vector2)best.transform.position - (Vector2)transform.position).normalized * _speed;
+        Vector2 v = Vector2.Lerp(rb.linearVelocity, desired, 6f * Time.fixedDeltaTime);
+        rb.linearVelocity = v;
+        transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);
     }
 
     private void OnDestroy()
