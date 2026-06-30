@@ -41,15 +41,6 @@ MonoBehaviour:
   - {fileID: -2100484687566533605, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
   - {fileID: -1938348122313728310, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
   - {fileID: -6868627183141942976, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: 5490832716821637967, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: 1244216606056624956, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: 6687136474239956348, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: 3831775300289351375, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: -8592557528908910471, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: 223312940293297181, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: -5851391243828074915, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: -2772878649487987086, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
-  - {fileID: 2649506044384025317, guid: b2dbc57602ee83d478f270deb9a65577, type: 3}
   attackFps: 12
   meleeMotion: 2
   meleeSwingAngle: 90
