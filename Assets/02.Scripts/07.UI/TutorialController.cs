@@ -29,6 +29,11 @@ namespace BagSurvivor.UI
         [Header("페이지 (비어 있으면 코드 기본값 사용)")]
         [SerializeField] private TutorialPage[] pages;
 
+        [Header("기본 페이지 이미지 (인스펙터 pages 비울 때 사용)")]
+        [SerializeField] private Sprite moveImage;
+        [SerializeField] private Sprite corridorImage;
+        [SerializeField] private Sprite eliteStairsImage;
+
         [Header("동작 설정")]
         [Tooltip("켜면 PlayerPrefs를 무시하고 플레이할 때마다 항상 표시 (개발/테스트용 — 출시 전 끌 것)")]
         [SerializeField] private bool alwaysShowOnPlay = false;
@@ -149,23 +154,26 @@ namespace BagSurvivor.UI
         // ─────────────────────────────────────────────────────────────
         // 기본 페이지 (인스펙터가 비어 있을 때)
 
-        private static TutorialPage[] BuildDefaultPages() => new[]
+        private TutorialPage[] BuildDefaultPages() => new[]
         {
             new TutorialPage
             {
                 title = "이동",
                 body  = "WASD 키로 캐릭터를 상하좌우로 이동합니다.",
+                image = moveImage,
             },
             new TutorialPage
             {
                 title = "복도",
                 body  = "복도에서 배낭을 열고 닫을 수 있습니다.",
+                image = corridorImage,
             },
             new TutorialPage
             {
                 title = "엘리트 방 / 계단",
                 body  = "문이 있는 방에 들어가면 엘리트를 처치할 때까지 밖으로 나갈 수 없습니다.\n" +
                         "엘리트를 처치하면 다음 층으로 내려가는 계단이 생성됩니다.",
+                image = eliteStairsImage,
             },
         };
 
@@ -199,7 +207,7 @@ namespace BagSurvivor.UI
             var panelRT = _panel.GetComponent<RectTransform>();
             panelRT.anchorMin = panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
-            panelRT.sizeDelta = new Vector2(720f, 520f);
+            panelRT.sizeDelta = new Vector2(720f, 640f);
 
             var bg = _panel.AddComponent<Image>();
             bg.color = new Color(0.06f, 0.06f, 0.11f, 0.98f);
@@ -223,8 +231,8 @@ namespace BagSurvivor.UI
             _pageImageRT.anchorMin = new Vector2(0.5f, 1f);
             _pageImageRT.anchorMax = new Vector2(0.5f, 1f);
             _pageImageRT.pivot = new Vector2(0.5f, 1f);
-            _pageImageRT.sizeDelta = new Vector2(360f, 200f);
-            _pageImageRT.anchoredPosition = new Vector2(0f, -100f);
+            _pageImageRT.sizeDelta = new Vector2(540f, 300f);
+            _pageImageRT.anchoredPosition = new Vector2(0f, -96f);
             _pageImage = imageGO.AddComponent<Image>();
             _pageImage.preserveAspect = true;
             imageGO.SetActive(false);
@@ -236,8 +244,8 @@ namespace BagSurvivor.UI
             bodyRT.anchorMin = new Vector2(0f, 0f);
             bodyRT.anchorMax = new Vector2(1f, 1f);
             bodyRT.pivot = new Vector2(0.5f, 0.5f);
-            bodyRT.offsetMin = new Vector2(40f, 90f);   // 하단 버튼 영역 확보
-            bodyRT.offsetMax = new Vector2(-40f, -110f); // 타이틀 영역 확보
+            bodyRT.offsetMin = new Vector2(40f, 86f);    // 하단 버튼 영역 확보
+            bodyRT.offsetMax = new Vector2(-40f, -410f); // 타이틀 + 이미지 영역 확보
 
             // ── 페이지 표시기 ──
             _indicatorText = MakeText(_panel.transform, "Indicator", 20,

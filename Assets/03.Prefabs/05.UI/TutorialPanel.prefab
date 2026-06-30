@@ -45,5 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.UI.TutorialController
   pages: []
+  moveImage: {fileID: 21300000, guid: 991ae50da4f409f42985b9c87795abcd, type: 3}
+  corridorImage: {fileID: 21300000, guid: 84ce691a74f624c4d9276ac00a30d51c, type: 3}
+  eliteStairsImage: {fileID: 21300000, guid: 31e3d95acedc1d9468e13180f8ae041e, type: 3}
+  alwaysShowOnPlay: 0
   autoShowOnFirstVisit: 1
   seenPrefKey: TutorialSeen
