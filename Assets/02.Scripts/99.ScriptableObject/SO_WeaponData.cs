@@ -37,8 +37,8 @@ public class SO_WeaponData : SO_ItemData
     public MeleeMotionType meleeMotion = MeleeMotionType.Swing;
     [Tooltip("스윙 호 각도(도). 0이면 90 사용. 등급별 확장은 추후")]
     public float meleeSwingAngle = 90f;
-    [Tooltip("무기를 플레이어 앞쪽으로 띄우는 거리(유닛). 찌르기 전진 거리에도 사용. 0이면 0.8")]
-    public float meleeReach = 0.8f;
+    [Tooltip("무기를 플레이어 앞쪽으로 띄우는 거리(유닛). 캐릭터 몸을 벗어나도록. 찌르기 전진 거리에도 사용. 0이면 1.6")]
+    public float meleeReach = 1.6f;
     [Tooltip("근접 모션 1회 시간(초). 0이면 0.2")]
     public float meleeMotionDuration = 0.2f;
 

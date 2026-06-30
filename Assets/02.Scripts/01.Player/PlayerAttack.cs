@@ -783,7 +783,7 @@ public class PlayerAttack : MonoBehaviour
         if (frames == null) yield break;
 
         float dur   = wd.meleeMotionDuration > 0f ? wd.meleeMotionDuration : 0.2f;
-        float reach = wd.meleeReach          > 0f ? wd.meleeReach          : 0.8f;
+        float reach = wd.meleeReach          > 0f ? wd.meleeReach          : 1.6f;
         float arc   = wd.meleeSwingAngle      > 0f ? wd.meleeSwingAngle      : 90f;
         float fps   = animated ? af.Length / dur : 1f;
 

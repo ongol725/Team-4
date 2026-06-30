@@ -37,6 +37,7 @@ public static class WeaponProjectileSetup
         w.attackFrames = frames;
         if (w.attackFps <= 0f) w.attackFps = 12f;
         w.meleeMotion = MeleeMotionType.Swing; // 스윙
+        w.meleeReach  = 1.6f;                  // 캐릭터 몸 밖으로 띄움
         EditorUtility.SetDirty(w);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
