@@ -110,11 +110,32 @@ public static class WeaponProjectileSetup
             { "WPN_013", (12, 1) }, { "WPN_014", (12, 1) }, { "WPN_015", (4, 1) },  { "WPN_016", (4, 1) },
             { "WPN_025", (15, 1) }, { "WPN_026", (16, 1) }, { "WPN_027", (20, 1) }, { "WPN_028", (4, 1) },
             { "WPN_029", (24, 1) }, { "WPN_030", (14, 1) },
+
+            // ── 17~24 신규 업로드 — 가로 1줄 스트립. 프레임 수는 [잠정값] (사용자 확정 후 교체) ──
+            { "WPN_019", (16, 1) }, // 대검   7140px
+            { "WPN_020", (16, 1) }, // 카타나 7140px
+            { "WPN_021", (1, 1) },  // 스피어 594x570 — 단일 합성 이미지(시트 아님)
+            { "WPN_022", (16, 1) }, // 플레일 7896px
+            { "WPN_023", (16, 1) }, // 메이스 4840px
+            { "WPN_024", (16, 1) }, // 몽둥이 7140px (현재 020과 동일 파일 — 별도 이미지 필요)
         };
         foreach (var kv in slice)
         {
             string p = $"{SheetDir}/{kv.Key}.png";
             if (AssetImporter.GetAtPath(p) != null) GridSlice(p, kv.Value.cols, kv.Value.rows);
+        }
+
+        // ── 4×2 격자(256셀·2px 간격) 시트 — 간격 기반 슬라이스(8프레임) ──
+        var gridGap = new Dictionary<string, (int cw, int ch, int gx, int gy, int cols, int rows)>
+        {
+            { "WPN_017", (256, 256, 2, 2, 4, 2) }, // 바주카 8프레임
+            { "WPN_018", (256, 256, 2, 2, 4, 2) }, // 레일건 8프레임
+        };
+        foreach (var kv in gridGap)
+        {
+            string p = $"{SheetDir}/{kv.Key}.png";
+            if (AssetImporter.GetAtPath(p) != null)
+                GridSliceBySize(p, kv.Value.cw, kv.Value.ch, kv.Value.gx, kv.Value.gy, kv.Value.cols, kv.Value.rows);
         }
 
         // 2) 무기 SO 로드 (itemID → 에셋)
