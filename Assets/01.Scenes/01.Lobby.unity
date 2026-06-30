@@ -1563,7 +1563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 167356796522675639, guid: f533d3b323435e047beee8f0dff3021c, type: 3}
       propertyPath: autoShowOnFirstVisit
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3330072524121842624, guid: f533d3b323435e047beee8f0dff3021c, type: 3}
       propertyPath: m_Name
