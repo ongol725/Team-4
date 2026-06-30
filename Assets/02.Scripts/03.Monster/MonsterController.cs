@@ -161,6 +161,9 @@ namespace BagSurvivor.Monster
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             if (spriteRenderer != null) baseColor = spriteRenderer.color;
 
+            // 발밑 그림자 자동 부착 (모든 몬스터 공통, 풀링 안전)
+            if (GetComponent<BlobShadow>() == null) gameObject.AddComponent<BlobShadow>();
+
             // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
             if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         }

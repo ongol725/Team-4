@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3e9c1a4d8f42a6b0c5e7f981234abc, type: 3}
+  m_Name: ShadowSettings
+  m_EditorClassIdentifier: 
+  widthRatio: 1.2
+  heightRatio: 0.5
+  alpha: 0.8
+  feetYOffset: 0.05
+  playerWidthMultiplier: 0.38
