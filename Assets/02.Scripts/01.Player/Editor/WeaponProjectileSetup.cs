@@ -100,17 +100,22 @@ public static class WeaponProjectileSetup
     [MenuItem("BagSurvivor/Setup/④ Fill Weapon Attack Frames")]
     public static void FillWeaponAttackFrames()
     {
-        // 1) 슬라이스가 잘못된 시트 재슬라이스 (실제 프레임 수 기준 균등 그리드, 중심 피벗)
-        //    값 = (cols, rows). WPN_008만 4×3 격자, 나머지는 가로 1줄.
-        var reslice = new Dictionary<string, (int cols, int rows)>
+        // 1) 22개 전부 확정 프레임 수 기준 균등 그리드로 슬라이스(원본좌표, 중심 피벗).
+        //    값 = (cols, rows). WPN_008만 4×3, 나머지는 가로 1줄.
+        var slice = new Dictionary<string, (int cols, int rows)>
         {
-            { "WPN_002", (12, 1) }, { "WPN_004", (12, 1) }, { "WPN_005", (8, 1) },
-            { "WPN_007", (4, 1) },  { "WPN_008", (4, 3) },  { "WPN_012", (12, 1) },
-            { "WPN_013", (12, 1) }, { "WPN_014", (12, 1) }, { "WPN_015", (4, 1) },
-            { "WPN_025", (15, 1) }, { "WPN_026", (16, 1) },
+            { "WPN_001", (4, 1) },  { "WPN_002", (12, 1) }, { "WPN_003", (12, 1) }, { "WPN_004", (12, 1) },
+            { "WPN_005", (8, 1) },  { "WPN_006", (4, 1) },  { "WPN_007", (4, 1) },  { "WPN_008", (4, 3) },
+            { "WPN_009", (4, 1) },  { "WPN_010", (8, 1) },  { "WPN_011", (6, 1) },  { "WPN_012", (12, 1) },
+            { "WPN_013", (12, 1) }, { "WPN_014", (12, 1) }, { "WPN_015", (4, 1) },  { "WPN_016", (4, 1) },
+            { "WPN_025", (15, 1) }, { "WPN_026", (16, 1) }, { "WPN_027", (20, 1) }, { "WPN_028", (4, 1) },
+            { "WPN_029", (24, 1) }, { "WPN_030", (14, 1) },
         };
-        foreach (var kv in reslice)
-            GridSlice($"{SheetDir}/{kv.Key}.png", kv.Value.cols, kv.Value.rows);
+        foreach (var kv in slice)
+        {
+            string p = $"{SheetDir}/{kv.Key}.png";
+            if (AssetImporter.GetAtPath(p) != null) GridSlice(p, kv.Value.cols, kv.Value.rows);
+        }
 
         // 2) 무기 SO 로드 (itemID → 에셋)
         var weaponsById = new Dictionary<string, SO_WeaponData>();
@@ -140,6 +145,10 @@ public static class WeaponProjectileSetup
 
             weapon.attackFrames = frames;
             if (weapon.attackFps <= 0f) weapon.attackFps = 12f;
+            // 근접 무기 시트는 모션이 프레임에 포함된 베이크드 → 제자리 재생(회전 스윕 없음)
+            if (weapon.attackStyleType == WeaponAttackStyleType.MeleeFan ||
+                weapon.attackStyleType == WeaponAttackStyleType.MeleeSingle)
+                weapon.meleeMotion = MeleeMotionType.Baked;
             EditorUtility.SetDirty(weapon);
             filled++;
         }
@@ -166,50 +175,42 @@ public static class WeaponProjectileSetup
         return (i < name.Length && int.TryParse(name.Substring(i), out int n)) ? n : 0;
     }
 
+    /// <summary>PNG 헤더(IHDR)에서 원본 픽셀 크기를 직접 읽는다. 임포트 다운스케일과 무관.</summary>
+    private static (int w, int h) PngSize(string assetPath)
+    {
+        try
+        {
+            using var fs = System.IO.File.OpenRead(assetPath);
+            var b = new byte[24];
+            if (fs.Read(b, 0, 24) < 24) return (0, 0);
+            int w = (b[16] << 24) | (b[17] << 16) | (b[18] << 8) | b[19];
+            int h = (b[20] << 24) | (b[21] << 16) | (b[22] << 8) | b[23];
+            return (w, h);
+        }
+        catch { return (0, 0); }
+    }
+
     /// <summary>
-    /// 지정 png를 cols×rows 균등 그리드로 재슬라이스한다(중심 피벗).
-    /// 추가로 모든 셀의 '내용물 영역'을 셀 로컬 좌표로 합집합해 공통 투명 여백을 잘라낸다(트림).
-    /// → 정규화 시 그림이 꽉 차 보이고, 모든 프레임이 같은 창을 써서 애니메이션 크기가 일관된다.
+    /// 지정 png를 cols×rows 균등 그리드로 슬라이스한다(중심 피벗).
+    /// rect는 반드시 '원본 해상도' 좌표여야 한다(스프라이트 rect는 원본 기준). PNG 헤더에서 원본 크기를
+    /// 직접 읽어 계산하므로, maxTextureSize 다운스케일(>2048)이 있어도 좌표가 어긋나지 않는다.
     /// </summary>
     private static void GridSlice(string pngPath, int cols, int rows)
     {
         var importer = AssetImporter.GetAtPath(pngPath) as TextureImporter;
         if (importer == null) { Debug.LogWarning($"[WeaponProjectileSetup] 임포터 없음: {pngPath}"); return; }
 
-        // 픽셀 분석을 위해 임시로 읽기 가능 활성화 후 리임포트
-        bool prevReadable = importer.isReadable;
-        if (!prevReadable) { importer.isReadable = true; importer.SaveAndReimport(); }
+        var (W, H) = PngSize(pngPath);
+        if (W <= 0 || H <= 0) { Debug.LogWarning($"[WeaponProjectileSetup] PNG 크기 읽기 실패: {pngPath}"); return; }
 
-        var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(pngPath);
-        if (tex == null) { Debug.LogWarning($"[WeaponProjectileSetup] 텍스처 로드 실패: {pngPath}"); return; }
-
-        int W = tex.width, H = tex.height;
         int cw = W / cols, ch = H / rows;
         if (cw <= 0 || ch <= 0) return;
 
-        // 셀 로컬 내용물 합집합 창 (모든 프레임 공통). 알파>임계 픽셀의 경계.
-        const byte THR = 10;
-        int ux0 = cw, uy0 = ch, ux1 = -1, uy1 = -1;
-        Color32[] px = null;
-        try { px = tex.GetPixels32(); } catch { px = null; } // GetPixels32: 좌하단 원점, index=y*W+x
-        if (px != null)
-        {
-            for (int r = 0; r < rows; r++)
-                for (int c = 0; c < cols; c++)
-                {
-                    int ox = c * cw, oy = H - (r + 1) * ch; // 셀 원점(좌하단)
-                    for (int ly = 0; ly < ch; ly++)
-                        for (int lx = 0; lx < cw; lx++)
-                            if (px[(oy + ly) * W + (ox + lx)].a > THR)
-                            {
-                                if (lx < ux0) ux0 = lx; if (lx > ux1) ux1 = lx;
-                                if (ly < uy0) uy0 = ly; if (ly > uy1) uy1 = ly;
-                            }
-                }
-        }
-        bool trim = ux1 >= ux0 && uy1 >= uy0;
-        int wx = trim ? ux0 : 0, wy = trim ? uy0 : 0;
-        int ww = trim ? (ux1 - ux0 + 1) : cw, wh = trim ? (uy1 - uy0 + 1) : ch;
+        importer.textureType         = TextureImporterType.Sprite;
+        importer.spriteImportMode    = SpriteImportMode.Multiple;
+        importer.spritePixelsPerUnit = 100;
+        importer.mipmapEnabled       = false;
+        importer.alphaIsTransparency = true;
 
         string prefix = Path.GetFileNameWithoutExtension(pngPath);
         var metas = new List<SpriteMetaData>();
@@ -217,24 +218,21 @@ public static class WeaponProjectileSetup
         for (int r = 0; r < rows; r++)
             for (int c = 0; c < cols; c++)
             {
-                int ox = c * cw, oy = H - (r + 1) * ch;
                 metas.Add(new SpriteMetaData
                 {
                     name      = $"{prefix}_{idx}",
-                    rect      = new Rect(ox + wx, oy + wy, ww, wh),
+                    rect      = new Rect(c * cw, H - (r + 1) * ch, cw, ch), // 원본 좌표(좌하단 원점)
                     alignment = (int)SpriteAlignment.Center,
                     pivot     = new Vector2(0.5f, 0.5f),
                 });
                 idx++;
             }
 
-        importer.spriteImportMode = SpriteImportMode.Multiple;
-        importer.isReadable       = prevReadable; // 원복(보통 false)
 #pragma warning disable CS0618 // spritesheet은 deprecated이나 그리드 일괄 슬라이스에 여전히 동작
         importer.spritesheet = metas.ToArray();
 #pragma warning restore CS0618
         EditorUtility.SetDirty(importer);
         importer.SaveAndReimport();
-        Debug.Log($"[WeaponProjectileSetup] 재슬라이스: {prefix} → {cols}x{rows}, 셀 {cw}x{ch} → 트림창 {ww}x{wh}");
+        Debug.Log($"[WeaponProjectileSetup] 슬라이스: {prefix} → {cols}x{rows}, 셀 {cw}x{ch} (원본 {W}x{H})");
     }
 }

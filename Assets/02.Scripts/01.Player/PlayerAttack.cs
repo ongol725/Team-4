@@ -806,6 +806,11 @@ public class PlayerAttack : MonoBehaviour
                 float lunge = Mathf.Sin(k * Mathf.PI);                 // 0→1→0 전진·복귀
                 wpn.transform.localPosition = new Vector3(0f, reach + lunge * reach, 0f);
             }
+            else if (wd.meleeMotion == MeleeMotionType.Baked)
+            {
+                // 모션이 프레임에 들어있음 → 공격 방향으로만 고정 정렬, 회전 스윕 없음(이중 회전 방지)
+                pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle);
+            }
             else // Swing
             {
                 float off = Mathf.Lerp(-arc * 0.5f, arc * 0.5f, k);    // 호로 휘두름
