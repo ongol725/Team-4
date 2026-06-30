@@ -652,6 +652,14 @@ public class PlayerAttack : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 투사체 생성
 
+    // A그룹(회전/찌르기/투척): 상점 정적 아이콘을 그대로 사용한다(전용 애니 시트 대신).
+    private static readonly HashSet<string> _shopIconWeapons = new()
+    {
+        "WPN_001", "WPN_002", "WPN_004", "WPN_005", "WPN_010", "WPN_016",
+        "WPN_019", "WPN_020", "WPN_021", "WPN_024", "WPN_025", "WPN_027", "WPN_029", "WPN_030",
+    };
+    private static bool UsesShopIcon(string id) => _shopIconWeapons.Contains(id);
+
     private void SpawnProjectile(WeaponLoadoutEntry entry, Vector2 dir,
         float dmgMult = 1f, float spdMult = 1f, float scaleMult = 1f,
         int pierce = 0, float knockbackForce = 0f, bool homing = false, bool boomerang = false)
@@ -666,6 +674,9 @@ public class PlayerAttack : MonoBehaviour
         maxHits += pierce;
 
         var projFrames = ValidFrames(wd.attackFrames);
+        // A그룹 투척(단검·수리검·부메랑): 상점 정적 아이콘이 곧 투사체가 된다.
+        if (UsesShopIcon(wd.itemID) && wd.itemImage != null)
+            projFrames = new[] { wd.itemImage };
         GameObject go = wd.projectile != null
             ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
             : (projFrames.Length > 0
@@ -870,7 +881,8 @@ public class PlayerAttack : MonoBehaviour
         float range, float scaleMult = 1f, MeleeMotionType? motionOverride = null)
     {
         var       af       = ValidFrames(wd.attackFrames);   // 삭제된 프레임 방어
-        bool      animated = af.Length > 0;
+        bool      useIcon  = UsesShopIcon(wd.itemID);         // A그룹: 상점 정적 아이콘 사용(시트 무시)
+        bool      animated = !useIcon && af.Length > 0;
         Sprite[]  frames   = animated ? af
                                       : (wd.itemImage != null ? new[] { wd.itemImage } : null);
         if (frames == null) yield break;
