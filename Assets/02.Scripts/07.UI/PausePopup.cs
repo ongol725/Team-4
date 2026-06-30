@@ -127,7 +127,12 @@ namespace BagSurvivor.UI
         private void OnLobby()
         {
             // 2차 확인 모달 표시 (게임은 계속 일시정지 유지)
-            if (lobbyConfirmPanel != null) lobbyConfirmPanel.SetActive(true);
+            if (lobbyConfirmPanel != null)
+            {
+                EnsureTopCanvas(lobbyConfirmPanel, 120);        // 표시 직전 재보장 (Awake에서 누락되는 케이스 대비)
+                lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
+                lobbyConfirmPanel.SetActive(true);
+            }
             else OnLobbyConfirm(); // 모달이 없으면 바로 이동
         }
 
