@@ -179,8 +179,8 @@ public class PlayerAttack : MonoBehaviour
                 float spdMult    = 1f;
                 float scaleMult  = id switch
                 {
-                    "WPN_016"              => 3f, // 수리검: 투사체 크기 ×3(가로세로 각각)
-                    "WPN_001" or "WPN_009" => 2f, // 단검·활: ×2(가로세로 각각)
+                    "WPN_016"                          => 3f, // 수리검: 투사체 크기 ×3(가로세로 각각)
+                    "WPN_001" or "WPN_009" or "WPN_007" => 2f, // 단검·활·권총: ×2(가로세로 각각)
                     _                      => 1f,
                 };
                 int   pierce     = 0;
