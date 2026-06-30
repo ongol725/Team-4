@@ -164,6 +164,11 @@ public class PlayerAttack : MonoBehaviour
         string id    = entry.data.itemID;
         float  range = entry.data.range > 0 ? entry.data.range : _meleeRange;
 
+        // 근접무기 전체 사거리 ×3 (표시·피격 동반, 비율 유지). 개별 크기 배율은 각 case에서 추가 적용.
+        if (entry.data.attackStyleType == WeaponAttackStyleType.MeleeFan ||
+            entry.data.attackStyleType == WeaponAttackStyleType.MeleeSingle)
+            range *= 3f;
+
         switch (entry.data.attackStyleType)
         {
             // ── SingleTarget ───────────────────────────────────────
@@ -215,6 +220,7 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.MeleeFan:
             {
                 if (id == "WPN_021") range *= 0.5f; // 스피어: 크기 0.5배(표시·피격 함께)
+                if (id == "WPN_019") range *= 2f;   // 대검: 크기 2배(표시·피격 함께)
                 // 무기별 기본 각도
                 float angle = id switch
                 {
