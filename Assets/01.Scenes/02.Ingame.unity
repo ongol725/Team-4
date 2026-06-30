@@ -781,13 +781,19 @@ MonoBehaviour:
     skill: {fileID: 11400000, guid: b78ecbdf86770e54f8c2a8999808c49f, type: 2}
   - synergyType: 4
     grade: 1
-    skill: {fileID: 11400000, guid: 5e9283036ca091145bfb591ac656f349, type: 2}
+    skill: {fileID: 11400000, guid: b78ecbdf86770e54f8c2a8999808c49f, type: 2}
   - synergyType: 4
     grade: 2
-    skill: {fileID: 11400000, guid: 70f23400203035740ad178870c04ddda, type: 2}
+    skill: {fileID: 11400000, guid: b78ecbdf86770e54f8c2a8999808c49f, type: 2}
+  - synergyType: 4
+    grade: 2
+    skill: {fileID: 11400000, guid: 5e9283036ca091145bfb591ac656f349, type: 2}
   - synergyType: 4
     grade: 3
     skill: {fileID: 11400000, guid: 83f22fe4a8bd97d4797921080b7a71ad, type: 2}
+  - synergyType: 4
+    grade: 3
+    skill: {fileID: 11400000, guid: 5e9283036ca091145bfb591ac656f349, type: 2}
   - synergyType: 6
     grade: 0
     skill: {fileID: 11400000, guid: 13f2353281b57544391e164eb2a5aab1, type: 2}
@@ -833,6 +839,18 @@ MonoBehaviour:
     grade: 2
     summon: {fileID: 11400000, guid: 0674475495319924f9907f10fc1b2aaf, type: 2}
     count: 3
+  - synergyType: 4
+    grade: 1
+    summon: {fileID: 11400000, guid: d94996f7b781a6442b8df49a49387717, type: 2}
+    count: 2
+  - synergyType: 4
+    grade: 2
+    summon: {fileID: 11400000, guid: d94996f7b781a6442b8df49a49387717, type: 2}
+    count: 2
+  - synergyType: 4
+    grade: 3
+    summon: {fileID: 11400000, guid: d94996f7b781a6442b8df49a49387717, type: 2}
+    count: 4
   - synergyType: 3
     grade: 0
     summon: {fileID: 11400000, guid: 35991cf7e0ce4a44c98939310c0dbee8, type: 2}
@@ -851,12 +869,36 @@ MonoBehaviour:
     count: 1
   - synergyType: 8
     grade: 1
+    summon: {fileID: 11400000, guid: 705e060f0c90cf94fbd2c83f58e2b6cc, type: 2}
+    count: 1
+  - synergyType: 8
+    grade: 1
     summon: {fileID: 11400000, guid: 23806500c7bfc6f439ec5543e45e99ad, type: 2}
-    count: 2
+    count: 1
+  - synergyType: 8
+    grade: 2
+    summon: {fileID: 11400000, guid: 705e060f0c90cf94fbd2c83f58e2b6cc, type: 2}
+    count: 1
+  - synergyType: 8
+    grade: 2
+    summon: {fileID: 11400000, guid: 23806500c7bfc6f439ec5543e45e99ad, type: 2}
+    count: 1
   - synergyType: 8
     grade: 2
     summon: {fileID: 11400000, guid: 472604da6e745f54fa4d622dd8ee5c52, type: 2}
-    count: 4
+    count: 1
+  - synergyType: 8
+    grade: 3
+    summon: {fileID: 11400000, guid: 705e060f0c90cf94fbd2c83f58e2b6cc, type: 2}
+    count: 1
+  - synergyType: 8
+    grade: 3
+    summon: {fileID: 11400000, guid: 23806500c7bfc6f439ec5543e45e99ad, type: 2}
+    count: 1
+  - synergyType: 8
+    grade: 3
+    summon: {fileID: 11400000, guid: 472604da6e745f54fa4d622dd8ee5c52, type: 2}
+    count: 1
   - synergyType: 8
     grade: 3
     summon: {fileID: 11400000, guid: 5a674171c73b6b040b2cbf420e954852, type: 2}

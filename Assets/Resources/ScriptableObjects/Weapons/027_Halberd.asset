@@ -32,6 +32,32 @@ MonoBehaviour:
   projectileSpeed: 0
   range: 7
   maxTargets: 0
+  attackFrames:
+  - {fileID: -4118626695368416123, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 7246525197602246760, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 9126006670254555997, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -4547122804974036929, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -3164077087821106265, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -8831809237624612613, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -8057383706712646792, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -531066565132456180, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 2322575701197904371, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 7262011049666077151, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 9088712988053076728, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 2693695219864508308, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 8968309488815380087, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 970766158776490963, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 3160691316483695458, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -4317296395902707505, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 1289717252428208554, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 7889558931718447650, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -6700393083800365136, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 8852837105975090037, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  attackFps: 12
+  meleeMotion: 2
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
   gradeStats:
   - attackPower: 50
     attackSpeed: 1.5

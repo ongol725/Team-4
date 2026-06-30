@@ -31,6 +31,16 @@ MonoBehaviour:
   projectileSpeed: 10
   range: 3
   maxTargets: 1
+  attackFrames:
+  - {fileID: 2008942932546052199, guid: fe819a957142fb342adca14b524de30d, type: 3}
+  - {fileID: -1688257123397877016, guid: fe819a957142fb342adca14b524de30d, type: 3}
+  - {fileID: -5478876352081764099, guid: fe819a957142fb342adca14b524de30d, type: 3}
+  - {fileID: -116525534215468298, guid: fe819a957142fb342adca14b524de30d, type: 3}
+  attackFps: 12
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
   gradeStats:
   - attackPower: 15
     attackSpeed: 1
