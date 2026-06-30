@@ -207,7 +207,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_019" => 180f, // 대검: 180도
                     "WPN_020" => 120f,
                     "WPN_022" => 120f, // 플레일: 전방 범위
-                    "WPN_023" => 60f,  // 메이스: 좁은 부채꼴(내리치기)
+                    "WPN_023" => 360f, // 메이스: 쇠구슬이 휘도는 전방위 — 쇠구슬 위치까지 판정 포함
                     "WPN_024" => 180f, // 몽둥이: 전방 180도
                     "WPN_027" => 120f, // 할버드: 넓은 부채꼴
                     "WPN_029" => 360f, // 워해머: 전방위
@@ -850,7 +850,10 @@ public class PlayerAttack : MonoBehaviour
         var pivot = new GameObject($"MeleePivot_{wd.itemName}");
         pivot.transform.position = transform.position;
         wpn.transform.SetParent(pivot.transform, false);
-        wpn.transform.localPosition = new Vector3(0f, reach, 0f); // 공격 방향 앞쪽으로 reach만큼 띄움(중앙 겹침 해소)
+        // 메이스(쇠구슬 휘두름)는 플레이어 중심으로 휘돌아야 판정(전방위 반경)과 일치 → 오프셋 0.
+        // 그 외 근접은 공격 방향 앞쪽으로 reach만큼 띄움(중앙 겹침 해소).
+        float fwd = wd.itemID == "WPN_023" ? 0f : reach;
+        wpn.transform.localPosition = new Vector3(0f, fwd, 0f);
         Destroy(pivot, dur + 0.05f);
 
         float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
