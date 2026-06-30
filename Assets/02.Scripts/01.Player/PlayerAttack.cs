@@ -378,7 +378,7 @@ public class PlayerAttack : MonoBehaviour
                 Vector2 toTarget  = nearest != null
                     ? ((Vector2)nearest.transform.position - (Vector2)transform.position)
                     : _lastMoveDir * range;
-                bool    animated  = entry.data.attackFrames != null && entry.data.attackFrames.Length > 0;
+                bool    animated  = ValidFrames(entry.data.attackFrames).Length > 0;
 
                 for (int i = 0; i < count; i++)
                 {
@@ -600,10 +600,11 @@ public class PlayerAttack : MonoBehaviour
         if (wd.projectileData != null) maxHits += wd.projectileData.pierceCount;
         maxHits += pierce;
 
+        var projFrames = ValidFrames(wd.attackFrames);
         GameObject go = wd.projectile != null
             ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
-            : (wd.attackFrames != null && wd.attackFrames.Length > 0
-                ? BuildAnimatedGO(wd.attackFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
+            : (projFrames.Length > 0
+                ? BuildAnimatedGO(projFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
                 : BuildTempGO(wd.itemImage, wd.itemName));
 
         go.transform.position = transform.position; // BuildTempGO는 위치를 설정하지 않으므로 항상 보정
@@ -623,10 +624,11 @@ public class PlayerAttack : MonoBehaviour
         float lifetime = travelRange / rawSpeed;
         int   damage   = ScaleDamage(entry.attackPower);
 
+        var projFrames = ValidFrames(wd.attackFrames);
         GameObject go = wd.projectile != null
             ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
-            : (wd.attackFrames != null && wd.attackFrames.Length > 0
-                ? BuildAnimatedGO(wd.attackFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
+            : (projFrames.Length > 0
+                ? BuildAnimatedGO(projFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
                 : BuildTempGO(wd.itemImage, wd.itemName));
         go.transform.position = transform.position;
 
@@ -644,14 +646,15 @@ public class PlayerAttack : MonoBehaviour
         var   wd       = entry.data;
         int   damage   = ScaleDamage(entry.attackPower);
         float diameter = Mathf.Max(1f, explodeRadius * 2f);
-        bool  animated = wd.attackFrames != null && wd.attackFrames.Length > 0;
+        var   af       = ValidFrames(wd.attackFrames); // 삭제된 프레임 방어
+        bool  animated = af.Length > 0;
 
         const float dur = 0.6f; // 애니 재생 시간
         GameObject go;
         if (animated)
         {
-            float fps = wd.attackFrames.Length / dur; // 시트 전체를 dur 안에 1회 재생
-            go = BuildAnimatedGO(wd.attackFrames, fps, $"Burst_{wd.itemName}",
+            float fps = af.Length / dur; // 시트 전체를 dur 안에 1회 재생
+            go = BuildAnimatedGO(af, fps, $"Burst_{wd.itemName}",
                                  diameter, loop: false, withBody: false);
         }
         else
@@ -691,6 +694,15 @@ public class PlayerAttack : MonoBehaviour
     /// 스프라이트는 자식에 두고 중심을 루트에 맞춰(피벗 무관) targetSize 지름으로 정규화한다.
     /// withBody=true면 투사체용 Rigidbody2D+트리거 콜라이더를 루트에 부착한다.
     /// </summary>
+    /// <summary>null/삭제된 스프라이트를 제외한 유효 프레임만 반환(없으면 빈 배열). 에셋 삭제로 참조가 깨진 경우 방어.</summary>
+    private static Sprite[] ValidFrames(Sprite[] arr)
+    {
+        if (arr == null) return System.Array.Empty<Sprite>();
+        var list = new List<Sprite>(arr.Length);
+        foreach (var s in arr) if (s != null) list.Add(s); // Unity의 == null은 삭제(missing)된 객체도 true
+        return list.ToArray();
+    }
+
     private static GameObject BuildAnimatedGO(Sprite[] frames, float fps, string name,
         float targetSize, bool loop, bool withBody)
     {
@@ -704,6 +716,9 @@ public class PlayerAttack : MonoBehaviour
             col.isTrigger = true;
             col.radius    = 0.3f;
         }
+
+        // 삭제/누락 프레임 방어 — 유효한 게 없으면 빈 오브젝트만 반환(크래시 방지)
+        if (frames == null || frames.Length == 0 || frames[0] == null) return go;
 
         var child = new GameObject("Sprite");
         child.transform.SetParent(go.transform, false);
@@ -761,15 +776,16 @@ public class PlayerAttack : MonoBehaviour
     private IEnumerator ShowMeleeFlash(SO_WeaponData wd, Vector2 dir,
         float range, float scaleMult = 1f)
     {
-        bool      animated = wd.attackFrames != null && wd.attackFrames.Length > 0;
-        Sprite[]  frames   = animated ? wd.attackFrames
+        var       af       = ValidFrames(wd.attackFrames);   // 삭제된 프레임 방어
+        bool      animated = af.Length > 0;
+        Sprite[]  frames   = animated ? af
                                       : (wd.itemImage != null ? new[] { wd.itemImage } : null);
         if (frames == null) yield break;
 
         float dur   = wd.meleeMotionDuration > 0f ? wd.meleeMotionDuration : 0.2f;
         float reach = wd.meleeReach          > 0f ? wd.meleeReach          : 0.8f;
         float arc   = wd.meleeSwingAngle      > 0f ? wd.meleeSwingAngle      : 90f;
-        float fps   = animated ? wd.attackFrames.Length / dur : 1f;
+        float fps   = animated ? af.Length / dur : 1f;
 
         // 무기 비주얼(스프라이트 중심이 root 원점) — 플레이어 중심 피벗에 매달아 앞쪽으로 띄운다.
         var wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", 2.0f * scaleMult, loop: false, withBody: false);
