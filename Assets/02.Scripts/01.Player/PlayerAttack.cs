@@ -171,7 +171,7 @@ public class PlayerAttack : MonoBehaviour
                 int   shots      = 1;
                 float dmgMult    = 1f;
                 float spdMult    = 1f;
-                float scaleMult  = 1f;
+                float scaleMult  = id == "WPN_001" ? 2f : 1f; // 단검: 투사체 크기 ×2
                 int   pierce     = 0;
                 bool  homing     = id == "WPN_011"; // 지팡이: 유도 투사체
 
@@ -298,8 +298,8 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.MeleeSingle:
             {
                 bool  splash    = false;
-                int   burst     = id == "WPN_025" ? 2 : 1; // 너클: 기본 2연타
-                float scaleMult = 1f;
+                int   burst     = id == "WPN_025" ? 2 : 1;        // 너클: 기본 2연타
+                float scaleMult = id == "WPN_025" ? 0.5f : 1f;    // 너클: 이펙트 크기 ×0.5
 
                 if (g5)
                 {
@@ -418,7 +418,7 @@ public class PlayerAttack : MonoBehaviour
                 Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
                 _boomerangGoLeft = !_boomerangGoLeft;
                 // 던졌다가 플레이어에게 회전하며 복귀
-                SpawnProjectile(entry, dir, spdMult: spdM, boomerang: true);
+                SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 3f, boomerang: true); // 부메랑: 투사체 크기 ×3
                 break;
             }
 
@@ -683,6 +683,7 @@ public class PlayerAttack : MonoBehaviour
             go.transform.localScale = Vector3.one * (ext > 0.001f ? diameter * 0.5f / ext : diameter);
         }
         go.transform.position = pos;
+        if (wd.itemID == "WPN_012") go.transform.localScale *= 0.5f; // 마도서: 표시 크기 ×0.5 (피해 반경은 유지)
         Destroy(go, dur + 0.1f);
 
         // 원이 형성되는 시점(애니 60%)에 1회 범위 피해
@@ -830,11 +831,23 @@ public class PlayerAttack : MonoBehaviour
         float fps   = animated ? af.Length / dur : 1f;
 
         // 무기 비주얼(스프라이트 중심이 root 원점) — 플레이어 중심 피벗에 매달아 앞쪽으로 띄운다.
-        var wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", 2.0f * scaleMult, loop: false, withBody: false);
+        bool baked = wd.meleeMotion == MeleeMotionType.Baked; // 모션이 프레임에 포함 → 제자리 재생(이동·회전 없음)
+        var  wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", 2.0f * scaleMult, loop: false, withBody: false);
+
+        // 무기별 표시 비율(가로,세로). 기본 1:1. 회전 없는 Baked에서만 비대칭 적용(전단 방지).
+        Vector2 vShape = wd.itemID switch
+        {
+            "WPN_002" => new Vector2(1.5f, 4f), // 장검: 가로 ×1.5 · 세로 ×4
+            _         => Vector2.one,
+        };
+        if (vShape != Vector2.one)
+            wpn.transform.localScale = new Vector3(vShape.x, vShape.y, 1f);
+
         var pivot = new GameObject($"MeleePivot_{wd.itemName}");
         pivot.transform.position = transform.position;
         wpn.transform.SetParent(pivot.transform, false);
-        wpn.transform.localPosition = new Vector3(0f, reach, 0f); // 12시 방향 앞쪽
+        // Baked는 제자리(플레이어 중심) 재생, 그 외에는 12시 방향 앞쪽으로 띄움
+        wpn.transform.localPosition = baked ? Vector3.zero : new Vector3(0f, reach, 0f);
         Destroy(pivot, dur + 0.05f);
 
         float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
@@ -850,10 +863,9 @@ public class PlayerAttack : MonoBehaviour
                 float lunge = Mathf.Sin(k * Mathf.PI);                 // 0→1→0 전진·복귀
                 wpn.transform.localPosition = new Vector3(0f, reach + lunge * reach, 0f);
             }
-            else if (wd.meleeMotion == MeleeMotionType.Baked)
+            else if (baked)
             {
-                // 모션이 프레임에 들어있음 → 공격 방향으로만 고정 정렬, 회전 스윕 없음(이중 회전 방지)
-                pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle);
+                // 제자리 재생: 이동·회전 없이 프레임만 재생(이펙트가 프레임에 포함됨)
             }
             else // Swing
             {
