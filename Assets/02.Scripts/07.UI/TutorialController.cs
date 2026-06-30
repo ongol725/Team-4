@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,6 +34,7 @@ namespace BagSurvivor.UI
         [SerializeField] private string seenPrefKey = "TutorialSeen";
 
         private Canvas _canvas;
+        private GameObject _root;   // Dimmer 루트 — 딤+패널 전체를 함께 토글
         private GameObject _panel;
         private TMP_FontAsset _font;
 
@@ -60,9 +60,9 @@ namespace BagSurvivor.UI
             SetVisible(false);
         }
 
-        private IEnumerator Start()
+        private void Start()
         {
-            yield return null; // 씬 초기화 완료 대기
+            // BuildUI는 Awake에서 끝나므로 추가 대기 없이 첫 프레임에 바로 표시한다.
             if (autoShowOnFirstVisit && PlayerPrefs.GetInt(seenPrefKey, 0) == 0)
             {
                 Open();
@@ -92,7 +92,7 @@ namespace BagSurvivor.UI
         private void SetVisible(bool visible)
         {
             _isVisible = visible;
-            if (_panel != null) _panel.SetActive(visible);
+            if (_root != null) _root.SetActive(visible);
         }
 
         private void Prev()
@@ -168,8 +168,9 @@ namespace BagSurvivor.UI
 
             gameObject.AddComponent<GraphicRaycaster>();
 
-            // ── 딤 배경 (클릭 차단) ──
+            // ── 딤 배경 (클릭 차단) ── 딤+패널 전체를 이 루트로 토글
             var dimmerGO = MakeGO("Dimmer", transform);
+            _root = dimmerGO;
             var dimmerRT = dimmerGO.GetComponent<RectTransform>();
             Stretch(dimmerRT);
             var dimmer = dimmerGO.AddComponent<Image>();
