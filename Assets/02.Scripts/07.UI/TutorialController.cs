@@ -158,13 +158,8 @@ namespace BagSurvivor.UI
             },
             new TutorialPage
             {
-                title = "단축키",
-                body  = "(추후 내용 추가 예정)",
-            },
-            new TutorialPage
-            {
-                title = "배낭",
-                body  = "(추후 내용 추가 예정)\n배낭은 복도에서만 열고 닫을 수 있습니다.",
+                title = "복도",
+                body  = "복도에서 배낭을 열고 닫을 수 있습니다.",
             },
             new TutorialPage
             {
