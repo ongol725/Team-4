@@ -32,6 +32,9 @@ public class BlobShadow : MonoBehaviour
     /// <summary>플레이어가 부착 직후 호출 — 플레이어 전용 폭 배수를 적용한다.</summary>
     public void MarkAsPlayer() { isPlayer = true; Refresh(); }
 
+    /// <summary>외부에서 스케일 변경 후 그림자 크기·위치를 다시 맞춘다(예: 슬라임 분열).</summary>
+    public void Refit() => Refresh();
+
     void OnEnable()
     {
         EnsureShadow();
@@ -87,8 +90,14 @@ public class BlobShadow : MonoBehaviour
         float s = (lossy != 0f) ? width / lossy : width;
         shadowSr.transform.localScale = new Vector3(s, s * (heightRatio / 0.5f), 1f);
 
-        // 발밑(스프라이트 하단 중앙)에 배치 — 자식이라 이후 부모 따라 이동
-        shadowSr.transform.position = new Vector3(b.center.x, b.min.y + feetY, 0f);
+        // 배치: 몬스터=발밑(스프라이트 하단). 플레이어=루트 기준 로컬 Y(playerShadowLocalY) 고정.
+        float worldY = b.min.y + feetY;
+        if (isPlayer)
+        {
+            float pY = st != null ? st.playerShadowLocalY : 0.4f;
+            worldY = transform.position.y + pY; // 루트 기준 로컬 Y = pY
+        }
+        shadowSr.transform.position = new Vector3(b.center.x, worldY, 0f);
 
         // 진하기 + 캐릭터보다 한 단계 뒤
         shadowSr.color = new Color(0f, 0f, 0f, alpha);
