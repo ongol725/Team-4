@@ -277,6 +277,17 @@ public class PlayerAttack : MonoBehaviour
                     foreach (var mc in GetEnemiesInRange(range))
                         mc.ApplySlow(0.5f, 2f);
                 }
+                // 몽둥이 5단계: 넉백 방향에 벽이 가까우면(벽 꿍) 추가 데미지
+                if (g5 && id == "WPN_024")
+                {
+                    Vector2 face = FacingDir(range);
+                    foreach (var mc in FindInFan(face, range, angle))
+                    {
+                        Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
+                        if (HasWallBehind(mc.transform.position, kbDir, 2.5f))
+                            mc.TakeDamage(ScaleDamage(entry.attackPower), 0f, Vector2.zero); // 벽 꿍 추가뎀
+                    }
+                }
 
                 break;
             }
@@ -908,6 +919,21 @@ public class PlayerAttack : MonoBehaviour
         return nearest != null
             ? ((Vector2)nearest.transform.position - (Vector2)transform.position).normalized
             : _lastMoveDir;
+    }
+
+    /// <summary>from에서 dir 방향 dist 안에 '벽'(비트리거 솔리드, 적/플레이어 아님)이 있는지.</summary>
+    private bool HasWallBehind(Vector2 from, Vector2 dir, float dist)
+    {
+        foreach (var h in Physics2D.RaycastAll(from, dir, dist))
+        {
+            if (h.collider == null || h.collider.isTrigger) continue;       // 트리거(적/픽업 등)는 벽 아님
+            if (h.collider.CompareTag("Player")) continue;
+            var mc = h.collider.GetComponent<MonsterController>()
+                  ?? h.collider.GetComponentInParent<MonsterController>();
+            if (mc != null) continue;                                       // 적은 벽 아님
+            return true;                                                     // 비트리거 솔리드 = 벽
+        }
+        return false;
     }
 
     private static Vector2 Rotate(Vector2 v, float deg)
