@@ -220,7 +220,8 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.MeleeFan:
             {
                 if (id == "WPN_021") range *= 0.5f; // 스피어: 크기 0.5배(표시·피격 함께)
-                if (id == "WPN_019") range *= 2f;   // 대검: 크기 2배(표시·피격 함께)
+                if (id == "WPN_019") range *= 0.2f; // 대검: 크기 0.2배(표시·피격 함께)
+                if (id == "WPN_024") range *= 0.5f; // 몽둥이: 크기 0.5배(표시·피격 함께)
                 // 무기별 기본 각도
                 float angle = id switch
                 {
