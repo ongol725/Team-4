@@ -35,11 +35,11 @@ MonoBehaviour:
     silverThreshold: 3
     goldThreshold: 3
     prismThreshold: 0
-    description: "2\uCD08\uB9C8\uB2E4 \uCE90\uB9AD\uD130 \uC88C\xB7\uC6B0\uC5D0 \uBC88\uAC1C
-      \uAE30\uB465\uC744 \uC138\uC6CC \uBC94\uC704 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4.
-      \uBB34\uAE30 \uACF5\uACA9\uB825 \uCD1D\uD569\uC5D0 \uBE44\uB840."
-    bronzeEffect: "\uBC88\uAC1C \uAE30\uB465 2\uAC1C (\uC88C\xB7\uC6B0)"
-    silverEffect: "\uBC88\uAC1C \uAE30\uB465 4\uAC1C"
+    description: "\uAC00\uBC29 \uBB34\uAE30 \uACF5\uACA9\uB825 \uCD1D\uD569\uC5D0
+      \uBE44\uB840\uD558\uB294 \uB099\uB8B0\uB97C 2\uCD08\uB9C8\uB2E4 \uBB34\uC791\uC704
+      \uC801\uC5D0\uAC8C \uB5A8\uAD7D\uB2C8\uB2E4."
+    bronzeEffect: "\uB9C8\uBC95 \uB099\uB8B0 1\uAC1C \uD22C\uD558"
+    silverEffect: "\uB9C8\uBC95 \uB099\uB8B0 3\uAC1C \uD22C\uD558"
     goldEffect: 
     prismEffect: 
   - type: 10
@@ -143,13 +143,13 @@ MonoBehaviour:
       \uBC1B\uB294 \uD53C\uD574\uB97C \uAC10\uC18C\uC2DC\uD0B5\uB2C8\uB2E4.\n\uBC29\uC5B4\uAD6C
       \uCCB4\uB825 \uCD1D\uD569\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
     bronzeEffect: "\uCDA9\uACA9\uD30C.  \uD53C\uD574 \uAC10\uC18C 10%.  \uB300\uBBF8\uC9C0
-      1000%"
-    silverEffect: "\uCDA9\uACA9\uD30C \uD06C\uAE30 \xD72.  \uD53C\uD574 \uAC10\uC18C
-      20%.  \uB300\uBBF8\uC9C0 1000%"
+      500%"
+    silverEffect: "\uCDA9\uACA9\uD30C \uD06C\uAE30 \xD71.5.  \uD53C\uD574 \uAC10\uC18C
+      20%.  \uB300\uBBF8\uC9C0 700%"
     goldEffect: "\uCDA9\uACA9\uD30C \uAC15\uD654.  \uD53C\uD574 \uAC10\uC18C 35%. 
-      \uB300\uBBF8\uC9C0 1300%"
-    prismEffect: "0.5\uCD08\uB9C8\uB2E4 \uC790\uB3D9 \uBC1C\uB3D9.  \uD53C\uD574
-      \uAC10\uC18C 60%.  \uB300\uBBF8\uC9C0 2000%"
+      \uB300\uBBF8\uC9C0 900%"
+    prismEffect: "\uCDA9\uACA9\uD30C \uD06C\uAE30 \xD72.  0.5\uCD08\uB9C8\uB2E4 \uC790\uB3D9
+      \uBC1C\uB3D9.  \uD53C\uD574 \uAC10\uC18C 60%.  \uB300\uBBF8\uC9C0 1500%"
   - type: 8
     displayName: "\uC815\uB839\uC220\uC0AC"
     icon: {fileID: 1605589836, guid: 1ec82e4abeca4ea409d810b5f2833f8a, type: 3}
@@ -197,18 +197,18 @@ MonoBehaviour:
   - type: 11
     displayName: "\uACFC\uBD80\uD654"
     icon: {fileID: 0}
-    bronzeThreshold: 1
-    silverThreshold: 2
-    goldThreshold: 7
+    bronzeThreshold: 4
+    silverThreshold: 5
+    goldThreshold: 6
     prismThreshold: 8
-    description: "\uC655\uADC0\uD615 \uCF58\uC149\uD2B8. \uBE0C~\uACE8\uB4DC\uB294
-      \uD328\uB110\uD2F0\uB9CC \uC788\uACE0 \uD504\uB9AC\uC998 \uB2EC\uC131 \uC2DC
-      \uC2E0\uC774 \uB429\uB2C8\uB2E4."
+    description: "\uC655\uADC0\uD615 \uCF58\uC149\uD2B8. \uBE0C\uB860\uC988\uB9CC
+      \uB514\uBC84\uD504, \uC2E4\uBC84\xB7\uACE8\uB4DC\uB294 \uD6A8\uACFC \uC5C6\uC74C,
+      \uD504\uB9AC\uC998 \uB2EC\uC131 \uC2DC \uC2E0\uC774 \uB429\uB2C8\uB2E4."
     bronzeEffect: "10\uCD08\uB9C8\uB2E4 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4/\uD53C\uD574\uB7C9
       50% \uAC10\uC18C"
-    silverEffect: "10\uCD08\uB9C8\uB2E4 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4/\uD53C\uD574\uB7C9
-      50% \uAC10\uC18C"
-    goldEffect: "10\uCD08\uB9C8\uB2E4 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4/\uD53C\uD574\uB7C9
-      50% \uAC10\uC18C"
+    silverEffect: "\uD6A8\uACFC \uC5C6\uC74C (\uD504\uB9AC\uC998 \uB3C4\uB2EC \uC2DC
+      \uAC01\uC131)"
+    goldEffect: "\uD6A8\uACFC \uC5C6\uC74C (\uD504\uB9AC\uC998 \uB3C4\uB2EC \uC2DC
+      \uAC01\uC131)"
     prismEffect: "\uB808\uC774\uC800 + \uCCB4\uC778\uB77C\uC774\uD2B8\uB2DD + \uBE44\uB217\uBC29\uC6B8
       3\uC885 \uBB34\uD55C \uBC1C\uB3D9.  \uC2E0\uC774 \uB429\uB2C8\uB2E4."

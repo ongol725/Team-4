@@ -30,9 +30,9 @@ namespace BagSurvivor.Items
         public Denomination[] denominations = new Denomination[]
         {
             new Denomination { id = "Item_001", goldValue = 1 },
-            new Denomination { id = "Item_002", goldValue = 10 },
-            new Denomination { id = "Item_003", goldValue = 100 },
-            new Denomination { id = "Item_004", goldValue = 500 },
+            new Denomination { id = "Item_002", goldValue = 11 },
+            new Denomination { id = "Item_003", goldValue = 31 },
+            new Denomination { id = "Item_004", goldValue = 201 },
         };
 
         [Header("드롭 분산 반경 (동전 여러 개 흩뿌리기, m)")]
@@ -65,9 +65,9 @@ namespace BagSurvivor.Items
                 denominations = new Denomination[]
                 {
                     new Denomination { id = "Item_001", goldValue = 1 },
-                    new Denomination { id = "Item_002", goldValue = 10 },
-                    new Denomination { id = "Item_003", goldValue = 100 },
-                    new Denomination { id = "Item_004", goldValue = 500 },
+                    new Denomination { id = "Item_002", goldValue = 11 },
+                    new Denomination { id = "Item_003", goldValue = 31 },
+                    new Denomination { id = "Item_004", goldValue = 201 },
                 };
             }
 

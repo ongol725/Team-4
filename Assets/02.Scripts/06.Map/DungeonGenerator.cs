@@ -362,7 +362,8 @@ public class DungeonGenerator : MonoBehaviour
                         corridorMask[cx, cy] = true;
             
             Room newGeneratedRoom = new Room { bounds = newRoom, type = RoomType.Normal };
-            newGeneratedRoom.shape = (RoomShape)Random.Range(0, 6);
+            // Parthenon(기둥) 방 제거 — 버그 많아 비활성. Rectangle/Octagon/Cross만 생성.
+            newGeneratedRoom.shape = (RoomShape)Random.Range(0, 3);
 
             // 입구 정보 저장: 복도가 새 방 경계에 닿는 타일 중앙 좌표 + 방 기준 입구 방향
             if (dir == 0) // 복도가 위로 뻗음 → 새 방 남쪽이 입구

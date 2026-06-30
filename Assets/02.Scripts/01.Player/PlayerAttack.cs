@@ -131,8 +131,10 @@ public class PlayerAttack : MonoBehaviour
         if (g5 && id == "WPN_009") spdBoost = 1f / 0.85f; // 활: 쿨타임 -15%
         if (g5 && id == "WPN_020") spdBoost = 1.3f;        // 카타나: 공속 +30%
 
-        // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율
-        float interval = 1f / (baseAps * weaponAps * spdBoost * charSpeedMul);
+        // 최종 쿨타임 = 무기 기본 주기(weaponAps, 초) / 캐릭터 공속 배율 (배율↑ = 더 빨라짐)
+        float spdDenom = baseAps * spdBoost * charSpeedMul;
+        if (spdDenom <= 0f) spdDenom = 1f; // 0 나눗셈 방지
+        float interval = weaponAps / spdDenom;
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
         var wait = new WaitForSeconds(interval);
