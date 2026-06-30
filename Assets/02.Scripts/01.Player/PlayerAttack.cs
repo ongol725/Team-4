@@ -144,6 +144,7 @@ public class PlayerAttack : MonoBehaviour
 
         // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율
         float interval = 1f / (baseAps * weaponAps * spdBoost * charSpeedMul);
+        if (id == "WPN_014") interval *= 2f; // 수류탄: 기본 쿨타임 2배(천천히 투척)
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
         var wait = new WaitForSeconds(interval);
@@ -383,6 +384,7 @@ public class PlayerAttack : MonoBehaviour
                 }
 
                 var     nearest  = FindNearest(range * 2f);
+                if (id == "WPN_014" && nearest == null) break; // 수류탄: 적이 사정거리 내에 있을 때만 투척
                 // 대상까지의 벡터(없으면 전방 range 거리). 폭발 애니가 있으면 그 지점에 고정 폭발한다.
                 Vector2 toTarget  = nearest != null
                     ? ((Vector2)nearest.transform.position - (Vector2)transform.position)
