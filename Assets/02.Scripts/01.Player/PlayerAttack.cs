@@ -130,6 +130,8 @@ public class PlayerAttack : MonoBehaviour
         float spdBoost = 1f;
         if (g5 && id == "WPN_009") spdBoost = 1f / 0.85f; // 활: 쿨타임 -15%
         if (g5 && id == "WPN_020") spdBoost = 1.3f;        // 카타나: 공속 +30%
+        if (g5 && id == "WPN_014") spdBoost = 2f;          // 수류탄: 투척 속도 2배
+        if (g5 && id == "WPN_010") spdBoost = 3f;          // 부메랑: 공격속도 +200%
 
         // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율
         float interval = 1f / (baseAps * weaponAps * spdBoost * charSpeedMul);
@@ -195,7 +197,8 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_019" => 100f,
                     "WPN_020" => 120f,
                     "WPN_022" => 360f, // 플레일: 전방위
-                    "WPN_023" => 60f,  // 메이스: 좁은 부채꼴
+                    "WPN_023" => 60f,  // 메이스: 좁은 부채꼴(내리치기)
+                    "WPN_024" => 180f, // 몽둥이: 전방 180도
                     "WPN_027" => 120f, // 할버드: 넓은 부채꼴
                     "WPN_029" => 360f, // 워해머: 전방위
                     "WPN_030" => 180f, // 사이드: 반원
@@ -276,7 +279,7 @@ public class PlayerAttack : MonoBehaviour
                 if (g5 && id == "WPN_023")
                 {
                     foreach (var mc in FindInFan(FacingDir(range), range, angle))
-                        mc.ApplyStun(1.5f);
+                        mc.ApplyStun(1f);
                 }
 
                 break;
@@ -349,7 +352,7 @@ public class PlayerAttack : MonoBehaviour
                 else if (id == "WPN_013")
                 {
                     // 번개구슬: 즉시 주변 적 타격 (range=0이므로 고정 탐색 반경 사용)
-                    int targetCnt = g5 ? 2 : 1;
+                    int targetCnt = g5 ? 3 : 1; // 번개구슬: 5단계 낙뢰 +2 (총 3)
                     AttackMultiTarget(entry, 8f, targetCnt);
                 }
                 else
@@ -367,7 +370,7 @@ public class PlayerAttack : MonoBehaviour
 
                 if (g5)
                 {
-                    if (id == "WPN_014") count     = 3;    // 그레네이드: 3발 부채꼴 투척
+                    // 수류탄014의 "투척 속도 2배"는 AttackLoop spdBoost에서 처리(여기선 발수 그대로)
                     if (id == "WPN_017") explodeR *= 1.5f; // 바주카: 폭발 범위 1.5배
                 }
 
