@@ -113,7 +113,7 @@ public class InventoryAnalyzer : MonoBehaviour
 
             foreach (var weapon in adjacentWeapons)
             {
-                weapon.RingGradeBonus += 1;
+                // 반지는 더 이상 등급을 올리지 않는다. 각 반지 고유 기믹만 부여.
                 switch (acc.data.itemID) // 반지별 인접 기믹(합산)
                 {
                     case "ACC_006": weapon.RingAtkBonus   += 1.0f;  break; // 다이아: 공격력 +100%
