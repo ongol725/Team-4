@@ -24,7 +24,6 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
   - {x: 2, y: 0}
-  - {x: 3, y: 0}
   attackStyleType: 7
   attackStyle: "\uBC94\uC704 \uD3ED\uBC1C"
   lv5AttackStyle: "\uD3ED\uBC1C \uBC94\uC704 \uC99D\uAC00"
