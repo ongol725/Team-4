@@ -5,7 +5,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("이동 설정")]
-    public float moveSpeed = 5f;
+    public float moveSpeed = 6f;
 
     // 인스펙터에서 직접 액션을 꽂아넣을 구멍을 뚫어줍니다.
     public InputActionReference moveAction; 
