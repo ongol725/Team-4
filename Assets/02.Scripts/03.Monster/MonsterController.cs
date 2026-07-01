@@ -679,7 +679,10 @@ namespace BagSurvivor.Monster
             {
                 // 시간 배율이 적용된 공격력으로 플레이어에게 접촉 데미지
                 if (playerHealth != null && !playerHealth.IsDead)
+                {
+                    playerHealth.LastAttacker = monsterData != null ? monsterData.name : gameObject.name; // 킬러 통계
                     playerHealth.TakeDamage(runtimeAttack);
+                }
 
                 yield return new WaitForSeconds(CONTACT_DAMAGE_INTERVAL);
             }

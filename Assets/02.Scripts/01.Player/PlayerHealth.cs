@@ -242,9 +242,10 @@ public class PlayerHealth : MonoBehaviour
             stats.goldSpent     = gm != null ? gm.goldSpent : 0;
             resultPopup.Show(false, stats); // Show 내부에서 timeScale=0 처리
 
-            // 런 통계 기록(사망). 사망존/킬러는 후속 훅에서 채움(현재 "-").
+            // 런 통계 기록(사망).
+            string killer = string.IsNullOrEmpty(LastAttacker) ? "-" : LastAttacker;
             RunStatsLogger.Instance?.RunEnd(false, gm != null ? gm.currentFloor : 1,
-                "-", "-", stats.mainSynergies);
+                RunZoneTracker.CurrentZone(), killer, stats.mainSynergies);
         }
         else
         {
@@ -252,6 +253,9 @@ public class PlayerHealth : MonoBehaviour
             Debug.Log("[PlayerHealth] 사망 — ResultPopup 미연결(결과화면 없음)");
         }
     }
+
+    /// <summary>마지막으로 플레이어에게 피해를 준 몬스터 이름(킬러 통계용). MonsterController가 설정.</summary>
+    [System.NonSerialized] public string LastAttacker = "";
 
     /// <summary>활성 시너지를 결과창 표시용 문자열로 만든다.</summary>
     private static string FormatSynergies(BattleLoadout lo)
