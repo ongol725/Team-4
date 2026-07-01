@@ -61,8 +61,8 @@ public class RunStatsLogger : MonoBehaviour
         _distance = 0f;
         _currentFloor = 1;
         _runEnded = false;
-        _floorEnter[1] = 0f;
         AppendEvent("RUN_START", "");
+        FloorEnter(1);   // 1층 진입 기록(진입 시각 0) — 이벤트 로그에도 남김
     }
 
     // ── 이벤트 훅 ──────────────────────────────────────────────
