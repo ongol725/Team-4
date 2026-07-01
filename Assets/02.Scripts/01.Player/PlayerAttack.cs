@@ -144,6 +144,7 @@ public class PlayerAttack : MonoBehaviour
             "WPN_010" => 3f,   // 부메랑: 공속 +200%
             "WPN_021" => 2f,   // 스피어: 찌르기 애니속도 2배
             "WPN_022" => 2f,   // 플레일: 공속 +100%
+            "WPN_003" => 2f,   // 철퇴: 찌르기 속도 2배
             _ => 1f,
         };
 
@@ -209,7 +210,7 @@ public class PlayerAttack : MonoBehaviour
                         case "WPN_006": pierce    = 10;         break; // 쇠뇌: 관통 +10
                         case "WPN_007": dmgMult   = 6f;         break; // 권총: 데미지 +500%
                         case "WPN_011": shots     = 3;          break; // 지팡이: 3발 (유도)
-                        case "WPN_016": pierce = 5; break; // 수리검 5단계: 관통 +5 (크기는 기본 ×3)
+                        case "WPN_016": scaleMult *= 3f; pierce = 5; break; // 수리검 5단계: 크기 ×3(기본3→9) + 관통 +5
                     }
                 }
 
@@ -255,7 +256,7 @@ public class PlayerAttack : MonoBehaviour
                         // 장검002·사이드030의 5단계는 쿨타임 감소(AttackLoop)로 처리 — 각도/애니 변경 없음
                         case "WPN_019": kb        = 10f;   break; // 대검: 넉백 +10 (이속저하는 후처리)
                         case "WPN_020": flashScale = 2f;   break; // 카타나: 이펙트 크기 +100%
-                        case "WPN_021": range     *= 1.5f; break; // 스피어 5단계: 사거리 1.5배(관통은 부채꼴 기본)
+                        case "WPN_021": range     *= 2f;   break; // 스피어 5단계: 사거리 2배(관통은 부채꼴 기본, 애니속도는 spdBoost)
                         case "WPN_022": range     *= 1.5f; break; // 플레일: 범위 +50% (후면 타격은 후처리)
                         case "WPN_024": kb        *= 4f;   break; // 몽둥이: 넉백 4배
                     }
@@ -291,6 +292,26 @@ public class PlayerAttack : MonoBehaviour
                 // 플레일 5단계: 정면뿐 아니라 후면에도 부채꼴 타격(두 부채꼴)
                 if (g5 && id == "WPN_022")
                     AttackMeleeFanDir(entry, range, angle, kb, flashScale, -FacingDir(range));
+
+                // 도끼 5단계: 피격 적을 중심으로 주변 적에게 스플래시(범위) 데미지
+                if (g5 && id == "WPN_005")
+                {
+                    int   splashDmg = ScaleDamage(entry.attackPower, 0.5f);
+                    float splashR   = 1.5f;
+                    foreach (var hit in FindInFan(FacingDir(range), range, angle))
+                    {
+                        var cols = _enemyLayer == 0
+                            ? Physics2D.OverlapCircleAll(hit.transform.position, splashR)
+                            : Physics2D.OverlapCircleAll(hit.transform.position, splashR, _enemyLayer);
+                        foreach (var col in cols)
+                        {
+                            var mc = col.GetComponent<MonsterController>() ?? col.GetComponentInParent<MonsterController>();
+                            if (mc == null || mc.IsDead || mc == hit) continue;
+                            Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)hit.transform.position).normalized;
+                            mc.TakeDamage(splashDmg, 0f, kbDir);
+                        }
+                    }
+                }
 
                 // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1초 (판정 반경과 동일하게 여유있게)
                 if (g5 && id == "WPN_023")
@@ -338,7 +359,8 @@ public class PlayerAttack : MonoBehaviour
 
                 if (g5)
                 {
-                    if (id == "WPN_025") burst = 5;    // 너클: 5연타
+                    if (id == "WPN_025") burst = 5;      // 너클: 5연타
+                    if (id == "WPN_003") range *= 2f;    // 철퇴: 찌르기 거리 2배(속도는 spdBoost)
                 }
 
                 if (burst > 1)
@@ -426,7 +448,7 @@ public class PlayerAttack : MonoBehaviour
                 if (g5)
                 {
                     // 수류탄014의 "투척 속도 2배"는 AttackLoop spdBoost에서 처리(여기선 발수 그대로)
-                    if (id == "WPN_017") explodeR *= 1.5f; // 바주카: 폭발 범위 1.5배
+                    if (id == "WPN_017") explodeR *= 3f; // 바주카 5단계: 폭발 반경 ×3
                 }
 
                 // 바주카는 미사일 비행 거리(range)와 탐지 범위를 일치시켜 미사일이 적까지 실제로 날아가 맞게 함
@@ -592,6 +614,15 @@ public class PlayerAttack : MonoBehaviour
             mc.TakeDamage(dmg, kb, kbDir);
         }
         StartCoroutine(ShowMeleeFlash(entry.data, dir, range, flashScale, MeleeMotionType.Thrust));
+
+        // 5단계: 찌르기와 함께 검기(투사체)를 상·하·좌·우 4방향으로 방출(관통)
+        if (entry.effectiveGrade >= 4)
+        {
+            SpawnProjectile(entry, Vector2.up,    pierce: 99);
+            SpawnProjectile(entry, Vector2.down,  pierce: 99);
+            SpawnProjectile(entry, Vector2.left,  pierce: 99);
+            SpawnProjectile(entry, Vector2.right, pierce: 99);
+        }
     }
 
     private void AttackMeleeSingle(WeaponLoadoutEntry entry, float range, bool splash = false, float scaleMult = 1f)
