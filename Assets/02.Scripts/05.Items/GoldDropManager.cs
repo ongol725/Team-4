@@ -38,6 +38,24 @@ namespace BagSurvivor.Items
         [Header("드롭 분산 반경 (동전 여러 개 흩뿌리기, m)")]
         public float scatterRadius = 0.5f;
 
+        [Header("골드 자동 획득 반경 (이 거리 안에 들어오면 캐릭터로 빨려옴, m)")]
+        public float pickupRadius = 2.5f;
+
+        // 플레이어 Transform 캐시(태그로 1회 탐색). 획득 반경 판정용.
+        private Transform _playerTf;
+        public Transform PlayerTransform
+        {
+            get
+            {
+                if (_playerTf == null)
+                {
+                    var p = GameObject.FindWithTag("Player");
+                    if (p != null) _playerTf = p.transform;
+                }
+                return _playerTf;
+            }
+        }
+
         [Header("풀 부모 (미지정 시 자동 생성)")]
         public Transform poolRoot;
 

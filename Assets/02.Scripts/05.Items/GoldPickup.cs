@@ -54,6 +54,17 @@ namespace BagSurvivor.Items
 
         private void Update()
         {
+            // 획득 반경: 플레이어가 가까우면 캐릭터로 빨려온다(자석)
+            if (!collected && !flying && owner != null)
+            {
+                Transform p = owner.PlayerTransform;
+                if (p != null &&
+                    (transform.position - p.position).sqrMagnitude <= owner.pickupRadius * owner.pickupRadius)
+                {
+                    FlyToPlayer(p);
+                }
+            }
+
             if (!animate || sr == null || frames == null || frames.Length < 2) return;
             animTimer += Time.deltaTime;
             float interval = 1f / Mathf.Max(0.01f, frameRate);
