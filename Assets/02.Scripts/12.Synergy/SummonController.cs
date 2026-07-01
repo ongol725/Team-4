@@ -436,8 +436,18 @@ public class SummonController : MonoBehaviour
                 break;
             case SkillTargetType.AreaCenter:
             case SkillTargetType.Self:
-                // 대정령 광역기: 화면 내 모든 적에게 대량 피해 (노드 이펙트 없음)
-                foreach (var mc in enemies) ApplySkillHit(skill, mc, damage);
+                if (skill.name == "SK_SPIRIT_NOVA")
+                {
+                    // 대정령 광역기: 플레이어 발밑(중앙 하단) 중심, 반지름 = 대정령 머리끝 ~ 플레이어 발 거리
+                    Vector2 feet = PlayerFeet();
+                    float r = Vector2.Distance(GolemHeadTop(), feet);
+                    foreach (var mc in GetEnemiesInRange(feet, r)) ApplySkillHit(skill, mc, damage);
+                    SpawnDamageFloor(feet, r); // [임시] 빨간 발판도 동일 중심·반경
+                }
+                else
+                {
+                    foreach (var mc in enemies) ApplySkillHit(skill, mc, damage);
+                }
                 break;
             case SkillTargetType.Forward:
                 var nearest = FindNearest(skill.rangeRadius);
@@ -458,6 +468,47 @@ public class SummonController : MonoBehaviour
 
         yield return null;
     }
+
+    // ===== [임시/디버그] 대정령 광역 강타 데미지 범위 빨간 바닥 =====
+    // 삭제 시: 이 region + ExecuteSkill AreaCenter의 SpawnDamageFloor 호출 한 줄만 지우면 됨.
+    #region TEMP_DamageFloor
+    private static Sprite _dbgCircle;
+    private void SpawnDamageFloor(Vector3 center, float radius)
+    {
+        if (_dbgCircle == null)
+        {
+            const int S = 32;
+            var tex = new Texture2D(S, S, TextureFormat.RGBA32, false);
+            float c = (S - 1) * 0.5f;
+            for (int y = 0; y < S; y++)
+            for (int x = 0; x < S; x++)
+                tex.SetPixel(x, y, Mathf.Sqrt((x - c) * (x - c) + (y - c) * (y - c)) <= c ? Color.white : Color.clear);
+            tex.Apply();
+            _dbgCircle = Sprite.Create(tex, new Rect(0, 0, S, S), new Vector2(0.5f, 0.5f), S);
+        }
+        var go = new GameObject("TEMP_DamageFloor");
+        go.transform.position = new Vector3(center.x, center.y, 0f);
+        float d = Mathf.Max(0.1f, radius * 2f); // 스프라이트=지름 1유닛 → 스케일=지름(반경×2)
+        go.transform.localScale = new Vector3(d, d, 1f);
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = _dbgCircle;
+        sr.color = new Color(1f, 0f, 0f, 0.4f);
+        sr.sortingOrder = 50; // 디버그 가시성 우선(맨 위). 바닥처럼 깔려면 낮추기.
+        StartCoroutine(FadeAndKill(sr, 0.6f));
+    }
+
+    private IEnumerator FadeAndKill(SpriteRenderer sr, float life)
+    {
+        float t = 0f, a0 = sr.color.a;
+        while (t < life && sr != null)
+        {
+            t += Time.deltaTime;
+            var col = sr.color; col.a = Mathf.Lerp(a0, 0f, t / life); sr.color = col;
+            yield return null;
+        }
+        if (sr != null) Destroy(sr.gameObject);
+    }
+    #endregion
 
     /// <summary>평상 애니메이션을 멈추고 발동 모션을 1회 재생한 뒤 평상 애니메이션을 복구한다(대정령 광역).</summary>
     private IEnumerator PlayCastMotion(Sprite[] castFrames, float fps)
@@ -541,7 +592,25 @@ public class SummonController : MonoBehaviour
         return best;
     }
 
+    // 플레이어 중앙 하단(발밑) 월드 좌표
+    private Vector2 PlayerFeet()
+    {
+        var psr = _player != null ? _player.GetComponentInChildren<SpriteRenderer>() : null;
+        if (psr != null) return new Vector2(psr.bounds.center.x, psr.bounds.min.y);
+        return _player != null ? (Vector2)_player.position : Vector2.zero;
+    }
+
+    // 대정령(본체) 머리 맨 위 중앙 월드 좌표
+    private Vector2 GolemHeadTop()
+    {
+        if (_mainSr != null) return new Vector2(_mainSr.bounds.center.x, _mainSr.bounds.max.y);
+        return (Vector2)transform.position;
+    }
+
     private List<MonsterController> GetEnemiesInRange(float range)
+        => GetEnemiesInRange((Vector2)transform.position, range);
+
+    private List<MonsterController> GetEnemiesInRange(Vector2 center, float range)
     {
         var result = new List<MonsterController>();
 
@@ -552,7 +621,7 @@ public class SummonController : MonoBehaviour
         else                  filter = ContactFilter2D.noFilter;
 
         var cols = new List<Collider2D>();
-        Physics2D.OverlapCircle((Vector2)transform.position, range, filter, cols);
+        Physics2D.OverlapCircle(center, range, filter, cols);
 
         foreach (var h in cols)
         {

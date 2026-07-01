@@ -17,3 +17,4 @@ MonoBehaviour:
   alpha: 0.8
   feetYOffset: 0.05
   playerWidthMultiplier: 0.38
+  playerShadowLocalY: -0.4
