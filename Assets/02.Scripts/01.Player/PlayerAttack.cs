@@ -223,7 +223,7 @@ public class PlayerAttack : MonoBehaviour
                 if (id == "WPN_022") range *= 0.5f; // 플레일: 크기 0.5배(표시·피격 함께)
                 if (id == "WPN_021") range *= 0.5f; // 스피어: 크기 0.5배(표시·피격 함께)
                 if (id == "WPN_019") range *= 1.2f; // 대검: 크기 1.2배(0.6→1.2, 2배)
-                if (id == "WPN_024") range *= 1.0f; // 몽둥이: 크기 1.0배(0.5→1.0, 2배)
+                if (id == "WPN_024") range *= 0.7f; // 몽둥이: 크기 0.7배(1.0→0.7, 70%)
                 if (id == "WPN_023") range *= 0.4f; // 메이스: 크기 0.4배(0.2→0.4, 애니 2배)
                 // 무기별 기본 각도
                 float angle = id switch
