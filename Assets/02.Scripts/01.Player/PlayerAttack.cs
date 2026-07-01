@@ -662,7 +662,7 @@ public class PlayerAttack : MonoBehaviour
     // A그룹(회전/찌르기/투척): 상점 정적 아이콘을 그대로 사용한다(전용 애니 시트 대신).
     private static readonly HashSet<string> _shopIconWeapons = new()
     {
-        "WPN_001", "WPN_002", "WPN_003", "WPN_004", "WPN_005", "WPN_010", "WPN_016",
+        "WPN_001", "WPN_002", "WPN_003", "WPN_005", "WPN_010", "WPN_016",
         "WPN_019", "WPN_020", "WPN_021", "WPN_022", "WPN_024", "WPN_025", "WPN_027", "WPN_029", "WPN_030",
     };
     private static bool UsesShopIcon(string id) => _shopIconWeapons.Contains(id);
