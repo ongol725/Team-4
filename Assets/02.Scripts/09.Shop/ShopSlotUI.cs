@@ -131,6 +131,9 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 _displayGradeIndex = 1;
         }
 
+        // [임시 테스트] 무기는 상점에 전부 5강(5등급)으로 등장 — 5단계 스펙 테스트용. 테스트 후 이 줄 제거.
+        if (item is SO_WeaponData) _displayGradeIndex = 4;
+
         // 색상 결정
         Color color;
         string rarityLabel;
