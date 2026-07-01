@@ -160,8 +160,9 @@ public static class BossSandboxAnimSetup
         if (refPng == null) { Debug.LogError("[BossAnim] 기준 '2페이즈 이동' 파일을 못 찾음"); return; }
         int refH = ContentHeight(refPng);
         if (refH <= 0) { Debug.LogError("[BossAnim] 기준 콘텐츠 높이 측정 실패"); return; }
-        var refImp = AssetImporter.GetAtPath(refPng) as TextureImporter;
-        float refPpu = refImp != null ? refImp.spritePixelsPerUnit : 256f;
+        // 기준 표시 크기를 PPU 상수(256)로 고정 — 기준 시트의 '현재' PPU를 쓰면
+        // 이전 실행 결과에 따라 목표 크기가 매번 흔들려 통일이 수렴하지 않는다.
+        float refPpu = PPU;
 
         int done = 0;
         foreach (string png in pngs)
@@ -181,23 +182,37 @@ public static class BossSandboxAnimSetup
                   "이펙트 큰 시트(포효/탄막/늑대/햘퀴기/석상)는 보스 몸이 작아 보이면 개별 조정 요청하세요.");
     }
 
-    /// <summary>PNG 파일을 직접 디코드(임포트 설정 무관)해 비투명 콘텐츠의 세로 높이(px)를 반환.</summary>
+    /// <summary>PNG를 직접 디코드해 '프레임별' 비투명 콘텐츠 높이(px)의 중앙값을 반환.
+    /// 시트 전체를 한 번에 재면 팔을 가장 뻗은 프레임에 휘둘려 몸통 크기를 왜곡한다.
+    /// 프레임마다 재고 중앙값을 취해 대표 캐릭터 높이를 얻는다 — 이 값으로 PPU를 잡아야
+    /// 모션이 바뀌어도 몸통 크기가 실제로 통일된다.</summary>
     private static int ContentHeight(string path)
     {
         byte[] bytes = File.ReadAllBytes(path);
         var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
         if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 0; }
-        int w = tex.width, hh = tex.height;
+        int w = tex.width, h = tex.height;
         var px = tex.GetPixels32();
-        int minY = int.MaxValue, maxY = int.MinValue;
-        for (int y = 0; y < hh; y++)
+        int cols = FrameCount(w, h);
+        int cw = Mathf.Max(1, w / cols);
+
+        var heights = new List<int>();
+        for (int f = 0; f < cols; f++)
         {
-            int row = y * w; bool any = false;
-            for (int x = 0; x < w; x += 4) { if (px[row + x].a > 10) { any = true; break; } }
-            if (any) { if (y < minY) minY = y; if (y > maxY) maxY = y; }
+            int x0 = f * cw, x1 = Mathf.Min(w, x0 + cw);
+            int minY = int.MaxValue, maxY = int.MinValue;
+            for (int y = 0; y < h; y++)
+            {
+                int row = y * w; bool any = false;
+                for (int x = x0; x < x1; x += 2) { if (px[row + x].a > 10) { any = true; break; } }
+                if (any) { if (y < minY) minY = y; if (y > maxY) maxY = y; }
+            }
+            if (maxY >= minY) heights.Add(maxY - minY + 1);
         }
         Object.DestroyImmediate(tex);
-        return (maxY >= minY) ? (maxY - minY + 1) : 0;
+        if (heights.Count == 0) return 0;
+        heights.Sort();
+        return heights[heights.Count / 2]; // 중앙값(대표 프레임)
     }
 
     // ── 슬라이스 (Unity 6 ISpriteEditorDataProvider) ──────────────
@@ -208,7 +223,7 @@ public static class BossSandboxAnimSetup
 
         importer.textureType        = TextureImporterType.Sprite;
         importer.spriteImportMode   = SpriteImportMode.Multiple;
-        importer.spritePixelsPerUnit = PerSheetPPU(path); // 모션별 PPU로 캐릭터 크기를 이동(Move)에 맞춤
+        importer.spritePixelsPerUnit = PPU; // 최초 임시값 — 'NormalizeSizes'가 콘텐츠(몸통 높이) 기준으로 최종 확정
         importer.mipmapEnabled      = false;
         importer.filterMode         = FilterMode.Bilinear;
         importer.maxTextureSize     = 16384; // 12288px 다운스케일 방지(필수)
@@ -262,27 +277,6 @@ public static class BossSandboxAnimSetup
         if (w == 7245) return 4;                // 할퀴기
         if (w == 12288) return 12;              // 늑대소환/돌진/석상소환/점프/포효 (셀 1024)
         return Mathf.Max(1, Mathf.RoundToInt(w / (float)FrameWidth)); // 기타 폴백
-    }
-
-    /// <summary>모션별 PPU. 시트마다 캐릭터를 다른 크기로 그려서, 프레임당 몸 면적(픽셀 수) 기준
-    /// 이동(Move)에 맞춘 값(포즈에 덜 휘둘림). 낮을수록 크게 보임.</summary>
-    private static float PerSheetPPU(string path)
-    {
-        string n = System.IO.Path.GetFileName(path);
-        if (n.Contains("이동")) return 256f;   // 기준
-        if (n.Contains("대기")) return 286f;
-        if (n.Contains("돌진")) return 98f;
-        if (n.Contains("퀴"))   return 240f;   // 할퀴기
-        if (n.Contains("탄막")) return 274f;
-        if (n.Contains("늑대")) return 92f;
-        if (n.Contains("포효")) return 126f;
-        if (n.Contains("점프")) return 130f;   // 더 크게(이동보다 약간 큼)
-        if (n.Contains("착지")) return 122f;   // 더 크게
-        if (n.Contains("스턴")) return 210f;
-        if (n.Contains("사망")) return 186f;
-        if (n.Contains("석상") && n.Contains("소환")) return 206f;
-        if (n.Contains("석상")) return 273f;   // 토템 오브젝트
-        return 256f;
     }
 
     private static Sprite[] LoadSpritesSorted(string path)
