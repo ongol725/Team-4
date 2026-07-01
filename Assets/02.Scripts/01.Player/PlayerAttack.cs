@@ -448,7 +448,7 @@ public class PlayerAttack : MonoBehaviour
                 Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
                 _boomerangGoLeft = !_boomerangGoLeft;
                 // 던졌다가 플레이어에게 회전하며 복귀
-                SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 2f, boomerang: true); // 부메랑: 투사체 크기 ×2(콜라이더 동반 → 피격범위도)
+                SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 4f, boomerang: true); // 부메랑: 투사체 크기 ×4(기존 ×2에서 2배, 콜라이더 동반)
                 break;
             }
 
