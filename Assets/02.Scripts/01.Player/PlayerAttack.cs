@@ -748,7 +748,8 @@ public class PlayerAttack : MonoBehaviour
         spdMult   *= entry.ringProjSpeed;
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
         float speed    = rawSpeed * spdMult;
-        float lifetime = wd.range > 0 ? (float)wd.range / rawSpeed : 3f;
+        // 강철 반지 속도감소(ringProjSpeed)는 사거리에 영향 없이 '느려지기만' 하도록 lifetime을 보정
+        float lifetime = wd.range > 0 ? (float)wd.range / rawSpeed / entry.ringProjSpeed : 3f;
         int   damage   = ScaleDamage(entry.attackPower, dmgMult);
         int   maxHits  = wd.maxTargets > 0 ? wd.maxTargets : 1; // 0 = 기본 1타
         if (wd.projectileData != null) maxHits += wd.projectileData.pierceCount;
