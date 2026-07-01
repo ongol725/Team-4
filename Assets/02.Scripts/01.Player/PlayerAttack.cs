@@ -743,6 +743,9 @@ public class PlayerAttack : MonoBehaviour
         float explosionRadius = 0f, Sprite[] overrideFrames = null)
     {
         var   wd       = entry.data;
+        // 강철 반지: 인접 무기 투사체 크기·속도 배율(크기는 피격범위 동반)
+        scaleMult *= entry.ringProjScale;
+        spdMult   *= entry.ringProjSpeed;
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
         float speed    = rawSpeed * spdMult;
         float lifetime = wd.range > 0 ? (float)wd.range / rawSpeed : 3f;

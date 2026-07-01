@@ -98,6 +98,8 @@ public class BattleLoadoutBuilder : MonoBehaviour
                 attackSpeed    = baseSpd * (1f + inst.RingSpdBonus),
                 ringStunChance = inst.RingStunChance,
                 ringSlowSec    = inst.RingSlowSec,
+                ringProjScale  = 1f + inst.RingProjScaleBonus,
+                ringProjSpeed  = Mathf.Max(0.1f, 1f + inst.RingProjSpeedBonus),
             };
 
             // 반지 버프 기록

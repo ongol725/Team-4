@@ -22,6 +22,8 @@ public class WeaponLoadoutEntry
     public float         attackSpeed;    // (금 반지 배율 반영)
     public float         ringStunChance; // 뼈 반지: 피격 시 스턴 확률(합산)
     public float         ringSlowSec;    // 나무 반지: 피격 시 슬로우 지속(초)
+    public float         ringProjScale = 1f; // 강철 반지: 투사체 크기 배율(피격범위 동반)
+    public float         ringProjSpeed = 1f; // 강철 반지: 발사·비행 속도 배율
     public System.Collections.Generic.List<RingBuffRecord> RingBuffs = new();
 }
 
