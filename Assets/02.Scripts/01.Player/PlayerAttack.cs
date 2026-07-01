@@ -428,8 +428,11 @@ public class PlayerAttack : MonoBehaviour
                     if (id == "WPN_017") explodeR *= 1.5f; // 바주카: 폭발 범위 1.5배
                 }
 
-                var     nearest  = FindNearest(range * 2f);
+                // 바주카는 미사일 비행 거리(range)와 탐지 범위를 일치시켜 미사일이 적까지 실제로 날아가 맞게 함
+                float   detectRange = id == "WPN_017" ? range : range * 2f;
+                var     nearest  = FindNearest(detectRange);
                 if (id == "WPN_014" && nearest == null) break; // 수류탄: 적이 사정거리 내에 있을 때만 투척
+                if (id == "WPN_017" && nearest == null) break; // 바주카: 사정거리 내 적 있을 때만 발사
                 // 대상까지의 벡터(없으면 전방 range 거리). 폭발 애니가 있으면 그 지점에 고정 폭발한다.
                 Vector2 toTarget  = nearest != null
                     ? ((Vector2)nearest.transform.position - (Vector2)transform.position)
