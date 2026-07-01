@@ -233,7 +233,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_019" => 180f, // 대검: 180도
                     "WPN_020" => 120f,
                     "WPN_021" => 30f,  // 스피어: 좁은 직선 찌르기(전방 관통)
-                    "WPN_022" => 40f,  // 플레일: 찌르기(전방 좁은 판정)
+                    "WPN_022" => 120f, // 플레일: 전방 범위(전용 애니)
                     "WPN_023" => 90f,  // 메이스: 전방 90도
                     "WPN_024" => 180f, // 몽둥이: 전방 180도
                     "WPN_027" => 180f, // 할버드: 180도 회전(이후 찌르기 콤보)
@@ -676,7 +676,7 @@ public class PlayerAttack : MonoBehaviour
     private static readonly HashSet<string> _shopIconWeapons = new()
     {
         "WPN_001", "WPN_002", "WPN_003", "WPN_005", "WPN_010", "WPN_016",
-        "WPN_019", "WPN_020", "WPN_021", "WPN_022", "WPN_024", "WPN_025", "WPN_027", "WPN_029", "WPN_030",
+        "WPN_019", "WPN_020", "WPN_021", "WPN_024", "WPN_025", "WPN_027", "WPN_029", "WPN_030",
     };
     private static bool UsesShopIcon(string id) => _shopIconWeapons.Contains(id);
 
