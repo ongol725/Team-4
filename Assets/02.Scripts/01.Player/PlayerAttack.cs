@@ -903,7 +903,7 @@ public class PlayerAttack : MonoBehaviour
             var   vis  = BuildAnimatedGO(frames, fps, $"Flame_{wd.itemName}", size, loop: true, withBody: false);
             vis.transform.SetParent(pivot.transform, false);
             vis.transform.localPosition = new Vector3(0f, size * 0.5f + 0.6f, 0f); // 캐릭터 앞쪽으로
-            vis.transform.localRotation = Quaternion.Euler(0f, 0f, -90f); // 불꽃 스프라이트 -90° 회전
+            vis.transform.localRotation = Quaternion.Euler(0f, 0f, 180f); // 불꽃 스프라이트 180° 회전
         }
 
         float tickTimer = 0f;
