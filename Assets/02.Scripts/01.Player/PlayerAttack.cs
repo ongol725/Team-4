@@ -149,11 +149,11 @@ public class PlayerAttack : MonoBehaviour
             _ => 1f,
         };
 
-        // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율 (attackSpeed = 초당 횟수, 클수록 빠름)
-        float spdDenom = baseAps * weaponAps * spdBoost * charSpeedMul;
-        if (spdDenom <= 0f) spdDenom = 1f; // 0 나눗셈 방지(stage 병합 시 도입한 가드)
-        float interval = 1f / spdDenom;
-        if (id == "WPN_014") interval *= 2f; // 수류탄: 기본 쿨타임 2배(천천히 투척)
+        // attackSpeed = "이 초마다 1발"(초/발, 클수록 느림). 최종 쿨타임 = 무기공속 / (기본공속 × 5단계보정 × 캐릭터공속배율)
+        // → weaponAps가 분자라 클수록 간격이 길어짐(느려짐), spdBoost·charSpeedMul이 클수록 빨라짐.
+        float spdDenom = baseAps * spdBoost * charSpeedMul;
+        if (spdDenom <= 0f) spdDenom = 1f; // 0 나눗셈 방지
+        float interval = weaponAps / spdDenom;
         if (g5 && id == "WPN_025") interval = 1f; // 너클 5단계: 쿨타임 1초 고정
         interval = Mathf.Max(interval, 0.05f); // 최소 쿨타임 하한(금반지+5단계 공속 폭주·투사체 폭증 방지)
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
