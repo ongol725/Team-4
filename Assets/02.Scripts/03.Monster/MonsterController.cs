@@ -46,6 +46,8 @@ namespace BagSurvivor.Monster
         [Header("넉백 설정")]
         [Tooltip("넉백 모션 지속 시간 (초)")]
         private const float KNOCKBACK_DURATION = 0.3f;
+        // 타격감 강화: 넉백 거리 배수(전 무기 공통) — "확 뒤로 밀리는" 느낌
+        private const float KNOCKBACK_FEEL_MULT = 1.6f;
 
         [Header("사망 설정")]
         [Tooltip("사망 모션/이펙트 재생 후 풀 반환까지 대기 시간 (초). 보스는 길게(예: 5)")]
@@ -61,6 +63,11 @@ namespace BagSurvivor.Monster
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
         private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
+
+        // 피격 연출(스쿼시&스트레치) — 스프라이트가 자식일 때만 스케일(콜라이더·크기기믹 충돌 방지)
+        private Transform _spriteTf;
+        private Vector3   _spriteBaseScale = Vector3.one;
+        private Coroutine _hitFxCo;
 
         // 넉백 관련
         private float kbCooldownTimer = 0f;
@@ -164,7 +171,12 @@ namespace BagSurvivor.Monster
             rb = GetComponent<Rigidbody2D>();
             col = GetComponent<Collider2D>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            if (spriteRenderer != null) baseColor = spriteRenderer.color;
+            if (spriteRenderer != null)
+            {
+                baseColor = spriteRenderer.color;
+                _spriteTf = spriteRenderer.transform;
+                _spriteBaseScale = _spriteTf.localScale;
+            }
 
             // 발밑 그림자 자동 부착 (모든 몬스터 공통, 풀링 안전)
             var blobShadow = GetComponent<BlobShadow>();
@@ -204,6 +216,8 @@ namespace BagSurvivor.Monster
             _stunCo = null;
             _slowCo = null;
             _burnCo = null;
+            _hitFxCo = null;
+            if (_spriteTf != null) _spriteTf.localScale = _spriteBaseScale; // 피격 스쿼시 잔존 복원
             deathCallback = null;
             OnDeath = null; // 풀 재사용 시 이전 구독자 잔존 방지(기믹은 OnEnable에서 재구독)
             hpMultiplier = 1f;
@@ -484,8 +498,9 @@ namespace BagSurvivor.Monster
             // 데미지 숫자 띄우기 (모든 데미지 소스가 이 메서드로 모임)
             DamagePopup.Show(transform.position, finalDamage);
 
-            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음)
-            StartCoroutine(HitEffectCoroutine());
+            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음). 연속 피격 시 재시작(스케일 누적 방지)
+            if (_hitFxCo != null) StopCoroutine(_hitFxCo);
+            _hitFxCo = StartCoroutine(HitEffectCoroutine());
 
             // HP 확인
             if (currentHP <= 0)
@@ -507,19 +522,31 @@ namespace BagSurvivor.Monster
         /// </summary>
         private IEnumerator HitEffectCoroutine()
         {
-            // 피격 시 깜빡임 효과
-            if (spriteRenderer != null)
-            {
-                Color originalColor = spriteRenderer.color;
-                spriteRenderer.color = Color.red;
-                yield return new WaitForSeconds(0.1f);
+            // 스프라이트가 자식일 때만 스케일(루트면 콜라이더·크기기믹과 충돌하므로 색 연출만)
+            bool canSquash = _spriteTf != null && _spriteTf != transform;
+            // 임팩트 순간: 세로로 확 늘리고 가로로 줄인 '펀치' 포즈 → 원래대로 되돌리며 튕김
+            Vector3 punch = canSquash
+                ? Vector3.Scale(_spriteBaseScale, new Vector3(0.72f, 1.35f, 1f))
+                : _spriteBaseScale;
 
-                // 사망하지 않았으면 색상 복구
-                if (!isDying && spriteRenderer != null)
-                {
-                    spriteRenderer.color = originalColor;
-                }
+            if (spriteRenderer != null) spriteRenderer.color = Color.red; // 피격 순간 빨강
+            if (canSquash) _spriteTf.localScale = punch;
+
+            const float dur = 0.14f;
+            float t = 0f;
+            while (t < dur)
+            {
+                t += Time.deltaTime;
+                float p = Mathf.Clamp01(t / dur);
+                if (canSquash) _spriteTf.localScale = Vector3.Lerp(punch, _spriteBaseScale, p);
+                // 앞 절반은 빨강 유지, 이후 기본색 복구
+                if (spriteRenderer != null && p >= 0.5f && !isDying) spriteRenderer.color = baseColor;
+                yield return null;
             }
+
+            if (canSquash) _spriteTf.localScale = _spriteBaseScale;
+            if (spriteRenderer != null && !isDying) spriteRenderer.color = baseColor;
+            _hitFxCo = null;
         }
 
         // ==========================================
@@ -534,8 +561,8 @@ namespace BagSurvivor.Monster
         /// <param name="direction">넉백 방향</param>
         private void ApplyKnockback(float baseKnockbackDistance, Vector2 direction)
         {
-            // 넉백 저항력 적용: 최종 거리 = 기본 거리 * (1.0 - KB_Resist)
-            float finalDistance = baseKnockbackDistance * (1f - monsterData.kbResist);
+            // 넉백 저항력 + 타격감 배수 적용: 최종 거리 = 기본 거리 * (1.0 - KB_Resist) * 강도배수
+            float finalDistance = baseKnockbackDistance * (1f - monsterData.kbResist) * KNOCKBACK_FEEL_MULT;
 
             if (finalDistance <= 0f) return;
 
@@ -558,13 +585,15 @@ namespace BagSurvivor.Monster
                 direction = ((Vector2)transform.position - (Vector2)playerTransform.position).normalized;
             }
 
-            // 0.3초 동안 거리만큼 이동
-            float speed = distance / KNOCKBACK_DURATION;
+            // 감속(ease-out) 모션: 시작 속도가 크고 점점 줄어 '확' 밀렸다가 멈춘다.
+            // 등속 아닌 감속이라 순간 충격이 강하게 느껴짐. (평균속도 = distance/DUR 유지: v0 = 2·distance/DUR)
+            float v0 = 2f * distance / KNOCKBACK_DURATION;
             float timer = 0f;
 
             while (timer < KNOCKBACK_DURATION)
             {
-                rb.linearVelocity = direction * speed;
+                float p = timer / KNOCKBACK_DURATION;
+                rb.linearVelocity = direction * v0 * (1f - p);
                 timer += Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
             }
