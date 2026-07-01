@@ -64,9 +64,11 @@ namespace BagSurvivor.Monster
         private SpriteRenderer spriteRenderer;
         private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
 
-        // 피격 연출(스쿼시&스트레치) — 스프라이트가 자식일 때만 스케일(콜라이더·크기기믹 충돌 방지)
+        // 피격 연출(스쿼시&스트레치). 피격 시작 시점의 현재 스케일을 기준으로 캡처해
+        // 크기 기믹(분열 슬라임 등)이 바꿔둔 크기도 정확히 복원한다.
         private Transform _spriteTf;
-        private Vector3   _spriteBaseScale = Vector3.one;
+        private Vector3   _restScale = Vector3.one; // 스쿼시 시작 시 캡처한 원래 크기
+        private bool      _squashing;               // 스쿼시 진행 중(연속 피격 재캡처 방지)
         private Coroutine _hitFxCo;
 
         // 넉백 관련
@@ -174,8 +176,7 @@ namespace BagSurvivor.Monster
             if (spriteRenderer != null)
             {
                 baseColor = spriteRenderer.color;
-                _spriteTf = spriteRenderer.transform;
-                _spriteBaseScale = _spriteTf.localScale;
+                _spriteTf = spriteRenderer.transform; // 단일 오브젝트 몬스터면 루트 = 스프라이트
             }
 
             // 발밑 그림자 자동 부착 (모든 몬스터 공통, 풀링 안전)
@@ -217,7 +218,8 @@ namespace BagSurvivor.Monster
             _slowCo = null;
             _burnCo = null;
             _hitFxCo = null;
-            if (_spriteTf != null) _spriteTf.localScale = _spriteBaseScale; // 피격 스쿼시 잔존 복원
+            if (_squashing && _spriteTf != null) _spriteTf.localScale = _restScale; // 피격 스쿼시 잔존 복원
+            _squashing = false;
             deathCallback = null;
             OnDeath = null; // 풀 재사용 시 이전 구독자 잔존 방지(기믹은 OnEnable에서 재구독)
             hpMultiplier = 1f;
@@ -522,30 +524,35 @@ namespace BagSurvivor.Monster
         /// </summary>
         private IEnumerator HitEffectCoroutine()
         {
-            // 스프라이트가 자식일 때만 스케일(루트면 콜라이더·크기기믹과 충돌하므로 색 연출만)
-            bool canSquash = _spriteTf != null && _spriteTf != transform;
-            // 임팩트 순간: 세로로 확 늘리고 가로로 줄인 '펀치' 포즈 → 원래대로 되돌리며 튕김
-            Vector3 punch = canSquash
-                ? Vector3.Scale(_spriteBaseScale, new Vector3(0.72f, 1.35f, 1f))
-                : _spriteBaseScale;
+            // 연속 피격 중이 아니면 현재 크기를 원래 크기로 캡처(기믹이 바꾼 크기도 정확히 복원)
+            if (!_squashing && _spriteTf != null)
+            {
+                _restScale = _spriteTf.localScale;
+                _squashing = true;
+            }
+            Vector3 rest  = _restScale;
+            // 임팩트 순간: 세로로 확 늘리고 가로로 줄인 '펀치' 포즈 → 원래대로 튕겨 복귀
+            Vector3 punch = Vector3.Scale(rest, new Vector3(0.65f, 1.4f, 1f));
 
             if (spriteRenderer != null) spriteRenderer.color = Color.red; // 피격 순간 빨강
-            if (canSquash) _spriteTf.localScale = punch;
+            if (_spriteTf != null) _spriteTf.localScale = punch;
 
-            const float dur = 0.14f;
+            const float dur = 0.15f;
             float t = 0f;
             while (t < dur)
             {
                 t += Time.deltaTime;
-                float p = Mathf.Clamp01(t / dur);
-                if (canSquash) _spriteTf.localScale = Vector3.Lerp(punch, _spriteBaseScale, p);
+                float p  = Mathf.Clamp01(t / dur);
+                float ep = 1f - (1f - p) * (1f - p); // ease-out: 빠르게 원상복구되며 탄력 있게
+                if (_spriteTf != null) _spriteTf.localScale = Vector3.Lerp(punch, rest, ep);
                 // 앞 절반은 빨강 유지, 이후 기본색 복구
                 if (spriteRenderer != null && p >= 0.5f && !isDying) spriteRenderer.color = baseColor;
                 yield return null;
             }
 
-            if (canSquash) _spriteTf.localScale = _spriteBaseScale;
+            if (_spriteTf != null) _spriteTf.localScale = rest;
             if (spriteRenderer != null && !isDying) spriteRenderer.color = baseColor;
+            _squashing = false;
             _hitFxCo = null;
         }
 
