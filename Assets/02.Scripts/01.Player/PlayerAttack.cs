@@ -221,10 +221,12 @@ public class PlayerAttack : MonoBehaviour
             {
                 if (id == "WPN_004") range *= 0.5f; // 채찍: 크기 0.5배(표시·피격 함께)
                 if (id == "WPN_022") range *= 0.5f; // 플레일: 크기 0.5배(표시·피격 함께)
-                if (id == "WPN_021") range *= 0.5f; // 스피어: 크기 0.5배(표시·피격 함께)
+                if (id == "WPN_021") range *= 0.375f; // 스피어: 0.5→0.375 (3/4 축소)
                 if (id == "WPN_019") range *= 1.2f; // 대검: 크기 1.2배(0.6→1.2, 2배)
                 if (id == "WPN_024") range *= 0.7f; // 몽둥이: 크기 0.7배(1.0→0.7, 70%)
-                if (id == "WPN_023") range *= 0.4f; // 메이스: 크기 0.4배(0.2→0.4, 애니 2배)
+                if (id == "WPN_023") range *= 0.3f;  // 메이스: 0.4→0.3 (3/4 축소)
+                if (id == "WPN_029") range *= 0.75f; // 워해머: 3/4 축소
+                if (id == "WPN_030") range *= 0.75f; // 사이드: 3/4 축소
                 // 무기별 기본 각도
                 float angle = id switch
                 {
@@ -330,7 +332,7 @@ public class PlayerAttack : MonoBehaviour
                 int   burst     = id == "WPN_025" ? 2 : 1;        // 너클: 기본 2연타
                 float scaleMult = 1f;
                 // 크기 조정은 range로 → 표시(2×range)와 피격(반경 range)이 함께 변함
-                if (id == "WPN_025") range *= 0.3f; // 너클: 크기 0.3배(0.5→0.3, 현재의 60%)
+                if (id == "WPN_025") range *= 0.225f; // 너클: 0.3→0.225 (3/4 축소)
                 if (id == "WPN_003") range *= 1.0f; // 철퇴: 크기 1.0배(0.5→1.0, 애니 2배)
 
                 if (g5)
