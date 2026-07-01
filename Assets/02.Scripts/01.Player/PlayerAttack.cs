@@ -220,6 +220,7 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.MeleeFan:
             {
                 if (id == "WPN_004") range *= 0.5f; // 채찍: 크기 0.5배(표시·피격 함께)
+                if (id == "WPN_022") range *= 0.5f; // 플레일: 크기 0.5배(표시·피격 함께)
                 if (id == "WPN_021") range *= 0.5f; // 스피어: 크기 0.5배(표시·피격 함께)
                 if (id == "WPN_019") range *= 1.2f; // 대검: 크기 1.2배(0.6→1.2, 2배)
                 if (id == "WPN_024") range *= 1.0f; // 몽둥이: 크기 1.0배(0.5→1.0, 2배)
@@ -233,7 +234,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_019" => 180f, // 대검: 180도
                     "WPN_020" => 120f,
                     "WPN_021" => 30f,  // 스피어: 좁은 직선 찌르기(전방 관통)
-                    "WPN_022" => 120f, // 플레일: 전방 범위(전용 애니)
+                    "WPN_022" => 120f, // 플레일: 전방 범위(전용 애니, 크기는 아래 range 배율)
                     "WPN_023" => 90f,  // 메이스: 전방 90도
                     "WPN_024" => 180f, // 몽둥이: 전방 180도
                     "WPN_027" => 180f, // 할버드: 180도 회전(이후 찌르기 콤보)
@@ -896,6 +897,7 @@ public class PlayerAttack : MonoBehaviour
             var   vis  = BuildAnimatedGO(frames, fps, $"Flame_{wd.itemName}", size, loop: true, withBody: false);
             vis.transform.SetParent(pivot.transform, false);
             vis.transform.localPosition = new Vector3(0f, size * 0.5f + 0.6f, 0f); // 캐릭터 앞쪽으로
+            vis.transform.localRotation = Quaternion.Euler(0f, 0f, -90f); // 불꽃 스프라이트 -90° 회전
         }
 
         float tickTimer = 0f;
