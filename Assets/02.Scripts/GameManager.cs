@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     {
         if (amount <= 0) return;
         gold += amount;
+        RunStatsLogger.Instance?.GoldGained(amount);
         onGoldChanged?.Invoke(gold);
     }
 
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
         if (gold < amount) return false;
         gold -= amount;
         goldSpent += amount;   // 결과창 '소모 골드'용 누적
+        RunStatsLogger.Instance?.GoldSpent(amount);
         onGoldChanged?.Invoke(gold);
         return true;
     }
@@ -80,6 +82,7 @@ public class GameManager : MonoBehaviour
     {
         gold = _settings != null ? _settings.startingGold : 200;
         ResetRunStats();
+        RunStatsLogger.Instance?.BeginRun();   // 새 런 통계 시작(1층 진입 시각 0)
         onGoldChanged?.Invoke(gold);
     }
 
@@ -124,6 +127,7 @@ public class GameManager : MonoBehaviour
     public void GoToNextFloor()
     {
         currentFloor++;
+        RunStatsLogger.Instance?.FloorEnter(currentFloor);
         Debug.Log($"[GameManager] {currentFloor}층으로 이동합니다.");
 
         // 보스 층 도달 시: 던전 재생성 대신 보스룸 씬으로 이동

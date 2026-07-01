@@ -241,6 +241,10 @@ public class PlayerHealth : MonoBehaviour
             stats.killCount     = gm != null ? gm.monstersKilled : 0;
             stats.goldSpent     = gm != null ? gm.goldSpent : 0;
             resultPopup.Show(false, stats); // Show 내부에서 timeScale=0 처리
+
+            // 런 통계 기록(사망). 사망존/킬러는 후속 훅에서 채움(현재 "-").
+            RunStatsLogger.Instance?.RunEnd(false, gm != null ? gm.currentFloor : 1,
+                "-", "-", stats.mainSynergies);
         }
         else
         {
