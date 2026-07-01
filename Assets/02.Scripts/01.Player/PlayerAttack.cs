@@ -731,11 +731,12 @@ public class PlayerAttack : MonoBehaviour
             "WPN_008" => 0f,   // 산탄총: 총알이 진행 방향 정면을 보게(0°)
             _         => 0f,
         };
+        float armTime = explosionRadius > 0f ? 0.25f : 0f; // 폭발형: 무장 지연(발사 직후 오폭 방지)
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
                   explosionRadius: explosionRadius,
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
-                  spinSpeed: spin, rotationOffset: rotOff);
+                  spinSpeed: spin, rotationOffset: rotOff, armTime: armTime);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,

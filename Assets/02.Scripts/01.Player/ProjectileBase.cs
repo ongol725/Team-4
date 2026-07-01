@@ -22,11 +22,16 @@ public class ProjectileBase : MonoBehaviour
     private Transform _owner;
     private float     _age;
     private float     _outTime;
+    private float     _armTime;  // 폭발형: 발사 후 이 시간 동안은 폭발 안 함(무장 지연)
+    private float     _liveTime; // 생성 후 경과 시간
 
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
         float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
-        bool boomerang = false, Transform owner = null, float spinSpeed = 0f, float rotationOffset = 0f)
+        bool boomerang = false, Transform owner = null, float spinSpeed = 0f, float rotationOffset = 0f,
+        float armTime = 0f)
     {
+        _armTime         = armTime;
+        _liveTime        = 0f;
         _damage          = damage;
         _remainingHits   = Mathf.Max(1, maxHits);
         _knockbackForce  = knockbackForce;
@@ -55,6 +60,7 @@ public class ProjectileBase : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _liveTime += Time.fixedDeltaTime;
         var rb = GetComponent<Rigidbody2D>();
 
         // 부메랑: 전진 후 플레이어에게 복귀
@@ -102,8 +108,15 @@ public class ProjectileBase : MonoBehaviour
 
         if (_explosionRadius > 0f)
         {
-            Explode();
-            Destroy(gameObject);
+            if (_liveTime < _armTime) return; // 무장 지연: 발사 직후엔 폭발 안 하고 지나감
+            // 적(트리거) 또는 벽(비트리거)에만 폭발. 아군 투사체·이펙트·픽업 등 다른 트리거는 무시(통과).
+            var emc = other.GetComponent<MonsterController>()
+                   ?? other.GetComponentInParent<MonsterController>();
+            if (emc != null || !other.isTrigger)
+            {
+                Explode();
+                Destroy(gameObject);
+            }
             return;
         }
 
