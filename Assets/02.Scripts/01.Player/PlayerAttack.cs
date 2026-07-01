@@ -170,9 +170,11 @@ public class PlayerAttack : MonoBehaviour
         float  range = entry.data.range > 0 ? entry.data.range : _meleeRange;
 
         // 근접무기 전체 사거리 ×3 (표시·피격 동반, 비율 유지). 개별 크기 배율은 각 case에서 추가 적용.
-        if (entry.data.attackStyleType == WeaponAttackStyleType.MeleeFan ||
-            entry.data.attackStyleType == WeaponAttackStyleType.MeleeSingle)
-            range *= 3f;
+        bool isMelee = entry.data.attackStyleType == WeaponAttackStyleType.MeleeFan ||
+                       entry.data.attackStyleType == WeaponAttackStyleType.MeleeSingle;
+        if (isMelee) range *= 3f;
+        // 상점 아이콘(A그룹) 근접: 아이콘이 커서 크기 1/3로 축소(표시·피격 동반)
+        if (isMelee && UsesShopIcon(id)) range *= 1f / 3f;
 
         switch (entry.data.attackStyleType)
         {
@@ -690,6 +692,9 @@ public class PlayerAttack : MonoBehaviour
 
         if (scaleMult != 1f)
             go.transform.localScale *= scaleMult;
+        // 상점 아이콘(A그룹) 투척: 아이콘이 커서 크기 1/3로 축소(콜라이더 동반 → 피격범위도)
+        if (UsesShopIcon(wd.itemID))
+            go.transform.localScale *= 1f / 3f;
 
         float spin = wd.itemID == "WPN_016" ? 1080f : 0f; // 수리검: 비행 중 자전(초당 3바퀴)
         float rotOff = wd.itemID == "WPN_001" ? 90f : 0f;  // 단검: 스프라이트 90° 회전해서 등장
