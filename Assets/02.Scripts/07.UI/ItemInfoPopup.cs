@@ -143,7 +143,9 @@ public class ItemInfoPopup : MonoBehaviour
     {
         _itemIcon.sprite = data.itemImage;
         _itemIcon.color  = data.itemImage != null ? Color.white : Color.clear;
-        _nameText.text   = data.itemName;
+        _nameText.text   = (data is SO_InventoryBlockData)
+            ? data.itemName
+            : $"{data.itemName}  Lv.{gi + 1}";   // 기획서: 이름 옆 레벨 표기
 
         if (data is SO_InventoryBlockData)
         {
@@ -185,8 +187,11 @@ public class ItemInfoPopup : MonoBehaviour
             }
             if (!string.IsNullOrEmpty(wd.attackStyle))
                 sb.AppendLine($"공격 방식  {wd.attackStyle}");
-            if (gi >= 4 && !string.IsNullOrEmpty(wd.lv5AttackStyle))
-                sb.AppendLine($"5단계 효과  {wd.lv5AttackStyle}");
+            if (!string.IsNullOrEmpty(wd.lv5AttackStyle))
+            {
+                if (gi >= 4) sb.AppendLine($"5단계 효과  {wd.lv5AttackStyle}");
+                else         sb.AppendLine("[잠금] 5레벨 달성 시 특수 능력 개방");  // 4레벨 이하 예고
+            }
         }
         else if (data is SO_ArmorData ad)
         {
