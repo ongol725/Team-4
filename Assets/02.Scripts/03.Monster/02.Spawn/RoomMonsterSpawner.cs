@@ -134,6 +134,9 @@ namespace BagSurvivor.Monster
         [Tooltip("현재 층 등장 몬스터를 종류별로 미리 생성해 풀에 적재(첫 스폰 끊김 방지). 0이면 끄기")]
         public int prewarmPerType = 8;
 
+        // 일반방 동시 생존 상한 배수(재미: 적 많음). 특수방(엘리트/보스)은 미적용.
+        private const int NORMAL_SPAWN_MULT = 2;
+
         [Header("타일맵 직접 지정 (선택: 미지정 시 DungeonGenerator에서 자동 참조)")]
         [Tooltip("바닥 타일맵 직접 지정 (테스트/특수 상황용)")]
         public Tilemap floorTilemapOverride;
@@ -270,7 +273,7 @@ namespace BagSurvivor.Monster
                 {
                     if (b == null) continue;
                     foreach (GameObject p in b)
-                        if (p != null && warmed.Add(p)) pool.Prewarm(p, prewarmPerType);
+                        if (p != null && warmed.Add(p)) pool.Prewarm(p, prewarmPerType * NORMAL_SPAWN_MULT);
                 }
             }
 
@@ -405,7 +408,7 @@ namespace BagSurvivor.Monster
             GameObject[] pool2 = cfg.BandPool(band);
             if (pool2 == null || pool2.Length == 0) yield break;
 
-            int maxAlive = Mathf.Max(1, cfg.BandMaxAlive(band)); // 밴드별 상한(미설정 시 maxAlive)
+            int maxAlive = Mathf.Max(1, cfg.BandMaxAlive(band)) * NORMAL_SPAWN_MULT; // 밴드별 상한 ×2(재미)
             float interval = Mathf.Max(0.1f, cfg.spawnInterval);
             var wait = new WaitForSeconds(interval);
 

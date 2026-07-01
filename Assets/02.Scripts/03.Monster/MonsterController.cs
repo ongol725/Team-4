@@ -48,6 +48,8 @@ namespace BagSurvivor.Monster
         private const float KNOCKBACK_DURATION = 0.3f;
         // 타격감 강화: 넉백 거리 배수(전 무기 공통) — "확 뒤로 밀리는" 느낌
         private const float KNOCKBACK_FEEL_MULT = 1.6f;
+        // 골드 드롭 배수(스폰 2배와 함께 순수입 유지용). 내림 처리 → 홀수는 0.5 손실.
+        private const float GOLD_DROP_MULT = 0.5f;
 
         [Header("사망 설정")]
         [Tooltip("사망 모션/이펙트 재생 후 풀 반환까지 대기 시간 (초). 보스는 길게(예: 5)")]
@@ -672,10 +674,14 @@ namespace BagSurvivor.Monster
             if (suppressGoldDrop) return; // 분열 중간 세대 등: 드롭 억제
             if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
+            // 골드 배수(0.5) 적용 후 내림. 스폰 2배와 함께 순수입 유지.
+            int gold = Mathf.FloorToInt(monsterData.dropItemValue * GOLD_DROP_MULT);
+            if (gold <= 0) return; // 원래 실드롭이지만 반토막에 0된 경우(현재 최소 4→2라 발생 안 함)
+
             // dropItemValue = 떨어뜨릴 총 골드. 동전 1개로 정확한 총액 드롭.
             if (BagSurvivor.Items.GoldDropManager.Instance != null)
                 BagSurvivor.Items.GoldDropManager.Instance.DropGold(
-                    transform.position, monsterData.dropItemValue);
+                    transform.position, gold);
         }
 
         // ==========================================
