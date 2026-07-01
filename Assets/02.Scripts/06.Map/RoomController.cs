@@ -76,6 +76,9 @@ public class RoomController : MonoBehaviour
         if (!collision.CompareTag("Player")) return;
         playerInside = false;
 
+        // 방을 떠날 때 바닥에 남은 골드를 자동 획득(하나하나 밟지 않아도 됨)
+        BagSurvivor.Items.GoldDropManager.Instance?.CollectAllDropped();
+
         // 활성화 전(확인 대기 중)에 나가면 취소 → 잠그지 않고 재진입 가능
         if (!activated && confirmCo != null)
         {

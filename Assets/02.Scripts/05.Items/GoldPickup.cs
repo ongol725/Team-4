@@ -65,6 +65,13 @@ namespace BagSurvivor.Items
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (collected || !other.CompareTag("Player")) return;
+            CollectNow();
+        }
+
+        /// <summary>남은 골드를 즉시 획득 처리하고 풀로 반환한다(밟기·방 이탈 자동수집 공통). 중복 방지.</summary>
+        public void CollectNow()
+        {
+            if (collected) return;
             collected = true;
 
             if (GameManager.Instance != null) GameManager.Instance.AddGold(amount);
