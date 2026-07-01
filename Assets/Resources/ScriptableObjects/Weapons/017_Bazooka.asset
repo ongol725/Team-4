@@ -43,6 +43,23 @@ MonoBehaviour:
   - {fileID: -591190847018776982, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
   - {fileID: -1292164317645965962, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
   attackFps: 12
+  explosionFrames:
+  - {fileID: 78604188, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -425589350, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -1811191531, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: 2080562186, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -1214893591, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -1777411727, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: 1900581830, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -2094002634, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -602830738, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: 96993488, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -352258352, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -1568862676, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -660733938, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -818551254, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: 379727494, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
+  - {fileID: -1554939736, guid: a22f4b936f5a06342b04efcd517ecc7a, type: 3}
   meleeMotion: 0
   meleeSwingAngle: 90
   meleeReach: 1.6

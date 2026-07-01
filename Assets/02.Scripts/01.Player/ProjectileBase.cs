@@ -24,14 +24,18 @@ public class ProjectileBase : MonoBehaviour
     private float     _outTime;
     private float     _armTime;  // 폭발형: 발사 후 이 시간 동안은 폭발 안 함(무장 지연)
     private float     _liveTime; // 생성 후 경과 시간
+    private Sprite[]  _explosionFrames; // 폭발 이펙트 프레임(폭발 반경에 맞춰 1회 재생)
+    private float     _explosionFps = 30f;
 
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
         float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
         bool boomerang = false, Transform owner = null, float spinSpeed = 0f, float rotationOffset = 0f,
-        float armTime = 0f)
+        float armTime = 0f, Sprite[] explosionFrames = null, float explosionFps = 30f)
     {
         _armTime         = armTime;
         _liveTime        = 0f;
+        _explosionFrames = explosionFrames;
+        _explosionFps    = explosionFps > 0f ? explosionFps : 30f;
         _damage          = damage;
         _remainingHits   = Mathf.Max(1, maxHits);
         _knockbackForce  = knockbackForce;
@@ -156,6 +160,8 @@ public class ProjectileBase : MonoBehaviour
         if (_exploded) return;
         _exploded = true;
 
+        SpawnExplosionEffect();
+
         var hits = Physics2D.OverlapCircleAll(transform.position, _explosionRadius);
         foreach (var h in hits)
         {
@@ -166,5 +172,25 @@ public class ProjectileBase : MonoBehaviour
             mc.TakeDamage(_damage, _knockbackForce, kbDir);
             _onHit?.Invoke(mc);
         }
+    }
+
+    // 폭발 지점에 이펙트를 폭발 지름(반경×2)에 맞춰 1회 재생(별도 오브젝트라 투사체 소멸 후에도 남음).
+    private void SpawnExplosionEffect()
+    {
+        if (_explosionFrames == null || _explosionFrames.Length == 0 || _explosionFrames[0] == null) return;
+
+        var fx = new GameObject("ExplosionFX");
+        fx.transform.position = transform.position;
+        var sr = fx.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = 20;
+        sr.sprite = _explosionFrames[0];
+
+        var   b        = _explosionFrames[0].bounds;
+        float maxExt   = Mathf.Max(b.extents.x, b.extents.y);
+        float diameter = _explosionRadius * 2f;
+        fx.transform.localScale = Vector3.one * (maxExt > 0.001f ? diameter * 0.5f / maxExt : diameter);
+
+        fx.AddComponent<SpriteSheetAnimator>().Play(_explosionFrames, _explosionFps, false);
+        Destroy(fx, _explosionFrames.Length / _explosionFps + 0.1f);
     }
 }

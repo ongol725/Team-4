@@ -770,7 +770,8 @@ public class PlayerAttack : MonoBehaviour
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
                   explosionRadius: explosionRadius,
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
-                  spinSpeed: spin, rotationOffset: rotOff, armTime: armTime);
+                  spinSpeed: spin, rotationOffset: rotOff, armTime: armTime,
+                  explosionFrames: wd.explosionFrames);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,
