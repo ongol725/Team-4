@@ -60,14 +60,26 @@ public class GameManager : MonoBehaviour
         if (amount <= 0) return true;
         if (gold < amount) return false;
         gold -= amount;
+        goldSpent += amount;   // 결과창 '소모 골드'용 누적
         onGoldChanged?.Invoke(gold);
         return true;
     }
+
+    // ── 결과창 통계(런 누적) ──────────────────────────────────
+    [HideInInspector] public int monstersKilled;  // 처치 몬스터 수
+    [HideInInspector] public int goldSpent;        // 소모 골드
+
+    /// <summary>몬스터 처치 시 호출(결과창 '처치 몬스터'용).</summary>
+    public void AddKill() => monstersKilled++;
+
+    /// <summary>런 통계 초기화(새 런/다시하기 시).</summary>
+    public void ResetRunStats() { monstersKilled = 0; goldSpent = 0; }
 
     /// <summary>골드를 시작 기본값으로 초기화합니다. (새 런 시작 시)</summary>
     public void ResetGold()
     {
         gold = _settings != null ? _settings.startingGold : 200;
+        ResetRunStats();
         onGoldChanged?.Invoke(gold);
     }
 

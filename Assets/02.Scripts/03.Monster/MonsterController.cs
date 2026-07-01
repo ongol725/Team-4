@@ -586,6 +586,8 @@ namespace BagSurvivor.Monster
             isDying = true;
             currentState = MonsterState.Die;
 
+            GameManager.Instance?.AddKill();   // 결과창 '처치 몬스터' 누적
+
             // 1. 즉시 충돌체 비활성화
             if (col != null) col.enabled = false;
             rb.linearVelocity = Vector2.zero;
