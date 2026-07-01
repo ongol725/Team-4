@@ -723,7 +723,7 @@ public class PlayerAttack : MonoBehaviour
         float rotOff = wd.itemID switch
         {
             "WPN_001" => -90f, // 단검: 스프라이트 -90° 회전해서 등장
-            "WPN_008" => -90f, // 산탄총: 총알이 진행 방향 정면을 보게
+            "WPN_008" => 0f,   // 산탄총: 총알이 진행 방향 정면을 보게(0°)
             _         => 0f,
         };
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
