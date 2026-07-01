@@ -1,3 +1,11 @@
+/// <summary>근접 무기의 휘두르는 모션 종류 (플레이어 중심 외부 회전 기반).</summary>
+public enum MeleeMotionType
+{
+    Swing,   // 호(arc)로 휘두르기 (코드 회전)
+    Thrust,  // 앞으로 찌르기(전진→복귀)
+    Baked,   // 모션이 프레임에 포함된 시트를 제자리 재생(회전 없음)
+}
+
 public enum WeaponAttackStyleType
 {
     Unknown = 0,

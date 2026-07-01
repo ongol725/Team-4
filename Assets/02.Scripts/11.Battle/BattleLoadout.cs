@@ -18,8 +18,12 @@ public class WeaponLoadoutEntry
 {
     public SO_WeaponData data;
     public int           effectiveGrade; // gradeIndex + RingGradeBonus (0~4)
-    public int           attackPower;    // effectiveGrade 기준 등급 스탯
-    public float         attackSpeed;
+    public int           attackPower;    // effectiveGrade 기준 등급 스탯 (다이아 반지 배율 반영)
+    public float         attackSpeed;    // (금 반지 배율 반영)
+    public float         ringStunChance; // 뼈 반지: 피격 시 스턴 확률(합산)
+    public float         ringSlowSec;    // 나무 반지: 피격 시 슬로우 지속(초)
+    public float         ringProjScale = 1f; // 강철 반지: 투사체 크기 배율(피격범위 동반)
+    public float         ringProjSpeed = 1f; // 강철 반지: 발사·비행 속도 배율
     public System.Collections.Generic.List<RingBuffRecord> RingBuffs = new();
 }
 
