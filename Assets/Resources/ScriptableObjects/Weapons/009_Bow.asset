@@ -28,9 +28,19 @@ MonoBehaviour:
   lv5AttackStyle: "\uCFE8\uD0C0\uC784 -15%"
   projectile: {fileID: 0}
   projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
-  projectileSpeed: 16
+  projectileSpeed: 32
   range: 5
   maxTargets: 0
+  attackFrames:
+  - {fileID: -3494622356380650373, guid: a2b3701cf2f2ca14db18882a8fe91dfb, type: 3}
+  - {fileID: -8117780290744642635, guid: a2b3701cf2f2ca14db18882a8fe91dfb, type: 3}
+  - {fileID: -4094345515411811141, guid: a2b3701cf2f2ca14db18882a8fe91dfb, type: 3}
+  - {fileID: -8780395644273943481, guid: a2b3701cf2f2ca14db18882a8fe91dfb, type: 3}
+  attackFps: 12
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
   gradeStats:
   - attackPower: 48
     attackSpeed: 1.2

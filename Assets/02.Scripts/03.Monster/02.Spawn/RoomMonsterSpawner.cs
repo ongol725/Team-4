@@ -428,6 +428,12 @@ namespace BagSurvivor.Monster
         /// <summary>밴드(0=near,1=mid,2=far)를 결정.
         /// far = 잠긴 특수방에 가장 가까운 일반방, near = 시작방 최근접 링, 나머지 = mid.
         /// (방 연결 그래프가 없어 방 중심 거리로 근사)</summary>
+        /// <summary>방의 밴드 이름(near/mid/far). 통계(사망존 등) 표시용.</summary>
+        public string GetZoneName(RoomController rc)
+        {
+            switch (ComputeBand(rc)) { case 0: return "near"; case 1: return "mid"; default: return "far"; }
+        }
+
         private int ComputeBand(RoomController rc)
         {
             RoomController start = FindRoomOfType(RoomType.Start);

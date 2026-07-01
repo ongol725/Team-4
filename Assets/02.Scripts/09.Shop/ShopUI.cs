@@ -124,6 +124,7 @@ public class ShopUI : MonoBehaviour
         if (GameManager.Instance != null && !GameManager.Instance.SpendGold(_rerollCost))
             return; // 골드 부족 — 리롤 취소
         _rerollsInCurrentGrade++;
+        RunStatsLogger.Instance?.Reroll();
         UpdateGrade();
         PopulateSlots();
     }

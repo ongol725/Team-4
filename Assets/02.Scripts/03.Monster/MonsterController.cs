@@ -86,6 +86,7 @@ namespace BagSurvivor.Monster
         // 상태이상 관련
         private float     _speedMultiplier = 1f;
         private Coroutine _stunCo;
+        private float     _stunReadyTime; // 스턴 적별 재적용 쿨다운 해제 시각(Time.time 기준)
         private Coroutine _slowCo;
         private Coroutine _burnCo;
 
@@ -586,6 +587,21 @@ namespace BagSurvivor.Monster
             isDying = true;
             currentState = MonsterState.Die;
 
+            GameManager.Instance?.AddKill();   // 결과창 '처치 몬스터' 누적
+
+            if (RunStatsLogger.Instance != null)
+            {
+                int floor = GameManager.Instance != null ? GameManager.Instance.currentFloor : 1;
+                string mName = monsterData != null ? monsterData.name : gameObject.name;
+                // 슬라임은 본체(루트)만 층별 처치수에 집계 — 분열체는 제외
+                var eliteSlime = GetComponent<EliteSlimeSplitGimmick>();
+                bool countForFloor = eliteSlime == null || eliteSlime.generation == eliteSlime.rootGeneration;
+                RunStatsLogger.Instance.MonsterKilled(mName, floor, countForFloor);
+                // 엘리트/중간보스/최종보스 = '층 보스'로 기록
+                if (GetComponent<EliteMonster>() != null || GetComponent<BossPatternDriver>() != null)
+                    RunStatsLogger.Instance.BossKilled(floor);
+            }
+
             // 1. 즉시 충돌체 비활성화
             if (col != null) col.enabled = false;
             rb.linearVelocity = Vector2.zero;
@@ -664,7 +680,10 @@ namespace BagSurvivor.Monster
             {
                 // 시간 배율이 적용된 공격력으로 플레이어에게 접촉 데미지
                 if (playerHealth != null && !playerHealth.IsDead)
+                {
+                    playerHealth.LastAttacker = monsterData != null ? monsterData.name : gameObject.name; // 킬러 통계
                     playerHealth.TakeDamage(runtimeAttack);
+                }
 
                 yield return new WaitForSeconds(CONTACT_DAMAGE_INTERVAL);
             }
@@ -771,6 +790,9 @@ namespace BagSurvivor.Monster
         public void ApplyStun(float duration)
         {
             if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 스턴 면역
+            if (Time.time < _stunReadyTime) return;   // 적별 재적용 쿨다운(연사 무기 영구기절 방지)
+            _stunReadyTime = Time.time + 2f;
             if (_stunCo != null) StopCoroutine(_stunCo);
             _stunCo = StartCoroutine(StunRoutine(duration));
         }
@@ -788,6 +810,7 @@ namespace BagSurvivor.Monster
         public void ApplySlow(float multiplier, float duration)
         {
             if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 슬로우 면역
             if (_slowCo != null) StopCoroutine(_slowCo);
             _slowCo = StartCoroutine(SlowRoutine(Mathf.Clamp01(multiplier), duration));
         }

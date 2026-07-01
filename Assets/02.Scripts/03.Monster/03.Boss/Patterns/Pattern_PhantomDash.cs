@@ -77,18 +77,23 @@ namespace BagSurvivor.Monster
             MonsterController wolf = MonsterPool.Instance.Get(wolfPrefab, spawnPos);
             if (wolf == null) return;
 
+            // 팬텀: 체력 없는(무적) 1회성 돌진체로 만든다. (풀 재사용 시 OnEnable에서 무적 해제)
+            wolf.SetInvincible(true);
+            // 소환물이 멧돼지(BoarGimmick)면 자체 돌진 AI를 끄고 PhantomWolfDash에 제어를 넘긴다.
+            var boar = wolf.GetComponent<BoarGimmick>();
+            if (boar != null) boar.phantomMode = true;
+
             // 소환 시점 플레이어 방향(폴백). 실제 방향은 늑대가 돌진 직전 재확정.
             Vector2 dir = ((Vector2)(controller.PlayerTransform != null
                 ? controller.PlayerTransform.position - spawnPos
                 : (Vector3)Vector2.right)).normalized;
 
+            // PhantomWolfDash가 없으면(멧돼지 프리팹 등) 런타임 부착 — 돌진 후 풀 반환(날아가고 사라짐)
             PhantomWolfDash dash = wolf.GetComponent<PhantomWolfDash>();
-            if (dash != null)
-            {
-                // 돌진 대기 시간 명시 세팅(풀 재사용 시 이전 값 잔존 방지). 2페이즈는 단축.
-                dash.startDelay = phase2Mode ? phase2WolfStartDelay : phase1WolfStartDelay;
-                dash.Dash(dir);
-            }
+            if (dash == null) dash = wolf.gameObject.AddComponent<PhantomWolfDash>();
+            // 돌진 대기 시간 명시 세팅(풀 재사용 시 이전 값 잔존 방지). 2페이즈는 단축.
+            dash.startDelay = phase2Mode ? phase2WolfStartDelay : phase1WolfStartDelay;
+            dash.Dash(dir);
         }
 
         // 회색=발동 사거리 / 파랑=늑대 소환 위치 반경

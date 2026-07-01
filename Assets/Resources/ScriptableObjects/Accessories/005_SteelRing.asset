@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ACC_005
   itemName: "강철 반지"
   itemDescription: "투사체 크기 증가, 속도 감소"
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -2777061214378532067, guid: 1b7089b16b3563b449d77cf300c34064, type: 3}
   rarity: 3
   grade: 1
   cost: 10

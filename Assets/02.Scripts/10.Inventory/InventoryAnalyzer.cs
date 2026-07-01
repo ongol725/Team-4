@@ -68,6 +68,12 @@ public class InventoryAnalyzer : MonoBehaviour
         foreach (var inst in _grid.GetAllPlacedInstances())
         {
             inst.RingGradeBonus = 0;
+            inst.RingAtkBonus   = 0f;
+            inst.RingSpdBonus   = 0f;
+            inst.RingStunChance = 0f;
+            inst.RingSlowSec    = 0f;
+            inst.RingProjScaleBonus = 0f;
+            inst.RingProjSpeedBonus = 0f;
             snapshot.Add(inst);
         }
 
@@ -109,7 +115,17 @@ public class InventoryAnalyzer : MonoBehaviour
 
             foreach (var weapon in adjacentWeapons)
             {
-                weapon.RingGradeBonus += 1;
+                // 반지는 더 이상 등급을 올리지 않는다. 각 반지 고유 기믹만 부여.
+                switch (acc.data.itemID) // 반지별 인접 기믹(합산)
+                {
+                    case "ACC_006": weapon.RingAtkBonus       += 1.0f;  break; // 다이아: 공격력 +100%
+                    case "ACC_004": weapon.RingSpdBonus       += 1.0f;  break; // 금: 공속 +100%
+                    case "ACC_002": weapon.RingStunChance     += 0.25f; break; // 뼈: 피격 시 스턴 25%
+                    case "ACC_001": weapon.RingSlowSec         = 3f;    break; // 나무: 피격 시 슬로우 3초
+                    case "ACC_003": weapon.RingGradeBonus     += 1;     break; // 은: 인접 무기 등급 +1
+                    case "ACC_005": weapon.RingProjScaleBonus += 0.5f;         // 강철: 투사체 크기 +50%
+                                    weapon.RingProjSpeedBonus -= 0.2f;  break; //        발사·비행속도 -20%
+                }
                 snapshot.RecordWeaponRingBuff(weapon, acc);
             }
         }

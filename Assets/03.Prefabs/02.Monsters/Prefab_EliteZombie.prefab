@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9041298883266514048}
   - component: {fileID: 2355656801338998943}
   - component: {fileID: 6650880860263085744}
+  - component: {fileID: 2151128136175299805}
   m_Layer: 8
   m_Name: Prefab_EliteZombie
   m_TagString: Monster
@@ -173,9 +174,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: f1fe3fb0b1acbe04aa23e64f1b634085, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  shadowWidthMul: 1
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
+  deathDelay: 0.1
+  damageReductionVfxPrefab: {fileID: 0}
 --- !u!114 &2355656801338998943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,3 +207,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.ZombieEliteDeathGimmick
   explosionPrefab: {fileID: 4007182511534385770, guid: 3b93d3564d11e63448026b838e603999, type: 3}
+--- !u!114 &2151128136175299805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6427610672282125992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd4ebcbe5b85364b9e4e2facd3587c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RingDropOnDeath
+  dropChance: 1

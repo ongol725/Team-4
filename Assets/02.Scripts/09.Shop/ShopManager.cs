@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
-    // 타입별 등장 확률 가중치: weapon=65, armor=15, inventory=10, accessory=10 (임시)
-    private static readonly int[] TypeWeights = { 65, 15, 10, 10 };
+    // 타입별 등장 확률 가중치: weapon=70, armor=18, inventory=12, accessory=0 (반지는 상점 제외)
+    private static readonly int[] TypeWeights = { 70, 18, 12, 0 };
     private const int TypeWeightTotal = 100;
 
     // 상점 등급(1~7)별 레어도 가중치 [shopGrade-1][0=Common, 1=Rare, 2=Epic, 3=Legendary]
@@ -35,9 +35,12 @@ public class ShopManager : MonoBehaviour
     {
         foreach (var b in _buckets) b.Clear();
         _buckets[0].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Weapons"));
+        // 보스 무기(031~033)는 상점에서 제외
+        _buckets[0].RemoveAll(w => w != null &&
+            (w.name.StartsWith("031") || w.name.StartsWith("032") || w.name.StartsWith("033")));
         _buckets[1].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Armor"));
         _buckets[2].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/InventoryBlocks"));
-        _buckets[3].AddRange(Resources.LoadAll<SO_ItemData>("ScriptableObjects/Accessories"));
+        // 반지(장신구)는 상점 제외 — 중간보스/엘리트 드랍으로만 획득 (_buckets[3] 비움)
     }
 
     public SO_ItemData[] GenerateShopItems(int count = 5, int shopGrade = 1)
