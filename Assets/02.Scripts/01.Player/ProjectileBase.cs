@@ -22,13 +22,11 @@ public class ProjectileBase : MonoBehaviour
     private Transform _owner;
     private float     _age;
     private float     _outTime;
-    private float     _spinSpeed; // 0이 아니면 비행 중 초당 이 각도만큼 자전(예: 수리검)
 
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
         float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
         bool boomerang = false, Transform owner = null, float spinSpeed = 0f, float rotationOffset = 0f)
     {
-        _spinSpeed       = spinSpeed;
         _damage          = damage;
         _remainingHits   = Mathf.Max(1, maxHits);
         _knockbackForce  = knockbackForce;
@@ -42,11 +40,12 @@ public class ProjectileBase : MonoBehaviour
 
         var rb = GetComponent<Rigidbody2D>();
         rb.gravityScale   = 0f;
-        rb.freezeRotation = false;
+        rb.freezeRotation = spinSpeed == 0f; // 자전 없으면 회전 고정(오도 방지)
         rb.linearVelocity = dir.normalized * speed;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + rotationOffset; // 무기별 스프라이트 회전 보정
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        if (spinSpeed != 0f) rb.angularVelocity = spinSpeed; // 물리 기반 자전(비행 내내 균일 — transform.Rotate는 리지드바디가 덮어씀)
 
         // 부메랑은 적을 관통하며 왕복하므로 일찍 소멸하지 않도록 다수 명중 허용
         if (boomerang) _remainingHits = Mathf.Max(_remainingHits, 999);
@@ -56,10 +55,6 @@ public class ProjectileBase : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // 자전(수리검 등): 진행과 무관하게 제자리에서 빙글빙글
-        if (_spinSpeed != 0f)
-            transform.Rotate(0f, 0f, _spinSpeed * Time.fixedDeltaTime);
-
         var rb = GetComponent<Rigidbody2D>();
 
         // 부메랑: 전진 후 플레이어에게 복귀
@@ -71,7 +66,6 @@ public class ProjectileBase : MonoBehaviour
                 Vector2 back = ((Vector2)_owner.position - (Vector2)transform.position).normalized * _speed;
                 Vector2 vb = Vector2.Lerp(rb.linearVelocity, back, 8f * Time.fixedDeltaTime);
                 rb.linearVelocity = vb;
-                transform.Rotate(0f, 0f, 720f * Time.fixedDeltaTime); // 회전하며 복귀
                 if (Vector2.Distance(transform.position, _owner.position) < 0.6f) Destroy(gameObject);
             }
             return;
