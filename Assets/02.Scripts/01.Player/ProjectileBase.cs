@@ -108,15 +108,7 @@ public class ProjectileBase : MonoBehaviour
 
         if (_explosionRadius > 0f)
         {
-            if (_liveTime < _armTime) return; // 무장 지연: 발사 직후엔 폭발 안 하고 지나감
-            // 적(트리거) 또는 벽(비트리거)에만 폭발. 아군 투사체·이펙트·픽업 등 다른 트리거는 무시(통과).
-            var emc = other.GetComponent<MonsterController>()
-                   ?? other.GetComponentInParent<MonsterController>();
-            if (emc != null || !other.isTrigger)
-            {
-                Explode();
-                Destroy(gameObject);
-            }
+            TryExplodeOn(other);
             return;
         }
 
@@ -137,6 +129,26 @@ public class ProjectileBase : MonoBehaviour
 
         if (--_remainingHits <= 0)
             Destroy(gameObject);
+    }
+
+    // 폭발형: 겹쳐 있는 동안에도 폭발 판정(무장 지연 중 진입해 Enter를 놓친 경우 대비)
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (_explosionRadius > 0f) TryExplodeOn(other);
+    }
+
+    // 적(트리거) 또는 벽(비트리거)에 닿고 무장이 끝났으면 폭발. 아군 투사체·이펙트·픽업은 무시.
+    private void TryExplodeOn(Collider2D other)
+    {
+        if (_liveTime < _armTime) return;
+        if (other.CompareTag("Player")) return;
+        var emc = other.GetComponent<MonsterController>()
+               ?? other.GetComponentInParent<MonsterController>();
+        if (emc != null || !other.isTrigger)
+        {
+            Explode();
+            Destroy(gameObject);
+        }
     }
 
     private void Explode()
