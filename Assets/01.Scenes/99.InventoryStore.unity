@@ -134,7 +134,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6641021
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3320,7 +3320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &919260887
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3632,7 +3632,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uACF5\uACA9\uB825"
+  m_Text: "\uAC00\uBC29 \uACF5\uACA9\uB825"
 --- !u!222 &1046227426
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4511,7 +4511,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC774\uB3D9\uC18D\uB3C4"
+  m_Text: "\uBC30\uCE58 \uBB34\uAE30 \uAC1C\uC218"
 --- !u!222 &1279534961
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4836,7 +4836,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uACF5\uACA9\uC18D\uB3C4"
+  m_Text: "\uBB34\uAE30 \uD3C9\uADE0 \uACF5\uACA9\uB825"
 --- !u!222 &1433140163
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5177,7 +5177,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uCE90\uB9AD\uD130 \uC2A4\uD0EF"
+  m_Text: "\uD604\uC7AC \uC2A4\uD0EF"
 --- !u!222 &1478337635
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6081,21 +6081,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45554f2c6c200174ba16d61bf25041a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatInfoPanelUI
-  _playerStats: {fileID: 0}
+  _loadoutBuilder: {fileID: 0}
   _analyzer: {fileID: 0}
-  _hpText: {fileID: 1109830816}
   _attackPowerText: {fileID: 494932585}
   _attackSpeedText: {fileID: 176504657}
   _moveSpeedText: {fileID: 2052373693}
+  _hpText: {fileID: 1109830816}
   _dpsText: {fileID: 0}
   _critChanceText: {fileID: 209144383}
   _hpRegenText: {fileID: 0}
-  _useMock: 1
-  _mockMaxHp: 100
-  _mockAtkMul: 1
-  _mockAtkSpdMul: 1
-  _mockMoveSpeed: 5
-  _mockCritChance: 0.05
+  _playerStats: {fileID: 0}
 --- !u!1 &1784275116
 GameObject:
   m_ObjectHideFlags: 0

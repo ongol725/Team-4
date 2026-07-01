@@ -2,106 +2,60 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 캐릭터 스탯 정보 패널.
-/// PlayerStats 컴포넌트를 참조해 기본 스탯 + 방어구 HP 재생을 표시한다.
-/// PlayerStats가 연결되지 않은 씬(인벤토리 상점 등)에서는 Mock 데이터로 동작한다.
+/// 가방 무기 스탯 패널.
+///  - 가방 공격력  : 가방 안 무기 공격력 총합 (WPN_ATK_SUM)
+///  - 무기 평균 공격력 : 가방 안 무기 공격력 평균 (WPN_ATK_AVG)
+///  - 배치 무기 개수 : 가방에 배치된 무기 수
+/// 값 텍스트 3개는 기존 씬 연결(_attackPowerText/_attackSpeedText/_moveSpeedText)을 재활용한다.
 /// </summary>
 public class StatInfoPanelUI : MonoBehaviour
 {
-    [Header("참조 (전투 씬에서 Player에 연결)")]
-    [SerializeField] private PlayerStats _playerStats;
-
-    [Header("참조 (인벤토리 씬 — 방어구 HP 반영용. 비우면 자동 탐색)")]
+    [Header("데이터 소스 (비우면 자동 탐색)")]
+    [SerializeField] private BattleLoadoutBuilder _loadoutBuilder;
     [SerializeField] private InventoryAnalyzer _analyzer;
 
-    [Header("값 텍스트")]
+    [Header("값 텍스트 (기존 행 재활용)")]
+    [SerializeField] private Text _attackPowerText;  // 가방 공격력(합)
+    [SerializeField] private Text _attackSpeedText;  // 무기 평균 공격력
+    [SerializeField] private Text _moveSpeedText;    // 배치 무기 개수
+
+    // 씬 연결 유지용(미사용) — 제거 시 인스펙터 참조가 끊기므로 남겨둔다.
     [SerializeField] private Text _hpText;
-    [SerializeField] private Text _attackPowerText;
-    [SerializeField] private Text _attackSpeedText;
-    [SerializeField] private Text _moveSpeedText;
-    [SerializeField] private Text _dpsText;          // 선택적 — 없어도 동작
+    [SerializeField] private Text _dpsText;
     [SerializeField] private Text _critChanceText;
-    [SerializeField] private Text _hpRegenText;      // 선택적 — 없어도 동작
-
-    [Header("Mock 데이터 (PlayerStats 미연결 시 표시)")]
-    [SerializeField] private bool  _useMock        = true;
-    [SerializeField] private int   _mockMaxHp      = 100;
-    [SerializeField] private float _mockAtkMul     = 1.0f;   // 캐릭터 공격 배율
-    [SerializeField] private float _mockAtkSpdMul  = 1.0f;   // 캐릭터 공속 배율
-    [SerializeField] private float _mockMoveSpeed  = 5.0f;
-    [SerializeField, Range(0f, 1f)]
-    private float _mockCritChance = 0.05f;
-
-    // ─────────────────────────────────────────────────────────────
+    [SerializeField] private Text _hpRegenText;
+    [SerializeField] private PlayerStats _playerStats;
 
     private void OnEnable()
     {
-        if (_playerStats != null)
-            _playerStats.OnStatsChanged += Refresh;
+        if (_loadoutBuilder == null) _loadoutBuilder = FindFirstObjectByType<BattleLoadoutBuilder>();
+        if (_loadoutBuilder != null) _loadoutBuilder.OnLoadoutReady += OnLoadout;
 
-        // 인벤토리 씬: 방어구를 놓거나 뺄 때(스냅샷 변경) 패널을 갱신하도록 구독
         if (_analyzer == null) _analyzer = FindFirstObjectByType<InventoryAnalyzer>();
-        if (_analyzer != null) _analyzer.OnSnapshotChanged += OnSnapshotChanged;
+        if (_analyzer != null) _analyzer.OnSnapshotChanged += OnSnapshot;
 
         Refresh();
     }
 
     private void OnDisable()
     {
-        if (_playerStats != null)
-            _playerStats.OnStatsChanged -= Refresh;
-        if (_analyzer != null)
-            _analyzer.OnSnapshotChanged -= OnSnapshotChanged;
+        if (_loadoutBuilder != null) _loadoutBuilder.OnLoadoutReady -= OnLoadout;
+        if (_analyzer != null) _analyzer.OnSnapshotChanged -= OnSnapshot;
     }
 
-    private void OnSnapshotChanged(InventorySnapshot _) => Refresh();
+    private void OnLoadout(BattleLoadout _) => Refresh();
+    private void OnSnapshot(InventorySnapshot _) => Refresh();
 
-    /// <summary>외부(InventoryAnalyzer.OnSnapshotChanged 등)에서 갱신 요청 시 호출한다.</summary>
+    /// <summary>가방 무기 스탯을 다시 계산해 표시한다.</summary>
     public void Refresh()
     {
-        // 선택된 캐릭터(없으면 전사 폴백)를 읽음
-        SO_CharacterData charData = CharacterManager.GetSelectedOrDefault();
+        var lo  = _loadoutBuilder != null ? _loadoutBuilder.Build() : null;
+        int sum = lo != null ? lo.GetScaledBase(ScalingStatType.WPN_ATK_SUM) : 0;
+        int avg = lo != null ? lo.GetScaledBase(ScalingStatType.WPN_ATK_AVG) : 0;
+        int cnt = lo != null ? lo.Weapons.Count : 0;
 
-        if (_playerStats != null)
-        {
-            // HP·재생은 PlayerStats(방어구 보너스 포함), 배율은 CharacterManager가 있으면 우선 사용
-            float atkMul    = charData != null ? charData.attackMultiplier      : _playerStats.attackMultiplier;
-            float atkSpdMul = charData != null ? charData.attackSpeedMultiplier : _playerStats.attackSpeedMultiplier;
-            float moveSpd   = charData != null ? charData.moveSpeed             : _playerStats.moveSpeed;
-            float crit      = charData != null ? charData.critChance            : _playerStats.critChance;
-
-            Apply(_playerStats.CurrentHp, _playerStats.maxHp,
-                  atkMul, atkSpdMul, moveSpd, crit, _playerStats.hpRegen);
-        }
-        else if (charData != null)
-        {
-            // PlayerStats 미연결 씬(인벤토리/상점): 캐릭터 기본 HP + 방어구 hpBonus를 합산해 표시
-            var snap = _analyzer != null ? (_analyzer.LatestSnapshot ?? _analyzer.Analyze()) : null;
-            int armorHp = snap != null ? snap.TotalHpBonus : 0;
-            int regen   = snap != null ? snap.TotalHpRegen : 0;
-            int maxHp   = charData.maxHp + armorHp;
-
-            Apply(maxHp, maxHp,
-                  charData.attackMultiplier, charData.attackSpeedMultiplier,
-                  charData.moveSpeed, charData.critChance, regen);
-        }
-        else if (_useMock)
-        {
-            Apply(_mockMaxHp, _mockMaxHp,
-                  _mockAtkMul, _mockAtkSpdMul,
-                  _mockMoveSpeed, _mockCritChance);
-        }
-    }
-
-    private void Apply(int hp, int maxHp, float atk, float atkSpd, float moveSpd, float crit, int hpRegen = 0)
-    {
-        float dps = atk * atkSpd * 10f;
-        if (_hpText          != null) _hpText.text          = $"{hp} / {maxHp}";
-        if (_attackPowerText != null) _attackPowerText.text  = $"×{atk:F1}";
-        if (_attackSpeedText != null) _attackSpeedText.text  = $"×{atkSpd:F1}";
-        if (_moveSpeedText   != null) _moveSpeedText.text    = moveSpd.ToString("F1");
-        if (_dpsText         != null) _dpsText.text          = $"{dps:F1}";
-        if (_critChanceText  != null) _critChanceText.text   = $"{crit * 100f:F1}%";
-        if (_hpRegenText     != null) _hpRegenText.text      = hpRegen > 0 ? $"+{hpRegen}/10s" : "0";
+        if (_attackPowerText != null) _attackPowerText.text = sum.ToString();
+        if (_attackSpeedText != null) _attackSpeedText.text = avg.ToString();
+        if (_moveSpeedText   != null) _moveSpeedText.text   = cnt.ToString();
     }
 }
