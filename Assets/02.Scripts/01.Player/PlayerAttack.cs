@@ -692,9 +692,11 @@ public class PlayerAttack : MonoBehaviour
             go.transform.localScale *= scaleMult;
 
         float spin = wd.itemID == "WPN_016" ? 1080f : 0f; // 수리검: 비행 중 자전(초당 3바퀴)
+        float rotOff = wd.itemID == "WPN_001" ? 90f : 0f;  // 단검: 스프라이트 90° 회전해서 등장
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
-                  homing: homing, boomerang: boomerang, owner: boomerang ? transform : null, spinSpeed: spin);
+                  homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
+                  spinSpeed: spin, rotationOffset: rotOff);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,

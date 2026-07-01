@@ -26,7 +26,7 @@ public class ProjectileBase : MonoBehaviour
 
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
         float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
-        bool boomerang = false, Transform owner = null, float spinSpeed = 0f)
+        bool boomerang = false, Transform owner = null, float spinSpeed = 0f, float rotationOffset = 0f)
     {
         _spinSpeed       = spinSpeed;
         _damage          = damage;
@@ -45,7 +45,7 @@ public class ProjectileBase : MonoBehaviour
         rb.freezeRotation = false;
         rb.linearVelocity = dir.normalized * speed;
 
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + rotationOffset; // 무기별 스프라이트 회전 보정
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         // 부메랑은 적을 관통하며 왕복하므로 일찍 소멸하지 않도록 다수 명중 허용

@@ -28,7 +28,7 @@ MonoBehaviour:
   lv5AttackStyle: "2\uAC1C \uD22C\uCCA9"
   projectile: {fileID: 0}
   projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
-  projectileSpeed: 10
+  projectileSpeed: 30
   range: 3
   maxTargets: 1
   attackFrames:
