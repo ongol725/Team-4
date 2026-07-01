@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ACC_003
   itemName: "은 반지"
   itemDescription: "인접 무기 등급 강화"
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 4153824395853626816, guid: 475978331152df640bbba18c62a3bcde, type: 3}
   rarity: 3
   grade: 1
   cost: 10

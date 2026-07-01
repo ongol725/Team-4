@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ACC_006
   itemName: "다이아몬드 반지"
   itemDescription: "인접 무기 공격력 대폭 증가"
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 8223180712976237174, guid: a69c231074a24834996b1c373d31596c, type: 3}
   rarity: 3
   grade: 1
   cost: 10

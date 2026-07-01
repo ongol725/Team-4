@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ACC_004
   itemName: "금 반지"
   itemDescription: "인접 무기 공격 속도 대폭 증가"
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -2753592389750927348, guid: 104ccbad28ec80542903a1ecadac21ff, type: 3}
   rarity: 3
   grade: 1
   cost: 10

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ACC_002
   itemName: "뼈 반지"
   itemDescription: "인접 무기에 맞은 적 확률적으로 기절"
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -4018097962248520016, guid: a9fcd8fa2eeb24f40a69f71f15318832, type: 3}
   rarity: 3
   grade: 1
   cost: 10

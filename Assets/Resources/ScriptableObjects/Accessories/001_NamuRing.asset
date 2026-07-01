@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: ACC_001
   itemName: "나무 반지"
   itemDescription: "인접 무기에 맞은 적 이동속도 감소"
-  itemImage: {fileID: 0}
+  itemImage: {fileID: -619568880229648131, guid: 1923c7b60c2facc4a835f0bf467677a2, type: 3}
   rarity: 3
   grade: 1
   cost: 10
