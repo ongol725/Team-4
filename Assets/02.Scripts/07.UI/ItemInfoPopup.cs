@@ -143,7 +143,9 @@ public class ItemInfoPopup : MonoBehaviour
     {
         _itemIcon.sprite = data.itemImage;
         _itemIcon.color  = data.itemImage != null ? Color.white : Color.clear;
-        _nameText.text   = data.itemName;
+        _nameText.text   = (data is SO_InventoryBlockData)
+            ? data.itemName
+            : $"{data.itemName}  Lv.{gi + 1}";   // 기획서: 이름 옆 레벨 표기
 
         if (data is SO_InventoryBlockData)
         {
@@ -185,8 +187,11 @@ public class ItemInfoPopup : MonoBehaviour
             }
             if (!string.IsNullOrEmpty(wd.attackStyle))
                 sb.AppendLine($"공격 방식  {wd.attackStyle}");
-            if (gi >= 4 && !string.IsNullOrEmpty(wd.lv5AttackStyle))
-                sb.AppendLine($"5단계 효과  {wd.lv5AttackStyle}");
+            if (!string.IsNullOrEmpty(wd.lv5AttackStyle))
+            {
+                if (gi >= 4) sb.AppendLine($"5단계 효과  {wd.lv5AttackStyle}");
+                else         sb.AppendLine("[잠금] 5레벨 달성 시 특수 능력 개방");  // 4레벨 이하 예고
+            }
         }
         else if (data is SO_ArmorData ad)
         {
@@ -242,11 +247,25 @@ public class ItemInfoPopup : MonoBehaviour
         _panelRT.sizeDelta = new Vector2(270f, 0f);
 
         var bg = panelGO.AddComponent<Image>();
-        bg.color = new Color(0.06f, 0.06f, 0.10f, 0.95f);
-
-        var outline          = panelGO.AddComponent<Outline>();
-        outline.effectColor  = new Color(0.38f, 0.38f, 0.50f, 0.9f);
-        outline.effectDistance = new Vector2(1f, -1f);
+        Sprite containerSprite = null;
+        // ponytail: 에디터에선 직접 로드. 빌드 배포 시 Popup_Container를 Resources로 옮기고 Resources.Load로 교체 필요.
+#if UNITY_EDITOR
+        containerSprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(
+            "Assets/04.Images/01.UI/05.ShopUI/Popup_Container.png");
+#endif
+        if (containerSprite != null)
+        {
+            bg.sprite = containerSprite;
+            bg.type   = Image.Type.Sliced;
+            bg.color  = Color.white;
+        }
+        else
+        {
+            bg.color = new Color(0.06f, 0.06f, 0.10f, 0.95f);
+            var outline          = panelGO.AddComponent<Outline>();
+            outline.effectColor  = new Color(0.38f, 0.38f, 0.50f, 0.9f);
+            outline.effectDistance = new Vector2(1f, -1f);
+        }
 
         var vlg = panelGO.AddComponent<VerticalLayoutGroup>();
         vlg.padding = new RectOffset(10, 10, 10, 10);

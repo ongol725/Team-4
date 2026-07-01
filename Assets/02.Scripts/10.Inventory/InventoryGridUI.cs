@@ -20,6 +20,9 @@ public class InventoryGridUI : MonoBehaviour
     [SerializeField] private int _cellSize = 50;
     [SerializeField] private int _cellGap  = 2;
 
+    [Tooltip("셀 배경 스프라이트(없으면 단색). 지정 시 상태 색이 tint로 적용됨")]
+    [SerializeField] private Sprite _cellSprite;
+
     [Header("셀 색상")]
     [SerializeField] private Color _emptyColor     = new Color(0.18f, 0.18f, 0.18f, 0.90f);
     [SerializeField] private Color _occupiedColor  = new Color(0.35f, 0.35f, 0.35f, 0.90f);
@@ -88,6 +91,7 @@ public class InventoryGridUI : MonoBehaviour
 
             bool locked = !_grid.InActiveArea(new Vector2Int(r, c));
             var img     = go.GetComponent<Image>();
+            if (_cellSprite != null) { img.sprite = _cellSprite; img.type = Image.Type.Simple; }
             img.color   = locked ? _lockedColor : _emptyColor;
 
             var outline = go.AddComponent<Outline>();
