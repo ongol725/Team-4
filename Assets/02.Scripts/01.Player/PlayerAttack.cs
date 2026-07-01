@@ -615,13 +615,14 @@ public class PlayerAttack : MonoBehaviour
         }
         StartCoroutine(ShowMeleeFlash(entry.data, dir, range, flashScale, MeleeMotionType.Thrust));
 
-        // 5단계: 찌르기와 함께 검기(투사체)를 상·하·좌·우 4방향으로 방출(관통)
+        // 5단계: 찌르기와 함께 검기(SwordWave 투사체)를 상·하·좌·우 4방향으로 방출(관통)
         if (entry.effectiveGrade >= 4)
         {
-            SpawnProjectile(entry, Vector2.up,    pierce: 99);
-            SpawnProjectile(entry, Vector2.down,  pierce: 99);
-            SpawnProjectile(entry, Vector2.left,  pierce: 99);
-            SpawnProjectile(entry, Vector2.right, pierce: 99);
+            var wave = entry.data.auxProjectileFrames;
+            SpawnProjectile(entry, Vector2.up,    pierce: 99, overrideFrames: wave);
+            SpawnProjectile(entry, Vector2.down,  pierce: 99, overrideFrames: wave);
+            SpawnProjectile(entry, Vector2.left,  pierce: 99, overrideFrames: wave);
+            SpawnProjectile(entry, Vector2.right, pierce: 99, overrideFrames: wave);
         }
     }
 
@@ -725,7 +726,7 @@ public class PlayerAttack : MonoBehaviour
     private void SpawnProjectile(WeaponLoadoutEntry entry, Vector2 dir,
         float dmgMult = 1f, float spdMult = 1f, float scaleMult = 1f,
         int pierce = 0, float knockbackForce = 0f, bool homing = false, bool boomerang = false,
-        float explosionRadius = 0f)
+        float explosionRadius = 0f, Sprite[] overrideFrames = null)
     {
         var   wd       = entry.data;
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
@@ -736,11 +737,13 @@ public class PlayerAttack : MonoBehaviour
         if (wd.projectileData != null) maxHits += wd.projectileData.pierceCount;
         maxHits += pierce;
 
-        var projFrames = ValidFrames(wd.attackFrames);
-        // A그룹 투척(단검·수리검·부메랑): 상점 정적 아이콘이 곧 투사체가 된다.
-        if (UsesShopIcon(wd.itemID) && wd.itemImage != null)
+        // overrideFrames(예: 할버드 검기 SwordWave)가 있으면 그 스프라이트로, 아니면 무기 기본 프레임/아이콘.
+        bool useOverride = overrideFrames != null && ValidFrames(overrideFrames).Length > 0;
+        var projFrames = useOverride ? ValidFrames(overrideFrames) : ValidFrames(wd.attackFrames);
+        // A그룹 투척(단검·수리검·부메랑): 상점 정적 아이콘이 곧 투사체가 된다. (오버라이드 시 제외)
+        if (!useOverride && UsesShopIcon(wd.itemID) && wd.itemImage != null)
             projFrames = new[] { wd.itemImage };
-        GameObject go = wd.projectile != null
+        GameObject go = wd.projectile != null && !useOverride
             ? Instantiate(wd.projectile, transform.position, Quaternion.identity)
             : (projFrames.Length > 0
                 ? BuildAnimatedGO(projFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
@@ -751,8 +754,8 @@ public class PlayerAttack : MonoBehaviour
 
         if (scaleMult != 1f)
             go.transform.localScale *= scaleMult;
-        // 상점 아이콘(A그룹) 투척: 아이콘이 커서 크기 1/3로 축소(콜라이더 동반 → 피격범위도)
-        if (UsesShopIcon(wd.itemID))
+        // 상점 아이콘(A그룹) 투척: 아이콘이 커서 크기 1/3로 축소. (검기 등 오버라이드 투사체는 제외)
+        if (!useOverride && UsesShopIcon(wd.itemID))
             go.transform.localScale *= 1f / 3f;
 
         float spin = wd.itemID == "WPN_010" ? 720f : 0f; // 부메랑: 비행 중 자전(초당 2바퀴)

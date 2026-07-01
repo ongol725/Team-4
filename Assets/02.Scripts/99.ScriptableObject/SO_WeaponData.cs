@@ -31,6 +31,8 @@ public class SO_WeaponData : SO_ItemData
     public Sprite[] attackFrames;
     [Tooltip("공격 애니메이션 재생 속도(FPS)")]
     public float    attackFps = 12f;
+    [Tooltip("보조 투사체(예: 할버드 5단계 검기) 프레임. 비우면 미사용")]
+    public Sprite[] auxProjectileFrames;
 
     [Header("근접 모션 (플레이어 중심 외부 회전, 무기는 12시 기준)")]
     [Tooltip("Swing=호로 휘두르기 / Thrust=앞으로 찌르기. 무기별로 지정(기본 Swing)")]

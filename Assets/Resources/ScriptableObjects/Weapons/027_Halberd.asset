@@ -54,6 +54,15 @@ MonoBehaviour:
   - {fileID: -6700393083800365136, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
   - {fileID: 8852837105975090037, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
   attackFps: 12
+  auxProjectileFrames:
+  - {fileID: 109942617, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1301186219, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -562498353, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 502116684, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -381104040, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1707099930, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 1109029539, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1932667270, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
   meleeMotion: 0
   meleeSwingAngle: 90
   meleeReach: 1.6
