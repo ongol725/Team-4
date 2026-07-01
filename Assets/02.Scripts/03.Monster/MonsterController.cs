@@ -754,6 +754,9 @@ namespace BagSurvivor.Monster
         public void ApplyStun(float duration)
         {
             if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 스턴 면역
+            if (Time.time < _stunReadyTime) return;   // 적별 재적용 쿨다운(연사 무기 영구기절 방지)
+            _stunReadyTime = Time.time + 2f;
             if (_stunCo != null) StopCoroutine(_stunCo);
             _stunCo = StartCoroutine(StunRoutine(duration));
         }
@@ -771,6 +774,7 @@ namespace BagSurvivor.Monster
         public void ApplySlow(float multiplier, float duration)
         {
             if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 슬로우 면역
             if (_slowCo != null) StopCoroutine(_slowCo);
             _slowCo = StartCoroutine(SlowRoutine(Mathf.Clamp01(multiplier), duration));
         }

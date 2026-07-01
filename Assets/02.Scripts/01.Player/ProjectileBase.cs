@@ -27,11 +27,18 @@ public class ProjectileBase : MonoBehaviour
     private Sprite[]  _explosionFrames; // 폭발 이펙트 프레임(폭발 반경에 맞춰 1회 재생)
     private float     _explosionFps = 30f;
 
+    // 반지 인접 기믹(피격 시): 뼈=스턴 확률, 나무=슬로우 지속. 일반몹 여부·쿨다운은 MonsterController가 판정.
+    private float _ringStunChance;
+    private float _ringSlowSec;
+
     public void Init(Vector2 dir, int damage, float speed, float lifetime, int maxHits,
         float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
         bool boomerang = false, Transform owner = null, float spinSpeed = 0f, float rotationOffset = 0f,
-        float armTime = 0f, Sprite[] explosionFrames = null, float explosionFps = 30f)
+        float armTime = 0f, Sprite[] explosionFrames = null, float explosionFps = 30f,
+        float ringStunChance = 0f, float ringSlowSec = 0f)
     {
+        _ringStunChance  = ringStunChance;
+        _ringSlowSec     = ringSlowSec;
         _armTime         = armTime;
         _liveTime        = 0f;
         _explosionFrames = explosionFrames;
@@ -130,6 +137,7 @@ public class ProjectileBase : MonoBehaviour
         Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
         mc.TakeDamage(_damage, _knockbackForce, kbDir);
         _onHit?.Invoke(mc);
+        ApplyRingStatus(mc);
 
         if (--_remainingHits <= 0)
             Destroy(gameObject);
@@ -171,7 +179,16 @@ public class ProjectileBase : MonoBehaviour
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(_damage, _knockbackForce, kbDir);
             _onHit?.Invoke(mc);
+            ApplyRingStatus(mc);
         }
+    }
+
+    // 반지 인접 기믹 적용(스턴 확률 판정 + 슬로우). 등급 면역·쿨다운은 MonsterController가 처리.
+    private void ApplyRingStatus(MonsterController mc)
+    {
+        if (mc == null || mc.IsDead) return;
+        if (_ringStunChance > 0f && Random.value < _ringStunChance) mc.ApplyStun(1f);
+        if (_ringSlowSec > 0f) mc.ApplySlow(0.25f, _ringSlowSec);
     }
 
     // 폭발 지점에 이펙트를 폭발 지름(반경×2)에 맞춰 1회 재생(별도 오브젝트라 투사체 소멸 후에도 남음).

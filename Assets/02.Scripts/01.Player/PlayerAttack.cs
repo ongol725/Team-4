@@ -310,6 +310,7 @@ public class PlayerAttack : MonoBehaviour
                             if (mc == null || mc.IsDead || mc == hit) continue;
                             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)hit.transform.position).normalized;
                             mc.TakeDamage(splashDmg, 0f, kbDir);
+                            TryRingOnHit(entry, mc);
                         }
                     }
                 }
@@ -570,6 +571,14 @@ public class PlayerAttack : MonoBehaviour
         ApplyMeleeFan(entry, fixedDir.normalized, range, angleDeg, knockback, flashScale);
     }
 
+    // 반지 인접 기믹(근접 피격 시): 뼈=확률 스턴, 나무=슬로우. 등급 면역·쿨다운은 MonsterController가 처리.
+    private void TryRingOnHit(WeaponLoadoutEntry entry, MonsterController mc)
+    {
+        if (mc == null || mc.IsDead) return;
+        if (entry.ringStunChance > 0f && UnityEngine.Random.value < entry.ringStunChance) mc.ApplyStun(1f);
+        if (entry.ringSlowSec > 0f) mc.ApplySlow(0.25f, entry.ringSlowSec);
+    }
+
     private void ApplyMeleeFan(WeaponLoadoutEntry entry, Vector2 facing,
         float range, float angleDeg, float knockback, float flashScale, float visualRange = -1f)
     {
@@ -585,6 +594,7 @@ public class PlayerAttack : MonoBehaviour
         {
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(meleeDmg, knockback, kbDir);
+            TryRingOnHit(entry, mc);
         }
         // 표시 반경을 판정 반경과 분리 가능(visualRange). 스윙 호 각도는 데미지 부채꼴 각도(angleDeg)와 일치.
         StartCoroutine(ShowMeleeFlash(entry.data, facing, visualRange > 0f ? visualRange : range, flashScale, swingArc: angleDeg));
@@ -613,6 +623,7 @@ public class PlayerAttack : MonoBehaviour
         {
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(dmg, kb, kbDir);
+            TryRingOnHit(entry, mc);
         }
         StartCoroutine(ShowMeleeFlash(entry.data, dir, range, flashScale, MeleeMotionType.Thrust));
 
@@ -640,6 +651,7 @@ public class PlayerAttack : MonoBehaviour
         if (target != null)
         {
             target.TakeDamage(ScaleDamage(entry.attackPower), _meleeKnockback, dir);
+            TryRingOnHit(entry, target);
 
             if (splash)
             {
@@ -648,6 +660,7 @@ public class PlayerAttack : MonoBehaviour
                     if (mc == target) continue;
                     Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
                     mc.TakeDamage(ScaleDamage(entry.attackPower, 0.5f), _meleeKnockback * 0.5f, kbDir);
+                    TryRingOnHit(entry, mc);
                 }
             }
         }
@@ -772,7 +785,8 @@ public class PlayerAttack : MonoBehaviour
                   explosionRadius: explosionRadius,
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
                   spinSpeed: spin, rotationOffset: rotOff, armTime: armTime,
-                  explosionFrames: wd.explosionFrames);
+                  explosionFrames: wd.explosionFrames,
+                  ringStunChance: entry.ringStunChance, ringSlowSec: entry.ringSlowSec);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,
@@ -792,7 +806,8 @@ public class PlayerAttack : MonoBehaviour
         go.transform.position = transform.position;
 
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
-        proj.Init(dir, damage, rawSpeed, lifetime, 1, explosionRadius: explodeRadius);
+        proj.Init(dir, damage, rawSpeed, lifetime, 1, explosionRadius: explodeRadius,
+                  ringStunChance: entry.ringStunChance, ringSlowSec: entry.ringSlowSec);
     }
 
     /// <summary>
@@ -830,11 +845,11 @@ public class PlayerAttack : MonoBehaviour
         Destroy(go, dur + 0.1f);
 
         // 원이 형성되는 시점(애니 60%)에 1회 범위 피해
-        StartCoroutine(DelayedExplodeAt(pos, explodeRadius, damage, dur * 0.6f));
+        StartCoroutine(DelayedExplodeAt(entry, pos, explodeRadius, damage, dur * 0.6f));
     }
 
     /// <summary>delay초 후 pos 중심 radius 내 모든 적에게 1회 범위 피해를 적용한다.</summary>
-    private IEnumerator DelayedExplodeAt(Vector3 pos, float radius, int damage, float delay)
+    private IEnumerator DelayedExplodeAt(WeaponLoadoutEntry entry, Vector3 pos, float radius, int damage, float delay)
     {
         yield return new WaitForSeconds(delay);
         var hits = _enemyLayer == 0
@@ -846,6 +861,7 @@ public class PlayerAttack : MonoBehaviour
             if (mc == null || mc.IsDead) continue;
             Vector2 kb = ((Vector2)mc.transform.position - (Vector2)pos).normalized;
             mc.TakeDamage(damage, 0f, kb);
+            TryRingOnHit(entry, mc);
         }
     }
 
@@ -967,7 +983,10 @@ public class PlayerAttack : MonoBehaviour
             {
                 int dmg = ScaleDamage(entry.attackPower);
                 foreach (var mc in FindInFan(faceDir, fanRange, fanAngle))
+                {
                     mc.TakeDamage(dmg, 0f, Vector2.zero);
+                    TryRingOnHit(entry, mc);
+                }
                 tickTimer = tick;
             }
             yield return null;
