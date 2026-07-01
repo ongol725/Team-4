@@ -27,6 +27,8 @@ public class PlayerAttack : MonoBehaviour
     private bool                     _paused;
     private bool                     _inCombatZone;
     private bool                     _boomerangGoLeft; // WPN_010 좌우 방향 토글
+    private GameObject               _flameVisual;     // WPN_026 지속 불꽃 비주얼(하나만 유지)
+    private bool                     _flameActive;     // WPN_026 채널 중복 시작 방지
 
     // ─────────────────────────────────────────────────────────────
 
@@ -109,6 +111,9 @@ public class PlayerAttack : MonoBehaviour
         // _loops 밖에서 기동된 서브 코루틴도 함께 중단
         StopAllCoroutines();
         _loops.Clear();
+        if (_flameVisual != null) Destroy(_flameVisual); // 화염방사기 지속 불꽃 정리
+        _flameVisual = null;
+        _flameActive = false;
 
         Debug.Log($"[PlayerAttack] RestartLoops — inCombat={_inCombatZone}, paused={_paused}, loadout={_currentLoadout != null}, weapons={_currentLoadout?.Weapons.Count ?? 0}");
         if (!_inCombatZone || _paused || _currentLoadout == null || _currentLoadout.Weapons.Count == 0) return;
@@ -246,12 +251,10 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
 
-                // 화염방사기: 채널형 — 일정 시간 동안 부채꼴 근접 도트(쿨타임은 무기 공격속도로)
+                // 화염방사기: 전투 중 계속 켜지는 지속 분사(도트). 이미 켜져 있으면 중복 시작 안 함.
                 if (id == "WPN_026")
                 {
-                    float dur  = g5 ? 5f : 3f;     // 분사 지속(5단계 5초)
-                    float tick = g5 ? 0.1f : 0.5f; // 도트 주기(5단계 0.1초)
-                    StartCoroutine(FlamethrowerChannel(entry, dur, tick, 120f, 4f));
+                    if (!_flameActive) StartCoroutine(FlamethrowerChannel(entry, 120f, 4f));
                     break;
                 }
 
@@ -850,28 +853,45 @@ public class PlayerAttack : MonoBehaviour
     }
 
     // 화염방사기: dur초 동안 tick마다 전방 부채꼴 도트 피해 + 분사 비주얼.
-    private IEnumerator FlamethrowerChannel(WeaponLoadoutEntry entry, float dur, float tick, float fanAngle, float fanRange)
+    // 화염방사기: 전투 중 지속 분사. 불꽃 비주얼 1개를 유지(루프)하며 플레이어를 따라 방향을 향하고,
+    // tick마다 부채꼴 도트 데미지. 전투 종료/일시정지 시 RestartLoops가 코루틴 중단 + 불꽃 정리한다.
+    private IEnumerator FlamethrowerChannel(WeaponLoadoutEntry entry, float fanAngle, float fanRange)
     {
-        var   wait = new WaitForSeconds(tick);
-        float elapsed = 0f;
-        float visualTimer = 0f;
-        while (elapsed < dur)
+        _flameActive = true;
+        var   wd   = entry.data;
+        bool  g5   = entry.effectiveGrade >= 4;
+        float tick = g5 ? 0.1f : 0.5f; // 도트 주기(5단계 0.1초)
+
+        // 지속 불꽃 비주얼(루프). 플레이어 중심 피벗 자식으로 앞쪽에 배치.
+        var af = ValidFrames(wd.attackFrames);
+        Sprite[] frames = af.Length > 0 ? af : (wd.itemImage != null ? new[] { wd.itemImage } : null);
+        var pivot = new GameObject($"FlamePivot_{wd.itemName}");
+        _flameVisual = pivot;
+        if (frames != null)
+        {
+            float fps  = af.Length > 1 ? af.Length / 0.5f : 12f; // 0.5초에 1회전 루프
+            float size = 2f * fanRange;
+            var   vis  = BuildAnimatedGO(frames, fps, $"Flame_{wd.itemName}", size, loop: true, withBody: false);
+            vis.transform.SetParent(pivot.transform, false);
+            vis.transform.localPosition = new Vector3(0f, size * 0.5f + 0.6f, 0f); // 캐릭터 앞쪽으로
+        }
+
+        float tickTimer = 0f;
+        while (true) // 전투 종료/일시정지 시 RestartLoops의 StopAllCoroutines로 중단됨
         {
             Vector2 faceDir = FacingDir(fanRange);
-            int     dmg     = ScaleDamage(entry.attackPower);
-            foreach (var mc in FindInFan(faceDir, fanRange, fanAngle))
-                mc.TakeDamage(dmg, 0f, Vector2.zero);
+            pivot.transform.position = transform.position; // 매 프레임 플레이어 추적
+            pivot.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(faceDir.y, faceDir.x) * Mathf.Rad2Deg - 90f);
 
-            // 분사 비주얼은 과도한 생성을 막기 위해 약 0.25초 간격으로만 갱신
-            visualTimer -= tick;
-            if (visualTimer <= 0f)
+            tickTimer -= Time.deltaTime;
+            if (tickTimer <= 0f)
             {
-                StartCoroutine(ShowMeleeFlash(entry.data, faceDir, fanRange));
-                visualTimer = 0.25f;
+                int dmg = ScaleDamage(entry.attackPower);
+                foreach (var mc in FindInFan(faceDir, fanRange, fanAngle))
+                    mc.TakeDamage(dmg, 0f, Vector2.zero);
+                tickTimer = tick;
             }
-
-            yield return wait;
-            elapsed += tick;
+            yield return null;
         }
     }
 
