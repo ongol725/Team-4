@@ -158,8 +158,8 @@ public static class BossSandboxAnimSetup
         // 기준 = 2페이즈 이동
         string refPng = pngs.FirstOrDefault(p => { var n = Path.GetFileName(p); return n.Contains("2페이즈") && n.Contains("이동"); });
         if (refPng == null) { Debug.LogError("[BossAnim] 기준 '2페이즈 이동' 파일을 못 찾음"); return; }
-        int refH = ContentHeight(refPng);
-        if (refH <= 0) { Debug.LogError("[BossAnim] 기준 콘텐츠 높이 측정 실패"); return; }
+        float refSize = ContentSize(refPng);
+        if (refSize <= 0f) { Debug.LogError("[BossAnim] 기준 콘텐츠 크기 측정 실패"); return; }
         // 기준 표시 크기를 PPU 상수(256)로 고정 — 기준 시트의 '현재' PPU를 쓰면
         // 이전 실행 결과에 따라 목표 크기가 매번 흔들려 통일이 수렴하지 않는다.
         float refPpu = PPU;
@@ -167,52 +167,55 @@ public static class BossSandboxAnimSetup
         int done = 0;
         foreach (string png in pngs)
         {
-            int h = ContentHeight(png);
-            if (h <= 0) { Debug.LogWarning("[BossAnim] 콘텐츠 높이 측정 실패: " + Path.GetFileName(png)); continue; }
+            float size = ContentSize(png);
+            if (size <= 0f) { Debug.LogWarning("[BossAnim] 콘텐츠 크기 측정 실패: " + Path.GetFileName(png)); continue; }
             var imp = AssetImporter.GetAtPath(png) as TextureImporter;
             if (imp == null) continue;
-            float ppu = refPpu * h / refH;                 // 높이 비례 → 같은 표시 크기
+            float ppu = refPpu * size / refSize;           // 면적 비례 → 같은 표시 크기
             if (Mathf.Abs(imp.spritePixelsPerUnit - ppu) < 0.05f) continue;
             imp.spritePixelsPerUnit = ppu;                 // PPU만 변경(슬라이스 보존)
             imp.SaveAndReimport();
             done++;
-            Debug.Log($"[BossAnim] {Path.GetFileName(png)}: 콘텐츠H={h} → PPU={ppu:F1}");
+            Debug.Log($"[BossAnim] {Path.GetFileName(png)}: 콘텐츠크기={size:F0} → PPU={ppu:F1}");
         }
-        Debug.Log($"[BossAnim] 크기 통일 완료 — {done}개 PPU 조정(2p 이동={refH}px 기준). " +
+        Debug.Log($"[BossAnim] 크기 통일 완료 — {done}개 PPU 조정(2p 이동={refSize:F0} 기준, 면적 방식). " +
                   "이펙트 큰 시트(포효/탄막/늑대/햘퀴기/석상)는 보스 몸이 작아 보이면 개별 조정 요청하세요.");
     }
 
-    /// <summary>PNG를 직접 디코드해 '프레임별' 비투명 콘텐츠 높이(px)의 중앙값을 반환.
-    /// 시트 전체를 한 번에 재면 팔을 가장 뻗은 프레임에 휘둘려 몸통 크기를 왜곡한다.
-    /// 프레임마다 재고 중앙값을 취해 대표 캐릭터 높이를 얻는다 — 이 값으로 PPU를 잡아야
-    /// 모션이 바뀌어도 몸통 크기가 실제로 통일된다.</summary>
-    private static int ContentHeight(string path)
+    /// <summary>PNG를 직접 디코드해 '프레임별' 비투명 픽셀 면적의 제곱근(√area)의 중앙값을 반환.
+    /// 세로 bbox 높이는 포즈에 취약하다(서있으면 큼, 웅크리거나 눕는 돌진/점프/착지는 작음 →
+    /// 같은 캐릭터인데도 포즈 때문에 크기가 완전히 다르게 측정됨). 그려진 픽셀 '면적'은
+    /// 포즈가 바뀌어도(웅크림/돌진/점프) 거의 일정하므로 몸통 크기의 대리값으로 더 안정적이다.
+    /// 프레임마다 재고 중앙값을 취해 이펙트가 낀 프레임(예: 기모으기 오라)에 휘둘리지 않게 한다.</summary>
+    private static float ContentSize(string path)
     {
         byte[] bytes = File.ReadAllBytes(path);
         var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 0; }
+        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 0f; }
         int w = tex.width, h = tex.height;
         var px = tex.GetPixels32();
         int cols = FrameCount(w, h);
         int cw = Mathf.Max(1, w / cols);
+        const int stride = 2;
 
-        var heights = new List<int>();
+        var sizes = new List<float>();
         for (int f = 0; f < cols; f++)
         {
             int x0 = f * cw, x1 = Mathf.Min(w, x0 + cw);
-            int minY = int.MaxValue, maxY = int.MinValue;
-            for (int y = 0; y < h; y++)
+            long count = 0;
+            for (int y = 0; y < h; y += stride)
             {
-                int row = y * w; bool any = false;
-                for (int x = x0; x < x1; x += 2) { if (px[row + x].a > 10) { any = true; break; } }
-                if (any) { if (y < minY) minY = y; if (y > maxY) maxY = y; }
+                int row = y * w;
+                for (int x = x0; x < x1; x += stride)
+                    if (px[row + x].a > 10) count++;
             }
-            if (maxY >= minY) heights.Add(maxY - minY + 1);
+            float area = count * stride * stride; // 샘플링 보정(2px 간격 → ×4)
+            if (area > 0f) sizes.Add(Mathf.Sqrt(area));
         }
         Object.DestroyImmediate(tex);
-        if (heights.Count == 0) return 0;
-        heights.Sort();
-        return heights[heights.Count / 2]; // 중앙값(대표 프레임)
+        if (sizes.Count == 0) return 0f;
+        sizes.Sort();
+        return sizes[sizes.Count / 2]; // 중앙값(대표 프레임)
     }
 
     // ── 슬라이스 (Unity 6 ISpriteEditorDataProvider) ──────────────
