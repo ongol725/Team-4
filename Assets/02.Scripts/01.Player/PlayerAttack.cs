@@ -970,7 +970,6 @@ public class PlayerAttack : MonoBehaviour
         // 무기 안쪽 끝이 캐릭터를 벗어나도록: 표시 반경(=지름/2) + 여유. 큰 무기일수록 더 멀리 띄움.
         float standoff = hitDiameter * scaleMult * 0.5f + 0.6f;
         if (wd.itemID == "WPN_004") standoff *= 0.5f; // 채찍: 캐릭터에 더 붙임
-        if (wd.itemID == "WPN_022") standoff = 0f;    // 플레일: 캐릭터 위치(중앙)에서 재생
         wpn.transform.localPosition = new Vector3(0f, standoff, 0f);
         // 무기별 스프라이트 회전 보정
         float spriteRot = wd.itemID == "WPN_020" ? -90f : 0f; // 카타나: -90° 회전

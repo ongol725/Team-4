@@ -31,7 +31,7 @@ MonoBehaviour:
   projectile: {fileID: 0}
   projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
   projectileSpeed: 5
-  range: 10
+  range: 50
   maxTargets: 0
   attackFrames:
   - {fileID: 1323871535956428201, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
