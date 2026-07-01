@@ -188,7 +188,8 @@ public class PlayerAttack : MonoBehaviour
                 {
                     "WPN_016"              => 3f, // 수리검: 투사체 크기 ×3(가로세로 각각)
                     "WPN_001"              => 4f, // 단검: 투사체 크기 ×4 (기존 ×2에서 2배)
-                    "WPN_009" or "WPN_007" => 2f, // 활·권총: ×2(가로세로 각각)
+                    "WPN_007"              => 4f, // 권총: ×4 (기존 ×2에서 2배)
+                    "WPN_009"              => 2f, // 활: ×2(가로세로 각각)
                     _                      => 1f,
                 };
                 int   pierce     = 0;
@@ -389,7 +390,7 @@ public class PlayerAttack : MonoBehaviour
                 {
                     // 번개구슬: 즉시 주변 적 타격 (range=0이므로 고정 탐색 반경 사용)
                     int targetCnt = g5 ? 3 : 1; // 번개구슬: 5단계 낙뢰 +2 (총 3)
-                    AttackMultiTarget(entry, 8f, targetCnt);
+                    AttackMultiTarget(entry, 8f, targetCnt, scaleMult: 2f); // 번개구슬: 투사체 크기 ×2
                 }
                 else
                 {
