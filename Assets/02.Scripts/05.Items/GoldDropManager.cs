@@ -176,13 +176,13 @@ namespace BagSurvivor.Items
         }
 
         /// <summary>
-        /// 바닥에 남은 드랍 골드를 모두 '획득 처리'한다(방 이탈 시 자동수집).
-        /// 하나하나 밟지 않아도 방을 떠나면 남은 골드가 캐릭터에게 들어온다.
+        /// 바닥에 남은 드랍 골드를 모두 플레이어에게 빨려가듯 날려 획득시킨다(방 이탈 시 자동수집 연출).
+        /// player가 null이면 즉시 획득으로 폴백.
         /// </summary>
-        public void CollectAllDropped()
+        public void CollectAllDropped(Transform player = null)
         {
             if (poolRoot == null) return;
-            // Return이 SetParent로 자식 순서를 바꾸므로, 먼저 수집 후 일괄 처리
+            // 먼저 수집(FlyToPlayer 도중 풀 반환으로 자식 순서가 바뀌어도 안전하게)
             var active = new List<GoldPickup>();
             foreach (Transform child in poolRoot)
             {
@@ -190,7 +190,11 @@ namespace BagSurvivor.Items
                 var g = child.GetComponent<GoldPickup>();
                 if (g != null) active.Add(g);
             }
-            foreach (var g in active) g.CollectNow();
+            foreach (var g in active)
+            {
+                if (player != null) g.FlyToPlayer(player);
+                else                g.CollectNow();
+            }
         }
 
         /// <summary>
