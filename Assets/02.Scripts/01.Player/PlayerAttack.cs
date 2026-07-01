@@ -187,7 +187,7 @@ public class PlayerAttack : MonoBehaviour
                 float scaleMult  = id switch
                 {
                     "WPN_016"              => 3f, // 수리검: 투사체 크기 ×3(가로세로 각각)
-                    "WPN_001"              => 4f, // 단검: 투사체 크기 ×4 (기존 ×2에서 2배)
+                    "WPN_001"              => 2f, // 단검: 투사체 크기 ×2 (4→2, 1/2 축소)
                     "WPN_007"              => 2.8f, // 권총: ×2.8 (기존 ×4의 70%)
                     "WPN_009"              => 2f, // 활: ×2(가로세로 각각)
                     "WPN_006"              => 2f, // 쇠뇌: 투사체 크기 ×2
@@ -436,11 +436,11 @@ public class PlayerAttack : MonoBehaviour
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 v = count > 1 ? Rotate(toTarget, (i - count / 2) * 20f) : toTarget;
-                    if (animated)
-                        // 그레네이드 등: 대상 지점에 폭발 애니 1회 재생 + 범위 피해(날아가며 사라지지 않게)
+                    if (animated && id != "WPN_017")
+                        // 수류탄 등: 대상 지점에 폭발 애니 1회 재생 + 범위 피해(날아가며 사라지지 않게)
                         SpawnTargetedExplosion(entry, (Vector3)((Vector2)transform.position + v), explodeR);
                     else
-                        // 시트 없는 투척물(바주카 등): 기존 비행 투사체 폭발
+                        // 바주카: 적에게 날아가는 비행 투사체(명중 시 폭발)
                         SpawnExplosive(entry, v.normalized, range, explodeR);
                 }
                 break;
@@ -713,7 +713,12 @@ public class PlayerAttack : MonoBehaviour
             go.transform.localScale *= 1f / 3f;
 
         float spin = 0f; // 자전 없음(수리검 자전 제거)
-        float rotOff = wd.itemID == "WPN_001" ? -90f : 0f; // 단검: 스프라이트 -90° 회전해서 등장
+        float rotOff = wd.itemID switch
+        {
+            "WPN_001" => -90f, // 단검: 스프라이트 -90° 회전해서 등장
+            "WPN_008" => -90f, // 산탄총: 총알이 진행 방향 정면을 보게
+            _         => 0f,
+        };
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
