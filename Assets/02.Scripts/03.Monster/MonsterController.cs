@@ -532,22 +532,36 @@ namespace BagSurvivor.Monster
                 _restScale = _spriteTf.localScale;
                 _squashing = true;
             }
-            Vector3 rest  = _restScale;
-            // 임팩트 순간: 세로로 확 늘리고 가로로 줄인 '펀치' 포즈 → 원래대로 튕겨 복귀
-            Vector3 punch = Vector3.Scale(rest, new Vector3(0.65f, 1.4f, 1f));
+            Vector3 rest    = _restScale;
+            // 격렬한 탄성 반응: (1) 세로로 확 늘림 → (2) 반동으로 납작하게 오버슈트 → (3) 원래대로 안정화
+            Vector3 stretch = Vector3.Scale(rest, new Vector3(0.5f,  1.6f,  1f)); // 강하게 늘림
+            Vector3 squash  = Vector3.Scale(rest, new Vector3(1.35f, 0.72f, 1f)); // 반동(납작) 오버슈트
 
-            if (spriteRenderer != null) spriteRenderer.color = Color.red; // 피격 순간 빨강
-            if (_spriteTf != null) _spriteTf.localScale = punch;
+            // 피격 순간: 흰 번쩍(임팩트) → 빨강
+            if (spriteRenderer != null) spriteRenderer.color = Color.white;
+            if (_spriteTf != null) _spriteTf.localScale = stretch;
 
-            const float dur = 0.15f;
+            // 1단계: 늘림 → 납작(빠르게 튕김)
+            const float d1 = 0.05f;
             float t = 0f;
-            while (t < dur)
+            while (t < d1)
             {
                 t += Time.deltaTime;
-                float p  = Mathf.Clamp01(t / dur);
-                float ep = 1f - (1f - p) * (1f - p); // ease-out: 빠르게 원상복구되며 탄력 있게
-                if (_spriteTf != null) _spriteTf.localScale = Vector3.Lerp(punch, rest, ep);
-                // 앞 절반은 빨강 유지, 이후 기본색 복구
+                float p = Mathf.Clamp01(t / d1);
+                if (_spriteTf != null) _spriteTf.localScale = Vector3.Lerp(stretch, squash, p);
+                if (spriteRenderer != null && p >= 0.4f) spriteRenderer.color = Color.red;
+                yield return null;
+            }
+
+            // 2단계: 납작 → 원래대로 (ease-out 탄성)
+            const float d2 = 0.13f;
+            t = 0f;
+            while (t < d2)
+            {
+                t += Time.deltaTime;
+                float p  = Mathf.Clamp01(t / d2);
+                float ep = 1f - (1f - p) * (1f - p);
+                if (_spriteTf != null) _spriteTf.localScale = Vector3.Lerp(squash, rest, ep);
                 if (spriteRenderer != null && p >= 0.5f && !isDying) spriteRenderer.color = baseColor;
                 yield return null;
             }
