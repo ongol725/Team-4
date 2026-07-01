@@ -87,12 +87,19 @@ public class BattleLoadoutBuilder : MonoBehaviour
                                      ? wd.gradeStats[effectiveGrade]
                                      : null;
 
+            // 반지 인접 배율(합산): 다이아=공격력, 금=공속. 표시·계산에 미리 반영.
+            int   baseAtk = stats?.attackPower ?? 0;
+            float baseSpd = stats?.attackSpeed ?? 0f;
             var entry = new WeaponLoadoutEntry
             {
                 data           = wd,
                 effectiveGrade = effectiveGrade,
-                attackPower    = stats?.attackPower ?? 0,
-                attackSpeed    = stats?.attackSpeed ?? 0f,
+                attackPower    = Mathf.RoundToInt(baseAtk * (1f + inst.RingAtkBonus)),
+                attackSpeed    = baseSpd * (1f + inst.RingSpdBonus),
+                ringStunChance = inst.RingStunChance,
+                ringSlowSec    = inst.RingSlowSec,
+                ringProjScale  = 1f + inst.RingProjScaleBonus,
+                ringProjSpeed  = Mathf.Max(0.1f, 1f + inst.RingProjSpeedBonus),
             };
 
             // 반지 버프 기록

@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_AccessoryData
   itemID: ACC_004
   itemName: "금 반지"
-  itemDescription: "투사체 1발이 궤도 위성 방어막으로 변경"
-  itemImage: {fileID: 0}
+  itemDescription: "인접 무기 공격 속도 대폭 증가"
+  itemImage: {fileID: -2753592389750927348, guid: 104ccbad28ec80542903a1ecadac21ff, type: 3}
   rarity: 3
   grade: 1
   cost: 10
   synergies: []
   cells:
   - {x: 0, y: 0}
-  adjacentGimmick: "1발이 플레이어 주위를 빙글빙글 도는 궤도 위성 방어막으로 변경"
+  adjacentGimmick: "주변 무기 공격 속도 +100% (반지 개수만큼 합산)"
   lv5Gimmick:

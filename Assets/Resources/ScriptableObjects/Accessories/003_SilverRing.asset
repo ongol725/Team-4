@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_AccessoryData
   itemID: ACC_003
   itemName: "은 반지"
-  itemDescription: "관통 횟수 증가, 비행 속도 향상"
-  itemImage: {fileID: 0}
+  itemDescription: "인접 무기 등급 강화"
+  itemImage: {fileID: 4153824395853626816, guid: 475978331152df640bbba18c62a3bcde, type: 3}
   rarity: 3
   grade: 1
   cost: 10
   synergies: []
   cells:
   - {x: 0, y: 0}
-  adjacentGimmick: "기본 관통 횟수 +1 증가, 비행 속도 30% 증가"
+  adjacentGimmick: "주변 무기 등급 강화 +1"
   lv5Gimmick:

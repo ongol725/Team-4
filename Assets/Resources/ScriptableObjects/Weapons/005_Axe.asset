@@ -24,7 +24,7 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
   - {x: 1, y: 0}
-  attackStyleType: 3
+  attackStyleType: 2
   attackStyle: "\uB2E8\uC77C \uACF5\uACA9"
   lv5AttackStyle: "\uC2A4\uD50C\uB798\uC2DC \uCD94\uAC00"
   projectile: {fileID: 0}
@@ -32,6 +32,20 @@ MonoBehaviour:
   projectileSpeed: 0
   range: 1
   maxTargets: 0
+  attackFrames:
+  - {fileID: -7156945422860306331, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: 5945261542180003890, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: 650432702452714548, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -2038237721781246502, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -981652405298280681, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -2956879311264668118, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: 2316176496178997561, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -133217212311399295, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  attackFps: 12
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
   gradeStats:
   - attackPower: 40
     attackSpeed: 1.3

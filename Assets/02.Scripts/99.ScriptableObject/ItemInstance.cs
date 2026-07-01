@@ -17,6 +17,14 @@ public class ItemInstance
     [System.NonSerialized]
     public int RingGradeBonus;
 
+    // 반지 인접 기믹(모두 Analyze()마다 초기화). 합산 규칙.
+    [System.NonSerialized] public float RingAtkBonus;   // 다이아(ACC_006): 인접당 +1.0(공격력 +100%)
+    [System.NonSerialized] public float RingSpdBonus;   // 금(ACC_004): 인접당 +1.0(공속 +100%)
+    [System.NonSerialized] public float RingStunChance; // 뼈(ACC_002): 인접당 +0.25(피격 시 스턴 확률)
+    [System.NonSerialized] public float RingSlowSec;    // 나무(ACC_001): 3초(인접 시 피격 시 슬로우)
+    [System.NonSerialized] public float RingProjScaleBonus; // 강철(ACC_005): 인접당 +0.5(투사체 크기)
+    [System.NonSerialized] public float RingProjSpeedBonus; // 강철(ACC_005): 인접당 -0.2(발사·비행 속도)
+
     // ─────────────────────────────────────────────────────────────
 
     public bool HasGrades =>

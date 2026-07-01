@@ -86,6 +86,7 @@ namespace BagSurvivor.Monster
         // 상태이상 관련
         private float     _speedMultiplier = 1f;
         private Coroutine _stunCo;
+        private float     _stunReadyTime; // 스턴 적별 재적용 쿨다운 해제 시각(Time.time 기준)
         private Coroutine _slowCo;
         private Coroutine _burnCo;
 
@@ -789,6 +790,9 @@ namespace BagSurvivor.Monster
         public void ApplyStun(float duration)
         {
             if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 스턴 면역
+            if (Time.time < _stunReadyTime) return;   // 적별 재적용 쿨다운(연사 무기 영구기절 방지)
+            _stunReadyTime = Time.time + 2f;
             if (_stunCo != null) StopCoroutine(_stunCo);
             _stunCo = StartCoroutine(StunRoutine(duration));
         }
@@ -806,6 +810,7 @@ namespace BagSurvivor.Monster
         public void ApplySlow(float multiplier, float duration)
         {
             if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 슬로우 면역
             if (_slowCo != null) StopCoroutine(_slowCo);
             _slowCo = StartCoroutine(SlowRoutine(Mathf.Clamp01(multiplier), duration));
         }

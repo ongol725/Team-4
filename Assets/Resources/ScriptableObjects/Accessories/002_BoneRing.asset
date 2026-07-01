@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_AccessoryData
   itemID: ACC_002
   itemName: "뼈 반지"
-  itemDescription: "투사체 소멸 시 사방으로 뼛조각을 흩뿌려 광역 피해"
-  itemImage: {fileID: 0}
+  itemDescription: "인접 무기에 맞은 적 확률적으로 기절"
+  itemImage: {fileID: -4018097962248520016, guid: a9fcd8fa2eeb24f40a69f71f15318832, type: 3}
   rarity: 3
   grade: 1
   cost: 10
   synergies: []
   cells:
   - {x: 0, y: 0}
-  adjacentGimmick: "투사체 소멸 시 사방으로 3~5개의 뼛조각을 흩뿌리며 주변에 추가 광역 피해"
+  adjacentGimmick: "주변 무기에 맞은 적 25% 확률로 1초간 기절 (일반 몬스터 한정)"
   lv5Gimmick:
