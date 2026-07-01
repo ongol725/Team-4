@@ -82,6 +82,7 @@ namespace BagSurvivor.Monster
         // 상태이상 관련
         private float     _speedMultiplier = 1f;
         private Coroutine _stunCo;
+        private float     _stunReadyTime; // 스턴 적별 재적용 쿨다운 해제 시각(Time.time 기준)
         private Coroutine _slowCo;
         private Coroutine _burnCo;
 
