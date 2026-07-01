@@ -242,11 +242,25 @@ public class ItemInfoPopup : MonoBehaviour
         _panelRT.sizeDelta = new Vector2(270f, 0f);
 
         var bg = panelGO.AddComponent<Image>();
-        bg.color = new Color(0.06f, 0.06f, 0.10f, 0.95f);
-
-        var outline          = panelGO.AddComponent<Outline>();
-        outline.effectColor  = new Color(0.38f, 0.38f, 0.50f, 0.9f);
-        outline.effectDistance = new Vector2(1f, -1f);
+        Sprite containerSprite = null;
+        // ponytail: 에디터에선 직접 로드. 빌드 배포 시 Popup_Container를 Resources로 옮기고 Resources.Load로 교체 필요.
+#if UNITY_EDITOR
+        containerSprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(
+            "Assets/04.Images/01.UI/05.ShopUI/Popup_Container.png");
+#endif
+        if (containerSprite != null)
+        {
+            bg.sprite = containerSprite;
+            bg.type   = Image.Type.Sliced;
+            bg.color  = Color.white;
+        }
+        else
+        {
+            bg.color = new Color(0.06f, 0.06f, 0.10f, 0.95f);
+            var outline          = panelGO.AddComponent<Outline>();
+            outline.effectColor  = new Color(0.38f, 0.38f, 0.50f, 0.9f);
+            outline.effectDistance = new Vector2(1f, -1f);
+        }
 
         var vlg = panelGO.AddComponent<VerticalLayoutGroup>();
         vlg.padding = new RectOffset(10, 10, 10, 10);
