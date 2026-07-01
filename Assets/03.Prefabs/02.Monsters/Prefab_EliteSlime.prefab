@@ -173,6 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: 1a939735e372c8840b4a3ae633c39274, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  shadowWidthMul: 0.6
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
@@ -188,8 +189,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf294353192db024495301a61c865821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.EliteMonster
-  hpMultiplier: 15
-  attackMultiplier: 1
+  hpMultiplier: 22.5
+  attackMultiplier: 4.5
 --- !u!114 &3736146279355546333
 MonoBehaviour:
   m_ObjectHideFlags: 0

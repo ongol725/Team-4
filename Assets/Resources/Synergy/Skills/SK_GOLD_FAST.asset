@@ -23,7 +23,7 @@ MonoBehaviour:
   hitInterval: 0.1
   extraCount: 15
   damageDelay: 0
-  rangeRadius: 3
+  rangeRadius: 0.4
   duration: 1
   cooldown: 0
   fixedEffect: 0

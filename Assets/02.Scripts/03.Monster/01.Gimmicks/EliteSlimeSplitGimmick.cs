@@ -83,6 +83,7 @@ namespace BagSurvivor.Monster
                     g.generation = generation - 1;                  // 다음 세대
                     g.room = rc;
                     child.transform.localScale = transform.localScale * childScaleMul;
+                    child.GetComponent<BlobShadow>()?.Refit(); // 축소된 크기에 맞춰 그림자 재계산
                 }
                 // 최종 세대(더 이상 분열 안 함)만 골드 드롭
                 child.suppressGoldDrop = (generation - 1) > 0;

@@ -24,6 +24,10 @@ namespace BagSurvivor.Monster
         [Tooltip("이 몬스터 위에 표시할 추적형 HP바 프리팹 (Monster_HpBar)")]
         public GameObject hpBarPrefab;
 
+        [Header("그림자")]
+        [Tooltip("발밑 그림자 폭 배수 (1=기본, 작을수록 작아짐). 스프라이트 여백이 큰 몬스터용")]
+        [Range(0.1f, 2f)] public float shadowWidthMul = 1f;
+
         [Header("렌더 정렬")]
         [Tooltip("타일맵(바닥=0/벽=1) 위에 보이도록 하는 스프라이트 정렬 순서")]
         public int sortingOrder = 10;
@@ -162,7 +166,9 @@ namespace BagSurvivor.Monster
             if (spriteRenderer != null) baseColor = spriteRenderer.color;
 
             // 발밑 그림자 자동 부착 (모든 몬스터 공통, 풀링 안전)
-            if (GetComponent<BlobShadow>() == null) gameObject.AddComponent<BlobShadow>();
+            var blobShadow = GetComponent<BlobShadow>();
+            if (blobShadow == null) blobShadow = gameObject.AddComponent<BlobShadow>();
+            blobShadow.SetWidthMul(shadowWidthMul);
 
             // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
             // + 빠른 넉백에도 벽을 통과(터널링)하지 않도록 연속 충돌 감지

@@ -22,4 +22,7 @@ public class ShadowSettings : ScriptableObject
     [Header("플레이어 전용")]
     [Tooltip("플레이어 그림자 폭 배수 (1=몬스터와 동일, 0.6=60%로 축소). 몬스터엔 영향 없음")]
     [Range(0f, 2f)] public float playerWidthMultiplier = 1f;
+
+    [Tooltip("플레이어 그림자의 루트 기준 로컬 Y 위치(발밑 자동계산 대신 고정)")]
+    public float playerShadowLocalY = -0.4f;
 }

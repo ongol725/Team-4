@@ -207,13 +207,11 @@ MonoBehaviour:
     - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
     - {fileID: 2122078588672271730, guid: b8ca1903eb5a33c43a55f2759551c795, type: 3}
     farMonsters:
-    - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
     - {fileID: 2122078588672271730, guid: b8ca1903eb5a33c43a55f2759551c795, type: 3}
-    - {fileID: 6427610672282125992, guid: 3ba080278912b774da7c2534d0587717, type: 3}
-    maxAlive: 7
-    nearMaxAlive: 0
-    midMaxAlive: 0
-    farMaxAlive: 0
+    maxAlive: 15
+    nearMaxAlive: 7
+    midMaxAlive: 8
+    farMaxAlive: 15
     spawnInterval: 1.8
   - floor: 4
     nearMonsters:
@@ -1498,6 +1496,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 817998970161622188, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 517.6887
+      objectReference: {fileID: 0}
+    - target: {fileID: 817998970161622188, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 41.9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 817998970161622188, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 56.6434
+      objectReference: {fileID: 0}
+    - target: {fileID: 817998970161622188, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 60.727386
+      objectReference: {fileID: 0}
     - target: {fileID: 834924608597663685, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.7115621
@@ -1613,6 +1627,10 @@ PrefabInstance:
     - target: {fileID: 5346816203878988909, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346816203878988909, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5718983317173041897, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_LocalScale.x
