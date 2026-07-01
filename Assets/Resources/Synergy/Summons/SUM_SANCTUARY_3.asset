@@ -42,3 +42,4 @@ MonoBehaviour:
   hp: 0
   attackEffectFrames: []
   attackEffectFps: 12
+  attackEffectScale: 0.5

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
 using BagSurvivor.Monster; // RoomMonsterSpawner (디스폰/재스폰 연동)
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -20,6 +21,9 @@ public class RoomController : MonoBehaviour
     // 문/계단 레퍼런스 (DungeonPopulator에서 주입)
     [HideInInspector] public DoorController door;
     [HideInInspector] public GameObject stairs;
+
+    // 복도로 직접 연결된 방들 (DungeonPopulator에서 주입) — 스폰 밴드(near/far) 판정용
+    [HideInInspector] public List<RoomController> connectedRooms = new List<RoomController>();
 
     [Header("문 잠금 안전 여백")]
     [Tooltip("문이 닫힐 때 밀려나지 않도록, 플레이어가 방 가장자리에서 이 거리만큼 안쪽에 들어와야 잠금")]
@@ -44,6 +48,11 @@ public class RoomController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
+
+        // 방 진입 시 0.5초 무적 — 바로 앞에 스폰된 몹과 충돌해 즉시 피해받는 것 방지
+        var ph = collision.GetComponentInParent<PlayerHealth>();
+        if (ph != null) ph.GrantInvincibility(0.5f);
+
         playerInside = true;
         playerTf = collision.transform;
         if (activated) return; // 이미 활성화된 방은 무시(전투 중 재진입 등)

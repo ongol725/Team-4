@@ -34,12 +34,7 @@ public class VisionController : MonoBehaviour
         DontDestroyOnLoad(gameObject); // 씬이 넘어가도 유지
         
         // 메인 카메라에 포스트 프로세싱 켜기 (없으면 켬)
-        if (Camera.main != null)
-        {
-            var camData = Camera.main.GetComponent<UniversalAdditionalCameraData>();
-            if (camData == null) camData = Camera.main.gameObject.AddComponent<UniversalAdditionalCameraData>();
-            camData.renderPostProcessing = true;
-        }
+        EnsurePostProcessing();
 
         // 글로벌 볼륨 추가
         volume = gameObject.AddComponent<Volume>();
@@ -58,9 +53,20 @@ public class VisionController : MonoBehaviour
         volume.profile = profile;
     }
 
+    // 현재 Camera.main에 포스트프로세싱을 보장한다. (층 전환·카메라 변경에도 암전이 렌더되도록 매 발동 시 재확인)
+    private void EnsurePostProcessing()
+    {
+        var cam = Camera.main;
+        if (cam == null) return;
+        var camData = cam.GetComponent<UniversalAdditionalCameraData>();
+        if (camData == null) camData = cam.gameObject.AddComponent<UniversalAdditionalCameraData>();
+        camData.renderPostProcessing = true;
+    }
+
     // 외부에서 시야 차단을 요청할 때 호출
     public void ApplyBlind(float duration, float fadeTime = 0.5f, float targetIntensity = 0.8f)
     {
+        EnsurePostProcessing(); // 현재 카메라에 post-processing 재보장 (2~4층 암전 누락 방지)
         StopAllCoroutines();
         StartCoroutine(BlindRoutine(duration, fadeTime, targetIntensity));
     }

@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3330072524121842624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6168794846177177176}
+  - component: {fileID: 167356796522675639}
+  m_Layer: 0
+  m_Name: TutorialPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6168794846177177176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3330072524121842624}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &167356796522675639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3330072524121842624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa388444d7c48d94a9261057073b8b42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.UI.TutorialController
+  pages:
+  - title: "\uC774\uB3D9"
+    body: "WASD \uD0A4\uB85C \uCE90\uB9AD\uD130\uB97C \uC0C1\uD558\uC88C\uC6B0\uB85C
+      \uC774\uB3D9\uD569\uB2C8\uB2E4."
+    image: {fileID: 21300000, guid: 991ae50da4f409f42985b9c87795abcd, type: 3}
+  - title: "\uBC30\uB0AD"
+    body: "Tab \uD0A4\uB85C \uBC30\uB0AD\uC744 \uC5F4\uACE0 \uB2EB\uC744 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+    image: {fileID: 21300000, guid: 84ce691a74f624c4d9276ac00a30d51c, type: 3}
+  - title: "\uC544\uC774\uD15C \uBC30\uCE58"
+    body: "\uC544\uC774\uD15C\uC744 \uD074\uB9AD\uD574 \uB4E0 \uB4A4, \uBC30\uCE58
+      \uAC00\uB2A5(\uD68C\uC0C9) \uCE78\uC744 \uD074\uB9AD\uD574 \uB193\uC2B5\uB2C8\uB2E4.\n\uC6B0\uD074\uB9AD\uD558\uBA74
+      \uBE60\uB974\uAC8C \uBC30\uCE58\uB429\uB2C8\uB2E4."
+    image: {fileID: 21300000, guid: 13c74b992631f4646944cc9c38534db1, type: 3}
+  - title: "\uAC00\uBC29 \uCE78 \uD655\uC7A5"
+    body: "\uAD6C\uB9E4\uD55C \uD655\uC7A5 \uD0C0\uC77C\uC744 \uBC30\uCE58 \uBD88\uAC00(\uAC80\uC815)
+      \uCE78\uC5D0 \uB193\uC73C\uBA74 \uC0AC\uC6A9 \uAC00\uB2A5\uD55C \uCE78\uC73C\uB85C
+      \uBC14\uB01D\uB2C8\uB2E4."
+    image: {fileID: 21300000, guid: 2b8be9ed1b0899c42b59a6e300d110ef, type: 3}
+  - title: "\uC5D8\uB9AC\uD2B8 \uBC29 / \uACC4\uB2E8"
+    body: "\uBB38\uC774 \uC788\uB294 \uBC29\uC5D0 \uB4E4\uC5B4\uAC00\uBA74 \uC5D8\uB9AC\uD2B8\uB97C
+      \uCC98\uCE58\uD560 \uB54C\uAE4C\uC9C0 \uBC16\uC73C\uB85C \uB098\uAC08 \uC218
+      \uC5C6\uC2B5\uB2C8\uB2E4.\n\uC5D8\uB9AC\uD2B8\uB97C \uCC98\uCE58\uD558\uBA74
+      \uB2E4\uC74C \uCE35\uC73C\uB85C \uB0B4\uB824\uAC00\uB294 \uACC4\uB2E8\uC774
+      \uC0DD\uC131\uB429\uB2C8\uB2E4."
+    image: {fileID: 21300000, guid: 18779fad4fb9ff840b93af9f1cedec6e, type: 3}
+  alwaysShowOnPlay: 0
+  autoShowOnFirstVisit: 1
+  seenPrefKey: TutorialSeen

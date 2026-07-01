@@ -196,7 +196,20 @@ MonoBehaviour:
   stairPrefab: {fileID: 2114701223535933209, guid: 5a523b54bc7521842a7506081228ae02, type: 3}
   monsterPrefabs:
   - {fileID: 0}
-  doorSprite: {fileID: 7482667652216324306, guid: 29a58acb0ba946f4fa38032e224d4a0c, type: 3}
+  closedDoorSprites:
+  - {fileID: 1617509173, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: -727033809, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: 372929608, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: -1576236388, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: 749007311, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: -437042833, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  openDoorSprites:
+  - {fileID: -1933375267, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: 0}
+  - {fileID: 1931314551, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: 979307291, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: -1471259894, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  - {fileID: 155749945, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
   doorSortingOrder: 10
   corridorWidth: 2
 --- !u!114 &1421781633991590451

@@ -13,6 +13,7 @@ public class Room
     public RoomShape shape;
     public Vector2Int entranceGridPos = new Vector2Int(-1, -1); // 입구 타일 그리드 좌표
     public int entranceDir = -1; // 방 기준 입구 방향: 0=북(위), 1=동(우), 2=남(아래), 3=서(좌)
+    [System.NonSerialized] public List<Room> connections = new List<Room>(); // 복도로 직접 연결된 방들(인접 그래프)
 }
 
 public class DungeonGenerator : MonoBehaviour
@@ -361,7 +362,8 @@ public class DungeonGenerator : MonoBehaviour
                         corridorMask[cx, cy] = true;
             
             Room newGeneratedRoom = new Room { bounds = newRoom, type = RoomType.Normal };
-            newGeneratedRoom.shape = (RoomShape)Random.Range(0, 6);
+            // Parthenon(기둥) 방 제거 — 버그 많아 비활성. Rectangle/Octagon/Cross만 생성.
+            newGeneratedRoom.shape = (RoomShape)Random.Range(0, 3);
 
             // 입구 정보 저장: 복도가 새 방 경계에 닿는 타일 중앙 좌표 + 방 기준 입구 방향
             if (dir == 0) // 복도가 위로 뻗음 → 새 방 남쪽이 입구
@@ -386,6 +388,10 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             DrawRoom(newGeneratedRoom);
+
+            // 인접 그래프: 새 방 ↔ 출발 방(baseRoom)을 복도로 연결
+            newGeneratedRoom.connections.Add(baseRoom);
+            baseRoom.connections.Add(newGeneratedRoom);
 
             generatedRooms.Add(newGeneratedRoom);
             return true;

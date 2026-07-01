@@ -29,6 +29,18 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     // 희귀도(Common/Rare/Epic/Legendary)별 기본 구매가
     private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
 
+    // 인벤토리 확장 블록(바닥) 칸 수별 정가
+    private static int InventoryBlockCost(int cells)
+    {
+        switch (Mathf.Clamp(cells, 1, 4))
+        {
+            case 1:  return 75;
+            case 2:  return 120;
+            case 3:  return 150;
+            default: return 200; // 4칸 이상
+        }
+    }
+
     // 상점 등급(1~7)별 2등급 아이템 등장 확률(%)
     private static readonly int[] Grade2Rates    = { 8, 10, 12, 14, 16, 18, 20 };
 
@@ -149,8 +161,18 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         _nameText.text    = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
         int discountIdx  = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
         _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
-        int priceIdx     = Mathf.Clamp((int)item.rarity, 0, RarityBaseCosts.Length - 1);
-        int baseCost     = RarityBaseCosts[priceIdx] * (_displayGradeIndex > 0 ? 2 : 1);
+        int baseCost;
+        if (item is SO_InventoryBlockData)
+        {
+            // 인벤토리 확장 블록(바닥): 차지 칸 수로 정가 책정 (희귀도/등급 배수 미적용)
+            int cellCount = (item.cells != null && item.cells.Length > 0) ? item.cells.Length : 1;
+            baseCost = InventoryBlockCost(cellCount);
+        }
+        else
+        {
+            int priceIdx = Mathf.Clamp((int)item.rarity, 0, RarityBaseCosts.Length - 1);
+            baseCost     = RarityBaseCosts[priceIdx] * (_displayGradeIndex > 0 ? 2 : 1);
+        }
         _finalCost       = _isDiscounted ? Mathf.Max(1, Mathf.FloorToInt(baseCost * 0.5f)) : baseCost;
         _costText.text   = $"{_finalCost} G";
         _rarityText.text  = rarityLabel;
