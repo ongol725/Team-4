@@ -949,7 +949,7 @@ public class PlayerAttack : MonoBehaviour
         float standoff = hitDiameter * scaleMult * 0.5f + 0.6f;
         wpn.transform.localPosition = new Vector3(0f, standoff, 0f);
         // 무기별 스프라이트 회전 보정
-        float spriteRot = wd.itemID == "WPN_020" ? 90f : 0f; // 카타나: 90° 회전
+        float spriteRot = wd.itemID == "WPN_020" ? -90f : 0f; // 카타나: -90° 회전
         if (spriteRot != 0f) wpn.transform.localRotation = Quaternion.Euler(0f, 0f, spriteRot);
         Destroy(pivot, dur + 0.05f);
 
