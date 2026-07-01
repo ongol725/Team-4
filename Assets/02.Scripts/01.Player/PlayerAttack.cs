@@ -962,6 +962,8 @@ public class PlayerAttack : MonoBehaviour
         // 무기별 스프라이트 회전 보정
         float spriteRot = wd.itemID == "WPN_020" ? -90f : 0f; // 카타나: -90° 회전
         if (spriteRot != 0f) wpn.transform.localRotation = Quaternion.Euler(0f, 0f, spriteRot);
+        // 도끼: 세로축 대칭(좌우 반전) — 회전 방향과 도끼날 일치
+        if (wd.itemID == "WPN_005") wpn.transform.localScale = new Vector3(-1f, 1f, 1f);
         Destroy(pivot, dur + 0.05f);
 
         float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
