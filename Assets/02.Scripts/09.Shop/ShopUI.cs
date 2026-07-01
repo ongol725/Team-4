@@ -68,6 +68,10 @@ public class ShopUI : MonoBehaviour
         if (_gradeText != null)
             CreateStatsPanel();
 
+        // 가방 무기 스탯 실시간 갱신
+        if (_loadoutBuilder != null)
+            _loadoutBuilder.OnLoadoutReady += _ => UpdateStatsPanel();
+
         PopulateSlots();
         UpdateGradeUI();
     }
@@ -192,7 +196,7 @@ public class ShopUI : MonoBehaviour
         boxRt.anchoredPosition = new Vector2(
             gradeRt.anchoredPosition.x - gradeRt.sizeDelta.x * 0.5f - 8f,
             gradeRt.anchoredPosition.y);
-        boxRt.sizeDelta = new Vector2(230f, 64f);  // 핸들 영역 포함해 높이 늘림
+        boxRt.sizeDelta = new Vector2(230f, 96f);  // 4줄(제목+3항목) 수용
 
         var bg = boxGo.GetComponent<Image>();
         bg.color         = new Color(0.08f, 0.08f, 0.12f, 0.92f);
@@ -215,7 +219,7 @@ public class ShopUI : MonoBehaviour
         var handleTxt = handleGo.GetComponent<Text>();
         handleTxt.font               = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
-        handleTxt.text               = "≡ 상점 확률표";
+        handleTxt.text               = "현재 스탯";
         handleTxt.fontSize           = 9;
         handleTxt.color              = new Color(0.55f, 0.55f, 0.65f);
         handleTxt.alignment          = TextAnchor.MiddleCenter;
@@ -248,15 +252,16 @@ public class ShopUI : MonoBehaviour
     {
         if (_statsText == null) return;
 
-        int idx      = Mathf.Clamp(_shopGrade - 1, 0, 6);
-        int normal   = RarityWeights[idx, 0];
-        int rare     = RarityWeights[idx, 1];
-        int epic     = RarityWeights[idx, 2];
-        int legend   = RarityWeights[idx, 3];
+        // 가방 안 무기 스탯 (합/평균/개수)
+        var lo  = _loadoutBuilder != null ? _loadoutBuilder.Build() : null;
+        int sum = lo != null ? lo.GetScaledBase(ScalingStatType.WPN_ATK_SUM) : 0;
+        int avg = lo != null ? lo.GetScaledBase(ScalingStatType.WPN_ATK_AVG) : 0;
+        int cnt = lo != null ? lo.Weapons.Count : 0;
 
         _statsText.text =
-            $"할인 확률  : {DiscountRates[idx]}%   2등급 확률 : {Grade2Rates[idx]}%\n" +
-            $"일반 {normal}%  희귀 {rare}%  영웅 {epic}%  전설 {legend}%";
+            $"가방 공격력 : {sum}\n" +
+            $"무기 평균 공격력 : {avg}\n" +
+            $"배치 무기 개수 : {cnt}";
     }
 
     // ─────────────────────────────────────────────────────────────
