@@ -140,8 +140,9 @@ public class PlayerAttack : MonoBehaviour
             "WPN_009" => 4f,   // 활: 쿨타임 1/4
             "WPN_014" => 4f,   // 수류탄: 쿨타임 1/4
             "WPN_030" => 5f,   // 사이드: 쿨타임 1/5
-            "WPN_020" => 1.3f, // 카타나: 공속 +30%
+            "WPN_020" => 4f,   // 카타나 5단계: 공속 +300%(×4)
             "WPN_010" => 3f,   // 부메랑: 공속 +200%
+            "WPN_016" => 2f,   // 수리검 5단계: 공속 2배
             "WPN_021" => 2f,   // 스피어: 찌르기 애니속도 2배
             "WPN_022" => 2f,   // 플레일: 공속 +100%
             "WPN_003" => 2f,   // 철퇴: 찌르기 속도 2배
@@ -151,6 +152,7 @@ public class PlayerAttack : MonoBehaviour
         // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율
         float interval = 1f / (baseAps * weaponAps * spdBoost * charSpeedMul);
         if (id == "WPN_014") interval *= 2f; // 수류탄: 기본 쿨타임 2배(천천히 투척)
+        if (g5 && id == "WPN_025") interval = 1f; // 너클 5단계: 쿨타임 1초 고정
         interval = Mathf.Max(interval, 0.05f); // 최소 쿨타임 하한(금반지+5단계 공속 폭주·투사체 폭증 방지)
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
@@ -208,10 +210,11 @@ public class PlayerAttack : MonoBehaviour
                     switch (id)
                     {
                         case "WPN_001": shots     = 4;          break; // 단검: 투사체 +3 (쿨 1/4는 AttackLoop)
-                        case "WPN_006": pierce    = 10;         break; // 쇠뇌: 관통 +10
+                        case "WPN_006": pierce    = 10; scaleMult *= 2f; break; // 쇠뇌 5단계: 관통 +10 + 투사체 크기 ×2
                         case "WPN_007": dmgMult   = 6f;         break; // 권총: 데미지 +500%
+                        case "WPN_009": scaleMult *= 2f; pierce = 5; break; // 활 5단계: 투사체 크기 ×2 + 관통 +5
                         case "WPN_011": shots     = 3;          break; // 지팡이: 3발 (유도)
-                        case "WPN_016": scaleMult *= 3f; pierce = 5; break; // 수리검 5단계: 크기 ×3(기본3→9) + 관통 +5
+                        case "WPN_016": scaleMult *= 3f; pierce = 5; range *= 2f; break; // 수리검 5단계: 크기 ×3(기본3→9) + 관통 +5 + 탐지범위 ×2
                     }
                 }
 
@@ -249,17 +252,21 @@ public class PlayerAttack : MonoBehaviour
                 };
                 float kb         = _meleeKnockback;
                 float flashScale = 1f;
+                float dmgMult    = 1f;
 
                 if (g5)
                 {
                     switch (id)
                     {
-                        // 장검002·사이드030의 5단계는 쿨타임 감소(AttackLoop)로 처리 — 각도/애니 변경 없음
+                        // 사이드030의 5단계는 쿨타임 감소(AttackLoop)로 처리 — 각도/애니 변경 없음
+                        case "WPN_002": range     *= 1.5f; break; // 장검 5단계: 판정 범위·이미지 크기 ×1.5(표시·피격 동반)
+                        case "WPN_005": range     *= 1.5f; break; // 도끼 5단계: 공격 범위 +50%
                         case "WPN_019": kb        = 10f;   break; // 대검: 넉백 +10 (이속저하는 후처리)
                         case "WPN_020": flashScale = 2f;   break; // 카타나: 이펙트 크기 +100%
                         case "WPN_021": range     *= 2f;   break; // 스피어 5단계: 사거리 2배(관통은 부채꼴 기본, 애니속도는 spdBoost)
                         case "WPN_022": range     *= 1.5f; break; // 플레일: 범위 +50% (후면 타격은 후처리)
-                        case "WPN_024": kb        *= 4f;   break; // 몽둥이: 넉백 4배
+                        case "WPN_024": kb        *= 8f;   break; // 몽둥이 5단계: 넉백 8배
+                        case "WPN_029": dmgMult    = 4f;   break; // 워해머 5단계: 데미지 +300%(×4)
                     }
                 }
 
@@ -270,12 +277,16 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 }
 
-                // 채찍: 오른쪽 → 왼쪽 순차 공격 (5단계: 반격 추가)
+                // 채찍: 오른쪽 → 왼쪽 순차 공격 (5단계: 상하좌우 4방향)
                 if (id == "WPN_004")
                 {
                     AttackMeleeFanDir(entry, range, angle, kb, flashScale, Vector2.right);
                     if (g5)
-                        StartCoroutine(DelayedFanDir(entry, range, angle, kb, flashScale, Vector2.left, 0.25f));
+                    {
+                        StartCoroutine(DelayedFanDir(entry, range, angle, kb, flashScale, Vector2.left, 0.15f));
+                        StartCoroutine(DelayedFanDir(entry, range, angle, kb, flashScale, Vector2.up,   0.30f));
+                        StartCoroutine(DelayedFanDir(entry, range, angle, kb, flashScale, Vector2.down, 0.45f));
+                    }
                     break;
                 }
 
@@ -288,7 +299,7 @@ public class PlayerAttack : MonoBehaviour
                 }
 
                 // 판정 반경엔 ApplyMeleeFan이 전방 오프셋(reach)을 더해 보이는 무기와 일치시킴
-                AttackMeleeFan(entry, range, angle, kb, flashScale);
+                AttackMeleeFan(entry, range, angle, kb, flashScale, dmgMult);
 
                 // 플레일 5단계: 정면뿐 아니라 후면에도 부채꼴 타격(두 부채꼴)
                 if (g5 && id == "WPN_022")
@@ -315,11 +326,11 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
 
-                // 메이스 5단계: 공격 후 범위 내 적에게 스턴 1초 (판정 반경과 동일하게 여유있게)
+                // 메이스 5단계: 실제 타격한 적(부채꼴 판정 내)에게만 스턴 1초
                 if (g5 && id == "WPN_023")
                 {
                     float maceReach = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
-                    foreach (var mc in GetEnemiesInRange(range + maceReach))
+                    foreach (var mc in FindInFan(FacingDir(range), range + maceReach, angle))
                         mc.ApplyStun(1f);
                 }
                 // 워해머 5단계: 전방위 적 이동속도 1/4 (2초)
@@ -362,7 +373,7 @@ public class PlayerAttack : MonoBehaviour
                 if (g5)
                 {
                     if (id == "WPN_025") burst = 5;      // 너클: 5연타
-                    if (id == "WPN_003") range *= 2f;    // 철퇴: 찌르기 거리 2배(속도는 spdBoost)
+                    if (id == "WPN_003") { range *= 2f; splash = true; } // 철퇴 5단계: 찌르기 거리 2배 + 광역 판정(주변 50%)
                 }
 
                 if (burst > 1)
@@ -380,6 +391,8 @@ public class PlayerAttack : MonoBehaviour
                 float pelletScale = id == "WPN_008" ? 2f : 1f; // 산탄총: 투사체 크기 ×2(콜라이더 동반 → 피격범위도)
                 if (g5 && id == "WPN_008") { spreadAngle = 120f; bullets = 6; }
                 AttackSpread(entry, range, spreadAngle, bullets, pelletScale);
+                if (g5 && id == "WPN_008") // 산탄총 5단계: X2 연사(약간의 딜레이 후 2번째 발사)
+                    StartCoroutine(DelayedSpread(entry, range, spreadAngle, bullets, pelletScale, 0.12f));
                 break;
             }
 
@@ -444,13 +457,13 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.ThrownExplosive:
             {
                 float explodeR = range * 0.5f;
-                if (id == "WPN_017") explodeR = 1.5f; // 바주카: 폭발 반경 고정(작게) — 미사일 이미지에 맞춰 광역 오폭 방지
+                if (id == "WPN_017") explodeR = 1.0f; // 바주카: 폭발 반경 고정(기본 너프 1.5→1.0)
                 int   count    = 1;
 
                 if (g5)
                 {
                     // 수류탄014의 "투척 속도 2배"는 AttackLoop spdBoost에서 처리(여기선 발수 그대로)
-                    if (id == "WPN_017") explodeR *= 3f; // 바주카 5단계: 폭발 반경 ×3
+                    if (id == "WPN_017") explodeR *= 1.5f; // 바주카 5단계: 폭발 반경 +50%(×1.5)
                 }
 
                 // 바주카는 미사일 비행 거리(range)와 탐지 범위를 일치시켜 미사일이 적까지 실제로 날아가 맞게 함
@@ -560,9 +573,9 @@ public class PlayerAttack : MonoBehaviour
     }
 
     private void AttackMeleeFan(WeaponLoadoutEntry entry, float range,
-        float angleDeg, float knockback, float flashScale = 1f)
+        float angleDeg, float knockback, float flashScale = 1f, float dmgMult = 1f)
     {
-        ApplyMeleeFan(entry, FacingDir(range), range, angleDeg, knockback, flashScale);
+        ApplyMeleeFan(entry, FacingDir(range), range, angleDeg, knockback, flashScale, dmgMult: dmgMult);
     }
 
     private void AttackMeleeFanDir(WeaponLoadoutEntry entry, float range,
@@ -580,7 +593,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     private void ApplyMeleeFan(WeaponLoadoutEntry entry, Vector2 facing,
-        float range, float angleDeg, float knockback, float flashScale, float visualRange = -1f)
+        float range, float angleDeg, float knockback, float flashScale, float visualRange = -1f, float dmgMult = 1f)
     {
         // 표시는 앞쪽으로 reach만큼 띄워지므로(대검·몽둥이·메이스 등) 판정 반경에 reach를 더해 보이는 무기와 일치시킴
         float reach    = entry.data.meleeReach > 0f ? entry.data.meleeReach : 1.6f;
@@ -589,7 +602,7 @@ public class PlayerAttack : MonoBehaviour
             ? GetEnemiesInRange(hitRange)
             : FindInFan(facing, hitRange, angleDeg);
 
-        int meleeDmg = ScaleDamage(entry.attackPower);
+        int meleeDmg = ScaleDamage(entry.attackPower, dmgMult);
         foreach (var mc in enemies)
         {
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
@@ -631,10 +644,10 @@ public class PlayerAttack : MonoBehaviour
         if (entry.effectiveGrade >= 4)
         {
             var wave = entry.data.auxProjectileFrames;
-            SpawnProjectile(entry, Vector2.up,    pierce: 99, overrideFrames: wave);
-            SpawnProjectile(entry, Vector2.down,  pierce: 99, overrideFrames: wave);
-            SpawnProjectile(entry, Vector2.left,  pierce: 99, overrideFrames: wave);
-            SpawnProjectile(entry, Vector2.right, pierce: 99, overrideFrames: wave);
+            SpawnProjectile(entry, Vector2.up,    pierce: 99, scaleMult: 3f, overrideFrames: wave); // 검기 크기 ×3
+            SpawnProjectile(entry, Vector2.down,  pierce: 99, scaleMult: 3f, overrideFrames: wave);
+            SpawnProjectile(entry, Vector2.left,  pierce: 99, scaleMult: 3f, overrideFrames: wave);
+            SpawnProjectile(entry, Vector2.right, pierce: 99, scaleMult: 3f, overrideFrames: wave);
         }
     }
 
@@ -675,6 +688,14 @@ public class PlayerAttack : MonoBehaviour
             AttackMeleeSingle(entry, range, false, scaleMult);
             yield return _waitMeleeBurst;
         }
+    }
+
+    // 산탄총 5단계 X2 연사: delay초 후 2번째 스프레드 발사
+    private IEnumerator DelayedSpread(WeaponLoadoutEntry entry, float range,
+        float totalAngle, int bulletCount, float scaleMult, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        AttackSpread(entry, range, totalAngle, bulletCount, scaleMult);
     }
 
     private void AttackSpread(WeaponLoadoutEntry entry, float range,
@@ -776,7 +797,8 @@ public class PlayerAttack : MonoBehaviour
         if (!useOverride && UsesShopIcon(wd.itemID))
             go.transform.localScale *= 1f / 3f;
 
-        float spin = wd.itemID == "WPN_010" ? 720f : 0f; // 부메랑: 비행 중 자전(초당 2바퀴)
+        // 부메랑: 비행 중 자전(초당 2바퀴). 5단계는 회전속도 ×3.
+        float spin = wd.itemID == "WPN_010" ? (entry.effectiveGrade >= 4 ? 2160f : 720f) : 0f;
         float rotOff = wd.itemID switch
         {
             "WPN_001" => -90f, // 단검: 스프라이트 -90° 회전해서 등장
@@ -985,7 +1007,7 @@ public class PlayerAttack : MonoBehaviour
             tickTimer -= Time.deltaTime;
             if (tickTimer <= 0f)
             {
-                int dmg = ScaleDamage(entry.attackPower);
+                int dmg = ScaleDamage(entry.attackPower, g5 ? 2f : 1f); // 5단계: 도트 데미지 ×2
                 foreach (var mc in FindInFan(faceDir, fanRange, fanAngle))
                 {
                     mc.TakeDamage(dmg, 0f, Vector2.zero);
