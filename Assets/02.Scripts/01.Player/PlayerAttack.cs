@@ -190,6 +190,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_001"              => 4f, // 단검: 투사체 크기 ×4 (기존 ×2에서 2배)
                     "WPN_007"              => 4f, // 권총: ×4 (기존 ×2에서 2배)
                     "WPN_009"              => 2f, // 활: ×2(가로세로 각각)
+                    "WPN_006"              => 2f, // 쇠뇌: 투사체 크기 ×2
                     _                      => 1f,
                 };
                 int   pierce     = 0;
@@ -388,9 +389,20 @@ public class PlayerAttack : MonoBehaviour
                 }
                 else if (id == "WPN_013")
                 {
-                    // 번개구슬: 즉시 주변 적 타격 (range=0이므로 고정 탐색 반경 사용)
-                    int targetCnt = g5 ? 3 : 1; // 번개구슬: 5단계 낙뢰 +2 (총 3)
-                    AttackMultiTarget(entry, 8f, targetCnt, scaleMult: 2f); // 번개구슬: 투사체 크기 ×2
+                    // 번개구슬: 가장 가까운 적 머리 위에 낙뢰 이펙트 생성 + 범위 피해(마도서 방식)
+                    int   targetCnt = g5 ? 3 : 1; // 5단계 낙뢰 +2 (총 3)
+                    float explodeR  = 1.5f;
+                    var enemies = GetEnemiesInRange(8f);
+                    enemies.Sort((a, b) =>
+                        Vector2.Distance(transform.position, a.transform.position)
+                            .CompareTo(Vector2.Distance(transform.position, b.transform.position)));
+                    int hit = 0;
+                    foreach (var mc in enemies)
+                    {
+                        if (hit >= targetCnt) break;
+                        SpawnTargetedExplosion(entry, mc.transform.position, explodeR);
+                        hit++;
+                    }
                 }
                 else
                 {
