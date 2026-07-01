@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 
 /// <summary>
 /// 런(플레이) 통계 로거.
@@ -100,34 +101,64 @@ public class RunStatsLogger : MonoBehaviour
         AppendEvent(cleared ? "RUN_CLEAR" : "RUN_DEATH",
             "floor=" + deathFloor + ";zone=" + deathZone + ";killer=" + killer);
 
+        string row = BuildSummaryRow(cleared, deathFloor, deathZone, killer, synergies);
+
         try
         {
             bool newFile = !File.Exists(_summaryPath);
             using var w = new StreamWriter(_summaryPath, true, Encoding.UTF8);
             if (newFile) w.WriteLine(Header());
-            var sb = new StringBuilder();
-            sb.Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")).Append(',');
-            sb.Append(F(Elapsed)).Append(',');
-            sb.Append(cleared ? "CLEAR" : "DEATH").Append(',');
-            sb.Append(deathFloor).Append(',');
-            sb.Append(Csv(deathZone)).Append(',');
-            sb.Append(Csv(killer)).Append(',');
-            for (int i = 1; i <= MaxFloor; i++) sb.Append(F(_floorEnter[i])).Append(',');
-            for (int i = 1; i <= MaxFloor; i++) sb.Append(F(_bossKill[i])).Append(',');
-            for (int i = 1; i <= MaxFloor; i++) sb.Append(_killsByFloor[i]).Append(',');
-            int totalKills = 0; for (int i = 1; i <= MaxFloor; i++) totalKills += _killsByFloor[i];
-            sb.Append(totalKills).Append(',');
-            sb.Append(_goldGained).Append(',');
-            sb.Append(_goldSpent).Append(',');
-            sb.Append(_inventoryOpens).Append(',');
-            sb.Append(_rerolls).Append(',');
-            sb.Append(F(_distance)).Append(',');
-            sb.Append(Csv(synergies));
-            w.WriteLine(sb.ToString());
+            w.WriteLine(row);
         }
         catch (Exception e) { Debug.LogWarning("[RunStats] 요약 기록 실패: " + e.Message); }
 
+        // 구글 폼 자동 업로드(설정 시). 로컬 CSV는 항상 백업으로 남음.
+        if (UploadEnabled && !string.IsNullOrEmpty(FormUrl) && !string.IsNullOrEmpty(EntryId))
+            StartCoroutine(UploadRow(row));
+
         Debug.Log("[RunStats] 저장: " + _summaryPath);
+    }
+
+    private string BuildSummaryRow(bool cleared, int deathFloor, string deathZone, string killer, string synergies)
+    {
+        var sb = new StringBuilder();
+        sb.Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")).Append(',');
+        sb.Append(F(Elapsed)).Append(',');
+        sb.Append(cleared ? "CLEAR" : "DEATH").Append(',');
+        sb.Append(deathFloor).Append(',');
+        sb.Append(Csv(deathZone)).Append(',');
+        sb.Append(Csv(killer)).Append(',');
+        for (int i = 1; i <= MaxFloor; i++) sb.Append(F(_floorEnter[i])).Append(',');
+        for (int i = 1; i <= MaxFloor; i++) sb.Append(F(_bossKill[i])).Append(',');
+        for (int i = 1; i <= MaxFloor; i++) sb.Append(_killsByFloor[i]).Append(',');
+        int totalKills = 0; for (int i = 1; i <= MaxFloor; i++) totalKills += _killsByFloor[i];
+        sb.Append(totalKills).Append(',');
+        sb.Append(_goldGained).Append(',');
+        sb.Append(_goldSpent).Append(',');
+        sb.Append(_inventoryOpens).Append(',');
+        sb.Append(_rerolls).Append(',');
+        sb.Append(F(_distance)).Append(',');
+        sb.Append(Csv(synergies));
+        return sb.ToString();
+    }
+
+    // ── 구글 폼 업로드 ────────────────────────────────────────
+    // 사용법: 구글 폼(긴 답변 1개) 만들고 → 미리채우기 링크로 formResponse URL + entry ID 확인 →
+    //         아래 3개를 채우고 UploadEnabled=true. (폼 필드 = CSV 한 줄 전체를 받음)
+    private static readonly bool   UploadEnabled = false;
+    private static readonly string FormUrl = "";   // 예: https://docs.google.com/forms/d/e/<FORM_ID>/formResponse
+    private static readonly string EntryId = "";   // 예: entry.1234567890
+
+    private System.Collections.IEnumerator UploadRow(string row)
+    {
+        var form = new WWWForm();
+        form.AddField(EntryId, row);
+        using var req = UnityWebRequest.Post(FormUrl, form);
+        yield return req.SendWebRequest();
+        if (req.result != UnityWebRequest.Result.Success)
+            Debug.LogWarning("[RunStats] 업로드 실패: " + req.error);
+        else
+            Debug.Log("[RunStats] 업로드 완료");
     }
 
     private static string Header()
