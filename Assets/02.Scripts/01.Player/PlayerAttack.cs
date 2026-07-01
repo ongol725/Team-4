@@ -330,7 +330,7 @@ public class PlayerAttack : MonoBehaviour
                 int   burst     = id == "WPN_025" ? 2 : 1;        // 너클: 기본 2연타
                 float scaleMult = 1f;
                 // 크기 조정은 range로 → 표시(2×range)와 피격(반경 range)이 함께 변함
-                if (id == "WPN_025") range *= 0.5f; // 너클: 크기 0.5배
+                if (id == "WPN_025") range *= 0.3f; // 너클: 크기 0.3배(0.5→0.3, 현재의 60%)
                 if (id == "WPN_003") range *= 1.0f; // 철퇴: 크기 1.0배(0.5→1.0, 애니 2배)
 
                 if (g5)
