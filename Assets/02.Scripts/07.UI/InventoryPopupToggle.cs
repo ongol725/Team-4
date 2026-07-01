@@ -108,6 +108,9 @@ public class InventoryPopupToggle : MonoBehaviour
 
         _popupCanvas.enabled = willOpen;
 
+        // 전투 중 주운 반지가 대기 중이면 임시칸에 투입
+        if (willOpen) RingDropService.FlushPending();
+
         // Canvas_Inventory 직접 자식인 패널도 함께 토글
         _debugUI?.SetPanelActive(willOpen);
 
