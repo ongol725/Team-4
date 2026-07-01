@@ -151,6 +151,7 @@ public class PlayerAttack : MonoBehaviour
         // 최종 쿨타임 = 무기 쿨타임 / 캐릭터 공속 배율
         float interval = 1f / (baseAps * weaponAps * spdBoost * charSpeedMul);
         if (id == "WPN_014") interval *= 2f; // 수류탄: 기본 쿨타임 2배(천천히 투척)
+        interval = Mathf.Max(interval, 0.05f); // 최소 쿨타임 하한(금반지+5단계 공속 폭주·투사체 폭증 방지)
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
         var wait = new WaitForSeconds(interval);

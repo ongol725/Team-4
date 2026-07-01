@@ -68,6 +68,10 @@ public class InventoryAnalyzer : MonoBehaviour
         foreach (var inst in _grid.GetAllPlacedInstances())
         {
             inst.RingGradeBonus = 0;
+            inst.RingAtkBonus   = 0f;
+            inst.RingSpdBonus   = 0f;
+            inst.RingStunChance = 0f;
+            inst.RingSlowSec    = 0f;
             snapshot.Add(inst);
         }
 
@@ -110,6 +114,13 @@ public class InventoryAnalyzer : MonoBehaviour
             foreach (var weapon in adjacentWeapons)
             {
                 weapon.RingGradeBonus += 1;
+                switch (acc.data.itemID) // 반지별 인접 기믹(합산)
+                {
+                    case "ACC_006": weapon.RingAtkBonus   += 1.0f;  break; // 다이아: 공격력 +100%
+                    case "ACC_004": weapon.RingSpdBonus   += 1.0f;  break; // 금: 공속 +100%
+                    case "ACC_002": weapon.RingStunChance += 0.25f; break; // 뼈: 피격 시 스턴 25%
+                    case "ACC_001": weapon.RingSlowSec     = 3f;    break; // 나무: 피격 시 슬로우 3초
+                }
                 snapshot.RecordWeaponRingBuff(weapon, acc);
             }
         }
