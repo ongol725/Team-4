@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 31e3d95acedc1d9468e13180f8ae041e
+guid: 2b8be9ed1b0899c42b59a6e300d110ef
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -422786041492313739
-    second: 03_elite_stairs_0
+      213: -8620792753169498292
+    second: 04_expand_zone_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 03_elite_stairs_0
+      name: 04_expand_zone_0
       rect:
         serializedVersion: 2
         x: 16
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5796bd4d556f12af0800000000000000
-      internalID: -422786041492313739
+      spriteID: c4ff1197aaacc5880800000000000000
+      internalID: -8620792753169498292
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      03_elite_stairs_0: -422786041492313739
+      04_expand_zone_0: -8620792753169498292
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
