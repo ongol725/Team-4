@@ -26,13 +26,8 @@ namespace BagSurvivor.UI
             public Sprite image; // 비워 두면 이미지 영역 숨김
         }
 
-        [Header("페이지 (비어 있으면 코드 기본값 사용)")]
+        [Header("페이지 (인스펙터에서 편집 — 순서대로 표시)")]
         [SerializeField] private TutorialPage[] pages;
-
-        [Header("기본 페이지 이미지 (인스펙터 pages 비울 때 사용)")]
-        [SerializeField] private Sprite moveImage;
-        [SerializeField] private Sprite corridorImage;
-        [SerializeField] private Sprite eliteStairsImage;
 
         [Header("동작 설정")]
         [Tooltip("켜면 PlayerPrefs를 무시하고 플레이할 때마다 항상 표시 (개발/테스트용 — 출시 전 끌 것)")]
@@ -104,7 +99,12 @@ namespace BagSurvivor.UI
 
         public void Open()
         {
-            _activePages = (pages != null && pages.Length > 0) ? pages : BuildDefaultPages();
+            if (pages == null || pages.Length == 0)
+            {
+                Debug.LogWarning("[Tutorial] 표시할 페이지가 없습니다. 인스펙터의 Pages를 채우세요.");
+                return;
+            }
+            _activePages = pages;
             _index = 0;
             ShowPage(_index);
             SetVisible(true);
@@ -150,32 +150,6 @@ namespace BagSurvivor.UI
             if (_nextLabel != null)
                 _nextLabel.text = (i >= _activePages.Length - 1) ? "닫기" : "다음";
         }
-
-        // ─────────────────────────────────────────────────────────────
-        // 기본 페이지 (인스펙터가 비어 있을 때)
-
-        private TutorialPage[] BuildDefaultPages() => new[]
-        {
-            new TutorialPage
-            {
-                title = "이동",
-                body  = "WASD 키로 캐릭터를 상하좌우로 이동합니다.",
-                image = moveImage,
-            },
-            new TutorialPage
-            {
-                title = "복도",
-                body  = "복도에서 배낭을 열고 닫을 수 있습니다.",
-                image = corridorImage,
-            },
-            new TutorialPage
-            {
-                title = "엘리트 방 / 계단",
-                body  = "문이 있는 방에 들어가면 엘리트를 처치할 때까지 밖으로 나갈 수 없습니다.\n" +
-                        "엘리트를 처치하면 다음 층으로 내려가는 계단이 생성됩니다.",
-                image = eliteStairsImage,
-            },
-        };
 
         // ─────────────────────────────────────────────────────────────
         // UI 빌드 (런타임 코드 생성)
