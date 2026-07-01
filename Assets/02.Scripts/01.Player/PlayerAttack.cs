@@ -704,7 +704,8 @@ public class PlayerAttack : MonoBehaviour
                 ? BuildAnimatedGO(projFrames, wd.attackFps, $"Proj_{wd.itemName}", 0.8f, loop: true, withBody: true)
                 : BuildTempGO(wd.itemImage, wd.itemName));
 
-        go.transform.position = transform.position; // BuildTempGO는 위치를 설정하지 않으므로 항상 보정
+        // 캐릭터 몸 밖(전방)에서 생성 — 캐릭터와 겹쳐 발사되는 것 방지
+        go.transform.position = transform.position + (Vector3)(dir.normalized * 0.7f);
 
         if (scaleMult != 1f)
             go.transform.localScale *= scaleMult;
@@ -712,7 +713,7 @@ public class PlayerAttack : MonoBehaviour
         if (UsesShopIcon(wd.itemID))
             go.transform.localScale *= 1f / 3f;
 
-        float spin = 0f; // 자전 없음(수리검 자전 제거)
+        float spin = wd.itemID == "WPN_010" ? 720f : 0f; // 부메랑: 비행 중 자전(초당 2바퀴)
         float rotOff = wd.itemID switch
         {
             "WPN_001" => -90f, // 단검: 스프라이트 -90° 회전해서 등장
@@ -956,6 +957,7 @@ public class PlayerAttack : MonoBehaviour
         wpn.transform.SetParent(pivot.transform, false);
         // 무기 안쪽 끝이 캐릭터를 벗어나도록: 표시 반경(=지름/2) + 여유. 큰 무기일수록 더 멀리 띄움.
         float standoff = hitDiameter * scaleMult * 0.5f + 0.6f;
+        if (wd.itemID == "WPN_004") standoff *= 0.5f; // 채찍: 캐릭터에 더 붙임
         wpn.transform.localPosition = new Vector3(0f, standoff, 0f);
         // 무기별 스프라이트 회전 보정
         float spriteRot = wd.itemID == "WPN_020" ? -90f : 0f; // 카타나: -90° 회전
