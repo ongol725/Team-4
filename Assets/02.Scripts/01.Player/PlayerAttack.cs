@@ -191,6 +191,7 @@ public class PlayerAttack : MonoBehaviour
                     "WPN_007"              => 2.8f, // 권총: ×2.8 (기존 ×4의 70%)
                     "WPN_009"              => 2f, // 활: ×2(가로세로 각각)
                     "WPN_006"              => 2f, // 쇠뇌: 투사체 크기 ×2
+                    "WPN_011"              => 1.3f, // 지팡이: 투사체 크기 ×1.3
                     _                      => 1f,
                 };
                 int   pierce     = 0;
