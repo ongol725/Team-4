@@ -221,10 +221,10 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.MeleeFan:
             {
                 if (id == "WPN_004") range *= 0.5f; // 채찍: 크기 0.5배(표시·피격 함께)
-                if (id == "WPN_022") range *= 0.5f; // 플레일: 크기 0.5배(표시·피격 함께)
+                if (id == "WPN_022") range *= 0.375f; // 플레일: 0.5→0.375 (3/4 축소)
                 if (id == "WPN_021") range *= 0.375f; // 스피어: 0.5→0.375 (3/4 축소)
-                if (id == "WPN_019") range *= 1.2f; // 대검: 크기 1.2배(0.6→1.2, 2배)
-                if (id == "WPN_024") range *= 0.7f; // 몽둥이: 크기 0.7배(1.0→0.7, 70%)
+                if (id == "WPN_019") range *= 0.9f;   // 대검: 1.2→0.9 (3/4 축소)
+                if (id == "WPN_024") range *= 0.525f; // 몽둥이: 0.7→0.525 (3/4 축소)
                 if (id == "WPN_023") range *= 0.3f;  // 메이스: 0.4→0.3 (3/4 축소)
                 if (id == "WPN_029") range *= 0.75f; // 워해머: 3/4 축소
                 if (id == "WPN_030") range *= 0.75f; // 사이드: 3/4 축소
@@ -280,7 +280,7 @@ public class PlayerAttack : MonoBehaviour
                 // 할버드: 180° 회전 → 찌르기 콤보(근접). 근접 크기 0.2배
                 if (id == "WPN_027")
                 {
-                    range *= 0.2f; // 근접 크기 0.2배(표시·피격 함께)
+                    range *= 0.15f; // 할버드: 0.2→0.15 (3/4 축소)
                     StartCoroutine(HalberdCombo(entry, range, angle, kb, flashScale));
                     break;
                 }
@@ -970,12 +970,13 @@ public class PlayerAttack : MonoBehaviour
         // 무기 안쪽 끝이 캐릭터를 벗어나도록: 표시 반경(=지름/2) + 여유. 큰 무기일수록 더 멀리 띄움.
         float standoff = hitDiameter * scaleMult * 0.5f + 0.6f;
         if (wd.itemID == "WPN_004") standoff *= 0.5f; // 채찍: 캐릭터에 더 붙임
+        if (wd.itemID == "WPN_022") standoff = 0f;    // 플레일: 캐릭터 위치(중앙)에서 재생
         wpn.transform.localPosition = new Vector3(0f, standoff, 0f);
         // 무기별 스프라이트 회전 보정
         float spriteRot = wd.itemID == "WPN_020" ? -90f : 0f; // 카타나: -90° 회전
         if (spriteRot != 0f) wpn.transform.localRotation = Quaternion.Euler(0f, 0f, spriteRot);
         // 도끼: 세로축 대칭(좌우 반전) — 회전 방향과 도끼날 일치
-        if (wd.itemID == "WPN_005") wpn.transform.localScale = new Vector3(-1f, 1f, 1f);
+        if (wd.itemID == "WPN_005" || wd.itemID == "WPN_027") wpn.transform.localScale = new Vector3(-1f, 1f, 1f); // 도끼·할버드: 세로축 대칭
         Destroy(pivot, dur + 0.05f);
 
         float baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // +Y(12시)를 dir로 정렬
