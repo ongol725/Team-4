@@ -145,9 +145,9 @@ public class RunStatsLogger : MonoBehaviour
     // ── 구글 폼 업로드 ────────────────────────────────────────
     // 사용법: 구글 폼(긴 답변 1개) 만들고 → 미리채우기 링크로 formResponse URL + entry ID 확인 →
     //         아래 3개를 채우고 UploadEnabled=true. (폼 필드 = CSV 한 줄 전체를 받음)
-    private static readonly bool   UploadEnabled = false;
-    private static readonly string FormUrl = "";   // 예: https://docs.google.com/forms/d/e/<FORM_ID>/formResponse
-    private static readonly string EntryId = "";   // 예: entry.1234567890
+    private static readonly bool   UploadEnabled = true;
+    private static readonly string FormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeBJGxjzvi5NHpPwYwsfn_SfL0OtXA3-9_j7O_k0RO6gOvbHw/formResponse";
+    private static readonly string EntryId = "entry.804028772";
 
     private System.Collections.IEnumerator UploadRow(string row)
     {
