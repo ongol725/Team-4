@@ -436,11 +436,14 @@ public class PlayerAttack : MonoBehaviour
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 v = count > 1 ? Rotate(toTarget, (i - count / 2) * 20f) : toTarget;
-                    if (animated && id != "WPN_017")
+                    if (id == "WPN_017")
+                        // 바주카: 애니 기반 투사체가 가까운 타겟으로 날아가 명중 시 폭발(전방 생성)
+                        SpawnProjectile(entry, v.normalized, explosionRadius: explodeR);
+                    else if (animated)
                         // 수류탄 등: 대상 지점에 폭발 애니 1회 재생 + 범위 피해(날아가며 사라지지 않게)
                         SpawnTargetedExplosion(entry, (Vector3)((Vector2)transform.position + v), explodeR);
                     else
-                        // 바주카: 적에게 날아가는 비행 투사체(명중 시 폭발)
+                        // 시트 없는 투척물: 기존 비행 투사체 폭발
                         SpawnExplosive(entry, v.normalized, range, explodeR);
                 }
                 break;
@@ -683,7 +686,8 @@ public class PlayerAttack : MonoBehaviour
 
     private void SpawnProjectile(WeaponLoadoutEntry entry, Vector2 dir,
         float dmgMult = 1f, float spdMult = 1f, float scaleMult = 1f,
-        int pierce = 0, float knockbackForce = 0f, bool homing = false, bool boomerang = false)
+        int pierce = 0, float knockbackForce = 0f, bool homing = false, bool boomerang = false,
+        float explosionRadius = 0f)
     {
         var   wd       = entry.data;
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
@@ -722,6 +726,7 @@ public class PlayerAttack : MonoBehaviour
         };
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
+                  explosionRadius: explosionRadius,
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
                   spinSpeed: spin, rotationOffset: rotOff);
     }
