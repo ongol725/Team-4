@@ -942,8 +942,10 @@ public class PlayerAttack : MonoBehaviour
         float hitDiameter = 2f * (range > 0f ? range : _meleeRange);
         var  wpn   = BuildAnimatedGO(frames, fps, $"Melee_{wd.itemName}", hitDiameter * scaleMult, loop: false, withBody: false);
 
+        // 채찍: 위로 떠 보여 캐릭터 우측 높이로 내림(값 조절 가능)
+        Vector3 pivotOffset = wd.itemID == "WPN_004" ? new Vector3(0f, -1.5f, 0f) : Vector3.zero;
         var pivot = new GameObject($"MeleePivot_{wd.itemName}");
-        pivot.transform.position = transform.position;
+        pivot.transform.position = transform.position + pivotOffset;
         wpn.transform.SetParent(pivot.transform, false);
         // 무기 안쪽 끝이 캐릭터를 벗어나도록: 표시 반경(=지름/2) + 여유. 큰 무기일수록 더 멀리 띄움.
         float standoff = hitDiameter * scaleMult * 0.5f + 0.6f;
@@ -960,7 +962,7 @@ public class PlayerAttack : MonoBehaviour
         {
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / dur);
-            pivot.transform.position = transform.position; // 플레이어 이동에 즉시 따라오게(매 프레임 동기화)
+            pivot.transform.position = transform.position + pivotOffset; // 플레이어 이동에 즉시 따라오게(매 프레임 동기화)
             if (motion == MeleeMotionType.Thrust)
             {
                 pivot.transform.rotation = Quaternion.Euler(0f, 0f, baseAngle);
