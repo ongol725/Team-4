@@ -587,6 +587,21 @@ namespace BagSurvivor.Monster
             isDying = true;
             currentState = MonsterState.Die;
 
+            GameManager.Instance?.AddKill();   // 결과창 '처치 몬스터' 누적
+
+            if (RunStatsLogger.Instance != null)
+            {
+                int floor = GameManager.Instance != null ? GameManager.Instance.currentFloor : 1;
+                string mName = monsterData != null ? monsterData.name : gameObject.name;
+                // 슬라임은 본체(루트)만 층별 처치수에 집계 — 분열체는 제외
+                var eliteSlime = GetComponent<EliteSlimeSplitGimmick>();
+                bool countForFloor = eliteSlime == null || eliteSlime.generation == eliteSlime.rootGeneration;
+                RunStatsLogger.Instance.MonsterKilled(mName, floor, countForFloor);
+                // 엘리트/중간보스/최종보스 = '층 보스'로 기록
+                if (GetComponent<EliteMonster>() != null || GetComponent<BossPatternDriver>() != null)
+                    RunStatsLogger.Instance.BossKilled(floor);
+            }
+
             // 1. 즉시 충돌체 비활성화
             if (col != null) col.enabled = false;
             rb.linearVelocity = Vector2.zero;
@@ -665,7 +680,10 @@ namespace BagSurvivor.Monster
             {
                 // 시간 배율이 적용된 공격력으로 플레이어에게 접촉 데미지
                 if (playerHealth != null && !playerHealth.IsDead)
+                {
+                    playerHealth.LastAttacker = monsterData != null ? monsterData.name : gameObject.name; // 킬러 통계
                     playerHealth.TakeDamage(runtimeAttack);
+                }
 
                 yield return new WaitForSeconds(CONTACT_DAMAGE_INTERVAL);
             }

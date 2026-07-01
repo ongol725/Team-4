@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8186196234887871813}
   - component: {fileID: 2365011747873043939}
   - component: {fileID: 5656345153591630103}
+  - component: {fileID: 9158639336281775120}
   m_Layer: 8
   m_Name: Prefab_Bear
   m_TagString: Monster
@@ -173,9 +174,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: f4066037aa53e65478383674f71853c1, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  shadowWidthMul: 1
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
+  deathDelay: 0.1
+  damageReductionVfxPrefab: {fileID: 0}
 --- !u!114 &2365011747873043939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,3 +229,17 @@ MonoBehaviour:
   decisionInterval: 0.2
   debugManualMode: 0
   debugShowLegend: 1
+--- !u!114 &9158639336281775120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9158167247413763753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd4ebcbe5b85364b9e4e2facd3587c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RingDropOnDeath
+  dropChance: 1
+  useFloorBasedChance: 1

@@ -42,6 +42,10 @@ namespace BagSurvivor.Monster
         private bool isCharging = false;
         private bool isInChargeSequence = false;
 
+        // 보스 소환 팬텀 멧돼지: 자체 돌진 AI를 끄고 PhantomWolfDash가 제어(체력 없는 1회성 돌진).
+        // 풀 재사용 시 OnDisable에서 false로 리셋된다.
+        [System.NonSerialized] public bool phantomMode = false;
+
         // 돌진 시각 효과용 (빨간 집중선)
         private LineRenderer chargeLine;
         // 돌진 경고선 프리팹 인스턴스(1회 생성 후 재사용 — 풀링 대용)
@@ -54,6 +58,7 @@ namespace BagSurvivor.Monster
 
         private void Update()
         {
+            if (phantomMode) return; // 팬텀(보스 소환) 모드: 자체 돌진 AI 비활성 — PhantomWolfDash가 제어
             if (controller == null || controller.IsDead) return;
             if (controller.PlayerTransform == null) return;
 
@@ -206,6 +211,7 @@ namespace BagSurvivor.Monster
             // 오브젝트 풀 반환 시 초기화
             isCharging = false;
             isInChargeSequence = false;
+            phantomMode = false;   // 재사용 시 일반 멧돼지 AI 복구
             HideChargeLine();
             StopAllCoroutines();
         }

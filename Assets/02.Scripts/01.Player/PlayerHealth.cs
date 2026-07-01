@@ -234,16 +234,39 @@ public class PlayerHealth : MonoBehaviour
             stats.playTime = DifficultyScaler.Instance != null
                 ? DifficultyScaler.Instance.ElapsedMinutes * 60f
                 : Time.timeSinceLevelLoad;
-            stats.mainSynergies = "-";
-            stats.weaponCount = 0;
-            stats.killCount = 0;
-            stats.goldSpent = 0;
+            var gm = GameManager.Instance;
+            var lo = gm != null ? gm.CurrentLoadout : null;
+            stats.mainSynergies = FormatSynergies(lo);
+            stats.weaponCount   = lo != null ? lo.Weapons.Count : 0;
+            stats.killCount     = gm != null ? gm.monstersKilled : 0;
+            stats.goldSpent     = gm != null ? gm.goldSpent : 0;
             resultPopup.Show(false, stats); // Show 내부에서 timeScale=0 처리
+
+            // 런 통계 기록(사망).
+            string killer = string.IsNullOrEmpty(LastAttacker) ? "-" : LastAttacker;
+            RunStatsLogger.Instance?.RunEnd(false, gm != null ? gm.currentFloor : 1,
+                RunZoneTracker.CurrentZone(), killer, stats.mainSynergies);
         }
         else
         {
             Time.timeScale = 0f;
             Debug.Log("[PlayerHealth] 사망 — ResultPopup 미연결(결과화면 없음)");
         }
+    }
+
+    /// <summary>마지막으로 플레이어에게 피해를 준 몬스터 이름(킬러 통계용). MonsterController가 설정.</summary>
+    [System.NonSerialized] public string LastAttacker = "";
+
+    /// <summary>활성 시너지를 결과창 표시용 문자열로 만든다.</summary>
+    private static string FormatSynergies(BattleLoadout lo)
+    {
+        if (lo == null || lo.ActiveSynergies == null || lo.ActiveSynergies.Count == 0) return "-";
+        var sb = new System.Text.StringBuilder();
+        foreach (var e in lo.ActiveSynergies)
+        {
+            if (sb.Length > 0) sb.Append(", ");
+            sb.Append(e.type).Append(' ').Append(e.grade);
+        }
+        return sb.ToString();
     }
 }

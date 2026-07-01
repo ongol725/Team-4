@@ -247,12 +247,8 @@ public class ItemInfoPopup : MonoBehaviour
         _panelRT.sizeDelta = new Vector2(270f, 0f);
 
         var bg = panelGO.AddComponent<Image>();
-        Sprite containerSprite = null;
-        // ponytail: 에디터에선 직접 로드. 빌드 배포 시 Popup_Container를 Resources로 옮기고 Resources.Load로 교체 필요.
-#if UNITY_EDITOR
-        containerSprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(
-            "Assets/04.Images/01.UI/05.ShopUI/Popup_Container.png");
-#endif
+        // Resources/UI/Popup_Container (빌드 포함). 스프라이트를 Resources로 옮겨 에디터·빌드 공통 로드.
+        Sprite containerSprite = Resources.Load<Sprite>("UI/Popup_Container");
         if (containerSprite != null)
         {
             bg.sprite = containerSprite;

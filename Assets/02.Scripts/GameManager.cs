@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     {
         if (amount <= 0) return;
         gold += amount;
+        RunStatsLogger.Instance?.GoldGained(amount);
         onGoldChanged?.Invoke(gold);
     }
 
@@ -60,14 +61,28 @@ public class GameManager : MonoBehaviour
         if (amount <= 0) return true;
         if (gold < amount) return false;
         gold -= amount;
+        goldSpent += amount;   // 결과창 '소모 골드'용 누적
+        RunStatsLogger.Instance?.GoldSpent(amount);
         onGoldChanged?.Invoke(gold);
         return true;
     }
+
+    // ── 결과창 통계(런 누적) ──────────────────────────────────
+    [HideInInspector] public int monstersKilled;  // 처치 몬스터 수
+    [HideInInspector] public int goldSpent;        // 소모 골드
+
+    /// <summary>몬스터 처치 시 호출(결과창 '처치 몬스터'용).</summary>
+    public void AddKill() => monstersKilled++;
+
+    /// <summary>런 통계 초기화(새 런/다시하기 시).</summary>
+    public void ResetRunStats() { monstersKilled = 0; goldSpent = 0; }
 
     /// <summary>골드를 시작 기본값으로 초기화합니다. (새 런 시작 시)</summary>
     public void ResetGold()
     {
         gold = _settings != null ? _settings.startingGold : 200;
+        ResetRunStats();
+        RunStatsLogger.Instance?.BeginRun();   // 새 런 통계 시작(1층 진입 시각 0)
         onGoldChanged?.Invoke(gold);
     }
 
@@ -112,6 +127,7 @@ public class GameManager : MonoBehaviour
     public void GoToNextFloor()
     {
         currentFloor++;
+        RunStatsLogger.Instance?.FloorEnter(currentFloor);
         Debug.Log($"[GameManager] {currentFloor}층으로 이동합니다.");
 
         // 보스 층 도달 시: 던전 재생성 대신 보스룸 씬으로 이동
