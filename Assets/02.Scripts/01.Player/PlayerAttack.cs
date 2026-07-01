@@ -420,6 +420,7 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.ThrownExplosive:
             {
                 float explodeR = range * 0.5f;
+                if (id == "WPN_017") explodeR = 1.5f; // 바주카: 폭발 반경 고정(작게) — 미사일 이미지에 맞춰 광역 오폭 방지
                 int   count    = 1;
 
                 if (g5)
@@ -443,8 +444,8 @@ public class PlayerAttack : MonoBehaviour
                 {
                     Vector2 v = count > 1 ? Rotate(toTarget, (i - count / 2) * 20f) : toTarget;
                     if (id == "WPN_017")
-                        // 바주카: 애니 기반 투사체가 가까운 타겟으로 날아가 명중 시 폭발(전방 생성)
-                        SpawnProjectile(entry, v.normalized, explosionRadius: explodeR);
+                        // 바주카: 애니 투사체가 적을 유도 추적해 명중 시 소규모 폭발(전방 생성)
+                        SpawnProjectile(entry, v.normalized, explosionRadius: explodeR, homing: true);
                     else if (animated)
                         // 수류탄 등: 대상 지점에 폭발 애니 1회 재생 + 범위 피해(날아가며 사라지지 않게)
                         SpawnTargetedExplosion(entry, (Vector3)((Vector2)transform.position + v), explodeR);
