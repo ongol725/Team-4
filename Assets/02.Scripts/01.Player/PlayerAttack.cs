@@ -219,7 +219,7 @@ public class PlayerAttack : MonoBehaviour
                 if (id == "WPN_021") range *= 0.5f; // 스피어: 크기 0.5배(표시·피격 함께)
                 if (id == "WPN_019") range *= 0.2f; // 대검: 크기 0.2배(표시·피격 함께)
                 if (id == "WPN_024") range *= 0.5f; // 몽둥이: 크기 0.5배(표시·피격 함께)
-                if (id == "WPN_023") range *= 0.2f; // 메이스: 크기 0.2배(표시·피격 함께)
+                if (id == "WPN_023") range *= 0.4f; // 메이스: 크기 0.4배(0.2→0.4, 애니 2배)
                 // 무기별 기본 각도
                 float angle = id switch
                 {
@@ -326,7 +326,7 @@ public class PlayerAttack : MonoBehaviour
                 float scaleMult = 1f;
                 // 크기 조정은 range로 → 표시(2×range)와 피격(반경 range)이 함께 변함
                 if (id == "WPN_025") range *= 0.5f; // 너클: 크기 0.5배
-                if (id == "WPN_003") range *= 0.5f; // 철퇴: 크기 0.5배
+                if (id == "WPN_003") range *= 1.0f; // 철퇴: 크기 1.0배(0.5→1.0, 애니 2배)
 
                 if (g5)
                 {
@@ -697,7 +697,7 @@ public class PlayerAttack : MonoBehaviour
             go.transform.localScale *= 1f / 3f;
 
         float spin = wd.itemID == "WPN_016" ? 1080f : 0f; // 수리검: 비행 중 자전(초당 3바퀴)
-        float rotOff = wd.itemID == "WPN_001" ? 90f : 0f;  // 단검: 스프라이트 90° 회전해서 등장
+        float rotOff = wd.itemID == "WPN_001" ? -90f : 0f; // 단검: 스프라이트 -90° 회전해서 등장
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
@@ -877,7 +877,7 @@ public class PlayerAttack : MonoBehaviour
         if (frames != null)
         {
             float fps  = af.Length > 1 ? af.Length / 0.5f : 12f; // 0.5초에 1회전 루프
-            float size = 2f * fanRange;
+            float size = 2f * fanRange / 3f; // 불꽃 표시 크기 1/3
             var   vis  = BuildAnimatedGO(frames, fps, $"Flame_{wd.itemName}", size, loop: true, withBody: false);
             vis.transform.SetParent(pivot.transform, false);
             vis.transform.localPosition = new Vector3(0f, size * 0.5f + 0.6f, 0f); // 캐릭터 앞쪽으로
