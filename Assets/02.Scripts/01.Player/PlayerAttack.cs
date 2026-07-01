@@ -698,7 +698,7 @@ public class PlayerAttack : MonoBehaviour
         if (UsesShopIcon(wd.itemID))
             go.transform.localScale *= 1f / 3f;
 
-        float spin = wd.itemID == "WPN_016" ? 1080f : 0f; // 수리검: 비행 중 자전(초당 3바퀴)
+        float spin = 0f; // 자전 없음(수리검 자전 제거)
         float rotOff = wd.itemID == "WPN_001" ? -90f : 0f; // 단검: 스프라이트 -90° 회전해서 등장
         var proj = go.GetComponent<ProjectileBase>() ?? go.AddComponent<ProjectileBase>();
         proj.Init(dir, damage, speed, lifetime, maxHits, knockbackForce,
