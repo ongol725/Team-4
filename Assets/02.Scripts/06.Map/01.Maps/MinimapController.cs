@@ -27,11 +27,12 @@ public class MinimapController : MonoBehaviour
     private int originalSightRadius;
     private Coroutine blindCoroutine;
 
-    // 현재 방 통로 입구 표시(빨간 점) — 독립 기능. false로 끄기 가능.
+    // 현재 방 통로 위치 표시(빨간 삼각형) — 독립 기능. false로 끄기 가능.
     private const bool ENABLE_EXIT_DOTS = true;
+    private const int  EXIT_TRI_DEPTH   = 3; // 삼각형 깊이(타일) — 복도(바깥) 방향으로 뻗는 길이
     private static readonly Color ExitDotColor = new Color(1f, 0.15f, 0.15f); // 밝은 빨강
     private int _currentRoomIndex = -1;
-    private List<Vector2Int> _currentExitCells = new List<Vector2Int>();
+    private List<Vector2[]> _currentExitTris = new List<Vector2[]>(); // 각 원소 = [밑변끝a, 밑변끝b, 꼭짓점]
 
     // 🌟 던전 생성기(DungeonGenerator)가 던전을 다 만들고 나서 이 함수를 호출해 줄 겁니다.
     public void InitializeMinimap(int width, int height, int[,] data, List<Room> generatedRooms, Transform player)
@@ -115,26 +116,49 @@ public class MinimapController : MonoBehaviour
 
         if (idx == _currentRoomIndex) return; // 변화 없음
         _currentRoomIndex = idx;
-        _currentExitCells = (idx >= 0) ? ComputeExitCells(rooms[idx]) : new List<Vector2Int>();
+        _currentExitTris = (idx >= 0) ? ComputeExitTriangles(rooms[idx]) : new List<Vector2[]>();
         RefreshMinimap();
     }
 
-    // 방 테두리 바로 바깥 한 겹에서 바닥(통로)인 셀 = 통로 입구. 미니맵에 빨간 점으로 찍는다.
-    private List<Vector2Int> ComputeExitCells(Room room)
+    // 방↔복도 경계선을 밑변으로, 복도(바깥) 방향으로 꼭짓점이 뻗는 삼각형 목록을 만든다.
+    // 각 변(상/하/좌/우)에서 복도와 맞닿은 연속 구간마다 삼각형 1개.
+    private List<Vector2[]> ComputeExitTriangles(Room room)
     {
-        var list = new List<Vector2Int>();
+        var tris = new List<Vector2[]>();
         RectInt b = room.bounds;
-        for (int x = b.xMin - 1; x <= b.xMax; x++)
+        int x0 = b.xMin, x1 = b.xMax - 1, y0 = b.yMin, y1 = b.yMax - 1; // 방 내부 셀 범위(포함)
+        int d = EXIT_TRI_DEPTH;
+
+        bool Floor(int x, int y) =>
+            x >= 0 && x < mapWidth && y >= 0 && y < mapHeight && mapData[x, y] == 1;
+
+        // 오른쪽(East): 경계 x=b.xMax, 복도셀 (b.xMax, y) — 꼭짓점 +x
+        ScanRuns(y0, y1, y => Floor(b.xMax, y), (s, e) =>
+            tris.Add(new[] { new Vector2(b.xMax, s), new Vector2(b.xMax, e + 1), new Vector2(b.xMax + d, (s + e + 1) * 0.5f) }));
+        // 왼쪽(West): 경계 x=b.xMin, 복도셀 (b.xMin-1, y) — 꼭짓점 -x
+        ScanRuns(y0, y1, y => Floor(b.xMin - 1, y), (s, e) =>
+            tris.Add(new[] { new Vector2(b.xMin, s), new Vector2(b.xMin, e + 1), new Vector2(b.xMin - d, (s + e + 1) * 0.5f) }));
+        // 위(North): 경계 y=b.yMax, 복도셀 (x, b.yMax) — 꼭짓점 +y
+        ScanRuns(x0, x1, x => Floor(x, b.yMax), (s, e) =>
+            tris.Add(new[] { new Vector2(s, b.yMax), new Vector2(e + 1, b.yMax), new Vector2((s + e + 1) * 0.5f, b.yMax + d) }));
+        // 아래(South): 경계 y=b.yMin, 복도셀 (x, b.yMin-1) — 꼭짓점 -y
+        ScanRuns(x0, x1, x => Floor(x, b.yMin - 1), (s, e) =>
+            tris.Add(new[] { new Vector2(s, b.yMin), new Vector2(e + 1, b.yMin), new Vector2((s + e + 1) * 0.5f, b.yMin - d) }));
+
+        return tris;
+    }
+
+    // [from..to] 범위에서 pred가 참인 연속 구간마다 onRun(start,end) 호출
+    private void ScanRuns(int from, int to, System.Func<int, bool> pred, System.Action<int, int> onRun)
+    {
+        int runStart = -1;
+        for (int i = from; i <= to; i++)
         {
-            for (int y = b.yMin - 1; y <= b.yMax; y++)
-            {
-                var cell = new Vector2Int(x, y);
-                if (b.Contains(cell)) continue;                 // 방 내부는 제외(테두리 밖만)
-                if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) continue;
-                if (mapData[x, y] == 1) list.Add(cell);         // 바닥(통로) → 입구
-            }
+            bool ok = pred(i);
+            if (ok && runStart < 0) runStart = i;
+            else if (!ok && runStart >= 0) { onRun(runStart, i - 1); runStart = -1; }
         }
-        return list;
+        if (runStart >= 0) onRun(runStart, to);
     }
 
     // 시야 밝히기 로직 (기존 던전 제너레이터에 있던 코드 그대로 이사)
@@ -235,19 +259,47 @@ public class MinimapController : MonoBehaviour
                 }
             }
         }
-        // 현재 방의 통로 입구를 빨간 점으로 덧칠(안개와 무관하게 항상 표시 — 어두워도 통로 방향 확인)
-        if (ENABLE_EXIT_DOTS && _currentExitCells != null)
+        // 현재 방의 통로 위치를 빨간 삼각형으로 덧칠(안개와 무관하게 항상 표시 — 어두워도 통로 방향 확인)
+        if (ENABLE_EXIT_DOTS && _currentExitTris != null)
         {
-            foreach (var c in _currentExitCells)
-            {
-                if (c.x >= 0 && c.x < mapWidth && c.y >= 0 && c.y < mapHeight)
-                    pixels[c.y * mapWidth + c.x] = ExitDotColor;
-            }
+            foreach (var t in _currentExitTris)
+                FillTriangle(pixels, t[0], t[1], t[2], ExitDotColor);
         }
 
         minimapTexture.SetPixels(pixels);
         minimapTexture.Apply();
     }
+
+    // 텍스처(픽셀 버퍼)에 삼각형을 채운다. 좌표는 타일 단위(픽셀=타일).
+    private void FillTriangle(Color[] px, Vector2 a, Vector2 b, Vector2 c, Color col)
+    {
+        int minX = Mathf.Clamp(Mathf.FloorToInt(Mathf.Min(a.x, Mathf.Min(b.x, c.x))), 0, mapWidth - 1);
+        int maxX = Mathf.Clamp(Mathf.CeilToInt (Mathf.Max(a.x, Mathf.Max(b.x, c.x))), 0, mapWidth - 1);
+        int minY = Mathf.Clamp(Mathf.FloorToInt(Mathf.Min(a.y, Mathf.Min(b.y, c.y))), 0, mapHeight - 1);
+        int maxY = Mathf.Clamp(Mathf.CeilToInt (Mathf.Max(a.y, Mathf.Max(b.y, c.y))), 0, mapHeight - 1);
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                var p = new Vector2(x + 0.5f, y + 0.5f); // 픽셀 중심
+                if (PointInTriangle(p, a, b, c)) px[y * mapWidth + x] = col;
+            }
+        }
+    }
+
+    private static bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+    {
+        float d1 = Cross(p, a, b);
+        float d2 = Cross(p, b, c);
+        float d3 = Cross(p, c, a);
+        bool hasNeg = d1 < 0f || d2 < 0f || d3 < 0f;
+        bool hasPos = d1 > 0f || d2 > 0f || d3 > 0f;
+        return !(hasNeg && hasPos); // 세 변에 대해 같은 쪽이면 내부
+    }
+
+    private static float Cross(Vector2 p, Vector2 a, Vector2 b) =>
+        (p.x - b.x) * (a.y - b.y) - (a.x - b.x) * (p.y - b.y);
 
     // 외부(함정 등)에서 시야를 일정 시간 차단할 때 호출
     public void SetBlind(float duration)
