@@ -425,10 +425,21 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         if (_isFollowingMouse) return;
         if (_gridUI.IsAnyFollowingMouse) return; // 다른 블록 드래그 중 → 클릭 무시
 
-        // 우클릭: 임시칸 → 합성 우선, 빈 공간 자동 배치
+        // 우클릭: 임시칸 아이템 → 합성/자동 배치, 그리드 배치 아이템 → 임시칸으로 이동
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if (_isInTempSlot) TrySmartPlaceFromTempSlot();
+            if (_isInTempSlot)
+            {
+                TrySmartPlaceFromTempSlot();
+            }
+            else if (_isPlaced && !(_instance.data is SO_InventoryBlockData))
+            {
+                // 배치된 아이템 우클릭 → 임시칸으로 이동
+                _grid.Remove(_instance);
+                _gridUI.OnItemUnplaced(_instance);
+                _isPlaced = false;
+                SendToTempSlot();
+            }
             return;
         }
 
