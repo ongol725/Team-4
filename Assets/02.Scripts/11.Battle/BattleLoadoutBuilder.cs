@@ -74,6 +74,15 @@ public class BattleLoadoutBuilder : MonoBehaviour
         loadout.tempAtkSpdMult = 1f - atkPen  / 100f;
     }
 
+    /// <summary>임시칸 과적 심각도 0~1 (UI 색 표시용, 페널티 공식과 단일 소스).
+    /// count = 반지 제외 임시칸 아이템 수. 이속 페널티가 상한에 닿을 때 1.</summary>
+    public static float GetTempSeverity(int countExcludingRings)
+    {
+        int n = Mathf.Max(0, countExcludingRings - TEMP_FREE);
+        float movePen = Mathf.Min(MOVE_CAP, MOVE_BASE * n + MOVE_ACCEL * (n * (n - 1) * 0.5f));
+        return MOVE_CAP > 0f ? Mathf.Clamp01(movePen / MOVE_CAP) : 0f;
+    }
+
     // 임시칸에 든 아이템 중 반지(장신구)를 제외한 수
     private static int CountTempItemsExcludingRings()
     {

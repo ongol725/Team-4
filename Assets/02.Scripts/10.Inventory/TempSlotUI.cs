@@ -123,9 +123,47 @@ public class TempSlotUI : MonoBehaviour
         }
     }
 
+    // 과적 색 단계: 연한 노랑 → 주황 → 빨강 → 진한 빨강
+    private static readonly Color[] OverloadStops =
+    {
+        new Color(1.00f, 0.95f, 0.50f, 0.90f), // 연노랑
+        new Color(1.00f, 0.60f, 0.20f, 0.92f), // 주황
+        new Color(0.90f, 0.15f, 0.10f, 0.95f), // 빨강
+        new Color(0.45f, 0.00f, 0.00f, 0.97f), // 진한 빨강
+    };
+
     private void UpdateBackground()
     {
-        if (_background != null)
-            _background.color = IsOccupied ? _occupiedColor : _emptyColor;
+        if (_background == null) return;
+
+        if (!IsOccupied) { _background.color = _emptyColor; return; }
+
+        // 반지 제외 아이템 수로 과적 심각도(0~1) 산출 → 색으로 표시
+        int cnt = CountNonRingItems();
+        float sev = BattleLoadoutBuilder.GetTempSeverity(cnt);
+        _background.color = sev <= 0f ? _occupiedColor : OverloadColor(sev);
+    }
+
+    private int CountNonRingItems()
+    {
+        int n = 0;
+        foreach (var b in _heldBlocks)
+        {
+            var data = b != null && b.Instance != null ? b.Instance.data : null;
+            if (data == null || data is SO_AccessoryData) continue; // 반지 노카운트
+            n++;
+        }
+        return n;
+    }
+
+    // severity(0~1)를 OverloadStops 구간에 매핑해 색 보간
+    private static Color OverloadColor(float s)
+    {
+        s = Mathf.Clamp01(s);
+        int seg = OverloadStops.Length - 1;          // 구간 수
+        float scaled = s * seg;
+        int i = Mathf.Min((int)scaled, seg - 1);
+        float f = scaled - i;
+        return Color.Lerp(OverloadStops[i], OverloadStops[i + 1], f);
     }
 }

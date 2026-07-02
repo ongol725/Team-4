@@ -412,6 +412,24 @@ public class InventoryGridUI : MonoBehaviour
         if (_activeFollowingBlock != null)
             _activeFollowingBlock.ForceSendToTempSlot();
 
+        // 인벤토리 확장 블록: 비활성(잠긴) 칸에 자동 확장
+        if (inst.data is SO_InventoryBlockData)
+        {
+            var bo = FindFirstValidBlockExpansion(inst);
+            if (bo.HasValue)
+            {
+                _grid.ExpandWithBlock(inst, bo.Value);
+                RefreshCellColors();
+                _grid.NotifyChanged();
+            }
+            else
+            {
+                // 맞는 잠긴 자리가 없으면 수동 배치로 폴백(마우스 따라다니는 블록)
+                BeginFollowFromShop(inst);
+            }
+            return;
+        }
+
         if (TryMergeWithExisting(inst)) return;
 
         var origin = FindFirstValidPlacement(inst);
@@ -461,6 +479,29 @@ public class InventoryGridUI : MonoBehaviour
             if (_grid.IsValidPlacement(inst, cell)) return cell;
         }
         return null;
+    }
+
+    /// <summary>인벤토리 확장 블록을 놓을 수 있는(잠긴+미점유) 첫 유효 원점.</summary>
+    public Vector2Int? FindFirstValidBlockExpansion(ItemInstance inst)
+    {
+        for (int r = 0; r < _grid.Rows; r++)
+        for (int c = 0; c < _grid.Cols; c++)
+        {
+            var cell = new Vector2Int(r, c);
+            if (_grid.IsValidBlockExpansion(inst, cell)) return cell;
+        }
+        return null;
+    }
+
+    /// <summary>상점 아이템을 마우스 따라다니는 블록으로 생성(수동 배치 폴백).</summary>
+    private void BeginFollowFromShop(ItemInstance inst)
+    {
+        var go = new GameObject("ItemBlock", typeof(RectTransform));
+        go.transform.SetParent(transform.root, false);
+        go.transform.SetAsLastSibling();
+
+        var block = go.AddComponent<ItemBlockUI>();
+        block.Initialize(inst, this, _grid, _cellSize); // Initialize 끝에서 SetFollowing(true)
     }
 
     /// <summary>지정 셀에 아이템 블록을 마우스 없이 즉시 배치.</summary>
