@@ -606,6 +606,13 @@ namespace BagSurvivor.Monster
                 // 엘리트/중간보스/최종보스 = '층 보스'로 기록
                 if (GetComponent<EliteMonster>() != null || GetComponent<BossPatternDriver>() != null)
                     RunStatsLogger.Instance.BossKilled(floor);
+
+                // 최종 보스(5층 패턴 보스) 처치 → 런 클리어 처리 + 통계 전송
+                if (GetComponent<BossPatternDriver>() != null && floor >= 5)
+                {
+                    var ph = UnityEngine.Object.FindFirstObjectByType<PlayerHealth>();
+                    if (ph != null) ph.ReportRunClear();
+                }
             }
 
             // 1. 즉시 충돌체 비활성화
