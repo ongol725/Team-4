@@ -52,6 +52,8 @@ namespace BagSurvivor.UI
         private int  _lastLayerIdx = -1;
         private bool _inited;
         private RectTransform _autoTimerFillRt; // 자동 생성한 타이머 채움(폭 직접 제어)
+        private Image     _sweep;    // 새 겹 차오름 연출 오버레이(mainFill 복제)
+        private Coroutine _sweepCo;
 
         // 힘 축적 팝업
         private GameObject    _popupGo;
@@ -104,6 +106,7 @@ namespace BagSurvivor.UI
             EnsureInit();
 
             // 시간에 따른 겹 상승 (보스 연결 여부와 무관 — 던전에서도 축적)
+            bool newLayerAdded = false;
             if (_layerHP > 0 && !(target != null && target.IsDead))
             {
                 int targetLayers = Mathf.Clamp(
@@ -114,6 +117,7 @@ namespace BagSurvivor.UI
                     _appliedLayers++;
                     AddOneLayerHp();
                     ShowPowerPopup(); // 1겹 오를 때마다 "힘 축적" 팝업
+                    newLayerAdded = true;
                 }
             }
 
@@ -131,7 +135,16 @@ namespace BagSurvivor.UI
 
             float cur = CurrentLayerFill(out int layerIdx);
 
-            if (layerIdx != _lastLayerIdx)
+            if (newLayerAdded)
+            {
+                // 새 겹: 새 색이 바 위로 좌→우로 차오르는 연출.
+                // 밑바탕(mainFill)은 이전 색을 유지하다가 스윕이 끝나면 새 색으로 확정된다.
+                _lastLayerIdx = layerIdx;
+                StartLayerSweep(RainbowColor(layerIdx));
+                displayedDelayed = cur; catchFrom = cur; delayTimer = 0f; catchTimer = 0f;
+                SetDelayed(cur);
+            }
+            else if (layerIdx != _lastLayerIdx)
             {
                 _lastLayerIdx = layerIdx;
                 ApplyLayerColor(layerIdx);
@@ -189,6 +202,69 @@ namespace BagSurvivor.UI
             Color c = RainbowColor(idx);
             if (mainFill != null) mainFill.color = c;
             if (delayedFill != null) { Color d = c * 0.5f; d.a = 1f; delayedFill.color = d; }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // 새 겹 "차오름" 연출: mainFill을 그대로 복제한 오버레이가 새 색으로 0→100% 채워짐.
+        //  - mainFill에서 RectTransform/스프라이트/Filled 설정을 복사 → 위치·채움이 정확히 일치.
+        // ─────────────────────────────────────────────────────────────
+        private void EnsureSweepOverlay()
+        {
+            if (_sweep != null || mainFill == null) return;
+            var src = mainFill.rectTransform;
+            var parent = src.parent as RectTransform;
+            if (parent == null) return;
+
+            var go = new GameObject("LayerSweep", typeof(RectTransform), typeof(Image));
+            var rt = (RectTransform)go.transform;
+            rt.SetParent(parent, false);
+            rt.anchorMin = src.anchorMin;
+            rt.anchorMax = src.anchorMax;
+            rt.pivot     = src.pivot;
+            rt.offsetMin = src.offsetMin;   // 앵커 설정 뒤 오프셋 복사 → 완전히 동일한 사각형
+            rt.offsetMax = src.offsetMax;
+
+            _sweep = go.GetComponent<Image>();
+            _sweep.sprite         = mainFill.sprite;
+            _sweep.material       = mainFill.material;
+            _sweep.type           = mainFill.type;
+            _sweep.fillMethod     = mainFill.fillMethod;
+            _sweep.fillOrigin     = mainFill.fillOrigin;
+            _sweep.preserveAspect = mainFill.preserveAspect;
+            _sweep.fillAmount     = 0f;
+            _sweep.raycastTarget  = false;
+            _sweep.enabled        = false;
+        }
+
+        private void StartLayerSweep(Color c)
+        {
+            EnsureSweepOverlay();
+            if (_sweep == null) { ApplyLayerColor(_lastLayerIdx); return; } // 폴백: 즉시 색 변경
+            if (_sweepCo != null) StopCoroutine(_sweepCo);
+            _sweepCo = StartCoroutine(SweepRoutine(c));
+        }
+
+        private IEnumerator SweepRoutine(Color c)
+        {
+            _sweep.color = c;
+            _sweep.fillAmount = 0f;
+            _sweep.enabled = true;
+            // mainFill 바로 위에 배치(그 위의 텍스트 등은 가리지 않도록 +1만)
+            _sweep.rectTransform.SetSiblingIndex(mainFill.rectTransform.GetSiblingIndex() + 1);
+
+            const float dur = 0.55f;
+            float t = 0f;
+            while (t < dur)
+            {
+                t += Time.deltaTime;
+                _sweep.fillAmount = Mathf.Clamp01(t / dur);
+                yield return null;
+            }
+            _sweep.fillAmount = 1f;
+            ApplyLayerColor(_lastLayerIdx); // 새 색을 실제 바(main/delayed)에 확정 → 오버레이 숨겨도 이어짐
+            _sweep.enabled = false;
+            _sweep.fillAmount = 0f;
+            _sweepCo = null;
         }
 
         // 무지개 색 — 겹마다 순환(빨→주→노→초→청→파→보)
