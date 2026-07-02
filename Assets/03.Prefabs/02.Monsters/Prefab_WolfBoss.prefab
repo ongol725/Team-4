@@ -187,7 +187,7 @@ MonoBehaviour:
   hpBarPrefab: {fileID: 0}
   shadowWidthMul: 1
   shadowFixedLocalY: 1
-  shadowLocalY: -1.9
+  shadowLocalY: -1.4
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
