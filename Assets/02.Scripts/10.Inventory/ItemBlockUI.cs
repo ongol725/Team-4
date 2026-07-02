@@ -133,7 +133,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         var mouse    = Mouse.current;
         var mousePos = (Vector2)mouse.position.ReadValue();
 
-        _rt.position = mousePos;
+        // 피벗(좌상단) 기준 위치를 아이템 크기만큼 이동해 '우하단'이 마우스에 오게 함
+        float w = _rt.rect.width  * _rt.lossyScale.x;
+        float h = _rt.rect.height * _rt.lossyScale.y;
+        _rt.position = mousePos + new Vector2(-w, h);
 
         var cell = _gridUI.ScreenToCell(mousePos);
         if (cell.HasValue)
