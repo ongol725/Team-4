@@ -154,6 +154,9 @@ MonoBehaviour:
   dungeonGenerator: {fileID: 1966734777}
   pool: {fileID: 92913258}
   difficulty: {fileID: 92913257}
+  spawnIndicator: {fileID: 3282872480293601917, guid: d9a33c8668fa33e458842524debdb589, type: 3}
+  spawnTelegraphSeconds: 2
+  spawnIndicatorSize: 1.5
   normalMonsters:
   - {fileID: 6151427403419922927, guid: a43f05829aa2dc84f8720d5f3febd810, type: 3}
   - {fileID: 1036162356454921042, guid: 2322750abf5424c4dacfe4df7088a56e, type: 3}

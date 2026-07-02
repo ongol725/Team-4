@@ -135,7 +135,19 @@ namespace BagSurvivor.Monster
         public int prewarmPerType = 8;
 
         // 일반방 동시 생존 상한 배수(재미: 적 많음). 특수방(엘리트/보스)은 미적용.
-        private const int NORMAL_SPAWN_MULT = 2;
+        private const int NORMAL_SPAWN_MULT = 3;
+
+        [Header("스폰 예고(텔레그래프) — 독립 기능")]
+        [Tooltip("적 생성 전 위치에 표시할 스프라이트(예: Sanctuary_Gd). 미지정 시 예고 없이 즉시 스폰")]
+        public Sprite spawnIndicator;
+        [Tooltip("예고 표시 후 실제 스폰까지 대기(초)")]
+        public float spawnTelegraphSeconds = 2f;
+        [Tooltip("예고 표시 지름(월드 단위)")]
+        public float spawnIndicatorSize = 1.5f;
+
+        private int _pendingSpawns; // 예고 대기 중 스폰 수(상한 초과 방지)
+        private readonly List<Coroutine>  _telegraphRoutines = new List<Coroutine>();
+        private readonly List<GameObject> _spawnMarkers      = new List<GameObject>();
 
         [Header("타일맵 직접 지정 (선택: 미지정 시 DungeonGenerator에서 자동 참조)")]
         [Tooltip("바닥 타일맵 직접 지정 (테스트/특수 상황용)")]
@@ -395,6 +407,13 @@ namespace BagSurvivor.Monster
         private void StopContinuous()
         {
             if (continuousRoutine != null) { StopCoroutine(continuousRoutine); continuousRoutine = null; }
+
+            // 예고 대기 중이던 스폰·마커 정리(방 이탈/층 변경 시 유령 스폰 방지)
+            foreach (var co in _telegraphRoutines) if (co != null) StopCoroutine(co);
+            _telegraphRoutines.Clear();
+            foreach (var m in _spawnMarkers) if (m != null) Destroy(m);
+            _spawnMarkers.Clear();
+            _pendingSpawns = 0;
         }
 
         /// <summary>일반방에 머무는 동안 밴드 풀에서 maxAlive를 유지하며 지속 스폰합니다(죽은 만큼 보충).</summary>
@@ -414,16 +433,17 @@ namespace BagSurvivor.Monster
 
             while (true)
             {
-                // 동시 생존이 상한 미만이면 1마리 보충 (진입 직후엔 빠르게 상한까지 채워짐)
-                if (activeMonsters.Count < maxAlive)
+                // 생존 + 예고대기 합이 상한 미만이면 1마리 예고→스폰 (예고 대기 수를 포함해 폭증 방지)
+                if (activeMonsters.Count + _pendingSpawns < maxAlive)
                 {
                     float hpMul = difficulty != null ? difficulty.GetHpMultiplier() : 1f;
                     float atkMul = difficulty != null ? difficulty.GetAttackMultiplier() : 1f;
-                    SpawnOne(rc, pool2[Random.Range(0, pool2.Length)], hpMul, atkMul);
+                    var co = StartCoroutine(SpawnWithTelegraph(rc, pool2[Random.Range(0, pool2.Length)], hpMul, atkMul));
+                    _telegraphRoutines.Add(co);
                 }
 
                 // 상한 미달이면 빠르게 채우고(다음 프레임), 가득 차면 interval 대기
-                if (activeMonsters.Count < maxAlive) yield return null;
+                if (activeMonsters.Count + _pendingSpawns < maxAlive) yield return null;
                 else yield return wait;
             }
         }
@@ -512,12 +532,56 @@ namespace BagSurvivor.Monster
             return pick;
         }
 
+        // 일반방: 위치를 먼저 정해 예고(마커) 2초 표시 후 그 자리에 스폰
+        private IEnumerator SpawnWithTelegraph(RoomController rc, GameObject prefab, float hpMul, float atkMul)
+        {
+            if (prefab == null) yield break;
+
+            Vector3 pos;
+            if (!TryGetSpawnPosition(rc.roomBounds, out pos)) yield break;
+
+            _pendingSpawns++;
+
+            GameObject marker = null;
+            if (spawnIndicator != null && spawnTelegraphSeconds > 0f)
+            {
+                marker = CreateSpawnMarker(pos);
+                _spawnMarkers.Add(marker);
+                yield return new WaitForSeconds(spawnTelegraphSeconds);
+                if (marker != null) { _spawnMarkers.Remove(marker); Destroy(marker); }
+            }
+
+            _pendingSpawns = Mathf.Max(0, _pendingSpawns - 1);
+            SpawnAt(rc, prefab, pos, hpMul, atkMul);
+        }
+
+        // 예고 마커 생성(2초간 표시, 살짝 명멸/확대해 눈에 띄게)
+        private GameObject CreateSpawnMarker(Vector3 pos)
+        {
+            var go = new GameObject("SpawnMarker");
+            go.transform.position = pos;
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = spawnIndicator;
+            sr.sortingOrder = 5; // 바닥 위, 몬스터 아래쯤
+            var b = spawnIndicator.bounds;
+            float ext = Mathf.Max(b.extents.x, b.extents.y);
+            go.transform.localScale = Vector3.one * (ext > 0.001f ? spawnIndicatorSize * 0.5f / ext : spawnIndicatorSize);
+            go.AddComponent<SpawnMarkerPulse>(); // 명멸 연출(자기완결)
+            return go;
+        }
+
         private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool enableBossPattern = false)
         {
             if (prefab == null) return;
-
             Vector3 pos;
             if (!TryGetSpawnPosition(rc.roomBounds, out pos)) return;
+            SpawnAt(rc, prefab, pos, hpMul, atkMul, enableBossPattern);
+        }
+
+        // 지정 위치에 실제 스폰(SpawnOne/예고 공용)
+        private void SpawnAt(RoomController rc, GameObject prefab, Vector3 pos, float hpMul, float atkMul, bool enableBossPattern = false)
+        {
+            if (prefab == null) return;
 
             // 엘리트 프리팹이면 인스펙터 배율(기본 HP 5배)을 난이도 배율에 곱함
             var elite = prefab.GetComponent<EliteMonster>();
