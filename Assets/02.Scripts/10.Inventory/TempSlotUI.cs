@@ -147,8 +147,9 @@ public class TempSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     // ── 호버 시 과적 디메리트 간단 표기(작은 팝업) ──
-    private GameObject      _tooltip;
-    private TextMeshProUGUI _tooltipText;
+    private GameObject          _tooltip;
+    private TextMeshProUGUI     _tooltipText;
+    private static TMP_FontAsset _koFont; // 한글 지원 TMP 폰트(기본 폰트는 한글이 □로 깨짐)
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -190,6 +191,8 @@ public class TempSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         trt.offsetMin = new Vector2(6f, 4f); trt.offsetMax = new Vector2(-6f, -4f);
 
         _tooltipText = textGO.AddComponent<TextMeshProUGUI>();
+        if (_koFont == null) _koFont = Resources.Load<TMP_FontAsset>("Fonts/BoldDunggeunmo SDF Damage");
+        if (_koFont != null) _tooltipText.font = _koFont; // 한글 폰트(기본 폰트는 □로 깨짐)
         _tooltipText.fontSize      = 15;
         _tooltipText.alignment     = TextAlignmentOptions.Center;
         _tooltipText.color         = Color.white;
