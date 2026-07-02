@@ -25,6 +25,7 @@ public class AutoMergeSystem : MonoBehaviour
 
     private void Update()
     {
+        if (!InventoryPopupToggle.AnyOpen) return; // 인벤창 열렸을 때만 단축키 작동
 #if ENABLE_INPUT_SYSTEM
         if (Keyboard.current != null && Keyboard.current.lKey.wasPressedThisFrame)
             RunAutoMerge();

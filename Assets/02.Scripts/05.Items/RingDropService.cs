@@ -37,6 +37,7 @@ public static class RingDropService
     private static void SpawnPickup(Vector3 pos, SO_ItemData ring)
     {
         var go = new GameObject("RingPickup") { transform = { position = new Vector3(pos.x, pos.y, 0f) } };
+        go.transform.localScale = Vector3.one * 0.5f; // 드랍 이미지 가로세로 1/2배(과대 표시 방지)
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = ring.itemImage;   // ponytail: 임시 = 반지 아이콘. 전용 픽업 스프라이트 준비되면 교체.
         sr.sortingOrder = 20;

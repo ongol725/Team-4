@@ -38,6 +38,24 @@ namespace BagSurvivor.Items
         [Header("드롭 분산 반경 (동전 여러 개 흩뿌리기, m)")]
         public float scatterRadius = 0.5f;
 
+        [Header("골드 자동 획득 반경 (이 거리 안에 들어오면 캐릭터로 빨려옴, m)")]
+        public float pickupRadius = 2.5f;
+
+        // 플레이어 Transform 캐시(태그로 1회 탐색). 획득 반경 판정용.
+        private Transform _playerTf;
+        public Transform PlayerTransform
+        {
+            get
+            {
+                if (_playerTf == null)
+                {
+                    var p = GameObject.FindWithTag("Player");
+                    if (p != null) _playerTf = p.transform;
+                }
+                return _playerTf;
+            }
+        }
+
         [Header("풀 부모 (미지정 시 자동 생성)")]
         public Transform poolRoot;
 
@@ -173,6 +191,28 @@ namespace BagSurvivor.Items
             g.gameObject.SetActive(false);
             g.transform.SetParent(poolRoot);
             pool.Push(g);
+        }
+
+        /// <summary>
+        /// 바닥에 남은 드랍 골드를 모두 플레이어에게 빨려가듯 날려 획득시킨다(방 이탈 시 자동수집 연출).
+        /// player가 null이면 즉시 획득으로 폴백.
+        /// </summary>
+        public void CollectAllDropped(Transform player = null)
+        {
+            if (poolRoot == null) return;
+            // 먼저 수집(FlyToPlayer 도중 풀 반환으로 자식 순서가 바뀌어도 안전하게)
+            var active = new List<GoldPickup>();
+            foreach (Transform child in poolRoot)
+            {
+                if (!child.gameObject.activeSelf) continue;
+                var g = child.GetComponent<GoldPickup>();
+                if (g != null) active.Add(g);
+            }
+            foreach (var g in active)
+            {
+                if (player != null) g.FlyToPlayer(player);
+                else                g.CollectNow();
+            }
         }
 
         /// <summary>

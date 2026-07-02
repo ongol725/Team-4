@@ -15,6 +15,7 @@ MonoBehaviour:
   summonID: SUM_GOLEM_4
   summonName: "정령 골렘 (골드)"
   aiType: 0
+  spriteFacesLeft: 1
   atkMultiplier: 0.5
   moveSpeed: 6
   atkCooldown: 0.5

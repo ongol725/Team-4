@@ -133,9 +133,16 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         var mouse    = Mouse.current;
         var mousePos = (Vector2)mouse.position.ReadValue();
 
-        _rt.position = mousePos;
+        // 아이템 '중심'이 커서에 오도록(피벗=좌상단이라 크기 절반만큼 이동)
+        float w = _rt.rect.width  * _rt.lossyScale.x;
+        float h = _rt.rect.height * _rt.lossyScale.y;
+        _rt.position = mousePos + new Vector2(-w * 0.5f, h * 0.5f);
 
-        var cell = _gridUI.ScreenToCell(mousePos);
+        // WYSIWYG 배치: 아이템 좌상단 칸의 중심을 샘플 → 눈에 보이는 그대로의 칸에 배치·하이라이트
+        float cellPx = _cellSize * _rt.lossyScale.x;
+        Vector2 sample = (Vector2)_rt.position + new Vector2(cellPx * 0.5f, -cellPx * 0.5f);
+        Vector2Int? cell = _gridUI.ScreenToCell(sample);
+
         if (cell.HasValue)
             _gridUI.HighlightPlacement(_instance, cell.Value);
         else
@@ -425,10 +432,21 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         if (_isFollowingMouse) return;
         if (_gridUI.IsAnyFollowingMouse) return; // 다른 블록 드래그 중 → 클릭 무시
 
-        // 우클릭: 임시칸 → 합성 우선, 빈 공간 자동 배치
+        // 우클릭: 임시칸 아이템 → 합성/자동 배치, 그리드 배치 아이템 → 임시칸으로 이동
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if (_isInTempSlot) TrySmartPlaceFromTempSlot();
+            if (_isInTempSlot)
+            {
+                TrySmartPlaceFromTempSlot();
+            }
+            else if (_isPlaced && !(_instance.data is SO_InventoryBlockData))
+            {
+                // 배치된 아이템 우클릭 → 임시칸으로 이동
+                _grid.Remove(_instance);
+                _gridUI.OnItemUnplaced(_instance);
+                _isPlaced = false;
+                SendToTempSlot();
+            }
             return;
         }
 
@@ -496,6 +514,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     public void OnSentToTempSlot(TempSlotUI slot)
     {
+        SetFollowing(false);  // 임시칸에 들어가면 마우스 추적 해제(드롭 반지가 따라다니다 오배치되는 버그 방지)
         _isPlaced     = false;
         _isInTempSlot = true;
         _tempSlot     = slot;
