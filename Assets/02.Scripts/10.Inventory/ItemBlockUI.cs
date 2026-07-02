@@ -507,6 +507,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     public void OnSentToTempSlot(TempSlotUI slot)
     {
+        SetFollowing(false);  // 임시칸에 들어가면 마우스 추적 해제(드롭 반지가 따라다니다 오배치되는 버그 방지)
         _isPlaced     = false;
         _isInTempSlot = true;
         _tempSlot     = slot;
