@@ -192,7 +192,7 @@ MonoBehaviour:
   stopDistance: 0
   approachOverlap: 0.4
   deathDelay: 5
-  damageReductionVfxPrefab: {fileID: 7615671605457786372, guid: 460a0c475bcf0dc4991286fea6957060, type: 3}
+  damageReductionVfxPrefab: {fileID: 3909060981160778116, guid: 460a0c475bcf0dc4991286fea6957060, type: 3}
 --- !u!114 &1839172850203504646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,10 +217,10 @@ MonoBehaviour:
   drawRangeGizmo: 1
   hitCount: 3
   firstHitInterval: 0.4
-  hitRange: 2.962963
+  hitRange: 5.925926
   attackAngle: 120
-  telegraphPrefab: {fileID: 7866192023862575234, guid: 23e9355ccc5d8a54ebcb14b45facc5e5, type: 3}
-  hitEffectPrefab: {fileID: 3774408115409620830, guid: bd31730943a8b14499c94f4943fd1c8d, type: 3}
+  telegraphPrefab: {fileID: 6581287303265451942, guid: 23e9355ccc5d8a54ebcb14b45facc5e5, type: 3}
+  hitEffectPrefab: {fileID: 0}
 --- !u!114 &6151717189659811340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   wallProbe: 0.8
   stopOnHit: 0.3
   phase2SecondDashTelegraph: 0.5
-  telegraphPrefab: {fileID: 3479124979689236717, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
+  telegraphPrefab: {fileID: 2288883914229809625, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
   impactEffectPrefab: {fileID: 3774408115409620830, guid: bd31730943a8b14499c94f4943fd1c8d, type: 3}
 --- !u!114 &8148719600609751913
 MonoBehaviour:
@@ -345,7 +345,7 @@ MonoBehaviour:
   phase2SummonCount: 5
   phase1WolfStartDelay: 2
   phase2WolfStartDelay: 0.3
-  wolfPrefab: {fileID: 1873999932027093102, guid: 1e83a3214d43ee745ad7deb3025446b6, type: 3}
+  wolfPrefab: {fileID: 4715965548098721940, guid: 1e83a3214d43ee745ad7deb3025446b6, type: 3}
   telegraphPrefab: {fileID: 0}
 --- !u!114 &3827026974784414885
 MonoBehaviour:
@@ -377,9 +377,9 @@ MonoBehaviour:
   ringWarningTime: 0.5
   phase2SecondWaveDelay: 0.7
   phase2SecondWaveRingDelay: 0.2
-  telegraphPrefab: {fileID: 6257079576885168005, guid: fb99248d28590d84198d34fafa813ced, type: 3}
-  ringWarningPrefab: {fileID: 6257079576885168005, guid: fb99248d28590d84198d34fafa813ced, type: 3}
-  ringWarningPrefabOuter: {fileID: 591906756994824545, guid: d834828ef23e7ea42af4b3c9c5b6bcc7, type: 3}
+  telegraphPrefab: {fileID: 7141889836203805253, guid: fb99248d28590d84198d34fafa813ced, type: 3}
+  ringWarningPrefab: {fileID: 7141889836203805253, guid: fb99248d28590d84198d34fafa813ced, type: 3}
+  ringWarningPrefabOuter: {fileID: 5546235816597213466, guid: d834828ef23e7ea42af4b3c9c5b6bcc7, type: 3}
   ringEffectPrefab: {fileID: 0}
   ringMaskPrefab: {fileID: 0}
 --- !u!114 &1951138826211289386
@@ -481,7 +481,7 @@ MonoBehaviour:
   invincibleThreshold: 0.35
   transitionDuration: 2
   phaseCenterOffset: {x: 0, y: -8, z: 0}
-  floorHazardPrefab: {fileID: 302090966893093285, guid: 6616746a84c0c3647907e2dfc278bac8, type: 3}
+  floorHazardPrefab: {fileID: 881924179731086750, guid: 6616746a84c0c3647907e2dfc278bac8, type: 3}
   phase2BasicChance: 0.6
 --- !u!114 &3635094568382575677
 MonoBehaviour:
