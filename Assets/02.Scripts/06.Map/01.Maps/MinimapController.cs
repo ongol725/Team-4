@@ -27,6 +27,12 @@ public class MinimapController : MonoBehaviour
     private int originalSightRadius;
     private Coroutine blindCoroutine;
 
+    // 현재 방 통로 입구 표시(빨간 점) — 독립 기능. false로 끄기 가능.
+    private const bool ENABLE_EXIT_DOTS = true;
+    private static readonly Color ExitDotColor = new Color(1f, 0.15f, 0.15f); // 밝은 빨강
+    private int _currentRoomIndex = -1;
+    private List<Vector2Int> _currentExitCells = new List<Vector2Int>();
+
     // 🌟 던전 생성기(DungeonGenerator)가 던전을 다 만들고 나서 이 함수를 호출해 줄 겁니다.
     public void InitializeMinimap(int width, int height, int[,] data, List<Room> generatedRooms, Transform player)
     {
@@ -90,6 +96,45 @@ public class MinimapController : MonoBehaviour
             lastPlayerPos = currentGridPos;
             UpdateExploration(currentGridPos);
         }
+
+        // 현재 방이 바뀌면 통로 입구(빨간 점) 갱신
+        if (ENABLE_EXIT_DOTS) UpdateCurrentRoomExits(currentGridPos);
+    }
+
+    // 플레이어가 속한 방을 찾아, 방이 바뀌면 그 방의 통로 입구 셀을 계산하고 미니맵을 다시 그린다.
+    // 방 밖(통로)이면 표시를 비운다.
+    private void UpdateCurrentRoomExits(Vector2Int pos)
+    {
+        if (rooms == null) return;
+
+        int idx = -1;
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            if (rooms[i].bounds.Contains(pos)) { idx = i; break; }
+        }
+
+        if (idx == _currentRoomIndex) return; // 변화 없음
+        _currentRoomIndex = idx;
+        _currentExitCells = (idx >= 0) ? ComputeExitCells(rooms[idx]) : new List<Vector2Int>();
+        RefreshMinimap();
+    }
+
+    // 방 테두리 바로 바깥 한 겹에서 바닥(통로)인 셀 = 통로 입구. 미니맵에 빨간 점으로 찍는다.
+    private List<Vector2Int> ComputeExitCells(Room room)
+    {
+        var list = new List<Vector2Int>();
+        RectInt b = room.bounds;
+        for (int x = b.xMin - 1; x <= b.xMax; x++)
+        {
+            for (int y = b.yMin - 1; y <= b.yMax; y++)
+            {
+                var cell = new Vector2Int(x, y);
+                if (b.Contains(cell)) continue;                 // 방 내부는 제외(테두리 밖만)
+                if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) continue;
+                if (mapData[x, y] == 1) list.Add(cell);         // 바닥(통로) → 입구
+            }
+        }
+        return list;
     }
 
     // 시야 밝히기 로직 (기존 던전 제너레이터에 있던 코드 그대로 이사)
@@ -190,6 +235,16 @@ public class MinimapController : MonoBehaviour
                 }
             }
         }
+        // 현재 방의 통로 입구를 빨간 점으로 덧칠(안개와 무관하게 항상 표시 — 어두워도 통로 방향 확인)
+        if (ENABLE_EXIT_DOTS && _currentExitCells != null)
+        {
+            foreach (var c in _currentExitCells)
+            {
+                if (c.x >= 0 && c.x < mapWidth && c.y >= 0 && c.y < mapHeight)
+                    pixels[c.y * mapWidth + c.x] = ExitDotColor;
+            }
+        }
+
         minimapTexture.SetPixels(pixels);
         minimapTexture.Apply();
     }
