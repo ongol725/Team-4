@@ -51,6 +51,7 @@ namespace BagSurvivor.UI
         private int  _appliedLayers;  // 현재까지 반영된 겹수
         private int  _lastLayerIdx = -1;
         private bool _inited;
+        private RectTransform _autoTimerFillRt; // 자동 생성한 타이머 채움(폭 직접 제어)
 
         // 힘 축적 팝업
         private GameObject    _popupGo;
@@ -116,12 +117,16 @@ namespace BagSurvivor.UI
                 }
             }
 
-            // 겹 상승 타이머 바
-            if (timerFill != null)
+            // 겹 상승 타이머 바 (다음 겹까지 진행도)
             {
                 bool maxed = _appliedLayers >= maxLayers;
-                timerFill.fillAmount = maxed ? 1f
+                float progress = maxed ? 1f
                     : Mathf.Repeat(RunElapsed(), escalateInterval) / Mathf.Max(1f, escalateInterval);
+                if (_autoTimerFillRt != null)
+                {
+                    var a = _autoTimerFillRt.anchorMax; a.x = progress; _autoTimerFillRt.anchorMax = a;
+                }
+                else if (timerFill != null) timerFill.fillAmount = progress;
             }
 
             float cur = CurrentLayerFill(out int layerIdx);
@@ -209,32 +214,33 @@ namespace BagSurvivor.UI
         // ─────────────────────────────────────────────────────────────
         private void EnsureTimerBar()
         {
-            if (timerFill != null || mainFill == null) return;
-            var barRt  = mainFill.rectTransform;
-            var parent = barRt.parent as RectTransform;
+            if (timerFill != null || _autoTimerFillRt != null || mainFill == null) return;
+            var parent = mainFill.rectTransform.parent as RectTransform;
             if (parent == null) return;
 
+            // 배경(어두운 트랙): HP바 프레임 하단에 얇게, 살짝 아래로.
             var rootGo = new GameObject("EscalateTimer", typeof(RectTransform), typeof(Image));
             var bgRt = (RectTransform)rootGo.transform;
             bgRt.SetParent(parent, false);
-            bgRt.anchorMin = barRt.anchorMin; bgRt.anchorMax = barRt.anchorMax; bgRt.pivot = barRt.pivot;
-            bgRt.sizeDelta = new Vector2(barRt.sizeDelta.x, 12f);
-            float barH = Mathf.Abs(barRt.rect.height);
-            bgRt.anchoredPosition = barRt.anchoredPosition + new Vector2(0f, -(barH * 0.5f) - 10f);
+            bgRt.anchorMin = new Vector2(0f, 0f);
+            bgRt.anchorMax = new Vector2(1f, 0f);
+            bgRt.pivot     = new Vector2(0.5f, 1f);        // 상단 기준 → 프레임 아래로 매달림
+            bgRt.sizeDelta = new Vector2(-24f, 10f);       // 좌우 12px 인셋, 높이 10
+            bgRt.anchoredPosition = new Vector2(0f, -6f);  // 프레임 하단 바로 아래
             var bg = rootGo.GetComponent<Image>();
-            bg.color = new Color(0f, 0f, 0f, 0.55f); bg.raycastTarget = false;
+            bg.color = new Color(0f, 0f, 0f, 0.6f); bg.raycastTarget = false;
 
+            // 채움: 폭을 anchorMax.x로 직접 제어(스프라이트/Filled 불필요, 항상 동작).
             var fillGo = new GameObject("Fill", typeof(RectTransform), typeof(Image));
-            var fRt = (RectTransform)fillGo.transform;
-            fRt.SetParent(rootGo.transform, false);
-            fRt.anchorMin = Vector2.zero; fRt.anchorMax = Vector2.one;
-            fRt.offsetMin = Vector2.zero; fRt.offsetMax = Vector2.zero;
-            timerFill = fillGo.GetComponent<Image>();
-            timerFill.color = new Color(1f, 0.95f, 0.4f, 0.9f);
-            timerFill.raycastTarget = false;
-            timerFill.type = Image.Type.Filled;
-            timerFill.fillMethod = Image.FillMethod.Horizontal;
-            timerFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+            _autoTimerFillRt = (RectTransform)fillGo.transform;
+            _autoTimerFillRt.SetParent(rootGo.transform, false);
+            _autoTimerFillRt.anchorMin = new Vector2(0f, 0f);
+            _autoTimerFillRt.anchorMax = new Vector2(0f, 1f); // 시작 0%
+            _autoTimerFillRt.offsetMin = Vector2.zero;
+            _autoTimerFillRt.offsetMax = Vector2.zero;
+            var fill = fillGo.GetComponent<Image>();
+            fill.color = new Color(1f, 0.85f, 0.2f, 0.95f);
+            fill.raycastTarget = false;
         }
 
         // ─────────────────────────────────────────────────────────────
