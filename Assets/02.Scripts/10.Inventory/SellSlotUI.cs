@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -12,9 +13,12 @@ public class SellSlotUI : MonoBehaviour
 
     [SerializeField] private Canvas _canvas;
 
-    [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시)")]
-    [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(811f, 26f);
-    [SerializeField] private Vector2 _shopOverlaySize = new Vector2(300f, 900f);
+    [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시) — BG(Item_Shop_Grid)와 동일한 영역")]
+    [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(789.05f, -1.25f);
+    [SerializeField] private Vector2 _shopOverlaySize = new Vector2(341.07f, 757.65f);
+
+    [Header("트랜지션")]
+    [SerializeField] private float _fadeDuration = 0.15f;
 
     [Header("디버그")]
     [Tooltip("체크하면 플레이 중 패널을 미리 표시해서 위치/크기를 바로 조정할 수 있습니다")]
@@ -26,6 +30,13 @@ public class SellSlotUI : MonoBehaviour
     private Canvas         _cachedCanvas;
     private InventoryGridUI _gridUI;
     private bool           _inShopMode;
+
+    private Text        _priceText;
+    private CanvasGroup _canvasGroup;
+    private Coroutine   _fadeRoutine;
+
+    private static readonly Color PriceActiveColor = new Color(1f, 0.90f, 0.35f, 1f);
+    private static readonly Color PriceDimColor    = new Color(1f, 0.90f, 0.35f, 0.45f);
 
     private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
 
@@ -68,7 +79,29 @@ public class SellSlotUI : MonoBehaviour
     {
         if (_bg == null) return;
         bool isDragging = _gridUI != null && _gridUI.IsAnyFollowingMouse;
-        _bg.color = (isDragging && IsMouseOver()) ? HoverColor : IdleColor;
+        bool isOver     = isDragging && IsMouseOver();
+        _bg.color = isOver ? HoverColor : IdleColor;
+
+        UpdateLivePrice(isDragging, isOver);
+    }
+
+    /// <summary>드래그 중인 아이템의 판매가를 골드 아이콘 위에 실시간으로 표시한다.
+    /// 완전히 올라와 있을 때(over)만 밝게 강조해 오조작을 방지한다.</summary>
+    private void UpdateLivePrice(bool isDragging, bool isOver)
+    {
+        if (_priceText == null) return;
+
+        var inst = _gridUI != null ? _gridUI.ActiveFollowingBlock?.Instance : null;
+        if (isDragging && inst?.data != null)
+        {
+            _priceText.gameObject.SetActive(true);
+            _priceText.text  = $"판매가 {ComputePrice(inst)} G";
+            _priceText.color = isOver ? PriceActiveColor : PriceDimColor;
+        }
+        else
+        {
+            _priceText.gameObject.SetActive(false);
+        }
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -93,21 +126,42 @@ public class SellSlotUI : MonoBehaviour
         }
     }
 
-    /// <summary>상점 오버레이 모드: 드래그 중 상점 위에 판매 패널을 표시/숨깁니다.</summary>
+    /// <summary>상점 오버레이 모드: 드래그 중 상점 위에 판매 패널을 표시/숨깁니다 (부드러운 페이드 전환).</summary>
     public void SetShopMode(bool active)
     {
         if (PanelRt == null || _inShopMode == active) return;
         _inShopMode = active;
+
+        if (_fadeRoutine != null) StopCoroutine(_fadeRoutine);
+
         if (active)
         {
             PanelRt.anchoredPosition = _shopOverlayPos;
             PanelRt.sizeDelta        = _shopOverlaySize;
             PanelRt.gameObject.SetActive(true);
+            if (_canvasGroup != null) _canvasGroup.alpha = 0f;
+            _fadeRoutine = StartCoroutine(FadeTo(1f, null));
         }
         else
         {
-            PanelRt.gameObject.SetActive(false);
+            _fadeRoutine = StartCoroutine(FadeTo(0f, () => PanelRt.gameObject.SetActive(false)));
         }
+    }
+
+    private IEnumerator FadeTo(float target, System.Action onComplete)
+    {
+        if (_canvasGroup == null) { onComplete?.Invoke(); yield break; }
+
+        float start = _canvasGroup.alpha;
+        float t = 0f;
+        while (t < _fadeDuration)
+        {
+            t += Time.deltaTime;
+            _canvasGroup.alpha = Mathf.Lerp(start, target, t / _fadeDuration);
+            yield return null;
+        }
+        _canvasGroup.alpha = target;
+        onComplete?.Invoke();
     }
 
 #if UNITY_EDITOR
@@ -124,9 +178,13 @@ public class SellSlotUI : MonoBehaviour
     /// <summary>아이템을 판매하고 골드를 지급한다</summary>
     public void Sell(ItemInstance inst)
     {
+        GameManager.Instance?.AddGold(ComputePrice(inst));
+    }
+
+    private static int ComputePrice(ItemInstance inst)
+    {
         int rarityIdx = Mathf.Clamp((int)inst.data.rarity, 0, RarityBaseCosts.Length - 1);
-        int price = RarityBaseCosts[rarityIdx] / 2;
-        GameManager.Instance?.AddGold(price);
+        return RarityBaseCosts[rarityIdx] / 2;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -146,6 +204,9 @@ public class SellSlotUI : MonoBehaviour
 
         _bg = panel.GetComponent<Image>();
         _bg.color = IdleColor;
+
+        _canvasGroup = panel.AddComponent<CanvasGroup>();
+        _canvasGroup.alpha = 0f;
 
         var font = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                 ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
@@ -168,13 +229,13 @@ public class SellSlotUI : MonoBehaviour
         titleTxt.color     = new Color(1f, 0.55f, 0.55f);
         titleTxt.raycastTarget = false;
 
-        // ── 안내 텍스트 ───────────────────────────────────────────
+        // ── 안내 텍스트 (하단 골드 아이콘 영역 140px 만큼 여백을 남김) ──────
         var hintGo = new GameObject("Hint", typeof(RectTransform), typeof(Text));
         hintGo.transform.SetParent(panel.transform, false);
         var hintRt = hintGo.GetComponent<RectTransform>();
         hintRt.anchorMin = new Vector2(0f, 0f);
         hintRt.anchorMax = new Vector2(1f, 1f);
-        hintRt.offsetMin = new Vector2(8f, 8f);
+        hintRt.offsetMin = new Vector2(8f, 150f);
         hintRt.offsetMax = new Vector2(-8f, -34f);
         var hintTxt = hintGo.GetComponent<Text>();
         hintTxt.font      = font;
@@ -183,6 +244,53 @@ public class SellSlotUI : MonoBehaviour
         hintTxt.alignment = TextAnchor.MiddleCenter;
         hintTxt.color     = new Color(0.85f, 0.65f, 0.65f);
         hintTxt.raycastTarget = false;
+
+        // ── 동전(골드) 아이콘 placeholder ────────────────────────────
+        var coinGo = new GameObject("CoinIcon", typeof(RectTransform), typeof(Image));
+        coinGo.transform.SetParent(panel.transform, false);
+        var coinRt = coinGo.GetComponent<RectTransform>();
+        coinRt.anchorMin        = new Vector2(0.5f, 0f);
+        coinRt.anchorMax        = new Vector2(0.5f, 0f);
+        coinRt.pivot            = new Vector2(0.5f, 0f);
+        coinRt.anchoredPosition = new Vector2(0f, 24f);
+        coinRt.sizeDelta        = new Vector2(56f, 56f);
+        var coinImg = coinGo.GetComponent<Image>();
+        coinImg.color         = new Color(0.95f, 0.75f, 0.15f, 0.95f);
+        coinImg.raycastTarget = false;
+
+        var coinLabelGo = new GameObject("CoinLabel", typeof(RectTransform), typeof(Text));
+        coinLabelGo.transform.SetParent(coinGo.transform, false);
+        var coinLabelRt = coinLabelGo.GetComponent<RectTransform>();
+        coinLabelRt.anchorMin = Vector2.zero;
+        coinLabelRt.anchorMax = Vector2.one;
+        coinLabelRt.offsetMin = Vector2.zero;
+        coinLabelRt.offsetMax = Vector2.zero;
+        var coinLabelTxt = coinLabelGo.GetComponent<Text>();
+        coinLabelTxt.font      = font;
+        coinLabelTxt.text      = "G";
+        coinLabelTxt.fontSize  = 24;
+        coinLabelTxt.fontStyle = FontStyle.Bold;
+        coinLabelTxt.alignment = TextAnchor.MiddleCenter;
+        coinLabelTxt.color     = new Color(0.35f, 0.20f, 0.02f);
+        coinLabelTxt.raycastTarget = false;
+
+        // ── 실시간 판매가 텍스트 (골드 아이콘 위, 드래그 중에만 표시) ─────
+        var priceGo = new GameObject("PriceText", typeof(RectTransform), typeof(Text));
+        priceGo.transform.SetParent(panel.transform, false);
+        var priceRt = priceGo.GetComponent<RectTransform>();
+        priceRt.anchorMin        = new Vector2(0.5f, 0f);
+        priceRt.anchorMax        = new Vector2(0.5f, 0f);
+        priceRt.pivot            = new Vector2(0.5f, 0f);
+        priceRt.anchoredPosition = new Vector2(0f, 90f);
+        priceRt.sizeDelta        = new Vector2(260f, 26f);
+        _priceText = priceGo.GetComponent<Text>();
+        _priceText.font      = font;
+        _priceText.fontSize  = 15;
+        _priceText.fontStyle = FontStyle.Bold;
+        _priceText.alignment = TextAnchor.MiddleCenter;
+        _priceText.color     = PriceActiveColor;
+        _priceText.raycastTarget = false;
+        _priceText.gameObject.SetActive(false);
 
         // 인벤토리가 닫힌 상태에서 시작하므로 초기에는 숨김
         panel.SetActive(false);
