@@ -643,6 +643,11 @@ namespace BagSurvivor.Monster
             isDying = true;
             currentState = MonsterState.Die;
 
+            // 피격 스쿼시(늘어짐) 도중 사망 시, 늘어진 채로 분열/사망 연출되지 않도록 즉시 원래 크기 복원.
+            if (_hitFxCo != null) { StopCoroutine(_hitFxCo); _hitFxCo = null; }
+            if (_squashing && _spriteTf != null) _spriteTf.localScale = _restScale;
+            _squashing = false;
+
             GameManager.Instance?.AddKill();   // 결과창 '처치 몬스터' 누적
 
             if (RunStatsLogger.Instance != null)
