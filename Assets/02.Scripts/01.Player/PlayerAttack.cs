@@ -829,9 +829,18 @@ public class PlayerAttack : MonoBehaviour
     private void AttachProjectileTrail(GameObject go, string weaponId, bool weak)
     {
         if (!ENABLE_PROJECTILE_TRAIL || go == null) return;
-        if (_trailMat == null) _trailMat = new Material(Shader.Find("Sprites/Default"));
+        if (_trailMat == null)
+        {
+            var sh = Shader.Find("Sprites/Default");
+            if (sh == null) return;            // 셰이더 없으면 잔상 생략(안전)
+            _trailMat = new Material(sh);
+        }
 
-        var tr = go.GetComponent<TrailRenderer>() ?? go.AddComponent<TrailRenderer>();
+        // ?? 는 Unity의 null 오버로드를 안 타므로 명시적 체크 사용
+        TrailRenderer tr = go.GetComponent<TrailRenderer>();
+        if (tr == null) tr = go.AddComponent<TrailRenderer>();
+        if (tr == null) return;                // 부착 실패 시 안전하게 생략
+
         tr.sharedMaterial    = _trailMat;
         tr.time              = weak ? 0.10f : 0.22f;  // 잔상 길이(약하게=짧게)
         tr.startWidth        = weak ? 0.12f : 0.30f;
