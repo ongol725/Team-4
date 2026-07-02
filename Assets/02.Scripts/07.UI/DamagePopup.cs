@@ -24,10 +24,10 @@ namespace BagSurvivor
         static readonly Color NormalColor = Color.white;
         static readonly Color CritColor = new Color(1f, 0.82f, 0.2f);
 
-        // 데미지 크기별 색(오름차순). <30 초록 / 30~59 노랑 / 60~99 주황 / 100+ 빨강
+        // 데미지 크기별 색(오름차순). <30 흰색 / 30~59 노랑 / 60~99 주황 / 100+ 빨강
         static readonly (int min, Color col)[] DamageTiers =
         {
-            (0,   new Color(0.50f, 1.00f, 0.50f)), // 초록(약타)
+            (0,   new Color(1.00f, 1.00f, 1.00f)), // 흰색(약타)
             (30,  new Color(1.00f, 0.95f, 0.30f)), // 노랑
             (60,  new Color(1.00f, 0.60f, 0.15f)), // 주황
             (100, new Color(1.00f, 0.25f, 0.20f)), // 빨강(최강타)
