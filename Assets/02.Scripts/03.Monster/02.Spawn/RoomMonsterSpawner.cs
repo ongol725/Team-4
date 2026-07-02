@@ -151,6 +151,12 @@ namespace BagSurvivor.Monster
         private readonly List<Coroutine>  _telegraphRoutines = new List<Coroutine>();
         private readonly List<GameObject> _spawnMarkers      = new List<GameObject>();
 
+        // ── 특수 이벤트 방 (Phase1: 강자/늪) ──
+        private readonly Dictionary<RoomController, RoomEventType> _roomEvents = new Dictionary<RoomController, RoomEventType>();
+        private float          _roomEnemyAtkMul = 1f; // 현재 방 적 공격력 배수(강자)
+        private bool           _swampApplied;         // 늪 이속 페널티 적용 중
+        private PlayerMovement _playerMove;
+
         [Header("타일맵 직접 지정 (선택: 미지정 시 DungeonGenerator에서 자동 참조)")]
         [Tooltip("바닥 타일맵 직접 지정 (테스트/특수 상황용)")]
         public Tilemap floorTilemapOverride;
@@ -233,6 +239,8 @@ namespace BagSurvivor.Monster
                 DespawnAllMonsters();       // 이전 층 몬스터 정리
                 currentNormalRoom = null;
                 subscribed.Clear();         // 파괴된 이전 방 구독 정리
+                _roomEvents.Clear();        // 이전 층 이벤트 방 배정 초기화
+                EndRoomEvent(null);         // 진행 중이던 이벤트 효과 원복
                 CacheTilemaps();
                 RescanRooms();
                 PrewarmPool();
@@ -246,9 +254,46 @@ namespace BagSurvivor.Monster
             RoomController room = GetPlayerNormalRoom();
             if (room == currentNormalRoom) return;
 
-            if (currentNormalRoom != null) { StopContinuous(); DespawnAllMonsters(); } // 이탈 → 정지+디스폰
-            if (room != null) StartContinuous(room);                                   // 진입 → 지속 스폰 시작
+            if (currentNormalRoom != null) { StopContinuous(); DespawnAllMonsters(); EndRoomEvent(currentNormalRoom); } // 이탈 → 정지+디스폰+효과원복
+            if (room != null) { StartContinuous(room); TriggerRoomEvent(room); }        // 진입 → 지속 스폰 + 이벤트 발동
             currentNormalRoom = room;
+        }
+
+        // ── 이벤트 방 발동/해제 ──────────────────────────────────────
+        private void TriggerRoomEvent(RoomController rc)
+        {
+            if (rc == null || !_roomEvents.TryGetValue(rc, out var ev) || ev == RoomEventType.None) return;
+
+            RoomEventBanner.Show(RoomEventInfo.Name(ev), RoomEventInfo.Desc(ev), RoomEventInfo.Color(ev));
+
+            switch (ev)
+            {
+                case RoomEventType.Strong:
+                    RoomEventState.GoldMultiplier = 2f; // 처치 골드 +100%
+                    _roomEnemyAtkMul = 2f;              // 적 공격력 +100%(스폰 시 적용)
+                    break;
+                case RoomEventType.Swamp:
+                    if (!_swampApplied) { SetPlayerSpeedMul(0.5f); _swampApplied = true; } // 이속 -50%
+                    _roomEnemyAtkMul = 1f;
+                    break;
+            }
+        }
+
+        private void EndRoomEvent(RoomController rc)
+        {
+            RoomEventState.Reset();  // 골드 배율 원복
+            _roomEnemyAtkMul = 1f;
+            if (_swampApplied) { SetPlayerSpeedMul(2f); _swampApplied = false; } // 이속 원복(×2로 복구)
+        }
+
+        private void SetPlayerSpeedMul(float m)
+        {
+            if (_playerMove == null)
+            {
+                var p = GameObject.FindGameObjectWithTag("Player");
+                if (p != null) _playerMove = p.GetComponent<PlayerMovement>();
+            }
+            if (_playerMove != null) _playerMove.speedMultiplier *= m; // 다른 배율(과부화 등)과 곱연산으로 공존
         }
 
         /// <summary>플레이어가 들어가 있는 '일반방'을 반환(없으면 null).</summary>
@@ -377,6 +422,15 @@ namespace BagSurvivor.Monster
 
                 subscribed.Add(rc);
 
+                // 일반방: 50%에 특수 이벤트 배정(Phase1: 강자/늪 중 랜덤)
+                if (rc.roomType == RoomType.Normal && !_roomEvents.ContainsKey(rc))
+                {
+                    RoomEventType ev = RoomEventType.None;
+                    if (Random.value < 0.5f)
+                        ev = Random.value < 0.5f ? RoomEventType.Strong : RoomEventType.Swamp;
+                    _roomEvents[rc] = ev;
+                }
+
                 // 일반방: 진입/이탈을 직접 추적(재진입 시 재스폰)하므로 이벤트 구독 안 함.
                 // 특수방(Elite/MiniBoss/Boss): 문 잠금 타이밍과 동기화되도록 1회 진입 이벤트로 스폰.
                 if (rc.roomType != RoomType.Normal)
@@ -445,7 +499,7 @@ namespace BagSurvivor.Monster
                 if (activeMonsters.Count + _pendingSpawns < maxAlive)
                 {
                     float hpMul = difficulty != null ? difficulty.GetHpMultiplier() : 1f;
-                    float atkMul = difficulty != null ? difficulty.GetAttackMultiplier() : 1f;
+                    float atkMul = (difficulty != null ? difficulty.GetAttackMultiplier() : 1f) * _roomEnemyAtkMul; // 강자의 방: 적 공격력 배수
                     var co = StartCoroutine(SpawnWithTelegraph(rc, pool2[Random.Range(0, pool2.Length)], hpMul, atkMul));
                     _telegraphRoutines.Add(co);
                 }
