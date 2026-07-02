@@ -33,14 +33,14 @@ public static class BossAnimApply
         ("Idle",       true,  new[]{"탄막"},     null),          // 대기 모션 = 탄막패턴(기 모으기) 사용
         ("ChargeIdle", true,  new[]{"돌진대기"}, null),          // 돌진 전 대기(신규)
         ("Move",       true,  new[]{"이동"},     null),
-        ("Stun",       true,  new[]{"스턴"},     null),
+        ("Stun",       true,  new[]{"스턴|기절"}, null),        // 재제작본은 '기절' 네이밍
         ("Death",      false, new[]{"사망"},     null),
         ("Charge",     false, new[]{"돌진"},     new[]{"대기"}), // 돌진(대시), 돌진대기 제외
         ("Melee",      false, new[]{"퀴"},       null),          // 할퀴기(파일명 '햘퀴기' 대응)
         ("Energy",     true,  new[]{"탄막"},     null),          // 패턴 끝까지 루프
         ("Phantom",    true,  new[]{"늑대"},     null),          // 패턴 끝까지 루프
         ("Leap",       false, new[]{"점프"},     null),
-        ("LeapLand",   true,  new[]{"착지"},     null),          // 착지 후 동심원 동안 루프
+        ("LeapLand",   true,  new[]{"착지|낙하"}, null),        // 착지 후 동심원 동안 루프(재제작 2p='낙하')
         ("Cast",       true,  new[]{"탄막"},     null),          // 힐토템/돌석상: 기모으기(탄막) 반복
     };
 
@@ -107,7 +107,9 @@ public static class BossAnimApply
     {
         AnimationClip Pick(string[] kws, string[] not)
         {
-            bool Match(AnimationClip c, string ph) => c.name.Contains(ph) && kws.All(k => c.name.Contains(k))
+            // kws 항목은 '|'로 대체 키워드 허용(예: "스턴|기절")
+            bool Match(AnimationClip c, string ph) => c.name.Contains(ph)
+                && kws.All(k => k.Split('|').Any(alt => c.name.Contains(alt)))
                 && (not == null || !not.Any(n => c.name.Contains(n)));
             // 새 네이밍(보스몬스터_{phase}) 우선 → 구파일(1페이즈보스몬스터_…)과 충돌 시 새 것
             return clips.FirstOrDefault(c => Match(c, "보스몬스터_" + primaryPhase))
