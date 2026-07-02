@@ -639,6 +639,28 @@ public static class BossAnimApply
         if (p != null) { p.animState = state; EditorUtility.SetDirty(p); }
     }
 
+    /// <summary>보스몬스터_석상.png(슬라이스된 8프레임)로 루프 idle 클립을 직접 생성.
+    /// setup 파이프라인(재제작 폴더 전용)이 이 클립을 안 만들어 석상이 정지 이미지로 보이던 문제 해결.</summary>
+    private static AnimationClip BuildStatueIdleClip()
+    {
+        var sprites = AssetDatabase.LoadAllAssetsAtPath(StatuePng).OfType<Sprite>()
+            .OrderBy(s => { int u = s.name.LastIndexOf('_'); return (u >= 0 && int.TryParse(s.name.Substring(u + 1), out int n)) ? n : 0; })
+            .ToArray();
+        if (sprites.Length == 0) { Debug.LogWarning("[BossAnimApply] 석상 스프라이트 없음: " + StatuePng); return null; }
+
+        var clip = new AnimationClip { frameRate = 12f };
+        var binding = EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite");
+        var keys = new ObjectReferenceKeyframe[sprites.Length];
+        for (int i = 0; i < sprites.Length; i++) keys[i] = new ObjectReferenceKeyframe { time = i / 12f, value = sprites[i] };
+        AnimationUtility.SetObjectReferenceCurve(clip, binding, keys);
+        var cs = AnimationUtility.GetAnimationClipSettings(clip); cs.loopTime = true; AnimationUtility.SetAnimationClipSettings(clip, cs);
+
+        string path = AnimDir + "/Statue_Idle.anim";
+        AssetDatabase.DeleteAsset(path);
+        AssetDatabase.CreateAsset(clip, path);
+        return clip;
+    }
+
     private static void ApplyTotem(GameObject boss, AnimationClip summonClip, AnimationClip idleClip)
     {
         var heal = boss.GetComponent<Pattern_HealTotem>();
@@ -647,6 +669,10 @@ public static class BossAnimApply
         var statue = AssetDatabase.LoadAllAssetsAtPath(StatuePng).OfType<Sprite>().FirstOrDefault();
         string tp = AssetDatabase.GetAssetPath(heal.totemPrefab);
         if (string.IsNullOrEmpty(tp)) return;
+
+        // 석상 idle 클립: 재제작 폴더에 없어(setup이 안 만듦) 정지 이미지처럼 보였음 →
+        // StatuePng(보스몬스터_석상.png, 이미 슬라이스됨)에서 루프 클립을 직접 생성해 항상 애니되게 한다.
+        if (idleClip == null) idleClip = BuildStatueIdleClip();
 
         // 석상 컨트롤러: 소환(1회) → 석상(루프) 자동전환. (소환 클립 없으면 석상만 루프)
         AnimatorController totemCtrl = null;
