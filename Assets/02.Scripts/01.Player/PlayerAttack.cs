@@ -842,10 +842,10 @@ public class PlayerAttack : MonoBehaviour
         if (tr == null) return;                // 부착 실패 시 안전하게 생략
 
         tr.sharedMaterial    = _trailMat;
-        tr.time              = weak ? 0.10f : 0.22f;  // 잔상 길이(약하게=짧게)
-        tr.startWidth        = weak ? 0.12f : 0.30f;
-        tr.endWidth          = 0f;
-        tr.numCapVertices    = 4;
+        tr.time              = weak ? 0.09f : 0.16f;  // 잔상 길이(짧게 — 은은한 잔상)
+        tr.startWidth        = weak ? 0.06f : 0.13f;  // 얇게 — 투사체를 덮지 않게
+        tr.endWidth          = 0f;                    // 끝은 뾰족하게 사라짐
+        tr.numCapVertices    = 2;
         tr.minVertexDistance = 0.03f;
         tr.autodestruct      = false;
 
@@ -853,11 +853,16 @@ public class PlayerAttack : MonoBehaviour
         var sr = go.GetComponentInChildren<SpriteRenderer>();
         if (sr != null) { tr.sortingLayerID = sr.sortingLayerID; tr.sortingOrder = sr.sortingOrder - 1; }
 
+        // 시작부터 반투명하게 → 꼬리로 갈수록 사라짐(색이 전체를 감싸는 위화감 제거)
         Color c = TrailColor(weaponId);
-        Color start = c; start.a = weak ? 0.45f : 0.9f;
+        Color start = c; start.a = weak ? 0.20f : 0.40f;
+        Color mid   = c; mid.a   = weak ? 0.08f : 0.18f;
         Color end   = c; end.a   = 0f;
-        tr.startColor = start;
-        tr.endColor   = end;
+        var grad = new Gradient();
+        grad.SetKeys(
+            new[] { new GradientColorKey(c, 0f), new GradientColorKey(c, 1f) },
+            new[] { new GradientAlphaKey(start.a, 0f), new GradientAlphaKey(mid.a, 0.5f), new GradientAlphaKey(0f, 1f) });
+        tr.colorGradient = grad;
         tr.Clear(); // 생성 지점부터 기록(원점 잔상 방지)
     }
 
