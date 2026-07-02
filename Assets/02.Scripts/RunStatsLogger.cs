@@ -48,6 +48,8 @@ public class RunStatsLogger : MonoBehaviour
     }
 
     private float Elapsed => Time.time - _runStart;
+    /// <summary>런 시작부터 경과한 초(층 넘어가도 누적). 보스 체력 겹 상승 등에 사용.</summary>
+    public float RunElapsedSeconds => Time.time - _runStart;
     private static string F(float v) => v.ToString("F1", CultureInfo.InvariantCulture);
 
     /// <summary>새 런 시작(리셋). 다시하기/로비→인게임 진입 시 호출.</summary>

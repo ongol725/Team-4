@@ -27,8 +27,9 @@ public static class BossRoomSetup
 
     // 체력 상승 기믹 파라미터
     private const int   StartHP      = 5000;
-    private const float GrowInterval = 30f;   // 30초마다
-    private const int   GrowAmount   = 125;   // +125 (5000/(1200/30)=125 → 20분에 10000)
+    private const int   BaseLayers       = 5;    // 기본 겹수
+    private const int   MaxLayers        = 100;  // 최대 겹수
+    private const float EscalateInterval = 60f;  // 1분마다 +1겹
 
     [MenuItem("Team4/보스룸 셋업 (풀+UI+체력)")]
     public static void Run()
@@ -38,7 +39,7 @@ public static class BossRoomSetup
         SetupScene();
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("[BossRoomSetup] 완료 — 보스 데이터 이전 + 체력 5000(+125/30s 무한 상승) + 보스룸 풀/UI 배치.");
+        Debug.Log("[BossRoomSetup] 완료 — 보스 데이터 이전 + 체력 5000(기본 5겹, 1분마다 +1겹/최대 100겹) + 보스룸 풀/UI 배치.");
     }
 
     /// <summary>보스/팬텀 데이터를 커밋 영역으로 이전하고, 보스 시작 체력을 5000으로.</summary>
@@ -73,12 +74,13 @@ public static class BossRoomSetup
         var bar = contents.GetComponentInChildren<BossHpBar>(true);
         if (bar != null)
         {
-            bar.growInterval = GrowInterval;
-            bar.growAmount = GrowAmount;
+            bar.baseLayers = BaseLayers;
+            bar.maxLayers = MaxLayers;
+            bar.escalateInterval = EscalateInterval;
             bar.standaloneMaxHP = StartHP;
             bar.standaloneCurHP = StartHP;
             PrefabUtility.SaveAsPrefabAsset(contents, BossHpBarPrefab);
-            Debug.Log($"[BossRoomSetup] BossHpBar: 시작 {StartHP}, {GrowInterval}초마다 +{GrowAmount} (무한 상승)");
+            Debug.Log($"[BossRoomSetup] BossHpBar: 기본 {BaseLayers}겹, {EscalateInterval}초마다 +1겹 (최대 {MaxLayers}겹)");
         }
         else Debug.LogWarning("[BossRoomSetup] Boss_HpBar에 BossHpBar 컴포넌트 없음");
         PrefabUtility.UnloadPrefabContents(contents);
