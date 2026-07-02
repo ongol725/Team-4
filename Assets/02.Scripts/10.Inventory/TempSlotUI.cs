@@ -144,6 +144,9 @@ public class TempSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         int cnt = CountNonRingItems();
         float sev = BattleLoadoutBuilder.GetTempSeverity(cnt);
         _background.color = sev <= 0f ? _occupiedColor : OverloadColor(sev);
+
+        // 팝업이 떠 있는 동안 아이템이 바뀌면 텍스트도 즉시 갱신(마우스 재진입 없이)
+        if (_tooltip != null && _tooltip.activeSelf) RefreshTooltipText();
     }
 
     // ── 호버 시 과적 디메리트 간단 표기(작은 팝업) ──
@@ -154,12 +157,19 @@ public class TempSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         EnsureTooltip();
+        RefreshTooltipText();
+        _tooltip.SetActive(true);
+    }
+
+    // 팝업 텍스트 갱신(호버 중 아이템이 바뀌면 즉시 반영)
+    private void RefreshTooltipText()
+    {
+        if (_tooltipText == null) return;
         int cnt = CountNonRingItems();
         BattleLoadoutBuilder.GetTempPenaltyPercents(cnt, out int m, out int a);
         _tooltipText.text = (m == 0 && a == 0)
             ? $"임시칸 여유 {cnt}/{BattleLoadoutBuilder.TempFreeCount}"
             : $"과적 {cnt}개\n이속 -{m}%  공속 -{a}%";
-        _tooltip.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
