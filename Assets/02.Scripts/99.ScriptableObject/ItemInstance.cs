@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -12,6 +13,9 @@ public class ItemInstance
 
     [Range(0, 4)]
     public int gradeIndex;     // 0 = 1등급, 4 = 5등급
+
+    /// <summary>무기 랜덤 강화 옵션. 옵션 수 = gradeIndex (2강 1개 ~ 5강 4개). 합성 시 1개씩 추가.</summary>
+    public List<WeaponAffix> affixes = new List<WeaponAffix>();
 
     /// <summary>반지 인접 버프로 추가되는 임시 등급 보너스. InventoryAnalyzer.Analyze()마다 초기화된다.</summary>
     [System.NonSerialized]
@@ -51,7 +55,18 @@ public class ItemInstance
     {
         if (!HasGrades || gradeIndex >= 4) return false;
         gradeIndex++;
+        // 무기는 합성 대상의 기존 옵션 유지 + 랜덤 1개 추가(중복 허용).
+        if (data is SO_WeaponData wd) affixes.Add(WeaponAffixTable.Roll(wd));
         return true;
+    }
+
+    /// <summary>무기 옵션 수를 gradeIndex에 맞춘다(다른 경로로 등급이 생성된 경우 보정).</summary>
+    public void SyncWeaponAffixes()
+    {
+        if (data is not SO_WeaponData wd) return;
+        affixes ??= new List<WeaponAffix>();
+        while (affixes.Count < gradeIndex) affixes.Add(WeaponAffixTable.Roll(wd));
+        while (affixes.Count > gradeIndex) affixes.RemoveAt(affixes.Count - 1);
     }
 
     /// <summary>

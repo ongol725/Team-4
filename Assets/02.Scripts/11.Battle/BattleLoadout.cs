@@ -24,6 +24,13 @@ public class WeaponLoadoutEntry
     public float         ringSlowSec;    // 나무 반지: 피격 시 슬로우 지속(초)
     public float         ringProjScale = 1f; // 강철 반지: 투사체 크기 배율(피격범위 동반)
     public float         ringProjSpeed = 1f; // 강철 반지: 발사·비행 속도 배율
+
+    // 랜덤 강화 옵션(어픽스) 집계 결과
+    public int   extraActivations = 0;   // 추가 발동 횟수(원=연발/근=연속타)
+    public float critChance       = 0f;  // 치명타 확률(0~1), 발동 시 데미지 ×2
+    public int   pierceBonus      = 0;   // 관통(다중타겟) 추가 (원거리)
+    public float affixSizeMult    = 1f;  // 근접 타격범위 배율(원거리는 ringProjScale에 합산)
+
     public System.Collections.Generic.List<RingBuffRecord> RingBuffs = new();
 }
 

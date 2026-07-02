@@ -144,6 +144,24 @@ public class BattleLoadoutBuilder : MonoBehaviour
                                      ? wd.gradeStats[effectiveGrade]
                                      : null;
 
+            // 랜덤 강화 옵션 집계 (옵션 수 = gradeIndex 보정 후)
+            inst.SyncWeaponAffixes();
+            float afxAtkMul = 1f, afxSpdFactor = 1f, afxSizeMul = 1f, afxCrit = 0f;
+            int   afxExtra = 0, afxPierce = 0;
+            if (inst.affixes != null)
+                foreach (var af in inst.affixes)
+                {
+                    switch (af.type)
+                    {
+                        case WeaponAffixType.AttackPower:     afxAtkMul   *= 1f + WeaponAffixTable.PercentValue(af.tier); break;
+                        case WeaponAffixType.AttackSpeed:     afxSpdFactor *= WeaponAffixTable.SpeedFactor(af.tier);      break;
+                        case WeaponAffixType.AttackSize:      afxSizeMul  *= 1f + WeaponAffixTable.PercentValue(af.tier); break;
+                        case WeaponAffixType.ExtraActivation: afxExtra    += WeaponAffixTable.ExtraCount(af.tier);        break;
+                        case WeaponAffixType.Pierce:          afxPierce   += WeaponAffixTable.PierceCount(af.tier);       break;
+                        case WeaponAffixType.Crit:            afxCrit     += WeaponAffixTable.CritChance(af.tier);        break;
+                    }
+                }
+
             // 반지 인접 배율(합산): 다이아=공격력, 금=공속. 표시·계산에 미리 반영.
             int   baseAtk = stats?.attackPower ?? 0;
             float baseSpd = stats?.attackSpeed ?? 0f;
@@ -151,12 +169,16 @@ public class BattleLoadoutBuilder : MonoBehaviour
             {
                 data           = wd,
                 effectiveGrade = effectiveGrade,
-                attackPower    = Mathf.RoundToInt(baseAtk * (1f + inst.RingAtkBonus)),
-                attackSpeed    = baseSpd * (1f + inst.RingSpdBonus),
+                attackPower    = Mathf.RoundToInt(baseAtk * (1f + inst.RingAtkBonus) * afxAtkMul),
+                attackSpeed    = baseSpd * (1f + inst.RingSpdBonus) * afxSpdFactor, // 주기↓ = 빠름
                 ringStunChance = inst.RingStunChance,
                 ringSlowSec    = inst.RingSlowSec,
-                ringProjScale  = 1f + inst.RingProjScaleBonus,
+                ringProjScale  = (1f + inst.RingProjScaleBonus) * afxSizeMul, // 원거리 크기(+피격범위)
                 ringProjSpeed  = Mathf.Max(0.1f, 1f + inst.RingProjSpeedBonus),
+                extraActivations = afxExtra,
+                critChance     = Mathf.Clamp01(afxCrit),
+                pierceBonus    = afxPierce,
+                affixSizeMult  = afxSizeMul, // 근접 타격범위
             };
 
             // 반지 버프 기록

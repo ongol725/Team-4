@@ -160,10 +160,22 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log($"[PlayerAttack] {entry.data.itemName} 루프 시작 — {interval:F2}s / {entry.data.attackStyleType}{(g5 ? " [5단계]" : "")}");
 
         var wait = new WaitForSeconds(interval);
+        // 랜덤 강화 옵션: 추가 발동(원=연발/근=연속타) + 치명타
+        int activations = 1 + Mathf.Max(0, entry.extraActivations);
+        float critChance = entry.critChance;
+        var extraWait = new WaitForSeconds(0.1f);
         while (true)
         {
             yield return wait;
-            TryAttack(entry);
+            for (int a = 0; a < activations; a++)
+            {
+                bool crit = critChance > 0f && Random.value < critChance;
+                int savedAtk = entry.attackPower;
+                if (crit) entry.attackPower = Mathf.RoundToInt(savedAtk * 2f); // 치명타: 이 발동의 모든 데미지 ×2
+                TryAttack(entry);
+                if (crit) entry.attackPower = savedAtk;
+                if (a < activations - 1) yield return extraWait;
+            }
         }
     }
 
@@ -182,6 +194,8 @@ public class PlayerAttack : MonoBehaviour
         if (isMelee) range *= 3f;
         // 상점 아이콘(A그룹) 근접: 아이콘이 커서 크기 1/3로 축소(표시·피격 동반)
         if (isMelee && UsesShopIcon(id)) range *= 1f / 3f;
+        // 랜덤 강화 옵션: 근접 공격 크기(타격범위) — 원거리는 ringProjScale로 처리됨
+        if (isMelee && entry.affixSizeMult != 1f) range *= entry.affixSizeMult;
 
         switch (entry.data.attackStyleType)
         {
@@ -778,6 +792,7 @@ public class PlayerAttack : MonoBehaviour
         int   maxHits  = wd.maxTargets > 0 ? wd.maxTargets : 1; // 0 = 기본 1타
         if (wd.projectileData != null) maxHits += wd.projectileData.pierceCount;
         maxHits += pierce;
+        maxHits += entry.pierceBonus; // 랜덤 강화 옵션: 관통(다중타겟) 추가
 
         // overrideFrames(예: 할버드 검기 SwordWave)가 있으면 그 스프라이트로, 아니면 무기 기본 프레임/아이콘.
         bool useOverride = overrideFrames != null && ValidFrames(overrideFrames).Length > 0;
