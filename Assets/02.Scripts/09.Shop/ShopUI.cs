@@ -25,10 +25,10 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private Text _gradeText;
 
     [Header("리롤 진행 게이지 (다음 등급까지 잔여 횟수)")]
-    [SerializeField] private Vector2 _gaugeOffset = new Vector2(0f, -30f);
+    [SerializeField] private Vector2 _gaugeOffset = new Vector2(115.8f, -2.9f);
     [SerializeField] private Vector2 _gaugeSize   = new Vector2(150f, 14f);
-    [SerializeField] private Vector2 _gaugeTextOffsetMin = new Vector2(71.9f, 31.8f);
-    [SerializeField] private Vector2 _gaugeTextOffsetMax = new Vector2(71.9f, 31.8f);
+    [SerializeField] private Vector2 _gaugeTextOffsetMin = new Vector2(-115.9f, -1f);
+    [SerializeField] private Vector2 _gaugeTextOffsetMax = new Vector2(-115.9f, -1f);
 
     [Header("확률표 (진열대 하단 고정)")]
     [SerializeField] private Vector2 _statsPanelOffset = new Vector2(0f, 8f);
@@ -69,10 +69,9 @@ public class ShopUI : MonoBehaviour
     private RectTransform _gaugeFillRt;
     private Text          _gaugeText;
 
-    private Image     _statsPanelBg;
-    private Coroutine  _statsFlashRoutine;
-    private static readonly Color StatsPanelBaseColor  = new Color(0.08f, 0.08f, 0.12f, 0.92f);
-    private static readonly Color StatsPanelFlashColor = new Color(1.00f, 0.85f, 0.30f, 0.92f);
+    private Coroutine _statsFlashRoutine;
+    private static readonly Color StatsTextBaseColor  = new Color(0.85f, 0.85f, 0.85f);
+    private static readonly Color StatsTextFlashColor = new Color(1.00f, 0.85f, 0.30f);
 
     // ─────────────────────────────────────────────────────────────
 
@@ -86,7 +85,7 @@ public class ShopUI : MonoBehaviour
 
         if (_gradeText != null)
         {
-            CreateStatsPanel();
+            CreateStatsText();
             CreateRerollGaugePanel();
         }
 
@@ -221,15 +220,15 @@ public class ShopUI : MonoBehaviour
         _shopGrade++;
         _rerollsInCurrentGrade = 0;
         UpdateGradeUI();
-        FlashStatsPanel();
+        FlashStatsText();
     }
 
     private void UpdateGradeUI()
     {
         if (_gradeText != null)
-            _gradeText.text = $"상점 Lv.{_shopGrade}";
+            _gradeText.text = $"Lv.{_shopGrade}";
 
-        UpdateStatsPanel();
+        UpdateStatsText();
         UpdateRerollGauge();
     }
 
@@ -251,6 +250,7 @@ public class ShopUI : MonoBehaviour
 
         var bgGo = new GameObject("RerollGaugeBg", typeof(RectTransform), typeof(Image));
         bgGo.transform.SetParent(_gradeText.transform.parent, false);
+        bgGo.transform.localScale = new Vector3(0.7053f, 0.7053f, 0.7053f);
 
         var bgRt = bgGo.GetComponent<RectTransform>();
         bgRt.anchorMin        = gradeRt.anchorMin;
@@ -289,7 +289,7 @@ public class ShopUI : MonoBehaviour
         _gaugeText = textGo.GetComponent<Text>();
         _gaugeText.font              = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                                     ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
-        _gaugeText.fontSize          = 10;
+        _gaugeText.fontSize          = 25;
         _gaugeText.alignment         = TextAnchor.MiddleCenter;
         _gaugeText.color             = Color.white;
         _gaugeText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -315,67 +315,58 @@ public class ShopUI : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 확률표 (런타임, 진열대 하단에 고정 배치 — 더 이상 드래그되지 않음)
 
-    private void CreateStatsPanel()
+    private void CreateStatsText()
     {
         var parent = _panelRoot != null ? _panelRoot.transform : _gradeText.transform.parent;
 
-        var boxGo = new GameObject("ShopStatsPanel", typeof(RectTransform), typeof(Image));
-        boxGo.transform.SetParent(parent, false);
-
-        var boxRt = boxGo.GetComponent<RectTransform>();
-        boxRt.anchorMin        = new Vector2(0f, 0f);
-        boxRt.anchorMax        = new Vector2(1f, 0f);
-        boxRt.pivot            = new Vector2(0.5f, 0f);
-        boxRt.anchoredPosition = _statsPanelOffset;
-        boxRt.sizeDelta        = new Vector2(0f, _statsPanelHeight);
-
-        _statsPanelBg               = boxGo.GetComponent<Image>();
-        _statsPanelBg.color         = StatsPanelBaseColor;
-        _statsPanelBg.raycastTarget = false;
-
         var textGo = new GameObject("StatsText", typeof(RectTransform), typeof(Text));
-        textGo.transform.SetParent(boxGo.transform, false);
+        textGo.transform.SetParent(parent, false);
 
+        // 기존 ShopStatsPanel의 rect(하단 스트레치)를 텍스트가 그대로 이어받아 화면 위치를 유지한다
         var textRt = textGo.GetComponent<RectTransform>();
-        textRt.anchorMin = Vector2.zero;
-        textRt.anchorMax = Vector2.one;
-        textRt.offsetMin = _statsTextOffsetMin;
-        textRt.offsetMax = _statsTextOffsetMax;
+        textRt.anchorMin        = new Vector2(0f, 0f);
+        textRt.anchorMax        = new Vector2(1f, 0f);
+        textRt.pivot            = new Vector2(0.5f, 0f);
+        textRt.anchoredPosition = _statsPanelOffset;
+        textRt.sizeDelta        = new Vector2(0f, _statsPanelHeight);
+        textRt.offsetMin       += _statsTextOffsetMin;
+        textRt.offsetMax       += _statsTextOffsetMax;
 
         _statsText = textGo.GetComponent<Text>();
         _statsText.font               = (Resources.Load<Font>("Fonts/Galmuri9") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"))
                                    ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
-        _statsText.fontSize           = 10;
-        _statsText.color              = new Color(0.85f, 0.85f, 0.85f);
+        _statsText.fontSize           = 21;
+        _statsText.color              = StatsTextBaseColor;
         _statsText.lineSpacing        = 1.3f;
         _statsText.alignment          = TextAnchor.MiddleCenter;
         _statsText.horizontalOverflow = HorizontalWrapMode.Overflow;
         _statsText.verticalOverflow   = VerticalWrapMode.Overflow;
         _statsText.raycastTarget      = false;
+        _statsText.supportRichText    = true;
     }
 
-    /// <summary>상점 레벨업 시 확률표 배경을 잠깐 반짝여 확률이 갱신되었음을 알린다</summary>
-    private void FlashStatsPanel()
+    /// <summary>상점 레벨업 시 확률표 텍스트를 잠깐 반짝여 확률이 갱신되었음을 알린다</summary>
+    private void FlashStatsText()
     {
-        if (_statsPanelBg == null) return;
+        if (_statsText == null) return;
         if (_statsFlashRoutine != null) StopCoroutine(_statsFlashRoutine);
-        _statsFlashRoutine = StartCoroutine(FlashStatsPanelRoutine());
+        _statsFlashRoutine = StartCoroutine(FlashStatsTextRoutine());
     }
 
-    private IEnumerator FlashStatsPanelRoutine()
+    private IEnumerator FlashStatsTextRoutine()
     {
         const float duration = 0.35f;
         float t = 0f;
         while (t < duration)
         {
             t += Time.deltaTime;
-            _statsPanelBg.color = Color.Lerp(StatsPanelFlashColor, StatsPanelBaseColor, t / duration);
+            _statsText.color = Color.Lerp(StatsTextFlashColor, StatsTextBaseColor, t / duration);
             yield return null;
         }
-        _statsPanelBg.color = StatsPanelBaseColor;
+        _statsText.color = StatsTextBaseColor;
     }
 
-    private void UpdateStatsPanel()
+    private void UpdateStatsText()
     {
         if (_statsText == null) return;
 
@@ -385,7 +376,8 @@ public class ShopUI : MonoBehaviour
         int epic     = RarityWeights[idx, 2];
         int legend   = RarityWeights[idx, 3];
 
-        _statsText.text = $"일반 {normal}%  희귀 {rare}%  영웅 {epic}%  전설 {legend}%";
+        // 등급 색상은 ShopSlotUI.RarityColors와 동일 (희귀 파랑 / 영웅 보라 / 전설 금색)
+        _statsText.text = $"일반 {normal}%  <color=#4D8CFF>희귀 {rare}%</color>  <color=#A640F2>영웅 {epic}%</color>  <color=#FFCC1A>전설 {legend}%</color>";
     }
 
     // ─────────────────────────────────────────────────────────────

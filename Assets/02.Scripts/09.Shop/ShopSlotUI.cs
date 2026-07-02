@@ -16,6 +16,10 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private RectTransform  _previewContainer;
     [SerializeField] private Image          _slotBackground;
 
+    [Header("옵션")]
+    [Tooltip("체크 시 슬롯 배경을 항상 투명하게 유지한다 (런타임 배경색 갱신 무시)")]
+    [SerializeField] private bool _hideBackground;
+
     private static readonly Color[] RarityColors =
     {
         new Color(0.75f, 0.75f, 0.75f),  // Common
@@ -101,7 +105,7 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private static readonly Color MergeHintBlue = new Color(0.35f, 0.75f, 1f);
 
-    private Color            _defaultNameColor;
+    private Color            _rarityNameColor = Color.white;
     private InventoryGrid    _cachedGrid;
     private TempSlotUI       _cachedTempSlot;
     private InventoryGridUI  _cachedGridUI;
@@ -109,13 +113,6 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private bool             _tempSubscribed;
     private bool             _isSoldOut;
     private bool             _isHovered;
-
-    // ─────────────────────────────────────────────────────────────
-
-    private void Awake()
-    {
-        _defaultNameColor = _nameText != null ? _nameText.color : Color.white;
-    }
 
     // ─────────────────────────────────────────────────────────────
 
@@ -192,9 +189,13 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         _rarityText.text  = rarityLabel;
         _rarityText.color = color;
 
+        // 아이템명도 등급 색상으로 노출 (합성 힌트 파란색이 우선)
+        _rarityNameColor  = color;
+        _nameText.color   = color;
+
         // 다크 브라운/블랙 톤 배경 + 레어도 색은 약하게만 섞어서 통일된 상점 테마를 유지
         if (_slotBackground != null)
-            _slotBackground.color = Color.Lerp(SlotBaseColor, color, 0.15f);
+            _slotBackground.color = _hideBackground ? Color.clear : Color.Lerp(SlotBaseColor, color, 0.15f);
 
         BuildMiniPreview(color);
     }
@@ -221,7 +222,9 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (_synergiesText != null) _synergiesText.text = string.Empty;
 
         if (_slotBackground != null)
-            _slotBackground.color = new Color(SlotBaseColor.r * 0.5f, SlotBaseColor.g * 0.5f, SlotBaseColor.b * 0.5f, 0.55f);
+            _slotBackground.color = _hideBackground
+                ? Color.clear
+                : new Color(SlotBaseColor.r * 0.5f, SlotBaseColor.g * 0.5f, SlotBaseColor.b * 0.5f, 0.55f);
     }
 
     public void SetSoldOut()
@@ -343,10 +346,11 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         var go = new GameObject("grade2_icon", typeof(RectTransform), typeof(Image));
         go.transform.SetParent(_previewContainer, false);
 
+        // 할인(1/2) 아이콘과 동일한 좌하단 기준으로 배치해 두 아이콘의 위치 좌표계를 통일
         _grade2IconRt               = go.GetComponent<RectTransform>();
-        _grade2IconRt.anchorMin     = new Vector2(1f, 1f);
-        _grade2IconRt.anchorMax     = new Vector2(1f, 1f);
-        _grade2IconRt.pivot         = new Vector2(1f, 1f);
+        _grade2IconRt.anchorMin     = new Vector2(0f, 0f);
+        _grade2IconRt.anchorMax     = new Vector2(0f, 0f);
+        _grade2IconRt.pivot         = new Vector2(0f, 0f);
         _grade2IconRt.anchoredPosition = _grade2IconOffset;
         _grade2IconRt.sizeDelta     = _grade2IconSize;
 
@@ -508,7 +512,7 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         // 등급 없는 아이템(악세서리, 인벤 확장 블록)은 합성 불가 → 힌트 없음
         bool hasGrades = _item is SO_WeaponData || _item is SO_ArmorData;
-        if (!hasGrades) { _nameText.color = _defaultNameColor; return; }
+        if (!hasGrades) { _nameText.color = _rarityNameColor; return; }
 
         // null이면 재탐색 (씬 로드 타이밍 방어)
         if (_cachedGrid == null)
@@ -537,7 +541,7 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 if (block?.Instance?.data == _item && block.Instance.gradeIndex == _displayGradeIndex)
                 { found = true; break; }
 
-        _nameText.color = found ? MergeHintBlue : _defaultNameColor;
+        _nameText.color = found ? MergeHintBlue : _rarityNameColor;
     }
 
     // ─────────────────────────────────────────────────────────────
