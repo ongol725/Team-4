@@ -185,11 +185,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: e2be5a3fc4c632544bcea3bbb5766135, type: 2}
   hpBarPrefab: {fileID: 0}
+  shadowWidthMul: 1
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
   deathDelay: 5
-  damageReductionVfxPrefab: {fileID: 6879586962923623183, guid: 311dc9ef5818be749afc110f39477ae2, type: 3}
+  damageReductionVfxPrefab: {fileID: 405276579642315284, guid: 460a0c475bcf0dc4991286fea6957060, type: 3}
 --- !u!114 &1839172850203504646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +217,7 @@ MonoBehaviour:
   firstHitInterval: 0.4
   hitRange: 2.962963
   attackAngle: 120
-  telegraphPrefab: {fileID: 5757945224208542710, guid: 9b8ec2a68b0d6c8408c5c8f8531d9e8b, type: 3}
+  telegraphPrefab: {fileID: 2844221685650203004, guid: 23e9355ccc5d8a54ebcb14b45facc5e5, type: 3}
   hitEffectPrefab: {fileID: 3774408115409620830, guid: bd31730943a8b14499c94f4943fd1c8d, type: 3}
 --- !u!114 &6151717189659811340
 MonoBehaviour:
@@ -249,7 +250,7 @@ MonoBehaviour:
   wallProbe: 0.8
   stopOnHit: 0.3
   phase2SecondDashTelegraph: 0.5
-  telegraphPrefab: {fileID: 4275581020290162337, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
+  telegraphPrefab: {fileID: 8994974341929589912, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
   impactEffectPrefab: {fileID: 3774408115409620830, guid: bd31730943a8b14499c94f4943fd1c8d, type: 3}
 --- !u!114 &8148719600609751913
 MonoBehaviour:
@@ -342,7 +343,7 @@ MonoBehaviour:
   phase2SummonCount: 5
   phase1WolfStartDelay: 2
   phase2WolfStartDelay: 0.3
-  wolfPrefab: {fileID: 290890298631119085, guid: 9dca9bd5780ada44c961e111ad73ee05, type: 3}
+  wolfPrefab: {fileID: 2814910793327845672, guid: 1e83a3214d43ee745ad7deb3025446b6, type: 3}
   telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
 --- !u!114 &3827026974784414885
 MonoBehaviour:
@@ -368,15 +369,15 @@ MonoBehaviour:
   drawRangeGizmo: 1
   hoverTime: 1
   jumpDuration: 1.5
-  ring1Radius: 1.3333334
-  ring2Radius: 2.0740743
-  ring3Radius: 3.4074078
+  ring1Radius: 4.5
+  ring2Radius: 7
+  ring3Radius: 11.5
   ringWarningTime: 0.5
   phase2SecondWaveDelay: 0.7
   phase2SecondWaveRingDelay: 0.2
-  telegraphPrefab: {fileID: 5519743591050941184, guid: 431b65e9a8a892d4b90598cd8af4c257, type: 3}
-  ringWarningPrefab: {fileID: 5519743591050941184, guid: 431b65e9a8a892d4b90598cd8af4c257, type: 3}
-  ringWarningPrefabOuter: {fileID: 6865670735945794169, guid: ae79a09fd11d8f842ac4b1fd1e389690, type: 3}
+  telegraphPrefab: {fileID: 919166817890876286, guid: fb99248d28590d84198d34fafa813ced, type: 3}
+  ringWarningPrefab: {fileID: 919166817890876286, guid: fb99248d28590d84198d34fafa813ced, type: 3}
+  ringWarningPrefabOuter: {fileID: 4924685073668381608, guid: d834828ef23e7ea42af4b3c9c5b6bcc7, type: 3}
   ringEffectPrefab: {fileID: 0}
   ringMaskPrefab: {fileID: 0}
 --- !u!114 &1951138826211289386
@@ -478,7 +479,7 @@ MonoBehaviour:
   invincibleThreshold: 0.35
   transitionDuration: 2
   phaseCenterOffset: {x: 0, y: -8, z: 0}
-  floorHazardPrefab: {fileID: 7573604675588430897, guid: 6a74ab13879a2fa4eb805af7699087b9, type: 3}
+  floorHazardPrefab: {fileID: 7308039910934029648, guid: 6616746a84c0c3647907e2dfc278bac8, type: 3}
   phase2BasicChance: 0.6
 --- !u!114 &3635094568382575677
 MonoBehaviour:
@@ -505,7 +506,7 @@ Animator:
   m_GameObject: {fileID: 8417251158332801010}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1e50ba697cdb7924ea0008424cde4317, type: 2}
+  m_Controller: {fileID: 9100000, guid: 458567944dd2fb24d8ea5b5a045d7764, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -530,8 +531,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.BossAnimator
   animator: {fileID: 8453252658399560253}
-  phase1Controller: {fileID: 9100000, guid: 1e50ba697cdb7924ea0008424cde4317, type: 2}
-  phase2Controller: {fileID: 9100000, guid: 7c5617ed11a4e234ab48b39548b541e2, type: 2}
+  phase1Controller: {fileID: 9100000, guid: 458567944dd2fb24d8ea5b5a045d7764, type: 2}
+  phase2Controller: {fileID: 9100000, guid: 3c0f8935c88998c4183a7157cb4a8e66, type: 2}
   idleState: Idle
   moveState: Move
   stunState: Stun

@@ -195,4 +195,4 @@ MonoBehaviour:
   chargeMaxDistance: 10
   chargeSpeedMultiplier: 3
   restDuration: 3
-  chargeWarnPrefab: {fileID: 1729557185456710403, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
+  chargeWarnPrefab: {fileID: 8994974341929589912, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}

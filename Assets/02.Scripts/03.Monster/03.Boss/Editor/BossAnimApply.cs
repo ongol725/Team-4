@@ -65,8 +65,49 @@ public static class BossAnimApply
         }
         var driver = Object.FindFirstObjectByType<BossPatternDriver>();
         if (driver == null) { Debug.LogError("[BossAnimApply] 씬에 보스(BossPatternDriver) 없음 — 샌드박스 빌드 먼저"); return; }
-        GameObject boss = driver.gameObject;
 
+        WireBoss(driver.gameObject, p1, p2, clips);
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        AssetDatabase.SaveAssets();
+        Debug.Log("[BossAnimApply] 완료(샌드박스) — P1(파랑)/P2(빨강) 컨트롤러 빌드 + 페이즈 자동전환 배선. " +
+                  "해당 페이즈 클립이 없는 모션은 다른 페이즈 클립으로 임시 폴백됩니다(콘솔 경고 = 부족 모션).");
+    }
+
+    private const string BossPrefabPath = "Assets/03.Prefabs/02.Monsters/Prefab_WolfBoss.prefab";
+
+    /// <summary>Prefab_WolfBoss 프리팹에 직접 배선 → 06.BossRoom·샌드박스 등 모든 인스턴스가 상속.
+    /// 클립/컨트롤러는 재빌드 후 프리팹 컨텐츠를 로드해 WireBoss로 연결하고 저장.</summary>
+    [MenuItem("Team4/보스 애니 적용 (프리팹 = 실제 보스)")]
+    public static void ApplyToPrefab()
+    {
+        var clips = AssetDatabase.FindAssets("t:AnimationClip", new[] { AnimDir })
+            .Select(g => AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetDatabase.GUIDToAssetPath(g)))
+            .Where(c => c != null).ToList();
+        if (clips.Count == 0) { Debug.LogError("[BossAnimApply] 클립 없음 — 먼저 '보스 샌드박스 애니 셋업' 실행"); return; }
+        if (AssetDatabase.LoadAssetAtPath<GameObject>(BossPrefabPath) == null)
+        { Debug.LogError("[BossAnimApply] Prefab_WolfBoss 없음: " + BossPrefabPath); return; }
+
+        var p1 = BuildController(CtrlP1, "1페이즈", "2페이즈", clips);
+        var p2 = BuildController(CtrlP2, "2페이즈", "1페이즈", clips);
+        AssetDatabase.SaveAssets();
+
+        var contents = PrefabUtility.LoadPrefabContents(BossPrefabPath);
+        var driver = contents.GetComponentInChildren<BossPatternDriver>(true);
+        if (driver == null) { PrefabUtility.UnloadPrefabContents(contents); Debug.LogError("[BossAnimApply] 프리팹에 BossPatternDriver 없음"); return; }
+
+        WireBoss(driver.gameObject, p1, p2, clips);
+
+        PrefabUtility.SaveAsPrefabAsset(contents, BossPrefabPath);
+        PrefabUtility.UnloadPrefabContents(contents);
+        AssetDatabase.SaveAssets();
+        Debug.Log("[BossAnimApply] 완료(프리팹) — Prefab_WolfBoss에 배선. 06.BossRoom 등 모든 인스턴스에 자동 반영됩니다.");
+    }
+
+    /// <summary>보스 GameObject에 애니메이터·페이즈 컨트롤러·패턴별 animState·이펙트 프리팹을 배선.</summary>
+    private static void WireBoss(GameObject boss, AnimatorController p1, AnimatorController p2, List<AnimationClip> clips)
+    {
         var animator = boss.GetComponent<Animator>(); if (animator == null) animator = boss.AddComponent<Animator>();
         animator.runtimeAnimatorController = p1;
         var ba = boss.GetComponent<BossAnimator>(); if (ba == null) ba = boss.AddComponent<BossAnimator>();
@@ -95,11 +136,6 @@ public static class BossAnimApply
         ApplyDamageReduceFx(boss);
 
         EditorUtility.SetDirty(boss);
-        EditorSceneManager.MarkSceneDirty(scene);
-        EditorSceneManager.SaveScene(scene);
-        AssetDatabase.SaveAssets();
-        Debug.Log("[BossAnimApply] 완료 — P1(파랑)/P2(빨강) 컨트롤러 빌드 + 페이즈 자동전환 배선. " +
-                  "해당 페이즈 클립이 없는 모션은 다른 페이즈 클립으로 임시 폴백됩니다(콘솔 경고 = 부족 모션).");
     }
 
     /// <summary>primaryPhase 클립 우선, 없으면 otherPhase 폴백으로 컨트롤러 빌드.</summary>
