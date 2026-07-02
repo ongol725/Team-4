@@ -50,6 +50,8 @@ namespace BagSurvivor.Monster
         private const float KNOCKBACK_FEEL_MULT = 1.6f;
         // 골드 드롭 배수(스폰 2배와 함께 순수입 유지용). 내림 처리 → 홀수는 0.5 손실.
         private const float GOLD_DROP_MULT = 0.5f;
+        // 넉백 최고 속도 상한(m/s). 강한 넉백이 벽을 뚫고 나가는 터널링 방지.
+        private const float MAX_KB_SPEED = 16f;
 
         [Header("사망 설정")]
         [Tooltip("사망 모션/이펙트 재생 후 풀 반환까지 대기 시간 (초). 보스는 길게(예: 5)")]
@@ -616,7 +618,9 @@ namespace BagSurvivor.Monster
             while (timer < KNOCKBACK_DURATION)
             {
                 float p = timer / KNOCKBACK_DURATION;
-                rb.linearVelocity = direction * v0 * (1f - p);
+                // 속도 상한 적용: 너무 빠르면 Continuous 충돌이 놓쳐 벽을 뚫으므로 상한으로 캡
+                float speed = Mathf.Min(v0 * (1f - p), MAX_KB_SPEED);
+                rb.linearVelocity = direction * speed;
                 timer += Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
             }
