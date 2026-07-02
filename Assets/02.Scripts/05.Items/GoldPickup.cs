@@ -88,9 +88,7 @@ namespace BagSurvivor.Items
             if (collected) return;
             collected = true;
 
-            // 강자의 방 등 이벤트 골드 배율 적용
-            int gained = Mathf.Max(1, Mathf.RoundToInt(amount * RoomEventState.GoldMultiplier));
-            if (GameManager.Instance != null) GameManager.Instance.AddGold(gained);
+            if (GameManager.Instance != null) GameManager.Instance.AddGold(amount);
 
             if (owner != null) owner.Return(this);
             else gameObject.SetActive(false);

@@ -696,10 +696,17 @@ namespace BagSurvivor.Monster
             int gold = Mathf.FloorToInt(monsterData.dropItemValue * GOLD_DROP_MULT);
             if (gold <= 0) return; // 원래 실드롭이지만 반토막에 0된 경우(현재 최소 4→2라 발생 안 함)
 
-            // dropItemValue = 떨어뜨릴 총 골드. 동전 1개로 정확한 총액 드롭.
-            if (BagSurvivor.Items.GoldDropManager.Instance != null)
-                BagSurvivor.Items.GoldDropManager.Instance.DropGold(
-                    transform.position, gold);
+            var mgr = BagSurvivor.Items.GoldDropManager.Instance;
+            if (mgr == null) return;
+
+            // 강자의 방 등 이벤트 골드 배율만큼 '코인 개수'를 늘려 떨어뜨림(하나씩→여러 개).
+            int coins = Mathf.Max(1, Mathf.RoundToInt(RoomEventState.GoldMultiplier)); // 강자의 방=2
+            for (int i = 0; i < coins; i++)
+            {
+                Vector3 p = transform.position;
+                if (coins > 1) p += (Vector3)(Random.insideUnitCircle * 0.45f); // 여러 개면 살짝 흩뿌림
+                mgr.DropGold(p, gold);
+            }
         }
 
         // ==========================================
