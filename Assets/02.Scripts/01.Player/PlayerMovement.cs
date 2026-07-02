@@ -40,12 +40,15 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _dashDir;
     private float _dashTimer, _dashCd, _afterimgTimer;
     private bool  _isDashing;
+    public float dashInvincibleAfter = 0.5f; // 대시 종료 후 추가 무적(초)
     private SpriteRenderer _sr; // 잔상 복제용 캐릭터 스프라이트
+    private PlayerHealth   _health;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         _sr = GetComponentInChildren<SpriteRenderer>();
+        _health = GetComponent<PlayerHealth>();
         // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
         if (rb != null)
         {
@@ -122,6 +125,10 @@ public class PlayerMovement : MonoBehaviour
         _dashCd        = dashCooldown;
         _dashDir       = _lastDir.sqrMagnitude > 0.01f ? _lastDir.normalized : Vector2.right;
         _afterimgTimer = 0f;
+
+        // 대시 중 + 종료 후 0.5초 무적(적과 부딪혀도 피해 없음)
+        if (_health != null) _health.GrantInvincibility(dashDuration + dashInvincibleAfter);
+
         SpawnAfterimage(); // 시작 즉시 하나
     }
 
