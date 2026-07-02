@@ -134,10 +134,8 @@ namespace BagSurvivor.Monster
         [Tooltip("현재 층 등장 몬스터를 종류별로 미리 생성해 풀에 적재(첫 스폰 끊김 방지). 0이면 끄기")]
         public int prewarmPerType = 8;
 
-        // 일반방 동시 생존 상한: 방 체류 시간에 따라 2배→5배로 점진 증가(2분에 최대). 방 이동 시 리셋. 특수방 미적용.
-        private const float SPAWN_MULT_START   = 2f;
-        private const float SPAWN_MULT_MAX     = 5f;
-        private const float SPAWN_RAMP_SECONDS = 120f;
+        // 일반방 동시 생존 상한 배수(고정 3배). 특수방(엘리트/보스) 미적용.
+        private const int NORMAL_SPAWN_MULT = 3;
 
         [Header("스폰 예고(텔레그래프) — 독립 기능")]
         [Tooltip("적 생성 전 위치에 표시할 스프라이트(예: Sanctuary_Gd). 미지정 시 예고 없이 즉시 스폰")]
@@ -332,7 +330,7 @@ namespace BagSurvivor.Monster
                 {
                     if (b == null) continue;
                     foreach (GameObject p in b)
-                        if (p != null && warmed.Add(p)) pool.Prewarm(p, prewarmPerType * Mathf.CeilToInt(SPAWN_MULT_MAX));
+                        if (p != null && warmed.Add(p)) pool.Prewarm(p, prewarmPerType * NORMAL_SPAWN_MULT);
                 }
             }
 
@@ -483,18 +481,12 @@ namespace BagSurvivor.Monster
             GameObject[] pool2 = cfg.BandPool(band);
             if (pool2 == null || pool2.Length == 0) yield break;
 
-            int baseMaxAlive = Mathf.Max(1, cfg.BandMaxAlive(band)); // 밴드별 기본 상한(램프의 1배 기준)
+            int maxAlive = Mathf.Max(1, cfg.BandMaxAlive(band)) * NORMAL_SPAWN_MULT; // 밴드별 상한 ×3(고정)
             float interval = Mathf.Max(0.1f, cfg.spawnInterval);
             var wait = new WaitForSeconds(interval);
-            float enterTime = Time.time; // 방 진입 시각(체류 시간 램프 기준)
 
             while (true)
             {
-                // 체류 시간에 따라 상한을 2배→5배로 램프(2분에 최대)
-                float ramp = Mathf.Lerp(SPAWN_MULT_START, SPAWN_MULT_MAX,
-                                        Mathf.Clamp01((Time.time - enterTime) / SPAWN_RAMP_SECONDS));
-                int maxAlive = Mathf.Max(1, Mathf.RoundToInt(baseMaxAlive * ramp));
-
                 // 생존 + 예고대기 합이 상한 미만이면 1마리 예고→스폰 (예고 대기 수를 포함해 폭증 방지)
                 if (activeMonsters.Count + _pendingSpawns < maxAlive)
                 {
