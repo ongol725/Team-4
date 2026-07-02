@@ -163,6 +163,8 @@ public static class BossAnimApply
         {
             var clip = Pick(kws, not);
             if (clip == null) { Debug.LogWarning($"[BossAnimApply] {primaryPhase} '{name}' 클립 없음(폴백도 실패)"); continue; }
+            // 1페이즈는 스턴 모션이 없다 — 2페이즈 클립으로 폴백하지 않고 상태 자체를 생략
+            if (name == "Stun" && primaryPhase == "1페이즈" && !clip.name.Contains("1페이즈")) continue;
             var s = AnimationUtility.GetAnimationClipSettings(clip);
             if (s.loopTime != loop) { s.loopTime = loop; AnimationUtility.SetAnimationClipSettings(clip, s); EditorUtility.SetDirty(clip); }
             // 폴백이라 다른 페이즈 클립이면 경고(부족 모션 추적용)
@@ -236,7 +238,7 @@ public static class BossAnimApply
         leap.ringWarningPrefabOuter = floorEdge != null ? floorEdge : floorWarn; // 2·3단(테두리)
         leap.ringMaskPrefab         = null;                                  // 테두리가 이미 링 → 마스크 불필요
         leap.ringEffectPrefab       = null;
-        leap.ring1Radius = 4.5f; leap.ring2Radius = 7f; leap.ring3Radius = 11.5f; // 바닥 크기 축소
+        leap.ring1Radius = 2.25f; leap.ring2Radius = 3.5f; leap.ring3Radius = 5.75f; // 반지름 기준 절반으로 축소
         EditorUtility.SetDirty(leap);
     }
 

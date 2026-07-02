@@ -28,6 +28,11 @@ namespace BagSurvivor.Monster
         [Tooltip("발밑 그림자 폭 배수 (1=기본, 작을수록 작아짐). 스프라이트 여백이 큰 몬스터용")]
         [Range(0.1f, 2f)] public float shadowWidthMul = 1f;
 
+        [Tooltip("그림자를 스프라이트 하단이 아닌 루트 기준 고정 Y에 둔다(보스: 모션마다 캔버스 높이가 달라 그림자가 튀는 것 방지)")]
+        public bool shadowFixedLocalY = false;
+        [Tooltip("shadowFixedLocalY가 켜졌을 때 루트 기준 그림자 Y (음수=아래). 발밑에 오도록 조정)")]
+        public float shadowLocalY = 0f;
+
         [Header("렌더 정렬")]
         [Tooltip("타일맵(바닥=0/벽=1) 위에 보이도록 하는 스프라이트 정렬 순서")]
         public int sortingOrder = 10;
@@ -170,6 +175,7 @@ namespace BagSurvivor.Monster
             var blobShadow = GetComponent<BlobShadow>();
             if (blobShadow == null) blobShadow = gameObject.AddComponent<BlobShadow>();
             blobShadow.SetWidthMul(shadowWidthMul);
+            if (shadowFixedLocalY) blobShadow.SetFixedLocalY(shadowLocalY);
 
             // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
             // + 빠른 넉백에도 벽을 통과(터널링)하지 않도록 연속 충돌 감지
