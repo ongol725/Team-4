@@ -21,7 +21,7 @@ using BagSurvivor.Monster;
 
 public static class BossAnimApply
 {
-    private const string AnimDir   = "Assets/01.Scenes/Sandbox/BossAnims";
+    private const string AnimDir   = "Assets/03.Prefabs/02.Monsters/BossAnims"; // 커밋 영역(빌드/클론 보존). 구 위치=Sandbox(gitignore)에서 이전
     private const string CtrlP1     = AnimDir + "/Boss_P1.controller";
     private const string CtrlP2     = AnimDir + "/Boss_P2.controller";
     private const string ScenePath = "Assets/01.Scenes/Sandbox/BossSandbox.unity";

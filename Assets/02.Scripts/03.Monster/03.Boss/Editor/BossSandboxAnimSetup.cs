@@ -22,7 +22,7 @@ public static class BossSandboxAnimSetup
     private const string ImgDir    = "Assets/04.Images/02.Monsters/Boss";
     private const string ReDirName = "보스 애니메이션 재 제작";      // 재제작 시트 하위 폴더
     private const string ReDir     = ImgDir + "/" + ReDirName;
-    private const string AnimDir   = "Assets/01.Scenes/Sandbox/BossAnims";
+    private const string AnimDir   = "Assets/03.Prefabs/02.Monsters/BossAnims"; // 커밋 영역(빌드/클론 보존). 구 위치=Sandbox(gitignore)에서 이전
     private const string CtrlPath  = AnimDir + "/SandboxBoss.controller";
     private const string ScenePath = "Assets/01.Scenes/Sandbox/BossSandbox.unity";
 
