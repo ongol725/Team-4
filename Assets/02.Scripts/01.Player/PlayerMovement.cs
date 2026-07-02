@@ -29,9 +29,23 @@ public class PlayerMovement : MonoBehaviour
     private float _loadoutMoveMult = 1f;
     private GameManager _gm;
 
+    [Header("대시 (스페이스)")]
+    public float dashSpeed        = 22f;   // 대시 속도
+    public float dashDuration     = 0.15f; // 대시 지속(초)
+    public float dashCooldown     = 1.0f;  // 재사용 대기(초)
+    public float afterimageInterval = 0.03f; // 잔상 생성 간격
+    public Color afterimageColor  = new Color(0.6f, 0.9f, 1f, 0.5f); // 잔상 색
+
+    private Vector2 _lastDir = Vector2.right; // 마지막 바라본 방향(정지 시 대시 방향)
+    private Vector2 _dashDir;
+    private float _dashTimer, _dashCd, _afterimgTimer;
+    private bool  _isDashing;
+    private SpriteRenderer _sr; // 잔상 복제용 캐릭터 스프라이트
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        _sr = GetComponentInChildren<SpriteRenderer>();
         // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
         if (rb != null)
         {
@@ -79,6 +93,70 @@ public class PlayerMovement : MonoBehaviour
         {
             moveInput = moveAction.action.ReadValue<Vector2>();
         }
+
+        // 바라보는 방향 추적(정지 시 마지막 방향 유지)
+        if (moveInput.sqrMagnitude > 0.01f) _lastDir = moveInput.normalized;
+
+        // 대시 쿨다운
+        if (_dashCd > 0f) _dashCd -= Time.deltaTime;
+
+        // 스페이스 → 대시 (인벤 열림·스턴·쿨다운 중 제외)
+        if (!_inventoryOpen && !isStunned && !_isDashing && _dashCd <= 0f
+            && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            StartDash();
+        }
+
+        // 대시 중 잔상 생성
+        if (_isDashing)
+        {
+            _afterimgTimer -= Time.deltaTime;
+            if (_afterimgTimer <= 0f) { SpawnAfterimage(); _afterimgTimer = afterimageInterval; }
+        }
+    }
+
+    private void StartDash()
+    {
+        _isDashing     = true;
+        _dashTimer     = dashDuration;
+        _dashCd        = dashCooldown;
+        _dashDir       = _lastDir.sqrMagnitude > 0.01f ? _lastDir.normalized : Vector2.right;
+        _afterimgTimer = 0f;
+        SpawnAfterimage(); // 시작 즉시 하나
+    }
+
+    // 현재 캐릭터 스프라이트를 반투명 복제해 잔상 생성 → 서서히 사라지고 소멸
+    private void SpawnAfterimage()
+    {
+        if (_sr == null || _sr.sprite == null) return;
+
+        var go = new GameObject("Afterimage");
+        go.transform.position   = _sr.transform.position;
+        go.transform.rotation   = _sr.transform.rotation;
+        go.transform.localScale = _sr.transform.lossyScale;
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite          = _sr.sprite;
+        sr.flipX           = _sr.flipX;
+        sr.color           = afterimageColor;
+        sr.sortingLayerID  = _sr.sortingLayerID;
+        sr.sortingOrder    = _sr.sortingOrder - 1; // 캐릭터 뒤에 깔림
+
+        StartCoroutine(FadeGhost(sr));
+    }
+
+    private IEnumerator FadeGhost(SpriteRenderer sr)
+    {
+        const float life = 0.3f;
+        float t = 0f;
+        Color c0 = sr.color;
+        while (t < life && sr != null)
+        {
+            t += Time.deltaTime;
+            var c = c0; c.a = Mathf.Lerp(c0.a, 0f, t / life); sr.color = c;
+            yield return null;
+        }
+        if (sr != null) Destroy(sr.gameObject);
     }
 
     void FixedUpdate()
@@ -86,6 +164,16 @@ public class PlayerMovement : MonoBehaviour
         if (isStunned || _inventoryOpen)
         {
             rb.linearVelocity = Vector2.zero;
+            _prevPosition = rb.position;
+            return;
+        }
+
+        // 대시 중: 바라본 방향으로 고속 이동(배율 무시), 거리 이벤트 제외
+        if (_isDashing)
+        {
+            rb.linearVelocity = _dashDir * dashSpeed;
+            _dashTimer -= Time.fixedDeltaTime;
+            if (_dashTimer <= 0f) _isDashing = false;
             _prevPosition = rb.position;
             return;
         }
