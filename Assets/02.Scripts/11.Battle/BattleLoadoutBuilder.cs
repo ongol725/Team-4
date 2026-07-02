@@ -52,7 +52,43 @@ public class BattleLoadoutBuilder : MonoBehaviour
         BuildWeapons(snapshot, loadout);
         BuildArmorStats(snapshot, loadout);
         BuildSynergies(snapshot, loadout);
+        BuildTempSlotPenalty(loadout);
         return loadout;
+    }
+
+    // ── 임시칸 과적 페널티 (반지 제외, 3개 무료, 가속 곡선) ──
+    private const int   TEMP_FREE      = 3;
+    private const float MOVE_BASE      = 4f,  MOVE_ACCEL   = 2f,   MOVE_CAP   = 60f;
+    private const float ATKSPD_BASE    = 3f,  ATKSPD_ACCEL = 1.5f, ATKSPD_CAP = 45f;
+
+    private void BuildTempSlotPenalty(BattleLoadout loadout)
+    {
+        int count = CountTempItemsExcludingRings();
+        int n = Mathf.Max(0, count - TEMP_FREE); // 무료 초과분
+        float tri = n * (n - 1) * 0.5f;          // 삼각수 가중(가속)
+
+        float movePen = Mathf.Min(MOVE_CAP,   MOVE_BASE   * n + MOVE_ACCEL   * tri);
+        float atkPen  = Mathf.Min(ATKSPD_CAP, ATKSPD_BASE * n + ATKSPD_ACCEL * tri);
+
+        loadout.tempMoveMult   = 1f - movePen / 100f;
+        loadout.tempAtkSpdMult = 1f - atkPen  / 100f;
+    }
+
+    // 임시칸에 든 아이템 중 반지(장신구)를 제외한 수
+    private static int CountTempItemsExcludingRings()
+    {
+        var temp = FindFirstObjectByType<TempSlotUI>();
+        if (temp == null) return 0;
+
+        int n = 0;
+        foreach (var block in temp.HeldBlocks)
+        {
+            var data = block != null && block.Instance != null ? block.Instance.data : null;
+            if (data == null) continue;
+            if (data is SO_AccessoryData) continue; // 반지는 노카운트
+            n++;
+        }
+        return n;
     }
 
     /// <summary>

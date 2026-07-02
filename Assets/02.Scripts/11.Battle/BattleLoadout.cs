@@ -55,6 +55,11 @@ public class BattleLoadout
     /// <summary>방어구 합산 10초당 체력 재생</summary>
     public int TotalHpRegen;
 
+    /// <summary>임시칸 과적 페널티: 이동속도 배율(1=무패널티, &lt;1 감소)</summary>
+    public float tempMoveMult = 1f;
+    /// <summary>임시칸 과적 페널티: 공격속도 배율(1=무패널티, &lt;1 감소=느려짐)</summary>
+    public float tempAtkSpdMult = 1f;
+
     /// <summary>Bronze 이상 활성화된 시너지 목록 (Gold → Silver → Bronze 순 정렬)</summary>
     public readonly List<ActiveSynergyEntry> ActiveSynergies = new();
 

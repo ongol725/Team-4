@@ -151,7 +151,8 @@ public class PlayerAttack : MonoBehaviour
 
         // attackSpeed = "이 초마다 1발"(초/발, 클수록 느림). 최종 쿨타임 = 무기공속 / (기본공속 × 5단계보정 × 캐릭터공속배율)
         // → weaponAps가 분자라 클수록 간격이 길어짐(느려짐), spdBoost·charSpeedMul이 클수록 빨라짐.
-        float spdDenom = baseAps * spdBoost * charSpeedMul;
+        float tempAtkMul = _currentLoadout != null ? _currentLoadout.tempAtkSpdMult : 1f; // 임시칸 과적 공속 페널티
+        float spdDenom = baseAps * spdBoost * charSpeedMul * tempAtkMul; // 배율<1 → 분모↓ → 간격↑(느려짐)
         if (spdDenom <= 0f) spdDenom = 1f; // 0 나눗셈 방지
         float interval = weaponAps / spdDenom;
         if (g5 && id == "WPN_025") interval = 1f; // 너클 5단계: 쿨타임 1초 고정
