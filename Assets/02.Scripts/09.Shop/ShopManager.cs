@@ -29,6 +29,19 @@ public class ShopManager : MonoBehaviour
         new(),
     };
 
+    // 활성 칸이 이 비율 이상이면 인벤토리 블록을 '배치 가능한 형태'로만 등장시킴
+    private const float BLOCK_FILTER_RATIO = 0.7f;
+
+    private InventoryGrid _grid;
+    private InventoryGrid Grid
+    {
+        get
+        {
+            if (_grid == null) _grid = FindFirstObjectByType<InventoryGrid>();
+            return _grid;
+        }
+    }
+
     private void Awake() => LoadAllItems();
 
     private void LoadAllItems()
@@ -65,6 +78,12 @@ public class ShopManager : MonoBehaviour
                 if (typeIdx == 2 || typeIdx == 3)
                 {
                     candidate = bucket[Random.Range(0, bucket.Count)];
+
+                    // 인벤토리 블록(2): 활성 70% 이상이면 남은 잠긴 영역에 배치 가능한 형태만 허용(못 놓으면 재추첨)
+                    if (typeIdx == 2 && Grid != null &&
+                        Grid.ActiveCellCount() >= Grid.TotalCellCount * BLOCK_FILTER_RATIO &&
+                        !Grid.CanPlaceBlockAnywhere(candidate))
+                        continue;
                 }
                 else
                 {

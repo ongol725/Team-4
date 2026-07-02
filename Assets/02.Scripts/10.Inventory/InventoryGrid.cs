@@ -125,6 +125,43 @@ public class InventoryGrid : MonoBehaviour
         return true;
     }
 
+    /// <summary>전체 칸 수(Rows×Cols).</summary>
+    public int TotalCellCount => Rows * Cols;
+
+    /// <summary>현재 활성(개방)된 칸 수.</summary>
+    public int ActiveCellCount()
+    {
+        int n = 0;
+        for (int x = 0; x < Rows; x++)
+            for (int y = 0; y < Cols; y++)
+                if (InActiveArea(new Vector2Int(x, y))) n++;
+        return n;
+    }
+
+    /// <summary>이 블록 형태가 현재 잠긴 영역 어딘가에 배치 가능하면 true(고정 형태, 모든 원점 탐색).</summary>
+    public bool CanPlaceBlockAnywhere(SO_ItemData data)
+    {
+        if (data == null) return false;
+        var cells = GetCells(data);
+        if (cells == null || cells.Length == 0) return false;
+
+        for (int x = 0; x < Rows; x++)
+        {
+            for (int y = 0; y < Cols; y++)
+            {
+                var origin = new Vector2Int(x, y);
+                bool ok = true;
+                foreach (var local in cells)
+                {
+                    var world = origin + local;
+                    if (!InBounds(world) || InActiveArea(world) || _occupied[world.x, world.y]) { ok = false; break; }
+                }
+                if (ok) return true;
+            }
+        }
+        return false;
+    }
+
     /// <summary>배치된 셀을 추가 활성 집합에 등록한다.</summary>
     public void ExpandWithBlock(ItemInstance inst, Vector2Int origin)
     {
