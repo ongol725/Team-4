@@ -284,7 +284,7 @@ MonoBehaviour:
   phase2BurstDuration: 3
   phase2BurstGap: 0.5
   projectilePrefab: {fileID: 1044820649197100113, guid: 176e1107f92ad4946865a622eebf5daf, type: 3}
-  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+  telegraphPrefab: {fileID: 0}
 --- !u!114 &4556135943655275093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,7 +316,7 @@ MonoBehaviour:
   phase2DamageReduction: 0.3
   phase2BuffDuration: 10
   projectilePrefab: {fileID: 1044820649197100113, guid: 176e1107f92ad4946865a622eebf5daf, type: 3}
-  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+  telegraphPrefab: {fileID: 0}
 --- !u!114 &1489519259286567960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,7 +346,7 @@ MonoBehaviour:
   phase1WolfStartDelay: 2
   phase2WolfStartDelay: 0.3
   wolfPrefab: {fileID: 1873999932027093102, guid: 1e83a3214d43ee745ad7deb3025446b6, type: 3}
-  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+  telegraphPrefab: {fileID: 0}
 --- !u!114 &3827026974784414885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,7 +407,7 @@ MonoBehaviour:
   totemCount: 5
   summonRadius: 1.1851853
   totemPrefab: {fileID: 6931323245288364574, guid: a13144b011078824cb331aa5dcff7dcc, type: 3}
-  telegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+  telegraphPrefab: {fileID: 0}
 --- !u!114 &1487902901000544307
 MonoBehaviour:
   m_ObjectHideFlags: 0
