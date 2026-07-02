@@ -39,6 +39,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private InventoryGridUI _gridUI;
     private InventoryGrid   _grid;
     private int             _cellSize;
+    private int             _maxRow, _maxCol; // 아이템 셀 확장(우하단 기준 배치 보정)
 
     public ItemInstance Instance => _instance;
 
@@ -104,6 +105,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             if (c.x > maxRow) maxRow = c.x;
             if (c.y > maxCol) maxCol = c.y;
         }
+        _maxRow = maxRow; _maxCol = maxCol; // 우하단 기준 배치 보정용(아이템 셀 크기)
         _rt.sizeDelta = new Vector2((maxCol + 1) * _cellSize, (maxRow + 1) * _cellSize);
 
         _placementInputGuard = false;
@@ -138,7 +140,12 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         float h = _rt.rect.height * _rt.lossyScale.y;
         _rt.position = mousePos + new Vector2(-w, h);
 
-        var cell = _gridUI.ScreenToCell(mousePos);
+        // 커서가 가리키는 셀 = 아이템의 '우하단' 셀 → 원점(좌상단)은 크기만큼 빼서 보정
+        var cursorCell = _gridUI.ScreenToCell(mousePos);
+        Vector2Int? cell = cursorCell.HasValue
+            ? cursorCell.Value - new Vector2Int(_maxRow, _maxCol)
+            : (Vector2Int?)null;
+
         if (cell.HasValue)
             _gridUI.HighlightPlacement(_instance, cell.Value);
         else
