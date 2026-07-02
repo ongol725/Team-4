@@ -75,15 +75,24 @@ public class ShopManager : MonoBehaviour
 
                 // 인벤토리 블록·장신구는 레어도 무관 균등 선택
                 SO_ItemData candidate;
-                if (typeIdx == 2 || typeIdx == 3)
+                if (typeIdx == 2)
+                {
+                    // 인벤토리 블록: 등장 확률(타입 12%)은 유지하고, 활성 70% 이상이면
+                    // '배치 가능한 블록'들 중에서만 균등 선택(불가능 블록만 제외).
+                    if (Grid != null && Grid.ActiveCellCount() >= Grid.TotalCellCount * BLOCK_FILTER_RATIO)
+                    {
+                        var placeable = bucket.FindAll(b => Grid.CanPlaceBlockAnywhere(b));
+                        if (placeable.Count == 0) continue; // 놓을 수 있는 블록이 전무할 때만 재추첨
+                        candidate = placeable[Random.Range(0, placeable.Count)];
+                    }
+                    else
+                    {
+                        candidate = bucket[Random.Range(0, bucket.Count)];
+                    }
+                }
+                else if (typeIdx == 3)
                 {
                     candidate = bucket[Random.Range(0, bucket.Count)];
-
-                    // 인벤토리 블록(2): 활성 70% 이상이면 남은 잠긴 영역에 배치 가능한 형태만 허용(못 놓으면 재추첨)
-                    if (typeIdx == 2 && Grid != null &&
-                        Grid.ActiveCellCount() >= Grid.TotalCellCount * BLOCK_FILTER_RATIO &&
-                        !Grid.CanPlaceBlockAnywhere(candidate))
-                        continue;
                 }
                 else
                 {
