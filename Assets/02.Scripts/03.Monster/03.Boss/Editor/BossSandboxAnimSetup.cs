@@ -33,38 +33,15 @@ public static class BossSandboxAnimSetup
     // 루프 재생할 모션(키워드 포함 시 loop)
     private static readonly string[] LoopKeywords = { "대기", "이동", "스턴", "기절", "탄막" };
 
-    /// <summary>보스 시트 목록: 최상위 + 재제작 폴더. 같은 모션(구/신 네이밍·오타 통일 후 동일 키)은
-    /// 재제작본을 우선하고 구본은 목록에서 제외한다(클립 이름 충돌·구버전 픽업 방지).</summary>
+    /// <summary>보스 캐릭터 모션 시트 목록 = '보스 애니메이션 재 제작' 폴더 전용(크기 조절된 최신본).
+    /// 최상위 Boss 폴더의 구 시트(스턴/착지모션/구네이밍 등)는 절대 포함하지 않는다.
+    /// (부채꼴·바닥장판·경고·데미지감소·범위이펙트 등 이펙트/소품은 BossAnimApply가 경로로 직접 로드하므로 무관.)</summary>
     private static string[] BossPngs()
     {
-        var all = new List<string>(Directory.GetFiles(ImgDir, "*.png"));
-        if (Directory.Exists(ReDir)) all.AddRange(Directory.GetFiles(ReDir, "*.png"));
-        var byKey = new Dictionary<string, string>();
-        foreach (var raw in all)
-        {
-            string p = raw.Replace('\\', '/');
-            string fn = Path.GetFileName(p);
-            if (!fn.Contains("보스몬스터") || fn.Contains("초상화")) continue; // 초상화=UI 아이콘(시트 아님)
-            string key = Canon(Path.GetFileNameWithoutExtension(p));
-            if (!byKey.ContainsKey(key) || p.Contains(ReDirName)) byKey[key] = p; // 재제작본 우선
-        }
-        return byKey.Values.OrderBy(p => p).ToArray();
-    }
-
-    /// <summary>모션 동일성 판별용 정규화 키. 구(1페이즈보스몬스터_*)·신(보스몬스터_1페이즈_*) 네이밍,
-    /// 오타(햘/할, 2페이스), 접미(모션/패턴), 공백 차이를 흡수한다.</summary>
-    private static string Canon(string n)
-    {
-        string x = n.Replace(" ", "");
-        x = x.Replace("1페이즈보스몬스터_", "보스몬스터_1페이즈_");
-        x = x.Replace("2페이즈보스몬스터_", "보스몬스터_2페이즈_");
-        x = x.Replace("2페이스", "2페이즈");
-        x = x.Replace("햘", "할");
-        x = x.Replace("3마리", "");
-        if (x.EndsWith("모션")) x = x.Substring(0, x.Length - 2);
-        if (x.EndsWith("패턴")) x = x.Substring(0, x.Length - 2);
-        if (!x.Contains("페이즈")) x = x.Replace("보스몬스터_", "보스몬스터_1페이즈_"); // 무페이즈(대기 등)=1페이즈 취급
-        return x;
+        string src = Directory.Exists(ReDir) ? ReDir : ImgDir; // 재제작 폴더 없으면 구 동작으로 폴백
+        return Directory.GetFiles(src, "*.png").Select(p => p.Replace('\\', '/'))
+            .Where(p => { var fn = Path.GetFileName(p); return fn.Contains("보스몬스터") && !fn.Contains("초상화"); })
+            .OrderBy(p => p).ToArray();
     }
 
     /// <summary>PNG 헤더에서 원본 픽셀 크기(임포트 다운스케일 무관)를 읽는다.</summary>
