@@ -29,7 +29,7 @@ public class MinimapController : MonoBehaviour
 
     // 현재 방 통로 위치 표시(빨간 삼각형) — 독립 기능. false로 끄기 가능.
     private const bool ENABLE_EXIT_DOTS = true;
-    private const int  EXIT_TRI_DEPTH   = 3; // 삼각형 깊이(타일) — 복도(바깥) 방향으로 뻗는 길이
+    private const int  EXIT_TRI_DEPTH   = 9; // 삼각형 깊이(타일) — 복도(바깥) 방향으로 뻗는 길이(3→9, 3배)
     private static readonly Color ExitDotColor = new Color(1f, 0.15f, 0.15f); // 밝은 빨강
     private int _currentRoomIndex = -1;
     private List<Vector2[]> _currentExitTris = new List<Vector2[]>(); // 각 원소 = [밑변끝a, 밑변끝b, 꼭짓점]
@@ -132,18 +132,31 @@ public class MinimapController : MonoBehaviour
         bool Floor(int x, int y) =>
             x >= 0 && x < mapWidth && y >= 0 && y < mapHeight && mapData[x, y] == 1;
 
+        // 밑변 길이 2배: 맞닿은 구간(길이 len)을 중앙 기준으로 양쪽 len/2씩 확장 → 총 2·len
         // 오른쪽(East): 경계 x=b.xMax, 복도셀 (b.xMax, y) — 꼭짓점 +x
         ScanRuns(y0, y1, y => Floor(b.xMax, y), (s, e) =>
-            tris.Add(new[] { new Vector2(b.xMax, s), new Vector2(b.xMax, e + 1), new Vector2(b.xMax + d, (s + e + 1) * 0.5f) }));
+        {
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
+            tris.Add(new[] { new Vector2(b.xMax, mid - half), new Vector2(b.xMax, mid + half), new Vector2(b.xMax + d, mid) });
+        });
         // 왼쪽(West): 경계 x=b.xMin, 복도셀 (b.xMin-1, y) — 꼭짓점 -x
         ScanRuns(y0, y1, y => Floor(b.xMin - 1, y), (s, e) =>
-            tris.Add(new[] { new Vector2(b.xMin, s), new Vector2(b.xMin, e + 1), new Vector2(b.xMin - d, (s + e + 1) * 0.5f) }));
+        {
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
+            tris.Add(new[] { new Vector2(b.xMin, mid - half), new Vector2(b.xMin, mid + half), new Vector2(b.xMin - d, mid) });
+        });
         // 위(North): 경계 y=b.yMax, 복도셀 (x, b.yMax) — 꼭짓점 +y
         ScanRuns(x0, x1, x => Floor(x, b.yMax), (s, e) =>
-            tris.Add(new[] { new Vector2(s, b.yMax), new Vector2(e + 1, b.yMax), new Vector2((s + e + 1) * 0.5f, b.yMax + d) }));
+        {
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
+            tris.Add(new[] { new Vector2(mid - half, b.yMax), new Vector2(mid + half, b.yMax), new Vector2(mid, b.yMax + d) });
+        });
         // 아래(South): 경계 y=b.yMin, 복도셀 (x, b.yMin-1) — 꼭짓점 -y
         ScanRuns(x0, x1, x => Floor(x, b.yMin - 1), (s, e) =>
-            tris.Add(new[] { new Vector2(s, b.yMin), new Vector2(e + 1, b.yMin), new Vector2((s + e + 1) * 0.5f, b.yMin - d) }));
+        {
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
+            tris.Add(new[] { new Vector2(mid - half, b.yMin), new Vector2(mid + half, b.yMin), new Vector2(mid, b.yMin - d) });
+        });
 
         return tris;
     }
