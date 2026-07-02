@@ -70,6 +70,9 @@ namespace BagSurvivor.Monster
 
         private bool success;
 
+        // 돌 소환(Cast) → 돌진(Charge)으로 애니를 직접 제어하므로 자동재생 끔
+        protected override bool AutoPlayAnimOnExecute => false;
+
         private void Reset()
         {
             patternName = "StoneBreak";
@@ -114,6 +117,8 @@ namespace BagSurvivor.Monster
                 stones.Add(h);
             }
 
+            // 돌 소환 동안 기 모으기(Cast) 모션
+            if (bossAnimator != null) bossAnimator.PlayPattern("Cast");
             yield return new WaitForSeconds(telegraphTime);
 
             // 3) dashCount회 돌진: (경고선→돌진) 후 1초 휴식, 반복. 아이템 획득하면 즉시 중단.
@@ -154,9 +159,14 @@ namespace BagSurvivor.Monster
         {
             Vector2 dir = DirToPlayer();
             GameObject tele = ShowTelegraph(dashTelegraphPrefab, transform.position, dir);
+            // 경로 표시(선딜) 동안 돌진대기 모션
+            if (bossAnimator != null) bossAnimator.PlayPattern("ChargeIdle");
             yield return WaitOrSuccess(dashTelegraph);
             ReturnPooled(tele);
             if (success) yield break; // 경고선 도중 획득 → 돌진 생략
+
+            // 실제 돌진 시작 → 돌진(Charge) 모션
+            if (bossAnimator != null) bossAnimator.PlayPattern("Charge", true);
 
             float traveled = 0f;
             bool hitPlayer = false;

@@ -405,7 +405,7 @@ MonoBehaviour:
   animState: Cast
   drawRangeGizmo: 1
   totemCount: 5
-  summonRadius: 1.1851853
+  summonRadius: 3.5555558
   totemPrefab: {fileID: 6931323245288364574, guid: a13144b011078824cb331aa5dcff7dcc, type: 3}
   telegraphPrefab: {fileID: 0}
 --- !u!114 &1487902901000544307
