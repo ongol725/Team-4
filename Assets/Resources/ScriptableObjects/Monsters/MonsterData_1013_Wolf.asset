@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uB291\uB300"
   englishName: Wolf
   grade: 0
-  maxHP: 500
+  maxHP: 1000
   attack: 70
   defense: 15
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 7
+  moveSpeed: 3.5
   movePattern: 0
   kbResist: 0.2
   kbCooldown: 0

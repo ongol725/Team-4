@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uCF54\uBCFC\uD2B8"
   englishName: Kobold
   grade: 0
-  maxHP: 65
+  maxHP: 130
   attack: 25
   defense: 5
   attackStyle: 1
   attackPattern: 1
-  moveSpeed: 4
+  moveSpeed: 2
   movePattern: 0
   kbResist: 0
   kbCooldown: 0

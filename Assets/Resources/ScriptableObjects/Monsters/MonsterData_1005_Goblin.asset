@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uACE0\uBE14\uB9B0"
   englishName: Goblin
   grade: 0
-  maxHP: 75
+  maxHP: 150
   attack: 10
   defense: 2
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 2.5
+  moveSpeed: 1.25
   movePattern: 0
   kbResist: 0.1
   kbCooldown: 0

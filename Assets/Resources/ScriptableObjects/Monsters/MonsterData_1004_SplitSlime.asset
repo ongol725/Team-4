@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uBD84\uC5F4\uC2AC\uB77C\uC784"
   englishName: SplitSlime
   grade: 0
-  maxHP: 20
+  maxHP: 40
   attack: 2
   defense: 0
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 2
+  moveSpeed: 1
   movePattern: 0
   kbResist: 0
   kbCooldown: 0

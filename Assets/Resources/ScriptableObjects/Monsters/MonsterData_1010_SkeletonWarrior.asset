@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uC2A4\uCF08\uB808\uD1A4 \uC804\uC0AC"
   englishName: SkeletonWarrior
   grade: 0
-  maxHP: 350
+  maxHP: 700
   attack: 40
   defense: 20
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 5
+  moveSpeed: 2.5
   movePattern: 0
   kbResist: 0.3
   kbCooldown: 0

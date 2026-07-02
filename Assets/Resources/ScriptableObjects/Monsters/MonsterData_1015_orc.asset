@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uC624\uD06C"
   englishName: orc
   grade: 0
-  maxHP: 850
+  maxHP: 1700
   attack: 75
   defense: 35
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 5
+  moveSpeed: 2.5
   movePattern: 0
   kbResist: 0.3
   kbCooldown: 0
