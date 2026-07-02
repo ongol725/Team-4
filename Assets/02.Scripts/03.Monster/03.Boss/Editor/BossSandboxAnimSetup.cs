@@ -170,10 +170,12 @@ public static class BossSandboxAnimSetup
         Debug.Log($"[BossAnim] 전체 {clips.Count}개 모션을 격자로 배치(전부 루프). Play로 동시에 움직임 확인하세요.");
     }
 
-    // ── 크기 통일: 모든 보스 시트를 '2페이즈 이동' 크기에 맞춤 (PPU만 변경) ──
-    // PNG를 직접 디코드해 콘텐츠 높이를 재고, spritePixelsPerUnit만 바꾼다.
-    // 슬라이스 사각형/모드/기타 임포트 설정은 전혀 건드리지 않는다(PPU는 독립 설정).
-    [MenuItem("Team4/보스 애니 크기 통일 (2p 이동 기준)")]
+    // ── [비활성화됨] 크기 통일: 모든 보스 시트를 '2페이즈 이동' 크기에 맞춤 (PPU만 변경) ──
+    // ⚠️ 메뉴 제거됨: 이 함수는 각 시트 PPU를 '콘텐츠 높이 기준'으로 재계산해 덮어쓴다.
+    //    현재 보스 모션 크기는 샌드박스에서 수동 조절한 값이 각 시트 PPU에 baked-in 되어 있으므로,
+    //    이걸 실행하면 그 수동 크기가 전부 날아간다. 재활성화하려면 아래 [MenuItem] 주석을 해제할 것.
+    // (참고: PNG 직접 디코드 대신 임포트 텍스처를 읽어 콘텐츠 높이 측정 → spritePixelsPerUnit만 변경)
+    // [MenuItem("Team4/보스 애니 크기 통일 (2p 이동 기준)")]  // 사고 방지 위해 비활성화 (2026-07)
     public static void NormalizeSizes()
     {
         if (!Directory.Exists(ImgDir)) { Debug.LogError("[BossAnim] 이미지 폴더 없음: " + ImgDir); return; }
