@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uC2A4\uCF08\uB808\uD1A4 \uAD81\uC218"
   englishName: SkeletonArcher
   grade: 0
-  maxHP: 500
+  maxHP: 250
   attack: 55
   defense: 8
   attackStyle: 1
   attackPattern: 1
-  moveSpeed: 2
+  moveSpeed: 3.2
   movePattern: 0
   kbResist: 0.3
   kbCooldown: 0

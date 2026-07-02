@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uBA67\uB3FC\uC9C0"
   englishName: Boar
   grade: 0
-  maxHP: 240
+  maxHP: 120
   attack: 20
   defense: 5
   attackStyle: 0
   attackPattern: 2
-  moveSpeed: 2
+  moveSpeed: 3.2
   movePattern: 1
   kbResist: 0.2
   kbCooldown: 0

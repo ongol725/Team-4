@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uD638\uB791\uC774"
   englishName: tiger
   grade: 2
-  maxHP: 4000
+  maxHP: 2000
   attack: 110
   defense: 50
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 3
+  moveSpeed: 4.8
   movePattern: 0
   kbResist: 0.4
   kbCooldown: 0

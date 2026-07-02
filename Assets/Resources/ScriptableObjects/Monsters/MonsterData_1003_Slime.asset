@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uC2AC\uB77C\uC784"
   englishName: Slime
   grade: 0
-  maxHP: 80
+  maxHP: 40
   attack: 3
   defense: 0
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 1
+  moveSpeed: 1.6
   movePattern: 0
   kbResist: 0
   kbCooldown: 0

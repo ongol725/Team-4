@@ -16,7 +16,7 @@ MonoBehaviour:
   monsterName: "\uD568\uC815\uC2DD\uBB3C"
   englishName: TrapPlant
   grade: 0
-  maxHP: 200
+  maxHP: 100
   attack: 0
   defense: 10
   attackStyle: 1

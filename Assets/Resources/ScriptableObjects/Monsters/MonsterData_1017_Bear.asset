@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uACF0"
   englishName: Bear
   grade: 2
-  maxHP: 5000
+  maxHP: 2500
   attack: 80
   defense: 80
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 2.5
+  moveSpeed: 4
   movePattern: 0
   kbResist: 0.4
   kbCooldown: 0

@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uC624\uC6B0\uAC70"
   englishName: ogre
   grade: 2
-  maxHP: 5600
+  maxHP: 2800
   attack: 100
   defense: 90
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 2
+  moveSpeed: 3.2
   movePattern: 0
   kbResist: 0.4
   kbCooldown: 0

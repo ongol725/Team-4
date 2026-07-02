@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uAC00\uACE0\uC77C"
   englishName: gargoyle
   grade: 0
-  maxHP: 2400
+  maxHP: 1200
   attack: 40
   defense: 200
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 1.75
+  moveSpeed: 2.8
   movePattern: 1
   kbResist: 0.5
   kbCooldown: 0.1

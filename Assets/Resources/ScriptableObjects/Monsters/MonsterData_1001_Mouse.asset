@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uC950"
   englishName: Mouse
   grade: 0
-  maxHP: 70
+  maxHP: 35
   attack: 2
   defense: 0
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 0.75
+  moveSpeed: 1.2
   movePattern: 0
   kbResist: 0
   kbCooldown: 0
