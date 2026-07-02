@@ -815,7 +815,63 @@ public class PlayerAttack : MonoBehaviour
                   spinSpeed: spin, rotationOffset: rotOff, armTime: armTime,
                   explosionFrames: wd.explosionFrames,
                   ringStunChance: entry.ringStunChance, ringSlowSec: entry.ringSlowSec);
+
+        // 투사체 잔상(가시성). 부메랑·검기(오버라이드)는 약하게. — 독립 기능
+        AttachProjectileTrail(go, wd.itemID, weak: boomerang || useOverride);
     }
+
+    // ─────────────────────────────────────────────────────────────
+    // 투사체 잔상(TrailRenderer) — 독립 기능. ENABLE_PROJECTILE_TRAIL=false로 전체 off, 이 블록 삭제로 완전 롤백.
+
+    private const bool ENABLE_PROJECTILE_TRAIL = true;
+    private static Material _trailMat; // 전 투사체 공유(색은 트레일별 vertex color로 지정)
+
+    private void AttachProjectileTrail(GameObject go, string weaponId, bool weak)
+    {
+        if (!ENABLE_PROJECTILE_TRAIL || go == null) return;
+        if (_trailMat == null) _trailMat = new Material(Shader.Find("Sprites/Default"));
+
+        var tr = go.GetComponent<TrailRenderer>() ?? go.AddComponent<TrailRenderer>();
+        tr.sharedMaterial    = _trailMat;
+        tr.time              = weak ? 0.10f : 0.22f;  // 잔상 길이(약하게=짧게)
+        tr.startWidth        = weak ? 0.12f : 0.30f;
+        tr.endWidth          = 0f;
+        tr.numCapVertices    = 4;
+        tr.minVertexDistance = 0.03f;
+        tr.autodestruct      = false;
+
+        // 스프라이트와 같은 정렬 레이어, 한 단계 아래로(투사체 뒤에 깔림)
+        var sr = go.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null) { tr.sortingLayerID = sr.sortingLayerID; tr.sortingOrder = sr.sortingOrder - 1; }
+
+        Color c = TrailColor(weaponId);
+        Color start = c; start.a = weak ? 0.45f : 0.9f;
+        Color end   = c; end.a   = 0f;
+        tr.startColor = start;
+        tr.endColor   = end;
+        tr.Clear(); // 생성 지점부터 기록(원점 잔상 방지)
+    }
+
+    // 무기별 잔상 색(미지정 무기는 흰색)
+    private static Color TrailColor(string id) => id switch
+    {
+        "WPN_001" => new Color(0.85f, 0.90f, 1.00f), // 단검: 은백
+        "WPN_006" => new Color(0.75f, 0.60f, 0.35f), // 쇠뇌: 갈색
+        "WPN_007" => new Color(1.00f, 0.90f, 0.40f), // 권총: 노랑
+        "WPN_008" => new Color(1.00f, 0.60f, 0.20f), // 산탄총: 주황
+        "WPN_009" => new Color(0.50f, 1.00f, 0.50f), // 활: 초록
+        "WPN_010" => new Color(0.40f, 1.00f, 1.00f), // 부메랑: 청록
+        "WPN_011" => new Color(0.50f, 0.60f, 1.00f), // 지팡이: 파랑
+        "WPN_012" => new Color(0.80f, 0.40f, 1.00f), // 마도서: 보라
+        "WPN_013" => new Color(1.00f, 0.95f, 0.30f), // 번개구슬: 전기노랑
+        "WPN_015" => new Color(1.00f, 0.85f, 0.30f), // 라이플: 노랑
+        "WPN_016" => new Color(0.80f, 0.90f, 0.95f), // 수리검: 회백
+        "WPN_017" => new Color(1.00f, 0.50f, 0.20f), // 바주카: 주황
+        "WPN_018" => new Color(0.40f, 0.90f, 1.00f), // 레일건: 하늘
+        "WPN_027" => new Color(0.70f, 0.85f, 1.00f), // 할버드 검기: 옅은 하늘
+        "WPN_028" => new Color(0.60f, 1.00f, 0.60f), // 장궁: 초록
+        _         => Color.white,
+    };
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,
         float travelRange, float explodeRadius)
