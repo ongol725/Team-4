@@ -445,7 +445,7 @@ MonoBehaviour:
   stonePrefab: {fileID: 5574503645699197074, guid: a119e75919e9abb46b86d7958058143e, type: 3}
   itemPickupPrefab: {fileID: 3966691219984321219, guid: 0e101020fca72c5439f594d949355531, type: 3}
   itemMarkerPrefab: {fileID: 0}
-  dashTelegraphPrefab: {fileID: 1848410282899153485, guid: 68608f4a7ec6c7d46912a0496140b404, type: 3}
+  dashTelegraphPrefab: {fileID: 0}
 --- !u!114 &2831693946660462046
 MonoBehaviour:
   m_ObjectHideFlags: 0
