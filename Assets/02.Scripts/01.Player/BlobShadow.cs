@@ -29,6 +29,8 @@ public class BlobShadow : MonoBehaviour
     SpriteRenderer shadowSr;     // 그림자 렌더러
     bool isPlayer;               // true면 playerWidthMultiplier 추가 적용
     float widthMul = 1f;         // 개별(몬스터별) 폭 배수 — 여백 큰 스프라이트 보정용
+    bool useFixedY;              // true면 스프라이트 하단 대신 루트 기준 고정 Y 사용(보스처럼 프레임마다 캔버스 여백이 달라 그림자가 튀는 경우)
+    float fixedY;                // useFixedY일 때 루트 기준 로컬 Y
 
     /// <summary>플레이어가 부착 직후 호출 — 플레이어 전용 폭 배수를 적용한다.</summary>
     public void MarkAsPlayer() { isPlayer = true; Refresh(); }
@@ -38,6 +40,9 @@ public class BlobShadow : MonoBehaviour
 
     /// <summary>외부에서 스케일 변경 후 그림자 크기·위치를 다시 맞춘다(예: 슬라임 분열).</summary>
     public void Refit() => Refresh();
+
+    /// <summary>스프라이트 하단이 아닌 루트 기준 고정 Y에 그림자를 둔다(보스: 프레임마다 캔버스 높이가 달라 그림자가 튀는 것 방지).</summary>
+    public void SetFixedLocalY(float y) { useFixedY = true; fixedY = y; Refresh(); }
 
     void OnEnable()
     {
@@ -95,12 +100,16 @@ public class BlobShadow : MonoBehaviour
         float s = (lossy != 0f) ? width / lossy : width;
         shadowSr.transform.localScale = new Vector3(s, s * (heightRatio / 0.5f), 1f);
 
-        // 배치: 몬스터=발밑(스프라이트 하단). 플레이어=루트 기준 로컬 Y(playerShadowLocalY) 고정.
+        // 배치: 몬스터=발밑(스프라이트 하단). 플레이어/고정모드=루트 기준 로컬 Y 고정.
         float worldY = b.min.y + feetY;
         if (isPlayer)
         {
             float pY = st != null ? st.playerShadowLocalY : 0.4f;
             worldY = transform.position.y + pY; // 루트 기준 로컬 Y = pY
+        }
+        else if (useFixedY)
+        {
+            worldY = transform.position.y + fixedY; // 보스 등: 프레임 캔버스 여백에 안 휘둘리는 고정 Y
         }
         shadowSr.transform.position = new Vector3(b.center.x, worldY, 0f);
 

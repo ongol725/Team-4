@@ -122,6 +122,7 @@ public class RunStatsLogger : MonoBehaviour
     private string BuildSummaryRow(bool cleared, int deathFloor, string deathZone, string killer, string synergies)
     {
         var sb = new StringBuilder();
+        sb.Append(Csv(Application.version)).Append(',');   // 버전(Player Settings → Version)
         sb.Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")).Append(',');
         sb.Append(F(Elapsed)).Append(',');
         sb.Append(cleared ? "CLEAR" : "DEATH").Append(',');
@@ -163,7 +164,7 @@ public class RunStatsLogger : MonoBehaviour
 
     private static string Header()
     {
-        var sb = new StringBuilder("시작시각,플레이시간,결과,사망층,사망존,킬러몬스터,");
+        var sb = new StringBuilder("버전,시작시각,플레이시간,결과,사망층,사망존,킬러몬스터,");
         for (int i = 1; i <= MaxFloor; i++) sb.Append("층").Append(i).Append("진입,");
         for (int i = 1; i <= MaxFloor; i++) sb.Append("층").Append(i).Append("보스사망,");
         for (int i = 1; i <= MaxFloor; i++) sb.Append("층").Append(i).Append("처치,");
