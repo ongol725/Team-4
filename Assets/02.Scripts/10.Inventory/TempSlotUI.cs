@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
 /// <summary>
 /// 스왑/이동 시 아이템을 임시로 보관하는 슬롯.
 /// 아이템은 슬롯 내부에서 가장자리/모서리 우선으로 분산 배치된다.
 /// </summary>
 [RequireComponent(typeof(RectTransform))]
-public class TempSlotUI : MonoBehaviour
+public class TempSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Image _background;
     [SerializeField] private Color _emptyColor    = new Color(0.15f, 0.15f, 0.20f, 0.80f);
@@ -123,13 +125,13 @@ public class TempSlotUI : MonoBehaviour
         }
     }
 
-    // 과적 색 단계: 연한 노랑 → 주황 → 빨강 → 진한 빨강
+    // 과적 색 단계: 연한 노랑 → 주황 → 빨강 → 진한 빨강 (불투명·선명 — 배경 비침 방지)
     private static readonly Color[] OverloadStops =
     {
-        new Color(1.00f, 0.95f, 0.50f, 0.90f), // 연노랑
-        new Color(1.00f, 0.60f, 0.20f, 0.92f), // 주황
-        new Color(0.90f, 0.15f, 0.10f, 0.95f), // 빨강
-        new Color(0.45f, 0.00f, 0.00f, 0.97f), // 진한 빨강
+        new Color(1.00f, 0.92f, 0.30f, 1f), // 연노랑
+        new Color(1.00f, 0.55f, 0.10f, 1f), // 주황
+        new Color(0.95f, 0.12f, 0.08f, 1f), // 빨강
+        new Color(0.55f, 0.00f, 0.00f, 1f), // 진한 빨강
     };
 
     private void UpdateBackground()
@@ -142,6 +144,58 @@ public class TempSlotUI : MonoBehaviour
         int cnt = CountNonRingItems();
         float sev = BattleLoadoutBuilder.GetTempSeverity(cnt);
         _background.color = sev <= 0f ? _occupiedColor : OverloadColor(sev);
+    }
+
+    // ── 호버 시 과적 디메리트 간단 표기(작은 팝업) ──
+    private GameObject      _tooltip;
+    private TextMeshProUGUI _tooltipText;
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        EnsureTooltip();
+        int cnt = CountNonRingItems();
+        BattleLoadoutBuilder.GetTempPenaltyPercents(cnt, out int m, out int a);
+        _tooltipText.text = (m == 0 && a == 0)
+            ? $"임시칸 여유 {cnt}/{BattleLoadoutBuilder.TempFreeCount}"
+            : $"과적 {cnt}개\n이속 -{m}%  공속 -{a}%";
+        _tooltip.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (_tooltip != null) _tooltip.SetActive(false);
+    }
+
+    private void EnsureTooltip()
+    {
+        if (_tooltip != null) return;
+
+        _tooltip = new GameObject("TempTooltip", typeof(RectTransform), typeof(Image));
+        var rt = (RectTransform)_tooltip.transform;
+        rt.SetParent(transform, false);
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1f); // 슬롯 상단 중앙
+        rt.pivot            = new Vector2(0.5f, 0f);
+        rt.anchoredPosition = new Vector2(0f, 8f);
+        rt.sizeDelta        = new Vector2(190f, 46f);
+
+        var bg = _tooltip.GetComponent<Image>();
+        bg.color = new Color(0f, 0f, 0f, 0.85f);
+        bg.raycastTarget = false;
+        rt.SetAsLastSibling();
+
+        var textGO = new GameObject("Text", typeof(RectTransform));
+        var trt = (RectTransform)textGO.transform;
+        trt.SetParent(_tooltip.transform, false);
+        trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one;
+        trt.offsetMin = new Vector2(6f, 4f); trt.offsetMax = new Vector2(-6f, -4f);
+
+        _tooltipText = textGO.AddComponent<TextMeshProUGUI>();
+        _tooltipText.fontSize      = 15;
+        _tooltipText.alignment     = TextAlignmentOptions.Center;
+        _tooltipText.color         = Color.white;
+        _tooltipText.raycastTarget = false;
+
+        _tooltip.SetActive(false);
     }
 
     private int CountNonRingItems()
