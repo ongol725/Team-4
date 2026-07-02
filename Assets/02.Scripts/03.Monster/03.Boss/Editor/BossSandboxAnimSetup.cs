@@ -158,46 +158,64 @@ public static class BossSandboxAnimSetup
         // 기준 = 2페이즈 이동
         string refPng = pngs.FirstOrDefault(p => { var n = Path.GetFileName(p); return n.Contains("2페이즈") && n.Contains("이동"); });
         if (refPng == null) { Debug.LogError("[BossAnim] 기준 '2페이즈 이동' 파일을 못 찾음"); return; }
-        int refH = ContentHeight(refPng);
-        if (refH <= 0) { Debug.LogError("[BossAnim] 기준 콘텐츠 높이 측정 실패"); return; }
-        var refImp = AssetImporter.GetAtPath(refPng) as TextureImporter;
-        float refPpu = refImp != null ? refImp.spritePixelsPerUnit : 256f;
+        float refSize = ContentSize(refPng);
+        if (refSize <= 0f) { Debug.LogError("[BossAnim] 기준 콘텐츠 크기 측정 실패"); return; }
+        // 기준 표시 크기를 PPU 상수(256)로 고정 — 기준 시트의 '현재' PPU를 쓰면
+        // 이전 실행 결과에 따라 목표 크기가 매번 흔들려 통일이 수렴하지 않는다.
+        float refPpu = PPU;
 
         int done = 0;
         foreach (string png in pngs)
         {
-            int h = ContentHeight(png);
-            if (h <= 0) { Debug.LogWarning("[BossAnim] 콘텐츠 높이 측정 실패: " + Path.GetFileName(png)); continue; }
+            float size = ContentSize(png);
+            if (size <= 0f) { Debug.LogWarning("[BossAnim] 콘텐츠 크기 측정 실패: " + Path.GetFileName(png)); continue; }
             var imp = AssetImporter.GetAtPath(png) as TextureImporter;
             if (imp == null) continue;
-            float ppu = refPpu * h / refH;                 // 높이 비례 → 같은 표시 크기
+            float ppu = refPpu * size / refSize;           // 면적 비례 → 같은 표시 크기
             if (Mathf.Abs(imp.spritePixelsPerUnit - ppu) < 0.05f) continue;
             imp.spritePixelsPerUnit = ppu;                 // PPU만 변경(슬라이스 보존)
             imp.SaveAndReimport();
             done++;
-            Debug.Log($"[BossAnim] {Path.GetFileName(png)}: 콘텐츠H={h} → PPU={ppu:F1}");
+            Debug.Log($"[BossAnim] {Path.GetFileName(png)}: 콘텐츠크기={size:F0} → PPU={ppu:F1}");
         }
-        Debug.Log($"[BossAnim] 크기 통일 완료 — {done}개 PPU 조정(2p 이동={refH}px 기준). " +
+        Debug.Log($"[BossAnim] 크기 통일 완료 — {done}개 PPU 조정(2p 이동={refSize:F0} 기준, 면적 방식). " +
                   "이펙트 큰 시트(포효/탄막/늑대/햘퀴기/석상)는 보스 몸이 작아 보이면 개별 조정 요청하세요.");
     }
 
-    /// <summary>PNG 파일을 직접 디코드(임포트 설정 무관)해 비투명 콘텐츠의 세로 높이(px)를 반환.</summary>
-    private static int ContentHeight(string path)
+    /// <summary>PNG를 직접 디코드해 '프레임별' 비투명 픽셀 면적의 제곱근(√area)의 중앙값을 반환.
+    /// 세로 bbox 높이는 포즈에 취약하다(서있으면 큼, 웅크리거나 눕는 돌진/점프/착지는 작음 →
+    /// 같은 캐릭터인데도 포즈 때문에 크기가 완전히 다르게 측정됨). 그려진 픽셀 '면적'은
+    /// 포즈가 바뀌어도(웅크림/돌진/점프) 거의 일정하므로 몸통 크기의 대리값으로 더 안정적이다.
+    /// 프레임마다 재고 중앙값을 취해 이펙트가 낀 프레임(예: 기모으기 오라)에 휘둘리지 않게 한다.</summary>
+    private static float ContentSize(string path)
     {
         byte[] bytes = File.ReadAllBytes(path);
         var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 0; }
-        int w = tex.width, hh = tex.height;
+        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 0f; }
+        int w = tex.width, h = tex.height;
         var px = tex.GetPixels32();
-        int minY = int.MaxValue, maxY = int.MinValue;
-        for (int y = 0; y < hh; y++)
+        int cols = FrameCount(w, h);
+        int cw = Mathf.Max(1, w / cols);
+        const int stride = 2;
+
+        var sizes = new List<float>();
+        for (int f = 0; f < cols; f++)
         {
-            int row = y * w; bool any = false;
-            for (int x = 0; x < w; x += 4) { if (px[row + x].a > 10) { any = true; break; } }
-            if (any) { if (y < minY) minY = y; if (y > maxY) maxY = y; }
+            int x0 = f * cw, x1 = Mathf.Min(w, x0 + cw);
+            long count = 0;
+            for (int y = 0; y < h; y += stride)
+            {
+                int row = y * w;
+                for (int x = x0; x < x1; x += stride)
+                    if (px[row + x].a > 10) count++;
+            }
+            float area = count * stride * stride; // 샘플링 보정(2px 간격 → ×4)
+            if (area > 0f) sizes.Add(Mathf.Sqrt(area));
         }
         Object.DestroyImmediate(tex);
-        return (maxY >= minY) ? (maxY - minY + 1) : 0;
+        if (sizes.Count == 0) return 0f;
+        sizes.Sort();
+        return sizes[sizes.Count / 2]; // 중앙값(대표 프레임)
     }
 
     // ── 슬라이스 (Unity 6 ISpriteEditorDataProvider) ──────────────
@@ -208,7 +226,7 @@ public static class BossSandboxAnimSetup
 
         importer.textureType        = TextureImporterType.Sprite;
         importer.spriteImportMode   = SpriteImportMode.Multiple;
-        importer.spritePixelsPerUnit = PerSheetPPU(path); // 모션별 PPU로 캐릭터 크기를 이동(Move)에 맞춤
+        importer.spritePixelsPerUnit = PPU; // 최초 임시값 — 'NormalizeSizes'가 콘텐츠(몸통 높이) 기준으로 최종 확정
         importer.mipmapEnabled      = false;
         importer.filterMode         = FilterMode.Bilinear;
         importer.maxTextureSize     = 16384; // 12288px 다운스케일 방지(필수)
@@ -262,27 +280,6 @@ public static class BossSandboxAnimSetup
         if (w == 7245) return 4;                // 할퀴기
         if (w == 12288) return 12;              // 늑대소환/돌진/석상소환/점프/포효 (셀 1024)
         return Mathf.Max(1, Mathf.RoundToInt(w / (float)FrameWidth)); // 기타 폴백
-    }
-
-    /// <summary>모션별 PPU. 시트마다 캐릭터를 다른 크기로 그려서, 프레임당 몸 면적(픽셀 수) 기준
-    /// 이동(Move)에 맞춘 값(포즈에 덜 휘둘림). 낮을수록 크게 보임.</summary>
-    private static float PerSheetPPU(string path)
-    {
-        string n = System.IO.Path.GetFileName(path);
-        if (n.Contains("이동")) return 256f;   // 기준
-        if (n.Contains("대기")) return 286f;
-        if (n.Contains("돌진")) return 98f;
-        if (n.Contains("퀴"))   return 240f;   // 할퀴기
-        if (n.Contains("탄막")) return 274f;
-        if (n.Contains("늑대")) return 92f;
-        if (n.Contains("포효")) return 126f;
-        if (n.Contains("점프")) return 130f;   // 더 크게(이동보다 약간 큼)
-        if (n.Contains("착지")) return 122f;   // 더 크게
-        if (n.Contains("스턴")) return 210f;
-        if (n.Contains("사망")) return 186f;
-        if (n.Contains("석상") && n.Contains("소환")) return 206f;
-        if (n.Contains("석상")) return 273f;   // 토템 오브젝트
-        return 256f;
     }
 
     private static Sprite[] LoadSpritesSorted(string path)
