@@ -141,9 +141,9 @@ namespace BagSurvivor.Monster
         [Tooltip("적 생성 전 위치에 표시할 스프라이트(예: Sanctuary_Gd). 미지정 시 예고 없이 즉시 스폰")]
         public Sprite spawnIndicator;
         [Tooltip("예고 표시 후 실제 스폰까지 대기(초)")]
-        public float spawnTelegraphSeconds = 2f;
+        public float spawnTelegraphSeconds = 1f;
         [Tooltip("예고 표시 지름(월드 단위)")]
-        public float spawnIndicatorSize = 1.5f;
+        public float spawnIndicatorSize = 1f;
 
         private int _pendingSpawns; // 예고 대기 중 스폰 수(상한 초과 방지)
         private readonly List<Coroutine>  _telegraphRoutines = new List<Coroutine>();
