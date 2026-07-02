@@ -843,10 +843,12 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         int effectiveGrade = Mathf.Clamp(
             _instance.gradeIndex + _instance.RingGradeBonus, 0, 4);
         ItemInfoPopup.Show(_instance.data, effectiveGrade, eventData.position);
+        WeaponAffixPopup.Show(_instance, eventData.position); // 무기 강화 옵션(별도 팝업, 겹치지 않게)
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         ItemInfoPopup.Hide();
+        WeaponAffixPopup.Hide();
     }
 }
