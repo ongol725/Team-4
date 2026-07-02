@@ -80,6 +80,7 @@ public class InventoryPopupToggle : MonoBehaviour
         _popupCanvas.enabled = false;
         _debugUI?.SetPanelActive(false);
         _loadoutBuilder?.BuildAndDeliver();
+        AnyOpen = false;
         onPopupToggled?.Invoke(false);
     }
 
@@ -122,9 +123,13 @@ public class InventoryPopupToggle : MonoBehaviour
         if (!willOpen)
             _loadoutBuilder?.BuildAndDeliver();
 
+        AnyOpen = willOpen;
         onPopupToggled?.Invoke(willOpen);
     }
 
     /// <summary>팝업 현재 열림 상태</summary>
     public bool IsOpen => _popupCanvas != null && _popupCanvas.enabled;
+
+    /// <summary>인벤토리 팝업이 열려 있는지(정적 조회용 — 단축키 게이트 등).</summary>
+    public static bool AnyOpen { get; private set; }
 }
