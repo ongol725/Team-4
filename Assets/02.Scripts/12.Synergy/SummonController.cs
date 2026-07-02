@@ -46,7 +46,8 @@ public class SummonController : MonoBehaviour
     // 본체 스프라이트/평상 애니메이션 — 광역 발동 시 발동 모션으로 잠시 교체(대정령)
     private SpriteRenderer _mainSr;
     private Coroutine      _idleAnimCo;
-    private float          _prevX;      // 좌우 반전 판정용 직전 x
+    private float          _prevX;         // 좌우 반전 판정용 직전 x
+    private bool           _baseFacesLeft;  // 원본 스프라이트가 좌향인가(반전 기준)
 
     // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
     private Camera _mainCam;
@@ -122,7 +123,15 @@ public class SummonController : MonoBehaviour
 
         // 좌우 반전용 스프라이트 확보(모델 프리팹/아이콘 공통) + 초기 x 기록
         if (_mainSr == null) _mainSr = GetComponentInChildren<SpriteRenderer>();
-        if (_mainSr != null) _mainSr.flipX = _data.spriteFacesLeft; // 원본이 좌향이면 기본 우향으로 보정
+
+        // 원본 좌향 여부: SO 플래그 우선, 없으면 텍스처 이름으로 자동 판별(Spirit_Gd/Sv 좌향)
+        _baseFacesLeft = _data.spriteFacesLeft;
+        if (!_baseFacesLeft && _mainSr != null && _mainSr.sprite != null && _mainSr.sprite.texture != null)
+        {
+            string tn = _mainSr.sprite.texture.name;
+            if (tn.Contains("Spirit_Gd") || tn.Contains("Spirit_Sv")) _baseFacesLeft = true;
+        }
+        if (_mainSr != null) _mainSr.flipX = _baseFacesLeft; // 좌향 원본이면 기본을 우향으로 보정
         _prevX = transform.position.x;
 
         // 초기 배회 목적지 설정
@@ -176,7 +185,7 @@ public class SummonController : MonoBehaviour
         {
             float dx = transform.position.x - _prevX;
             if (Mathf.Abs(dx) > 0.0005f)
-                _mainSr.flipX = _data.spriteFacesLeft ? dx > 0f : dx < 0f;
+                _mainSr.flipX = _baseFacesLeft ? dx > 0f : dx < 0f;
         }
         _prevX = transform.position.x;
 
