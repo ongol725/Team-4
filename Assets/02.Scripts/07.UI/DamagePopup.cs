@@ -24,6 +24,26 @@ namespace BagSurvivor
         static readonly Color NormalColor = Color.white;
         static readonly Color CritColor = new Color(1f, 0.82f, 0.2f);
 
+        // 데미지 크기별 색(오름차순). <30 초록 / 30~59 노랑 / 60~99 주황 / 100+ 빨강
+        static readonly (int min, Color col)[] DamageTiers =
+        {
+            (0,   new Color(0.50f, 1.00f, 0.50f)), // 초록(약타)
+            (30,  new Color(1.00f, 0.95f, 0.30f)), // 노랑
+            (60,  new Color(1.00f, 0.60f, 0.15f)), // 주황
+            (100, new Color(1.00f, 0.25f, 0.20f)), // 빨강(최강타)
+        };
+
+        static Color TierColor(int amount)
+        {
+            Color c = DamageTiers[0].col;
+            for (int i = 0; i < DamageTiers.Length; i++)
+            {
+                if (amount >= DamageTiers[i].min) c = DamageTiers[i].col;
+                else break;
+            }
+            return c;
+        }
+
         // ── 풀 ───────────────────────────────────────────────
         static readonly Queue<DamagePopup> pool = new Queue<DamagePopup>();
         static TMP_FontAsset font;
@@ -77,7 +97,7 @@ namespace BagSurvivor
             transform.localScale = Vector3.one;
             age = 0f;
             vel = Vector3.up * RiseSpeed;
-            baseColor = overrideColor ?? (crit ? CritColor : NormalColor);
+            baseColor = overrideColor ?? (crit ? CritColor : TierColor(amount));
 
             tmp.text = amount.ToString();
             tmp.fontSize = crit ? FontSize * 1.4f : FontSize;

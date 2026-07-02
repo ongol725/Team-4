@@ -46,6 +46,7 @@ public class SummonController : MonoBehaviour
     // 본체 스프라이트/평상 애니메이션 — 광역 발동 시 발동 모션으로 잠시 교체(대정령)
     private SpriteRenderer _mainSr;
     private Coroutine      _idleAnimCo;
+    private float          _prevX;      // 좌우 반전 판정용 직전 x
 
     // 성능: Camera.main은 매 프레임 FindObjectWithTag를 호출하므로 Init에서 캐싱
     private Camera _mainCam;
@@ -119,6 +120,10 @@ public class SummonController : MonoBehaviour
             }
         }
 
+        // 좌우 반전용 스프라이트 확보(모델 프리팹/아이콘 공통) + 초기 x 기록
+        if (_mainSr == null) _mainSr = GetComponentInChildren<SpriteRenderer>();
+        _prevX = transform.position.x;
+
         // 초기 배회 목적지 설정
         PickNewWanderDest();
 
@@ -163,6 +168,14 @@ public class SummonController : MonoBehaviour
             case SummonAIType.Bounce:       UpdateBounce();       break;
             case SummonAIType.GuardOffset:  UpdateGuardOffset();  break;
         }
+
+        // 정령(추격형): 이동 방향에 따라 좌우 반전 — 왼쪽 이동 시 세로축 반전, 정지 시 마지막 방향 유지
+        if (_mainSr != null && _data.aiType == SummonAIType.FollowAttack)
+        {
+            float dx = transform.position.x - _prevX;
+            if (Mathf.Abs(dx) > 0.0005f) _mainSr.flipX = dx < 0f;
+        }
+        _prevX = transform.position.x;
 
         if (_data.uniqueSkill != null && _uniqueSkillTimer >= _data.uniqueSkillCooldown)
         {
