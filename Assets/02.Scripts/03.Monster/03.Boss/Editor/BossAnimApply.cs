@@ -188,8 +188,9 @@ public static class BossAnimApply
         AnimationClip Pick(System.Func<string, bool> extra) =>
             clips.FirstOrDefault(c => c.name.Contains(prefix) && c.name.Contains("포효") && extra(c.name));
 
-        AnimationClip intro = Pick(n => n.Contains("전체"));                                        // 포효 전체모션
-        AnimationClip loopC = Pick(n => !n.Contains("(1)") && !n.Contains("전체") && !n.Contains("마무리")) // 포효(반복)
+        // 신규 네이밍(시작모션) 우선, 구 네이밍(전체모션) 폴백
+        AnimationClip intro = Pick(n => n.Contains("시작")) ?? Pick(n => n.Contains("전체"));          // 포효 시작(인트로)
+        AnimationClip loopC = Pick(n => !n.Contains("(1)") && !n.Contains("시작") && !n.Contains("전체") && !n.Contains("마무리")) // 포효(반복)
                            ?? Pick(n => n.Contains("(1)"));
         AnimationClip outro = Pick(n => n.Contains("마무리"));                                       // 포효 마무리모션
         if (intro == null) intro = loopC;
