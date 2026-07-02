@@ -842,7 +842,7 @@ public class PlayerAttack : MonoBehaviour
         if (tr == null) return;                // 부착 실패 시 안전하게 생략
 
         tr.sharedMaterial    = _trailMat;
-        tr.time              = weak ? 0.09f : 0.16f;  // 잔상 길이(짧게 — 은은한 잔상)
+        tr.time              = weak ? 0.10f : 0.22f;  // 잔상 길이(원래대로 유지)
         tr.startWidth        = weak ? 0.06f : 0.13f;  // 얇게 — 투사체를 덮지 않게
         tr.endWidth          = 0f;                    // 끝은 뾰족하게 사라짐
         tr.numCapVertices    = 2;
