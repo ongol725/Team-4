@@ -825,6 +825,8 @@ public class PlayerAttack : MonoBehaviour
 
     private const bool ENABLE_PROJECTILE_TRAIL = true;
     private static Material _trailMat; // 전 투사체 공유(색은 트레일별 vertex color로 지정)
+    // 무기·강약별 그라디언트 1회 생성 후 재사용(발사마다 new 방지 — GC 스파이크 렉 제거)
+    private static readonly System.Collections.Generic.Dictionary<string, Gradient> _trailGradients = new();
 
     private void AttachProjectileTrail(GameObject go, string weaponId, bool weak)
     {
@@ -842,7 +844,7 @@ public class PlayerAttack : MonoBehaviour
         if (tr == null) return;                // 부착 실패 시 안전하게 생략
 
         tr.sharedMaterial    = _trailMat;
-        tr.time              = weak ? 0.10f : 0.22f;  // 잔상 길이(원래대로 유지)
+        tr.time              = weak ? 0.20f : 0.44f;  // 잔상 길이(현재의 2배)
         tr.startWidth        = weak ? 0.06f : 0.13f;  // 얇게 — 투사체를 덮지 않게
         tr.endWidth          = 0f;                    // 끝은 뾰족하게 사라짐
         tr.numCapVertices    = 2;
@@ -853,17 +855,26 @@ public class PlayerAttack : MonoBehaviour
         var sr = go.GetComponentInChildren<SpriteRenderer>();
         if (sr != null) { tr.sortingLayerID = sr.sortingLayerID; tr.sortingOrder = sr.sortingOrder - 1; }
 
-        // 시작부터 반투명하게 → 꼬리로 갈수록 사라짐(색이 전체를 감싸는 위화감 제거)
-        Color c = TrailColor(weaponId);
-        Color start = c; start.a = weak ? 0.20f : 0.40f;
-        Color mid   = c; mid.a   = weak ? 0.08f : 0.18f;
-        Color end   = c; end.a   = 0f;
-        var grad = new Gradient();
-        grad.SetKeys(
-            new[] { new GradientColorKey(c, 0f), new GradientColorKey(c, 1f) },
-            new[] { new GradientAlphaKey(start.a, 0f), new GradientAlphaKey(mid.a, 0.5f), new GradientAlphaKey(0f, 1f) });
-        tr.colorGradient = grad;
+        // 캐시된 그라디언트 재사용(발사마다 할당 없음). 시작 반투명 → 꼬리로 소멸.
+        tr.colorGradient = GetTrailGradient(weaponId, weak);
         tr.Clear(); // 생성 지점부터 기록(원점 잔상 방지)
+    }
+
+    // 무기·강약별 그라디언트를 1회 생성해 캐시(발사마다 new Gradient/배열 할당 제거)
+    private static Gradient GetTrailGradient(string weaponId, bool weak)
+    {
+        string key = weaponId + (weak ? "_w" : "");
+        if (_trailGradients.TryGetValue(key, out var g)) return g;
+
+        Color c = TrailColor(weaponId);
+        float a0 = weak ? 0.20f : 0.40f; // 시작 알파
+        float a1 = weak ? 0.08f : 0.18f; // 중간 알파
+        g = new Gradient();
+        g.SetKeys(
+            new[] { new GradientColorKey(c, 0f), new GradientColorKey(c, 1f) },
+            new[] { new GradientAlphaKey(a0, 0f), new GradientAlphaKey(a1, 0.5f), new GradientAlphaKey(0f, 1f) });
+        _trailGradients[key] = g;
+        return g;
     }
 
     // 무기별 잔상 색(미지정 무기는 흰색)
