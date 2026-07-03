@@ -175,6 +175,10 @@ MonoBehaviour:
   monsterData: {fileID: 11400000, guid: 6f6c732decf19494087ac16fa739d126, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
   shadowWidthMul: 1
+  shadowFixedLocalY: 0
+  shadowLocalY: 0
+  deathSfx:
+  - {fileID: 8300000, guid: a46dedc4ec6aca343a49e2de328cd418, type: 3}
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4

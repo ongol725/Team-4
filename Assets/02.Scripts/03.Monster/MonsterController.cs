@@ -33,6 +33,10 @@ namespace BagSurvivor.Monster
         [Tooltip("shadowFixedLocalY가 켜졌을 때 루트 기준 그림자 Y (음수=아래). 발밑에 오도록 조정)")]
         public float shadowLocalY = 0f;
 
+        [Header("사운드")]
+        [Tooltip("사망 시 재생할 효과음. 여러 개 넣으면 매번 랜덤 1개(배리에이션)")]
+        public AudioClip[] deathSfx;
+
         [Header("렌더 정렬")]
         [Tooltip("타일맵(바닥=0/벽=1) 위에 보이도록 하는 스프라이트 정렬 순서")]
         public int sortingOrder = 10;
@@ -588,10 +592,29 @@ namespace BagSurvivor.Monster
         // ==========================================
         // 사망 처리
         // ==========================================
+        /// <summary>사망 효과음 재생 — 여러 클립이면 랜덤 1개. 몬스터가 풀로 반환돼도 소리가 끊기지 않게
+        /// 독립 오브젝트에서 2D로 재생한다(PlayClipAtPoint는 3D 감쇠라 2D 게임에서 작게 들림).</summary>
+        private void PlayDeathSfx()
+        {
+            if (deathSfx == null || deathSfx.Length == 0) return;
+            AudioClip clip = deathSfx[Random.Range(0, deathSfx.Length)];
+            if (clip == null) return;
+
+            var go = new GameObject("DeathSfx_" + gameObject.name);
+            var src = go.AddComponent<AudioSource>();
+            src.clip = clip;
+            src.spatialBlend = 0f; // 2D
+            src.volume = PlayerPrefs.GetInt("sfxOn", 1) == 1 ? PlayerPrefs.GetFloat("sfxVol", 0.8f) : 0f;
+            src.Play();
+            Destroy(go, clip.length + 0.1f);
+        }
+
         private IEnumerator DieCoroutine()
         {
             isDying = true;
             currentState = MonsterState.Die;
+
+            PlayDeathSfx();
 
             GameManager.Instance?.AddKill();   // 결과창 '처치 몬스터' 누적
 
