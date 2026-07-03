@@ -97,14 +97,18 @@ public class PlayerMovement : MonoBehaviour
             moveInput = moveAction.action.ReadValue<Vector2>();
         }
 
+        // 튜토리얼 팝업 표시 중에는 이동 입력 무시
+        if (BagSurvivor.UI.TutorialController.IsBlocking) moveInput = Vector2.zero;
+
         // 바라보는 방향 추적(정지 시 마지막 방향 유지)
         if (moveInput.sqrMagnitude > 0.01f) _lastDir = moveInput.normalized;
 
         // 대시 쿨다운
         if (_dashCd > 0f) _dashCd -= Time.deltaTime;
 
-        // 스페이스 → 대시 (인벤 열림·스턴·쿨다운 중 제외)
-        if (!_inventoryOpen && !isStunned && !_isDashing && _dashCd <= 0f
+        // 스페이스 → 대시 (인벤 열림·튜토리얼·스턴·쿨다운 중 제외)
+        if (!_inventoryOpen && !BagSurvivor.UI.TutorialController.IsBlocking
+            && !isStunned && !_isDashing && _dashCd <= 0f
             && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             StartDash();
@@ -168,7 +172,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isStunned || _inventoryOpen)
+        if (isStunned || _inventoryOpen || BagSurvivor.UI.TutorialController.IsBlocking)
         {
             rb.linearVelocity = Vector2.zero;
             _prevPosition = rb.position;

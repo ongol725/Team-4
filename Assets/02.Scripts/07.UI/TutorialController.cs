@@ -55,6 +55,9 @@ namespace BagSurvivor.UI
         private int _index;
         private bool _isVisible;
 
+        /// <summary>튜토리얼 팝업이 떠 있는 동안 true — 이동/대시/가방 등 플레이어 입력 차단 게이트.</summary>
+        public static bool IsBlocking { get; private set; }
+
         // ─────────────────────────────────────────────────────────────
 
         private void Awake()
@@ -120,8 +123,13 @@ namespace BagSurvivor.UI
         private void SetVisible(bool visible)
         {
             _isVisible = visible;
+            IsBlocking = visible; // 팝업 표시 중 플레이어 입력 차단
             if (_root != null) _root.SetActive(visible);
         }
+
+        // 팝업이 열린 채 비활성/파괴되어도 입력이 잠기지 않도록 해제.
+        private void OnDisable()  => IsBlocking = false;
+        private void OnDestroy() => IsBlocking = false;
 
         private void Prev()
         {

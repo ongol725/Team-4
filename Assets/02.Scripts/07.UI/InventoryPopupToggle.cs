@@ -88,6 +88,7 @@ public class InventoryPopupToggle : MonoBehaviour
     {
 #if ENABLE_INPUT_SYSTEM
         if (Keyboard.current == null) return;
+        if (BagSurvivor.UI.TutorialController.IsBlocking) return; // 튜토리얼 팝업 중 가방 토글 차단
         if (Keyboard.current.tabKey.wasPressedThisFrame)
             Toggle();
 #endif
