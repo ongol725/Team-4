@@ -57,10 +57,17 @@ public class DungeonCombatZone : MonoBehaviour
         _cachedRooms.AddRange(
             FindObjectsByType<RoomController>(FindObjectsSortMode.None));
 
-        // 방 클리어 시 비전투로 전환되도록 구독(보스/미니보스/엘리트 등 잠기는 방)
+        // 방 클리어 시 비전투로 전환되도록 구독 — 문이 잠기는 특수방(Elite/MiniBoss/Boss)에만 적용.
+        // 일반방은 지속 스폰이라 웨이브 사이에 일시적으로 전멸하면 monsterCount가 0이 되어
+        // RoomController.ClearRoom()이 잘못 호출될 수 있음 → 그대로 구독하면 일반방이 영구 비전투가 됨.
         foreach (var rc in _cachedRooms)
         {
             if (rc == null) continue;
+            bool isSpecialRoom = rc.roomType == RoomType.Elite ||
+                                  rc.roomType == RoomType.MiniBoss ||
+                                  rc.roomType == RoomType.Boss;
+            if (!isSpecialRoom) continue;
+
             var room = rc; // 클로저 캡처
             if (room.OnRoomCleared == null)
                 room.OnRoomCleared = new UnityEngine.Events.UnityEvent();
