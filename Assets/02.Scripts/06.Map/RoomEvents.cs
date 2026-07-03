@@ -93,7 +93,7 @@ public class RoomEventBanner : MonoBehaviour
         prt.anchorMin = new Vector2(0.5f, 1f);
         prt.anchorMax = new Vector2(0.5f, 1f);
         prt.pivot = new Vector2(0.5f, 1f);
-        prt.anchoredPosition = new Vector2(0f, -120f);
+        prt.anchoredPosition = new Vector2(0f, -260f); // 상단 중앙 보스 HP UI와 겹치지 않게 아래로
         prt.sizeDelta = new Vector2(900f, 150f);
 
         b._cg = panel.AddComponent<CanvasGroup>();

@@ -37,6 +37,12 @@ public class MinimapController : MonoBehaviour
     // 방문한 적 있는 방들(누적) — 이 방들의 출구 중 '아직 안 밝혀진(안개 속)' 복도만 표시한다.
     private readonly HashSet<int> _visitedRooms = new HashSet<int>();
 
+    // 클리어된 방 표시 — 클리어 시 미니맵 색을 어두운 회청으로 바꿔 "끝난 방"을 한눈에 구분
+    private static readonly Color ClearedRoomColor = new Color(0.35f, 0.35f, 0.40f);
+    private readonly HashSet<RectInt> _clearedRoomBounds = new HashSet<RectInt>();          // RoomController.roomBounds == Room.bounds 로 매칭
+    private readonly HashSet<RoomController> _subscribedClearRooms = new HashSet<RoomController>();
+    private float _clearScanTimer;
+
     // 🌟 던전 생성기(DungeonGenerator)가 던전을 다 만들고 나서 이 함수를 호출해 줄 겁니다.
     public void InitializeMinimap(int width, int height, int[,] data, List<Room> generatedRooms, Transform player)
     {
@@ -55,6 +61,11 @@ public class MinimapController : MonoBehaviour
         _currentRoomIndex = -1;
         lastPlayerPos = new Vector2Int(-1, -1);
 
+        // 클리어 방 표시 초기화 (RoomController 구독은 Update에서 지연 수행 — 생성 순서 무관)
+        _clearedRoomBounds.Clear();
+        _subscribedClearRooms.Clear();
+        _clearScanTimer = 1f; // 다음 Update에서 즉시 1회 스캔
+
         minimapTexture = new Texture2D(mapWidth, mapHeight, TextureFormat.RGBA32, false);
         minimapTexture.filterMode = FilterMode.Point; // 픽셀아트 느낌 살리기
         minimapUI.texture = minimapTexture;
@@ -66,6 +77,14 @@ public class MinimapController : MonoBehaviour
     {
         // 초기화되지 않았거나 플레이어가 없으면 작동하지 않음
         if (playerTransform == null || mapData == null) return;
+
+        // 1초 주기: 새로 생긴 RoomController의 클리어 이벤트 구독(던전 생성 순서와 무관하게 지연 구독)
+        _clearScanTimer += Time.deltaTime;
+        if (_clearScanTimer >= 1f)
+        {
+            _clearScanTimer = 0f;
+            SubscribeRoomClears();
+        }
 
         // 전체 밝히기 토글 감지
         if (revealFullMinimap != lastRevealState)
@@ -260,6 +279,36 @@ public class MinimapController : MonoBehaviour
         if (changed) RefreshMinimap();
     }
 
+    /// <summary>씬의 RoomController들을 스캔해 클리어 이벤트를 구독한다.
+    /// 클리어 순간 해당 방 bounds를 기록하고 미니맵을 다시 그려 색을 바꾼다.</summary>
+    private void SubscribeRoomClears()
+    {
+        _subscribedClearRooms.RemoveWhere(rc => rc == null); // 파괴된(이전 층) 방 정리
+
+        foreach (RoomController rc in FindObjectsByType<RoomController>(FindObjectsSortMode.None))
+        {
+            if (rc == null || _subscribedClearRooms.Contains(rc)) continue;
+            _subscribedClearRooms.Add(rc);
+
+            // 구독 전에 이미 클리어된 방(스캔 지연 사이)도 반영
+            if (rc.IsCleared && _clearedRoomBounds.Add(rc.roomBounds)) RefreshMinimap();
+
+            RoomController room = rc; // 클로저 캡처
+            if (room.OnRoomCleared == null)
+                room.OnRoomCleared = new UnityEngine.Events.UnityEvent();
+            room.OnRoomCleared.AddListener(() =>
+            {
+                if (_clearedRoomBounds.Add(room.roomBounds)) RefreshMinimap();
+            });
+        }
+    }
+
+    // 방 색: 클리어된 방은 타입과 무관하게 어두운 회청("끝난 방"), 아니면 타입별 색
+    private Color RoomColorFor(Room room)
+    {
+        return _clearedRoomBounds.Contains(room.bounds) ? ClearedRoomColor : RoomColor(room.type);
+    }
+
     // 미니맵 텍스처 다시 그리기 (기존 코드 이사)
     private void RefreshMinimap()
     {
@@ -284,7 +333,7 @@ public class MinimapController : MonoBehaviour
                         {
                             if (room.bounds.Contains(new Vector2Int(x, y)))
                             {
-                                pixelColor = RoomColor(room.type);
+                                pixelColor = RoomColorFor(room);
                                 break;
                             }
                         }
@@ -310,7 +359,7 @@ public class MinimapController : MonoBehaviour
             // 삼각형이 방 안으로 삐져나오지 않도록, 방 셀을 삼각형 위에 다시 칠해 클리핑한다.
             foreach (Room room in rooms)
             {
-                Color rc = RoomColor(room.type);
+                Color rc = RoomColorFor(room);
                 RectInt bnd = room.bounds;
                 for (int yy = bnd.yMin; yy < bnd.yMax; yy++)
                     for (int xx = bnd.xMin; xx < bnd.xMax; xx++)
