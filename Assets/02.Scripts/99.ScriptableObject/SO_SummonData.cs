@@ -26,6 +26,8 @@ public class SO_SummonData : ScriptableObject
     public float moveSpeed    = 4f;
     public float atkCooldown  = 1.5f;
     public float atkRange     = 1.5f;
+    [Tooltip("일반 공격 동시 타격 수. 1=최근접 1명, 2 이상=가까운 순 N명 (고대 정령 프리즘=4)")]
+    public int maxTargets = 1;
 
     [Header("지속 시간")]
     [Tooltip("-1 = 전투 내내 영구 유지, 양수 = N초 후 소멸")]
