@@ -39,6 +39,10 @@ namespace BagSurvivor.UI
         public Color clearColor = new Color(0.16f, 0.38f, 0.62f, 0.98f);
         public Color failColor = new Color(0.45f, 0.14f, 0.14f, 0.98f);
 
+        [Header("클리어/실패 제목 텍스트 색")]
+        public Color clearTextColor = new Color(0.35f, 0.65f, 1f, 1f);
+        public Color failTextColor  = new Color(1f, 0.35f, 0.35f, 1f);
+
         [Header("씬 이름 (Build Settings 등록 필요)")]
         [Tooltip("다시하기 시 로드할 인게임 시작 씬 (층마다 다른 씬이라 항상 첫 인게임 씬으로 재시작)")]
         public string ingameSceneName = "02.Ingame";
@@ -65,7 +69,11 @@ namespace BagSurvivor.UI
             if (panel != null) panel.SetActive(true);
             Time.timeScale = 0f;
 
-            if (titleText != null) titleText.text = isClear ? "클리어!" : "실패...";
+            if (titleText != null)
+            {
+                titleText.text  = isClear ? "클리어!" : "실패...";
+                titleText.color = isClear ? clearTextColor : failTextColor;
+            }
             if (frameImage != null) frameImage.color = isClear ? clearColor : failColor;
 
             if (s != null)

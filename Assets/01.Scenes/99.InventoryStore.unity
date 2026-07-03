@@ -779,7 +779,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -789,7 +789,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 848952100b09cfd45b12c1465ff97915, type: 3}
+  m_Sprite: {fileID: -2921360772027914602, guid: 55d3ec1b5b8be4c49af8c4da7b26a3dd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1051,9 +1051,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2b4f631c907a58d3f1e5b8a4c9d2076, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   _canvas: {fileID: 0}
+  _bgSprite: {fileID: 9214414406291804741, guid: b8f7720630f7cfa4b86f84f5934ac04d, type: 3}
   _shopOverlayPos: {x: 789.05, y: 9.2326}
   _shopOverlaySize: {x: 341.067, y: 694.289}
   _fadeDuration: 0.15
@@ -4420,6 +4421,7 @@ MonoBehaviour:
   silverSprite: {fileID: -7219599736098211980, guid: 354d0e578c6e76b4487b10c019491788, type: 3}
   goldSprite: {fileID: -8474996694655026510, guid: 6e0a9365d2ee1a64f8bc22f4328a0856, type: 3}
   prismSprite: {fileID: 3937989823865342731, guid: 4281c5bd3b6f2e14c88751e968a80679, type: 3}
+  graySprite: {fileID: -7402295119234774143, guid: 2c29db7656e9b894f8c44ca2eb9cb6a6, type: 3}
 --- !u!1 &1349147418
 GameObject:
   m_ObjectHideFlags: 0

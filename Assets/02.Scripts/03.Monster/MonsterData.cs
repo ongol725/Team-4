@@ -23,8 +23,11 @@ namespace BagSurvivor.Monster
         [Tooltip("몬스터 영문 이름 (프리팹/코드 참조용)")] 
         public string englishName;
 
-        [Tooltip("몬스터 등급")] 
+        [Tooltip("몬스터 등급")]
         public MonsterGrade grade = MonsterGrade.Normal;
+
+        [Tooltip("최종 보스 여부 — 처치 시 런 클리어(결과 팝업) 처리")]
+        public bool isFinalBoss = false;
 
         // ==========================================
         // 전투 스탯

@@ -99,21 +99,26 @@ public class SynergyCalculator : MonoBehaviour
             int goldMin   = threshold != null ? threshold.goldThreshold   : DefaultGold;
             int prismMin  = threshold != null ? threshold.prismThreshold  : 0;
 
-            if (count < bronzeMin) continue;
+            if (count < 1) continue;
+
+            // 조건 미달이어도 아이템을 1개 이상 보유하면 비활성(회색) 항목으로 노출한다.
+            bool isActive = count >= bronzeMin;
 
             var grade = (prismMin > 0 && count >= prismMin) ? SynergyGrade.Prism
                       : count >= goldMin                    ? SynergyGrade.Gold
                       : count >= silverMin                  ? SynergyGrade.Silver
                       : SynergyGrade.Bronze;
 
-            int nextMin = prismMin > 0 ? prismMin : goldMin;
+            // 비활성은 다음 목표가 브론즈 임계값, 활성은 최종 단계(프리즘/골드)
+            int nextMin = !isActive  ? bronzeMin
+                        : prismMin > 0 ? prismMin : goldMin;
 
             string displayName = threshold != null && !string.IsNullOrEmpty(threshold.displayName)
                 ? threshold.displayName
                 : KoreanNames.TryGetValue(kvp.Key, out var n) ? n : kvp.Key.ToString();
 
             string effect = threshold != null
-                ? BuildMilestoneText(threshold, grade)
+                ? BuildMilestoneText(threshold, isActive ? grade : (SynergyGrade?)null)
                 : string.Empty;
 
             result.Add(new SynergyInfo
@@ -123,6 +128,7 @@ public class SynergyCalculator : MonoBehaviour
                 count         = count,
                 nextThreshold = nextMin,
                 grade         = grade,
+                isActive      = isActive,
                 condition     = threshold?.triggerCondition ?? string.Empty,
                 description   = threshold?.description ?? string.Empty,
                 effect        = effect,
@@ -130,7 +136,12 @@ public class SynergyCalculator : MonoBehaviour
             });
         }
 
-        result.Sort((a, b) => b.grade.CompareTo(a.grade));
+        // 활성(프리즘→골드→실버→브론즈) 먼저, 비활성(회색)은 맨 뒤
+        result.Sort((a, b) =>
+        {
+            if (a.isActive != b.isActive) return a.isActive ? -1 : 1;
+            return b.grade.CompareTo(a.grade);
+        });
         return result;
     }
 
@@ -139,9 +150,10 @@ public class SynergyCalculator : MonoBehaviour
     /// <summary>
     /// 시너지의 전체 마일스톤 단계를 "(임계값) 효과" 형식으로 세로 나열한다.
     /// 현재 적용 중인 단계는 흰색(#FFFFFF), 미도달·지나간 단계는 회색 50%(#88888880)로 표시.
+    /// activeGrade가 null(비활성 시너지)이면 전 단계를 회색으로 표시한다.
     /// (기획: 시너지_툴팁_텍스트_테이블.md)
     /// </summary>
-    private static string BuildMilestoneText(SynergyThreshold t, SynergyGrade activeGrade)
+    private static string BuildMilestoneText(SynergyThreshold t, SynergyGrade? activeGrade)
     {
         var sb = new System.Text.StringBuilder();
         AppendMilestone(sb, t.bronzeThreshold, t.bronzeEffect, activeGrade == SynergyGrade.Bronze);

@@ -22,12 +22,14 @@ namespace BagSurvivor.UI
         public Color silver = new Color(0.75f, 0.78f, 0.85f, 1f);
         public Color gold   = new Color(1f,    0.84f, 0.30f, 1f);
         public Color prism  = new Color(0.75f, 0.45f, 1.00f, 1f);
+        public Color gray   = new Color(0.55f, 0.55f, 0.58f, 1f);
 
         [Header("등급 패널 스프라이트 (지정 시 색상 틴트 대신 사용)")]
         public Sprite bronzeSprite;
         public Sprite silverSprite;
         public Sprite goldSprite;
         public Sprite prismSprite;
+        public Sprite graySprite;   // 비활성(조건 미달) 패널
 
         private SynergyInfo info;
         private SynergyListUI owner;
@@ -49,7 +51,8 @@ namespace BagSurvivor.UI
             if (iconImage != null && i.icon != null) iconImage.sprite = i.icon;
             if (frameImage != null)
             {
-                var panelSprite = i.grade == SynergyGrade.Prism  ? prismSprite
+                var panelSprite = !i.isActive                     ? graySprite
+                                : i.grade == SynergyGrade.Prism   ? prismSprite
                                 : i.grade == SynergyGrade.Gold    ? goldSprite
                                 : i.grade == SynergyGrade.Silver  ? silverSprite : bronzeSprite;
                 if (panelSprite != null)
@@ -59,10 +62,21 @@ namespace BagSurvivor.UI
                 }
                 else
                 {
-                    frameImage.color = i.grade == SynergyGrade.Prism  ? prism
-                                     : i.grade == SynergyGrade.Gold    ? gold
-                                     : i.grade == SynergyGrade.Silver  ? silver : bronze;
+                    frameImage.color = !i.isActive                    ? gray
+                                     : i.grade == SynergyGrade.Prism  ? prism
+                                     : i.grade == SynergyGrade.Gold   ? gold
+                                     : i.grade == SynergyGrade.Silver ? silver : bronze;
                 }
+            }
+
+            // 비활성(조건 미달) 항목은 아이콘·텍스트를 살짝 어둡게 표시
+            // (엔트리는 Populate마다 프리팹에서 새로 생성되므로 원복 처리는 불필요)
+            if (!i.isActive)
+            {
+                var dim = new Color(0.72f, 0.72f, 0.72f, 1f);
+                if (iconImage != null) iconImage.color *= dim;
+                if (nameText  != null) nameText.color  *= dim;
+                if (countText != null) countText.color *= dim;
             }
         }
 

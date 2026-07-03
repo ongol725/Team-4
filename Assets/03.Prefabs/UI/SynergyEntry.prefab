@@ -238,6 +238,7 @@ MonoBehaviour:
   silverSprite: {fileID: -7219599736098211980, guid: 354d0e578c6e76b4487b10c019491788, type: 3}
   goldSprite: {fileID: -8474996694655026510, guid: 6e0a9365d2ee1a64f8bc22f4328a0856, type: 3}
   prismSprite: {fileID: 3937989823865342731, guid: 4281c5bd3b6f2e14c88751e968a80679, type: 3}
+  graySprite: {fileID: -7402295119234774143, guid: 2c29db7656e9b894f8c44ca2eb9cb6a6, type: 3}
 --- !u!1 &5039436106251804411
 GameObject:
   m_ObjectHideFlags: 0

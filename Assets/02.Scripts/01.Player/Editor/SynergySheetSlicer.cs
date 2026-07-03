@@ -41,6 +41,8 @@ namespace BagSurvivor.EditorTools
             ("StoneDrop_Common", 12, 1), // 12288×1536, 12프레임 (셀별 콘텐츠 검증)
             // 일렉트로 번개 기둥: 30956×2048, 본체 중심 간격 ≈3090px → 10프레임 (셀 3095px, 빈 프레임 없음)
             ("ElectroShockwave", 10, 1),
+            // 대정령(프리즘) 타격 이펙트: 2048×1024, 512px 셀 4×2 = 8프레임
+            ("Elemental_Explosion_SpriteSheet", 4, 2),
             // ── 4x4 그리드 ──
             ("Gold_Coin1", 4, 4), ("Gold_Coin2", 4, 4), ("Gold_Coin3", 4, 4), ("Gold_Coin4", 4, 4),
             ("RichCoin_BOMB1", 4, 4), ("RichCoin_BOMB2", 4, 4), ("RichCoin_BOMB3", 4, 4), ("RichCoin_BOMB4", 4, 4),
@@ -60,85 +62,106 @@ namespace BagSurvivor.EditorTools
 
             foreach (var s in Sheets)
             {
-                string path = $"{Dir}/{s.name}.png";
-
-                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                if (importer == null)
-                {
-                    Debug.LogWarning($"[Slicer] 임포터 없음(파일 미존재?): {path}");
-                    skipped++;
-                    continue;
-                }
-
-                // 1) 스프라이트/멀티플 + 최대 해상도 확보 후 1차 임포트 (정확한 픽셀 크기 확보)
-                importer.textureType      = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Multiple;
-                importer.maxTextureSize   = 16384;
-                importer.mipmapEnabled    = false;
-                importer.SaveAndReimport();
-
-                // 임포트 후 importer 참조가 갱신될 수 있어 재취득
-                importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                var tex  = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
-                if (importer == null || tex == null)
-                {
-                    Debug.LogWarning($"[Slicer] 텍스처 로드 실패: {path}");
-                    skipped++;
-                    continue;
-                }
-
-                int W = tex.width, H = tex.height;
-                int cw = W / s.cols, ch = H / s.rows;
-                if (cw <= 0 || ch <= 0)
-                {
-                    Debug.LogWarning($"[Slicer] 잘못된 격자: {s.name} ({W}x{H} / {s.cols}x{s.rows})");
-                    skipped++;
-                    continue;
-                }
-
-                // 2) 데이터 프로바이더로 격자 SpriteRect 생성
-                var dp = factory.GetSpriteEditorDataProviderFromObject(importer);
-                dp.InitSpriteEditorDataProvider();
-
-                var rects = new List<SpriteRect>();
-                int idx = 0;
-                for (int row = 0; row < s.rows; row++)
-                for (int col = 0; col < s.cols; col++)
-                {
-                    float x = col * cw;
-                    float y = H - (row + 1) * ch; // Unity rect 원점은 좌하단 → 위 행부터 채우기
-                    rects.Add(new SpriteRect
-                    {
-                        name      = $"{s.name}_{idx}",
-                        spriteID  = GUID.Generate(),
-                        rect      = new Rect(x, y, cw, ch),
-                        alignment = SpriteAlignment.Center,
-                        pivot     = new Vector2(0.5f, 0.5f),
-                        border    = Vector4.zero,
-                    });
-                    idx++;
-                }
-
-                dp.SetSpriteRects(rects.ToArray());
-
-                // 이름↔fileId 매핑 (Unity 6 직렬화)
-                var nameIdDp = dp.GetDataProvider<ISpriteNameFileIdDataProvider>();
-                if (nameIdDp != null)
-                {
-                    var pairs = rects.Select(r => new SpriteNameFileIdPair(r.name, r.spriteID)).ToList();
-                    nameIdDp.SetNameFileIdPairs(pairs);
-                }
-
-                dp.Apply();
-                importer.SaveAndReimport();
-
-                done++;
-                Debug.Log($"[Slicer] {s.name}: {s.cols}x{s.rows} = {s.cols * s.rows}프레임 ({cw}x{ch})");
+                if (SliceSheet(factory, s)) done++;
+                else                        skipped++;
             }
 
             AssetDatabase.Refresh();
             Debug.Log($"[Slicer] 재슬라이스 완료 — 성공 {done}개, 건너뜀 {skipped}개. " +
                       $"이어서 'BagSurvivor/Setup/③ Fill Synergy Icons'를 실행해 프레임을 재연결하세요.");
+        }
+
+        /// <summary>Sheets 목록에 등록된 시트 하나만 재슬라이스한다.
+        /// (전체 메뉴 ⓪은 모든 시트의 spriteID를 재생성해 기존 참조가 갱신될 때까지 diff가 커지므로,
+        ///  신규 시트 추가 시에는 이 메서드로 대상만 슬라이스 → ③ 메뉴로 재연결한다)</summary>
+        public static bool SliceSingle(string sheetName)
+        {
+            foreach (var s in Sheets)
+            {
+                if (s.name != sheetName) continue;
+                var factory = new SpriteDataProviderFactories();
+                factory.Init();
+                bool ok = SliceSheet(factory, s);
+                AssetDatabase.Refresh();
+                return ok;
+            }
+            Debug.LogWarning($"[Slicer] Sheets 목록에 없는 시트: {sheetName}");
+            return false;
+        }
+
+        static bool SliceSheet(SpriteDataProviderFactories factory, (string name, int cols, int rows) s)
+        {
+            string path = $"{Dir}/{s.name}.png";
+
+            var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+            if (importer == null)
+            {
+                Debug.LogWarning($"[Slicer] 임포터 없음(파일 미존재?): {path}");
+                return false;
+            }
+
+            // 1) 스프라이트/멀티플 + 최대 해상도 확보 후 1차 임포트 (정확한 픽셀 크기 확보)
+            importer.textureType      = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Multiple;
+            importer.maxTextureSize   = 16384;
+            importer.mipmapEnabled    = false;
+            importer.SaveAndReimport();
+
+            // 임포트 후 importer 참조가 갱신될 수 있어 재취득
+            importer = AssetImporter.GetAtPath(path) as TextureImporter;
+            var tex  = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if (importer == null || tex == null)
+            {
+                Debug.LogWarning($"[Slicer] 텍스처 로드 실패: {path}");
+                return false;
+            }
+
+            int W = tex.width, H = tex.height;
+            int cw = W / s.cols, ch = H / s.rows;
+            if (cw <= 0 || ch <= 0)
+            {
+                Debug.LogWarning($"[Slicer] 잘못된 격자: {s.name} ({W}x{H} / {s.cols}x{s.rows})");
+                return false;
+            }
+
+            // 2) 데이터 프로바이더로 격자 SpriteRect 생성
+            var dp = factory.GetSpriteEditorDataProviderFromObject(importer);
+            dp.InitSpriteEditorDataProvider();
+
+            var rects = new List<SpriteRect>();
+            int idx = 0;
+            for (int row = 0; row < s.rows; row++)
+            for (int col = 0; col < s.cols; col++)
+            {
+                float x = col * cw;
+                float y = H - (row + 1) * ch; // Unity rect 원점은 좌하단 → 위 행부터 채우기
+                rects.Add(new SpriteRect
+                {
+                    name      = $"{s.name}_{idx}",
+                    spriteID  = GUID.Generate(),
+                    rect      = new Rect(x, y, cw, ch),
+                    alignment = SpriteAlignment.Center,
+                    pivot     = new Vector2(0.5f, 0.5f),
+                    border    = Vector4.zero,
+                });
+                idx++;
+            }
+
+            dp.SetSpriteRects(rects.ToArray());
+
+            // 이름↔fileId 매핑 (Unity 6 직렬화)
+            var nameIdDp = dp.GetDataProvider<ISpriteNameFileIdDataProvider>();
+            if (nameIdDp != null)
+            {
+                var pairs = rects.Select(r => new SpriteNameFileIdPair(r.name, r.spriteID)).ToList();
+                nameIdDp.SetNameFileIdPairs(pairs);
+            }
+
+            dp.Apply();
+            importer.SaveAndReimport();
+
+            Debug.Log($"[Slicer] {s.name}: {s.cols}x{s.rows} = {s.cols * s.rows}프레임 ({cw}x{ch})");
+            return true;
         }
     }
 }
