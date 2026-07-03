@@ -17,6 +17,10 @@ public class ShortcutHelpUI : MonoBehaviour
     private Vector2 _basePosition;
     private bool _isVisible;
 
+    // 사용자의 표시 선호(기본 켜짐). 상점이 열릴 때 이 값을 적용한다.
+    // → 상점을 처음 열면 기본으로 켜져 있고, 상점이 닫히면 함께 숨는다.
+    private bool _wantVisible = true;
+
     // 위치 미세조정 오프셋 (x=좌우, y=상하)
     private Vector2 _positionOffset = Vector2.zero;
 
@@ -41,12 +45,24 @@ public class ShortcutHelpUI : MonoBehaviour
     {
         yield return null; // 씬 초기화 완료 대기
         BuildUI();
+
+        // 상점(인벤/상점 팝업) 열림/닫힘에 도움말 표시를 연동
+        InventoryPopupToggle.onPopupToggled += OnPopupToggled;
+        ApplyVisibility(); // 현재 상점 상태에 맞춰 초기 표시(이미 열려 있으면 기본 켜짐)
     }
+
+    private void OnDestroy()
+    {
+        InventoryPopupToggle.onPopupToggled -= OnPopupToggled;
+    }
+
+    // 상점이 닫히면 함께 숨고, 열리면 사용자 선호(_wantVisible)대로 표시한다.
+    private void OnPopupToggled(bool open) => ApplyVisibility();
 
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
-            Toggle();
+            ToggleByUser();
 
         // Inspector offset 실시간 반영
         if (_panelRt != null)
@@ -59,7 +75,7 @@ public class ShortcutHelpUI : MonoBehaviour
         _panelRt   = null;
         yield return null; // 씬 초기화 완료 대기
         BuildUI();
-        SetVisible(true);
+        SetVisible(InventoryPopupToggle.AnyOpen && _wantVisible);
     }
 
     public void SetVisible(bool visible)
@@ -107,18 +123,33 @@ public class ShortcutHelpUI : MonoBehaviour
         return true;
     }
 
-    /// <summary>버튼 등 외부에서 도움말을 토글한다 — Q 키와 동일 동작</summary>
+    /// <summary>버튼 등 외부에서 도움말을 토글한다 — Q 키와 동일 동작(상점 열림 상태에서만).</summary>
     public static void Toggle()
     {
         if (_instance == null) return;
+        _instance.ToggleByUser();
+    }
 
-        // 씬 전환으로 이전 Canvas가 파괴된 경우 패널 재생성 후 표시
-        if (_instance._panel == null)
+    /// <summary>Q키·버튼 공통 토글. 상점(인벤/상점 팝업)이 열려 있을 때만 동작하며 표시 선호를 뒤집는다.</summary>
+    private void ToggleByUser()
+    {
+        if (!InventoryPopupToggle.AnyOpen) return; // 상점이 열렸을 때만 켤 수 있음
+        _wantVisible = !_wantVisible;
+        ApplyVisibility();
+    }
+
+    /// <summary>상점 열림 여부 + 표시 선호를 종합해 실제 패널 표시를 갱신한다.</summary>
+    private void ApplyVisibility()
+    {
+        bool show = InventoryPopupToggle.AnyOpen && _wantVisible;
+
+        // 씬 전환으로 이전 Canvas가 파괴된 경우 재생성 후 표시
+        if (show && _panel == null)
         {
-            _instance.StartCoroutine(_instance.RebuildAndShow());
+            StartCoroutine(RebuildAndShow());
             return;
         }
-        _instance.SetVisible(!_instance._isVisible);
+        SetVisible(show);
     }
 
     // ─────────────────────────────────────────────────────────────
