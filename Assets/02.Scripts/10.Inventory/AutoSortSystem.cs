@@ -6,14 +6,20 @@ using UnityEngine.InputSystem;
 #endif
 
 /// <summary>
-/// O 키 / 자동정렬 버튼으로 인벤토리 아이템을
-/// 합성등급 → 희귀도 → 크기 기준으로 최적 재배치한다.
+/// O 키로 인벤토리 아이템을 합성등급 → 희귀도 → 크기 기준으로 최적 재배치한다.
+/// 함께 생성되는 버튼(AutoSortButton)은 단축키 도움말(Q와 동일)을 토글한다.
 ///
 /// 사용법: 씬 내 아무 오브젝트(메인카메라 포함)에 부착.
 ///         InventoryGridUI 를 런타임에 자동 탐색한다.
 /// </summary>
 public class AutoSortSystem : MonoBehaviour
 {
+    [Header("단축키 정보 버튼 위치 (캔버스 좌하단 기준)")]
+    [SerializeField] private Vector2 _buttonPos = new Vector2(478.18f, 279.35f);
+
+    [Header("버튼 배경 스프라이트 (미지정 시 단색 배경 폴백)")]
+    [SerializeField] private Sprite _buttonSprite;
+
     private InventoryGridUI _gridUI;
     private bool            _buttonCreated;
 
@@ -80,15 +86,23 @@ public class AutoSortSystem : MonoBehaviour
         rt.anchorMax     = new Vector2(0f, 0f);
         rt.pivot         = new Vector2(0f, 0f);
         rt.sizeDelta     = new Vector2(120f, 34f);
-        // 인벤토리 그리드 하단 좌측 근처에 배치 (그리드 위치 기준 오프셋)
-        rt.anchoredPosition = GetButtonOffset();
+        rt.anchoredPosition = _buttonPos;
+        rt.localScale    = Vector3.one * 1.096982f;
 
-        var bg       = btnGO.GetComponent<Image>();
-        bg.color     = new Color(0.12f, 0.12f, 0.20f, 0.95f);
+        var bg = btnGO.GetComponent<Image>();
+        if (_buttonSprite != null)
+        {
+            bg.sprite = _buttonSprite;
+            bg.color  = Color.white; // 스프라이트 원본 색 그대로
+        }
+        else
+        {
+            bg.color = new Color(0.12f, 0.12f, 0.20f, 0.95f);
 
-        var outline          = btnGO.AddComponent<Outline>();
-        outline.effectColor  = new Color(0.40f, 0.45f, 0.70f, 0.90f);
-        outline.effectDistance = new Vector2(1f, -1f);
+            var outline          = btnGO.AddComponent<Outline>();
+            outline.effectColor  = new Color(0.40f, 0.45f, 0.70f, 0.90f);
+            outline.effectDistance = new Vector2(1f, -1f);
+        }
 
         // ── 텍스트 ──
         var labelGO = new GameObject("Label", typeof(RectTransform), typeof(Text));
@@ -101,11 +115,11 @@ public class AutoSortSystem : MonoBehaviour
 
         var txt             = labelGO.GetComponent<Text>();
         txt.font            = font;
-        txt.text            = "자동 배치  [O]";
-        txt.fontSize        = 12;
-        txt.fontStyle       = FontStyle.Bold;
+        txt.text            = "단축키 정보 [Q]";
+        txt.fontSize        = 14;
+        txt.fontStyle       = FontStyle.Normal;
         txt.alignment       = TextAnchor.MiddleCenter;
-        txt.color           = new Color(0.80f, 0.85f, 1.00f);
+        txt.color           = Color.white; // FFFFFF
         txt.raycastTarget   = false;
 
         // ── 버튼 이벤트 ──
@@ -115,20 +129,6 @@ public class AutoSortSystem : MonoBehaviour
         colors.highlightedColor = new Color(1.15f, 1.15f, 1.15f);
         colors.pressedColor     = new Color(0.75f, 0.75f, 0.75f);
         btn.colors = colors;
-        btn.onClick.AddListener(RunAutoSort);
-    }
-
-    /// <summary>그리드 앵커드 포지션을 기준으로 버튼 위치 계산</summary>
-    private Vector2 GetButtonOffset()
-    {
-        if (_gridUI == null) return new Vector2(10f, 10f);
-
-        var gridRT = _gridUI.GetComponent<RectTransform>();
-        if (gridRT == null) return new Vector2(10f, 10f);
-
-        // 그리드 좌하단 바로 아래 10px
-        return new Vector2(
-            gridRT.anchoredPosition.x,
-            gridRT.anchoredPosition.y - gridRT.rect.height - 10f);
+        btn.onClick.AddListener(ShortcutHelpUI.Toggle);
     }
 }

@@ -49,7 +49,7 @@ public class ItemInfoPopup : MonoBehaviour
         { SynergyType.SpiritMage,     "정령술사"   },
         { SynergyType.GearShift,      "기어시프트" },
         { SynergyType.Pinball,        "핀볼"       },
-        { SynergyType.Overload,       "과부화"     },
+        { SynergyType.Overload,       "과부하"     },
         { SynergyType.Electro,        "일렉트로"   },
         { SynergyType.Impregnable,    "난공불락"   },
     };

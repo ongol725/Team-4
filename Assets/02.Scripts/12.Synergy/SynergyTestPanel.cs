@@ -44,7 +44,7 @@ public class SynergyTestPanel : MonoBehaviour
         (SynergyType.Executioner, "처형자"),
         (SynergyType.SpiritMage,  "정령술사"),
         (SynergyType.Pinball,     "핀볼"),
-        (SynergyType.Overload,    "과부화"),
+        (SynergyType.Overload,    "과부하"),
         (SynergyType.Electro,     "일렉트로"),
         (SynergyType.Impregnable, "난공불락"),
         (SynergyType.Titan,       "티탄"),

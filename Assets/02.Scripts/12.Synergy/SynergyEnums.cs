@@ -5,7 +5,7 @@ public enum SkillType
     AoE,          // 장판/범위
     Slash,        // 즉발 참격
     Buff,         // 플레이어 강화
-    Beam,         // 지속 빔 — 발사가 아니라 바라보는 방향으로 생성되어 지속 데미지 (과부화 레이저)
+    Beam,         // 지속 빔 — 발사가 아니라 바라보는 방향으로 생성되어 지속 데미지 (과부하 레이저)
 }
 
 /// <summary>스킬 발동 시 조준 대상 / 생성 위치</summary>
@@ -18,9 +18,9 @@ public enum SkillTargetType
     ForwardDual,   // 좌·우 각각 가장 가까운 적 2명 (처형자)
     ForwardTriple, // 가장 가까운 적 3명 순차 타격 (마왕 프리즘)
     SidePillars,   // 플레이어 좌·우 고정 위치에 기둥 생성 (일렉트로)
-    ChainLightning,// 최근접 적부터 차례로 연쇄 타격 (과부화 체인라이트닝)
-    FacingForward, // 플레이어가 바라보는 방향으로 발사 (과부화 레이저)
-    RandomAroundSelf, // 플레이어 주변 랜덤 위치에 생성 후 그 자리 적 타격 (과부화 비눗방울)
+    ChainLightning,// 최근접 적부터 차례로 연쇄 타격 (과부하 체인라이트닝)
+    FacingForward, // 플레이어가 바라보는 방향으로 발사 (과부하 레이저)
+    RandomAroundSelf, // 플레이어 주변 랜덤 위치에 생성 후 그 자리 적 타격 (과부하 비눗방울)
 }
 
 /// <summary>피격 시 부여되는 상태이상</summary>
@@ -42,7 +42,7 @@ public enum FixedEffectType
     InstantDeath,    // 즉사 (체력 X% 이하 적)
     DamageReduction, // 피해 감소 (난공불락)
     HealArmorHpPct,  // 방어구 HP 비율 회복 (성기사단)
-    SpeedPenalty,    // 이동속도 페널티 (과부화)
+    SpeedPenalty,    // 이동속도 페널티 (과부하)
 }
 
 /// <summary>스킬 발동 방식 트리거</summary>
@@ -52,7 +52,7 @@ public enum SynergyTriggerType
     OnHitTaken,  // 플레이어 피격 시
     OnMove,      // 이동 거리 누적
     Passive,     // 소환/오브젝트 상시 유지
-    Penalty,     // 과부화 패널티
+    Penalty,     // 과부하 패널티
 }
 
 /// <summary>시너지 스케일링 기준 스탯</summary>

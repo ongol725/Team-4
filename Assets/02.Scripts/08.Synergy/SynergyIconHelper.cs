@@ -18,7 +18,7 @@ public static class SynergyIconHelper
             { SynergyType.SpiritMage,  new Color(0.10f, 0.75f, 0.75f) }, // 정령술사 — 청록
             { SynergyType.Fairy,       new Color(0.95f, 0.55f, 0.85f) }, // 페어리  — 분홍
             { SynergyType.Pinball,     new Color(0.95f, 0.45f, 0.10f) }, // 핀볼    — 오렌지
-            { SynergyType.Overload,    new Color(0.90f, 0.80f, 0.00f) }, // 과부화  — 노랑
+            { SynergyType.Overload,    new Color(0.90f, 0.80f, 0.00f) }, // 과부하  — 노랑
             { SynergyType.Electro,     new Color(0.30f, 0.60f, 0.95f) }, // 일렉트로 — 밝은 파랑
             { SynergyType.Impregnable, new Color(0.10f, 0.50f, 0.25f) }, // 난공불락 — 녹색
         };

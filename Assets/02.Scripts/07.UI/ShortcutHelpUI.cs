@@ -17,8 +17,8 @@ public class ShortcutHelpUI : MonoBehaviour
     private Vector2 _basePosition;
     private bool _isVisible;
 
-    // 위치 오프셋: 시너지 우측 기준 (x=좌우, y=상하)
-    private Vector2 _positionOffset = new Vector2(10f, 0f);
+    // 위치 미세조정 오프셋 (x=좌우, y=상하)
+    private Vector2 _positionOffset = Vector2.zero;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoCreate()
@@ -46,15 +46,7 @@ public class ShortcutHelpUI : MonoBehaviour
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
-        {
-            // 씬 전환으로 이전 Canvas가 파괴된 경우 패널 재생성 후 표시
-            if (_panel == null)
-            {
-                StartCoroutine(RebuildAndShow());
-                return;
-            }
-            SetVisible(!_isVisible);
-        }
+            Toggle();
 
         // Inspector offset 실시간 반영
         if (_panelRt != null)
@@ -73,7 +65,60 @@ public class ShortcutHelpUI : MonoBehaviour
     public void SetVisible(bool visible)
     {
         _isVisible = visible;
-        if (_panel != null) _panel.SetActive(visible);
+        if (_panel == null) return;
+
+        // 버튼이 패널보다 늦게 생성되는 경우를 대비해 표시 시점에 위치 재계산
+        if (visible)
+        {
+            PositionAboveButton(_panelRt);
+            _panel.transform.SetAsLastSibling();
+            _panel.SetActive(true);
+            EnsureTopSorting(); // 중첩 Canvas 정렬은 활성 상태에서 설정해야 유지된다
+        }
+        else
+        {
+            _panel.SetActive(false);
+        }
+    }
+
+    /// <summary>패널에 전용 Canvas(override sorting)를 부여해 인벤토리 등 다른 UI보다 항상 위에 렌더링한다.
+    /// 인벤토리 캔버스(10)·시너지(11)보다 높고 일시정지 팝업(100~120)보다는 낮은 값.</summary>
+    private void EnsureTopSorting()
+    {
+        var canvas = _panel.GetComponent<Canvas>();
+        if (canvas == null) canvas = _panel.AddComponent<Canvas>();
+        canvas.overrideSorting = true;
+        canvas.sortingOrder    = 60;
+    }
+
+    /// <summary>단축키 정보 버튼(AutoSortButton) 바로 위에 패널을 배치한다. 성공 여부 반환.</summary>
+    private bool PositionAboveButton(RectTransform panelRt)
+    {
+        if (panelRt == null) return false;
+
+        var btn = GameObject.Find("AutoSortButton");
+        if (btn == null || btn.transform.parent != panelRt.parent) return false;
+
+        var btnRt = btn.GetComponent<RectTransform>();
+        panelRt.anchorMin = panelRt.anchorMax = new Vector2(0f, 0f);
+        panelRt.pivot     = new Vector2(0f, 0f);
+        _basePosition     = btnRt.anchoredPosition + new Vector2(0f, btnRt.sizeDelta.y + Gap);
+        panelRt.anchoredPosition = _basePosition + _positionOffset;
+        return true;
+    }
+
+    /// <summary>버튼 등 외부에서 도움말을 토글한다 — Q 키와 동일 동작</summary>
+    public static void Toggle()
+    {
+        if (_instance == null) return;
+
+        // 씬 전환으로 이전 Canvas가 파괴된 경우 패널 재생성 후 표시
+        if (_instance._panel == null)
+        {
+            _instance.StartCoroutine(_instance.RebuildAndShow());
+            return;
+        }
+        _instance.SetVisible(!_instance._isVisible);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -94,10 +139,20 @@ public class ShortcutHelpUI : MonoBehaviour
         panelRt.sizeDelta = new Vector2(PanelW, 100f); // 높이는 나중에 계산
 
         var bg = _panel.GetComponent<Image>();
-        bg.color = new Color(0.05f, 0.05f, 0.10f, 0.96f);
-        var outlineComp = _panel.AddComponent<Outline>();
-        outlineComp.effectColor    = new Color(0.35f, 0.35f, 0.55f, 0.85f);
-        outlineComp.effectDistance = new Vector2(1.5f, -1.5f);
+        var frameSprite = Resources.Load<Sprite>("UI/Paus_Frame");
+        if (frameSprite != null)
+        {
+            bg.sprite = frameSprite;
+            bg.color  = Color.white; // 프레임 원본 색 그대로
+        }
+        else
+        {
+            // 리소스를 못 찾으면 기존 단색 배경 폴백
+            bg.color = new Color(0.05f, 0.05f, 0.10f, 0.96f);
+            var outlineComp = _panel.AddComponent<Outline>();
+            outlineComp.effectColor    = new Color(0.35f, 0.35f, 0.55f, 0.85f);
+            outlineComp.effectDistance = new Vector2(1.5f, -1.5f);
+        }
 
         // ── 타이틀 ──────────────────────────────────────────────────
         var titleGo = MakeText(_panel, "[ 단축키 도움말 ]", 13, FontStyle.Bold,
@@ -129,9 +184,10 @@ public class ShortcutHelpUI : MonoBehaviour
         float panelH  = PadY + TitleH + 6f + bodyH + PadY;
         panelRt.sizeDelta = new Vector2(PanelW, panelH);
 
-        // ── 인벤토리 좌측에 배치 ────────────────────────────────────
+        // ── 단축키 정보 버튼 위에 배치 (버튼이 없으면 시너지 우측 폴백) ──
         _panelRt = panelRt;
-        PositionNextToSynergy(panelRt, canvas);
+        if (!PositionAboveButton(panelRt))
+            PositionNextToSynergy(panelRt, canvas);
 
         _panel.SetActive(false);
     }

@@ -642,8 +642,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64429adc19d9b3345ba195c854052e45, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::AutoSortSystem
+  _buttonPos: {x: 478.18, y: 279.35}
+  _buttonSprite: {fileID: -2360239471782958608, guid: 8ff8521a4d6396c488d7c9557ca8ac3a, type: 3}
 --- !u!1 &810000001
 GameObject:
   m_ObjectHideFlags: 0
