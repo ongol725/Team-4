@@ -7,7 +7,6 @@
 //  - MonsterController에 컴포넌트로 부착 (컴포지션 패턴)
 // ============================================================
 using UnityEngine;
-using System.Collections;
 
 namespace BagSurvivor.Monster
 {
@@ -31,9 +30,6 @@ namespace BagSurvivor.Monster
         [Tooltip("발사 쿨다운(초)")]
         public float fireCooldown = 1.5f;
 
-        [Tooltip("발사 직전 준비(텔레그래프) 시간(초). 이 동안 빨간 외곽선 표시")]
-        public float telegraphTime = 0.4f;
-
         [Tooltip("스폰(태어난) 직후 첫 발사까지 대기시간(초)")]
         public float spawnDelay = 0.5f;
 
@@ -48,34 +44,21 @@ namespace BagSurvivor.Monster
         public GameObject projectilePrefab;
 
         private MonsterController controller;
-        private AttackTelegraphOutline outline;
         private float cooldownTimer;
-        private bool firing;
 
         private void Awake()
         {
             controller = GetComponent<MonsterController>();
-            outline = GetComponent<AttackTelegraphOutline>();
-            if (outline == null) outline = gameObject.AddComponent<AttackTelegraphOutline>();
         }
 
         private void OnEnable()
         {
             cooldownTimer = spawnDelay; // 태어나자마자 쏘지 않고 spawnDelay만큼 대기 후 첫 발사
-            firing = false;
-            outline?.Show(false);
-        }
-
-        private void OnDisable()
-        {
-            firing = false;
-            outline?.Show(false); // 풀 반환 시 외곽선 정리
         }
 
         private void Update()
         {
             if (controller == null || controller.IsDead || controller.PlayerTransform == null) return;
-            if (firing) return; // 준비~발사 진행 중
 
             if (cooldownTimer > 0f)
             {
@@ -84,28 +67,10 @@ namespace BagSurvivor.Monster
             }
 
             if (controller.GetDistanceToPlayer() <= attackRange)
-                StartCoroutine(TelegraphAndFire());
-        }
-
-        /// <summary>발사 준비(빨간 외곽선) → 발사 → 쿨다운. 준비 도중 사망 시 안전 종료.</summary>
-        private IEnumerator TelegraphAndFire()
-        {
-            firing = true;
-            if (telegraphTime > 0f)
             {
-                outline?.Show(true);
-                float t = 0f;
-                while (t < telegraphTime)
-                {
-                    if (controller == null || controller.IsDead) { outline?.Show(false); firing = false; yield break; }
-                    t += Time.deltaTime;
-                    yield return null;
-                }
-                outline?.Show(false);
+                Fire();
+                cooldownTimer = fireCooldown;
             }
-            if (controller != null && !controller.IsDead) Fire();
-            cooldownTimer = fireCooldown;
-            firing = false;
         }
 
         private void Fire()
@@ -119,6 +84,11 @@ namespace BagSurvivor.Monster
                 ? GameObjectPool.Instance.Get(projectilePrefab, transform.position, Quaternion.identity)
                 : Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             if (go == null) return;
+
+            // 날아가는 투사체에 빨간 외곽선 표시(없으면 부착) — 몬스터 본체가 아닌 투사체가 텔레그래프
+            var outline = go.GetComponent<AttackTelegraphOutline>();
+            if (outline == null) outline = go.AddComponent<AttackTelegraphOutline>();
+            outline.Show(true);
 
             var proj = go.GetComponent<BossProjectile>();
             if (proj != null) proj.Launch(dir, projectileSpeed, controller.Attack, projectileMaxRange);
