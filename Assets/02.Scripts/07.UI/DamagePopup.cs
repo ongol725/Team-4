@@ -26,7 +26,7 @@ namespace BagSurvivor
         const float PopDur          = 0.12f; // 등장 팝 지속(초)
         const float PopStartScale   = 0.55f; // 팝 시작 스케일(작게 → 오버슈트하며 커짐)
         const float HScatter        = 0.9f;  // 좌우 산개 속도(아치 느낌)
-        const float MaxTilt         = 8f;    // 랜덤 기울기(도)
+        const float MaxTilt         = 4f;    // 랜덤 기울기(도)
         const float HoldUntil       = 0.55f; // 이 비율까지 불투명 유지 후 빠르게 페이드
         static readonly Color NormalColor = Color.white;
         static readonly Color CritColor = new Color(1f, 0.82f, 0.2f);
