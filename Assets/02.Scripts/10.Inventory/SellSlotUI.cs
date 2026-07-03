@@ -38,8 +38,6 @@ public class SellSlotUI : MonoBehaviour
     private static readonly Color PriceActiveColor = new Color(1f, 0.90f, 0.35f, 1f);
     private static readonly Color PriceDimColor    = new Color(1f, 0.90f, 0.35f, 0.45f);
 
-    private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
-
     private static readonly Color IdleColor  = new Color(0.50f, 0.05f, 0.05f, 0.88f);
     private static readonly Color HoverColor = new Color(0.85f, 0.12f, 0.12f, 0.96f);
 
@@ -183,8 +181,9 @@ public class SellSlotUI : MonoBehaviour
 
     private static int ComputePrice(ItemInstance inst)
     {
-        int rarityIdx = Mathf.Clamp((int)inst.data.rarity, 0, RarityBaseCosts.Length - 1);
-        return RarityBaseCosts[rarityIdx] / 2;
+        // 판매가 = 현재 아이템 구매가(cost)의 절반. (100G 단위 가격 개편 반영)
+        if (inst?.data == null) return 0;
+        return inst.data.cost / 2;
     }
 
     // ─────────────────────────────────────────────────────────────
