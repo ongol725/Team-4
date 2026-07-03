@@ -33,6 +33,10 @@ namespace BagSurvivor.Monster
         [Tooltip("shadowFixedLocalY가 켜졌을 때 루트 기준 그림자 Y (음수=아래). 발밑에 오도록 조정)")]
         public float shadowLocalY = 0f;
 
+        [Header("사운드")]
+        [Tooltip("사망 시 재생할 효과음. 여러 개 넣으면 매번 랜덤 1개(배리에이션)")]
+        public AudioClip[] deathSfx;
+
         [Header("렌더 정렬")]
         [Tooltip("타일맵(바닥=0/벽=1) 위에 보이도록 하는 스프라이트 정렬 순서")]
         public int sortingOrder = 10;
@@ -132,6 +136,9 @@ namespace BagSurvivor.Monster
         // 배율이 적용된 런타임 스탯 (SO 원본은 수정하지 않음)
         private int runtimeMaxHP;
         private int runtimeAttack;
+
+        // 방어력 런타임 오버라이드 (음수=미사용, SO값 사용). 층별 중간보스 방어력 고정 등에 사용.
+        private int runtimeDefenseOverride = -1;
 
         // ==========================================
         // 프로퍼티 (외부 접근용)
@@ -287,6 +294,9 @@ namespace BagSurvivor.Monster
             hpMultiplier = hpMul <= 0f ? 1f : hpMul;
             attackMultiplier = attackMul <= 0f ? 1f : attackMul;
         }
+
+        /// <summary>방어력을 런타임에 고정값으로 오버라이드합니다(음수=SO값 사용). 활성화 전 주입.</summary>
+        public void SetDefenseOverride(int defense) => runtimeDefenseOverride = defense;
 
         /// <summary>체력을 회복합니다(최대 체력 한도). </summary>
         public void Heal(int amount)
@@ -501,8 +511,9 @@ namespace BagSurvivor.Monster
         {
             if (isDying || isInvincible) return;
 
-            // 방어력 + 받는 피해 배율 적용
-            int finalDamage = monsterData.CalculateDamageTaken(rawDamage);
+            // 방어력 + 받는 피해 배율 적용 (defense 오버라이드 시 SO값 대신 고정값 사용)
+            int def = runtimeDefenseOverride >= 0 ? runtimeDefenseOverride : monsterData.defense;
+            int finalDamage = Mathf.Max(1, rawDamage - def);
             if (damageTakenMultiplier != 1f)
                 finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * damageTakenMultiplier));
             currentHP -= finalDamage;
@@ -644,6 +655,13 @@ namespace BagSurvivor.Monster
         // ==========================================
         // 사망 처리
         // ==========================================
+        /// <summary>사망 효과음 재생 — 여러 클립이면 랜덤 1개(배리에이션). AudioUtil이 2D 재생/설정 볼륨/중첩 방지 처리.</summary>
+        private void PlayDeathSfx()
+        {
+            if (deathSfx == null || deathSfx.Length == 0) return;
+            AudioUtil.PlaySfx(deathSfx[Random.Range(0, deathSfx.Length)]);
+        }
+
         private IEnumerator DieCoroutine()
         {
             isDying = true;
@@ -653,6 +671,8 @@ namespace BagSurvivor.Monster
             if (_hitFxCo != null) { StopCoroutine(_hitFxCo); _hitFxCo = null; }
             if (_squashing && _spriteTf != null) _spriteTf.localScale = _restScale;
             _squashing = false;
+
+            PlayDeathSfx();
 
             GameManager.Instance?.AddKill();   // 결과창 '처치 몬스터' 누적
 
@@ -693,6 +713,14 @@ namespace BagSurvivor.Monster
 
             // 3. 사망 연출 시간(보스는 길게) — 이 동안 Death 애니/이펙트 표시
             yield return new WaitForSeconds(deathDelay);
+
+            // 최종 보스(달빛의 도살자) 처치 → 사망 연출이 끝난 뒤 클리어 결과 화면 표시.
+            // (팝업이 timeScale=0으로 멈추므로 연출 후에 호출해야 죽는 모습이 보인다)
+            if (monsterData != null && monsterData.isFinalBoss)
+            {
+                var clearPh = UnityEngine.Object.FindFirstObjectByType<PlayerHealth>();
+                if (clearPh != null) clearPh.ShowClearResult();
+            }
 
             // 4. 드롭 + 사망 통지 / 풀 반환
             SpawnDropItem();

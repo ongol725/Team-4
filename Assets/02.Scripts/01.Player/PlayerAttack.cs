@@ -188,6 +188,8 @@ public class PlayerAttack : MonoBehaviour
         string id    = entry.data.itemID;
         float  range = entry.data.range > 0 ? entry.data.range : _meleeRange;
 
+        PlayFireSfx(id, entry.data.attackStyleType); // 무기별 발사/휘두름 효과음
+
         // 근접무기 전체 사거리 ×3 (표시·피격 동반, 비율 유지). 개별 크기 배율은 각 case에서 추가 적용.
         bool isMelee = entry.data.attackStyleType == WeaponAttackStyleType.MeleeFan ||
                        entry.data.attackStyleType == WeaponAttackStyleType.MeleeSingle;
@@ -548,6 +550,35 @@ public class PlayerAttack : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 공격 스타일 구현
 
+    /// <summary>무기별 발사/휘두름 효과음. 전용 클립(채찍·바주카·레일건·총기) 우선,
+    /// 근접 무기는 무게에 따라 Swing_Heavy/Light. 대응 클립 없는 무기(활·마법 등)는 무음 유지.
+    /// 99.External은 에셋스토어 클립(gitignore) — 미임포트 팀원은 자동 폴백/무음.</summary>
+    private static void PlayFireSfx(string id, WeaponAttackStyleType style)
+    {
+        const string Dir = "01.SFX/01.Players/01.Combat/";
+        const string Ext = "99.External/";
+        string path = id switch
+        {
+            "WPN_004" => Dir + "Whip",     // 채찍
+            "WPN_017" => Dir + "Bazooka",  // 바주카
+            "WPN_018" => Dir + "Railgun",  // 레일건
+            "WPN_007" or "WPN_008" or "WPN_015" => Dir + "Gunshot", // 권총/샷건/라이플
+            // 철퇴: 전용 해머음(외부 에셋), 없으면 Swing_Heavy 폴백
+            "WPN_023" => AudioUtil.Has(Ext + "Mace_Swing") ? Ext + "Mace_Swing" : Dir + "Swing_Heavy",
+            // 번개구슬: 번개 임팩트(외부 에셋), 없으면 무음
+            "WPN_013" => AudioUtil.Has(Ext + "LightningOrb_Attack") ? Ext + "LightningOrb_Attack" : null,
+            _ => null,
+        };
+        if (path == null &&
+            (style == WeaponAttackStyleType.MeleeFan || style == WeaponAttackStyleType.MeleeSingle))
+        {
+            bool heavy = id is "WPN_003" or "WPN_005" or "WPN_019" or "WPN_022"
+                            or "WPN_024" or "WPN_027" or "WPN_029" or "WPN_030";
+            path = heavy ? Dir + "Swing_Heavy" : Dir + "Swing_Light";
+        }
+        if (path != null) AudioUtil.PlaySfx(path);
+    }
+
     private void AttackSingleTarget(WeaponLoadoutEntry entry, float range,
         int shots = 1, float dmgMult = 1f, float spdMult = 1f,
         float scaleMult = 1f, int pierce = 0, bool homing = false)
@@ -621,12 +652,15 @@ public class PlayerAttack : MonoBehaviour
             : FindInFan(facing, hitRange, angleDeg);
 
         int meleeDmg = ScaleDamage(entry.attackPower, dmgMult);
+        int hitCount = 0;
         foreach (var mc in enemies)
         {
             Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(meleeDmg, knockback, kbDir);
             TryRingOnHit(entry, mc);
+            hitCount++;
         }
+        if (hitCount > 0) AudioUtil.PlaySfx("01.SFX/01.Players/01.Combat/Hit_Blade", 0.8f); // 근접 적중음(스윙당 1회)
         // 표시 반경을 판정 반경과 분리 가능(visualRange). 스윙 호 각도는 데미지 부채꼴 각도(angleDeg)와 일치.
         StartCoroutine(ShowMeleeFlash(entry.data, facing, visualRange > 0f ? visualRange : range, flashScale, swingArc: angleDeg));
     }

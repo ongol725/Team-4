@@ -60,6 +60,10 @@ public class ShopManager : MonoBehaviour
     {
         if (_buckets[0].Count == 0) LoadAllItems();
 
+        // 인벤토리 그리드가 모두 활성화되면 확장 블록(버킷2)을 상점에서 제외
+        var grid = FindFirstObjectByType<InventoryGrid>(FindObjectsInactive.Include);
+        bool allowBlocks = grid == null || !grid.IsFullyActive();
+
         var result  = new SO_ItemData[count];
         var usedIDs = new HashSet<string>();
 
@@ -69,7 +73,7 @@ public class ShopManager : MonoBehaviour
 
             for (int attempt = 0; attempt < 100; attempt++)
             {
-                int typeIdx = PickType();
+                int typeIdx = PickType(allowBlocks);
                 var bucket  = _buckets[typeIdx];
                 if (bucket.Count == 0) continue;
 
@@ -113,7 +117,7 @@ public class ShopManager : MonoBehaviour
             // 중복 회피 100회 실패 시 폴백
             if (pick == null)
             {
-                var bucket = _buckets[PickType()];
+                var bucket = _buckets[PickType(allowBlocks)];
                 if (bucket.Count > 0)
                     pick = bucket[Random.Range(0, bucket.Count)];
             }
@@ -127,17 +131,23 @@ public class ShopManager : MonoBehaviour
         return result;
     }
 
-    // 누적 가중치로 타입 인덱스 반환 (0=무기, 1=방어구, 2=인벤)
-    private int PickType()
+    // 누적 가중치로 타입 인덱스 반환 (0=무기, 1=방어구, 2=인벤). allowBlocks=false면 인벤 블록(2) 제외.
+    private int PickType(bool allowBlocks = true)
     {
-        int roll       = Random.Range(0, TypeWeightTotal);
+        int total = 0;
+        for (int i = 0; i < TypeWeights.Length; i++)
+            total += (i == 2 && !allowBlocks) ? 0 : TypeWeights[i];
+        if (total <= 0) return 0; // 안전장치
+
+        int roll       = Random.Range(0, total);
         int cumulative = 0;
         for (int i = 0; i < TypeWeights.Length; i++)
         {
-            cumulative += TypeWeights[i];
+            int w = (i == 2 && !allowBlocks) ? 0 : TypeWeights[i];
+            cumulative += w;
             if (roll < cumulative) return i;
         }
-        return TypeWeights.Length - 1;
+        return 0;
     }
 
     // 상점 등급 기반 레어도 인덱스 반환 (0=Common~3=Legendary)

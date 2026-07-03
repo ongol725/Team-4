@@ -112,6 +112,13 @@ public class InventoryGrid : MonoBehaviour
         return _extraActiveCells != null && _extraActiveCells.Contains(cell);
     }
 
+    /// <summary>그리드의 모든 셀이 활성화되어 더 이상 확장할 곳이 없으면 true.</summary>
+    public bool IsFullyActive()
+    {
+        int active = ActiveRows * ActiveCols + (_extraActiveCells != null ? _extraActiveCells.Count : 0);
+        return active >= Rows * Cols;
+    }
+
     /// <summary>인벤토리 블록 배치 가능 여부: 모든 셀이 잠긴 영역(비활성 + 미점유)이어야 한다.</summary>
     public bool IsValidBlockExpansion(ItemInstance inst, Vector2Int origin)
     {

@@ -91,6 +91,9 @@ namespace BagSurvivor.Monster
             [Tooltip("공격 배율 (층별 난이도 차등)")]
             public float attackMultiplier = 1f;
 
+            [Tooltip("방어력 고정 오버라이드 (-1 = SO값 사용). 예: 2층 중간보스 defense 30 고정")]
+            public int defenseOverride = -1;
+
             [Tooltip("방 1개당 최소 스폰 수")]
             public int minCount = 1;
 
@@ -129,6 +132,8 @@ namespace BagSurvivor.Monster
         public int edgeMargin = 1;
         [Tooltip("바닥 타일을 찾기 위한 위치 재시도 횟수")]
         public int maxPositionAttempts = 25;
+        [Tooltip("플레이어와 이 거리보다 가까운 위치는 스폰 후보에서 제외(스폰 직후 접촉 피해 방지)")]
+        public float minSpawnDistanceFromPlayer = 2.5f;
 
         [Header("풀 예열 (Prewarm)")]
         [Tooltip("현재 층 등장 몬스터를 종류별로 미리 생성해 풀에 적재(첫 스폰 끊김 방지). 0이면 끄기")]
@@ -564,7 +569,7 @@ namespace BagSurvivor.Monster
             for (int i = 0; i < count; i++)
             {
                 GameObject prefab = PickSpecialPrefab(rule);
-                SpawnOne(rc, prefab, hp, atk, bossPattern);
+                SpawnOne(rc, prefab, hp, atk, bossPattern, rule.defenseOverride);
             }
         }
 
@@ -624,16 +629,16 @@ namespace BagSurvivor.Monster
             return go;
         }
 
-        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool enableBossPattern = false)
+        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool enableBossPattern = false, int defenseOverride = -1)
         {
             if (prefab == null) return;
             Vector3 pos;
             if (!TryGetSpawnPosition(rc.roomBounds, out pos)) return;
-            SpawnAt(rc, prefab, pos, hpMul, atkMul, enableBossPattern);
+            SpawnAt(rc, prefab, pos, hpMul, atkMul, enableBossPattern, defenseOverride);
         }
 
         // 지정 위치에 실제 스폰(SpawnOne/예고 공용)
-        private void SpawnAt(RoomController rc, GameObject prefab, Vector3 pos, float hpMul, float atkMul, bool enableBossPattern = false)
+        private void SpawnAt(RoomController rc, GameObject prefab, Vector3 pos, float hpMul, float atkMul, bool enableBossPattern = false, int defenseOverride = -1)
         {
             if (prefab == null) return;
 
@@ -643,6 +648,8 @@ namespace BagSurvivor.Monster
 
             MonsterController mc = pool.Get(prefab, pos, hpMul, atkMul);
             if (mc == null) return;
+
+            mc.SetDefenseOverride(defenseOverride); // 층별 방어력 고정(예: 2층 중간보스 30) — 풀 재사용 시 -1로 복원됨
 
             // 보스 패턴 구동기: 4층 미니보스만 켬(평소/풀재사용엔 꺼서 일반 몬스터로 동작)
             var driver = mc.GetComponent<BossPatternDriver>();
@@ -689,11 +696,17 @@ namespace BagSurvivor.Monster
 
                 bool isFloor = floorTilemap.HasTile(cell);
                 bool isWall = wallTilemap != null && wallTilemap.HasTile(cell);
-                if (isFloor && !isWall)
-                {
-                    world = floorTilemap.GetCellCenterWorld(cell);
-                    return true;
-                }
+                if (!isFloor || isWall) continue;
+
+                Vector3 candidate = floorTilemap.GetCellCenterWorld(cell);
+
+                // 플레이어와 너무 가까우면 재시도(스폰 직후 접촉 피해 방지)
+                if (playerTf != null &&
+                    Vector2.Distance(candidate, playerTf.position) < minSpawnDistanceFromPlayer)
+                    continue;
+
+                world = candidate;
+                return true;
             }
             return false;
         }

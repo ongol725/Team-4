@@ -230,19 +230,12 @@ public class PlayerHealth : MonoBehaviour
         // 결과(실패) 화면 표시
         if (resultPopup != null)
         {
-            var stats = new ResultStats();
-            stats.playTime = DifficultyScaler.Instance != null
-                ? DifficultyScaler.Instance.ElapsedMinutes * 60f
-                : Time.timeSinceLevelLoad;
-            var gm = GameManager.Instance;
-            var lo = gm != null ? gm.CurrentLoadout : null;
-            stats.mainSynergies = FormatSynergies(lo);
-            stats.weaponCount   = lo != null ? lo.Weapons.Count : 0;
-            stats.killCount     = gm != null ? gm.monstersKilled : 0;
-            stats.goldSpent     = gm != null ? gm.goldSpent : 0;
+            var stats = BuildResultStats();
             resultPopup.Show(false, stats); // Show 내부에서 timeScale=0 처리
+            BgmManager.Instance?.PlayGameOver(); // BGM 중단 + 게임오버 트랙 1회
 
             // 런 통계 기록(사망).
+            var gm = GameManager.Instance;
             string killer = string.IsNullOrEmpty(LastAttacker) ? "-" : LastAttacker;
             RunStatsLogger.Instance?.RunEnd(false, gm != null ? gm.currentFloor : 1,
                 RunZoneTracker.CurrentZone(), killer, stats.mainSynergies);
@@ -252,6 +245,36 @@ public class PlayerHealth : MonoBehaviour
             Time.timeScale = 0f;
             Debug.Log("[PlayerHealth] 사망 — ResultPopup 미연결(결과화면 없음)");
         }
+    }
+
+    /// <summary>결과창 통계 조립 (클리어/실패 공용).</summary>
+    private ResultStats BuildResultStats()
+    {
+        var stats = new ResultStats();
+        stats.playTime = DifficultyScaler.Instance != null
+            ? DifficultyScaler.Instance.ElapsedMinutes * 60f
+            : Time.timeSinceLevelLoad;
+        var gm = GameManager.Instance;
+        var lo = gm != null ? gm.CurrentLoadout : null;
+        stats.mainSynergies = FormatSynergies(lo);
+        stats.weaponCount   = lo != null ? lo.Weapons.Count : 0;
+        stats.killCount     = gm != null ? gm.monstersKilled : 0;
+        stats.goldSpent     = gm != null ? gm.goldSpent : 0;
+        return stats;
+    }
+
+    /// <summary>최종 보스(달빛의 도살자) 처치 시 호출 — 클리어 결과 화면 표시 + 통계 전송.
+    /// 플레이어가 이미 사망해 실패 화면이 떠 있으면 무시.</summary>
+    public void ShowClearResult()
+    {
+        if (isDead) return;
+        ReportRunClear(); // 통계 전송(내부 중복 가드)
+
+        if (resultPopup == null) resultPopup = FindFirstObjectByType<ResultPopup>();
+        if (resultPopup != null)
+            resultPopup.Show(true, BuildResultStats()); // Show 내부에서 timeScale=0 처리
+        else
+            Debug.Log("[PlayerHealth] 클리어 — ResultPopup 미연결(결과화면 없음)");
     }
 
     private bool _runCleared;

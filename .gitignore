@@ -104,3 +104,12 @@ GEMINI.md
 
 # hera-agent 디버그 스크린샷
 /Screenshots/
+
+# 에셋스토어 사운드 (라이선스상 재배포 불가 — 팀원 각자 에셋스토어에서 무료로 받아 임포트)
+/[Aa]ssets/A.M.P. DEMO/
+/[Aa]ssets/A.M.P. DEMO.meta
+/[Aa]ssets/Bow and Hammer Sound Effects/
+/[Aa]ssets/Bow and Hammer Sound Effects.meta
+# 위 에셋에서 자동 복사되는 클립 (ExternalSoundSync가 생성)
+/[Aa]ssets/06.Sounds/Resources/99.External/
+/[Aa]ssets/06.Sounds/Resources/99.External.meta

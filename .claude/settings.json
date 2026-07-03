@@ -1,6 +1,5 @@
 {
   "permissions": {
-    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(xargs grep -l \"InventoryGrid\")",
       "Bash(awk '/m_Name: InventoryStoreRoot/,/^---/' 99.InventoryStore.unity)",
@@ -16,8 +15,10 @@
       "Bash(git -C c:/Team-4 add Assets/01.Scenes/00.TestBattle.unity Assets/02.Scripts/07.UI/SynergyData.cs Assets/02.Scripts/12.Synergy.meta Assets/02.Scripts/12.Synergy/ Assets/02.Scripts/99.ScriptableObject/SO_SkillData.cs Assets/02.Scripts/99.ScriptableObject/SO_SkillData.cs.meta Assets/02.Scripts/99.ScriptableObject/SO_SummonData.cs Assets/02.Scripts/99.ScriptableObject/SO_SummonData.cs.meta Assets/Resources/ScriptableObjects/Skills.meta Assets/Resources/ScriptableObjects/Skills/ Assets/Resources/ScriptableObjects/Summons.meta Assets/Resources/ScriptableObjects/Summons/)",
       "Bash(git -C c:/Team-4 commit -m ' *)",
       "Bash(git -C \"c:/Team-4\" add \"Assets/02.Scripts/12.Synergy/SynergyManager.cs\" \"Assets/02.Scripts/12.Synergy/SummonController.cs\")",
-      "Bash(git -C \"c:/Team-4\" add \"Assets/02.Scripts/12.Synergy/SynergyManager.cs\" \"Assets/02.Scripts/12.Synergy/SummonController.cs\" \"Assets/02.Scripts/03.Monster/02.Spawn/TestMonsterSpawner.cs\")"
+      "Bash(git -C \"c:/Team-4\" add \"Assets/02.Scripts/12.Synergy/SynergyManager.cs\" \"Assets/02.Scripts/12.Synergy/SummonController.cs\" \"Assets/02.Scripts/03.Monster/02.Spawn/TestMonsterSpawner.cs\")",
+      "PowerShell($prefabs = @{\"Bear\"=\"Assets\\\\03.Prefabs\\\\02.Monsters\\\\Prefab_Bear.prefab.meta\"; \"Ogre\"=\"Assets\\\\03.Prefabs\\\\02.Monsters\\\\Prefab_Ogre.prefab.meta\"; \"Tiger\"=\"Assets\\\\03.Prefabs\\\\02.Monsters\\\\Prefab_Tiger.prefab.meta\"; \"WolfBoss\"=\"Assets\\\\03.Prefabs\\\\02.Monsters\\\\Prefab_WolfBoss.prefab.meta\"}; foreach \\($k in $prefabs.Keys\\) { $g = \\(\\(Get-Content $prefabs[$k] | Select-String \"^guid:\"\\).Line -split ' '\\)[1]; $inBoss = Select-String -Path \"Assets\\\\01.Scenes\\\\06.BossRoom.unity\" -Pattern $g -Quiet; Write-Output \"$k guid=$g inBossRoom=$inBoss\" })"
     ],
+    "defaultMode": "bypassPermissions",
     "additionalDirectories": [
       "c:\\Team-4\\Assets\\02.Scripts"
     ]

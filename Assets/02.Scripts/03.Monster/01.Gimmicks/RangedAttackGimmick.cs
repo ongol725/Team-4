@@ -85,6 +85,11 @@ namespace BagSurvivor.Monster
                 : Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             if (go == null) return;
 
+            // 날아가는 투사체에 빨간 외곽선 표시(없으면 부착) — 몬스터 본체가 아닌 투사체가 텔레그래프
+            var outline = go.GetComponent<AttackTelegraphOutline>();
+            if (outline == null) outline = go.AddComponent<AttackTelegraphOutline>();
+            outline.Show(true);
+
             var proj = go.GetComponent<BossProjectile>();
             if (proj != null) proj.Launch(dir, projectileSpeed, controller.Attack, projectileMaxRange);
         }

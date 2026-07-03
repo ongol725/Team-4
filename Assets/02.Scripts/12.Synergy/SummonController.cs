@@ -434,13 +434,17 @@ public class SummonController : MonoBehaviour
 
         if (_atkTimer >= _data.atkCooldown)
         {
-            var enemy = FindNearest(_data.atkRange);
-            if (enemy != null)
+            // maxTargets(기본 1)만큼 가까운 순으로 동시 타격 — 고대 정령(프리즘)은 4명
+            var targets = FindNearestN(_data.atkRange, Mathf.Max(1, _data.maxTargets));
+            if (targets.Count > 0)
             {
                 _atkTimer = 0f;
-                Vector2 kb = ((Vector2)enemy.transform.position - (Vector2)transform.position).normalized;
-                enemy.TakeDamage(_attackPower, 1f, kb);
-                SpawnAttackEffect(enemy.transform.position);
+                foreach (var enemy in targets)
+                {
+                    Vector2 kb = ((Vector2)enemy.transform.position - (Vector2)transform.position).normalized;
+                    enemy.TakeDamage(_attackPower, 1f, kb);
+                    SpawnAttackEffect(enemy.transform.position);
+                }
             }
         }
     }
@@ -615,6 +619,18 @@ public class SummonController : MonoBehaviour
             if (d < minDist) { minDist = d; best = mc; }
         }
         return best;
+    }
+
+    /// <summary>사거리 내 적을 가까운 순으로 최대 count명 반환한다.</summary>
+    private List<MonsterController> FindNearestN(float range, int count)
+    {
+        var enemies = GetEnemiesInRange(range);
+        Vector2 origin = transform.position;
+        enemies.Sort((a, b) =>
+            ((Vector2)a.transform.position - origin).sqrMagnitude
+            .CompareTo(((Vector2)b.transform.position - origin).sqrMagnitude));
+        if (enemies.Count > count) enemies.RemoveRange(count, enemies.Count - count);
+        return enemies;
     }
 
     // 플레이어 중앙 하단(발밑) 월드 좌표

@@ -575,6 +575,9 @@ public class SynergyManager : MonoBehaviour
     private IEnumerator DelayedHit(SO_SkillData skill, MonsterController mc, int damage, float delay)
     {
         yield return new WaitForSeconds(delay);
+        // 티탄(메테오): 돌이 떨어져 착탄하는 순간 — 대상이 이미 죽었어도 돌은 떨어지므로 소리는 재생
+        if (skill != null && skill.skillID != null && skill.skillID.StartsWith("SK_METEOR"))
+            AudioUtil.PlaySfx("99.External/Titan_RockImpact", 1f, warnIfMissing: false); // 외부 에셋 — 없으면 무음
         if (mc == null || mc.IsDead || !mc.gameObject.activeInHierarchy) yield break;
         ApplyHit(skill, mc, damage);
     }
