@@ -161,7 +161,7 @@ public class MinimapController : MonoBehaviour
         bool HiddenH(int cy, int dy, int s, int e) { for (int x = s; x <= e; x++) if (Hidden(x, cy, 0, dy)) return true; return false; }
 
         const float baseScale = 0.8f; // 밑변 크기(현재의 80%)
-        const float baseOut   = 0f;   // 밑변은 방 경계에 맞춤(침범은 방 그리드를 위에 덧칠해 클리핑 — RefreshMinimap)
+        const float baseOut   = 2f;   // 밑변을 방 경계에서 복도 쪽으로 2칸 밀기(+ 방 그리드 클리핑 병행)
 
         // 오른쪽(East): 경계 x=b.xMax, 복도셀 (b.xMax, y) — 꼭짓점 +x
         ScanRuns(y0, y1, y => Floor(b.xMax, y), (s, e) =>
