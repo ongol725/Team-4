@@ -721,7 +721,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
                 rt.sizeDelta = new Vector2(_cellSize * 0.9f, _cellSize * 0.9f);
                 rt.anchoredPosition = new Vector2(cell.y * _cellSize + _cellSize * 0.05f, -cell.x * _cellSize - _cellSize * 0.05f);
                 go.GetComponent<Image>().color = baseColor;
-                if (!labelPlaced)
+                // 인벤토리 확장 블록은 이름 라벨("인벤토리 블록 N칸")을 표시하지 않음
+                if (!labelPlaced && !(_instance.data is SO_InventoryBlockData))
                 {
                     AddLabel(go, _instance.data.itemName);
                     labelPlaced = true;
