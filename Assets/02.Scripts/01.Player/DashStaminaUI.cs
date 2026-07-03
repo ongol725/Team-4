@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class DashStaminaUI : MonoBehaviour
 {
     [Header("위치/크기")]
-    public Vector3 offset  = new Vector3(0f, 0.525f, 0f); // 머리 위 오프셋(월드) — 캐릭터와의 거리 1/2로 조정
+    public Vector3 offset  = new Vector3(0f, 0.63f, 0f);  // 머리 위 오프셋(월드) — 0.525에서 20% 상향
     public float diameter  = 0.34f;                       // 원 지름(월드 유닛)
 
     [Header("색상")]
