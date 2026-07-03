@@ -18,9 +18,16 @@ namespace BagSurvivor
         const float Lifetime = 0.8f;     // 총 표시 시간(초)
         const float RiseSpeed = 1.8f;    // 위로 떠오르는 초기 속도
         const float Gravity = 2.2f;      // 떠오른 뒤 살짝 감속(아치 느낌)
-        const float FontSize = 6f;       // 월드 폰트 크기 (작으면 키울 것)
+        const float FontSize = 6f;       // 월드 폰트 최대 크기(강타 기준). 약타는 TierSizeMul로 축소
         const float HitYOffset = 0.7f;   // 피격 위치에서 위로 띄울 높이
         const int SortingOrder = 100;    // 스프라이트/이펙트(≈10) 위로 보이게
+
+        // ── 타격감(A안) 튜닝 ─────────────────────────────────
+        const float PopDur          = 0.12f; // 등장 팝 지속(초)
+        const float PopStartScale   = 0.55f; // 팝 시작 스케일(작게 → 오버슈트하며 커짐)
+        const float HScatter        = 0.9f;  // 좌우 산개 속도(아치 느낌)
+        const float MaxTilt         = 8f;    // 랜덤 기울기(도)
+        const float HoldUntil       = 0.55f; // 이 비율까지 불투명 유지 후 빠르게 페이드
         static readonly Color NormalColor = Color.white;
         static readonly Color CritColor = new Color(1f, 0.82f, 0.2f);
 
@@ -42,6 +49,23 @@ namespace BagSurvivor
                 else break;
             }
             return c;
+        }
+
+        // 데미지 크기별 글자 크기 배율: 약타 70% → 강타 100%(현재 크기).
+        static float TierSizeMul(int amount)
+        {
+            if (amount >= 100) return 1.00f;
+            if (amount >= 60)  return 0.90f;
+            if (amount >= 30)  return 0.80f;
+            return 0.70f;
+        }
+
+        // 오버슈트 이징(등장 팝) — 끝에서 1을 살짝 넘겼다 정착.
+        static float EaseOutBack(float p)
+        {
+            const float c1 = 1.70158f, c3 = c1 + 1f;
+            float x = p - 1f;
+            return 1f + c3 * x * x * x + c1 * x * x;
         }
 
         // ── 풀 ───────────────────────────────────────────────
@@ -94,13 +118,16 @@ namespace BagSurvivor
         void Setup(Vector3 pos, int amount, bool crit, Color? overrideColor)
         {
             transform.position = pos;
-            transform.localScale = Vector3.one;
+            transform.localScale = Vector3.one * PopStartScale;                  // 팝 시작(작게)
+            transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-MaxTilt, MaxTilt)); // 랜덤 기울기
             age = 0f;
-            vel = Vector3.up * RiseSpeed;
+            // 위로 떠오르며 좌우로 살짝 산개(아치)
+            vel = Vector3.up * RiseSpeed + Vector3.right * Random.Range(-HScatter, HScatter);
             baseColor = overrideColor ?? (crit ? CritColor : TierColor(amount));
 
             tmp.text = amount.ToString();
-            tmp.fontSize = crit ? FontSize * 1.4f : FontSize;
+            // 강타(크리 포함)는 현재 크기(100%), 약타는 70%까지 축소
+            tmp.fontSize = FontSize * (crit ? 1.0f : TierSizeMul(amount));
             tmp.color = baseColor;
 
             gameObject.SetActive(true);
@@ -116,13 +143,20 @@ namespace BagSurvivor
                 return;
             }
 
+            // 이동(아치)
             transform.position += vel * Time.deltaTime;
             vel.y -= Gravity * Time.deltaTime;
 
-            // 뒤쪽 40% 구간에서 서서히 사라짐
+            // 등장 팝: 작게 → 오버슈트하며 1.0으로 정착("팍")
+            float scale = age < PopDur
+                ? Mathf.LerpUnclamped(PopStartScale, 1f, EaseOutBack(age / PopDur))
+                : 1f;
+            transform.localScale = Vector3.one * scale;
+
+            // HoldUntil 이후 빠르게 페이드
             float t = age / Lifetime;
             Color c = baseColor;
-            c.a = t < 0.6f ? 1f : Mathf.Clamp01(1f - (t - 0.6f) / 0.4f);
+            c.a = t < HoldUntil ? 1f : Mathf.Clamp01(1f - (t - HoldUntil) / (1f - HoldUntil));
             tmp.color = c;
         }
     }
