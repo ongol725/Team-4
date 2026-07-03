@@ -432,6 +432,8 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         if (_isFollowingMouse) return;
         if (_gridUI.IsAnyFollowingMouse) return; // 다른 블록 드래그 중 → 클릭 무시
 
+        AudioUtil.PlaySfx("01.SFX/03.UI/BackpackItemClick"); // 가방 아이템 클릭음
+
         // 우클릭: 임시칸 아이템 → 합성/자동 배치, 그리드 배치 아이템 → 임시칸으로 이동
         if (eventData.button == PointerEventData.InputButton.Right)
         {

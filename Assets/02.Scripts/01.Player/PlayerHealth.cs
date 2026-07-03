@@ -241,6 +241,7 @@ public class PlayerHealth : MonoBehaviour
             stats.killCount     = gm != null ? gm.monstersKilled : 0;
             stats.goldSpent     = gm != null ? gm.goldSpent : 0;
             resultPopup.Show(false, stats); // Show 내부에서 timeScale=0 처리
+            BgmManager.Instance?.PlayGameOver(); // BGM 중단 + 게임오버 트랙 1회
 
             // 런 통계 기록(사망).
             string killer = string.IsNullOrEmpty(LastAttacker) ? "-" : LastAttacker;

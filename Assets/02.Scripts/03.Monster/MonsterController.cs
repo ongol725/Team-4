@@ -592,21 +592,11 @@ namespace BagSurvivor.Monster
         // ==========================================
         // 사망 처리
         // ==========================================
-        /// <summary>사망 효과음 재생 — 여러 클립이면 랜덤 1개. 몬스터가 풀로 반환돼도 소리가 끊기지 않게
-        /// 독립 오브젝트에서 2D로 재생한다(PlayClipAtPoint는 3D 감쇠라 2D 게임에서 작게 들림).</summary>
+        /// <summary>사망 효과음 재생 — 여러 클립이면 랜덤 1개(배리에이션). AudioUtil이 2D 재생/설정 볼륨/중첩 방지 처리.</summary>
         private void PlayDeathSfx()
         {
             if (deathSfx == null || deathSfx.Length == 0) return;
-            AudioClip clip = deathSfx[Random.Range(0, deathSfx.Length)];
-            if (clip == null) return;
-
-            var go = new GameObject("DeathSfx_" + gameObject.name);
-            var src = go.AddComponent<AudioSource>();
-            src.clip = clip;
-            src.spatialBlend = 0f; // 2D
-            src.volume = PlayerPrefs.GetInt("sfxOn", 1) == 1 ? PlayerPrefs.GetFloat("sfxVol", 0.8f) : 0f;
-            src.Play();
-            Destroy(go, clip.length + 0.1f);
+            AudioUtil.PlaySfx(deathSfx[Random.Range(0, deathSfx.Length)]);
         }
 
         private IEnumerator DieCoroutine()

@@ -114,7 +114,9 @@ namespace BagSurvivor.UI
                 mixer.SetFloat(bgmParam, ToDb(bgmOn ? bgmV : 0f));
                 mixer.SetFloat(sfxParam, ToDb(sfxOn ? sfxV : 0f));
             }
-            // 믹서가 없으면 PlayerPrefs 저장만 (실제 오디오 시스템 연결 시 사용)
+            // BGM은 BgmManager가 PlayerPrefs를 읽어 재생 — 저장 후 즉시 반영
+            Save();
+            BgmManager.Instance?.ApplyVolume();
         }
 
         private float ToDb(float linear)
