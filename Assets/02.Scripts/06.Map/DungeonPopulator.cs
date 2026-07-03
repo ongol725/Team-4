@@ -104,7 +104,11 @@ public class DungeonPopulator : MonoBehaviour
 
         foreach (Room room in generatedRooms)
         {
-            if (room.type == RoomType.Start || room.type == RoomType.Boss) continue;
+            // 시작방 + 보스급 특수방(엘리트/중간보스/보스 = 층별 '보스방')에는 함정을 두지 않는다.
+            if (room.type == RoomType.Start ||
+                room.type == RoomType.Elite ||
+                room.type == RoomType.MiniBoss ||
+                room.type == RoomType.Boss) continue;
 
             int trapCount = Random.Range(minTrapsPerRoom, maxTrapsPerRoom + 1);
             if (trapCount == 0) continue;
