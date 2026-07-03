@@ -39,12 +39,19 @@ public class DashStaminaUI : MonoBehaviour
         Build();
     }
 
-    // 월드스페이스 캔버스 + 배경/파이 이미지를 코드로 생성
+    // 독립 오브젝트이므로 플레이어 소멸 시 게이지도 함께 정리
+    private void OnDestroy()
+    {
+        if (_root != null) Destroy(_root.gameObject);
+    }
+
+    // 월드스페이스 캔버스 + 배경/파이 이미지를 코드로 생성.
+    // 플레이어 '자식'이 아닌 독립 오브젝트: 로드아웃 빌더 등이 플레이어 자식을
+    // 정리할 때 함께 파괴되지 않도록 하고, 위치는 LateUpdate에서 따라간다.
     private void Build()
     {
         var go = new GameObject("DashStaminaUI");
-        go.transform.SetParent(transform, false);
-        go.transform.localPosition = offset;
+        go.transform.position = transform.position + offset;
         _root = go.transform;
 
         var canvas = go.AddComponent<Canvas>();
@@ -86,13 +93,10 @@ public class DashStaminaUI : MonoBehaviour
         return img;
     }
 
-    // 유니티 내장 Knob(부드러운 원) 사용, 실패 시 절차 생성 원으로 폴백
+    // 절차 생성 원형 스프라이트(안티앨리어싱 가장자리).
+    // 내장 Knob은 런타임 로드 불가(에디터 전용)라 시도하지 않는다.
     private static Sprite GetCircleSprite()
     {
-        if (_circleSprite != null) return _circleSprite;
-
-        try { _circleSprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd"); }
-        catch { _circleSprite = null; }
         if (_circleSprite != null) return _circleSprite;
 
         const int S = 64;
@@ -112,7 +116,17 @@ public class DashStaminaUI : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_pm == null || _fill == null) return;
+        if (_pm == null) return;
+
+        // 외부에서 게이지 오브젝트가 파괴됐으면 자가 복구(예: 씬 정리 루틴에 휩쓸린 경우)
+        if (_root == null || _fill == null)
+        {
+            Build();
+            if (_root == null || _fill == null) return;
+        }
+
+        // 독립 오브젝트이므로 매 프레임 플레이어 머리 위로 따라붙기
+        _root.position = transform.position + offset;
 
         float charge = _pm.DashCharge01;
         bool  full   = charge >= 1f;
