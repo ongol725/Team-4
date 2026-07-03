@@ -137,6 +137,11 @@ public class ProjectileBase : MonoBehaviour
         }
         if (mc.IsDead) return;
 
+        // 명중 횟수를 이미 소진했으면 데미지 적용 금지.
+        // (Destroy는 프레임 끝에 실행되므로, 겹친 적들의 Enter가 같은 스텝에 몰리면
+        //  관통 없는 투사체도 여러 적을 때리는 버그가 생긴다 → 여기서 차단)
+        if (_remainingHits <= 0) return;
+
         Vector2 kbDir = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
         mc.TakeDamage(_damage, _knockbackForce, kbDir);
         _onHit?.Invoke(mc);
