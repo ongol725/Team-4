@@ -97,14 +97,16 @@ namespace BagSurvivor.UI
             Save();
         }
 
-        /// <summary>화면 모드 실제 적용. 창모드=1280x720, 전체/테두리없음=모니터 기본 해상도.</summary>
+        /// <summary>화면 모드 실제 적용. 창모드=1280x720, 전체/테두리없음=1920x1080 고정.
+        /// (노트북마다 네이티브 해상도가 달라 화면이 깨지던 문제 방지 — 백버퍼를 1920x1080으로 고정하고
+        ///  GPU가 모니터에 맞춰 스케일링)</summary>
         private void ApplyScreenMode(int idx)
         {
             FullScreenMode mode = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
             if (mode == FullScreenMode.Windowed)
                 Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
             else
-                Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, mode);
+                Screen.SetResolution(1920, 1080, mode);
         }
 
         private void UpdateScreenModeText()
