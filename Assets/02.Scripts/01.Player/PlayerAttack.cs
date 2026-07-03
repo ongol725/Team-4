@@ -535,23 +535,29 @@ public class PlayerAttack : MonoBehaviour
     // 공격 스타일 구현
 
     /// <summary>무기별 발사/휘두름 효과음. 전용 클립(채찍·바주카·레일건·총기) 우선,
-    /// 근접 무기는 무게에 따라 Swing_Heavy/Light. 대응 클립 없는 무기(활·마법 등)는 무음 유지.</summary>
+    /// 근접 무기는 무게에 따라 Swing_Heavy/Light. 대응 클립 없는 무기(활·마법 등)는 무음 유지.
+    /// 99.External은 에셋스토어 클립(gitignore) — 미임포트 팀원은 자동 폴백/무음.</summary>
     private static void PlayFireSfx(string id, WeaponAttackStyleType style)
     {
         const string Dir = "01.SFX/01.Players/01.Combat/";
+        const string Ext = "99.External/";
         string path = id switch
         {
             "WPN_004" => Dir + "Whip",     // 채찍
             "WPN_017" => Dir + "Bazooka",  // 바주카
             "WPN_018" => Dir + "Railgun",  // 레일건
             "WPN_007" or "WPN_008" or "WPN_015" => Dir + "Gunshot", // 권총/샷건/라이플
+            // 철퇴: 전용 해머음(외부 에셋), 없으면 Swing_Heavy 폴백
+            "WPN_023" => AudioUtil.Has(Ext + "Mace_Swing") ? Ext + "Mace_Swing" : Dir + "Swing_Heavy",
+            // 번개구슬: 번개 임팩트(외부 에셋), 없으면 무음
+            "WPN_013" => AudioUtil.Has(Ext + "LightningOrb_Attack") ? Ext + "LightningOrb_Attack" : null,
             _ => null,
         };
         if (path == null &&
             (style == WeaponAttackStyleType.MeleeFan || style == WeaponAttackStyleType.MeleeSingle))
         {
             bool heavy = id is "WPN_003" or "WPN_005" or "WPN_019" or "WPN_022"
-                            or "WPN_023" or "WPN_024" or "WPN_027" or "WPN_029" or "WPN_030";
+                            or "WPN_024" or "WPN_027" or "WPN_029" or "WPN_030";
             path = heavy ? Dir + "Swing_Heavy" : Dir + "Swing_Light";
         }
         if (path != null) AudioUtil.PlaySfx(path);
