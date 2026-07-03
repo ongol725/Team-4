@@ -21,10 +21,10 @@ MonoBehaviour:
   cost: 4
   synergies: 0e0000000000000000000000
   cells:
-  - {x: 1, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
   - {x: 1, y: 1}
-  - {x: 1, y: 2}
-  - {x: 2, y: 1}
   attackStyleType: 2
   attackStyle: "\uC6D0\uD615 \uD68C\uC804"
   lv5AttackStyle: "\uBC94\uC704 1.5\uBC30\xB7\uC18D\uB3C4 \uC800\uD558"
