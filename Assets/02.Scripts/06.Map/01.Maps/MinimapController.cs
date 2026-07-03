@@ -27,6 +27,9 @@ public class MinimapController : MonoBehaviour
     private int originalSightRadius;
     private Coroutine blindCoroutine;
 
+    // 방 진입 시 그 방과 연결된 복도를 이미 다 밝혔는지 기록(매 이동마다 BFS 재실행 방지)
+    private readonly HashSet<Room> corridorsRevealedRooms = new HashSet<Room>();
+
     // 🌟 던전 생성기(DungeonGenerator)가 던전을 다 만들고 나서 이 함수를 호출해 줄 겁니다.
     public void InitializeMinimap(int width, int height, int[,] data, List<Room> generatedRooms, Transform player)
     {
@@ -118,7 +121,13 @@ public class MinimapController : MonoBehaviour
                         }
                     }
                 }
-                break; 
+
+                // 방과 연결된 복도를 전부 밝힘(방 진입 시 1회). 다른 방은 밝히지 않음.
+                if (corridorsRevealedRooms.Add(room))
+                {
+                    if (RevealConnectedCorridors(room)) changed = true;
+                }
+                break;
             }
         }
 
@@ -142,6 +151,52 @@ public class MinimapController : MonoBehaviour
         }
 
         if (changed) RefreshMinimap();
+    }
+
+    // 방과 연결된 복도 칸(mapData==1, 어떤 방에도 안 속함)을 BFS로 전부 밝힘.
+    // 방 경계 바로 바깥의 복도 입구를 시드로 확장하며, 다른 방을 만나면 그 방은 밝히지 않고 정지.
+    // 반환: 새로 밝혀진 칸이 있으면 true.
+    private bool RevealConnectedCorridors(Room room)
+    {
+        var queue   = new Queue<Vector2Int>();
+        var visited = new HashSet<Vector2Int>();
+        bool changed = false;
+
+        // 방 경계(±1) 주변에서 복도 입구를 시드로 넣음
+        for (int x = room.bounds.xMin - 1; x <= room.bounds.xMax; x++)
+            for (int y = room.bounds.yMin - 1; y <= room.bounds.yMax; y++)
+                TryEnqueueCorridor(x, y, queue, visited);
+
+        while (queue.Count > 0)
+        {
+            Vector2Int c = queue.Dequeue();
+            if (!isExplored[c.x, c.y]) { isExplored[c.x, c.y] = true; changed = true; }
+
+            TryEnqueueCorridor(c.x + 1, c.y, queue, visited);
+            TryEnqueueCorridor(c.x - 1, c.y, queue, visited);
+            TryEnqueueCorridor(c.x, c.y + 1, queue, visited);
+            TryEnqueueCorridor(c.x, c.y - 1, queue, visited);
+        }
+        return changed;
+    }
+
+    // 복도 바닥(mapData==1이면서 어떤 방에도 속하지 않는 칸)만 큐에 추가. 방/벽/맵 밖은 무시.
+    private void TryEnqueueCorridor(int x, int y, Queue<Vector2Int> queue, HashSet<Vector2Int> visited)
+    {
+        if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) return;
+        if (mapData[x, y] != 1) return;      // 바닥이 아니면(벽/빈공간) 제외
+        if (IsInsideAnyRoom(x, y)) return;   // 방 칸이면 확장하지 않음(복도만 대상)
+
+        var p = new Vector2Int(x, y);
+        if (visited.Add(p)) queue.Enqueue(p);
+    }
+
+    private bool IsInsideAnyRoom(int x, int y)
+    {
+        var p = new Vector2Int(x, y);
+        foreach (Room r in rooms)
+            if (r.bounds.Contains(p)) return true;
+        return false;
     }
 
     // 미니맵 텍스처 다시 그리기 (기존 코드 이사)
