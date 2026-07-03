@@ -23684,6 +23684,18 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1569684169140493544, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1569684169140493544, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1569684169140493544, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1864387555577598140, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_Name
       value: BattleUI
