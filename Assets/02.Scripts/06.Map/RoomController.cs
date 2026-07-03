@@ -19,7 +19,8 @@ public class RoomController : MonoBehaviour
     public UnityEvent OnRoomCleared;
 
     // 문/계단 레퍼런스 (DungeonPopulator에서 주입)
-    [HideInInspector] public DoorController door;
+    [HideInInspector] public DoorController door;                                   // 특수방: 단일 입구 문
+    [HideInInspector] public List<DoorController> doors = new List<DoorController>(); // 일반방: 복도 개구부마다 1개
     [HideInInspector] public GameObject stairs;
 
     // 복도로 직접 연결된 방들 (DungeonPopulator에서 주입) — 스폰 밴드(near/far) 판정용
@@ -39,11 +40,29 @@ public class RoomController : MonoBehaviour
     private bool roomCleared = false;   // 방 클리어(영구 개방)되었는가
     private int monsterCount = 0;
 
-    // 특수 방 여부: 문/계단 시스템이 작동하는 방
-    private bool IsSpecialRoom =>
+    // 전투 잠금 방: 진입 확인 후 문을 잠그고 킬수 클리어를 진행하는 방 (시작/상점 제외)
+    private bool IsCombatRoom =>
+        roomType == RoomType.Normal ||
         roomType == RoomType.Elite ||
         roomType == RoomType.MiniBoss ||
         roomType == RoomType.Boss;
+
+    /// <summary>방이 클리어(영구 개방·비전투)되었는가. 스폰러/이벤트 게이트용.</summary>
+    public bool IsCleared => roomCleared;
+
+    private bool HasDoors => door != null || doors.Count > 0;
+
+    // 이 방의 모든 문(특수방 단일 + 일반방 다중)을 일괄 개폐
+    private void SetDoorsClosed(bool closed)
+    {
+        if (door != null) { if (closed) door.Close(); else door.Open(); }
+        for (int i = 0; i < doors.Count; i++)
+        {
+            var d = doors[i];
+            if (d == null) continue;
+            if (closed) d.Close(); else d.Open();
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -55,10 +74,10 @@ public class RoomController : MonoBehaviour
 
         playerInside = true;
         playerTf = collision.transform;
-        if (activated) return; // 이미 활성화된 방은 무시(전투 중 재진입 등)
+        if (activated) return; // 이미 활성화(클리어 포함)된 방은 무시 — 클리어 방 재진입은 영구 비전투
 
-        // 일반방: 기존대로 즉시 1회 진입 통지
-        if (!IsSpecialRoom)
+        // 비전투 방(시작/상점): 즉시 1회 진입 통지만
+        if (!IsCombatRoom)
         {
             activated = true;
             Debug.Log($"[{roomType}] 방에 플레이어가 진입했습니다! (크기: {roomBounds.width}x{roomBounds.height})");
@@ -66,7 +85,7 @@ public class RoomController : MonoBehaviour
             return;
         }
 
-        // 특수방: 0.5초 뒤에도 방 안에 있을 때만 스폰+잠금 (잠깐 밟고 나가면 미활성)
+        // 전투방(일반 포함): 충분히 안쪽으로 들어왔을 때만 스폰+잠금 (잠깐 밟고 나가면 미활성)
         if (confirmCo == null)
             confirmCo = StartCoroutine(ConfirmEntry());
     }
@@ -102,20 +121,17 @@ public class RoomController : MonoBehaviour
 
         activated = true;
         Debug.Log($"[{roomType}] 방에 플레이어가 진입했습니다! (크기: {roomBounds.width}x{roomBounds.height})");
-        OnPlayerEnterRoom?.Invoke(); // 스폰
+        OnPlayerEnterRoom?.Invoke(); // 스폰(일반방은 총량 선등록 포함)
 
-        if (door != null)
-        {
-            door.Close();
-            doorClosed = true;
-            Debug.Log($"[{roomType}] 문 잠금");
+        SetDoorsClosed(true);
+        doorClosed = true;
+        if (HasDoors) Debug.Log($"[{roomType}] 문 잠금");
 
-            // 몬스터가 등록되지 않은 상태면 (스폰 규칙 없음 등) 즉시 클리어
-            if (monsterCount <= 0)
-                ClearRoom();
-            else
-                guardCo = StartCoroutine(PresenceGuard()); // 잠금 후 존재 가드 시작
-        }
+        // 몬스터가 등록되지 않은 상태면 (스폰 규칙 없는 층 등) 즉시 클리어
+        if (monsterCount <= 0)
+            ClearRoom();
+        else
+            guardCo = StartCoroutine(PresenceGuard()); // 잠금 후 존재 가드 시작
     }
 
     /// <summary>잠금 후 안전장치(히스테리시스):
@@ -132,15 +148,15 @@ public class RoomController : MonoBehaviour
             if (doorClosed && !inside)
             {
                 // 잠겼는데 플레이어가 완전히 밖 → 재개방 + 몬스터 디스폰(따라 나오지 못하게)
-                if (door != null) door.Open();
+                SetDoorsClosed(false);
                 doorClosed = false;
                 DespawnRoomMonsters();
                 Debug.Log($"[{roomType}] 플레이어가 밖에 있어 문 임시 개방 + 몬스터 디스폰");
             }
             else if (!doorClosed && IsPlayerWellInside())
             {
-                // 다시 깊이 들어옴 → 재잠금 + 재스폰(처음부터)
-                if (door != null) door.Close();
+                // 다시 깊이 들어옴 → 재잠금 + 재스폰(처음부터, 일반방은 총량 재추첨)
+                SetDoorsClosed(true);
                 doorClosed = true;
                 RespawnRoomMonsters();
                 Debug.Log($"[{roomType}] 플레이어 재진입 → 문 재잠금 + 재스폰");
@@ -200,6 +216,13 @@ public class RoomController : MonoBehaviour
         monsterCount++;
     }
 
+    /// <summary>스폰 예정 총량 선등록(일반방 갇힘 전투용).
+    /// 미스폰 몬스터까지 포함해 카운트해 두어, 웨이브 사이 일시 전멸로 문이 일찍 열리지 않게 한다.</summary>
+    public void RegisterMonsters(int count)
+    {
+        if (count > 0) monsterCount += count;
+    }
+
     // 몬스터 사망 시 호출
     public void NotifyMonsterDead()
     {
@@ -213,7 +236,7 @@ public class RoomController : MonoBehaviour
     {
         roomCleared = true;          // 존재 가드 종료 신호
         doorClosed = false;
-        if (door != null) door.Open();
+        SetDoorsClosed(false);       // 모든 문 영구 개방
         if (stairs != null) stairs.SetActive(true);
         Debug.Log($"[{roomType}] 방 클리어!");
         OnRoomCleared?.Invoke();

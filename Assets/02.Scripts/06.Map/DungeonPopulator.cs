@@ -178,34 +178,22 @@ public class DungeonPopulator : MonoBehaviour
                              room.type == RoomType.MiniBoss ||
                              room.type == RoomType.Boss;
 
+            // 일반방: 갇힘 전투(건전/아이작식) — 복도 개구부마다 문 생성해 전투 중 잠금
+            if (room.type == RoomType.Normal && mapData != null)
+            {
+                foreach (var (tileX, tileY, vertical, segLen) in FindOpenings(mapData, room.bounds))
+                    controller.doors.Add(
+                        CreateDoor(roomObj.transform, floorTilemap, tileX, tileY, vertical, segLen + 2));
+            }
+
             if (isSpecial)
             {
                 // --- 문 생성 ---
                 if (room.entranceGridPos.x >= 0)
                 {
-                    Vector3 doorLocalPos = new Vector3(room.entranceGridPos.x + 0.5f, room.entranceGridPos.y + 0.5f, 0f);
-                    Vector3 doorWorldPos = floorTilemap != null
-                        ? floorTilemap.transform.TransformPoint(doorLocalPos)
-                        : doorLocalPos;
-
-                    GameObject doorObj = new GameObject("Door");
-                    doorObj.transform.position = doorWorldPos;
-                    doorObj.transform.SetParent(roomObj.transform);
-
                     bool isVerticalCorridor = (room.entranceDir == 0 || room.entranceDir == 2);
-
-                    // 문 가로 칸 수 = 통로 폭 + 양옆 1칸씩 여유 → 개구부를 완전히 덮어 옆으로 못 샘
-                    int doorWidthTiles = corridorWidth + 2;
-
-                    // 차단은 콜라이더가 담당. size는 로컬 기준(width×1) → 가로 통로면 90° 회전으로 세로 벽이 됨.
-                    BoxCollider2D doorCol = doorObj.AddComponent<BoxCollider2D>();
-                    doorCol.size = new Vector2(doorWidthTiles, 1f);
-                    doorCol.enabled = false; // 초기에는 열린 상태
-
-                    // 문 비주얼 + 열림/닫힘 토글 (가로 통로면 아트 90° 회전해 재사용)
-                    DoorController doorController = doorObj.AddComponent<DoorController>();
-                    doorController.Init(closedDoorSprites, openDoorSprites, !isVerticalCorridor, doorSortingOrder, doorWidthTiles);
-                    controller.door = doorController;
+                    controller.door = CreateDoor(roomObj.transform, floorTilemap,
+                        room.entranceGridPos.x, room.entranceGridPos.y, isVerticalCorridor, corridorWidth + 2);
                 }
 
                 // --- 계단 생성 (입구 반대편 중앙, 클리어 전까지 비활성) ---
@@ -255,6 +243,66 @@ public class DungeonPopulator : MonoBehaviour
             foreach (Room neighbor in kv.Key.connections)
                 if (roomToController.TryGetValue(neighbor, out RoomController nc))
                     kv.Value.connectedRooms.Add(nc);
+        }
+    }
+
+    /// <summary>문 1개 생성(차단 콜라이더 + 비주얼). tileX/tileY = 문 중심 타일(그리드), 초기 열림.</summary>
+    private DoorController CreateDoor(Transform parent, Tilemap floorTilemap, int tileX, int tileY, bool isVerticalCorridor, int widthTiles)
+    {
+        Vector3 localPos = new Vector3(tileX + 0.5f, tileY + 0.5f, 0f);
+        Vector3 worldPos = floorTilemap != null
+            ? floorTilemap.transform.TransformPoint(localPos)
+            : localPos;
+
+        GameObject doorObj = new GameObject("Door");
+        doorObj.transform.position = worldPos;
+        doorObj.transform.SetParent(parent);
+
+        // 차단은 콜라이더가 담당. size는 로컬 기준(width×1) → 가로 통로면 90° 회전으로 세로 벽이 됨.
+        BoxCollider2D doorCol = doorObj.AddComponent<BoxCollider2D>();
+        doorCol.size = new Vector2(widthTiles, 1f);
+        doorCol.enabled = false; // 초기에는 열린 상태
+
+        // 문 비주얼 + 열림/닫힘 토글 (가로 통로면 아트 90° 회전해 재사용)
+        DoorController doorController = doorObj.AddComponent<DoorController>();
+        doorController.Init(closedDoorSprites, openDoorSprites, !isVerticalCorridor, doorSortingOrder, widthTiles);
+        return doorController;
+    }
+
+    /// <summary>방 둘레 '한 칸 바깥'의 바닥(1) 연속 구간 = 복도 개구부를 모두 찾는다.
+    /// 반환: (문 타일X, 문 타일Y, 세로복도 여부, 구간 길이). 문 타일은 방 안쪽 경계 행/열(특수방 입구 규약과 동일).</summary>
+    private static List<(int x, int y, bool vertical, int len)> FindOpenings(int[,] mapData, RectInt b)
+    {
+        var result = new List<(int, int, bool, int)>();
+        int w = mapData.GetLength(0), h = mapData.GetLength(1);
+
+        // 북(바깥 y=yMax) / 남(바깥 y=yMin-1): x 구간 스캔 → 문은 방 안쪽 y=yMax-1 / yMin
+        ScanEdge(b.xMin, b.xMax, x => b.yMax < h && x >= 0 && x < w && mapData[x, b.yMax] == 1,
+                 (cx, len) => result.Add((cx, b.yMax - 1, true, len)));
+        ScanEdge(b.xMin, b.xMax, x => b.yMin - 1 >= 0 && x >= 0 && x < w && mapData[x, b.yMin - 1] == 1,
+                 (cx, len) => result.Add((cx, b.yMin, true, len)));
+        // 동(바깥 x=xMax) / 서(바깥 x=xMin-1): y 구간 스캔 → 문은 방 안쪽 x=xMax-1 / xMin
+        ScanEdge(b.yMin, b.yMax, y => b.xMax < w && y >= 0 && y < h && mapData[b.xMax, y] == 1,
+                 (cy, len) => result.Add((b.xMax - 1, cy, false, len)));
+        ScanEdge(b.yMin, b.yMax, y => b.xMin - 1 >= 0 && y >= 0 && y < h && mapData[b.xMin - 1, y] == 1,
+                 (cy, len) => result.Add((b.xMin, cy, false, len)));
+        return result;
+    }
+
+    /// <summary>[from, to) 구간에서 isOpen이 참인 연속 구간을 찾아 (구간 중심, 길이)를 콜백으로 전달.</summary>
+    private static void ScanEdge(int from, int to, System.Func<int, bool> isOpen, System.Action<int, int> onSegment)
+    {
+        int segStart = -1;
+        for (int i = from; i <= to; i++)
+        {
+            bool open = i < to && isOpen(i);
+            if (open && segStart < 0) segStart = i;
+            if (!open && segStart >= 0)
+            {
+                int len = i - segStart;
+                onSegment(segStart + len / 2, len);
+                segStart = -1;
+            }
         }
     }
 }

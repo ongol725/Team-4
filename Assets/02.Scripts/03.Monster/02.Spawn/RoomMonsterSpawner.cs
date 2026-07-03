@@ -142,6 +142,12 @@ namespace BagSurvivor.Monster
         // 일반방 동시 생존 상한 배수(고정 3배). 특수방(엘리트/보스) 미적용.
         private const int NORMAL_SPAWN_MULT = 3;
 
+        [Header("일반방 갇힘 전투 (건전/아이작식)")]
+        [Tooltip("일반방 총 스폰량 최소 — 진입 시 방마다 [min,max]에서 랜덤 추첨")]
+        public int normalRoomTotalMin = 30;
+        [Tooltip("일반방 총 스폰량 최대")]
+        public int normalRoomTotalMax = 70;
+
         [Header("스폰 예고(텔레그래프) — 독립 기능")]
         [Tooltip("적 생성 전 위치에 표시할 스프라이트(예: Sanctuary_Gd). 미지정 시 예고 없이 즉시 스폰")]
         public Sprite spawnIndicator;
@@ -250,15 +256,14 @@ namespace BagSurvivor.Monster
             }
         }
 
-        // 일반방 진입/이탈 추적: 일반방을 떠나면 디스폰, (다시) 들어오면 재스폰.
-        // → 복도로 나갔다 돌아오면 몬스터가 다시 나옴. (특수방은 OnPlayerEnterRoom 1회 스폰 유지)
+        // 일반방 진입/이탈 추적: 이탈(복도 등) 시 정지+디스폰+효과원복만 담당.
+        // 스폰·이벤트 시작은 문 잠금 시점(RoomController → OnPlayerEnterRoom → StartNormalFight)에 수행.
         private void CheckRoomPresence()
         {
             RoomController room = GetPlayerNormalRoom();
             if (room == currentNormalRoom) return;
 
             if (currentNormalRoom != null) { StopContinuous(); DespawnAllMonsters(); EndRoomEvent(currentNormalRoom); } // 이탈 → 정지+디스폰+효과원복
-            if (room != null) { StartContinuous(room); TriggerRoomEvent(room); }        // 진입 → 지속 스폰 + 이벤트 발동
             currentNormalRoom = room;
         }
 
@@ -360,9 +365,11 @@ namespace BagSurvivor.Monster
             });
         }
 
-        /// <summary>현재 활성 몬스터를 모두 풀로 반환합니다. (사망이 아닌 디스폰이라 방 클리어는 통지하지 않음)</summary>
+        /// <summary>현재 활성 몬스터를 모두 풀로 반환합니다. (사망이 아닌 디스폰이라 방 클리어는 통지하지 않음)
+        /// 진행 중인 예산 스폰/예고도 함께 정지 — 문 재개방(플레이어 이탈) 후 빈 방에 계속 스폰되는 것 방지.</summary>
         public void DespawnAllMonsters()
         {
+            StopContinuous();
             for (int i = activeMonsters.Count - 1; i >= 0; i--)
             {
                 MonsterController m = activeMonsters[i];
@@ -434,14 +441,23 @@ namespace BagSurvivor.Monster
                     _roomEvents[rc] = ev;
                 }
 
-                // 일반방: 진입/이탈을 직접 추적(재진입 시 재스폰)하므로 이벤트 구독 안 함.
-                // 특수방(Elite/MiniBoss/Boss): 문 잠금 타이밍과 동기화되도록 1회 진입 이벤트로 스폰.
+                // 전투방 공통: 문 잠금 타이밍(진입 확인 후)과 동기화되도록 OnPlayerEnterRoom으로 스폰.
+                //  - 특수방(Elite/MiniBoss/Boss): 규칙 기반 1회 스폰
+                //  - 일반방: 총량(30~70 랜덤) 갇힘 전투 시작 + 클리어 시 잔여 정리
+                RoomController room = rc; // 클로저 캡처용 지역 복사
+                if (room.OnPlayerEnterRoom == null)
+                    room.OnPlayerEnterRoom = new UnityEngine.Events.UnityEvent();
+
                 if (rc.roomType != RoomType.Normal)
                 {
-                    RoomController room = rc; // 클로저 캡처용 지역 복사
-                    if (room.OnPlayerEnterRoom == null)
-                        room.OnPlayerEnterRoom = new UnityEngine.Events.UnityEvent();
                     room.OnPlayerEnterRoom.AddListener(() => SpawnForRoom(room));
+                }
+                else
+                {
+                    room.OnPlayerEnterRoom.AddListener(() => StartNormalFight(room));
+                    if (room.OnRoomCleared == null)
+                        room.OnRoomCleared = new UnityEngine.Events.UnityEvent();
+                    room.OnRoomCleared.AddListener(() => OnNormalRoomCleared(room));
                 }
             }
         }
@@ -456,11 +472,37 @@ namespace BagSurvivor.Monster
             SpawnSpecial(rc, hpMul, atkMul); // Start/Shop은 규칙이 없어 자동으로 스폰 안 됨
         }
 
-        // ── 일반방 지속 스폰 ────────────────────────────────────────────────
-        private void StartContinuous(RoomController rc)
+        // ── 일반방 갇힘 전투 (총량 고정) ─────────────────────────────────────
+        /// <summary>일반방 갇힘 전투 시작(문 잠금 직전 OnPlayerEnterRoom에서 호출).
+        /// 총량을 방에 선등록해 웨이브 사이 전멸로 문이 일찍 열리지 않게 하고, 예산 스폰을 가동한다.</summary>
+        private void StartNormalFight(RoomController rc)
+        {
+            if (rc == null || pool == null) return;
+
+            int floor = dungeonGenerator != null ? dungeonGenerator.currentFloor : 1;
+            FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
+            if (cfg == null) return; // 설정 없는 층: 등록 없음 → RoomController가 즉시 클리어(잠금 없음)
+
+            int band = ComputeBand(rc);
+            GameObject[] pool2 = cfg.BandPool(band);
+            if (pool2 == null || pool2.Length == 0) return;
+
+            int total = Random.Range(normalRoomTotalMin, normalRoomTotalMax + 1);
+            rc.RegisterMonsters(total); // 미스폰 포함 총량 선등록 — 전부 처치해야 문 개방
+
+            TriggerRoomEvent(rc); // 강자/늪 이벤트는 잠금(전투 시작) 시점에 발동
+
+            StopContinuous();
+            continuousRoutine = StartCoroutine(BudgetedSpawn(rc, total, cfg, band));
+            Debug.Log($"[Normal] 갇힘 전투 시작 — 총 {total}마리");
+        }
+
+        /// <summary>일반방 클리어: 스폰 정지 + 잔여(분열체 등 보너스) 정리 + 이벤트 효과 종료 → 완전 비전투.</summary>
+        private void OnNormalRoomCleared(RoomController rc)
         {
             StopContinuous();
-            continuousRoutine = StartCoroutine(ContinuousSpawn(rc));
+            DespawnAllMonsters();
+            EndRoomEvent(rc);
         }
 
         private void StopContinuous()
@@ -475,30 +517,28 @@ namespace BagSurvivor.Monster
             _pendingSpawns = 0;
         }
 
-        /// <summary>일반방에 머무는 동안 밴드 풀에서 maxAlive를 유지하며 지속 스폰합니다(죽은 만큼 보충).</summary>
-        private IEnumerator ContinuousSpawn(RoomController rc)
+        /// <summary>일반방 갇힘 전투: 총량(budget)을 소진할 때까지 밴드 풀에서 maxAlive를 유지하며 스폰.
+        /// 소진 후 코루틴 종료 — 잔여 생존 몬스터 처치는 사망 콜백(NotifyMonsterDead)이 클리어를 판정한다.</summary>
+        private IEnumerator BudgetedSpawn(RoomController rc, int budget, FloorSpawnConfig cfg, int band)
         {
-            int floor = dungeonGenerator != null ? dungeonGenerator.currentFloor : 1;
-            FloorSpawnConfig cfg = floorConfigs.Find(c => c != null && c.floor == floor);
-            if (cfg == null) yield break; // 5층 등 설정 없는 층은 일반방 스폰 안 함
-
-            int band = ComputeBand(rc);                 // 0=near,1=mid,2=far
             GameObject[] pool2 = cfg.BandPool(band);
-            if (pool2 == null || pool2.Length == 0) yield break;
 
             int maxAlive = Mathf.Max(1, cfg.BandMaxAlive(band)) * NORMAL_SPAWN_MULT; // 밴드별 상한 ×3(고정)
             float interval = Mathf.Max(0.1f, cfg.spawnInterval);
             var wait = new WaitForSeconds(interval);
+            int remaining = budget;
 
-            while (true)
+            while (remaining > 0)
             {
                 // 생존 + 예고대기 합이 상한 미만이면 1마리 예고→스폰 (예고 대기 수를 포함해 폭증 방지)
                 if (activeMonsters.Count + _pendingSpawns < maxAlive)
                 {
                     float hpMul = difficulty != null ? difficulty.GetHpMultiplier() : 1f;
                     float atkMul = (difficulty != null ? difficulty.GetAttackMultiplier() : 1f) * _roomEnemyAtkMul; // 강자의 방: 적 공격력 배수
-                    var co = StartCoroutine(SpawnWithTelegraph(rc, pool2[Random.Range(0, pool2.Length)], hpMul, atkMul));
+                    remaining--;
+                    var co = StartCoroutine(SpawnWithTelegraph(rc, pool2[Random.Range(0, pool2.Length)], hpMul, atkMul, preCounted: true));
                     _telegraphRoutines.Add(co);
+                    if (remaining <= 0) break; // 총량 소진 → 스폰 종료
                 }
 
                 // 상한 미달이면 빠르게 채우고(다음 프레임), 가득 차면 interval 대기
@@ -591,13 +631,14 @@ namespace BagSurvivor.Monster
             return pick;
         }
 
-        // 일반방: 위치를 먼저 정해 예고(마커) 2초 표시 후 그 자리에 스폰
-        private IEnumerator SpawnWithTelegraph(RoomController rc, GameObject prefab, float hpMul, float atkMul)
+        // 일반방: 위치를 먼저 정해 예고(마커) 표시 후 그 자리에 스폰.
+        // preCounted=true면 방 카운트에 이미 선등록된 스폰 → 실패 시 카운트를 환급해 문이 안 열리는 잠금 고착을 방지.
+        private IEnumerator SpawnWithTelegraph(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool preCounted = false)
         {
-            if (prefab == null) yield break;
+            if (prefab == null) { if (preCounted) rc.NotifyMonsterDead(); yield break; }
 
             Vector3 pos;
-            if (!TryGetSpawnPosition(rc.roomBounds, out pos)) yield break;
+            if (!TryGetSpawnPosition(rc.roomBounds, out pos)) { if (preCounted) rc.NotifyMonsterDead(); yield break; }
 
             _pendingSpawns++;
 
@@ -611,7 +652,7 @@ namespace BagSurvivor.Monster
             }
 
             _pendingSpawns = Mathf.Max(0, _pendingSpawns - 1);
-            SpawnAt(rc, prefab, pos, hpMul, atkMul);
+            SpawnAt(rc, prefab, pos, hpMul, atkMul, preCounted: preCounted);
         }
 
         // 예고 마커 생성(2초간 표시, 살짝 명멸/확대해 눈에 띄게)
@@ -637,17 +678,18 @@ namespace BagSurvivor.Monster
             SpawnAt(rc, prefab, pos, hpMul, atkMul, enableBossPattern, defenseOverride);
         }
 
-        // 지정 위치에 실제 스폰(SpawnOne/예고 공용)
-        private void SpawnAt(RoomController rc, GameObject prefab, Vector3 pos, float hpMul, float atkMul, bool enableBossPattern = false, int defenseOverride = -1)
+        // 지정 위치에 실제 스폰(SpawnOne/예고 공용).
+        // preCounted=true: 방 카운트 선등록분(일반방 갇힘 전투) → 여기서 재등록하지 않고, 실패 시 환급.
+        private void SpawnAt(RoomController rc, GameObject prefab, Vector3 pos, float hpMul, float atkMul, bool enableBossPattern = false, int defenseOverride = -1, bool preCounted = false)
         {
-            if (prefab == null) return;
+            if (prefab == null) { if (preCounted) rc.NotifyMonsterDead(); return; }
 
             // 엘리트 프리팹이면 인스펙터 배율(기본 HP 5배)을 난이도 배율에 곱함
             var elite = prefab.GetComponent<EliteMonster>();
             if (elite != null) { hpMul *= elite.hpMultiplier; atkMul *= elite.attackMultiplier; }
 
             MonsterController mc = pool.Get(prefab, pos, hpMul, atkMul);
-            if (mc == null) return;
+            if (mc == null) { if (preCounted) rc.NotifyMonsterDead(); return; }
 
             mc.SetDefenseOverride(defenseOverride); // 층별 방어력 고정(예: 2층 중간보스 30) — 풀 재사용 시 -1로 복원됨
 
@@ -657,8 +699,8 @@ namespace BagSurvivor.Monster
 
             activeMonsters.Add(mc);
 
-            // 방에 등록 (특수방의 문 잠금/클리어 카운트와 연동)
-            rc.RegisterMonster();
+            // 방에 등록 (문 잠금/클리어 카운트와 연동) — 선등록분(preCounted)은 중복 등록 금지
+            if (!preCounted) rc.RegisterMonster();
 
             // 사망 시: 활성 목록에서 제거 + 방에 클리어 통지 + 풀 반환
             RoomController room = rc;
