@@ -161,34 +161,35 @@ public class MinimapController : MonoBehaviour
         bool HiddenH(int cy, int dy, int s, int e) { for (int x = s; x <= e; x++) if (Hidden(x, cy, 0, dy)) return true; return false; }
 
         const float baseScale = 0.8f; // 밑변 크기(현재의 80%)
+        const float baseOut   = 0f;   // 밑변은 방 경계에 맞춤(침범은 방 그리드를 위에 덧칠해 클리핑 — RefreshMinimap)
 
         // 오른쪽(East): 경계 x=b.xMax, 복도셀 (b.xMax, y) — 꼭짓점 +x
         ScanRuns(y0, y1, y => Floor(b.xMax, y), (s, e) =>
         {
             if (!HiddenV(b.xMax, 1, s, e)) return; // 이미 밝혀진 복도면 표기 안 함
-            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale;
-            tris.Add(new[] { new Vector2(b.xMax, mid - half), new Vector2(b.xMax, mid + half), new Vector2(b.xMax + d, mid) });
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale, bx = b.xMax + baseOut;
+            tris.Add(new[] { new Vector2(bx, mid - half), new Vector2(bx, mid + half), new Vector2(b.xMax + d, mid) });
         });
         // 왼쪽(West): 경계 x=b.xMin, 복도셀 (b.xMin-1, y) — 꼭짓점 -x
         ScanRuns(y0, y1, y => Floor(b.xMin - 1, y), (s, e) =>
         {
             if (!HiddenV(b.xMin - 1, -1, s, e)) return;
-            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale;
-            tris.Add(new[] { new Vector2(b.xMin, mid - half), new Vector2(b.xMin, mid + half), new Vector2(b.xMin - d, mid) });
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale, bx = b.xMin - baseOut;
+            tris.Add(new[] { new Vector2(bx, mid - half), new Vector2(bx, mid + half), new Vector2(b.xMin - d, mid) });
         });
         // 위(North): 경계 y=b.yMax, 복도셀 (x, b.yMax) — 꼭짓점 +y
         ScanRuns(x0, x1, x => Floor(x, b.yMax), (s, e) =>
         {
             if (!HiddenH(b.yMax, 1, s, e)) return;
-            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale;
-            tris.Add(new[] { new Vector2(mid - half, b.yMax), new Vector2(mid + half, b.yMax), new Vector2(mid, b.yMax + d) });
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale, by = b.yMax + baseOut;
+            tris.Add(new[] { new Vector2(mid - half, by), new Vector2(mid + half, by), new Vector2(mid, b.yMax + d) });
         });
         // 아래(South): 경계 y=b.yMin, 복도셀 (x, b.yMin-1) — 꼭짓점 -y
         ScanRuns(x0, x1, x => Floor(x, b.yMin - 1), (s, e) =>
         {
             if (!HiddenH(b.yMin - 1, -1, s, e)) return;
-            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale;
-            tris.Add(new[] { new Vector2(mid - half, b.yMin), new Vector2(mid + half, b.yMin), new Vector2(mid, b.yMin - d) });
+            float mid = (s + e + 1) * 0.5f, half = (e + 1 - s) * baseScale, by = b.yMin - baseOut;
+            tris.Add(new[] { new Vector2(mid - half, by), new Vector2(mid + half, by), new Vector2(mid, b.yMin - d) });
         });
 
         return tris;
@@ -283,12 +284,7 @@ public class MinimapController : MonoBehaviour
                         {
                             if (room.bounds.Contains(new Vector2Int(x, y)))
                             {
-                                pixelColor = Color.blue; // 기본 방
-                                if (room.type == RoomType.Start) pixelColor = Color.green;
-                                else if (room.type == RoomType.Shop) pixelColor = Color.yellow;
-                                else if (room.type == RoomType.Elite) pixelColor = new Color(0.86f, 0.08f, 0.24f);
-                                else if (room.type == RoomType.MiniBoss) pixelColor = new Color(0.5f, 0f, 0.5f);
-                                else if (room.type == RoomType.Boss) pixelColor = new Color(0.55f, 0f, 0f);
+                                pixelColor = RoomColor(room.type);
                                 break;
                             }
                         }
@@ -305,15 +301,41 @@ public class MinimapController : MonoBehaviour
                 }
             }
         }
-        // 현재 방의 통로 위치를 빨간 삼각형으로 덧칠(안개와 무관하게 항상 표시 — 어두워도 통로 방향 확인)
+        // 방의 통로 위치를 빨간 삼각형으로 덧칠(안개와 무관하게 항상 표시 — 어두워도 통로 방향 확인)
         if (ENABLE_EXIT_DOTS && _currentExitTris != null)
         {
             foreach (var t in _currentExitTris)
                 FillTriangle(pixels, t[0], t[1], t[2], ExitDotColor);
+
+            // 삼각형이 방 안으로 삐져나오지 않도록, 방 셀을 삼각형 위에 다시 칠해 클리핑한다.
+            foreach (Room room in rooms)
+            {
+                Color rc = RoomColor(room.type);
+                RectInt bnd = room.bounds;
+                for (int yy = bnd.yMin; yy < bnd.yMax; yy++)
+                    for (int xx = bnd.xMin; xx < bnd.xMax; xx++)
+                        if (xx >= 0 && xx < mapWidth && yy >= 0 && yy < mapHeight
+                            && (revealFullMinimap || isExplored[xx, yy]) && mapData[xx, yy] == 1)
+                            pixels[yy * mapWidth + xx] = rc;
+            }
         }
 
         minimapTexture.SetPixels(pixels);
         minimapTexture.Apply();
+    }
+
+    // 방 타입별 미니맵 색상 (타일 렌더·삼각형 클리핑 공통 사용)
+    private static Color RoomColor(RoomType type)
+    {
+        switch (type)
+        {
+            case RoomType.Start:    return Color.green;
+            case RoomType.Shop:     return Color.yellow;
+            case RoomType.Elite:    return new Color(0.86f, 0.08f, 0.24f);
+            case RoomType.MiniBoss: return new Color(0.5f, 0f, 0.5f);
+            case RoomType.Boss:     return new Color(0.55f, 0f, 0f);
+            default:                return Color.blue; // 일반 방
+        }
     }
 
     // 텍스처(픽셀 버퍼)에 삼각형을 채운다. 좌표는 타일 단위(픽셀=타일).
