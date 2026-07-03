@@ -20,7 +20,9 @@ using UnityEngine.SceneManagement;
 public static class BossSandboxAnimSetup
 {
     private const string ImgDir    = "Assets/04.Images/02.Monsters/Boss";
-    private const string AnimDir   = "Assets/01.Scenes/Sandbox/BossAnims";
+    private const string ReDirName = "보스 애니메이션 재 제작";      // 재제작 시트 하위 폴더
+    private const string ReDir     = ImgDir + "/" + ReDirName;
+    private const string AnimDir   = "Assets/03.Prefabs/02.Monsters/BossAnims"; // 커밋 영역(빌드/클론 보존). 구 위치=Sandbox(gitignore)에서 이전
     private const string CtrlPath  = AnimDir + "/SandboxBoss.controller";
     private const string ScenePath = "Assets/01.Scenes/Sandbox/BossSandbox.unity";
 
@@ -29,7 +31,31 @@ public static class BossSandboxAnimSetup
     private const float FPS        = 12f;
 
     // 루프 재생할 모션(키워드 포함 시 loop)
-    private static readonly string[] LoopKeywords = { "대기", "이동", "스턴", "탄막" };
+    private static readonly string[] LoopKeywords = { "대기", "이동", "스턴", "기절", "탄막" };
+
+    /// <summary>보스 캐릭터 모션 시트 목록 = '보스 애니메이션 재 제작' 폴더 전용(크기 조절된 최신본).
+    /// 최상위 Boss 폴더의 구 시트(스턴/착지모션/구네이밍 등)는 절대 포함하지 않는다.
+    /// (부채꼴·바닥장판·경고·데미지감소·범위이펙트 등 이펙트/소품은 BossAnimApply가 경로로 직접 로드하므로 무관.)</summary>
+    private static string[] BossPngs()
+    {
+        string src = Directory.Exists(ReDir) ? ReDir : ImgDir; // 재제작 폴더 없으면 구 동작으로 폴백
+        return Directory.GetFiles(src, "*.png").Select(p => p.Replace('\\', '/'))
+            .Where(p => { var fn = Path.GetFileName(p); return fn.Contains("보스몬스터") && !fn.Contains("초상화"); })
+            .OrderBy(p => p).ToArray();
+    }
+
+    /// <summary>PNG 헤더에서 원본 픽셀 크기(임포트 다운스케일 무관)를 읽는다.</summary>
+    private static (int w, int h) SourcePngSize(string path)
+    {
+        using (var fs = File.OpenRead(path))
+        {
+            var buf = new byte[24];
+            if (fs.Read(buf, 0, 24) < 24) return (0, 0);
+            int w = (buf[16] << 24) | (buf[17] << 16) | (buf[18] << 8) | buf[19];
+            int h = (buf[20] << 24) | (buf[21] << 16) | (buf[22] << 8) | buf[23];
+            return (w, h);
+        }
+    }
 
     [MenuItem("Team4/보스 샌드박스 애니 셋업")]
     public static void Setup()
@@ -41,9 +67,8 @@ public static class BossSandboxAnimSetup
         foreach (var old in Directory.GetFiles(AnimDir, "*.anim"))
             AssetDatabase.DeleteAsset(old.Replace('\\', '/'));
 
-        // 보스 시트만 처리(KakaoTalk 등 참조 이미지 제외)
-        string[] pngs = Directory.GetFiles(ImgDir, "*.png").Select(p => p.Replace('\\', '/'))
-            .Where(p => Path.GetFileName(p).Contains("보스몬스터")).OrderBy(p => p).ToArray();
+        // 보스 시트만 처리(KakaoTalk 등 참조 이미지 제외) — 재제작본 우선 dedup
+        string[] pngs = BossPngs();
         if (pngs.Length == 0) { Debug.LogError("[BossAnim] 보스 PNG 없음: " + ImgDir); return; }
 
         var clips = new List<AnimationClip>();
@@ -53,10 +78,10 @@ public static class BossSandboxAnimSetup
         {
             // [가드] 이미 Multiple(수동 슬라이스)로 설정된 파일은 절대 재임포트/재슬라이스하지 않는다.
             // (SliceGrid가 PPU·maxTextureSize·필터·프레임분할 등 설정을 덮어써 수동 작업을 날리는 사고 방지)
-            // Single 등 아직 안 잘린 파일만 자동 슬라이스한다.
+            // 단, 재제작 폴더는 예외 — Automatic 오슬라이스가 흔해 항상 FrameCount 테이블 기준으로 강제 재슬라이스.
             var imp = AssetImporter.GetAtPath(png) as TextureImporter;
             bool alreadySliced = imp != null && imp.spriteImportMode == SpriteImportMode.Multiple;
-            if (!alreadySliced)
+            if (png.Contains(ReDirName) || !alreadySliced)
             {
                 if (SliceGrid(png) <= 0) { Debug.LogWarning("[BossAnim] 자동 슬라이스 실패(수동으로 잘라주세요): " + png); continue; }
             }
@@ -145,17 +170,18 @@ public static class BossSandboxAnimSetup
         Debug.Log($"[BossAnim] 전체 {clips.Count}개 모션을 격자로 배치(전부 루프). Play로 동시에 움직임 확인하세요.");
     }
 
-    // ── 크기 통일: 모든 보스 시트를 '2페이즈 이동' 크기에 맞춤 (PPU만 변경) ──
-    // PNG를 직접 디코드해 콘텐츠 높이를 재고, spritePixelsPerUnit만 바꾼다.
-    // 슬라이스 사각형/모드/기타 임포트 설정은 전혀 건드리지 않는다(PPU는 독립 설정).
-    [MenuItem("Team4/보스 애니 크기 통일 (2p 이동 기준)")]
+    // ── [비활성화됨] 크기 통일: 모든 보스 시트를 '2페이즈 이동' 크기에 맞춤 (PPU만 변경) ──
+    // ⚠️ 메뉴 제거됨: 이 함수는 각 시트 PPU를 '콘텐츠 높이 기준'으로 재계산해 덮어쓴다.
+    //    현재 보스 모션 크기는 샌드박스에서 수동 조절한 값이 각 시트 PPU에 baked-in 되어 있으므로,
+    //    이걸 실행하면 그 수동 크기가 전부 날아간다. 재활성화하려면 아래 [MenuItem] 주석을 해제할 것.
+    // (참고: PNG 직접 디코드 대신 임포트 텍스처를 읽어 콘텐츠 높이 측정 → spritePixelsPerUnit만 변경)
+    // [MenuItem("Team4/보스 애니 크기 통일 (2p 이동 기준)")]  // 사고 방지 위해 비활성화 (2026-07)
     public static void NormalizeSizes()
     {
         if (!Directory.Exists(ImgDir)) { Debug.LogError("[BossAnim] 이미지 폴더 없음: " + ImgDir); return; }
-        string[] pngs = Directory.GetFiles(ImgDir, "*.png").Select(p => p.Replace('\\', '/'))
-            .Where(p => Path.GetFileName(p).Contains("보스몬스터")).ToArray();
+        string[] pngs = BossPngs();
 
-        // 기준 = 2페이즈 이동
+        // 기준 = 2페이즈 이동 (콘텐츠 높이·PPU 모두 임포트 픽셀 기준으로 통일)
         string refPng = pngs.FirstOrDefault(p => { var n = Path.GetFileName(p); return n.Contains("2페이즈") && n.Contains("이동"); });
         if (refPng == null) { Debug.LogError("[BossAnim] 기준 '2페이즈 이동' 파일을 못 찾음"); return; }
         int refH = ContentHeight(refPng);
@@ -181,14 +207,25 @@ public static class BossSandboxAnimSetup
                   "이펙트 큰 시트(포효/탄막/늑대/햘퀴기/석상)는 보스 몸이 작아 보이면 개별 조정 요청하세요.");
     }
 
-    /// <summary>PNG 파일을 직접 디코드(임포트 설정 무관)해 비투명 콘텐츠의 세로 높이(px)를 반환.</summary>
+    /// <summary>임포트된 텍스처(다운스케일 반영, 임포트 픽셀 기준)의 비투명 콘텐츠 세로 높이(px).
+    /// 원본 PNG 직접 디코드는 32768px 폭에서 Texture2D 생성 불가라 임포트본을 RenderTexture로 복사해 읽는다.</summary>
     private static int ContentHeight(string path)
     {
-        byte[] bytes = File.ReadAllBytes(path);
-        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-        if (!ImageConversion.LoadImage(tex, bytes)) { Object.DestroyImmediate(tex); return 0; }
-        int w = tex.width, hh = tex.height;
-        var px = tex.GetPixels32();
+        var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+        if (tex == null) return 0;
+        var rt = RenderTexture.GetTemporary(tex.width, tex.height, 0, RenderTextureFormat.ARGB32);
+        var prevRt = RenderTexture.active;
+        Graphics.Blit(tex, rt);
+        RenderTexture.active = rt;
+        var copy = new Texture2D(tex.width, tex.height, TextureFormat.RGBA32, false);
+        copy.ReadPixels(new Rect(0, 0, tex.width, tex.height), 0, 0);
+        copy.Apply();
+        RenderTexture.active = prevRt;
+        RenderTexture.ReleaseTemporary(rt);
+
+        var px = copy.GetPixels32();
+        int w = copy.width, hh = copy.height;
+        Object.DestroyImmediate(copy);
         int minY = int.MaxValue, maxY = int.MinValue;
         for (int y = 0; y < hh; y++)
         {
@@ -196,7 +233,6 @@ public static class BossSandboxAnimSetup
             for (int x = 0; x < w; x += 4) { if (px[row + x].a > 10) { any = true; break; } }
             if (any) { if (y < minY) minY = y; if (y > maxY) maxY = y; }
         }
-        Object.DestroyImmediate(tex);
         return (maxY >= minY) ? (maxY - minY + 1) : 0;
     }
 
@@ -208,18 +244,23 @@ public static class BossSandboxAnimSetup
 
         importer.textureType        = TextureImporterType.Sprite;
         importer.spriteImportMode   = SpriteImportMode.Multiple;
-        importer.spritePixelsPerUnit = PerSheetPPU(path); // 모션별 PPU로 캐릭터 크기를 이동(Move)에 맞춤
         importer.mipmapEnabled      = false;
         importer.filterMode         = FilterMode.Bilinear;
-        importer.maxTextureSize     = 16384; // 12288px 다운스케일 방지(필수)
+        importer.maxTextureSize     = 16384; // 12288px 다운스케일 방지(필수). 32768px 시트는 절반으로 축소됨
         importer.textureCompression = TextureImporterCompression.Uncompressed;
         importer.SaveAndReimport();
 
-        var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
-        if (tex == null) return 0;
-        int w = tex.width, h = tex.height;
+        // 슬라이스 rect는 원본 픽셀 좌표계 — 임포트 다운스케일(예: 32768→16384)과 무관하게 헤더에서 읽는다
+        var (w, h) = SourcePngSize(path);
+        if (w <= 0 || h <= 0) return 0;
         int cols = FrameCount(w, h);
         int cw = w / cols;
+
+        // PPU는 임포트 후 픽셀 기준으로 적용되므로, 다운스케일된 시트는 비율만큼 보정
+        var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+        float importScale = tex != null ? tex.width / (float)w : 1f;
+        importer.spritePixelsPerUnit = Mathf.Max(1f, PerSheetPPU(path) * importScale); // 모션별 PPU(크기 통일 메뉴가 재보정)
+        importer.SaveAndReimport();
 
         var factory = new SpriteDataProviderFactories();
         factory.Init();
@@ -255,6 +296,29 @@ public static class BossSandboxAnimSetup
     /// round(폭/1536)로는 12·10프레임짜리가 8칸으로 잘려 캐릭터가 옆으로 밀렸음.</summary>
     private static int FrameCount(int w, int h)
     {
+        // ── 재제작(2026-07) 시트: 원본 px → 프레임 수 (투명 경계선 분석으로 확정) ──
+        if (w == 32768 && h == 2567) return 12; // 1p 늑대 소환
+        if (w == 32768 && h == 1265) return 12; // 1p 돌진
+        if (w == 28854 && h == 3606) return 8;  // 1p 돌진대기
+        if (w == 15393 && h == 5301) return 8;  // 1p 이동
+        if (w == 25623 && h == 8541) return 12; // 1p 점프(후반 프레임은 화면 이탈로 빈 칸)
+        if (w == 23448 && h == 8232) return 10; // 1p 착지
+        if (w == 16296 && h == 2037) return 8;  // 탄막(1p/2p 동일 규격)
+        if (w == 32768 && h == 1640) return 20; // 포효 전체모션(1p/2p 동일 규격)
+        if (w == 7152  && h == 3576) return 2;  // 1p 포효
+        if (w == 32768 && h == 2288) return 12; // 1p 햘퀴기
+        if (w == 17442 && h == 1452) return 12; // 2p 석상소환/변신
+        if (w == 19626 && h == 1785) return 8;  // 2p 기절
+        if (w == 24489 && h == 2451) return 10; // 2p 낙하
+        if (w == 32768 && h == 2558) return 12; // 2p 늑대소환
+        if (w == 32768 && h == 1285) return 12; // 2p 돌진
+        if (w == 21165 && h == 2646) return 8;  // 2p 돌진대기
+        if (w == 13713 && h == 2721) return 6;  // 2p 사망
+        if (w == 13908 && h == 1386) return 8;  // 2p 이동
+        if (w == 18096 && h == 2943) return 12; // 2p 점프(후반 빈 칸)
+        if (w == 8217  && h == 2739) return 3;  // 2p 포효
+        if (w == 32768 && h == 2289) return 12; // 2p 햘퀴기
+        // ── 구버전 시트 ──
         if (w == 12288 && h == 1536) return 8;  // 대기/이동/스턴/탄막
         if (w == 12288 && h == 1920) return 8;  // 석상
         if (w == 9216  && h == 1536) return 6;  // 사망
@@ -279,6 +343,9 @@ public static class BossSandboxAnimSetup
         if (n.Contains("점프")) return 130f;   // 더 크게(이동보다 약간 큼)
         if (n.Contains("착지")) return 122f;   // 더 크게
         if (n.Contains("스턴")) return 210f;
+        if (n.Contains("기절")) return 210f;   // 재제작 스턴
+        if (n.Contains("낙하")) return 122f;   // 재제작 2p 착지
+        if (n.Contains("변신")) return 206f;
         if (n.Contains("사망")) return 186f;
         if (n.Contains("석상") && n.Contains("소환")) return 206f;
         if (n.Contains("석상")) return 273f;   // 토템 오브젝트

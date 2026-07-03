@@ -64,7 +64,7 @@ public enum SynergyType
     SpiritMage = 8,     // 정령술사
     GearShift = 9,      // 기어시프트
     Pinball = 10,       // 핀볼
-    Overload = 11,      // 과부화
+    Overload = 11,      // 과부하
     Electro = 12,       // 일렉트로
     Impregnable = 13,   // 난공불락
     Titan = 14,         // 티탄

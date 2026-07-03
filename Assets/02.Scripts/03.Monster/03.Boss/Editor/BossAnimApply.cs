@@ -21,7 +21,7 @@ using BagSurvivor.Monster;
 
 public static class BossAnimApply
 {
-    private const string AnimDir   = "Assets/01.Scenes/Sandbox/BossAnims";
+    private const string AnimDir   = "Assets/03.Prefabs/02.Monsters/BossAnims"; // 커밋 영역(빌드/클론 보존). 구 위치=Sandbox(gitignore)에서 이전
     private const string CtrlP1     = AnimDir + "/Boss_P1.controller";
     private const string CtrlP2     = AnimDir + "/Boss_P2.controller";
     private const string ScenePath = "Assets/01.Scenes/Sandbox/BossSandbox.unity";
@@ -33,14 +33,14 @@ public static class BossAnimApply
         ("Idle",       true,  new[]{"탄막"},     null),          // 대기 모션 = 탄막패턴(기 모으기) 사용
         ("ChargeIdle", true,  new[]{"돌진대기"}, null),          // 돌진 전 대기(신규)
         ("Move",       true,  new[]{"이동"},     null),
-        ("Stun",       true,  new[]{"스턴"},     null),
+        ("Stun",       true,  new[]{"스턴|기절"}, null),        // 재제작본은 '기절' 네이밍
         ("Death",      false, new[]{"사망"},     null),
         ("Charge",     false, new[]{"돌진"},     new[]{"대기"}), // 돌진(대시), 돌진대기 제외
         ("Melee",      false, new[]{"퀴"},       null),          // 할퀴기(파일명 '햘퀴기' 대응)
         ("Energy",     true,  new[]{"탄막"},     null),          // 패턴 끝까지 루프
         ("Phantom",    true,  new[]{"늑대"},     null),          // 패턴 끝까지 루프
         ("Leap",       false, new[]{"점프"},     null),
-        ("LeapLand",   true,  new[]{"착지"},     null),          // 착지 후 동심원 동안 루프
+        ("LeapLand",   true,  new[]{"착지|낙하"}, null),        // 착지 후 동심원 동안 루프(재제작 2p='낙하')
         ("Cast",       true,  new[]{"탄막"},     null),          // 힐토템/돌석상: 기모으기(탄막) 반복
     };
 
@@ -65,8 +65,49 @@ public static class BossAnimApply
         }
         var driver = Object.FindFirstObjectByType<BossPatternDriver>();
         if (driver == null) { Debug.LogError("[BossAnimApply] 씬에 보스(BossPatternDriver) 없음 — 샌드박스 빌드 먼저"); return; }
-        GameObject boss = driver.gameObject;
 
+        WireBoss(driver.gameObject, p1, p2, clips);
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        AssetDatabase.SaveAssets();
+        Debug.Log("[BossAnimApply] 완료(샌드박스) — P1(파랑)/P2(빨강) 컨트롤러 빌드 + 페이즈 자동전환 배선. " +
+                  "해당 페이즈 클립이 없는 모션은 다른 페이즈 클립으로 임시 폴백됩니다(콘솔 경고 = 부족 모션).");
+    }
+
+    private const string BossPrefabPath = "Assets/03.Prefabs/02.Monsters/Prefab_WolfBoss.prefab";
+
+    /// <summary>Prefab_WolfBoss 프리팹에 직접 배선 → 06.BossRoom·샌드박스 등 모든 인스턴스가 상속.
+    /// 클립/컨트롤러는 재빌드 후 프리팹 컨텐츠를 로드해 WireBoss로 연결하고 저장.</summary>
+    [MenuItem("Team4/보스 애니 적용 (프리팹 = 실제 보스)")]
+    public static void ApplyToPrefab()
+    {
+        var clips = AssetDatabase.FindAssets("t:AnimationClip", new[] { AnimDir })
+            .Select(g => AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetDatabase.GUIDToAssetPath(g)))
+            .Where(c => c != null).ToList();
+        if (clips.Count == 0) { Debug.LogError("[BossAnimApply] 클립 없음 — 먼저 '보스 샌드박스 애니 셋업' 실행"); return; }
+        if (AssetDatabase.LoadAssetAtPath<GameObject>(BossPrefabPath) == null)
+        { Debug.LogError("[BossAnimApply] Prefab_WolfBoss 없음: " + BossPrefabPath); return; }
+
+        var p1 = BuildController(CtrlP1, "1페이즈", "2페이즈", clips);
+        var p2 = BuildController(CtrlP2, "2페이즈", "1페이즈", clips);
+        AssetDatabase.SaveAssets();
+
+        var contents = PrefabUtility.LoadPrefabContents(BossPrefabPath);
+        var driver = contents.GetComponentInChildren<BossPatternDriver>(true);
+        if (driver == null) { PrefabUtility.UnloadPrefabContents(contents); Debug.LogError("[BossAnimApply] 프리팹에 BossPatternDriver 없음"); return; }
+
+        WireBoss(driver.gameObject, p1, p2, clips);
+
+        PrefabUtility.SaveAsPrefabAsset(contents, BossPrefabPath);
+        PrefabUtility.UnloadPrefabContents(contents);
+        AssetDatabase.SaveAssets();
+        Debug.Log("[BossAnimApply] 완료(프리팹) — Prefab_WolfBoss에 배선. 06.BossRoom 등 모든 인스턴스에 자동 반영됩니다.");
+    }
+
+    /// <summary>보스 GameObject에 애니메이터·페이즈 컨트롤러·패턴별 animState·이펙트 프리팹을 배선.</summary>
+    private static void WireBoss(GameObject boss, AnimatorController p1, AnimatorController p2, List<AnimationClip> clips)
+    {
         var animator = boss.GetComponent<Animator>(); if (animator == null) animator = boss.AddComponent<Animator>();
         animator.runtimeAnimatorController = p1;
         var ba = boss.GetComponent<BossAnimator>(); if (ba == null) ba = boss.AddComponent<BossAnimator>();
@@ -95,11 +136,6 @@ public static class BossAnimApply
         ApplyDamageReduceFx(boss);
 
         EditorUtility.SetDirty(boss);
-        EditorSceneManager.MarkSceneDirty(scene);
-        EditorSceneManager.SaveScene(scene);
-        AssetDatabase.SaveAssets();
-        Debug.Log("[BossAnimApply] 완료 — P1(파랑)/P2(빨강) 컨트롤러 빌드 + 페이즈 자동전환 배선. " +
-                  "해당 페이즈 클립이 없는 모션은 다른 페이즈 클립으로 임시 폴백됩니다(콘솔 경고 = 부족 모션).");
     }
 
     /// <summary>primaryPhase 클립 우선, 없으면 otherPhase 폴백으로 컨트롤러 빌드.</summary>
@@ -107,7 +143,9 @@ public static class BossAnimApply
     {
         AnimationClip Pick(string[] kws, string[] not)
         {
-            bool Match(AnimationClip c, string ph) => c.name.Contains(ph) && kws.All(k => c.name.Contains(k))
+            // kws 항목은 '|'로 대체 키워드 허용(예: "스턴|기절")
+            bool Match(AnimationClip c, string ph) => c.name.Contains(ph)
+                && kws.All(k => k.Split('|').Any(alt => c.name.Contains(alt)))
                 && (not == null || !not.Any(n => c.name.Contains(n)));
             // 새 네이밍(보스몬스터_{phase}) 우선 → 구파일(1페이즈보스몬스터_…)과 충돌 시 새 것
             return clips.FirstOrDefault(c => Match(c, "보스몬스터_" + primaryPhase))
@@ -125,6 +163,8 @@ public static class BossAnimApply
         {
             var clip = Pick(kws, not);
             if (clip == null) { Debug.LogWarning($"[BossAnimApply] {primaryPhase} '{name}' 클립 없음(폴백도 실패)"); continue; }
+            // 1페이즈는 스턴 모션이 없다 — 2페이즈 클립으로 폴백하지 않고 상태 자체를 생략
+            if (name == "Stun" && primaryPhase == "1페이즈" && !clip.name.Contains("1페이즈")) continue;
             var s = AnimationUtility.GetAnimationClipSettings(clip);
             if (s.loopTime != loop) { s.loopTime = loop; AnimationUtility.SetAnimationClipSettings(clip, s); EditorUtility.SetDirty(clip); }
             // 폴백이라 다른 페이즈 클립이면 경고(부족 모션 추적용)
@@ -148,8 +188,9 @@ public static class BossAnimApply
         AnimationClip Pick(System.Func<string, bool> extra) =>
             clips.FirstOrDefault(c => c.name.Contains(prefix) && c.name.Contains("포효") && extra(c.name));
 
-        AnimationClip intro = Pick(n => n.Contains("전체"));                                        // 포효 전체모션
-        AnimationClip loopC = Pick(n => !n.Contains("(1)") && !n.Contains("전체") && !n.Contains("마무리")) // 포효(반복)
+        // 신규 네이밍(시작모션) 우선, 구 네이밍(전체모션) 폴백
+        AnimationClip intro = Pick(n => n.Contains("시작")) ?? Pick(n => n.Contains("전체"));          // 포효 시작(인트로)
+        AnimationClip loopC = Pick(n => !n.Contains("(1)") && !n.Contains("시작") && !n.Contains("전체") && !n.Contains("마무리")) // 포효(반복)
                            ?? Pick(n => n.Contains("(1)"));
         AnimationClip outro = Pick(n => n.Contains("마무리"));                                       // 포효 마무리모션
         if (intro == null) intro = loopC;
@@ -198,7 +239,7 @@ public static class BossAnimApply
         leap.ringWarningPrefabOuter = floorEdge != null ? floorEdge : floorWarn; // 2·3단(테두리)
         leap.ringMaskPrefab         = null;                                  // 테두리가 이미 링 → 마스크 불필요
         leap.ringEffectPrefab       = null;
-        leap.ring1Radius = 4.5f; leap.ring2Radius = 7f; leap.ring3Radius = 11.5f; // 바닥 크기 축소
+        leap.ring1Radius = 2.25f; leap.ring2Radius = 3.5f; leap.ring3Radius = 5.75f; // 반지름 기준 절반으로 축소
         EditorUtility.SetDirty(leap);
     }
 
@@ -599,6 +640,28 @@ public static class BossAnimApply
         if (p != null) { p.animState = state; EditorUtility.SetDirty(p); }
     }
 
+    /// <summary>보스몬스터_석상.png(슬라이스된 8프레임)로 루프 idle 클립을 직접 생성.
+    /// setup 파이프라인(재제작 폴더 전용)이 이 클립을 안 만들어 석상이 정지 이미지로 보이던 문제 해결.</summary>
+    private static AnimationClip BuildStatueIdleClip()
+    {
+        var sprites = AssetDatabase.LoadAllAssetsAtPath(StatuePng).OfType<Sprite>()
+            .OrderBy(s => { int u = s.name.LastIndexOf('_'); return (u >= 0 && int.TryParse(s.name.Substring(u + 1), out int n)) ? n : 0; })
+            .ToArray();
+        if (sprites.Length == 0) { Debug.LogWarning("[BossAnimApply] 석상 스프라이트 없음: " + StatuePng); return null; }
+
+        var clip = new AnimationClip { frameRate = 12f };
+        var binding = EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite");
+        var keys = new ObjectReferenceKeyframe[sprites.Length];
+        for (int i = 0; i < sprites.Length; i++) keys[i] = new ObjectReferenceKeyframe { time = i / 12f, value = sprites[i] };
+        AnimationUtility.SetObjectReferenceCurve(clip, binding, keys);
+        var cs = AnimationUtility.GetAnimationClipSettings(clip); cs.loopTime = true; AnimationUtility.SetAnimationClipSettings(clip, cs);
+
+        string path = AnimDir + "/Statue_Idle.anim";
+        AssetDatabase.DeleteAsset(path);
+        AssetDatabase.CreateAsset(clip, path);
+        return clip;
+    }
+
     private static void ApplyTotem(GameObject boss, AnimationClip summonClip, AnimationClip idleClip)
     {
         var heal = boss.GetComponent<Pattern_HealTotem>();
@@ -607,6 +670,10 @@ public static class BossAnimApply
         var statue = AssetDatabase.LoadAllAssetsAtPath(StatuePng).OfType<Sprite>().FirstOrDefault();
         string tp = AssetDatabase.GetAssetPath(heal.totemPrefab);
         if (string.IsNullOrEmpty(tp)) return;
+
+        // 석상 idle 클립: 재제작 폴더에 없어(setup이 안 만듦) 정지 이미지처럼 보였음 →
+        // StatuePng(보스몬스터_석상.png, 이미 슬라이스됨)에서 루프 클립을 직접 생성해 항상 애니되게 한다.
+        if (idleClip == null) idleClip = BuildStatueIdleClip();
 
         // 석상 컨트롤러: 소환(1회) → 석상(루프) 자동전환. (소환 클립 없으면 석상만 루프)
         AnimatorController totemCtrl = null;

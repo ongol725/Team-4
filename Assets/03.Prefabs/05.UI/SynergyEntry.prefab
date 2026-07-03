@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text:
+  m_Text: 
 --- !u!1 &423072169770118657
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,3 +352,8 @@ MonoBehaviour:
   bronze: {r: 0.8, g: 0.5, b: 0.3, a: 1}
   silver: {r: 0.75, g: 0.78, b: 0.85, a: 1}
   gold: {r: 1, g: 0.84, b: 0.3, a: 1}
+  prism: {r: 0.75, g: 0.45, b: 1, a: 1}
+  bronzeSprite: {fileID: 5307048192468003278, guid: 32bf7767f278dc94a965f657967a7416, type: 3}
+  silverSprite: {fileID: -7219599736098211980, guid: 354d0e578c6e76b4487b10c019491788, type: 3}
+  goldSprite: {fileID: -8474996694655026510, guid: 6e0a9365d2ee1a64f8bc22f4328a0856, type: 3}
+  prismSprite: {fileID: 3937989823865342731, guid: 4281c5bd3b6f2e14c88751e968a80679, type: 3}

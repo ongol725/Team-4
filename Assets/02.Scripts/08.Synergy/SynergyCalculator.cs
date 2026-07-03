@@ -42,7 +42,7 @@ public class SynergyCalculator : MonoBehaviour
             { SynergyType.SpiritMage,     "정령술사"   },
             { SynergyType.GearShift,      "기어시프트" },
             { SynergyType.Pinball,        "핀볼"       },
-            { SynergyType.Overload,       "과부화"     },
+            { SynergyType.Overload,       "과부하"     },
             { SynergyType.Electro,        "일렉트로"   },
             { SynergyType.Impregnable,    "난공불락"   },
             { SynergyType.Titan,          "티탄"       },
@@ -113,13 +113,7 @@ public class SynergyCalculator : MonoBehaviour
                 : KoreanNames.TryGetValue(kvp.Key, out var n) ? n : kvp.Key.ToString();
 
             string effect = threshold != null
-                ? grade switch
-                {
-                    SynergyGrade.Prism  => threshold.prismEffect,
-                    SynergyGrade.Gold   => threshold.goldEffect,
-                    SynergyGrade.Silver => threshold.silverEffect,
-                    _                   => threshold.bronzeEffect,
-                }
+                ? BuildMilestoneText(threshold, grade)
                 : string.Empty;
 
             result.Add(new SynergyInfo
@@ -129,6 +123,7 @@ public class SynergyCalculator : MonoBehaviour
                 count         = count,
                 nextThreshold = nextMin,
                 grade         = grade,
+                condition     = threshold?.triggerCondition ?? string.Empty,
                 description   = threshold?.description ?? string.Empty,
                 effect        = effect,
                 icon          = threshold?.icon ?? SynergyIconHelper.GetIcon(kvp.Key),
@@ -137,5 +132,30 @@ public class SynergyCalculator : MonoBehaviour
 
         result.Sort((a, b) => b.grade.CompareTo(a.grade));
         return result;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// 시너지의 전체 마일스톤 단계를 "(임계값) 효과" 형식으로 세로 나열한다.
+    /// 현재 적용 중인 단계는 흰색(#FFFFFF), 미도달·지나간 단계는 회색 50%(#88888880)로 표시.
+    /// (기획: 시너지_툴팁_텍스트_테이블.md)
+    /// </summary>
+    private static string BuildMilestoneText(SynergyThreshold t, SynergyGrade activeGrade)
+    {
+        var sb = new System.Text.StringBuilder();
+        AppendMilestone(sb, t.bronzeThreshold, t.bronzeEffect, activeGrade == SynergyGrade.Bronze);
+        AppendMilestone(sb, t.silverThreshold, t.silverEffect, activeGrade == SynergyGrade.Silver);
+        AppendMilestone(sb, t.goldThreshold,   t.goldEffect,   activeGrade == SynergyGrade.Gold);
+        AppendMilestone(sb, t.prismThreshold,  t.prismEffect,  activeGrade == SynergyGrade.Prism);
+        return sb.ToString().TrimEnd('\n');
+    }
+
+    private static void AppendMilestone(System.Text.StringBuilder sb, int threshold, string effectText, bool isActive)
+    {
+        if (threshold <= 0 || string.IsNullOrEmpty(effectText)) return; // 미정의 단계는 생략
+        sb.Append(isActive ? "<color=#FFFFFF>" : "<color=#88888880>")
+          .Append('(').Append(threshold).Append(") ").Append(effectText)
+          .Append("</color>\n");
     }
 }

@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>이동 거리(m)를 인자로 발행. SynergyManager 대부호 트리거 구독용.</summary>
     public event System.Action<float> onDistanceMoved;
 
-    /// <summary>이동속도 배율. 과부화 패널티 등에서 일시 변경.</summary>
+    /// <summary>이동속도 배율. 과부하 패널티 등에서 일시 변경.</summary>
     public float speedMultiplier = 1f;
 
     /// <summary>임시칸 과적 이동속도 배율(로드아웃 확정 시 반영, 1=무패널티).</summary>

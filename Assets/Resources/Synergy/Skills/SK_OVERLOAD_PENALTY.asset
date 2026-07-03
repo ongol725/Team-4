@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SK_OVERLOAD_PENALTY
   m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
   skillID: SK_OVERLOAD_PENALTY
-  skillName: "\uACFC\uBD80\uD654 \uD328\uB110\uD2F0"
+  skillName: "\uACFC\uBD80\uD558 \uD328\uB110\uD2F0"
   triggerType: 4
   skillType: 3
   targetType: 2

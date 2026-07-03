@@ -254,6 +254,21 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    private bool _runCleared;
+
+    /// <summary>최종 보스 처치 시 호출 — 런을 클리어로 통계 기록/전송. (사망 후엔 무시)</summary>
+    public void ReportRunClear()
+    {
+        if (isDead || _runCleared) return;
+        _runCleared = true;
+        var gm = GameManager.Instance;
+        var lo = gm != null ? gm.CurrentLoadout : null;
+        string synergies = FormatSynergies(lo);
+        RunStatsLogger.Instance?.RunEnd(true, gm != null ? gm.currentFloor : MaxFloorClear, "-", "-", synergies);
+    }
+
+    private const int MaxFloorClear = 5;
+
     /// <summary>마지막으로 플레이어에게 피해를 준 몬스터 이름(킬러 통계용). MonsterController가 설정.</summary>
     [System.NonSerialized] public string LastAttacker = "";
 

@@ -645,8 +645,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64429adc19d9b3345ba195c854052e45, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::AutoSortSystem
+  _buttonPos: {x: 478.18, y: 279.35}
+  _buttonSprite: {fileID: -2360239471782958608, guid: 8ff8521a4d6396c488d7c9557ca8ac3a, type: 3}
 --- !u!1 &810000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,6 +1518,10 @@ PrefabInstance:
       value: 60.727386
       objectReference: {fileID: 0}
     - target: {fileID: 834924608597663685, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 221.4812
+      objectReference: {fileID: 0}
+    - target: {fileID: 834924608597663685, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.7115621
       objectReference: {fileID: 0}
@@ -1525,11 +1531,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 834924608597663685, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 155
+      value: 190.34735
       objectReference: {fileID: 0}
     - target: {fileID: 834924608597663685, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 90
+      value: 92.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480609185858153091, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480609185858153091, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480609185858153091, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480609185858153091, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1864387555577598140, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_Name
@@ -1742,6 +1764,10 @@ PrefabInstance:
     - target: {fileID: 8536225408253114452, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8968489429202715732, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9122376445408019779, guid: c9c9b566fef688346a4533eb6cef6525, type: 3}
       propertyPath: m_IsActive
