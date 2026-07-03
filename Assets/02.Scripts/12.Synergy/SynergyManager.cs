@@ -13,7 +13,7 @@ using BagSurvivor.UI;
 ///   OnHitTaken — 플레이어 피격 시 발동 (난공불락)
 ///   OnMove     — 플레이어 이동 거리 누적 시 발동 (대부호)
 ///   Passive    — 소환수/오브젝트를 전투 내내 유지 (핀볼·페어리·정령술사·성기사단)
-///   Penalty    — 브~골 패널티, 프리즘 초강력 발동 (과부화)
+///   Penalty    — 브~골 패널티, 프리즘 초강력 발동 (과부하)
 ///
 /// ▶ 스케일링 스탯
 ///   WPN_ATK_SUM — 무기 공격력 총합
@@ -60,7 +60,7 @@ public class SynergyManager : MonoBehaviour
     private PlayerAttack                 _playerAttack;
     private BattleLoadout                _loadout;
 
-    // 과부화 패널티: 진입 직전 피해량 배율을 저장해 두고 해제 시 원래 값으로 복구
+    // 과부하 패널티: 진입 직전 피해량 배율을 저장해 두고 해제 시 원래 값으로 복구
     // (캐릭터 고유 배율이 1이 아닐 수 있으므로 1f로 강제하지 않는다)
     private float _savedAtkMul = 1f;
 
@@ -194,7 +194,7 @@ public class SynergyManager : MonoBehaviour
                 var skill = skillBinding.skill;
                 dmgBase = Mathf.RoundToInt(_loadout.GetScaledBase(skill.scalingStat) * skill.dmgMultiplier);
 
-                // 지속 빔(과부화 레이저): 트리거별 발사 루프 대신 추종 빔 1개 생성 → 지속 데미지
+                // 지속 빔(과부하 레이저): 트리거별 발사 루프 대신 추종 빔 1개 생성 → 지속 데미지
                 if (skill.skillType == SkillType.Beam)
                 {
                     SpawnBeam(skill, dmgBase);
@@ -355,7 +355,7 @@ public class SynergyManager : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────
-    // Penalty 루프 (과부화)
+    // Penalty 루프 (과부하)
 
     private IEnumerator PenaltyLoop(SO_SkillData skill, SynergyGrade grade, int damage)
     {
@@ -395,7 +395,7 @@ public class SynergyManager : MonoBehaviour
             _savedAtkMul = _playerStats.attackMultiplier;
             _playerStats.attackMultiplier *= rate;
         }
-        Debug.Log($"[과부화] 패널티 발동 (이동속도·피해량 ×{rate:F2})");
+        Debug.Log($"[과부하] 패널티 발동 (이동속도·피해량 ×{rate:F2})");
     }
 
     private void RemoveOverloadPenalty()
@@ -404,7 +404,7 @@ public class SynergyManager : MonoBehaviour
             _playerMovement.speedMultiplier = 1f;
         if (_playerStats != null)
             _playerStats.attackMultiplier = _savedAtkMul;
-        Debug.Log("[과부화] 패널티 해제");
+        Debug.Log("[과부하] 패널티 해제");
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -426,7 +426,7 @@ public class SynergyManager : MonoBehaviour
                 for (int i = 0; i < count && enemies.Count > 0; i++)
                 {
                     var target = enemies[Random.Range(0, enemies.Count)];
-                    // 다수 대상(티탄 돌·과부화 비눗방울 등)은 명중 지점마다 이펙트를 띄운다.
+                    // 다수 대상(티탄 돌·과부하 비눗방울 등)은 명중 지점마다 이펙트를 띄운다.
                     if (!isProj) SpawnVFX(skill, target.transform.position);
                     // damageDelay > 0 이면 VFX(연출) 진행 후 데미지 적용 (티탄: 돌이 떨어진 뒤 타격)
                     if (skill.damageDelay > 0f)
@@ -440,7 +440,7 @@ public class SynergyManager : MonoBehaviour
 
             case SkillTargetType.RandomAroundSelf:
             {
-                // 과부화 비눗방울: 적을 조준하지 않고 플레이어 주변 랜덤 위치에 흩뿌린 뒤 그 자리 적을 타격.
+                // 과부하 비눗방울: 적을 조준하지 않고 플레이어 주변 랜덤 위치에 흩뿌린 뒤 그 자리 적을 타격.
                 // rangeRadius = 흩뿌리는 반경, visualSize = 비눗방울 지름(타격 반경 = 그 절반).
                 int   count   = skill.extraCount > 0 ? skill.extraCount : 1;
                 float scatter = skill.rangeRadius  > 0f ? skill.rangeRadius  : 4f;
@@ -514,7 +514,7 @@ public class SynergyManager : MonoBehaviour
 
             case SkillTargetType.FacingForward:
             {
-                // 과부화 레이저: 적을 조준하지 않고 플레이어가 바라보는 방향으로 발사.
+                // 과부하 레이저: 적을 조준하지 않고 플레이어가 바라보는 방향으로 발사.
                 Vector2 dir = _playerAttack != null ? _playerAttack.FacingDirection : Vector2.right;
                 if (dir == Vector2.zero) dir = Vector2.right;
                 int pierce = skill.pierceCount > 0 ? skill.pierceCount : 1;
@@ -524,7 +524,7 @@ public class SynergyManager : MonoBehaviour
 
             case SkillTargetType.ChainLightning:
             {
-                // 과부화: 최근접 적부터 시작해 직전 적 기준 가장 가까운 적으로 연쇄 타격.
+                // 과부하: 최근접 적부터 시작해 직전 적 기준 가장 가까운 적으로 연쇄 타격.
                 // 플레이어 → 적 → 적 … 을 번개 선으로 잇고, 명중 지점마다 임팩트 이펙트를 띄운다.
                 int hops = skill.extraCount > 0 ? skill.extraCount : 4;
                 var pool = GetEnemiesInRange(_player.position, skill.rangeRadius <= 0f ? 50f : skill.rangeRadius);
@@ -534,7 +534,7 @@ public class SynergyManager : MonoBehaviour
                 {
                     Vector3 hitPos = cur.transform.position;
                     HitEnemy(skill, cur, damage);
-                    // 노드 임팩트: 타격 지점마다 nodeFrames(과부화=OVERLOAD2.1_Pr) 1회 재생. 비어 있으면 연결선만.
+                    // 노드 임팩트: 타격 지점마다 nodeFrames(과부하=OVERLOAD2.1_Pr) 1회 재생. 비어 있으면 연결선만.
                     if (skill.nodeFrames != null && skill.nodeFrames.Length > 0)
                         SpawnFramesVFX(skill.nodeFrames, hitPos,
                                        skill.visualSize > 0f ? skill.visualSize : 1.5f,
@@ -832,7 +832,7 @@ public class SynergyManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 지속 빔(과부화 레이저)을 1개 생성한다. 플레이어가 바라보는 방향을 추적하며 주기적으로
+    /// 지속 빔(과부하 레이저)을 1개 생성한다. 플레이어가 바라보는 방향을 추적하며 주기적으로
     /// 빔 경로의 적에게 데미지를 준다. Refresh/파괴 시 _auraVFX 정리 루틴이 함께 제거한다.
     /// rangeRadius=빔 길이, visualSize=빔 두께, cooldown=데미지 틱 간격으로 해석한다.
     /// </summary>

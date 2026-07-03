@@ -7,6 +7,7 @@
 //         → 씬의 SynergyManager Inspector 바인딩 자동 채우기
 //
 // 데이터 출처: 콘텐츠_시너지기획서_20260608_v0.4
+//             (툴팁 텍스트: Assets/02.Scripts/시너지_툴팁_텍스트_테이블.md 기준)
 // ============================================================
 using System.Collections.Generic;
 using UnityEditor;
@@ -194,23 +195,23 @@ namespace BagSurvivor.SynergyEditor
                 ScalingStatType.WPN_ATK_SUM, dmg:0.7f, cd:0f, range:3f,
                 extra:15, duration:1f);
 
-            // ── 과부화 (Overload) — Penalty ──
-            d["SK_OVERLOAD_PENALTY"] = Sk("SK_OVERLOAD_PENALTY", "과부화 패널티",
+            // ── 과부하 (Overload) — Penalty ──
+            d["SK_OVERLOAD_PENALTY"] = Sk("SK_OVERLOAD_PENALTY", "과부하 패널티",
                 SynergyTriggerType.Penalty, SkillType.Buff, SkillTargetType.Self,
                 ScalingStatType.None, dmg:0f, cd:10f, range:0f,
                 fx:FixedEffectType.SpeedPenalty, fxVal:50f);
-            // 과부화 프리즘: 3종 효과 동시 발동 (콘셉트 슬라이드 24). 각각 Penalty 트리거로 무한 발동.
+            // 과부하 프리즘: 3종 효과 동시 발동 (콘셉트 슬라이드 24). 각각 Penalty 트리거로 무한 발동.
             // 레이저: 발사형 투사체가 아니라 바라보는 방향으로 생성되는 지속 빔.
             // range=빔 길이, vSize=빔 두께, cd=데미지 틱 간격으로 해석된다(SynergyBeam).
-            d["SK_OVERLOAD_LASER"] = Sk("SK_OVERLOAD_LASER", "과부화 레이저 (프리즘)",
+            d["SK_OVERLOAD_LASER"] = Sk("SK_OVERLOAD_LASER", "과부하 레이저 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.Beam, SkillTargetType.FacingForward,
                 ScalingStatType.WPN_ATK_AVG, dmg:3.0f, cd:0.2f, range:4f, vSize:2f);
-            d["SK_OVERLOAD_CHAIN"] = Sk("SK_OVERLOAD_CHAIN", "과부화 체인라이트닝 (프리즘)",
+            d["SK_OVERLOAD_CHAIN"] = Sk("SK_OVERLOAD_CHAIN", "과부하 체인라이트닝 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.ChainLightning,
                 ScalingStatType.WPN_ATK_AVG, dmg:6.0f, cd:0.5f, range:50f, extra:4);
             // 비눗방울: 적 조준이 아니라 플레이어 주변 랜덤 위치에 흩뿌려 그 자리 적을 타격.
             // range=흩뿌리는 반경, vSize=비눗방울 지름(타격 반경=절반).
-            d["SK_OVERLOAD_BUBBLE"] = Sk("SK_OVERLOAD_BUBBLE", "과부화 비눗방울 (프리즘)",
+            d["SK_OVERLOAD_BUBBLE"] = Sk("SK_OVERLOAD_BUBBLE", "과부하 비눗방울 (프리즘)",
                 SynergyTriggerType.Penalty, SkillType.AoE, SkillTargetType.RandomAroundSelf,
                 ScalingStatType.WPN_ATK_AVG, dmg:4.0f, cd:0.4f, range:4f, extra:3, vSize:1.6f);
 
@@ -316,99 +317,112 @@ namespace BagSurvivor.SynergyEditor
             {
                 // ── 암살단 ──────────────────────────────────────────
                 Th(SynergyType.Assassin, "암살단", 2, 4, 5, 0,
-                    "가방 무기 공격력 평균에 비례하는 수리검을 3초마다 투척합니다.",
-                    "수리검을 던집니다.  대미지 100%",
-                    "수리검 속도 30% 증가.  대미지 110%",
-                    "수리검 크기 ×1.5.  대미지 120%"),
+                    "단검, 권총, 수리검, 카타나, 너클",
+                    "적을 관통해서 날아가는 거대한 수리검을 던집니다. (쿨타임 3초) *수리검 공격력은 가방 무기 공격력 평균에 비례합니다.",
+                    "수리검을 던집니다.",
+                    "수리검의 속도가 빨라집니다.",
+                    "수리검이 더 커집니다."),
 
                 // ── 일렉트로 ────────────────────────────────────────
                 Th(SynergyType.Electro, "일렉트로", 2, 3, 3, 0,
-                    "가방 무기 공격력 총합에 비례하는 낙뢰를 2초마다 무작위 적에게 떨굽니다.",
+                    "지팡이, 마도서, 번개 반지",
+                    "낙뢰를 소환하여 무작위 적을 공격합니다. 낙뢰가 적을 처치하면 쿨타임이 50% 감소합니다. (쿨타임 2초) *낙뢰의 대미지는 가방 무기 공격력 총합에 비례합니다.",
                     "마법 낙뢰 1개 투하",
-                    "마법 낙뢰 3개 투하",
-                    ""),
+                    "",
+                    "마법 낙뢰 3개 투하"),
 
                 // ── 핀볼 ────────────────────────────────────────────
                 Th(SynergyType.Pinball, "핀볼", 2, 3, 3, 0,
-                    "맵 전체를 튕겨 다니며 적에게 피해를 주는 구체를 생성합니다.",
-                    "핀볼 생성.  대미지 110%",
-                    "핀볼 이동 속도 증가.  대미지 130%",
-                    "핀볼 이동 속도 증가.  대미지 130%"),
+                    "쇠뇌, 부메랑, 수리검",
+                    "맵 전체를 돌아다니는 구체를 생성합니다. 생성된 구체는 피격된 적에게 대미지를 입힙니다. *핀볼 공격력은 가방 무기 공격력 평균에 비례합니다.",
+                    "핀볼 생성",
+                    "",
+                    "핀볼 이동 속도 증가"),
 
                 // ── 처형자 ──────────────────────────────────────────
                 Th(SynergyType.Executioner, "처형자", 2, 4, 5, 0,
-                    "3초마다 좌우에 사신의 낫을 발사합니다. 체력이 낮은 적을 즉사시킵니다.",
-                    "체력 5% 이하 적 즉사.  대미지 100%",
-                    "체력 10% 이하 적 즉사.  대미지 110%",
-                    "체력 15% 이하 적 즉사.  대미지 130%"),
+                    "낫, 도끼, 시클, 할버드, 사이드",
+                    "캐릭터 좌우에 거대한 사신의 낫 투사체를 번갈아 발사합니다. 사신의 낫은 닿은 일반 몬스터의 HP가 일정 이하인 경우 즉사합니다. *낫 공격력은 가방 무기 공격력 총합에 비례합니다.",
+                    "체력 5% 이하 적 즉사",
+                    "체력 10% 이하 적 즉사",
+                    "체력 15% 이하 적 즉사"),
 
                 // ── 성기사단 ────────────────────────────────────────
                 Th(SynergyType.HolyKnight, "성기사단", 2, 4, 5, 0,
-                    "플레이어 위치에 신성한 성역 장판을 생성합니다. 장판 내에서 체력이 회복됩니다.",
-                    "장판 5초 유지.  체력 회복 1%.  대미지 50%",
-                    "장판 8초 유지.  체력 회복 1.5%.  대미지 60%",
-                    "장판 11초 유지.  체력 회복 2%.  대미지 70%"),
+                    "무기: 장검, 메이스 / 방어구: 문장, 방패",
+                    "20초마다 일정 시간 유지되는 성역을 생성합니다. 성역 내부에 있는 적은 지속 피해를 입고, 플레이어는 체력을 회복합니다. *장판 피해는 가방 무기 공격력 총합에 비례합니다. *체력 회복은 가방 방어구 체력 총합에 비례합니다.",
+                    "장판 5초 유지",
+                    "장판 8초 유지",
+                    "장판 11초 유지"),
 
                 // ── 소드마스터 ──────────────────────────────────────
                 Th(SynergyType.SwordMaster, "소드마스터", 3, 4, 5, 0,
-                    "2초마다 전방으로 검기를 발사합니다.",
-                    "검기 1개 발사.  대미지 100%",
-                    "검기 크기 50% 확대.  대미지 110%",
-                    "검기 2회 발사.  대미지 130%"),
+                    "단검, 장검, 대검, 카타나, 시클",
+                    "캐릭터가 보는 방향으로 검기를 발사합니다. *검기 공격력은 가방 무기 공격력 평균에 비례합니다.",
+                    "2초마다 전방에 검기 1개 발사",
+                    "검기의 크기가 50% 확대",
+                    "검기 2회 발사"),
 
                 // ── 티탄 ────────────────────────────────────────────
                 Th(SynergyType.Titan, "티탄", 2, 4, 6, 0,
-                    "4초마다 무작위 적에게 돌을 떨굽니다.",
-                    "돌 3개 낙하.  대미지 500%",
-                    "돌 6개 낙하.  대미지 500%",
-                    "돌 9개 낙하.  대미지 500%"),
+                    "철퇴, 도끼, 산탄총, 대검, 몽둥이, 워해머",
+                    "랜덤한 방향에 돌을 떨어트립니다. *돌 공격력은 가방 무기 공격력 평균에 비례합니다.",
+                    "돌 3개 떨구기",
+                    "돌 6개 떨구기",
+                    "돌 9개 떨구기"),
 
                 // ── 페어리 ──────────────────────────────────────────
                 Th(SynergyType.Fairy, "페어리", 2, 4, 6, 0,
-                    "플레이어 주변을 회전하며 적에게 피해를 주는 요정을 소환합니다.",
-                    "요정 1마리 소환.  대미지 100%",
-                    "요정 2마리 소환.  대미지 100%",
-                    "요정 3마리 소환 (가속).  대미지 100%"),
+                    "도끼, 권총, 활, 카타나, 시클, 너클",
+                    "플레이어 주변을 회전하며 대미지를 주는 요정을 소환합니다. *요정 피해는 가방 무기 공격력 총합에 비례합니다.",
+                    "1개의 요정이 회전합니다.",
+                    "2개의 요정이 회전합니다.",
+                    "3개의 요정이 더욱 빠르게 회전합니다."),
 
                 // ── 난공불락 ────────────────────────────────────────
                 Th(SynergyType.Impregnable, "난공불락", 3, 6, 9, 12,
-                    "피격 시 충격파를 발산하고 받는 피해를 감소시킵니다.\n방어구 체력 총합에 비례합니다.",
-                    "충격파.  피해 감소 10%.  대미지 500%",
-                    "충격파 크기 ×1.5.  피해 감소 20%.  대미지 700%",
-                    "충격파 강화.  피해 감소 35%.  대미지 900%",
-                    "충격파 크기 ×2.  0.5초마다 자동 발동.  피해 감소 60%.  대미지 1500%"),
+                    "무기: 스피어, 대검 / 방어구: (방어구 전원)",
+                    "적에게 피격 시 시너지 레벨에 따라 피해량을 감소시키고, 적에게 범위 피해를 입힙니다. *충격파 대미지는 가방 방어구 체력 총합에 비례합니다.",
+                    "피해량 감소 10%",
+                    "충격파의 크기 100% 증가, 피해량 감소 20%",
+                    "충격파 대미지 증가, 피해량 35% 감소",
+                    "그 누구도 뚫을 수 없습니다."),
 
                 // ── 정령술사 ────────────────────────────────────────
                 Th(SynergyType.SpiritMage, "정령술사", 3, 5, 7, 9,
-                    "전투에 함께하는 원소 정령을 소환합니다. 등급이 오를수록 정령이 추가됩니다.",
-                    "물 정령 1기.  대미지 100%",
-                    "물·불 정령 2기.",
-                    "물·불·바람 정령 3기.",
-                    "고대 정령 1기.  대미지 450%.  8초마다 광역 공격"),
+                    "낫, 지팡이, 마도서, 번개 반지, 장궁, 레일건, 스피어, 메이스, 화염 방사기",
+                    "동행하는 정령 골렘이 같이 전투를 진행합니다. 시너지 레벨에 따라 다양한 효과가 발동됩니다. *정령 피해는 가방 무기 공격력 평균에 비례합니다.",
+                    "정령 골렘 1기 소환",
+                    "정령 골렘 2기 소환",
+                    "정령 골렘 4기 소환",
+                    "고대 정령이 소환됩니다."),
 
                 // ── 마왕 ────────────────────────────────────────────
                 Th(SynergyType.DemonLord, "마왕", 2, 4, 6, 8,
-                    "마왕의 권능이 누적 발동됩니다. 등급이 오를수록 효과가 더해집니다.",
-                    "지옥 검기를 전방으로 발사.  대미지 100%",
-                    "검기 + 지옥 기어 2기 추가.",
-                    "검기 + 기어 2기 + 연옥 소용돌이.",
-                    "3연 검기 + 기어 4기 + 소용돌이.  강림."),
+                    "장검, 철퇴, 산탄총, 수류탄, 라이플, 바주카, 화염 방사기, 사이드",
+                    "마왕의 스킬이 발동됩니다. 레벨에 따라 강력한 스킬이 발동됩니다. *마왕 스킬은 가방 무기 공격력 총합에 비례합니다.",
+                    "지옥불 불씨",
+                    "연옥의 기어",
+                    "마왕의 멸천",
+                    "종말의 지옥 불꽃 / 마왕 강림"),
 
                 // ── 대부호 ──────────────────────────────────────────
                 Th(SynergyType.Tycoon, "대부호", 5, 7, 8, 9,
-                    "이동 시 골드를 뿌립니다. 2초 후 폭발하며 범위 피해를 줍니다.",
-                    "1칸당 골드 3개.  골드당 70% 대미지",
-                    "1칸당 골드 5개.",
-                    "1칸당 골드 7개.",
-                    "1칸당 골드 15개.  폭발 시간 1초로 단축"),
+                    "철퇴, 낫, 활, 라이플, 너클, 화염 방사기, 할버드, 몽둥이, 바주카",
+                    "플레이어가 이동 시 골드를 떨어트립니다. 떨어진 골드는 2초 뒤 폭발합니다. *코인은 가방 무기 공격력 총합에 비례합니다.",
+                    "이동 거리 1칸당 3개의 골드를 뿌립니다.",
+                    "이동 거리 1칸당 5개의 골드를 뿌립니다.",
+                    "이동 거리 1칸당 7개의 골드를 뿌립니다.",
+                    "당신의 걸음을 당당합니다."),
 
-                // ── 과부화 ──────────────────────────────────────────
-                Th(SynergyType.Overload, "과부화", 4, 5, 6, 8,
-                    "왕귀형 콘셉트. 브론즈만 디버프, 실버·골드는 효과 없음, 프리즘 달성 시 신이 됩니다.",
-                    "10초마다 1초간 이동속도/피해량 50% 감소",
-                    "효과 없음 (프리즘 도달 시 각성)",
-                    "효과 없음 (프리즘 도달 시 각성)",
-                    "레이저 + 체인라이트닝 + 비눗방울 3종 무한 발동.  신이 됩니다."),
+                // ── 과부하 ──────────────────────────────────────────
+                Th(SynergyType.Overload, "과부하", 4, 5, 6, 8,
+                    "쇠뇌, 장궁, 부메랑, 지팡이, 마도서, 번개 반지, 수리검, 레일건",
+                    "당신이 마지막에 도달한다면... *스킬 피해는 가방 무기 공격력 평균에 비례합니다.",
+                    "10초마다 1초동안 발동합니다. / 1초간 이동속도 50% 감소 / 1초간 피해량 감소 50%",
+                    "아무 효과도 없습니다.",
+                    "조금 더 있으면 효과가 발동합니다.",
+                    "과부하를 해제합니다."),
             };
 
             // 보존된 아이콘 복원
@@ -611,22 +625,24 @@ namespace BagSurvivor.SynergyEditor
         static SynergyThreshold Th(
             SynergyType type, string displayName,
             int bronze, int silver, int gold, int prism,
-            string desc, string bronzeEff, string silverEff, string goldEff,
+            string cond, string desc,
+            string bronzeEff, string silverEff, string goldEff,
             string prismEff = "")
         {
             return new SynergyThreshold
             {
-                type            = type,
-                displayName     = displayName,
-                bronzeThreshold = bronze,
-                silverThreshold = silver,
-                goldThreshold   = gold,
-                prismThreshold  = prism,
-                description     = desc,
-                bronzeEffect    = bronzeEff,
-                silverEffect    = silverEff,
-                goldEffect      = goldEff,
-                prismEffect     = prismEff,
+                type             = type,
+                displayName      = displayName,
+                bronzeThreshold  = bronze,
+                silverThreshold  = silver,
+                goldThreshold    = gold,
+                prismThreshold   = prism,
+                triggerCondition = cond,
+                description      = desc,
+                bronzeEffect     = bronzeEff,
+                silverEffect     = silverEff,
+                goldEffect       = goldEff,
+                prismEffect      = prismEff,
             };
         }
 
@@ -734,7 +750,7 @@ namespace BagSurvivor.SynergyEditor
                 //                  (기어=Devil_Wave는 소환수 아이콘으로 별도 연결)
                 { "SK_DEMON_1", "Devil_Fireball" }, { "SK_DEMON_2", "Devil_Slash" },
                 { "SK_DEMON_3", "Devil_Fireball" }, { "SK_DEMON_4", "Devil_Fireball" },
-                // 과부화 프리즘 3종: 레이저=OVERLOAD3_Pr(빔형), 체인=OVERLOAD2_Pr, 비눗방울=OVERLOAD1_Pr
+                // 과부하 프리즘 3종: 레이저=OVERLOAD3_Pr(빔형), 체인=OVERLOAD2_Pr, 비눗방울=OVERLOAD1_Pr
                 { "SK_OVERLOAD_LASER",  "OVERLOAD3_Pr" },
                 { "SK_OVERLOAD_CHAIN",  "OVERLOAD2_Pr" },
                 { "SK_OVERLOAD_BUBBLE", "OVERLOAD1_Pr" },

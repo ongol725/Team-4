@@ -75,7 +75,7 @@ public class SO_SkillData : ScriptableObject
     public bool vfxAnchorBottom = false;
 
     [Header("노드 임팩트 (체인라이트닝 등)")]
-    [Tooltip("타격 지점(노드)마다 1회 재생할 임팩트 시트 프레임. 비우면 노드 이펙트 없음(연결선만). 과부화 체인라이트닝=OVERLOAD2.1_Pr")]
+    [Tooltip("타격 지점(노드)마다 1회 재생할 임팩트 시트 프레임. 비우면 노드 이펙트 없음(연결선만). 과부하 체인라이트닝=OVERLOAD2.1_Pr")]
     public Sprite[] nodeFrames;
 
     [Header("대부호 골드 드롭 (OnMove 전용)")]

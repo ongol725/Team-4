@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SK_OVERLOAD_CHAIN
   m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
   skillID: SK_OVERLOAD_CHAIN
-  skillName: "\uACFC\uBD80\uD654 \uCCB4\uC778\uB77C\uC774\uD2B8\uB2DD (\uD504\uB9AC\uC998)"
+  skillName: "\uACFC\uBD80\uD558 \uCCB4\uC778\uB77C\uC774\uD2B8\uB2DD (\uD504\uB9AC\uC998)"
   triggerType: 4
   skillType: 1
   targetType: 7

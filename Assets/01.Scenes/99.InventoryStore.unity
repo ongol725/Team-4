@@ -766,8 +766,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 93, y: -12.66751}
-  m_SizeDelta: {x: 0, y: -46.8314}
+  m_AnchoredPosition: {x: 93, y: -10.12839}
+  m_SizeDelta: {x: 0, y: -43.641}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &226862350
 MonoBehaviour:
@@ -4415,6 +4415,11 @@ MonoBehaviour:
   nameText: {fileID: 1676942184}
   descText: {fileID: 907411381}
   effectText: {fileID: 60716294}
+  background: {fileID: 1072002903}
+  bronzeSprite: {fileID: 5307048192468003278, guid: 32bf7767f278dc94a965f657967a7416, type: 3}
+  silverSprite: {fileID: -7219599736098211980, guid: 354d0e578c6e76b4487b10c019491788, type: 3}
+  goldSprite: {fileID: -8474996694655026510, guid: 6e0a9365d2ee1a64f8bc22f4328a0856, type: 3}
+  prismSprite: {fileID: 3937989823865342731, guid: 4281c5bd3b6f2e14c88751e968a80679, type: 3}
 --- !u!1 &1349147418
 GameObject:
   m_ObjectHideFlags: 0
@@ -5206,7 +5211,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 963210fd79542ff489725640188e6ff2, type: 3}
-    m_FontSize: 11
+    m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10

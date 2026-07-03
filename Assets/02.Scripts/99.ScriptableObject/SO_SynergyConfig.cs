@@ -47,6 +47,7 @@ public class SynergyThreshold
     public int prismThreshold  = 0;
 
     [Header("효과 텍스트")]
+    [TextArea(1, 2)] public string triggerCondition; // 발동 조건 (구성 아이템 목록)
     [TextArea(1, 3)] public string description;   // 시너지 공통 설명
     [TextArea(1, 3)] public string bronzeEffect;  // Bronze 등급 효과
     [TextArea(1, 3)] public string silverEffect;  // Silver 등급 효과
