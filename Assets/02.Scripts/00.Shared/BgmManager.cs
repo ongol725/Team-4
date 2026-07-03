@@ -50,16 +50,18 @@ public class BgmManager : MonoBehaviour
 
     private void OnSceneChanged(Scene _, Scene next) => PlayForScene(next.name);
 
+    private const float BaseVolumeMul = 0.7f; // BGM 트랙 자체가 커서 기본 70%로 재생
+
     private static float BgmVolume =>
-        PlayerPrefs.GetInt("bgmOn", 1) == 1 ? PlayerPrefs.GetFloat("bgmVol", 0.8f) : 0f;
+        (PlayerPrefs.GetInt("bgmOn", 1) == 1 ? PlayerPrefs.GetFloat("bgmVol", 0.8f) : 0f) * BaseVolumeMul;
 
     private void PlayForScene(string sceneName)
     {
         string path = null;
-        if (sceneName.Contains("Title") || sceneName.Contains("Lobby"))
+        if (sceneName.Contains("Title"))
             path = TitlePath;
-        else if (sceneName.Contains("Ingame") || sceneName.Contains("BossRoom") || sceneName.Contains("TestBattle"))
-            path = IngamePath;
+        else if (sceneName.Contains("Lobby") || sceneName.Contains("Ingame") || sceneName.Contains("BossRoom") || sceneName.Contains("TestBattle"))
+            path = IngamePath; // 로비부터 전투 BGM 시작(끊김 없이 이어짐)
 
         if (path == null || path == _currentPath) { ApplyVolume(); return; } // 매핑 없는 씬/같은 곡 = 유지
         var clip = Resources.Load<AudioClip>(path);

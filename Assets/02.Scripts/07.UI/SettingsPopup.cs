@@ -55,8 +55,9 @@ namespace BagSurvivor.UI
             if (sfxLabel != null) sfxLabel.text = StringTable.Get(143021);
             SetOkLabel();
 
-            // 화면 모드
+            // 화면 모드 — 저장된 모드를 시작 시 복원 적용
             modeIndex = PlayerPrefs.GetInt("screenModeIdx", CurrentModeIndex());
+            ApplyScreenMode(modeIndex);
             UpdateScreenModeText();
             if (screenModeLeft != null) screenModeLeft.onClick.AddListener(delegate { CycleMode(-1); });
             if (screenModeRight != null) screenModeRight.onClick.AddListener(delegate { CycleMode(1); });
@@ -91,9 +92,19 @@ namespace BagSurvivor.UI
         private void CycleMode(int dir)
         {
             modeIndex = (modeIndex + dir + modes.Length) % modes.Length;
-            Screen.fullScreenMode = modes[modeIndex];
+            ApplyScreenMode(modeIndex);
             UpdateScreenModeText();
             Save();
+        }
+
+        /// <summary>화면 모드 실제 적용. 창모드=1280x720, 전체/테두리없음=모니터 기본 해상도.</summary>
+        private void ApplyScreenMode(int idx)
+        {
+            FullScreenMode mode = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
+            if (mode == FullScreenMode.Windowed)
+                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            else
+                Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, mode);
         }
 
         private void UpdateScreenModeText()
