@@ -14,6 +14,7 @@ public class DungeonCombatZone : MonoBehaviour
 {
     private Transform              _player;
     private List<RoomController>   _cachedRooms = new List<RoomController>();
+    private readonly HashSet<RoomController> _clearedRooms = new HashSet<RoomController>(); // 클리어된 방(보스 등)=비전투
     private GameObject             _lastRoomsContainer;
     private bool                   _currentCombat;
 
@@ -52,8 +53,20 @@ public class DungeonCombatZone : MonoBehaviour
     private void RefreshRooms()
     {
         _cachedRooms.Clear();
+        _clearedRooms.Clear(); // 새 던전이면 클리어 기록 초기화
         _cachedRooms.AddRange(
             FindObjectsByType<RoomController>(FindObjectsSortMode.None));
+
+        // 방 클리어 시 비전투로 전환되도록 구독(보스/미니보스/엘리트 등 잠기는 방)
+        foreach (var rc in _cachedRooms)
+        {
+            if (rc == null) continue;
+            var room = rc; // 클로저 캡처
+            if (room.OnRoomCleared == null)
+                room.OnRoomCleared = new UnityEngine.Events.UnityEvent();
+            room.OnRoomCleared.AddListener(() => _clearedRooms.Add(room));
+        }
+
         _lastRoomsContainer = GameObject.Find("RoomControllers");
     }
 
@@ -89,6 +102,9 @@ public class DungeonCombatZone : MonoBehaviour
             if (rc == null) continue;
             var col = rc.GetComponent<Collider2D>();
             if (col == null || !col.OverlapPoint(pos)) continue;
+
+            // 클리어된 방(보스 등)은 비전투 — 인벤 열어 반지 장착 후 다음 층 이동 가능
+            if (_clearedRooms.Contains(rc)) return false;
 
             // 이 방 안에 있음 → 타입으로 전투 여부 판단
             return rc.roomType != RoomType.Start && rc.roomType != RoomType.Shop;

@@ -15,6 +15,7 @@ MonoBehaviour:
   summonID: SUM_GOLEM_GIANT
   summonName: "고대 정령 대형 골렘"
   aiType: 0
+  spriteFacesLeft: 1
   atkMultiplier: 2.5
   moveSpeed: 2.5
   atkCooldown: 2

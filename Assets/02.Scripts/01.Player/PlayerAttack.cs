@@ -1067,6 +1067,8 @@ public class PlayerAttack : MonoBehaviour
         float t = 0f;
         while (t < dur)
         {
+            // 피벗·무기 GO가 파괴됐으면(전투 종료·씬 전환·재컴파일 등) 즉시 종료
+            if (pivot == null || wpn == null) yield break;
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / dur);
             pivot.transform.position = transform.position + pivotOffset; // 플레이어 이동에 즉시 따라오게(매 프레임 동기화)

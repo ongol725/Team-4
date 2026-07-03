@@ -30,6 +30,7 @@ public class AutoSortSystem : MonoBehaviour
         // 버튼은 InventoryGridUI 가 로드된 뒤 한 번만 생성
         if (!_buttonCreated) TryCreateButton();
 
+        if (!InventoryPopupToggle.AnyOpen) return; // 인벤창 열렸을 때만 단축키 작동
 #if ENABLE_INPUT_SYSTEM
         if (Keyboard.current != null && Keyboard.current.oKey.wasPressedThisFrame)
             RunAutoSort();
