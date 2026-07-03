@@ -13,6 +13,9 @@ public class SellSlotUI : MonoBehaviour
 
     [SerializeField] private Canvas _canvas;
 
+    [Header("배경 스프라이트 (빨간 판매 배경) — Item_Shop_Grid_red_bg_with_border")]
+    [SerializeField] private Sprite _bgSprite;
+
     [Header("상점 오버레이 위치/크기 (드래그 시 상점 위에 표시) — BG(Item_Shop_Grid)와 동일한 영역")]
     [SerializeField] private Vector2 _shopOverlayPos  = new Vector2(789.05f, -1.25f);
     [SerializeField] private Vector2 _shopOverlaySize = new Vector2(341.07f, 757.65f);
@@ -40,8 +43,16 @@ public class SellSlotUI : MonoBehaviour
 
     private static readonly int[] RarityBaseCosts = { 100, 200, 300, 400 };
 
-    private static readonly Color IdleColor  = new Color(0.50f, 0.05f, 0.05f, 0.88f);
-    private static readonly Color HoverColor = new Color(0.85f, 0.12f, 0.12f, 0.96f);
+    // 스프라이트 미지정 시(폴백) 사용하는 단색 빨강
+    private static readonly Color IdleColorFlat  = new Color(0.50f, 0.05f, 0.05f, 0.88f);
+    private static readonly Color HoverColorFlat = new Color(0.85f, 0.12f, 0.12f, 0.96f);
+    // 빨간 배경 스프라이트 사용 시: 스프라이트 색은 유지하고 명암만 조절해 호버 피드백을 준다
+    private static readonly Color IdleColorTint  = new Color(0.80f, 0.80f, 0.80f, 1f);
+    private static readonly Color HoverColorTint = new Color(1f, 1f, 1f, 1f);
+
+    // BuildUI에서 스프라이트 유무에 따라 선택되는 실제 색
+    private Color _idleColor  = IdleColorFlat;
+    private Color _hoverColor = HoverColorFlat;
 
     // ─────────────────────────────────────────────────────────────
 
@@ -80,7 +91,7 @@ public class SellSlotUI : MonoBehaviour
         if (_bg == null) return;
         bool isDragging = _gridUI != null && _gridUI.IsAnyFollowingMouse;
         bool isOver     = isDragging && IsMouseOver();
-        _bg.color = isOver ? HoverColor : IdleColor;
+        _bg.color = isOver ? _hoverColor : _idleColor;
 
         UpdateLivePrice(isDragging, isOver);
     }
@@ -203,7 +214,14 @@ public class SellSlotUI : MonoBehaviour
         PanelRt = rt;
 
         _bg = panel.GetComponent<Image>();
-        _bg.color = IdleColor;
+        if (_bgSprite != null)
+        {
+            _bg.sprite  = _bgSprite;
+            _bg.type    = Image.Type.Simple;
+            _idleColor  = IdleColorTint;
+            _hoverColor = HoverColorTint;
+        }
+        _bg.color = _idleColor;
 
         _canvasGroup = panel.AddComponent<CanvasGroup>();
         _canvasGroup.alpha = 0f;

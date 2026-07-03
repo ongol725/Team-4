@@ -16,6 +16,7 @@ MonoBehaviour:
   monsterName: "\uB2EC\uBE5B\uC758 \uB3C4\uC0B4\uC790 \uB291\uB300\uC778\uAC04"
   englishName: MoonlightButcherWerewolf
   grade: 3
+  isFinalBoss: 1
   maxHP: 5000
   attack: 300
   defense: 250
