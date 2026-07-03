@@ -66,7 +66,9 @@ public class ProjectileBase : MonoBehaviour
         // 부메랑은 적을 관통하며 왕복하므로 일찍 소멸하지 않도록 다수 명중 허용
         if (boomerang) _remainingHits = Mathf.Max(_remainingHits, 999);
 
-        Destroy(gameObject, lifetime);
+        // 부메랑은 플레이어에게 돌아와서 소멸(FixedUpdate). 시간초과로 공중에서 사라지지 않도록
+        // 넉넉한 안전 상한만 둔다. 그 외 투사체는 기존대로 lifetime에 소멸.
+        Destroy(gameObject, boomerang ? lifetime * 4f : lifetime);
     }
 
     private void FixedUpdate()
@@ -78,11 +80,12 @@ public class ProjectileBase : MonoBehaviour
         if (_boomerang)
         {
             _age += Time.fixedDeltaTime;
-            if (_age >= _outTime && _owner != null)
+            if (_age >= _outTime)
             {
+                if (_owner == null) { Destroy(gameObject); return; } // 주인 없으면 복귀 불가 → 소멸
+                // 플레이어에게 돌아올 때까지 계속 유도하고, 도달했을 때만 소멸
                 Vector2 back = ((Vector2)_owner.position - (Vector2)transform.position).normalized * _speed;
-                Vector2 vb = Vector2.Lerp(rb.linearVelocity, back, 8f * Time.fixedDeltaTime);
-                rb.linearVelocity = vb;
+                rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, back, 8f * Time.fixedDeltaTime);
                 if (Vector2.Distance(transform.position, _owner.position) < 0.6f) Destroy(gameObject);
             }
             return;
