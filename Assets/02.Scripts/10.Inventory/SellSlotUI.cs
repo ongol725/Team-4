@@ -181,9 +181,9 @@ public class SellSlotUI : MonoBehaviour
 
     private static int ComputePrice(ItemInstance inst)
     {
-        // 판매가 = 현재 아이템 구매가(cost)의 절반. (100G 단위 가격 개편 반영)
+        // 판매가 = 현재 구매가(희귀도/등급 기준)의 절반. 상점 가격표와 동일 소스 사용.
         if (inst?.data == null) return 0;
-        return inst.data.cost / 2;
+        return ShopSlotUI.BaseBuyCost(inst.data, inst.gradeIndex) / 2;
     }
 
     // ─────────────────────────────────────────────────────────────

@@ -169,9 +169,11 @@ public class ItemInfoPopup : MonoBehaviour
         _synSection.SetActive(!string.IsNullOrEmpty(syn));
         _synText.text = syn;
 
-        bool hasCost = data.cost > 0;
+        // 판매가 = 현재 구매가(희귀도/등급 기준)의 절반. (에셋 cost는 구버전 값이라 미사용)
+        int sellPrice = ShopSlotUI.BaseBuyCost(data, gi) / 2;
+        bool hasCost = sellPrice > 0 && !(data is SO_InventoryBlockData); // 확장 블록은 판매 불가
         _costSection.SetActive(hasCost);
-        if (hasCost) _costText.text = $"💰  {data.cost} G";
+        if (hasCost) _costText.text = $"💰  판매가 {sellPrice} G";
     }
 
     private static string BuildStats(SO_ItemData data, int gi)
