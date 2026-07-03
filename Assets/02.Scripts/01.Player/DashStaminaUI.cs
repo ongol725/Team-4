@@ -11,12 +11,12 @@ using UnityEngine.UI;
 public class DashStaminaUI : MonoBehaviour
 {
     [Header("위치/크기")]
-    public Vector3 offset  = new Vector3(0f, 1.05f, 0f); // 머리 위 오프셋(월드)
-    public float diameter  = 0.34f;                      // 원 지름(월드 유닛)
+    public Vector3 offset  = new Vector3(0f, 0.525f, 0f); // 머리 위 오프셋(월드) — 캐릭터와의 거리 1/2로 조정
+    public float diameter  = 0.34f;                       // 원 지름(월드 유닛)
 
     [Header("색상")]
     public Color chargingColor = new Color(1f,    0.85f, 0.35f, 0.95f); // 차오르는 파이(골드)
-    public Color readyColor    = new Color(0.45f, 1f,    0.95f, 1f);    // 가득 = 대시 가능(청록, 잔상색 톤)
+    public Color readyColor    = new Color(0.35f, 0.78f, 0.38f, 1f);    // 가득 = 대시 가능(차분한 초록)
     public Color backColor     = new Color(0f,    0f,    0f,    0.45f); // 배경 원(반투명 검정)
 
     [Header("완충 펄스")]
