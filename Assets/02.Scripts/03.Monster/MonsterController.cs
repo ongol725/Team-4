@@ -653,6 +653,14 @@ namespace BagSurvivor.Monster
             // 3. 사망 연출 시간(보스는 길게) — 이 동안 Death 애니/이펙트 표시
             yield return new WaitForSeconds(deathDelay);
 
+            // 최종 보스(달빛의 도살자) 처치 → 사망 연출이 끝난 뒤 클리어 결과 화면 표시.
+            // (팝업이 timeScale=0으로 멈추므로 연출 후에 호출해야 죽는 모습이 보인다)
+            if (monsterData != null && monsterData.isFinalBoss)
+            {
+                var clearPh = UnityEngine.Object.FindFirstObjectByType<PlayerHealth>();
+                if (clearPh != null) clearPh.ShowClearResult();
+            }
+
             // 4. 드롭 + 사망 통지 / 풀 반환
             SpawnDropItem();
             if (deathCallback != null)

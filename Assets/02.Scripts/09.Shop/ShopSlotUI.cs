@@ -84,6 +84,8 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             { SynergyType.Overload,       "과부하"     },
             { SynergyType.Electro,        "일렉트로"   },
             { SynergyType.Impregnable,    "난공불락"   },
+            { SynergyType.Titan,          "티탄"       },
+            { SynergyType.Fairy,          "페어리"     },
         };
 
     private const float MiniCellGap = 1f;

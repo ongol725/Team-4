@@ -151,6 +151,7 @@ public class BattleLoadoutBuilder : MonoBehaviour
         var synList = _synergyCalc.Calculate(snapshot);
         foreach (var syn in synList)
         {
+            if (!syn.isActive) continue; // 조건 미달(회색 표시 전용) 시너지는 전투에 반영하지 않음
             loadout.ActiveSynergies.Add(new ActiveSynergyEntry
             {
                 type  = syn.type,

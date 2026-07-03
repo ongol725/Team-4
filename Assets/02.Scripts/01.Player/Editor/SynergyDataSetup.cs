@@ -264,10 +264,11 @@ namespace BagSurvivor.SynergyEditor
                 SummonAIType.FollowAttack, ScalingStatType.WPN_ATK_AVG,
                 atk:2.0f, spd:5.2f, atkCd:1.0f, atkRange:1.5f, dur:-1f);
             // 대정령: 캐릭터 머리 위 고정(GuardOffset + spd 0 = 공전 안 함). 주기 광역(uniqueSkill)으로 공격.
+            // 일반 공격은 가까운 순 4명 동시 타격(maxTargets), 타격 이펙트는 Elemental_Explosion 시트(③ 메뉴로 연결)
             d["SUM_GIANT_GOLEM"] = Sum("SUM_GIANT_GOLEM", "고대 정령 (프리즘)",
                 SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_AVG,
                 atk:4.5f, spd:0f, atkCd:2.0f, atkRange:6.0f, dur:-1f,
-                uniqueSkillCd:8f, scale:0.3f, atkFxScale:3f); // 크기 축소 / 공격 모션은 크게
+                uniqueSkillCd:8f, scale:0.3f, atkFxScale:3f, maxTargets:4); // 크기 축소 / 공격 모션은 크게
 
             // ── 마왕 기어 (DemonLord) — GuardOffset, 플레이어 주변 고정 위치 원거리 공격 ──
             d["SUM_DEMON_GEAR"] = Sum("SUM_DEMON_GEAR", "지옥 기어",
@@ -599,7 +600,8 @@ namespace BagSurvivor.SynergyEditor
             SummonAIType ai, ScalingStatType scaling,
             float atk, float spd, float atkCd, float atkRange, float dur,
             FixedEffectType fx = FixedEffectType.None, float fxVal = 0f,
-            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 5, float atkFxScale = 0.5f)
+            float uniqueSkillCd = 8f, float scale = 0f, int sortOrder = 5, float atkFxScale = 0.5f,
+            int maxTargets = 1)
         {
             string path = $"{SummonDir}/{id}.asset";
             var asset = LoadOrCreate<SO_SummonData>(path);
@@ -618,6 +620,7 @@ namespace BagSurvivor.SynergyEditor
             asset.displayScale        = scale;
             asset.sortingOrder        = sortOrder;
             asset.attackEffectScale   = atkFxScale;
+            asset.maxTargets          = maxTargets;
             EditorUtility.SetDirty(asset);
             return asset;
         }
@@ -926,7 +929,24 @@ namespace BagSurvivor.SynergyEditor
                 filled++;
             }
 
-            // 정령 골렘·고대 정령은 공격 투사체(spirit_attack) 미사용 — 연결하지 않음.
+            // 정령 골렘은 공격 투사체(spirit_attack) 미사용 — 연결하지 않음.
+
+            // ── 고대 정령(프리즘) 일반 공격 타격 이펙트 — Elemental_Explosion 시트(4×2 격자 8프레임) ──
+            var giantGolem = AssetDatabase.LoadAssetAtPath<SO_SummonData>($"{SummonDir}/SUM_GIANT_GOLEM.asset");
+            if (giantGolem != null)
+            {
+                var fxFrames = LoadLargeFramesSorted($"{sheetDir}/Elemental_Explosion_SpriteSheet.png");
+                if (fxFrames.Length > 0)
+                {
+                    giantGolem.attackEffectFrames = fxFrames;
+                    giantGolem.attackEffectFps    = 16f; // 8프레임 → 0.5초 재생 (공격 주기 2초 내 종료)
+                    EditorUtility.SetDirty(giantGolem);
+                }
+                else
+                {
+                    Debug.LogWarning($"[SynergyDataSetup] 대정령 타격 이펙트 시트 없음: {sheetDir}/Elemental_Explosion_SpriteSheet.png");
+                }
+            }
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[SynergyDataSetup] 소환수 아이콘 {filled}개 적용 완료");

@@ -22,6 +22,7 @@ namespace BagSurvivor.UI
         public Sprite silverSprite;
         public Sprite goldSprite;
         public Sprite prismSprite;
+        public Sprite graySprite;   // 비활성(조건 미달) 배경
 
         private RectTransform rt;
 
@@ -53,7 +54,8 @@ namespace BagSurvivor.UI
 
             if (background != null)
             {
-                var panelSprite = i.grade == SynergyGrade.Prism  ? prismSprite
+                var panelSprite = !i.isActive                     ? graySprite
+                                : i.grade == SynergyGrade.Prism   ? prismSprite
                                 : i.grade == SynergyGrade.Gold    ? goldSprite
                                 : i.grade == SynergyGrade.Silver  ? silverSprite : bronzeSprite;
                 if (panelSprite != null)

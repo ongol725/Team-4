@@ -143,12 +143,13 @@ namespace BagSurvivor.UI
             txt.fontSize  = 11;
             txt.alignment = TextAnchor.MiddleLeft;
 
-            string label = (s.grade == SynergyGrade.Prism || s.count >= s.nextThreshold)
+            string label = (s.isActive && (s.grade == SynergyGrade.Prism || s.count >= s.nextThreshold))
                 ? $"{s.synergyName}  ★{s.count}"
                 : $"{s.synergyName}  {s.count}/{s.nextThreshold}";
 
             txt.text  = label;
-            txt.color = s.grade == SynergyGrade.Prism  ? new Color(0.75f, 0.45f, 1f)
+            txt.color = !s.isActive                    ? new Color(0.60f, 0.60f, 0.62f)
+                      : s.grade == SynergyGrade.Prism  ? new Color(0.75f, 0.45f, 1f)
                       : s.grade == SynergyGrade.Gold   ? new Color(1f, 0.84f, 0.3f)
                       : s.grade == SynergyGrade.Silver  ? new Color(0.75f, 0.78f, 0.85f)
                       : new Color(0.8f, 0.5f, 0.3f);
