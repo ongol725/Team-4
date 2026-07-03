@@ -50,15 +50,21 @@ public class DashStaminaUI : MonoBehaviour
     // 정리할 때 함께 파괴되지 않도록 하고, 위치는 LateUpdate에서 따라간다.
     private void Build()
     {
-        var go = new GameObject("DashStaminaUI");
-        go.transform.position = transform.position + offset;
-        _root = go.transform;
+        // 이전 게이지가 남아있으면 제거(중복 생성 방지)
+        if (_root != null) Destroy(_root.gameObject);
 
-        var canvas = go.AddComponent<Canvas>();
+        // 주의: Canvas를 생성 '후' AddComponent하면 기존 Transform이 RectTransform으로
+        // 교체되어, 먼저 잡아둔 transform 참조가 죽은 객체가 된다(무한 재생성 루프 원인).
+        // → 생성 시점에 RectTransform+Canvas를 함께 부여하고 그 뒤에 참조를 잡는다.
+        var go = new GameObject("DashStaminaUI", typeof(RectTransform), typeof(Canvas));
+        _root = go.transform;
+        _root.position = transform.position + offset;
+
+        var canvas = go.GetComponent<Canvas>();
         canvas.renderMode   = RenderMode.WorldSpace;
         canvas.sortingOrder = 40; // 캐릭터/이펙트 위, 스크린 HUD와는 무관
 
-        var rt = (RectTransform)go.transform;
+        var rt = (RectTransform)_root;
         rt.sizeDelta = new Vector2(100f, 100f);
         _baseScale = Vector3.one * (diameter / 100f);
         rt.localScale = _baseScale;
