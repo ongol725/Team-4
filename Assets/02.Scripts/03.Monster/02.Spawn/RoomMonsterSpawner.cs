@@ -91,6 +91,9 @@ namespace BagSurvivor.Monster
             [Tooltip("공격 배율 (층별 난이도 차등)")]
             public float attackMultiplier = 1f;
 
+            [Tooltip("방어력 고정 오버라이드 (-1 = SO값 사용). 예: 2층 중간보스 defense 30 고정")]
+            public int defenseOverride = -1;
+
             [Tooltip("방 1개당 최소 스폰 수")]
             public int minCount = 1;
 
@@ -489,7 +492,7 @@ namespace BagSurvivor.Monster
             for (int i = 0; i < count; i++)
             {
                 GameObject prefab = PickSpecialPrefab(rule);
-                SpawnOne(rc, prefab, hp, atk, bossPattern);
+                SpawnOne(rc, prefab, hp, atk, bossPattern, rule.defenseOverride);
             }
         }
 
@@ -511,7 +514,7 @@ namespace BagSurvivor.Monster
             return pick;
         }
 
-        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool enableBossPattern = false)
+        private void SpawnOne(RoomController rc, GameObject prefab, float hpMul, float atkMul, bool enableBossPattern = false, int defenseOverride = -1)
         {
             if (prefab == null) return;
 
@@ -524,6 +527,8 @@ namespace BagSurvivor.Monster
 
             MonsterController mc = pool.Get(prefab, pos, hpMul, atkMul);
             if (mc == null) return;
+
+            mc.SetDefenseOverride(defenseOverride); // 층별 방어력 고정(예: 2층 중간보스 30) — 풀 재사용 시 -1로 복원됨
 
             // 보스 패턴 구동기: 4층 미니보스만 켬(평소/풀재사용엔 꺼서 일반 몬스터로 동작)
             var driver = mc.GetComponent<BossPatternDriver>();

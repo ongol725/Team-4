@@ -124,6 +124,9 @@ namespace BagSurvivor.Monster
         private int runtimeMaxHP;
         private int runtimeAttack;
 
+        // 방어력 런타임 오버라이드 (음수=미사용, SO값 사용). 층별 중간보스 방어력 고정 등에 사용.
+        private int runtimeDefenseOverride = -1;
+
         // ==========================================
         // 프로퍼티 (외부 접근용)
         // ==========================================
@@ -271,6 +274,9 @@ namespace BagSurvivor.Monster
             hpMultiplier = hpMul <= 0f ? 1f : hpMul;
             attackMultiplier = attackMul <= 0f ? 1f : attackMul;
         }
+
+        /// <summary>방어력을 런타임에 고정값으로 오버라이드합니다(음수=SO값 사용). 활성화 전 주입.</summary>
+        public void SetDefenseOverride(int defense) => runtimeDefenseOverride = defense;
 
         /// <summary>체력을 회복합니다(최대 체력 한도). </summary>
         public void Heal(int amount)
@@ -485,8 +491,9 @@ namespace BagSurvivor.Monster
         {
             if (isDying || isInvincible) return;
 
-            // 방어력 + 받는 피해 배율 적용
-            int finalDamage = monsterData.CalculateDamageTaken(rawDamage);
+            // 방어력 + 받는 피해 배율 적용 (defense 오버라이드 시 SO값 대신 고정값 사용)
+            int def = runtimeDefenseOverride >= 0 ? runtimeDefenseOverride : monsterData.defense;
+            int finalDamage = Mathf.Max(1, rawDamage - def);
             if (damageTakenMultiplier != 1f)
                 finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * damageTakenMultiplier));
             currentHP -= finalDamage;

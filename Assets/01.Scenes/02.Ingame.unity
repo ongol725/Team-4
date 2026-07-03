@@ -250,6 +250,7 @@ MonoBehaviour:
     noRepeatAcrossRooms: 0
     hpMultiplier: 1
     attackMultiplier: 1
+    defenseOverride: -1
     minCount: 1
     maxCount: 1
   - roomType: 3
@@ -259,6 +260,7 @@ MonoBehaviour:
     noRepeatAcrossRooms: 0
     hpMultiplier: 1
     attackMultiplier: 1
+    defenseOverride: -1
     minCount: 1
     maxCount: 1
   - roomType: 4
@@ -268,8 +270,9 @@ MonoBehaviour:
     - {fileID: 9158167247413763753, guid: 9d5c7f1771b4b474a8fc2613850a7330, type: 3}
     - {fileID: 9112178706994911348, guid: fc49b2fd66dc1124785717f2a532a124, type: 3}
     noRepeatAcrossRooms: 1
-    hpMultiplier: 1
+    hpMultiplier: 1.5
     attackMultiplier: 1
+    defenseOverride: 30
     minCount: 1
     maxCount: 1
   - roomType: 4
@@ -279,13 +282,15 @@ MonoBehaviour:
     - {fileID: 9158167247413763753, guid: 9d5c7f1771b4b474a8fc2613850a7330, type: 3}
     - {fileID: 9112178706994911348, guid: fc49b2fd66dc1124785717f2a532a124, type: 3}
     noRepeatAcrossRooms: 1
-    hpMultiplier: 2
+    hpMultiplier: 2.5
     attackMultiplier: 2
+    defenseOverride: -1
     minCount: 1
     maxCount: 1
   nearRingFactor: 1.5
   edgeMargin: 1
   maxPositionAttempts: 25
+  minSpawnDistanceFromPlayer: 2.5
   prewarmPerType: 8
   floorTilemapOverride: {fileID: 0}
   wallTilemapOverride: {fileID: 0}
@@ -361,6 +366,7 @@ MonoBehaviour:
     goldValue: 201
     sprite: {fileID: -7485415606213293452, guid: b2bd68e5e9fb82f448caf5bc9e15839c, type: 3}
   scatterRadius: 0.5
+  pickupRadius: 2.5
   poolRoot: {fileID: 0}
   prewarmCount: 12
 --- !u!1 &151557548 stripped
@@ -642,7 +648,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64429adc19d9b3345ba195c854052e45, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoSortSystem
   _buttonPos: {x: 478.18, y: 279.35}
   _buttonSprite: {fileID: -2360239471782958608, guid: 8ff8521a4d6396c488d7c9557ca8ac3a, type: 3}
