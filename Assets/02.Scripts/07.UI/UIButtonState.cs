@@ -30,14 +30,17 @@ namespace BagSurvivor.UI
         [Range(0.5f, 1f)] public float activeScale = 0.95f;
 
         [Header("클릭 SFX (선택)")]
-        [Tooltip("SFX_Btn_Click 클립")]
+        [Tooltip("SFX_Btn_Click 클립 (비우면 기본 클릭음 DefaultClick 사용)")]
         public AudioClip clickSfx;
+
+        // 기본 클릭음 (개별 지정 없을 때) — 전역 1회 로드
+        private static AudioClip _defaultClick;
+        private static bool _defaultLoaded;
 
         private Image dimOverlay;
         private Vector3 originalScale;
         private bool isPointerInside;
         private bool isPointerDown;
-        private AudioSource sfxSource;
 
         private void Awake()
         {
@@ -118,14 +121,17 @@ namespace BagSurvivor.UI
 
         private void PlayClickSfx()
         {
-            if (clickSfx == null) return;
-            if (sfxSource == null)
+            AudioClip clip = clickSfx;
+            if (clip == null)
             {
-                sfxSource = GetComponent<AudioSource>();
-                if (sfxSource == null) sfxSource = gameObject.AddComponent<AudioSource>();
-                sfxSource.playOnAwake = false;
+                if (!_defaultLoaded)
+                {
+                    _defaultClick = Resources.Load<AudioClip>("01.SFX/03.UI/DefaultClick");
+                    _defaultLoaded = true;
+                }
+                clip = _defaultClick;
             }
-            sfxSource.PlayOneShot(clickSfx);
+            AudioUtil.PlaySfx(clip); // 2D + 설정(sfxOn/sfxVol) 반영
         }
     }
 }

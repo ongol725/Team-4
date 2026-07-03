@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5503807697345093931}
   - component: {fileID: 8928994163963701202}
   - component: {fileID: 3867242365250654926}
+  - component: {fileID: 1453939325762517476}
   m_Layer: 8
   m_Name: Prefab_GoblinArcher
   m_TagString: Monster
@@ -172,9 +173,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: fb147e291898cd5408f927c89f7462ef, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  shadowWidthMul: 1
+  shadowFixedLocalY: 0
+  shadowLocalY: 0
+  deathSfx: []
   sortingOrder: 10
   stopDistance: 7
   approachOverlap: 0.4
+  deathDelay: 0.1
+  damageReductionVfxPrefab: {fileID: 0}
 --- !u!114 &3867242365250654926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +197,22 @@ MonoBehaviour:
   aimMode: 0
   attackRange: 7
   fireCooldown: 1.5
+  telegraphTime: 0.4
+  spawnDelay: 0.5
   projectileSpeed: 8
   projectileMaxRange: 12
   projectilePrefab: {fileID: 5813921172449787936, guid: a98dea411e3080346afefddd2263fadd, type: 3}
+--- !u!114 &1453939325762517476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6703318431440199771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6ac643d8a47ac4f8ddfe42a0aca0ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.AttackTelegraphOutline
+  outlineColor: {r: 1, g: 0.15, b: 0.15, a: 0.9}
+  thickness: 0.08

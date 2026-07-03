@@ -175,6 +175,10 @@ MonoBehaviour:
   monsterData: {fileID: 11400000, guid: f1fe3fb0b1acbe04aa23e64f1b634085, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
   shadowWidthMul: 1
+  shadowFixedLocalY: 0
+  shadowLocalY: 0
+  deathSfx:
+  - {fileID: 8300000, guid: 96bc763fa9881714ba12a456972d949b, type: 3}
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
@@ -220,3 +224,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RingDropOnDeath
   dropChance: 1
+  useFloorBasedChance: 0

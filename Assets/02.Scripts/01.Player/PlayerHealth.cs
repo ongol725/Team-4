@@ -232,6 +232,7 @@ public class PlayerHealth : MonoBehaviour
         {
             var stats = BuildResultStats();
             resultPopup.Show(false, stats); // Show 내부에서 timeScale=0 처리
+            BgmManager.Instance?.PlayGameOver(); // BGM 중단 + 게임오버 트랙 1회
 
             // 런 통계 기록(사망).
             var gm = GameManager.Instance;
