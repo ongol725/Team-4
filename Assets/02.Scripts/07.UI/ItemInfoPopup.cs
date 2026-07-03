@@ -171,9 +171,11 @@ public class ItemInfoPopup : MonoBehaviour
         _synSection.SetActive(!string.IsNullOrEmpty(syn));
         _synText.text = syn;
 
-        bool hasCost = data.cost > 0;
+        // 판매가 = 현재 구매가(희귀도/등급 기준)의 절반. (에셋 cost는 구버전 값이라 미사용)
+        int sellPrice = ShopSlotUI.BaseBuyCost(data, gi) / 2;
+        bool hasCost = sellPrice > 0 && !(data is SO_InventoryBlockData); // 확장 블록은 판매 불가
         _costSection.SetActive(hasCost);
-        if (hasCost) _costText.text = $"💰  {data.cost} G";
+        if (hasCost) _costText.text = $"💰  판매가 {sellPrice} G";
     }
 
     private static string BuildStats(SO_ItemData data, int gi)
@@ -306,11 +308,10 @@ public class ItemInfoPopup : MonoBehaviour
         MakeText(_synSection.transform, "SynLabel", font, 11, new Color(0.78f, 0.58f, 1f)).text = "── 시너지 ──";
         _synText = MakeText(_synSection.transform, "SynContent", font, 11, Color.white);
 
-        // ── 비용 섹션 (우측 하단 정렬) ──
-        _costSection = MakeGO("CostSection", panelGO.transform);
-        _costSection.AddComponent<LayoutElement>().flexibleWidth = 1;
-        _costText = MakeText(_costSection.transform, "Cost", font, 13, new Color(1f, 0.84f, 0.2f), FontStyle.Bold);
-        _costText.alignment = TextAnchor.MiddleRight;
+        // ── 판매가 (맨 아래 행, 우측 하단 정렬 — 다른 설명과 겹치지 않도록 독립 행으로) ──
+        _costText = MakeText(panelGO.transform, "Cost", font, 13, new Color(1f, 0.84f, 0.2f), FontStyle.Bold);
+        _costText.alignment = TextAnchor.LowerRight;
+        _costSection = _costText.gameObject; // 토글용(Populate에서 SetActive)
 
         _panelRT.gameObject.SetActive(false);
     }
