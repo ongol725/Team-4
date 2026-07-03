@@ -34,6 +34,11 @@ public class MinimapController : MonoBehaviour
     private int _currentRoomIndex = -1;
     private List<Vector2[]> _currentExitTris = new List<Vector2[]>(); // 각 원소 = [밑변끝a, 밑변끝b, 꼭짓점]
 
+    // 방문한 적 있는 방들(누적) — 이 방들의 '아직 안 지나간' 출구 통로를 계속 표시한다.
+    private readonly HashSet<int> _visitedRooms = new HashSet<int>();
+    // 플레이어가 실제로 밟은 복도 셀 — 이 셀과 맞닿은 출구는 '지나간' 것으로 보고 표시를 지운다.
+    private readonly HashSet<Vector2Int> _traveledCorridorCells = new HashSet<Vector2Int>();
+
     // 🌟 던전 생성기(DungeonGenerator)가 던전을 다 만들고 나서 이 함수를 호출해 줄 겁니다.
     public void InitializeMinimap(int width, int height, int[,] data, List<Room> generatedRooms, Transform player)
     {
@@ -45,6 +50,14 @@ public class MinimapController : MonoBehaviour
         playerTransform = player;
 
         isExplored = new bool[mapWidth, mapHeight];
+
+        // 층 전환(던전 재생성) 시 통로 표기 누적 상태 초기화
+        _visitedRooms.Clear();
+        _traveledCorridorCells.Clear();
+        _currentExitTris.Clear();
+        _currentRoomIndex = -1;
+        lastPlayerPos = new Vector2Int(-1, -1);
+
         minimapTexture = new Texture2D(mapWidth, mapHeight, TextureFormat.RGBA32, false);
         minimapTexture.filterMode = FilterMode.Point; // 픽셀아트 느낌 살리기
         minimapUI.texture = minimapTexture;
@@ -98,13 +111,13 @@ public class MinimapController : MonoBehaviour
             UpdateExploration(currentGridPos);
         }
 
-        // 현재 방이 바뀌면 통로 입구(빨간 점) 갱신
-        if (ENABLE_EXIT_DOTS) UpdateCurrentRoomExits(currentGridPos);
+        // 통로 표기 갱신: 방 진입/복도 이동 추적 후, 방문한 방들의 '안 지나간' 출구만 표시
+        if (ENABLE_EXIT_DOTS) UpdateExitTriangles(currentGridPos);
     }
 
-    // 플레이어가 속한 방을 찾아, 방이 바뀌면 그 방의 통로 입구 셀을 계산하고 미니맵을 다시 그린다.
-    // 방 밖(통로)이면 표시를 비운다.
-    private void UpdateCurrentRoomExits(Vector2Int pos)
+    // 방문한 방을 누적하고, 밟은 복도 셀을 기록한 뒤,
+    // 방문한 모든 방의 출구 중 '아직 지나가지 않은' 통로만 삼각형으로 다시 그린다.
+    private void UpdateExitTriangles(Vector2Int pos)
     {
         if (rooms == null) return;
 
@@ -114,9 +127,23 @@ public class MinimapController : MonoBehaviour
             if (rooms[i].bounds.Contains(pos)) { idx = i; break; }
         }
 
-        if (idx == _currentRoomIndex) return; // 변화 없음
+        bool dirty = false;
+        if (idx >= 0)
+        {
+            if (_visitedRooms.Add(idx)) dirty = true;      // 새 방 방문
+        }
+        else if (pos.x >= 0 && pos.x < mapWidth && pos.y >= 0 && pos.y < mapHeight
+                 && mapData[pos.x, pos.y] == 1)            // 복도 셀을 밟음 → '지나간' 통로로 기록
+        {
+            if (_traveledCorridorCells.Add(pos)) dirty = true;
+        }
         _currentRoomIndex = idx;
-        _currentExitTris = (idx >= 0) ? ComputeExitTriangles(rooms[idx]) : new List<Vector2[]>();
+
+        if (!dirty) return; // 새 방문/새 복도 진입이 없으면 표기 변화도 없음
+
+        _currentExitTris.Clear();
+        foreach (int ri in _visitedRooms)
+            _currentExitTris.AddRange(ComputeExitTriangles(rooms[ri]));
         RefreshMinimap();
     }
 
@@ -132,28 +159,36 @@ public class MinimapController : MonoBehaviour
         bool Floor(int x, int y) =>
             x >= 0 && x < mapWidth && y >= 0 && y < mapHeight && mapData[x, y] == 1;
 
+        // 세로 구간(고정 x)·가로 구간(고정 y)에서 이미 밟은 복도 셀이 하나라도 있으면 '지나간' 통로 → 표시 안 함
+        bool TraveledV(int fx, int s, int e) { for (int y = s; y <= e; y++) if (_traveledCorridorCells.Contains(new Vector2Int(fx, y))) return true; return false; }
+        bool TraveledH(int fy, int s, int e) { for (int x = s; x <= e; x++) if (_traveledCorridorCells.Contains(new Vector2Int(x, fy))) return true; return false; }
+
         // 밑변 길이 2배: 맞닿은 구간(길이 len)을 중앙 기준으로 양쪽 len/2씩 확장 → 총 2·len
         // 오른쪽(East): 경계 x=b.xMax, 복도셀 (b.xMax, y) — 꼭짓점 +x
         ScanRuns(y0, y1, y => Floor(b.xMax, y), (s, e) =>
         {
+            if (TraveledV(b.xMax, s, e)) return;
             float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
             tris.Add(new[] { new Vector2(b.xMax, mid - half), new Vector2(b.xMax, mid + half), new Vector2(b.xMax + d, mid) });
         });
         // 왼쪽(West): 경계 x=b.xMin, 복도셀 (b.xMin-1, y) — 꼭짓점 -x
         ScanRuns(y0, y1, y => Floor(b.xMin - 1, y), (s, e) =>
         {
+            if (TraveledV(b.xMin - 1, s, e)) return;
             float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
             tris.Add(new[] { new Vector2(b.xMin, mid - half), new Vector2(b.xMin, mid + half), new Vector2(b.xMin - d, mid) });
         });
         // 위(North): 경계 y=b.yMax, 복도셀 (x, b.yMax) — 꼭짓점 +y
         ScanRuns(x0, x1, x => Floor(x, b.yMax), (s, e) =>
         {
+            if (TraveledH(b.yMax, s, e)) return;
             float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
             tris.Add(new[] { new Vector2(mid - half, b.yMax), new Vector2(mid + half, b.yMax), new Vector2(mid, b.yMax + d) });
         });
         // 아래(South): 경계 y=b.yMin, 복도셀 (x, b.yMin-1) — 꼭짓점 -y
         ScanRuns(x0, x1, x => Floor(x, b.yMin - 1), (s, e) =>
         {
+            if (TraveledH(b.yMin - 1, s, e)) return;
             float mid = (s + e + 1) * 0.5f, half = (e + 1 - s);
             tris.Add(new[] { new Vector2(mid - half, b.yMin), new Vector2(mid + half, b.yMin), new Vector2(mid, b.yMin - d) });
         });
