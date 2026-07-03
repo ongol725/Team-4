@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
 
     /// <summary>현재 이동 입력(-1~1). 방향 애니메이션 등에서 참조.</summary>
     public Vector2 MoveInput => moveInput;
+
+    /// <summary>대시 스태미너 충전률(0~1). 1이면 대시 가능. DashStaminaUI 표시용.</summary>
+    public float DashCharge01 => dashCooldown <= 0f ? 1f : 1f - Mathf.Clamp01(_dashCd / dashCooldown);
     private bool _inventoryOpen = false;
     private Vector2 _prevPosition;
 
@@ -32,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("대시 (스페이스)")]
     public float dashSpeed        = 22f;   // 대시 속도
     public float dashDuration     = 0.15f; // 대시 지속(초)
-    public float dashCooldown     = 1.0f;  // 재사용 대기(초)
+    public float dashCooldown     = 2.0f;  // 재사용 대기(초)
     public float afterimageInterval = 0.03f; // 잔상 생성 간격
     public Color afterimageColor  = new Color(0.6f, 0.9f, 1f, 0.5f); // 잔상 색
 
@@ -62,6 +65,9 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         if (moveAction != null) moveAction.action.Enable();
+
+        // 머리 위 대시 스태미너 원형 게이지 자동 부착(씬/프리팹 수정 없음 — 작업 충돌 방지)
+        if (GetComponent<DashStaminaUI>() == null) gameObject.AddComponent<DashStaminaUI>();
 
         InventoryPopupToggle.onPopupToggled += OnInventoryToggled;
 
