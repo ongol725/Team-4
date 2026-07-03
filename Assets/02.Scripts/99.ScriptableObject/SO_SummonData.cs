@@ -15,6 +15,9 @@ public class SO_SummonData : ScriptableObject
     [Header("AI")]
     public SummonAIType aiType;
 
+    [Tooltip("스프라이트 원본이 왼쪽을 보고 그려졌으면 체크(이동 방향 반전 보정용)")]
+    public bool spriteFacesLeft;
+
     [Header("전투")]
     [Tooltip("ScalingStatType에 따라 WPN_ATK_AVG/SUM 또는 ARM_HP_SUM 대비 배율")]
     public ScalingStatType scalingStat = ScalingStatType.WPN_ATK_AVG;
