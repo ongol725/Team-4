@@ -53,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
         if (rb != null)
         {
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+            // 대시 등 고속 이동 시 얇은 벽을 통과(터널링)하지 않도록 스윕 충돌 감지 사용
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             _prevPosition = rb.position;
         }
     }
