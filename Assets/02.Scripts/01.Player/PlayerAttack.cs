@@ -523,7 +523,8 @@ public class PlayerAttack : MonoBehaviour
             case WeaponAttackStyleType.Boomerang:
             {
                 float   spdM = g5 ? 3f : 1f; // 5단계: 투사체 속도 +200%(×3)
-                Vector2 dir  = Rotate(_lastMoveDir, _boomerangGoLeft ? 90f : -90f);
+                // 이동/바라보는 방향과 무관하게 항상 화면 고정 좌우(수평)로 발사, 한 발씩 좌↔우 번갈아
+                Vector2 dir  = _boomerangGoLeft ? Vector2.left : Vector2.right;
                 _boomerangGoLeft = !_boomerangGoLeft;
                 // 던졌다가 플레이어에게 회전하며 복귀
                 SpawnProjectile(entry, dir, spdMult: spdM, scaleMult: 4f, boomerang: true); // 부메랑: 투사체 크기 ×4(기존 ×2에서 2배, 콜라이더 동반)
