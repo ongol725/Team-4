@@ -38,6 +38,9 @@ namespace BagSurvivor.Monster
         // ==========================================
         // 내부 변수
         // ==========================================
+        // 돌진 정지 판정 시 진행 방향 앞쪽을 살피는 거리(월드 유닛) — 멧돼지 앞코가 벽에 닿는 느낌
+        private const float WallStopLookAhead = 0.7f;
+
         private MonsterController controller;
         private bool isCharging = false;
         private bool isInChargeSequence = false;
@@ -92,6 +95,12 @@ namespace BagSurvivor.Monster
             Vector2 chargeDirection = controller.GetDirectionToPlayer();
             Vector2 startPosition = transform.position;
 
+            // 돌진이 방을 벗어나지 못하도록 이 방의 경계를 미리 확보(벽·복도 입구에서 정지용).
+            // 방을 못 찾으면(haveRoom=false) 기존처럼 최대 거리까지 돌진.
+            Rect roomRect = default;
+            bool haveRoom = RoomMonsterSpawner.Instance != null &&
+                            RoomMonsterSpawner.Instance.TryGetRoomWorldRect(startPosition, out roomRect);
+
             // 빨간 집중선 표시
             ShowChargeLine(chargeDirection);
 
@@ -112,6 +121,15 @@ namespace BagSurvivor.Monster
             while (distanceTraveled < chargeMaxDistance && isCharging)
             {
                 if (controller.IsDead) break;
+
+                // 진행 방향 앞쪽을 살펴 벽 타일이 있거나(정확) 방을 벗어나면(복도 입구) 정지
+                var spawner = RoomMonsterSpawner.Instance;
+                if (spawner != null)
+                {
+                    Vector2 probe = (Vector2)transform.position + chargeDirection * WallStopLookAhead;
+                    if (spawner.IsWallAt(probe)) break;                    // 벽에 막힘(주목적)
+                    if (haveRoom && !roomRect.Contains(probe)) break;      // 복도로 나가려 하면 방 끝에서 막힘
+                }
 
                 controller.SetVelocity(chargeDirection * chargeSpeed);
                 distanceTraveled = Vector2.Distance(startPosition, transform.position);

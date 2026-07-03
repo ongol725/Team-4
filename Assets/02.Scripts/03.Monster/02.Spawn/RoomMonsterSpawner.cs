@@ -313,6 +313,65 @@ namespace BagSurvivor.Monster
             activeMonsters.Clear();
         }
 
+        /// <summary>주어진 월드 위치를 포함하는 방의 '월드 좌표 사각형'을 반환. 없으면 false.
+        /// roomBounds는 셀 좌표이고 타일맵이 오프셋을 가질 수 있으므로 WorldToCell/CellToWorld로 변환한다.
+        /// (멧돼지 돌진이 방 밖(벽·복도)으로 나가지 못하게 경계 조회용 — 06.Map은 읽기만 함)</summary>
+        public bool TryGetRoomWorldRect(Vector2 worldPos, out Rect worldRect)
+        {
+            worldRect = default;
+            var tm = GetFloorTilemap();
+
+            Vector3Int cellPos = tm != null
+                ? tm.WorldToCell(worldPos)
+                : new Vector3Int(Mathf.FloorToInt(worldPos.x), Mathf.FloorToInt(worldPos.y), 0);
+            var cell = new Vector2Int(cellPos.x, cellPos.y);
+
+            foreach (var rc in subscribed)
+            {
+                if (rc == null || !rc.roomBounds.Contains(cell)) continue;
+                RectInt b = rc.roomBounds;
+                if (tm != null)
+                {
+                    Vector3 wMin = tm.CellToWorld(new Vector3Int(b.xMin, b.yMin, 0));
+                    Vector3 wMax = tm.CellToWorld(new Vector3Int(b.xMax, b.yMax, 0));
+                    worldRect = Rect.MinMaxRect(wMin.x, wMin.y, wMax.x, wMax.y);
+                }
+                else
+                {
+                    worldRect = Rect.MinMaxRect(b.xMin, b.yMin, b.xMax, b.yMax);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private UnityEngine.Tilemaps.Tilemap _floorTilemapCache;
+        private UnityEngine.Tilemaps.Tilemap GetFloorTilemap()
+        {
+            if (_floorTilemapCache != null) return _floorTilemapCache;
+            var go = GameObject.Find("FloorMap");
+            if (go != null) _floorTilemapCache = go.GetComponent<UnityEngine.Tilemaps.Tilemap>();
+            if (_floorTilemapCache == null) _floorTilemapCache = GameObject.FindFirstObjectByType<UnityEngine.Tilemaps.Tilemap>();
+            return _floorTilemapCache;
+        }
+
+        /// <summary>주어진 월드 위치에 벽 타일이 있으면 true. (Wallmap 직접 조회 — 방 모양과 무관하게 정확)</summary>
+        public bool IsWallAt(Vector2 worldPos)
+        {
+            var tm = GetWallTilemap();
+            if (tm == null) return false;
+            return tm.HasTile(tm.WorldToCell(worldPos));
+        }
+
+        private UnityEngine.Tilemaps.Tilemap _wallTilemapCache;
+        private UnityEngine.Tilemaps.Tilemap GetWallTilemap()
+        {
+            if (_wallTilemapCache != null) return _wallTilemapCache;
+            var go = GameObject.Find("Wallmap");
+            if (go != null) _wallTilemapCache = go.GetComponent<UnityEngine.Tilemaps.Tilemap>();
+            return _wallTilemapCache;
+        }
+
         private void EnsurePool()
         {
             if (pool != null) return;
