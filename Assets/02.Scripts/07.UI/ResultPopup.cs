@@ -63,6 +63,8 @@ namespace BagSurvivor.UI
                 Time.timeScale = 1f;
         }
 
+        private bool _rewardGranted; // 메타 재화 중복 지급 방지 (씬 리로드 시 자연 리셋)
+
         /// <summary>결과 화면 표시. isClear=true 클리어, false 실패.</summary>
         public void Show(bool isClear, ResultStats s)
         {
@@ -76,13 +78,27 @@ namespace BagSurvivor.UI
             }
             if (frameImage != null) frameImage.color = isClear ? clearColor : failColor;
 
+            // 메타 재화 지급 (런 1회, 패배해도 지급 — 반복 플레이 동기)
+            int reward = 0;
+            if (!_rewardGranted)
+            {
+                _rewardGranted = true;
+                int floor      = GameManager.Instance != null ? GameManager.Instance.currentFloor : 1;
+                int goldGained = RunStatsLogger.Instance != null ? RunStatsLogger.Instance.GoldGainedTotal : 0;
+                reward = MetaProgression.GrantRunReward(goldGained, floor, s != null ? s.killCount : 0, isClear);
+            }
+
             if (s != null)
             {
                 if (playTimeText != null) playTimeText.text = "플레이 시간    " + FormatTime(s.playTime);
                 if (synergyText != null) synergyText.text = "사용 시너지    " + s.mainSynergies;
                 if (weaponText != null) weaponText.text = "배치 무기    " + s.weaponCount + " 개";
                 if (killText != null) killText.text = "처치 몬스터    " + s.killCount + " 마리";
-                if (goldText != null) goldText.text = "소모 골드    " + s.goldSpent.ToString("N0");
+                if (goldText != null)
+                {
+                    goldText.text = "소모 골드    " + s.goldSpent.ToString("N0");
+                    if (reward > 0) goldText.text += "\n" + MetaProgression.CURRENCY_NAME + " 획득    +" + reward.ToString("N0");
+                }
             }
         }
 
