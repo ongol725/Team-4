@@ -51,7 +51,8 @@ namespace BagSurvivor.Monster
 
         [Header("충돌 데미지 설정")]
         [Tooltip("접촉 데미지 판정 간격 (초)")]
-        private const float CONTACT_DAMAGE_INTERVAL = 0.5f;
+        private const float CONTACT_DAMAGE_INTERVAL = 0.2f;  // 뱀서식 도트 틱(0.5→0.2)
+        private const float CONTACT_DAMAGE_MULT     = 0.5f;  // 접촉 데미지 배율 — 틱이 잦아진 만큼 절반으로
 
         [Header("넉백 설정")]
         [Tooltip("넉백 모션 지속 시간 (초)")]
@@ -839,11 +840,11 @@ namespace BagSurvivor.Monster
 
             while (isPlayerInContact && !isDying)
             {
-                // 시간 배율이 적용된 공격력으로 플레이어에게 접촉 데미지
+                // 시간 배율이 적용된 공격력의 절반으로 플레이어에게 접촉 데미지 (틱 0.2초 뱀서식 도트)
                 if (playerHealth != null && !playerHealth.IsDead)
                 {
                     playerHealth.LastAttacker = monsterData != null ? monsterData.name : gameObject.name; // 킬러 통계
-                    playerHealth.TakeDamage(runtimeAttack);
+                    playerHealth.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(runtimeAttack * CONTACT_DAMAGE_MULT)));
                 }
 
                 yield return new WaitForSeconds(CONTACT_DAMAGE_INTERVAL);
