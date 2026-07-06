@@ -147,6 +147,11 @@ namespace BagSurvivor.Monster
         public int normalRoomTotalMin = 30;
         [Tooltip("일반방 총 스폰량 최대")]
         public int normalRoomTotalMax = 70;
+        [Tooltip("일반방 최대 웨이브 수 — 총량을 이 수 이하로 나눠 웨이브마다 일괄 투입(루즈함 방지)")]
+        public int normalRoomMaxWaves = 4;
+
+        // 생존+예고 대기 수가 이 값 이하로 줄면 다음 웨이브 투입(마지막 한둘 쫓는 지루함 방지)
+        private const int WAVE_NEXT_THRESHOLD = 2;
 
         [Header("스폰 예고(텔레그래프) — 독립 기능")]
         [Tooltip("적 생성 전 위치에 표시할 스프라이트(예: Sanctuary_Gd). 미지정 시 예고 없이 즉시 스폰")]
@@ -517,33 +522,39 @@ namespace BagSurvivor.Monster
             _pendingSpawns = 0;
         }
 
-        /// <summary>일반방 갇힘 전투: 총량(budget)을 소진할 때까지 밴드 풀에서 maxAlive를 유지하며 스폰.
+        /// <summary>일반방 갇힘 전투: 총량(budget)을 최대 normalRoomMaxWaves개의 웨이브로 나눠 일괄 투입.
+        /// 현재 웨이브 생존이 임계 이하로 줄면 다음 웨이브 투입 — 찔끔찔끔 보충되는 루즈함 방지.
         /// 소진 후 코루틴 종료 — 잔여 생존 몬스터 처치는 사망 콜백(NotifyMonsterDead)이 클리어를 판정한다.</summary>
         private IEnumerator BudgetedSpawn(RoomController rc, int budget, FloorSpawnConfig cfg, int band)
         {
             GameObject[] pool2 = cfg.BandPool(band);
 
-            int maxAlive = Mathf.Max(1, cfg.BandMaxAlive(band)) * NORMAL_SPAWN_MULT; // 밴드별 상한 ×3(고정)
-            float interval = Mathf.Max(0.1f, cfg.spawnInterval);
-            var wait = new WaitForSeconds(interval);
-            int remaining = budget;
+            // 총량을 웨이브 수로 균등 분배(나머지는 앞 웨이브부터 +1)
+            int waves = Mathf.Clamp(normalRoomMaxWaves, 1, budget);
+            int baseSize = budget / waves;
+            int extra = budget % waves;
+            var checkWait = new WaitForSeconds(0.25f);
 
-            while (remaining > 0)
+            for (int w = 0; w < waves; w++)
             {
-                // 생존 + 예고대기 합이 상한 미만이면 1마리 예고→스폰 (예고 대기 수를 포함해 폭증 방지)
-                if (activeMonsters.Count + _pendingSpawns < maxAlive)
+                int waveSize = baseSize + (w < extra ? 1 : 0);
+                Debug.Log($"[Normal] 웨이브 {w + 1}/{waves} — {waveSize}마리 투입");
+
+                // 웨이브 일괄 투입 (몇 마리씩 프레임 분산 — 같은 프레임 스파이크 방지)
+                for (int i = 0; i < waveSize; i++)
                 {
                     float hpMul = difficulty != null ? difficulty.GetHpMultiplier() : 1f;
                     float atkMul = (difficulty != null ? difficulty.GetAttackMultiplier() : 1f) * _roomEnemyAtkMul; // 강자의 방: 적 공격력 배수
-                    remaining--;
                     var co = StartCoroutine(SpawnWithTelegraph(rc, pool2[Random.Range(0, pool2.Length)], hpMul, atkMul, preCounted: true));
                     _telegraphRoutines.Add(co);
-                    if (remaining <= 0) break; // 총량 소진 → 스폰 종료
+                    if ((i & 3) == 3) yield return null; // 4마리마다 한 프레임 휴식
                 }
 
-                // 상한 미달이면 빠르게 채우고(다음 프레임), 가득 차면 interval 대기
-                if (activeMonsters.Count + _pendingSpawns < maxAlive) yield return null;
-                else yield return wait;
+                if (w == waves - 1) break; // 마지막 웨이브는 대기 불필요
+
+                // 생존+예고 대기가 임계 이하로 줄 때까지 대기 → 다음 웨이브
+                while (activeMonsters.Count + _pendingSpawns > WAVE_NEXT_THRESHOLD)
+                    yield return checkWait;
             }
         }
 

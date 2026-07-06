@@ -6,6 +6,7 @@
 // ============================================================
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace BagSurvivor.Monster
 {
@@ -65,6 +66,14 @@ namespace BagSurvivor.Monster
         [Header("사망 설정")]
         [Tooltip("사망 모션/이펙트 재생 후 풀 반환까지 대기 시간 (초). 보스는 길게(예: 5)")]
         public float deathDelay = 0.1f;
+
+        [Header("겹침 분리 (소프트)")]
+        [Tooltip("몬스터끼리 뭉치지 않게 밀어내는 강도(초당 겹침 해소 배율). 0이면 끄기")]
+        public float separationStrength = 4f;
+        // 분리 판정 반경: 스프라이트 폭 × 0.45 → 두 몬스터 중심 거리가 폭의 90% 이상 유지
+        //  = 뒤에 가린 몬스터도 이미지의 최소 90%가 보인다(살짝만 겹침 허용)
+        private float _sepRadius;
+        private static readonly List<MonsterController> _sepRegistry = new List<MonsterController>();
 
         // ==========================================
         // 런타임 변수
@@ -215,10 +224,18 @@ namespace BagSurvivor.Monster
             // 오브젝트 풀에서 재활성화될 때마다 초기화
             InitializeMonster();
             ShowHpBar();
+
+            // 겹침 분리 등록 + 반경 계산(스프라이트 폭 기반)
+            if (!_sepRegistry.Contains(this)) _sepRegistry.Add(this);
+            _sepRadius = (spriteRenderer != null && spriteRenderer.sprite != null)
+                ? spriteRenderer.sprite.bounds.size.x * Mathf.Abs(transform.lossyScale.x) * 0.45f
+                : 0.3f;
         }
 
         private void OnDisable()
         {
+            _sepRegistry.Remove(this); // 겹침 분리 등록 해제
+
             // 오브젝트 풀 반환 시 모든 코루틴 정지 및 상태 초기화
             StopAllCoroutines();
             knockbackCoroutine = null;
@@ -392,7 +409,38 @@ namespace BagSurvivor.Monster
             if (currentState == MonsterState.Tracking)
             {
                 HandleMovement();
+                ApplySeparation(); // 이동 속도 확정 후 겹침 분리 가산
             }
+        }
+
+        /// <summary>주변 몬스터와 겹치면 밀어내는 소프트 분리.
+        /// 중심 거리가 (내 폭+상대 폭)×0.45 미만이면 겹침 깊이에 비례해 속도를 가산 —
+        /// 살짝 겹치는 것은 허용하되 이미지의 최소 90%는 항상 보이게 유지한다.</summary>
+        private void ApplySeparation()
+        {
+            if (separationStrength <= 0f || _sepRadius <= 0f) return;
+            if (monsterData != null && monsterData.movePattern == MovePattern.Stationary) return; // 고정형은 제외
+
+            Vector2 push = Vector2.zero;
+            for (int i = 0; i < _sepRegistry.Count; i++)
+            {
+                MonsterController other = _sepRegistry[i];
+                if (other == null || other == this || other.isDying) continue;
+
+                Vector2 diff = rb.position - other.rb.position;
+                float minDist = _sepRadius + other._sepRadius;
+                float d = diff.magnitude;
+                if (d >= minDist) continue;
+
+                // 완전히 같은 위치면 임의 방향으로, 아니면 서로 반대 방향으로 겹침 깊이만큼
+                Vector2 dir = d > 0.001f ? diff / d : Random.insideUnitCircle.normalized;
+                push += dir * (minDist - d);
+            }
+            if (push == Vector2.zero) return;
+
+            // 부드럽게 해소(속도 가산) + 폭주 방지 상한
+            Vector2 sep = Vector2.ClampMagnitude(push * separationStrength, 3f);
+            rb.linearVelocity += sep;
         }
 
         // ==========================================
