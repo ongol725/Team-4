@@ -142,6 +142,17 @@ public class SynergyCalculator : MonoBehaviour
             if (a.isActive != b.isActive) return a.isActive ? -1 : 1;
             return b.grade.CompareTo(a.grade);
         });
+
+        // 메타 업그레이드(시너지 공명): 동시 발동 제한 — 정렬 상위 N개 초과 활성 항목은
+        // 회색(비발동)으로 표시해 실제 발동(SynergyManager, 같은 등급 우선 규칙)과 일치시킨다.
+        int slots = MetaUpgrades.MaxSynergyActive;
+        foreach (var info in result)
+        {
+            if (!info.isActive) continue;
+            if (slots > 0) { slots--; continue; }
+            info.isActive = false;
+        }
+
         return result;
     }
 

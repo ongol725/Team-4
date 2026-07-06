@@ -183,8 +183,15 @@ public class SynergyManager : MonoBehaviour
         bool needHitEvent  = false;
         bool needMoveEvent = false;
 
+        // 메타 업그레이드(시너지 공명): 동시 발동 수 제한 — 기본 1개, 업글로 최대 3개.
+        // ActiveSynergies는 등급 내림차순 정렬이라 앞에서부터 N개 = 상위 등급 우선 발동.
+        int synergySlots = MetaUpgrades.MaxSynergyActive;
+
         foreach (var entry in _loadout.ActiveSynergies)
         {
+            if (synergySlots <= 0) break;
+            synergySlots--;
+
             int dmgBase = 0;
 
             // ── 스킬형 ─────────────────────────────────────────

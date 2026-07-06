@@ -146,18 +146,20 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         gameObject.SetActive(true);
         _isSoldOut = false;
 
-        // 2등급 롤: 등급 있는 아이템(무기/방어구)에만 적용
+        // 2등급 롤: 등급 있는 아이템(무기/방어구)에만 적용.
+        // 메타 업그레이드(명품 진열): 등장 확률 +5%p/Lv 가산.
         _displayGradeIndex = 0;
         bool hasGrades = item is SO_WeaponData || item is SO_ArmorData;
         if (hasGrades)
         {
             int rateIdx = Mathf.Clamp(shopGrade - 1, 0, Grade2Rates.Length - 1);
-            if (UnityEngine.Random.Range(0, 100) < Grade2Rates[rateIdx])
+            if (UnityEngine.Random.Range(0, 100) < Grade2Rates[rateIdx] + MetaUpgrades.Grade2BonusPct)
                 _displayGradeIndex = 1;
         }
 
+        // 메타 업그레이드(파격 세일): 반값 할인 확률 +5%p/Lv 가산.
         int discountIdx = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
-        _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
+        _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx] + MetaUpgrades.SaleBonusPct;
 
         RebuildVisual();
         RefreshSynergies(item);
@@ -188,7 +190,8 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         _nameText.text = item is SO_InventoryBlockData ? "인벤토리" : item.itemName;
 
-        int baseCost      = BaseBuyCost(item, _displayGradeIndex);
+        // 메타 업그레이드(단골 할인): 구매가에만 적용 — BaseBuyCost 기준인 판매가에는 영향 없음
+        int baseCost      = Mathf.Max(1, Mathf.RoundToInt(BaseBuyCost(item, _displayGradeIndex) * MetaUpgrades.ShopPriceMul));
         _finalCost        = _isDiscounted ? Mathf.Max(1, Mathf.FloorToInt(baseCost * 0.5f)) : baseCost;
         _costText.text    = $"{_finalCost}G";
         _rarityText.text  = rarityLabel;

@@ -118,24 +118,44 @@ public class MetaLobbyUI : MonoBehaviour
         _rerollLabel.alignment = TextAlignmentOptions.Center;
     }
 
-    // 영구 업그레이드 패널 (5종 목록 + 구매 버튼)
+    // 영구 업그레이드 패널 (2컬럼 목록 + 구매 버튼)
+    private const int ROWS_PER_COLUMN = 6;
+
     private void BuildUpgradePanel(Transform canvasParent)
     {
         var panel = new GameObject("UpgradePanel", typeof(RectTransform), typeof(Image));
-        var prt = (RectTransform)panel.transform;
-        prt.SetParent(canvasParent, false);
-        prt.anchorMin = new Vector2(0f, 0.5f);
-        prt.anchorMax = new Vector2(0f, 0.5f);
-        prt.pivot     = new Vector2(0f, 0.5f);
-        prt.anchoredPosition = new Vector2(24f, -160f);
-        prt.sizeDelta = new Vector2(320f, 340f);
+        var panelRt = (RectTransform)panel.transform;
+        panelRt.SetParent(canvasParent, false);
+        panelRt.anchorMin = new Vector2(0f, 0.5f);
+        panelRt.anchorMax = new Vector2(0f, 0.5f);
+        panelRt.pivot     = new Vector2(0f, 0.5f);
+        panelRt.anchoredPosition = new Vector2(24f, -180f);
+        panelRt.sizeDelta = new Vector2(650f, 400f);
         panel.GetComponent<Image>().color = new Color(0.08f, 0.07f, 0.06f, 0.85f);
 
-        MakeText(prt, "영구 업그레이드", 26, new Vector2(0f, -16f), Color.white, FontStyles.Bold);
+        MakeText(panelRt, "영구 업그레이드", 26, new Vector2(0f, -16f), Color.white, FontStyles.Bold);
 
-        float y = -58f;
+        // 컬럼 컨테이너 2개 — 행 좌표계를 컬럼 기준으로 재사용
+        var columns = new RectTransform[2];
+        for (int c = 0; c < 2; c++)
+        {
+            var colGo = new GameObject("Col" + c, typeof(RectTransform));
+            var crt = (RectTransform)colGo.transform;
+            crt.SetParent(panelRt, false);
+            crt.anchorMin = new Vector2(0f, 1f);
+            crt.anchorMax = new Vector2(0f, 1f);
+            crt.pivot     = new Vector2(0f, 1f);
+            crt.anchoredPosition = new Vector2(5f + c * 320f, -50f);
+            crt.sizeDelta = new Vector2(320f, 350f);
+            columns[c] = crt;
+        }
+
+        int idx = 0;
         foreach (var def in MetaUpgrades.All)
         {
+            var prt = columns[Mathf.Min(idx / ROWS_PER_COLUMN, columns.Length - 1)];
+            float y = -(idx % ROWS_PER_COLUMN) * 54f;
+            idx++;
             var row = new UpgradeRow { def = def };
 
             // 이름 + 레벨 (좌측 정렬)
@@ -168,7 +188,6 @@ public class MetaLobbyUI : MonoBehaviour
             desc.rectTransform.sizeDelta = new Vector2(230f, 22f);
 
             _upgradeRows.Add(row);
-            y -= 54f;
         }
     }
 

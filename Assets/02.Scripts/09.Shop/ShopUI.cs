@@ -171,7 +171,11 @@ public class ShopUI : MonoBehaviour
 
     public void Reroll()
     {
-        if (GameManager.Instance != null && !GameManager.Instance.SpendGold(_rerollCost))
+        // 메타 업그레이드(공짜 리롤): 레벨×10% 확률로 골드 소모 없이 리롤
+        bool free = MetaUpgrades.FreeRerollChance > 0f && UnityEngine.Random.value < MetaUpgrades.FreeRerollChance;
+        if (free)
+            Debug.Log("[Shop] 공짜 리롤 발동!");
+        else if (GameManager.Instance != null && !GameManager.Instance.SpendGold(_rerollCost))
             return; // 골드 부족 — 리롤 취소
         _rerollsInCurrentGrade++;
         RunStatsLogger.Instance?.Reroll();

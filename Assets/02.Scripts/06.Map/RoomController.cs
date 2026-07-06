@@ -238,6 +238,20 @@ public class RoomController : MonoBehaviour
         doorClosed = false;
         SetDoorsClosed(false);       // 모든 문 영구 개방
         if (stairs != null) stairs.SetActive(true);
+
+        // 메타 업그레이드(전장의 회복): 방 클리어 시 최대 HP의 1/3/6/10% 회복
+        float healPct = MetaUpgrades.ClearHealPct;
+        if (healPct > 0f && playerTf != null)
+        {
+            var ph = playerTf.GetComponentInParent<PlayerHealth>();
+            if (ph != null && !ph.IsDead)
+            {
+                int heal = Mathf.Max(1, Mathf.RoundToInt(ph.MaxHP * healPct));
+                ph.Heal(heal);
+                Debug.Log($"[Meta] 방 클리어 회복 +{heal} HP");
+            }
+        }
+
         Debug.Log($"[{roomType}] 방 클리어!");
         OnRoomCleared?.Invoke();
     }
