@@ -196,10 +196,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.RangedAttackGimmick
   aimMode: 0
   attackRange: 7
-  fireCooldown: 1.5
+  fireCooldown: 3
   telegraphTime: 0.4
   spawnDelay: 0.5
-  projectileSpeed: 8
+  projectileSpeed: 4.8
   projectileMaxRange: 12
   projectilePrefab: {fileID: 6614194758801626682, guid: 1c70bb39c9fbb2e49bd444c586488494, type: 3}
 --- !u!114 &382592928114246236

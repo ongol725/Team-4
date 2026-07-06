@@ -28,13 +28,13 @@ namespace BagSurvivor.Monster
         public float attackRange = 7f;
 
         [Tooltip("발사 쿨다운(초)")]
-        public float fireCooldown = 1.5f;
+        public float fireCooldown = 3f;    // 1.5→3: 갇힘방 다수 몬스터 밸런스(원거리 견제 완화)
 
         [Tooltip("스폰(태어난) 직후 첫 발사까지 대기시간(초)")]
         public float spawnDelay = 0.5f;
 
         [Tooltip("투사체 속도(m/s)")]
-        public float projectileSpeed = 8f;
+        public float projectileSpeed = 4.8f; // 8→4.8(60%): 피하기 쉽게
 
         [Tooltip("투사체 최대 비행 거리(m)")]
         public float projectileMaxRange = 12f;
