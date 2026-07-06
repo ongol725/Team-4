@@ -43,7 +43,8 @@ public class PlayerHealth : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color baseColor = Color.white;
     private Coroutine flashCoroutine;
-    private BloodSplatterEffect _blood;  // 피격 핏방울 이펙트(자동 부착)
+    private BloodSplatterEffect _blood;       // 피격 핏방울 이펙트(자동 부착)
+    private ScreenDamageFlash   _screenFlash; // 피격 화면 붉은 비네트(자동 부착)
 
     // 방어구 HP/재생 자체 적용 (전투 씬에 PlayerStats가 없을 때 PlayerHealth가 직접 브릿지)
     private int         _baseMaxHP;       // 캐릭터 기본 최대체력(방어구 보너스 제외)
@@ -70,6 +71,10 @@ public class PlayerHealth : MonoBehaviour
         // 피격 핏방울 이펙트 자동 부착 (씬/프리팹 수정 없음)
         _blood = GetComponent<BloodSplatterEffect>();
         if (_blood == null) _blood = gameObject.AddComponent<BloodSplatterEffect>();
+
+        // 피격 화면 붉은 비네트 자동 부착 (뱀서식)
+        _screenFlash = GetComponent<ScreenDamageFlash>();
+        if (_screenFlash == null) _screenFlash = gameObject.AddComponent<ScreenDamageFlash>();
 
         // PlayerStats 없이도 캐릭터 maxHp 반영 (미선택/씬에 CharacterManager 없으면 전사 폴백)
         var charData = CharacterManager.GetSelectedOrDefault();
@@ -192,8 +197,9 @@ public class PlayerHealth : MonoBehaviour
         // 플레이어 머리 위에 받은 데미지 표시 (연한 빨강으로 구분, 몬스터와 동일 풀 재사용)
         BagSurvivor.DamagePopup.Show(transform.position, amount, false, new Color(1f, 0.55f, 0.55f));
 
-        // 핏방울 이펙트 (피해가 실제로 들어갔을 때만 — 무적/사망은 위에서 걸러짐)
+        // 핏방울 이펙트 + 화면 붉은 비네트 (피해가 실제로 들어갔을 때만 — 무적/사망은 위에서 걸러짐)
         if (_blood != null) _blood.Play(transform.position);
+        if (_screenFlash != null) _screenFlash.Play();
 
         onDamageTaken?.Invoke(amount);
         UpdateHud();
