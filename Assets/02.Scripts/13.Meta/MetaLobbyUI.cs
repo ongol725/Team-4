@@ -66,6 +66,14 @@ public class MetaLobbyUI : MonoBehaviour
     // ── UI 구성 ─────────────────────────────────────────────
     private void Build()
     {
+        // 한글 폰트: 동적 아틀라스로 생성 — "BoldDunggeunmo SDF Damage"는 정적 서브셋
+        // 아틀라스라 미베이크 글자("확" 등)가 □로 깨진다. Galmuri9(TTF)로 동적 생성해
+        // 어떤 한글도 렌더링 가능하게 한다. 실패 시 기존 폰트 폴백.
+        if (_font == null)
+        {
+            var src = Resources.Load<Font>("Fonts/Galmuri9");
+            if (src != null) _font = TMP_FontAsset.CreateFontAsset(src);
+        }
         if (_font == null) _font = Resources.Load<TMP_FontAsset>("Fonts/BoldDunggeunmo SDF Damage");
 
         var canvasGo = new GameObject("Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
