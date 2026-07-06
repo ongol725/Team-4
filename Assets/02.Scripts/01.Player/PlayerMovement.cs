@@ -66,6 +66,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (moveAction != null) moveAction.action.Enable();
 
+        // 런 시작 랜덤 이동속도 배율(로비 미경유 시 1). base moveSpeed와 곱연산이라 이중 적용 없음.
+        speedMultiplier *= RunStartStats.MoveSpeedMul;
+
         // 머리 위 대시 스태미너 원형 게이지 자동 부착(씬/프리팹 수정 없음 — 작업 충돌 방지)
         if (GetComponent<DashStaminaUI>() == null) gameObject.AddComponent<DashStaminaUI>();
 

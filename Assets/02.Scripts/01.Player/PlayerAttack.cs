@@ -42,13 +42,14 @@ public class PlayerAttack : MonoBehaviour
         _rb    = GetComponent<Rigidbody2D>();
 
         // PlayerStats가 없으면 캐릭터 데이터(미선택 시 전사 폴백)에서 공격/공속 배율을 직접 읽는다.
+        // 런 시작 랜덤 스탯(RunStartStats) 배율을 함께 곱한다(로비 미경유 시 1 = 영향 없음).
         if (_stats == null)
         {
             var cd = CharacterManager.GetSelectedOrDefault();
             if (cd != null)
             {
-                _charAtkMul    = cd.attackMultiplier;
-                _charAtkSpdMul = cd.attackSpeedMultiplier;
+                _charAtkMul    = cd.attackMultiplier      * RunStartStats.AttackMul;
+                _charAtkSpdMul = cd.attackSpeedMultiplier * RunStartStats.AttackSpeedMul;
             }
         }
     }
