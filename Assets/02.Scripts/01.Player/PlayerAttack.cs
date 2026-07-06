@@ -164,7 +164,7 @@ public class PlayerAttack : MonoBehaviour
         // 랜덤 강화 옵션: 추가 발동(원=연발/근=연속타) + 치명타
         int activations = 1 + Mathf.Max(0, entry.extraActivations);
         float critChance = entry.critChance;
-        var extraWait = new WaitForSeconds(0.1f);
+        var extraWait = new WaitForSeconds(0.2f); // 추가 발동 간격(0.1→0.2) — 몇 회 발동인지 눈으로 구분되게
         while (true)
         {
             yield return wait;
