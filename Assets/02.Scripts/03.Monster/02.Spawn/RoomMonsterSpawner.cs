@@ -437,12 +437,15 @@ namespace BagSurvivor.Monster
 
                 subscribed.Add(rc);
 
-                // 일반방: 50%에 특수 이벤트 배정(Phase1: 강자/늪 중 랜덤)
+                // 일반방: 특수 이벤트 배정 — 기본 강자 25% / 늪 25% / 없음 50%.
+                // 메타 업그레이드(황금의 기운): 강자의 방(골드2배) 확률만 +5%p/Lv 가산.
                 if (rc.roomType == RoomType.Normal && !_roomEvents.ContainsKey(rc))
                 {
                     RoomEventType ev = RoomEventType.None;
-                    if (Random.value < 0.5f)
-                        ev = Random.value < 0.5f ? RoomEventType.Strong : RoomEventType.Swamp;
+                    float strongChance = 0.25f + MetaUpgrades.GoldRoomBonus;
+                    float r = Random.value;
+                    if (r < strongChance)              ev = RoomEventType.Strong;
+                    else if (r < strongChance + 0.25f) ev = RoomEventType.Swamp;
                     _roomEvents[rc] = ev;
                 }
 
@@ -492,7 +495,9 @@ namespace BagSurvivor.Monster
             GameObject[] pool2 = cfg.BandPool(band);
             if (pool2 == null || pool2.Length == 0) return;
 
-            int total = Random.Range(normalRoomTotalMin, normalRoomTotalMax + 1);
+            // 메타 업그레이드(몬스터 증원): 총량 배율 적용 (재화 획득 기회↑)
+            int total = Mathf.Max(1, Mathf.RoundToInt(
+                Random.Range(normalRoomTotalMin, normalRoomTotalMax + 1) * MetaUpgrades.SpawnCountMul));
             rc.RegisterMonsters(total); // 미스폰 포함 총량 선등록 — 전부 처치해야 문 개방
 
             TriggerRoomEvent(rc); // 강자/늪 이벤트는 잠금(전투 시작) 시점에 발동

@@ -35,6 +35,16 @@ public class MetaLobbyUI : MonoBehaviour
     private TextMeshProUGUI _rerollLabel;
     private static TMP_FontAsset _font;
 
+    // 업그레이드 행 (정의 ↔ UI 텍스트 매핑)
+    private class UpgradeRow
+    {
+        public MetaUpgradeDef def;
+        public TextMeshProUGUI label;    // "이름 Lv.n/max"
+        public TextMeshProUGUI btnLabel; // "-비용" / "MAX"
+    }
+    private readonly System.Collections.Generic.List<UpgradeRow> _upgradeRows
+        = new System.Collections.Generic.List<UpgradeRow>();
+
     private void Start()
     {
         RunStartStats.RollFree(); // 로비 진입 시 무료 추첨 + 리롤 비용 초기화
@@ -67,16 +77,18 @@ public class MetaLobbyUI : MonoBehaviour
         scaler.uiScaleMode         = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920, 1080);
 
-        // 좌측 중앙 패널
-        var panel = new GameObject("Panel", typeof(RectTransform), typeof(Image));
+        // 좌측 상단쪽: 시작 스탯 패널
+        var panel = new GameObject("StatPanel", typeof(RectTransform), typeof(Image));
         var prt = (RectTransform)panel.transform;
         prt.SetParent(canvasGo.transform, false);
         prt.anchorMin = new Vector2(0f, 0.5f);
         prt.anchorMax = new Vector2(0f, 0.5f);
         prt.pivot     = new Vector2(0f, 0.5f);
-        prt.anchoredPosition = new Vector2(24f, 0f);
+        prt.anchoredPosition = new Vector2(24f, 190f);
         prt.sizeDelta = new Vector2(320f, 300f);
         panel.GetComponent<Image>().color = new Color(0.08f, 0.07f, 0.06f, 0.85f);
+
+        BuildUpgradePanel(canvasGo.transform); // 좌측 하단쪽: 영구 업그레이드 패널
 
         MakeText(prt, "이번 런 시작 스탯", 26, new Vector2(0f, -18f), Color.white, FontStyles.Bold);
         _currencyText = MakeText(prt, "", 20, new Vector2(0f, -56f), new Color(0.85f, 0.75f, 1f), FontStyles.Normal);
@@ -104,6 +116,60 @@ public class MetaLobbyUI : MonoBehaviour
         lrt.sizeDelta = Vector2.zero;
         lrt.anchoredPosition = Vector2.zero;
         _rerollLabel.alignment = TextAlignmentOptions.Center;
+    }
+
+    // 영구 업그레이드 패널 (5종 목록 + 구매 버튼)
+    private void BuildUpgradePanel(Transform canvasParent)
+    {
+        var panel = new GameObject("UpgradePanel", typeof(RectTransform), typeof(Image));
+        var prt = (RectTransform)panel.transform;
+        prt.SetParent(canvasParent, false);
+        prt.anchorMin = new Vector2(0f, 0.5f);
+        prt.anchorMax = new Vector2(0f, 0.5f);
+        prt.pivot     = new Vector2(0f, 0.5f);
+        prt.anchoredPosition = new Vector2(24f, -160f);
+        prt.sizeDelta = new Vector2(320f, 340f);
+        panel.GetComponent<Image>().color = new Color(0.08f, 0.07f, 0.06f, 0.85f);
+
+        MakeText(prt, "영구 업그레이드", 26, new Vector2(0f, -16f), Color.white, FontStyles.Bold);
+
+        float y = -58f;
+        foreach (var def in MetaUpgrades.All)
+        {
+            var row = new UpgradeRow { def = def };
+
+            // 이름 + 레벨 (좌측 정렬)
+            row.label = MakeText(prt, "", 19, new Vector2(-30f, y), Color.white, FontStyles.Normal);
+            row.label.alignment = TextAlignmentOptions.Left;
+            row.label.rectTransform.sizeDelta = new Vector2(230f, 30f);
+
+            // 구매 버튼 (우측)
+            var btnGo = new GameObject("Buy_" + def.id, typeof(RectTransform), typeof(Image), typeof(Button));
+            var brt = (RectTransform)btnGo.transform;
+            brt.SetParent(prt, false);
+            brt.anchorMin = new Vector2(1f, 1f);
+            brt.anchorMax = new Vector2(1f, 1f);
+            brt.pivot     = new Vector2(1f, 1f);
+            brt.anchoredPosition = new Vector2(-10f, y);
+            brt.sizeDelta = new Vector2(72f, 30f);
+            btnGo.GetComponent<Image>().color = new Color(0.45f, 0.30f, 0.12f, 1f);
+            var capturedDef = def; // 클로저 캡처
+            btnGo.GetComponent<Button>().onClick.AddListener(() => { MetaUpgrades.TryBuy(capturedDef); Refresh(); });
+
+            row.btnLabel = MakeText(brt, "", 16, Vector2.zero, Color.white, FontStyles.Bold);
+            var lrt = row.btnLabel.rectTransform;
+            lrt.anchorMin = Vector2.zero; lrt.anchorMax = Vector2.one;
+            lrt.sizeDelta = Vector2.zero; lrt.anchoredPosition = Vector2.zero;
+            row.btnLabel.alignment = TextAlignmentOptions.Center;
+
+            // 효과 설명 (작게)
+            var desc = MakeText(prt, def.desc, 14, new Vector2(-30f, y - 22f), new Color(0.7f, 0.7f, 0.72f), FontStyles.Normal);
+            desc.alignment = TextAlignmentOptions.Left;
+            desc.rectTransform.sizeDelta = new Vector2(230f, 22f);
+
+            _upgradeRows.Add(row);
+            y -= 54f;
+        }
     }
 
     private TextMeshProUGUI MakeText(RectTransform parent, string text, float size, Vector2 pos, Color color, FontStyles style)
@@ -150,6 +216,16 @@ public class MetaLobbyUI : MonoBehaviour
 
         if (_rerollLabel != null)
             _rerollLabel.text = $"리롤  (-{RunStartStats.NextRerollCost} {MetaProgression.CURRENCY_NAME})";
+
+        // 업그레이드 행 갱신
+        foreach (var row in _upgradeRows)
+        {
+            int lv = MetaUpgrades.GetLevel(row.def.id);
+            if (row.label != null)
+                row.label.text = $"{row.def.displayName}  Lv.{lv}/{row.def.maxLevel}";
+            if (row.btnLabel != null)
+                row.btnLabel.text = MetaUpgrades.IsMaxed(row.def) ? "MAX" : $"-{MetaUpgrades.NextCost(row.def)}";
+        }
     }
 
     private static void SetStat(TextMeshProUGUI t, string label, float mul)

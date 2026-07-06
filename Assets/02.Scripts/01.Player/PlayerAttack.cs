@@ -48,7 +48,7 @@ public class PlayerAttack : MonoBehaviour
             var cd = CharacterManager.GetSelectedOrDefault();
             if (cd != null)
             {
-                _charAtkMul    = cd.attackMultiplier      * RunStartStats.AttackMul;
+                _charAtkMul    = cd.attackMultiplier      * RunStartStats.AttackMul * MetaUpgrades.AttackBonusMul;
                 _charAtkSpdMul = cd.attackSpeedMultiplier * RunStartStats.AttackSpeedMul;
             }
         }

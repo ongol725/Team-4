@@ -161,12 +161,18 @@ public class ShopManager : MonoBehaviour
 
         int roll       = Random.Range(0, total);
         int cumulative = 0;
+        int picked     = 0;
         for (int i = 0; i < RarityCount; i++)
         {
             cumulative += RarityWeightsByGrade[gradeIdx, i];
-            if (roll < cumulative) return i;
+            if (roll < cumulative) { picked = i; break; }
         }
-        return 0;
+
+        // 메타 업그레이드(희귀무기 확률): 레벨×5% 확률로 한 등급 상향
+        if (picked < RarityCount - 1 && Random.value < MetaUpgrades.RareUpChance)
+            picked++;
+
+        return picked;
     }
 
     private static List<SO_ItemData> FindByRarity(List<SO_ItemData> bucket, int rarityIdx)

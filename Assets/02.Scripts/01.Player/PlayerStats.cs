@@ -90,9 +90,9 @@ public class PlayerStats : MonoBehaviour
         maxHp                 = charData.maxHp;
         moveSpeed             = charData.moveSpeed;
         critChance            = charData.critChance;
-        // 런 시작 랜덤 스탯(RunStartStats) 배율 반영 — 로비 미경유 시 1(영향 없음).
-        // PlayerAttack은 _stats 유무로 경로가 배타적이라 이중 적용되지 않는다.
-        attackMultiplier      = charData.attackMultiplier      * RunStartStats.AttackMul;
+        // 런 시작 랜덤 스탯(RunStartStats) + 영구 업그레이드(MetaUpgrades) 배율 반영.
+        // 로비 미경유/무업글 시 1(영향 없음). PlayerAttack은 _stats 유무로 경로가 배타적이라 이중 적용되지 않는다.
+        attackMultiplier      = charData.attackMultiplier      * RunStartStats.AttackMul * MetaUpgrades.AttackBonusMul;
         attackSpeedMultiplier = charData.attackSpeedMultiplier * RunStartStats.AttackSpeedMul;
 
         // 같은 GameObject의 PlayerHealth / PlayerMovement에도 즉시 반영

@@ -45,13 +45,19 @@ public static class WeaponAffixTable
         wd != null && (wd.attackStyleType == WeaponAttackStyleType.MeleeFan
                     || wd.attackStyleType == WeaponAttackStyleType.MeleeSingle);
 
-    /// <summary>티어 추첨: 60% T1 / 30% T2 / 10% T3.</summary>
+    /// <summary>티어 추첨: 60% T1 / 30% T2 / 10% T3.
+    /// 메타 업그레이드(무기옵션 등급): 레벨×5% 확률로 한 티어 상향.</summary>
     public static AffixTier RollTier()
     {
         float r = Random.value;
-        if (r < 0.60f) return AffixTier.T1;
-        if (r < 0.90f) return AffixTier.T2;
-        return AffixTier.T3;
+        AffixTier tier = r < 0.60f ? AffixTier.T1
+                       : r < 0.90f ? AffixTier.T2
+                       : AffixTier.T3;
+
+        if (tier < AffixTier.T3 && Random.value < MetaUpgrades.AffixTierUpChance)
+            tier += 1;
+
+        return tier;
     }
 
     /// <summary>무기 타입 풀에서 옵션 1개 + 티어 추첨.</summary>
