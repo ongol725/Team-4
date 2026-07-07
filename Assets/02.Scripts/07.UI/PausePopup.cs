@@ -103,8 +103,14 @@ namespace BagSurvivor.UI
 #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                if (_bagOpen) InventoryPopupToggle.Instance?.CloseBag(); // 가방 열림 중엔 ESC = 가방 닫기
-                else Toggle();                                          // 그 외엔 일시정지 토글
+                // 튜토리얼이 열려 있거나 이번 프레임에 튜토리얼이 ESC로 닫혔으면 일시정지는 열지 않는다
+                // (실행 순서와 무관하게 안전: 열림 중이면 IsOpen, 이미 닫혔으면 LastEscCloseFrame로 감지)
+                if (TutorialController.IsOpen || TutorialController.LastEscCloseFrame == Time.frameCount)
+                {
+                    // 튜토리얼이 ESC를 소비 — 일시정지 토글 안 함
+                }
+                else if (_bagOpen) InventoryPopupToggle.Instance?.CloseBag(); // 가방 열림 중엔 ESC = 가방 닫기
+                else Toggle();                                               // 그 외엔 일시정지 토글
             }
 #endif
         }
