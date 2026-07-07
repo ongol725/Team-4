@@ -250,8 +250,8 @@ namespace BagSurvivor.Monster
             if (hpBar != null) hpBar.SetTarget(this);
         }
 
-        /// <summary>풀 반환 시 HP바를 숨깁니다 (인스턴스는 재사용 위해 유지).</summary>
-        private void HideHpBar()
+        /// <summary>HP바를 숨깁니다 (인스턴스는 재사용 위해 유지). 풀 반환 시, 또는 소환 팬텀처럼 체력바가 필요없을 때 호출.</summary>
+        public void HideHpBar()
         {
             if (hpBarInstance != null) hpBarInstance.SetActive(false);
         }

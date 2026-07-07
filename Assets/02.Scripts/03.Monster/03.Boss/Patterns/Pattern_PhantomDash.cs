@@ -79,6 +79,7 @@ namespace BagSurvivor.Monster
 
             // 팬텀: 체력 없는(무적) 1회성 돌진체로 만든다. (풀 재사용 시 OnEnable에서 무적 해제)
             wolf.SetInvincible(true);
+            wolf.HideHpBar(); // 소환 팬텀은 체력바 숨김(풀 재사용 시 OnEnable의 ShowHpBar가 복구)
             // 소환물이 멧돼지(BoarGimmick)면 자체 돌진 AI를 끄고 PhantomWolfDash에 제어를 넘긴다.
             var boar = wolf.GetComponent<BoarGimmick>();
             if (boar != null) boar.phantomMode = true;
@@ -93,6 +94,12 @@ namespace BagSurvivor.Monster
             if (dash == null) dash = wolf.gameObject.AddComponent<PhantomWolfDash>();
             // 돌진 대기 시간 명시 세팅(풀 재사용 시 이전 값 잔존 방지). 2페이즈는 단축.
             dash.startDelay = phase2Mode ? phase2WolfStartDelay : phase1WolfStartDelay;
+            // 멧돼지 소환은 일반 멧돼지와 동일한 '돌진 바닥' 예고를 깐다(BoarGimmick의 경고 프리팹 재사용).
+            if (boar != null)
+            {
+                dash.dirTelegraphPrefab = boar.chargeWarnPrefab;
+                dash.stretchTelegraphToDash = true; // 돌진 거리만큼 바닥 스트립 늘림
+            }
             dash.Dash(dir);
         }
 

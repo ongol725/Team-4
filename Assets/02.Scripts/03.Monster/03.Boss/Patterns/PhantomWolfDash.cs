@@ -33,6 +33,9 @@ namespace BagSurvivor.Monster
         [Tooltip("돌진 방향 예고(텔레그래프) 프리팹")]
         public GameObject dirTelegraphPrefab;
 
+        [Tooltip("텔레그래프(바닥 경고 스트립)를 돌진 거리만큼 늘일지 여부. 멧돼지 소환처럼 바닥을 깔 때 true")]
+        [System.NonSerialized] public bool stretchTelegraphToDash = false;
+
         private MonsterController controller;
 
         private void Awake()
@@ -104,9 +107,22 @@ namespace BagSurvivor.Monster
             if (dirTelegraphPrefab == null) return null;
             float ang = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             Quaternion rot = Quaternion.Euler(0f, 0f, ang);
-            if (GameObjectPool.Instance != null)
-                return GameObjectPool.Instance.Get(dirTelegraphPrefab, transform.position, rot);
-            return Instantiate(dirTelegraphPrefab, transform.position, rot);
+            GameObject go = GameObjectPool.Instance != null
+                ? GameObjectPool.Instance.Get(dirTelegraphPrefab, transform.position, rot)
+                : Instantiate(dirTelegraphPrefab, transform.position, rot);
+
+            // 바닥 경고 스트립(Tiled/Sliced 스프라이트)이면 돌진 거리만큼 길이를 늘려 바닥을 깐다.
+            // (BoarGimmick.ShowChargeLine과 동일 방식. 화살표 등 Simple 스프라이트는 건드리지 않음)
+            if (go != null)
+            {
+                var sr = go.GetComponentInChildren<SpriteRenderer>();
+                if (stretchTelegraphToDash && sr != null && sr.drawMode != SpriteDrawMode.Simple)
+                {
+                    sr.size = new Vector2(dashDistance, sr.size.y);
+                    sr.transform.localPosition = new Vector3(dashDistance * 0.5f, 0f, 0f);
+                }
+            }
+            return go;
         }
 
         /// <summary>예고 표식을 늑대 위치에 두고 dir 방향으로 회전 갱신(조준 추적용).</summary>
