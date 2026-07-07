@@ -68,9 +68,10 @@ namespace BagSurvivor.UI
 
             // 인벤토리 등 다른 Canvas(sortingOrder 10)보다 위에 렌더링되도록 Canvas override 설정.
             // 모달(설정/로비확인)은 일시정지 메뉴보다 더 위 → 클릭 가능하도록 정렬값 분리.
-            EnsureTopCanvas(pausePanel, 100);
-            EnsureTopCanvas(settingPopup, 110);
-            EnsureTopCanvas(lobbyConfirmPanel, 120);
+            // 보스룸 등 다른 씬에 있던 sortingOrder 120대 캔버스에 밀리지 않도록 확인 모달을 크게 올린다.
+            EnsureTopCanvas(pausePanel, 500);
+            EnsureTopCanvas(settingPopup, 510);
+            EnsureTopCanvas(lobbyConfirmPanel, 520);
 
             if (pausePanel != null) pausePanel.SetActive(false);
             if (settingPopup != null) settingPopup.SetActive(false);
@@ -144,7 +145,7 @@ namespace BagSurvivor.UI
             // 2차 확인 모달 표시 (게임은 계속 일시정지 유지)
             if (lobbyConfirmPanel != null)
             {
-                EnsureTopCanvas(lobbyConfirmPanel, 120);        // 표시 직전 재보장 (Awake에서 누락되는 케이스 대비)
+                EnsureTopCanvas(lobbyConfirmPanel, 520);        // 표시 직전 재보장 (Awake에서 누락되는 케이스 대비)
                 lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
                 lobbyConfirmPanel.SetActive(true);
             }
