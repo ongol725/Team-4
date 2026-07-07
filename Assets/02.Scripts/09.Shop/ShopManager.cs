@@ -51,6 +51,14 @@ public class ShopManager : MonoBehaviour
         var grid = FindFirstObjectByType<InventoryGrid>(FindObjectsInactive.Include);
         bool allowBlocks = grid == null || !grid.IsFullyActive();
 
+        // 이미 5단계(gradeIndex>=4, 최종)까지 합성한 무기는 더 살 필요가 없으므로 상점에서 제외
+        var maxedWeaponIDs = new HashSet<string>();
+        if (grid != null)
+            foreach (var inst in grid.GetAllPlacedInstances())
+                if (inst != null && inst.data is SO_WeaponData && inst.gradeIndex >= 4
+                    && !string.IsNullOrEmpty(inst.data.itemID))
+                    maxedWeaponIDs.Add(inst.data.itemID);
+
         var result  = new SO_ItemData[count];
         var usedIDs = new HashSet<string>();
 
@@ -79,6 +87,10 @@ public class ShopManager : MonoBehaviour
                     candidate = pool[Random.Range(0, pool.Count)];
                 }
 
+                // 5단계 보유 무기는 제외
+                if (!string.IsNullOrEmpty(candidate.itemID) && maxedWeaponIDs.Contains(candidate.itemID))
+                    continue;
+
                 if (string.IsNullOrEmpty(candidate.itemID) || !usedIDs.Contains(candidate.itemID))
                 {
                     pick = candidate;
@@ -86,12 +98,14 @@ public class ShopManager : MonoBehaviour
                 }
             }
 
-            // 중복 회피 100회 실패 시 폴백
+            // 중복 회피 100회 실패 시 폴백 (5단계 보유 무기는 여기서도 제외)
             if (pick == null)
             {
                 var bucket = _buckets[PickType(allowBlocks)];
-                if (bucket.Count > 0)
-                    pick = bucket[Random.Range(0, bucket.Count)];
+                var pool = bucket.FindAll(it => it == null || string.IsNullOrEmpty(it.itemID)
+                                             || !maxedWeaponIDs.Contains(it.itemID));
+                if (pool.Count > 0)
+                    pick = pool[Random.Range(0, pool.Count)];
             }
 
             if (pick == null) continue;
