@@ -120,7 +120,11 @@ namespace BagSurvivor.UI
         {
             if (isPaused) return;
             isPaused = true;
-            if (pausePanel != null) pausePanel.SetActive(true);
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(true);
+                EnsureTopCanvas(pausePanel, 500); // 활성화 후 재보장 (overrideSorting은 활성 상태에서만 적용됨)
+            }
             Time.timeScale = 0f; // 게임 일시정지
             // TODO: 인게임 효과음 비활성화 (BGM은 유지)
             if (frame != null) StartCoroutine(PunchScale());
@@ -137,7 +141,11 @@ namespace BagSurvivor.UI
 
         private void OpenSetting()
         {
-            if (settingPopup != null) settingPopup.SetActive(true);
+            if (settingPopup != null)
+            {
+                settingPopup.SetActive(true);
+                EnsureTopCanvas(settingPopup, 510); // 활성화 후 재보장
+            }
         }
 
         private void OnLobby()
@@ -145,9 +153,11 @@ namespace BagSurvivor.UI
             // 2차 확인 모달 표시 (게임은 계속 일시정지 유지)
             if (lobbyConfirmPanel != null)
             {
-                EnsureTopCanvas(lobbyConfirmPanel, 520);        // 표시 직전 재보장 (Awake에서 누락되는 케이스 대비)
-                lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
+                // overrideSorting은 활성 상태에서만 적용되므로 반드시 SetActive(true) 후 호출한다.
+                // (비활성 pausePanel의 자식이라 Awake 시점엔 override가 걸리지 않아 뒤로 밀렸음)
                 lobbyConfirmPanel.SetActive(true);
+                EnsureTopCanvas(lobbyConfirmPanel, 520);
+                lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
             }
             else OnLobbyConfirm(); // 모달이 없으면 바로 이동
         }
