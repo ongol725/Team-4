@@ -146,18 +146,19 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         gameObject.SetActive(true);
         _isSoldOut = false;
 
-        // 2등급 롤: 등급 있는 아이템(무기/방어구)에만 적용
+        // 할인 우선 판정: 할인과 2등급은 상호 배타 — 할인이 뜨면 2등급은 뜨지 않는다.
+        int discountIdx = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
+        _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
+
+        // 2등급 롤: 등급 있는 아이템(무기/방어구)에만, 그리고 할인이 아닐 때만 적용
         _displayGradeIndex = 0;
         bool hasGrades = item is SO_WeaponData || item is SO_ArmorData;
-        if (hasGrades)
+        if (hasGrades && !_isDiscounted)
         {
             int rateIdx = Mathf.Clamp(shopGrade - 1, 0, Grade2Rates.Length - 1);
             if (UnityEngine.Random.Range(0, 100) < Grade2Rates[rateIdx])
                 _displayGradeIndex = 1;
         }
-
-        int discountIdx = Mathf.Clamp(shopGrade - 1, 0, DiscountRates.Length - 1);
-        _isDiscounted    = UnityEngine.Random.Range(0, 100) < DiscountRates[discountIdx];
 
         RebuildVisual();
         RefreshSynergies(item);
