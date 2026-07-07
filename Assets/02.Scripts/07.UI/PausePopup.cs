@@ -25,6 +25,7 @@ namespace BagSurvivor.UI
         public Button continueButton;    // 이어하기
         public Button settingButton;     // 설정
         public Button lobbyButton;       // 로비 이동
+        public Button quitButton;        // 게임 종료
 
         [Header("설정 팝업 (선택)")]
         public GameObject settingPopup;
@@ -60,6 +61,7 @@ namespace BagSurvivor.UI
             if (continueButton != null) continueButton.onClick.AddListener(Close);
             if (settingButton != null) settingButton.onClick.AddListener(OpenSetting);
             if (lobbyButton != null) lobbyButton.onClick.AddListener(OnLobby);
+            if (quitButton != null) quitButton.onClick.AddListener(OnQuit);
             if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnLobbyConfirm);
             if (lobbyConfirmNoButton != null) lobbyConfirmNoButton.onClick.AddListener(OnLobbyCancel);
 
@@ -173,6 +175,17 @@ namespace BagSurvivor.UI
             Time.timeScale = 1f; // 다음 씬이 멈춘 채 시작하지 않도록 복구
             GameManager.Instance?.ClearLoadout();
             SceneManager.LoadScene(lobbySceneName);
+        }
+
+        /// <summary>게임 종료. 빌드에서는 앱 종료, 에디터에서는 플레이 중지.</summary>
+        private void OnQuit()
+        {
+            Time.timeScale = 1f;
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         // timeScale=0 상태이므로 unscaled 시간 사용
