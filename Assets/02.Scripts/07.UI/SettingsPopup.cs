@@ -39,12 +39,22 @@ namespace BagSurvivor.UI
         public string bgmParam = "BGMVol";
         public string sfxParam = "SFXVol";
 
-        private readonly FullScreenMode[] modes =
+        private static readonly FullScreenMode[] modes =
         {
             FullScreenMode.ExclusiveFullScreen, // 전체화면
             FullScreenMode.Windowed,            // 창모드
             FullScreenMode.FullScreenWindow     // 테두리 없는 창 모드
         };
+
+        // 저장된 화면 모드를 게임 시작 시 '1회만' 적용한다.
+        // 화면 모드는 씬이 바뀌어도 유지되므로, 씬마다(SettingsPopup.Awake) 재적용하면
+        // 스테이지 진입 때마다 해상도가 재설정되어 화면이 번쩍이고 모드가 바뀌던 문제가 생긴다.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void ApplySavedScreenModeOnce()
+        {
+            if (!PlayerPrefs.HasKey("screenModeIdx")) return; // 저장값 없으면 빌드 기본값 유지
+            ApplyScreenMode(PlayerPrefs.GetInt("screenModeIdx", 1));
+        }
         private readonly int[] modeCodes = { 143002, 143003, 143004 };
         private int modeIndex;
 
@@ -55,9 +65,9 @@ namespace BagSurvivor.UI
             if (sfxLabel != null) sfxLabel.text = StringTable.Get(143021);
             SetOkLabel();
 
-            // 화면 모드 — 저장된 모드를 시작 시 복원 적용
+            // 화면 모드 — 현재 상태를 UI에 표시만 한다(실제 적용은 시작 시 1회 + 사용자가 바꿀 때만).
+            // 씬 로드마다 재적용하면 화면이 번쩍이므로 여기선 SetResolution을 호출하지 않는다.
             modeIndex = PlayerPrefs.GetInt("screenModeIdx", CurrentModeIndex());
-            ApplyScreenMode(modeIndex);
             UpdateScreenModeText();
             if (screenModeLeft != null) screenModeLeft.onClick.AddListener(delegate { CycleMode(-1); });
             if (screenModeRight != null) screenModeRight.onClick.AddListener(delegate { CycleMode(1); });
@@ -97,14 +107,16 @@ namespace BagSurvivor.UI
             Save();
         }
 
-        /// <summary>화면 모드 실제 적용. 창모드=1280x720, 전체/테두리없음=모니터 기본 해상도.</summary>
-        private void ApplyScreenMode(int idx)
+        /// <summary>화면 모드 실제 적용. 창모드=1280x720, 전체/테두리없음=1920x1080 고정.
+        /// (노트북마다 네이티브 해상도가 달라 화면이 깨지던 문제 방지 — 백버퍼를 1920x1080으로 고정하고
+        ///  GPU가 모니터에 맞춰 스케일링)</summary>
+        private static void ApplyScreenMode(int idx)
         {
             FullScreenMode mode = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
             if (mode == FullScreenMode.Windowed)
                 Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
             else
-                Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, mode);
+                Screen.SetResolution(1920, 1080, mode);
         }
 
         private void UpdateScreenModeText()

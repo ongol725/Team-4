@@ -160,6 +160,7 @@ namespace BagSurvivor.UI
             if (tooltip == null || e == null) return;
 
             // 시너지 항목(마우스 판정 영역)의 '아래쪽 끝 중앙'을 기준점으로 잡아 그 밑으로 설명을 펼친다.
+            // (툴팁은 자체 Canvas 정렬을 올려 인벤토리 위에 렌더되므로 아래로 펼쳐도 가리지 않음)
             Vector3 anchor;
             var er = e.transform as RectTransform;
             if (er != null)

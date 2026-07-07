@@ -13,7 +13,10 @@ namespace BagSurvivor.Monster
     public class FloorHazard : MonoBehaviour
     {
         [Header("피해 설정")]
-        [Tooltip("틱당 피해량")]
+        [Tooltip("0보다 크면 '플레이어 최대체력 비율'로 피해(예: 0.025 = 최대체력의 2.5%). 이 값이 우선 적용됨")]
+        [Range(0f, 1f)] public float maxHpPercentPerTick = 0.025f;
+
+        [Tooltip("최대체력 비율(maxHpPercentPerTick)이 0일 때 사용하는 고정 피해량")]
         public int damagePerTick = 5;
 
         [Tooltip("피해 간격(초)")]
@@ -39,7 +42,10 @@ namespace BagSurvivor.Monster
             PlayerHealth ph = playerCol != null ? playerCol.GetComponentInParent<PlayerHealth>() : null;
             while (ph != null && !ph.IsDead)
             {
-                ph.TakeDamage(damagePerTick);
+                int dmg = maxHpPercentPerTick > 0f
+                    ? Mathf.Max(1, Mathf.CeilToInt(ph.MaxHP * maxHpPercentPerTick)) // 최대체력 비율 피해
+                    : damagePerTick;                                               // 고정 피해
+                ph.TakeDamage(dmg);
                 yield return new WaitForSeconds(tickInterval);
             }
             damageCo = null;

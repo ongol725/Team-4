@@ -21,7 +21,7 @@ MonoBehaviour:
   defense: 15
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 7
+  moveSpeed: 5
   movePattern: 0
   kbResist: 0.2
   kbCooldown: 0
@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 6
   spawnCount: 1
   dropItemID: Item_002
-  dropItemValue: 46
+  dropItemValue: 36
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Wolf.prefab

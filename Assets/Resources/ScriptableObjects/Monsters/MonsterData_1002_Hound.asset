@@ -16,7 +16,7 @@ MonoBehaviour:
   monsterName: "\uB4E4\uAC1C"
   englishName: Hound
   grade: 0
-  maxHP: 50
+  maxHP: 65
   attack: 5
   defense: 0
   attackStyle: 0
@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 3
   spawnCount: 2
   dropItemID: Item_001
-  dropItemValue: 14
+  dropItemValue: 15
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Hound.prefab

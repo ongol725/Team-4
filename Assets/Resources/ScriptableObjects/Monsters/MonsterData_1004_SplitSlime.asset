@@ -16,7 +16,7 @@ MonoBehaviour:
   monsterName: "\uBD84\uC5F4\uC2AC\uB77C\uC784"
   englishName: SplitSlime
   grade: 0
-  maxHP: 20
+  maxHP: 25
   attack: 2
   defense: 0
   attackStyle: 0
@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 0
   spawnCount: 0
   dropItemID: Item_001
-  dropItemValue: 4
+  dropItemValue: 3
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Slime.prefab

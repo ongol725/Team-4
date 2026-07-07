@@ -25,6 +25,7 @@ namespace BagSurvivor.UI
         public Button continueButton;    // 이어하기
         public Button settingButton;     // 설정
         public Button lobbyButton;       // 로비 이동
+        public Button quitButton;        // 게임 종료
 
         [Header("설정 팝업 (선택)")]
         public GameObject settingPopup;
@@ -60,6 +61,7 @@ namespace BagSurvivor.UI
             if (continueButton != null) continueButton.onClick.AddListener(Close);
             if (settingButton != null) settingButton.onClick.AddListener(OpenSetting);
             if (lobbyButton != null) lobbyButton.onClick.AddListener(OnLobby);
+            if (quitButton != null) quitButton.onClick.AddListener(OnQuit);
             if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnLobbyConfirm);
             if (lobbyConfirmNoButton != null) lobbyConfirmNoButton.onClick.AddListener(OnLobbyCancel);
 
@@ -68,9 +70,10 @@ namespace BagSurvivor.UI
 
             // 인벤토리 등 다른 Canvas(sortingOrder 10)보다 위에 렌더링되도록 Canvas override 설정.
             // 모달(설정/로비확인)은 일시정지 메뉴보다 더 위 → 클릭 가능하도록 정렬값 분리.
-            EnsureTopCanvas(pausePanel, 100);
-            EnsureTopCanvas(settingPopup, 110);
-            EnsureTopCanvas(lobbyConfirmPanel, 120);
+            // 보스룸 등 다른 씬에 있던 sortingOrder 120대 캔버스에 밀리지 않도록 확인 모달을 크게 올린다.
+            EnsureTopCanvas(pausePanel, 500);
+            EnsureTopCanvas(settingPopup, 510);
+            EnsureTopCanvas(lobbyConfirmPanel, 520);
 
             if (pausePanel != null) pausePanel.SetActive(false);
             if (settingPopup != null) settingPopup.SetActive(false);
@@ -100,8 +103,14 @@ namespace BagSurvivor.UI
 #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                if (_bagOpen) InventoryPopupToggle.Instance?.CloseBag(); // 가방 열림 중엔 ESC = 가방 닫기
-                else Toggle();                                          // 그 외엔 일시정지 토글
+                // 튜토리얼이 열려 있거나 이번 프레임에 튜토리얼이 ESC로 닫혔으면 일시정지는 열지 않는다
+                // (실행 순서와 무관하게 안전: 열림 중이면 IsOpen, 이미 닫혔으면 LastEscCloseFrame로 감지)
+                if (TutorialController.IsOpen || TutorialController.LastEscCloseFrame == Time.frameCount)
+                {
+                    // 튜토리얼이 ESC를 소비 — 일시정지 토글 안 함
+                }
+                else if (_bagOpen) InventoryPopupToggle.Instance?.CloseBag(); // 가방 열림 중엔 ESC = 가방 닫기
+                else Toggle();                                               // 그 외엔 일시정지 토글
             }
 #endif
         }
@@ -119,7 +128,11 @@ namespace BagSurvivor.UI
         {
             if (isPaused) return;
             isPaused = true;
-            if (pausePanel != null) pausePanel.SetActive(true);
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(true);
+                EnsureTopCanvas(pausePanel, 500); // 활성화 후 재보장 (overrideSorting은 활성 상태에서만 적용됨)
+            }
             Time.timeScale = 0f; // 게임 일시정지
             // TODO: 인게임 효과음 비활성화 (BGM은 유지)
             if (frame != null) StartCoroutine(PunchScale());
@@ -136,7 +149,11 @@ namespace BagSurvivor.UI
 
         private void OpenSetting()
         {
-            if (settingPopup != null) settingPopup.SetActive(true);
+            if (settingPopup != null)
+            {
+                settingPopup.SetActive(true);
+                EnsureTopCanvas(settingPopup, 510); // 활성화 후 재보장
+            }
         }
 
         private void OnLobby()
@@ -144,9 +161,11 @@ namespace BagSurvivor.UI
             // 2차 확인 모달 표시 (게임은 계속 일시정지 유지)
             if (lobbyConfirmPanel != null)
             {
-                EnsureTopCanvas(lobbyConfirmPanel, 120);        // 표시 직전 재보장 (Awake에서 누락되는 케이스 대비)
-                lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
+                // overrideSorting은 활성 상태에서만 적용되므로 반드시 SetActive(true) 후 호출한다.
+                // (비활성 pausePanel의 자식이라 Awake 시점엔 override가 걸리지 않아 뒤로 밀렸음)
                 lobbyConfirmPanel.SetActive(true);
+                EnsureTopCanvas(lobbyConfirmPanel, 520);
+                lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
             }
             else OnLobbyConfirm(); // 모달이 없으면 바로 이동
         }
@@ -162,6 +181,17 @@ namespace BagSurvivor.UI
             Time.timeScale = 1f; // 다음 씬이 멈춘 채 시작하지 않도록 복구
             GameManager.Instance?.ClearLoadout();
             SceneManager.LoadScene(lobbySceneName);
+        }
+
+        /// <summary>게임 종료. 빌드에서는 앱 종료, 에디터에서는 플레이 중지.</summary>
+        private void OnQuit()
+        {
+            Time.timeScale = 1f;
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         // timeScale=0 상태이므로 unscaled 시간 사용

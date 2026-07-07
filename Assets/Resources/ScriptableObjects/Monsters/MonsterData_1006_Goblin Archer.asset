@@ -16,7 +16,7 @@ MonoBehaviour:
   monsterName: "\uACE0\uBE14\uB9B0 \uAD81\uC218"
   englishName: Goblin Archer
   grade: 0
-  maxHP: 60
+  maxHP: 80
   attack: 12
   defense: 5
   attackStyle: 1
@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 5
   spawnCount: 2
   dropItemID: Item_002
-  dropItemValue: 22
+  dropItemValue: 20
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_GoblinArcher.prefab

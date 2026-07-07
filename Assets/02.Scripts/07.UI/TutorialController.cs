@@ -117,9 +117,30 @@ namespace BagSurvivor.UI
 
         // ─────────────────────────────────────────────────────────────
 
+        /// <summary>튜토리얼이 현재 열려 있는지(다른 UI가 ESC 처리를 양보하도록 조회).</summary>
+        public static bool IsOpen { get; private set; }
+        /// <summary>ESC로 튜토리얼을 닫은 프레임(같은 프레임에 일시정지가 함께 열리지 않도록).</summary>
+        public static int LastEscCloseFrame = -1;
+
+        private void Update()
+        {
+            if (!_isVisible) return;
+#if ENABLE_INPUT_SYSTEM
+            bool esc = Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame;
+#else
+            bool esc = Input.GetKeyDown(KeyCode.Escape);
+#endif
+            if (esc)
+            {
+                LastEscCloseFrame = Time.frameCount;
+                Close();
+            }
+        }
+
         private void SetVisible(bool visible)
         {
             _isVisible = visible;
+            IsOpen = visible;
             if (_root != null) _root.SetActive(visible);
         }
 
