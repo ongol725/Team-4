@@ -1206,9 +1206,41 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5881209748839471788, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5881209748839471788, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5881209748839471788, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422491211714249974, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422491211714249974, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422491211714249974, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7610487072474034648, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8206721281852917282, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133786949357314904, guid: 1e027a3a4e465f648aa96481afa10c4c, type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
