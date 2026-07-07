@@ -363,6 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a7291ff0ae8cfc46a77e7906ff96842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.FloorHazard
+  maxHpPercentPerTick: 0.025
   damagePerTick: 5
   tickInterval: 0.5
 --- !u!95 &2904273227656687011
