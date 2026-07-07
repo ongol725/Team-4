@@ -44,6 +44,7 @@ namespace BagSurvivor.Monster
         private Vector3 phaseCenter;   // 전환 시 내려앉을 가운데 = 스폰(시작) 위치
         private bool transitioning;
         private bool transitioned;
+        private GameObject hazardInstance; // 2페이즈 영구 장판 인스턴스(보스 사망/비활성 시 정리)
 
         /// <summary>2페이즈 진입 완료 여부.</summary>
         public bool IsPhase2 => transitioned;
@@ -63,9 +64,15 @@ namespace BagSurvivor.Monster
             phaseCenter = transform.position + phaseCenterOffset; // 스폰 위치 + 오프셋 = 전환 시 내려앉을 가운데
         }
 
+        private void OnDisable()
+        {
+            DestroyHazard(); // 풀 반환/씬 종료 시에도 장판이 남지 않도록 정리
+        }
+
         private void Update()
         {
-            if (controller == null || controller.IsDead) return;
+            if (controller == null) return;
+            if (controller.IsDead) { DestroyHazard(); return; } // 보스 사망 → 영구 장판 제거
             if (transitioning || transitioned) return;
 
             if (controller.HpRatio < phase2Threshold)
@@ -112,9 +119,9 @@ namespace BagSurvivor.Monster
             }
             transform.position = phaseCenter;    // 바닥 위치 고정(가운데)
 
-            // 바닥 영구 장판(가운데, 영구 지속이므로 풀 대신 직접 생성)
+            // 바닥 영구 장판(가운데). 영구 지속이라 풀 대신 직접 생성하고, 보스 사망 시 정리한다.
             if (floorHazardPrefab != null)
-                Instantiate(floorHazardPrefab, transform.position, Quaternion.identity);
+                hazardInstance = Instantiate(floorHazardPrefab, transform.position, Quaternion.identity);
 
             transitioning = false;
 
@@ -134,6 +141,11 @@ namespace BagSurvivor.Monster
                 p.phase2Mode = true;
 
             if (driver != null) driver.basicChance = phase2BasicChance; // 60/40
+        }
+
+        private void DestroyHazard()
+        {
+            if (hazardInstance != null) { Destroy(hazardInstance); hazardInstance = null; }
         }
     }
 }
