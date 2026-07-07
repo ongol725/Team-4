@@ -214,17 +214,17 @@ public class MinimapController : MonoBehaviour
                     int tileData = mapData[x, y];
                     if (tileData == 3)
                     {
-                        pixels[index] = Color.gray; // 벽
+                        pixels[index] = new Color32(0x78, 0x4c, 0x28, 0xff); // 벽 #784c28
                     }
                     else if (tileData == 1) // 방 또는 복도
                     {
-                        Color pixelColor = Color.red; // 기본 복도 색상 (어떤 방에도 속하지 않으면 복도)
+                        Color pixelColor = new Color32(0x80, 0x08, 0x0d, 0xff); // 기본 복도 #80080d (어떤 방에도 속하지 않으면 복도)
                         foreach (Room room in rooms)
                         {
                             if (room.bounds.Contains(new Vector2Int(x, y)))
                             {
-                                pixelColor = Color.blue; // 기본 방
-                                if (room.type == RoomType.Start) pixelColor = Color.green;
+                                pixelColor = new Color32(0xca, 0xbf, 0xa9, 0xff); // 기본 방 바닥 #cabfa9
+                                if (room.type == RoomType.Start) pixelColor = new Color32(0x10, 0x87, 0x13, 0xff); // 시작방 #108713
                                 else if (room.type == RoomType.Shop) pixelColor = Color.yellow;
                                 else if (room.type == RoomType.Elite) pixelColor = new Color(0.86f, 0.08f, 0.24f);
                                 else if (room.type == RoomType.MiniBoss) pixelColor = new Color(0.5f, 0f, 0.5f);
