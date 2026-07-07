@@ -6,6 +6,7 @@
 // ============================================================
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace BagSurvivor.Monster
 {
@@ -70,6 +71,15 @@ namespace BagSurvivor.Monster
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
         private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
+
+        // ── 몬스터 간 겹침 방지(separation) ─────────────────────────
+        // 활성 몬스터 전역 목록. 이미지(스프라이트) 크기 기준으로 서로 밀어내 90% 이상 보이게 유지.
+        private static readonly List<MonsterController> Active = new List<MonsterController>();
+        [Header("겹침 방지")]
+        [Tooltip("이미지 폭 기준 허용 근접 비율. 0.9면 서로 최대 10%만 겹침(90% 보임). 0으로 두면 분리 안 함")]
+        [Range(0f, 1f)] public float separationVisible = 0.9f;
+        [Tooltip("밀어내는 강도(초당). 클수록 빨리 벌어짐")]
+        public float separationStrength = 12f;
 
         // 넉백 관련
         private float kbCooldownTimer = 0f;
@@ -198,10 +208,12 @@ namespace BagSurvivor.Monster
             // 오브젝트 풀에서 재활성화될 때마다 초기화
             InitializeMonster();
             ShowHpBar();
+            if (!Active.Contains(this)) Active.Add(this); // 몬스터 간 겹침 방지(separation)용 등록
         }
 
         private void OnDisable()
         {
+            Active.Remove(this);
             // 오브젝트 풀 반환 시 모든 코루틴 정지 및 상태 초기화
             StopAllCoroutines();
             knockbackCoroutine = null;
@@ -427,14 +439,40 @@ namespace BagSurvivor.Monster
             // stopDistance>0이면 수동 지정값, 아니면 콜라이더 기반 자동값(approachOverlap만큼 겹쳐 접근).
             // 플레이어 중심까지 추적하며 방향이 매 프레임 뒤집혀 떨리는 현상을 방지한다.
             float stop = stopDistance > 0f ? stopDistance : autoStopDistance;
-            if (dist <= Mathf.Max(stop, 0.0001f))
-            {
-                rb.linearVelocity = Vector2.zero;
-                return;
-            }
+            Vector2 chaseVel = (dist <= Mathf.Max(stop, 0.0001f))
+                ? Vector2.zero
+                : AvoidPillar(toPlayer / dist) * monsterData.moveSpeed * _speedMultiplier;
 
-            Vector2 dir = AvoidPillar(toPlayer / dist);
-            rb.linearVelocity = dir * monsterData.moveSpeed * _speedMultiplier;
+            // 겹침 방지: 정지 상태(플레이어에 몰림)에서도 서로 밀어내 이미지가 겹치지 않게 한다.
+            rb.linearVelocity = chaseVel + ComputeSeparation();
+        }
+
+        /// <summary>주변 몬스터와 이미지 기준 최소 간격을 유지하도록 밀어내는 속도를 계산한다.
+        /// separationVisible(0.9)이면 서로 최대 10%만 겹치도록(90% 보이게) 밀어낸다.</summary>
+        private Vector2 ComputeSeparation()
+        {
+            if (separationVisible <= 0f || spriteRenderer == null) return Vector2.zero;
+
+            float rSelf = spriteRenderer.bounds.extents.x; // 스프라이트(이미지) 반폭
+            Vector2 selfPos = transform.position;
+            Vector2 push = Vector2.zero;
+
+            // ponytail: O(n²) 전수 순회. 현재 몬스터 수 규모에선 충분. 폭증하면 공간 분할로 교체.
+            for (int i = 0; i < Active.Count; i++)
+            {
+                var o = Active[i];
+                if (o == null || o == this || o.isDying || o.spriteRenderer == null) continue;
+
+                Vector2 d = selfPos - (Vector2)o.transform.position;
+                float desired = (rSelf + o.spriteRenderer.bounds.extents.x) * separationVisible;
+                float sq = d.sqrMagnitude;
+                if (sq < desired * desired && sq > 0.000001f)
+                {
+                    float dist = Mathf.Sqrt(sq);
+                    push += (d / dist) * (desired - dist); // 파고든 만큼 비례해 밀어냄
+                }
+            }
+            return push * separationStrength;
         }
 
         /// <summary>스프라이트를 좌우 방향(dirX)에 맞춰 뒤집습니다. 돌진 등 외부제어 패턴 중 방향 고정용
