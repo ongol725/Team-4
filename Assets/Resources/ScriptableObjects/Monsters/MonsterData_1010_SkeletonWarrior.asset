@@ -16,12 +16,12 @@ MonoBehaviour:
   monsterName: "\uC2A4\uCF08\uB808\uD1A4 \uC804\uC0AC"
   englishName: SkeletonWarrior
   grade: 0
-  maxHP: 350
+  maxHP: 400
   attack: 40
   defense: 20
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 5
+  moveSpeed: 3
   movePattern: 0
   kbResist: 0.3
   kbCooldown: 0
@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 5
   spawnCount: 5
   dropItemID: Item_002
-  dropItemValue: 40
+  dropItemValue: 31
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_SkeletonWarrior.prefab

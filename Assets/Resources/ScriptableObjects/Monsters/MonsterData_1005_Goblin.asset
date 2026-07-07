@@ -16,7 +16,7 @@ MonoBehaviour:
   monsterName: "\uACE0\uBE14\uB9B0"
   englishName: Goblin
   grade: 0
-  maxHP: 75
+  maxHP: 100
   attack: 10
   defense: 2
   attackStyle: 0
@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 5
   spawnCount: 6
   dropItemID: Item_001
-  dropItemValue: 20
+  dropItemValue: 18
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Goblin.prefab

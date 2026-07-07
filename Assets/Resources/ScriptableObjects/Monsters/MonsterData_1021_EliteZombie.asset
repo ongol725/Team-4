@@ -16,7 +16,7 @@ MonoBehaviour:
   monsterName: "\uC880\uBE44 \uC5D8\uB9AC\uD2B8"
   englishName: EliteZombie
   grade: 1
-  maxHP: 200
+  maxHP: 500
   attack: 22
   defense: 10
   attackStyle: 0
