@@ -26,9 +26,18 @@ namespace BagSurvivor.UI
 
         private RectTransform rt;
 
+        // 프리즘 배경은 밝은 무지개색이라 흰 글씨가 안 보인다 → 프리즘일 때만 어두운 글씨로.
+        private static readonly Color PrismTextColor = new Color32(0x24, 0x18, 0x30, 0xff); // 어두운 보라
+        private Color _origNameColor = Color.white;
+        private Color _origDescColor = Color.white;
+        private Color _origEffectColor = Color.white;
+
         private void Awake()
         {
             rt = GetComponent<RectTransform>();
+            if (nameText != null)   _origNameColor   = nameText.color;
+            if (descText != null)   _origDescColor   = descText.color;
+            if (effectText != null) _origEffectColor = effectText.color;
 
             // 툴팁이 마우스 포인터를 가로채면 시너지 항목의 OnPointerExit가 발동해
             // 깜빡임(보였다 사라졌다)이 생긴다. CanvasGroup으로 레이캐스트를 차단하지 않게 한다.
@@ -51,12 +60,31 @@ namespace BagSurvivor.UI
         public void Show(SynergyInfo i, Vector3 topAnchorWorldPos)
         {
             if (i == null) return;
-            if (nameText != null) nameText.text = i.synergyName;
+
+            // 프리즘(활성)은 밝은 배경이라 글씨를 어둡게 → 잘 보이게
+            bool prism = i.isActive && i.grade == SynergyGrade.Prism;
+
+            if (nameText != null)
+            {
+                nameText.text  = i.synergyName;
+                nameText.color = prism ? PrismTextColor : _origNameColor;
+            }
             if (descText != null)
+            {
+                string condColor = prism ? "#241830" : "#8FA6FF";
                 descText.text = string.IsNullOrEmpty(i.condition)
                     ? i.description
-                    : "<color=#8FA6FF>발동 조건: " + i.condition + "</color>\n" + i.description;
-            if (effectText != null) effectText.text = i.effect;
+                    : "<color=" + condColor + ">발동 조건: " + i.condition + "</color>\n" + i.description;
+                descText.color = prism ? PrismTextColor : _origDescColor;
+            }
+            if (effectText != null)
+            {
+                string fx = i.effect ?? string.Empty;
+                if (prism) // 마일스톤 내장 색태그(활성 흰색/비활성 회색)를 어둡게 치환
+                    fx = fx.Replace("#FFFFFF", "#241830").Replace("#88888880", "#5A4A6A80");
+                effectText.text  = fx;
+                effectText.color = prism ? PrismTextColor : _origEffectColor;
+            }
             if (icon != null && i.icon != null) icon.sprite = i.icon;
 
             if (background != null)
