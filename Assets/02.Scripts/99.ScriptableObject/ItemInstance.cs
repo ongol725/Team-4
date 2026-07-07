@@ -13,6 +13,9 @@ public class ItemInstance
     [Range(0, 4)]
     public int gradeIndex;     // 0 = 1등급, 4 = 5등급
 
+    // 이 시각(Time.unscaledTime) 전까지는 판매 금지. 구매 직후 연타로 바로 팔리는 것 방지(0.5초).
+    [System.NonSerialized] public float noSellUntil;
+
     /// <summary>반지 인접 버프로 추가되는 임시 등급 보너스. InventoryAnalyzer.Analyze()마다 초기화된다.</summary>
     [System.NonSerialized]
     public int RingGradeBonus;

@@ -404,8 +404,12 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private bool IsMouseOverSellSlot() =>
         SellSlotUI.Instance != null && SellSlotUI.Instance.IsMouseOver();
 
+    /// <summary>구매 직후 0.5초 동안은 판매 금지(연타로 바로 팔리는 것 방지).</summary>
+    private bool CanSell() => _instance == null || Time.unscaledTime >= _instance.noSellUntil;
+
     private void SellAndDestroy()
     {
+        if (!CanSell()) return; // 구매 직후 판매 금지 — 아이템은 계속 따라다님
         SetFollowing(false);
         _gridUI.OnPlacementCancelled(_instance);
         SellSlotUI.Instance?.Sell(_instance);
@@ -456,6 +460,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         if (eventData.button == PointerEventData.InputButton.Left
          && Keyboard.current != null && Keyboard.current.tKey.isPressed)
         {
+            if (!CanSell()) return; // 구매 직후 0.5초 판매 금지
             if (_isPlaced)
             {
                 _grid.Remove(_instance);

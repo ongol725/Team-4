@@ -555,7 +555,7 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if (GameManager.Instance == null || !GameManager.Instance.SpendGold(_finalCost))
             return; // 골드 부족 — 구매 취소
-        _onBuy?.Invoke(new ItemInstance { data = _item, gradeIndex = _displayGradeIndex }, this);
+        _onBuy?.Invoke(new ItemInstance { data = _item, gradeIndex = _displayGradeIndex, noSellUntil = Time.unscaledTime + 0.5f }, this);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -592,7 +592,7 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (_cachedGridUI == null) _cachedGridUI = FindAnyObjectByType<InventoryGridUI>();
         if (_cachedGridUI == null) return;
 
-        var inst = new ItemInstance { data = _item, gradeIndex = _displayGradeIndex };
+        var inst = new ItemInstance { data = _item, gradeIndex = _displayGradeIndex, noSellUntil = Time.unscaledTime + 0.5f };
         _cachedGridUI.SmartReceiveFromShop(inst);
         SetSoldOut();
     }
