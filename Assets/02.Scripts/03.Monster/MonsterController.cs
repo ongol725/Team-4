@@ -534,7 +534,7 @@ namespace BagSurvivor.Monster
             int finalDamage = Mathf.Max(1, rawDamage - def);
             if (damageTakenMultiplier != 1f)
                 finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * damageTakenMultiplier));
-            currentHP -= finalDamage;
+            currentHP = Mathf.Max(0, currentHP - finalDamage); // 0 미만으로 내려가지 않게(표기 -1 방지)
 
             // 데미지 숫자 띄우기 (모든 데미지 소스가 이 메서드로 모임)
             DamagePopup.Show(transform.position, finalDamage);
