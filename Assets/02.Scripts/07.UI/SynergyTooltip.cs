@@ -37,6 +37,13 @@ namespace BagSurvivor.UI
             cg.blocksRaycasts = false;
             cg.interactable = false;
 
+            // 인벤토리(캔버스 정렬 0~10) 위에 렌더되도록 자체 Canvas로 정렬을 올린다.
+            // (hover 시에만 보이므로 인벤토리 위에 겹쳐 떠도 무방)
+            var canvas = GetComponent<Canvas>();
+            if (canvas == null) canvas = gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 200;
+
             gameObject.SetActive(false);
         }
 
@@ -68,7 +75,8 @@ namespace BagSurvivor.UI
             gameObject.SetActive(true);
             if (rt != null)
             {
-                // 피벗을 상단 중앙으로 → 기준점(시너지 항목 아래 끝)부터 아래로 내용이 펼쳐짐
+                // 피벗을 상단 중앙으로 → 기준점(시너지 항목 아래 끝)부터 아래로 내용이 펼쳐짐.
+                // 인벤토리 위에 렌더되도록 자체 Canvas 정렬을 올려두었으므로 아래로 펼쳐도 가리지 않음.
                 rt.pivot = new Vector2(0.5f, 1f);
                 ResizeToFit();
                 rt.position = topAnchorWorldPos;
