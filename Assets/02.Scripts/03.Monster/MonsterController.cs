@@ -625,8 +625,20 @@ namespace BagSurvivor.Monster
             float speed = distance / KNOCKBACK_DURATION;
             float timer = 0f;
 
+            // 넉백으로 방 밖(복도/맵밖)이나 벽으로 밀려나지 않도록 이 방의 경계를 확보
+            var spawner = RoomMonsterSpawner.Instance;
+            Rect roomRect = default;
+            bool haveRoom = spawner != null && spawner.TryGetRoomWorldRect(transform.position, out roomRect);
+
             while (timer < KNOCKBACK_DURATION)
             {
+                // 다음 스텝 위치가 방 경계를 벗어나거나(복도/맵밖) 벽 타일이면 그 자리에서 정지
+                if (spawner != null)
+                {
+                    Vector2 nextPos = (Vector2)transform.position + direction * speed * Time.fixedDeltaTime;
+                    if ((haveRoom && !roomRect.Contains(nextPos)) || spawner.IsWallAt(nextPos))
+                        break;
+                }
                 rb.linearVelocity = direction * speed;
                 timer += Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
