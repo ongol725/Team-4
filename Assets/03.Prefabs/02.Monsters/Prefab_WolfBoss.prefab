@@ -435,8 +435,8 @@ MonoBehaviour:
   mapCenter: {x: 0, y: 0, z: 0}
   dashCount: 6
   dashTelegraph: 1.5
-  dashSpeed: 6.5185194
-  dashDistance: 3.5555558
+  dashSpeed: 9.777779
+  dashDistance: 5.3333337
   dashRestTime: 1
   bodyHitRadius: 0.35555562
   stoneBreakRadius: 0.44444448
@@ -445,7 +445,7 @@ MonoBehaviour:
   stonePrefab: {fileID: 5574503645699197074, guid: a119e75919e9abb46b86d7958058143e, type: 3}
   itemPickupPrefab: {fileID: 3966691219984321219, guid: 0e101020fca72c5439f594d949355531, type: 3}
   itemMarkerPrefab: {fileID: 0}
-  dashTelegraphPrefab: {fileID: 0}
+  dashTelegraphPrefab: {fileID: 8621140538416912394, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
 --- !u!114 &2831693946660462046
 MonoBehaviour:
   m_ObjectHideFlags: 0

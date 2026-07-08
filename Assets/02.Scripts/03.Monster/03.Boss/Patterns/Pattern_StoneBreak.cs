@@ -159,6 +159,16 @@ namespace BagSurvivor.Monster
         {
             Vector2 dir = DirToPlayer();
             GameObject tele = ShowTelegraph(dashTelegraphPrefab, transform.position, dir);
+            // DashWarn 류 경고선이면 돌진 거리만큼 앞으로 타일(자식 SpriteRenderer) — 사거리 표시
+            if (tele != null)
+            {
+                var sr = tele.GetComponentInChildren<SpriteRenderer>();
+                if (sr != null && sr.drawMode != SpriteDrawMode.Simple)
+                {
+                    sr.size = new Vector2(dashDistance, sr.size.y);
+                    sr.transform.localPosition = new Vector3(dashDistance * 0.5f, 0f, 0f);
+                }
+            }
             // 경로 표시(선딜) 동안 돌진대기 모션
             if (bossAnimator != null) bossAnimator.PlayPattern("ChargeIdle");
             yield return WaitOrSuccess(dashTelegraph);
