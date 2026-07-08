@@ -61,6 +61,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private int        _shopRefundCost;
 
     private readonly List<GameObject> _cellOutlines = new();
+    private readonly List<GameObject> _synergyHi = new(); // 시너지 hover 시 흰색 강조 외곽선
 
     // 희귀도별 테두리 색상 (무기용)
     private static readonly Color[] RarityColors =
@@ -579,6 +580,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private void BuildVisuals()
     {
         _cellOutlines.Clear();
+        _synergyHi.Clear(); // 비주얼 재빌드 시 하이라이트 오브젝트도 함께 파괴되므로 참조 정리
 
         var cells         = InventoryGrid.GetCells(_instance.data);
         bool isWeapon     = _instance.data is SO_WeaponData;
@@ -785,6 +787,49 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         var img = go.GetComponent<Image>();
         img.color         = col;
         img.raycastTarget = false;
+    }
+
+    // ── 시너지 hover 강조: 흰색 외곽선 ─────────────────────────────
+    /// <summary>이 아이템이 해당 시너지를 켜는지(SO_ItemData.synergies 확인).</summary>
+    public bool HasSynergy(SynergyType type)
+    {
+        if (_instance?.data?.synergies == null) return false;
+        foreach (var s in _instance.data.synergies) if (s == type) return true;
+        return false;
+    }
+
+    /// <summary>시너지 hover 시 흰색 외곽선 표시/숨김.</summary>
+    public void SetSynergyHighlight(bool on)
+    {
+        if (on && _synergyHi.Count == 0) BuildSynergyHighlight();
+        foreach (var g in _synergyHi) if (g != null) g.SetActive(on);
+    }
+
+    private void BuildSynergyHighlight()
+    {
+        if (_instance?.data == null) return;
+        const float thick = 3f;
+        float s = _cellSize;
+        Color white = Color.white; // 색 겹침 없는 흰색 강조
+        foreach (var cell in InventoryGrid.GetCells(_instance.data))
+        {
+            var container = new GameObject("syn_hi", typeof(RectTransform));
+            container.transform.SetParent(_rt, false);
+            container.transform.SetAsLastSibling(); // 아이템 위에 렌더
+            var cRt = container.GetComponent<RectTransform>();
+            cRt.anchorMin = cRt.anchorMax = new Vector2(0f, 1f);
+            cRt.pivot = new Vector2(0f, 1f);
+            cRt.sizeDelta = new Vector2(s, s);
+            cRt.anchoredPosition = new Vector2(cell.y * s, -cell.x * s);
+
+            OutlineStrip(container, new Vector2(0,          0            ), new Vector2(s,     thick),          white);
+            OutlineStrip(container, new Vector2(0,          -(s - thick) ), new Vector2(s,     thick),          white);
+            OutlineStrip(container, new Vector2(0,          -thick       ), new Vector2(thick, s - thick * 2f), white);
+            OutlineStrip(container, new Vector2(s - thick,  -thick       ), new Vector2(thick, s - thick * 2f), white);
+
+            container.SetActive(false);
+            _synergyHi.Add(container);
+        }
     }
 
     private static Font GetDefaultFont() =>

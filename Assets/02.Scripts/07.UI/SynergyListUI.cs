@@ -155,9 +155,28 @@ namespace BagSurvivor.UI
                       : new Color(0.8f, 0.5f, 0.3f);
         }
 
+        private InventoryGridUI _gridUICache;
+
+        /// <summary>hover한 시너지를 켜는 인벤 무기에 흰색 외곽선 강조.</summary>
+        private void HighlightSynergyItems(SynergyInfo info)
+        {
+            if (info == null) return;
+            if (_gridUICache == null) _gridUICache = FindFirstObjectByType<InventoryGridUI>();
+            _gridUICache?.HighlightSynergy(info.type);
+        }
+
+        private void ClearSynergyItemsHighlight()
+        {
+            if (_gridUICache == null) _gridUICache = FindFirstObjectByType<InventoryGridUI>();
+            _gridUICache?.ClearSynergyHighlight();
+        }
+
         public void ShowTooltip(SynergyEntry e)
         {
-            if (tooltip == null || e == null) return;
+            if (e == null) return;
+            HighlightSynergyItems(e.Info); // 이 시너지를 켜는 무기들 강조
+
+            if (tooltip == null) return;
 
             // 시너지 항목(마우스 판정 영역)의 '아래쪽 끝 중앙'을 기준점으로 잡아 그 밑으로 설명을 펼친다.
             // (툴팁은 자체 Canvas 정렬을 올려 인벤토리 위에 렌더되므로 아래로 펼쳐도 가리지 않음)
@@ -178,6 +197,7 @@ namespace BagSurvivor.UI
 
         public void HideTooltip()
         {
+            ClearSynergyItemsHighlight();
             if (tooltip != null) tooltip.Hide();
         }
     }
