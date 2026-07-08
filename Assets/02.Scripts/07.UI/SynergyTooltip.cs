@@ -82,7 +82,7 @@ namespace BagSurvivor.UI
                 string fx = i.effect ?? string.Empty;
                 if (prism) // 마일스톤 내장 색태그(활성 흰색/비활성 회색)를 어둡게 치환
                     fx = fx.Replace("#FFFFFF", "#241830").Replace("#88888880", "#5A4A6A80");
-                effectText.text  = fx;
+                effectText.text  = fx + "\n"; // 마지막 하단 공백줄 — 텍스트가 패널 아래 모서리에 붙지 않도록
                 effectText.color = prism ? PrismTextColor : _origEffectColor;
             }
             if (icon != null && i.icon != null) icon.sprite = i.icon;

@@ -27,9 +27,9 @@ MonoBehaviour:
   duration: 0
   cooldown: 10
   fixedEffect: 6
-  fixedEffectValue: 50
+  fixedEffectValue: 65
   statusEffect: 0
-  effectValue: 0
+  effectValue: 30
   vfxPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 15

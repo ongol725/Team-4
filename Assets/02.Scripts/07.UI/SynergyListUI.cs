@@ -66,6 +66,7 @@ namespace BagSurvivor.UI
                 var canvas = canvasGO.AddComponent<Canvas>();
                 canvas.renderMode   = RenderMode.ScreenSpaceOverlay;
                 canvas.sortingOrder = srcCanvas.sortingOrder + 1;
+                canvas.pixelPerfect = srcCanvas.pixelPerfect; // 원본 캔버스의 픽셀 스냅 설정 승계 (픽셀 폰트 선명도)
 
                 // 부모 Canvas의 CanvasScaler 설정 복사 → 좌표계 동일하게 유지
                 var srcScaler = srcCanvas.GetComponent<CanvasScaler>();

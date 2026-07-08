@@ -232,6 +232,7 @@ public class ItemInfoPopup : MonoBehaviour
         _canvas              = gameObject.AddComponent<Canvas>();
         _canvas.renderMode   = RenderMode.ScreenSpaceOverlay;
         _canvas.sortingOrder = 100;
+        _canvas.pixelPerfect = true; // 픽셀 폰트(Galmuri9) 선명도 — 픽셀 격자 스냅
 
         var scaler = gameObject.AddComponent<CanvasScaler>();
         scaler.uiScaleMode         = CanvasScaler.ScaleMode.ScaleWithScreenSize;

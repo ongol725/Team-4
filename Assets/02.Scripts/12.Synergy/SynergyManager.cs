@@ -379,31 +379,33 @@ public class SynergyManager : MonoBehaviour
         }
         else
         {
-            // 브론즈~골드: 10초마다 1초간 이동속도/피해량 50% 감소
+            // 브론즈: 10초마다 1초간 이동속도(fixedEffectValue%)·피해량(effectValue%) 감소
             var waitCycle   = new WaitForSeconds(10f);
             var waitPenalty = new WaitForSeconds(1f);
-            float penaltyRate = skill.fixedEffectValue > 0f ? 1f - skill.fixedEffectValue / 100f : 0.5f;
+            float moveRate = skill.fixedEffectValue > 0f ? 1f - skill.fixedEffectValue / 100f : 0.5f;
+            // 피해량 감소율은 effectValue 사용 — 미지정(0)이면 이동속도와 동일 비율
+            float atkRate  = skill.effectValue     > 0f ? 1f - skill.effectValue     / 100f : moveRate;
 
             while (true)
             {
                 yield return waitCycle;
-                ApplyOverloadPenalty(penaltyRate);
+                ApplyOverloadPenalty(moveRate, atkRate);
                 yield return waitPenalty;
                 RemoveOverloadPenalty();
             }
         }
     }
 
-    private void ApplyOverloadPenalty(float rate)
+    private void ApplyOverloadPenalty(float moveRate, float atkRate)
     {
         if (_playerMovement != null)
-            _playerMovement.speedMultiplier = rate;
+            _playerMovement.speedMultiplier = moveRate;
         if (_playerStats != null)
         {
             _savedAtkMul = _playerStats.attackMultiplier;
-            _playerStats.attackMultiplier *= rate;
+            _playerStats.attackMultiplier *= atkRate;
         }
-        Debug.Log($"[과부하] 패널티 발동 (이동속도·피해량 ×{rate:F2})");
+        Debug.Log($"[과부하] 패널티 발동 (이동속도 ×{moveRate:F2}, 피해량 ×{atkRate:F2})");
     }
 
     private void RemoveOverloadPenalty()

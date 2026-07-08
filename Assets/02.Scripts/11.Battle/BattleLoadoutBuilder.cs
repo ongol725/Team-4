@@ -142,6 +142,16 @@ public class BattleLoadoutBuilder : MonoBehaviour
     {
         loadout.TotalHpBonus = snapshot.TotalHpBonus;
         loadout.TotalHpRegen = snapshot.TotalHpRegen;
+
+        // ARM_HP_SUM 시너지 스케일링용(난공불락 충격파 등) — 방어구 기본 체력만 합산(반지 버프 제외).
+        // 누락 시 0으로 남아 충격파 피해가 항상 최소치(1)로 계산되는 버그가 있었다.
+        int armorHp = 0;
+        foreach (var a in snapshot.Armors)
+        {
+            var st = a.CurrentArmorStats;
+            if (st != null) armorHp += st.hpBonus;
+        }
+        loadout.TotalArmorHp = armorHp;
     }
 
     private void BuildSynergies(InventorySnapshot snapshot, BattleLoadout loadout)
