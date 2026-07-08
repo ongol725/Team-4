@@ -809,27 +809,36 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     {
         if (_instance?.data == null) return;
         const float thick = 3f;
-        float s = _cellSize;
         Color white = Color.white; // 색 겹침 없는 흰색 강조
-        foreach (var cell in InventoryGrid.GetCells(_instance.data))
+
+        // 무기 전체(셀 바운딩 박스) 기준 외곽선 1개만 그린다. (셀마다 그리면 2칸+ 무기에 테두리가 여러 개)
+        int minR = int.MaxValue, minC = int.MaxValue, maxR = int.MinValue, maxC = int.MinValue;
+        foreach (var c in InventoryGrid.GetCells(_instance.data))
         {
-            var container = new GameObject("syn_hi", typeof(RectTransform));
-            container.transform.SetParent(_rt, false);
-            container.transform.SetAsLastSibling(); // 아이템 위에 렌더
-            var cRt = container.GetComponent<RectTransform>();
-            cRt.anchorMin = cRt.anchorMax = new Vector2(0f, 1f);
-            cRt.pivot = new Vector2(0f, 1f);
-            cRt.sizeDelta = new Vector2(s, s);
-            cRt.anchoredPosition = new Vector2(cell.y * s, -cell.x * s);
-
-            OutlineStrip(container, new Vector2(0,          0            ), new Vector2(s,     thick),          white);
-            OutlineStrip(container, new Vector2(0,          -(s - thick) ), new Vector2(s,     thick),          white);
-            OutlineStrip(container, new Vector2(0,          -thick       ), new Vector2(thick, s - thick * 2f), white);
-            OutlineStrip(container, new Vector2(s - thick,  -thick       ), new Vector2(thick, s - thick * 2f), white);
-
-            container.SetActive(false);
-            _synergyHi.Add(container);
+            if (c.x < minR) minR = c.x; if (c.x > maxR) maxR = c.x;
+            if (c.y < minC) minC = c.y; if (c.y > maxC) maxC = c.y;
         }
+        if (maxR < minR) return; // 셀 없음
+
+        float w = (maxC - minC + 1) * _cellSize;
+        float h = (maxR - minR + 1) * _cellSize;
+
+        var container = new GameObject("syn_hi", typeof(RectTransform));
+        container.transform.SetParent(_rt, false);
+        container.transform.SetAsLastSibling(); // 아이템 위에 렌더
+        var cRt = container.GetComponent<RectTransform>();
+        cRt.anchorMin = cRt.anchorMax = new Vector2(0f, 1f);
+        cRt.pivot = new Vector2(0f, 1f);
+        cRt.sizeDelta = new Vector2(w, h);
+        cRt.anchoredPosition = new Vector2(minC * _cellSize, -minR * _cellSize);
+
+        OutlineStrip(container, new Vector2(0,         0            ), new Vector2(w,     thick),          white); // 상
+        OutlineStrip(container, new Vector2(0,         -(h - thick) ), new Vector2(w,     thick),          white); // 하
+        OutlineStrip(container, new Vector2(0,         -thick       ), new Vector2(thick, h - thick * 2f), white); // 좌
+        OutlineStrip(container, new Vector2(w - thick, -thick       ), new Vector2(thick, h - thick * 2f), white); // 우
+
+        container.SetActive(false);
+        _synergyHi.Add(container);
     }
 
     private static Font GetDefaultFont() =>
