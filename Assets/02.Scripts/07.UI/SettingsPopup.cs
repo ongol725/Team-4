@@ -46,14 +46,27 @@ namespace BagSurvivor.UI
             FullScreenMode.FullScreenWindow     // 테두리 없는 창 모드
         };
 
-        // 저장된 화면 모드를 게임 시작 시 '1회만' 적용한다.
-        // 화면 모드는 씬이 바뀌어도 유지되므로, 씬마다(SettingsPopup.Awake) 재적용하면
-        // 스테이지 진입 때마다 해상도가 재설정되어 화면이 번쩍이고 모드가 바뀌던 문제가 생긴다.
+        // 저장된 화면 모드를 게임 시작 시 '1회만' 적용하고, 이후 씬 로드 때는
+        // 실제 모드가 저장값과 '다를 때만' 재적용한다. (일부 씬(보스룸) 로드 시 Unity가
+        // Player Settings 기본 fullscreenMode로 되돌려 창모드→전체화면으로 튀는 것 보정.
+        // 정상 유지된 씬에선 재적용 안 하므로 불필요한 번쩍임이 없다.)
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void ApplySavedScreenModeOnce()
         {
             if (!PlayerPrefs.HasKey("screenModeIdx")) return; // 저장값 없으면 빌드 기본값 유지
             ApplyScreenMode(PlayerPrefs.GetInt("screenModeIdx", 1));
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoadedReapply; // 중복 방지
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoadedReapply;
+        }
+
+        private static void OnSceneLoadedReapply(UnityEngine.SceneManagement.Scene s,
+                                                 UnityEngine.SceneManagement.LoadSceneMode m)
+        {
+            if (!PlayerPrefs.HasKey("screenModeIdx")) return;
+            int idx = PlayerPrefs.GetInt("screenModeIdx", 1);
+            FullScreenMode want = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
+            if (Screen.fullScreenMode != want) // 씬 로드로 모드가 리셋됐을 때만 되돌림
+                ApplyScreenMode(idx);
         }
         private readonly int[] modeCodes = { 143002, 143003, 143004 };
         private int modeIndex;
