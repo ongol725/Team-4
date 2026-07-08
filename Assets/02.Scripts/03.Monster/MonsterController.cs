@@ -71,6 +71,7 @@ namespace BagSurvivor.Monster
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
         private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
+        private Coroutine _hitCo;               // 피격 플래시 코루틴(연타 시 겹쳐 빨강 고정되는 것 방지)
 
         // ── 몬스터 간 겹침 방지(separation) ─────────────────────────
         // 활성 몬스터 전역 목록. 이미지(스프라이트) 크기 기준으로 서로 밀어내 90% 이상 보이게 유지.
@@ -546,8 +547,9 @@ namespace BagSurvivor.Monster
             // 데미지 숫자 띄우기 (모든 데미지 소스가 이 메서드로 모임)
             DamagePopup.Show(transform.position, finalDamage);
 
-            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음)
-            StartCoroutine(HitEffectCoroutine());
+            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음). 이전 플래시를 멈추고 새로 시작(연타 시 빨강 고정 방지)
+            if (_hitCo != null) StopCoroutine(_hitCo);
+            _hitCo = StartCoroutine(HitEffectCoroutine());
 
             // HP 확인
             if (currentHP <= 0)
@@ -572,16 +574,15 @@ namespace BagSurvivor.Monster
             // 피격 시 깜빡임 효과
             if (spriteRenderer != null)
             {
-                Color originalColor = spriteRenderer.color;
                 spriteRenderer.color = Color.red;
                 yield return new WaitForSeconds(0.1f);
 
-                // 사망하지 않았으면 색상 복구
+                // 사망하지 않았으면 기준색(baseColor)으로 복구.
+                // (현재 색을 캡처해 복구하면 연타 시 이미 빨간 상태를 원본으로 잡아 빨강이 고정됨)
                 if (!isDying && spriteRenderer != null)
-                {
-                    spriteRenderer.color = originalColor;
-                }
+                    spriteRenderer.color = baseColor;
             }
+            _hitCo = null;
         }
 
         // ==========================================
