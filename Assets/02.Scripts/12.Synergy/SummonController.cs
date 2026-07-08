@@ -152,6 +152,9 @@ public class SummonController : MonoBehaviour
 
     private void OnDestroy()
     {
+        // 성역이 사라질 때(15초 이동/전투 종료) 버프가 걸린 채면 반드시 해제
+        if (_zoneBuffApplied) SetSanctuaryBuff(false);
+
         // Init에서 생성한 임시 Texture2D 명시적 해제 (메모리 누수 방지)
         if (_runtimeTex != null) Destroy(_runtimeTex);
     }
@@ -340,10 +343,25 @@ public class SummonController : MonoBehaviour
 
     private void UpdateStationary()
     {
+        // 성기사단 성역: 플레이어가 위에 서 있는 동안 체력 재생 가속 + 받는 피해 감소.
+        // 매 프레임 진입/이탈을 판정해 버프를 토글한다 (공격/회복 틱 없음).
+        if (_data.fixedEffect == FixedEffectType.ZoneRegenBuff)
+        {
+            // 판정 반경 = 화면에 실제로 보이는 장판 크기(스프라이트 bounds) — 시각과 판정을 항상 일치시킨다.
+            // 스프라이트가 없으면 atkRange 폴백. 크기 조정은 SO의 displayScale 하나로 판정까지 함께 바뀐다.
+            float zoneRadius = _mainSr != null && _mainSr.sprite != null
+                ? Mathf.Max(_mainSr.bounds.extents.x, _mainSr.bounds.extents.y)
+                : _data.atkRange;
+            bool inside = _player != null
+                       && Vector2.Distance(_player.position, transform.position) <= zoneRadius;
+            if (inside != _zoneBuffApplied) SetSanctuaryBuff(inside);
+            return;
+        }
+
         if (_atkTimer < _data.atkCooldown) return;
         _atkTimer = 0f;
 
-        // 성기사단 성역: 플레이어 체력 회복 (HealArmorHpPct)
+        // (구) 성기사단 성역: 플레이어 체력 회복 (HealArmorHpPct)
         if (_data.fixedEffect == FixedEffectType.HealArmorHpPct && _playerHealth != null)
         {
             int armorHp  = GameManager.Instance?.CurrentLoadout?.TotalArmorHp ?? 0;
@@ -357,6 +375,19 @@ public class SummonController : MonoBehaviour
             Vector2 kb = ((Vector2)mc.transform.position - (Vector2)transform.position).normalized;
             mc.TakeDamage(_attackPower, 1f, kb);
         }
+    }
+
+    // ── 성기사단 성역 구역 버프 ─────────────────────────────────
+    private bool _zoneBuffApplied;
+    private const float SanctuaryDmgReduction = 0.2f; // 성역 위 받는 피해 감소율 (기획 고정 20%)
+
+    /// <summary>성역 버프 적용/해제. fixedEffectValue = 체력 재생 배율(브론즈2/실버2.5/골드4).</summary>
+    private void SetSanctuaryBuff(bool on)
+    {
+        _zoneBuffApplied = on;
+        if (_playerHealth == null) return;
+        _playerHealth.RegenRateMultiplier    = on ? Mathf.Max(1f, _data.fixedEffectValue) : 1f;
+        _playerHealth.ZoneDamageReductionPct = on ? SanctuaryDmgReduction : 0f;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -471,7 +502,7 @@ public class SummonController : MonoBehaviour
                     Vector2 feet = PlayerFeet();
                     float r = Vector2.Distance(GolemHeadTop(), feet);
                     foreach (var mc in GetEnemiesInRange(feet, r)) ApplySkillHit(skill, mc, damage);
-                    SpawnDamageFloor(feet, r); // [임시] 빨간 발판도 동일 중심·반경
+                    SpawnNovaExplosion(skill, feet, r); // 폭발 시트(Elemental_Explosion2)를 판정 범위 크기로 재생
                 }
                 else
                 {
@@ -498,46 +529,28 @@ public class SummonController : MonoBehaviour
         yield return null;
     }
 
-    // ===== [임시/디버그] 대정령 광역 강타 데미지 범위 빨간 바닥 =====
-    // 삭제 시: 이 region + ExecuteSkill AreaCenter의 SpawnDamageFloor 호출 한 줄만 지우면 됨.
-    #region TEMP_DamageFloor
-    private static Sprite _dbgCircle;
-    private void SpawnDamageFloor(Vector3 center, float radius)
+    /// <summary>대정령 광역 강타 폭발 이펙트 — nodeFrames(Elemental_Explosion2 시트)를 판정 범위 크기로 1회 재생한다.</summary>
+    private void SpawnNovaExplosion(SO_SkillData skill, Vector3 center, float radius)
     {
-        if (_dbgCircle == null)
-        {
-            const int S = 32;
-            var tex = new Texture2D(S, S, TextureFormat.RGBA32, false);
-            float c = (S - 1) * 0.5f;
-            for (int y = 0; y < S; y++)
-            for (int x = 0; x < S; x++)
-                tex.SetPixel(x, y, Mathf.Sqrt((x - c) * (x - c) + (y - c) * (y - c)) <= c ? Color.white : Color.clear);
-            tex.Apply();
-            _dbgCircle = Sprite.Create(tex, new Rect(0, 0, S, S), new Vector2(0.5f, 0.5f), S);
-        }
-        var go = new GameObject("TEMP_DamageFloor");
-        go.transform.position = new Vector3(center.x, center.y, 0f);
-        float d = Mathf.Max(0.1f, radius * 2f); // 스프라이트=지름 1유닛 → 스케일=지름(반경×2)
-        go.transform.localScale = new Vector3(d, d, 1f);
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = _dbgCircle;
-        sr.color = new Color(1f, 0f, 0f, 0.4f);
-        sr.sortingOrder = 50; // 디버그 가시성 우선(맨 위). 바닥처럼 깔려면 낮추기.
-        StartCoroutine(FadeAndKill(sr, 0.6f));
-    }
+        var frames = skill.nodeFrames;
+        if (frames == null || frames.Length == 0 || frames[0] == null) return;
 
-    private IEnumerator FadeAndKill(SpriteRenderer sr, float life)
-    {
-        float t = 0f, a0 = sr.color.a;
-        while (t < life && sr != null)
-        {
-            t += Time.deltaTime;
-            var col = sr.color; col.a = Mathf.Lerp(a0, 0f, t / life); sr.color = col;
-            yield return null;
-        }
-        if (sr != null) Destroy(sr.gameObject);
+        var go = new GameObject("SpiritNovaFx");
+        go.transform.position = new Vector3(center.x, center.y, 0f);
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sortingOrder = SynergyLayers.Effect; // 공격 이펙트는 캐릭터 위
+        sr.sprite = frames[0];
+
+        // 스프라이트 실제 크기를 데미지 판정 지름(반경×2)에 맞춤
+        float maxExtent = Mathf.Max(frames[0].bounds.extents.x, frames[0].bounds.extents.y);
+        float target    = Mathf.Max(0.1f, radius);
+        go.transform.localScale = maxExtent > 0.001f ? Vector3.one * (target / maxExtent) : Vector3.one;
+
+        float fps = skill.animFps > 0f ? skill.animFps : 12f;
+        go.AddComponent<SpriteSheetAnimator>().Play(frames, fps, loop: false);
+        Destroy(go, frames.Length / Mathf.Max(1f, fps) + 0.1f);
     }
-    #endregion
 
     /// <summary>평상 애니메이션을 멈추고 발동 모션을 1회 재생한 뒤 평상 애니메이션을 복구한다(대정령 광역).</summary>
     private IEnumerator PlayCastMotion(Sprite[] castFrames, float fps)

@@ -124,13 +124,14 @@ public class PlayerStats : MonoBehaviour
     }
 
     // 10초마다 hpRegen만큼 PlayerHealth를 회복
+    // 성역 위에 있으면 PlayerHealth.RegenRateMultiplier(2~4배)가 곱해진다.
     private IEnumerator RegenLoop()
     {
         var wait = new WaitForSeconds(10f);
         while (_playerHealth != null && !_playerHealth.IsDead)
         {
             yield return wait;
-            _playerHealth.Heal(hpRegen);
+            _playerHealth.Heal(Mathf.Max(1, Mathf.RoundToInt(hpRegen * _playerHealth.RegenRateMultiplier)));
         }
         _regenCoroutine = null;
     }

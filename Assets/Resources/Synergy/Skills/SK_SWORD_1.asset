@@ -18,7 +18,7 @@ MonoBehaviour:
   skillType: 2
   targetType: 8
   scalingStat: 1
-  dmgMultiplier: 1
+  dmgMultiplier: 2
   hitCount: 1
   hitInterval: 0.1
   extraCount: 0

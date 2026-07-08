@@ -607,7 +607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SynergyManager
   _skillBindings:
   - synergyType: 12
-    grade: 0
+    grade: 1
     skill: {fileID: 11400000, guid: 451fb441f0d093249982c7e4b762532a, type: 2}
   - synergyType: 12
     grade: 2

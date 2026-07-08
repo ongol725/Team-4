@@ -16,13 +16,13 @@ MonoBehaviour:
   summonName: "\uC131\uC5ED \uC7A5\uD310 (\uBE0C\uB860\uC988)"
   aiType: 2
   scalingStat: 3
-  atkMultiplier: 0.5
+  atkMultiplier: 0
   moveSpeed: 0
   atkCooldown: 1
   atkRange: 5
-  duration: 5
-  fixedEffect: 5
-  fixedEffectValue: 1
+  duration: 15
+  fixedEffect: 8
+  fixedEffectValue: 2
   uniqueSkill: {fileID: 0}
   uniqueSkillCooldown: 8
   displayScale: 1.8

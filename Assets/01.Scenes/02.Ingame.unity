@@ -798,10 +798,10 @@ MonoBehaviour:
     grade: 2
     skill: {fileID: 11400000, guid: cb5944a0e2ba70347b0bdb9ba1142b61, type: 2}
   - synergyType: 12
-    grade: 0
+    grade: 1
     skill: {fileID: 11400000, guid: 32c1b2518d9165c4aa38030e9819537b, type: 2}
   - synergyType: 12
-    grade: 1
+    grade: 2
     skill: {fileID: 11400000, guid: 5697fd3c6b3aa28458460c41fab787b3, type: 2}
   - synergyType: 7
     grade: 0
@@ -2053,6 +2053,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   DamageReductionPct: 0
+  ZoneDamageReductionPct: 0
+  RegenRateMultiplier: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

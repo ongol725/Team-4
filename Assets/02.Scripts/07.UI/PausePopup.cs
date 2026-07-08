@@ -43,6 +43,13 @@ namespace BagSurvivor.UI
         private bool isPaused;
         private bool _bagOpen;   // 가방(인벤토리) 열림 상태 — ESC/일시정지 버튼 게이트
 
+        // 확인 모달 공용화 (로비 이동/게임 종료)
+        private bool   _confirmQuit;      // true = 게임 종료 확인, false = 로비 이동 확인
+        private Text   _confirmMsgText;   // 모달 메시지 Text (런타임 캐시)
+        private Text   _confirmYesText;   // 확인(예) 버튼 라벨 Text (런타임 캐시)
+        private string _lobbyMsg;         // 프리팹 기본 메시지(로비 이동용) 보존
+        private string _lobbyYesLabel;    // 프리팹 기본 확인 라벨("나가기") 보존
+
         private void OnDestroy()
         {
             // 씬 전환 등 외부 경로로 파괴될 때 timeScale 복구
@@ -61,8 +68,8 @@ namespace BagSurvivor.UI
             if (continueButton != null) continueButton.onClick.AddListener(Close);
             if (settingButton != null) settingButton.onClick.AddListener(OpenSetting);
             if (lobbyButton != null) lobbyButton.onClick.AddListener(OnLobby);
-            if (quitButton != null) quitButton.onClick.AddListener(OnQuit);
-            if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnLobbyConfirm);
+            if (quitButton != null) quitButton.onClick.AddListener(OnQuitRequest);
+            if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnConfirmYes);
             if (lobbyConfirmNoButton != null) lobbyConfirmNoButton.onClick.AddListener(OnLobbyCancel);
 
             // 가방(인벤토리) 열림/닫힘 구독 — 열리면 일시정지 버튼 UI·기능 끔, 닫히면 복구
@@ -156,18 +163,50 @@ namespace BagSurvivor.UI
             }
         }
 
-        private void OnLobby()
+        private void OnLobby()       => ShowConfirm(quit: false);
+        private void OnQuitRequest() => ShowConfirm(quit: true);
+
+        /// <summary>2차 확인 모달 표시 — quit=true면 게임 종료, false면 로비 이동. (게임은 계속 일시정지 유지)
+        /// 같은 모달(LobbyConfirmPanel)을 공용으로 쓰고 메시지·확인 라벨만 용도에 맞게 교체한다.</summary>
+        private void ShowConfirm(bool quit)
         {
-            // 2차 확인 모달 표시 (게임은 계속 일시정지 유지)
-            if (lobbyConfirmPanel != null)
+            _confirmQuit = quit;
+            if (lobbyConfirmPanel == null) { OnConfirmYes(); return; } // 모달이 없으면 바로 실행
+
+            // 모달 텍스트 교체 (프리팹 기본값 = 로비 이동 문구를 보존해 두고 복원)
+            CacheConfirmTexts();
+            if (_confirmMsgText != null)
+                _confirmMsgText.text = quit
+                    ? "정말 게임을 종료하시겠습니까?\n진행 중인 런은 저장되지 않습니다."
+                    : _lobbyMsg;
+            if (_confirmYesText != null)
+                _confirmYesText.text = quit ? "종료" : _lobbyYesLabel;
+
+            // overrideSorting은 활성 상태에서만 적용되므로 반드시 SetActive(true) 후 호출한다.
+            // (비활성 pausePanel의 자식이라 Awake 시점엔 override가 걸리지 않아 뒤로 밀렸음)
+            lobbyConfirmPanel.SetActive(true);
+            EnsureTopCanvas(lobbyConfirmPanel, 520);
+            lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
+        }
+
+        /// <summary>확인 모달의 메시지/확인 라벨 Text를 1회 캐시하고 프리팹 기본 문구를 보존한다.</summary>
+        private void CacheConfirmTexts()
+        {
+            if (_confirmMsgText != null || lobbyConfirmPanel == null) return;
+            foreach (var t in lobbyConfirmPanel.GetComponentsInChildren<Text>(true))
             {
-                // overrideSorting은 활성 상태에서만 적용되므로 반드시 SetActive(true) 후 호출한다.
-                // (비활성 pausePanel의 자식이라 Awake 시점엔 override가 걸리지 않아 뒤로 밀렸음)
-                lobbyConfirmPanel.SetActive(true);
-                EnsureTopCanvas(lobbyConfirmPanel, 520);
-                lobbyConfirmPanel.transform.SetAsLastSibling(); // 형제 중 맨 위로 → 일시정지 메뉴 앞에 렌더+클릭
+                if (t.gameObject.name == "Message") _confirmMsgText = t;
+                else if (lobbyConfirmYesButton != null && t.transform.IsChildOf(lobbyConfirmYesButton.transform))
+                    _confirmYesText = t;
             }
-            else OnLobbyConfirm(); // 모달이 없으면 바로 이동
+            if (_confirmMsgText != null) _lobbyMsg      = _confirmMsgText.text;
+            if (_confirmYesText != null) _lobbyYesLabel = _confirmYesText.text;
+        }
+
+        private void OnConfirmYes()
+        {
+            if (_confirmQuit) OnQuit();
+            else              OnLobbyConfirm();
         }
 
         private void OnLobbyCancel()

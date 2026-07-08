@@ -25,7 +25,7 @@ MonoBehaviour:
   damageDelay: 0
   rangeRadius: 15
   duration: 0
-  cooldown: 3
+  cooldown: 2
   fixedEffect: 0
   fixedEffectValue: 0
   statusEffect: 0

@@ -23,6 +23,8 @@ public class SO_WeaponData : SO_ItemData
     public GameObject        projectile;
     public SO_ProjectileData projectileData;
     public float             projectileSpeed;
+    [Tooltip("투사체 크기 배율 (1=기본). 피격 범위도 함께 커진다")]
+    public float             projectileScale = 1f;
     public int               range;
     public int               maxTargets;
 
@@ -35,6 +37,8 @@ public class SO_WeaponData : SO_ItemData
     public Sprite[] auxProjectileFrames;
     [Tooltip("폭발 이펙트(예: 바주카 폭발) 프레임. 폭발 반경에 맞춰 1회 재생. 비우면 미사용")]
     public Sprite[] explosionFrames;
+    [Tooltip("폭발 이펙트 재생 속도(fps). 재생 시간 = 프레임 수 ÷ fps")]
+    public float    explosionFps = 30f;
 
     [Header("근접 모션 (플레이어 중심 외부 회전, 무기는 12시 기준)")]
     [Tooltip("Swing=호로 휘두르기 / Thrust=앞으로 찌르기. 무기별로 지정(기본 Swing)")]

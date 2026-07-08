@@ -43,6 +43,8 @@ public enum FixedEffectType
     DamageReduction, // 피해 감소 (난공불락)
     HealArmorHpPct,  // 방어구 HP 비율 회복 (성기사단)
     SpeedPenalty,    // 이동속도 페널티 (과부하)
+    KillCooldownReduction, // 처치 시 다음 쿨타임 감소 % (일렉트로)
+    ZoneRegenBuff,   // 구역 위 체력 재생 배율 + 받는 피해 감소 (성기사단 성역)
 }
 
 /// <summary>스킬 발동 방식 트리거</summary>

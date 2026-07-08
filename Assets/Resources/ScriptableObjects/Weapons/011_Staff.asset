@@ -30,6 +30,7 @@ MonoBehaviour:
   projectile: {fileID: 0}
   projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
   projectileSpeed: 10
+  projectileScale: 2
   range: 10
   maxTargets: 0
   attackFrames:
@@ -45,13 +46,13 @@ MonoBehaviour:
   meleeReach: 1.6
   meleeMotionDuration: 0.2
   gradeStats:
-  - attackPower: 30
+  - attackPower: 33
     attackSpeed: 1.3
-  - attackPower: 39
+  - attackPower: 43
     attackSpeed: 1.2
-  - attackPower: 50
+  - attackPower: 55
     attackSpeed: 1.1
-  - attackPower: 60
+  - attackPower: 66
     attackSpeed: 1
-  - attackPower: 72
+  - attackPower: 79
     attackSpeed: 0.9

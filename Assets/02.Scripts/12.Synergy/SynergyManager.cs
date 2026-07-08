@@ -71,7 +71,7 @@ public class SynergyManager : MonoBehaviour
 
     // 지속시간 소환수(성역 등)가 소멸한 뒤 다시 시전될 때까지의 빈 시간(초).
     // 실제 재시전 주기 = data.duration + 이 값. (등급↑ = duration↑ → 가동률↑)
-    private const float SummonRecastGap = 2f;
+    private const float SummonRecastGap = 0f; // 성역: 소멸 즉시 다른 위치에 재생성 (기획: 15초마다 이동)
 
     // 플레이어를 감싸며 따라다니는 영구 이펙트(마왕 소용돌이 등). Refresh/파괴 시 정리.
     private readonly List<GameObject>        _auraVFX       = new();
@@ -83,6 +83,9 @@ public class SynergyManager : MonoBehaviour
     private readonly List<(SO_SkillData skill, int dmg)> _onMoveSkills = new();
     private float _moveDistAccum = 0f;
     private const float MoveDropInterval = 1f; // 1유닛 이동마다 골드 드랍
+
+    // 처치 시 쿨타임 감소 (일렉트로) — HitEnemy에서 처치 감지 시 등록, SkillLoop가 다음 사이클에 소비
+    private readonly HashSet<SO_SkillData> _killCdReduced = new();
 
     // 테스트 패널이 적용 중이면 정식 로드아웃(방 진입 등) 발행을 무시해 덮어쓰기 방지
     private bool _testLockActive = false;
@@ -173,6 +176,7 @@ public class SynergyManager : MonoBehaviour
         _onHitSkills.Clear();
         _onMoveSkills.Clear();
         _moveDistAccum = 0f;
+        _killCdReduced.Clear();
 
         // 패시브 피해 감소 초기화
         if (_playerHealth != null) _playerHealth.DamageReductionPct = 0f;
@@ -341,11 +345,15 @@ public class SynergyManager : MonoBehaviour
     private IEnumerator SkillLoop(SO_SkillData skill, int damage)
     {
         var wait     = new WaitForSeconds(skill.cooldown);
+        // 처치 시 쿨타임 감소(일렉트로): 직전 발동에서 적을 처치했으면 다음 대기를 fixedEffectValue% 줄인다.
+        var waitReduced = new WaitForSeconds(skill.cooldown * (1f - Mathf.Clamp01(skill.fixedEffectValue / 100f)));
         int hitCount = Mathf.Max(1, skill.hitCount);
         var hitWait  = hitCount > 1 ? new WaitForSeconds(skill.hitInterval) : null;
         while (true)
         {
-            yield return wait;
+            bool reduced = skill.fixedEffect == FixedEffectType.KillCooldownReduction
+                        && _killCdReduced.Remove(skill);
+            yield return reduced ? waitReduced : wait;
             for (int h = 0; h < hitCount; h++)
             {
                 ExecuteSkill(skill, damage);
@@ -714,6 +722,10 @@ public class SynergyManager : MonoBehaviour
         Vector2 kb      = ((Vector2)mc.transform.position - (Vector2)_player.position).normalized;
         float kbForce   = skill.fixedEffect == FixedEffectType.Knockback ? skill.fixedEffectValue : 0f;
         mc.TakeDamage(damage, kbForce, kb);
+
+        // 일렉트로: 낙뢰가 적을 처치하면 다음 쿨타임 감소 (SkillLoop가 다음 사이클에 소비)
+        if (skill.fixedEffect == FixedEffectType.KillCooldownReduction && mc.IsDead)
+            _killCdReduced.Add(skill);
     }
 
     private IEnumerator ApplyBurn(MonsterController mc, int dmgPerTick, float duration, float interval)
@@ -987,7 +999,8 @@ public class SynergyManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // 소환형
 
-    /// <summary>지속시간 소환수(성역)를 소멸 후 SummonRecastGap 만큼 쉬었다가 다시 시전하는 루프.</summary>
+    /// <summary>지속시간 소환수(성역)를 duration 후 다른 위치에 다시 시전하는 루프.
+    /// 성역은 15초 유지 → 소멸 → 즉시 화면 내 다른 랜덤 지점에 재생성된다.</summary>
     private IEnumerator SummonRespawnLoop(SO_SummonData data, int count, int atkPower)
     {
         while (true)
@@ -1008,15 +1021,29 @@ public class SynergyManager : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            Vector2 offset = Random.insideUnitCircle.normalized * 1.5f;
+            // 고정형(성역)은 화면 내 랜덤 지점에 설치, 그 외 소환수는 플레이어 주변에 생성
+            Vector3 pos = data.aiType == SummonAIType.Stationary
+                ? RandomScreenPos()
+                : _player.position + (Vector3)(Random.insideUnitCircle.normalized * 1.5f);
             var go = new GameObject($"Summon_{data.summonID}_{i}");
             go.transform.SetParent(_summonRoot);
-            go.transform.position = _player.position + (Vector3)offset;
+            go.transform.position = pos;
 
             var sc = go.AddComponent<SummonController>();
             sc.Init(data, _player, atkPower, _enemyLayer, i, count);
             _summons.Add(sc);
         }
+    }
+
+    /// <summary>메인 카메라 화면 안의 랜덤 지점(가장자리 margin 제외). 카메라 부재 시 플레이어 위치 폴백.</summary>
+    private Vector3 RandomScreenPos(float margin = 1.5f)
+    {
+        var cam = Camera.main;
+        if (cam == null) return _player != null ? _player.position : Vector3.zero;
+        float halfH = Mathf.Max(1f, cam.orthographicSize - margin);
+        float halfW = Mathf.Max(1f, cam.orthographicSize * cam.aspect - margin);
+        var c = cam.transform.position;
+        return new Vector3(c.x + Random.Range(-halfW, halfW), c.y + Random.Range(-halfH, halfH), 0f);
     }
 
     // ─────────────────────────────────────────────────────────────
