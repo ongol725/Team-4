@@ -337,23 +337,17 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
         if (_grid.TryPlace(_instance, origin))
         {
-            // 배치 성공: 첫 번째는 임시칸으로, 나머지는 마우스로
-            var tempSlot  = _gridUI.TempSlot;
-            bool tempUsed = false;
+            // 배치 성공: 밀려난 아이템은 '전부' 임시칸으로 보낸다.
+            // (예전엔 첫 개만 임시칸, 나머지가 마우스에 여러 개 들려 서로 겹치던 버그)
+            var tempSlot = _gridUI.TempSlot;
             for (int i = 0; i < displaced.Count; i++)
             {
                 var blockUI = savedBlocks[i];
                 if (blockUI == null) continue;
-                if (!tempUsed && tempSlot != null
-                    && !(blockUI.Instance.data is SO_InventoryBlockData))
-                {
+                if (tempSlot != null && !(blockUI.Instance.data is SO_InventoryBlockData))
                     tempSlot.ReceiveBlock(blockUI);
-                    tempUsed = true;
-                }
                 else
-                {
-                    blockUI.ResumeFollowing();
-                }
+                    blockUI.ResumeFollowing(); // 임시칸이 없거나 확장블록일 때만 폴백
             }
             SnapToGrid(origin);
         }
