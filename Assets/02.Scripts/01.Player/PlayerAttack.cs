@@ -804,6 +804,8 @@ public class PlayerAttack : MonoBehaviour
         // 강철 반지: 인접 무기 투사체 크기·속도 배율(크기는 피격범위 동반)
         scaleMult *= entry.ringProjScale;
         spdMult   *= entry.ringProjSpeed;
+        // 무기 고유 투사체 크기 배율 (예: 지팡이 에너지 볼 2배) — 피격 범위 동반 확대
+        if (wd.projectileScale > 0f && wd.projectileScale != 1f) scaleMult *= wd.projectileScale;
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
         float speed    = rawSpeed * spdMult;
         // 강철 반지 속도감소(ringProjSpeed)는 사거리에 영향 없이 '느려지기만' 하도록 lifetime을 보정
@@ -848,7 +850,7 @@ public class PlayerAttack : MonoBehaviour
                   explosionRadius: explosionRadius,
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
                   spinSpeed: spin, rotationOffset: rotOff, armTime: armTime,
-                  explosionFrames: wd.explosionFrames,
+                  explosionFrames: wd.explosionFrames, explosionFps: wd.explosionFps,
                   ringStunChance: entry.ringStunChance, ringSlowSec: entry.ringSlowSec);
     }
 

@@ -26,8 +26,8 @@ MonoBehaviour:
   rangeRadius: 6
   duration: 0
   cooldown: 2
-  fixedEffect: 0
-  fixedEffectValue: 0
+  fixedEffect: 7
+  fixedEffectValue: 50
   statusEffect: 0
   effectValue: 0
   vfxPrefab: {fileID: 0}

@@ -81,23 +81,26 @@ namespace BagSurvivor.SynergyEditor
             d["SK_ASS_1"] = Sk("SK_ASS_1", "수리검 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
                 ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:3f, range:15f, pierce:999, vSize:1.6f);
+            // 실버부터 공격 속도 1.5배(쿨타임 3→2초) — 골드도 승계
             d["SK_ASS_2"] = Sk("SK_ASS_2", "수리검 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:3f, range:15f, pierce:999, vSize:1.6f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, pierce:999, vSize:1.6f);
             // 골드 '거대 수리검': 1.2(×1.5)에서 추가로 2배 → 2.4
             d["SK_ASS_3"] = Sk("SK_ASS_3", "거대 수리검 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Projectile, SkillTargetType.Forward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:3f, range:15f, extra:1, pierce:999, vSize:2.4f);
+                ScalingStatType.WPN_ATK_AVG, dmg:1.2f, cd:2f, range:15f, extra:1, pierce:999, vSize:2.4f);
 
             // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy (기획서: 무작위 낙뢰 1/3개) ──
             // 번개: 가로:세로 = 1:1.5 비율 유지(stretchY 1.5), 전체 크기 vSize 2.4
             // 낙뢰: 캐릭터 주변 일정 반경(range=6) 내 랜덤 적 타격, 애니 4배속(fps 48)
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:1, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:1,
+                fx:FixedEffectType.KillCooldownReduction, fxVal:50f, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
             d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
-                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:3, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:2f, range:6f, extra:3,
+                fx:FixedEffectType.KillCooldownReduction, fxVal:50f, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
             // 낫: 투사체 크기 ×1.5(1.6→2.4), 이동속도 -50%(15→7.5), 애니 2.5배속(12→30)
@@ -116,15 +119,16 @@ namespace BagSurvivor.SynergyEditor
 
             // ── 소드마스터 (SwordMaster) — AutoTimer / WPN_ATK_AVG / Forward ──
             // 검기: 크기 확대(0.8→4.8) + 세로 2배(stretchY) + 바라보는 방향(FacingForward) 발사
+            // 대미지 전 등급 2배 상향(1.0/1.1/1.3 → 2.0/2.2/2.6), 실버부터 크기·범위 50% 확대(vSize 4.8→7.2, 골드 승계)
             d["SK_SWORD_1"] = Sk("SK_SWORD_1", "검기 (브론즈)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.0f, cd:2f, range:15f, vSize:4.8f, stretchY:2f);
+                ScalingStatType.WPN_ATK_AVG, dmg:2.0f, cd:2f, range:15f, vSize:4.8f, stretchY:2f);
             d["SK_SWORD_2"] = Sk("SK_SWORD_2", "대형 검기 (실버)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.1f, cd:2f, range:15f, vSize:4.8f, stretchY:2f);
+                ScalingStatType.WPN_ATK_AVG, dmg:2.2f, cd:2f, range:15f, vSize:7.2f, stretchY:2f);
             d["SK_SWORD_3"] = Sk("SK_SWORD_3", "연속 검기 (골드)",
                 SynergyTriggerType.AutoTimer, SkillType.Slash, SkillTargetType.FacingForward,
-                ScalingStatType.WPN_ATK_AVG, dmg:1.3f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:4.8f, stretchY:2f);
+                ScalingStatType.WPN_ATK_AVG, dmg:2.6f, cd:2f, range:15f, hits:2, hitInterval:0.15f, vSize:7.2f, stretchY:2f);
 
             // ── 티탄 (Titan) — AutoTimer / WPN_ATK_AVG / RandomEnemy × N ──
             // 돌: 크기 5배(vSize 0.8→4.0), 낙하 애니 2배속(fps 60→120; 총 0.2→0.1초),
@@ -180,20 +184,20 @@ namespace BagSurvivor.SynergyEditor
             // ── 대부호 (Tycoon) — OnMove / WPN_ATK_SUM / 골드 드랍 ──
             d["SK_GOLD_BOMB_1"] = Sk("SK_GOLD_BOMB_1", "골드 폭발 (브론즈)",
                 SynergyTriggerType.OnMove, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:0.7f, cd:0f, range:3f,
-                extra:3, duration:2f);
+                ScalingStatType.WPN_ATK_SUM, dmg:0.9f, cd:0f, range:3f,
+                extra:3, duration:1.5f);
             d["SK_GOLD_BOMB_2"] = Sk("SK_GOLD_BOMB_2", "골드 폭발 (실버)",
                 SynergyTriggerType.OnMove, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:0.7f, cd:0f, range:3f,
-                extra:5, duration:2f);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.0f, cd:0f, range:3f,
+                extra:5, duration:1.5f);
             d["SK_GOLD_BOMB_3"] = Sk("SK_GOLD_BOMB_3", "골드 폭발 (골드)",
                 SynergyTriggerType.OnMove, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:0.7f, cd:0f, range:3f,
-                extra:7, duration:2f);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.1f, cd:0f, range:3f,
+                extra:7, duration:1.5f);
             d["SK_GOLD_FAST"] = Sk("SK_GOLD_FAST", "골드 폭발 (프리즘)",
                 SynergyTriggerType.OnMove, SkillType.AoE, SkillTargetType.Self,
-                ScalingStatType.WPN_ATK_SUM, dmg:0.7f, cd:0f, range:3f,
-                extra:15, duration:1f);
+                ScalingStatType.WPN_ATK_SUM, dmg:1.5f, cd:0f, range:3f,
+                extra:15, duration:0.5f);
 
             // ── 과부하 (Overload) — Penalty ──
             d["SK_OVERLOAD_PENALTY"] = Sk("SK_OVERLOAD_PENALTY", "과부하 패널티",
@@ -275,20 +279,22 @@ namespace BagSurvivor.SynergyEditor
                 SummonAIType.GuardOffset, ScalingStatType.WPN_ATK_SUM,
                 atk:0.5f, spd:120f, atkCd:1.0f, atkRange:6f, dur:-1f, sortOrder:5); // spd=공전속도, 기어는 캐릭터 아래
 
-            // ── 성기사단 (HolyKnight) — Stationary + HealArmorHpPct ──
-            // 성역 장판: 기본 0.6 → 3배 확대(scale 1.8), 바닥 깔림(sortOrder -1)
+            // ── 성기사단 (HolyKnight) — Stationary + ZoneRegenBuff ──
+            // 성역 장판: 화면 내 랜덤 위치에 15초 유지 후 다른 곳으로 이동(SummonRespawnLoop).
+            // 위에 서 있는 동안 체력 재생 배율(fxVal: 2/2.5/4배) + 받는 피해 20% 감소(SummonController 상수).
+            // 공격 없음(atk 0). 구역 판정 반경 = 표시되는 장판 크기(SummonController가 스프라이트 bounds로 산출), atkRange는 폴백.
             d["SUM_SANCTUARY_1"] = Sum("SUM_SANCTUARY_1", "성역 장판 (브론즈)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
-                atk:0.5f, spd:0f, atkCd:1.0f, atkRange:5f, dur:5f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.0f, scale:1.8f, sortOrder:1);
+                atk:0f, spd:0f, atkCd:1.0f, atkRange:5f, dur:15f,
+                fx:FixedEffectType.ZoneRegenBuff, fxVal:2.0f, scale:1.8f, sortOrder:1);
             d["SUM_SANCTUARY_2"] = Sum("SUM_SANCTUARY_2", "성역 장판 (실버)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
-                atk:0.6f, spd:0f, atkCd:1.0f, atkRange:5f, dur:8f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:1.5f, scale:1.8f, sortOrder:1);
+                atk:0f, spd:0f, atkCd:1.0f, atkRange:5f, dur:15f,
+                fx:FixedEffectType.ZoneRegenBuff, fxVal:2.5f, scale:1.8f, sortOrder:1);
             d["SUM_SANCTUARY_3"] = Sum("SUM_SANCTUARY_3", "성역 장판 (골드)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
-                atk:0.7f, spd:0f, atkCd:1.0f, atkRange:5f, dur:11f,
-                fx:FixedEffectType.HealArmorHpPct, fxVal:2.0f, scale:1.8f, sortOrder:1);
+                atk:0f, spd:0f, atkCd:1.0f, atkRange:5f, dur:15f,
+                fx:FixedEffectType.ZoneRegenBuff, fxVal:4.0f, scale:1.8f, sortOrder:1);
 
             return d;
         }
@@ -319,22 +325,23 @@ namespace BagSurvivor.SynergyEditor
                 // ── 암살단 ──────────────────────────────────────────
                 Th(SynergyType.Assassin, "암살단", 2, 4, 5, 0,
                     "단검, 권총, 수리검, 카타나, 너클",
-                    "적을 관통해서 날아가는 거대한 수리검을 던집니다. (쿨타임 3초) *수리검 공격력은 가방 무기 공격력 평균에 비례합니다.",
+                    "적을 관통해서 날아가는 거대한 수리검을 던집니다. (기본 쿨타임 3초, 실버부터 2초) *수리검 공격력은 가방 무기 공격력 평균에 비례합니다.",
                     "수리검을 던집니다.",
-                    "수리검의 속도가 빨라집니다.",
+                    "수리검의 공격 속도가 빨라집니다.",
                     "수리검이 더 커집니다."),
 
                 // ── 일렉트로 ────────────────────────────────────────
-                Th(SynergyType.Electro, "일렉트로", 2, 3, 3, 0,
-                    "지팡이, 마도서, 번개 구슬",
+                // 임계값 2=실버(낙뢰1)/3=골드(낙뢰3) — 브론즈 등급은 건너뜀(핀볼과 동일 구조)
+                Th(SynergyType.Electro, "일렉트로", 2, 2, 3, 0,
+                    "번개 구슬, 지팡이, 마도서",
                     "낙뢰를 소환하여 무작위 적을 공격합니다. 낙뢰가 적을 처치하면 쿨타임이 50% 감소합니다. (쿨타임 2초) *낙뢰의 대미지는 가방 무기 공격력 총합에 비례합니다.",
-                    "마법 낙뢰 1개 투하",
                     "",
+                    "마법 낙뢰 1개 투하",
                     "마법 낙뢰 3개 투하"),
 
                 // ── 핀볼 ────────────────────────────────────────────
                 Th(SynergyType.Pinball, "핀볼", 2, 3, 3, 0,
-                    "쇠뇌, 부메랑, 수리검",
+                    "부메랑, 쇠뇌, 수리검",
                     "맵 전체를 돌아다니는 구체를 생성합니다. 생성된 구체는 피격된 적에게 대미지를 입힙니다. *핀볼 공격력은 가방 무기 공격력 평균에 비례합니다.",
                     "핀볼 생성",
                     "",
@@ -342,23 +349,23 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 처형자 ──────────────────────────────────────────
                 Th(SynergyType.Executioner, "처형자", 2, 4, 5, 0,
-                    "낫, 도끼, 시클, 할버드, 사이드",
+                    "플레일, 채찍, 도끼, 할버드, 사이드",
                     "캐릭터 좌우에 거대한 사신의 낫 투사체를 번갈아 발사합니다. 사신의 낫은 닿은 일반 몬스터의 HP가 일정 이하인 경우 즉사합니다. *낫 공격력은 가방 무기 공격력 총합에 비례합니다.",
                     "체력 5% 이하 적 즉사",
                     "체력 10% 이하 적 즉사",
                     "체력 15% 이하 적 즉사"),
 
                 // ── 성기사단 ────────────────────────────────────────
-                Th(SynergyType.HolyKnight, "성기사단", 2, 4, 5, 0,
-                    "무기: 장검, 메이스 / 방어구: 문장, 방패",
-                    "20초마다 일정 시간 유지되는 성역을 생성합니다. 성역 내부에 있는 적은 지속 피해를 입고, 플레이어는 체력을 회복합니다. *장판 피해는 가방 무기 공격력 총합에 비례합니다. *체력 회복은 가방 방어구 체력 총합에 비례합니다.",
-                    "장판 5초 유지",
-                    "장판 8초 유지",
-                    "장판 11초 유지"),
+                Th(SynergyType.HolyKnight, "성기사단", 3, 4, 5, 0,
+                    "무기: 장검, 메이스, 워해머 / 방어구: 문장, 방패",
+                    "랜덤한 위치에 성역을 생성합니다. 성역 위에서는 체력 재생이 빨라집니다. 또한 받는 대미지가 20% 감소합니다.",
+                    "체력 재생 2배",
+                    "체력 재생 2.5배",
+                    "체력 재생 4배"),
 
                 // ── 소드마스터 ──────────────────────────────────────
                 Th(SynergyType.SwordMaster, "소드마스터", 3, 4, 5, 0,
-                    "단검, 장검, 대검, 카타나, 시클",
+                    "단검, 장검, 대검, 카타나, 플레일",
                     "캐릭터가 보는 방향으로 검기를 발사합니다. *검기 공격력은 가방 무기 공격력 평균에 비례합니다.",
                     "2초마다 전방에 검기 1개 발사",
                     "검기의 크기가 50% 확대",
@@ -374,7 +381,7 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 페어리 ──────────────────────────────────────────
                 Th(SynergyType.Fairy, "페어리", 2, 4, 6, 0,
-                    "도끼, 권총, 활, 카타나, 시클, 너클",
+                    "권총, 도끼, 활, 카타나, 플레일, 너클",
                     "플레이어 주변을 회전하며 대미지를 주는 요정을 소환합니다. *요정 피해는 가방 무기 공격력 총합에 비례합니다.",
                     "1개의 요정이 회전합니다.",
                     "2개의 요정이 회전합니다.",
@@ -385,17 +392,17 @@ namespace BagSurvivor.SynergyEditor
                     "무기: 스피어, 대검 / 방어구: (방어구 전원)",
                     "적에게 피격 시 시너지 레벨에 따라 피해량을 감소시키고, 적에게 범위 피해를 입힙니다. *충격파 대미지는 가방 방어구 체력 총합에 비례합니다.",
                     "피해량 감소 10%",
-                    "충격파의 크기 100% 증가, 피해량 감소 20%",
+                    "충격파의 크기 50% 증가, 피해량 감소 20%",
                     "충격파 대미지 증가, 피해량 35% 감소",
                     "그 누구도 뚫을 수 없습니다."),
 
                 // ── 정령술사 ────────────────────────────────────────
                 Th(SynergyType.SpiritMage, "정령술사", 3, 5, 7, 9,
-                    "채찍, 지팡이, 마도서, 번개 구슬, 장궁, 레일건, 스피어, 메이스, 화염 방사기",
+                    "번개 구슬, 채찍, 지팡이, 마도서, 장궁, 레일건, 스피어, 메이스, 화염 방사기",
                     "동행하는 정령 골렘이 같이 전투를 진행합니다. 시너지 레벨에 따라 다양한 효과가 발동됩니다. *정령 피해는 가방 무기 공격력 평균에 비례합니다.",
                     "정령 골렘 1기 소환",
                     "정령 골렘 2기 소환",
-                    "정령 골렘 4기 소환",
+                    "정령 골렘 3기 소환",
                     "고대 정령이 소환됩니다."),
 
                 // ── 마왕 ────────────────────────────────────────────
@@ -405,12 +412,12 @@ namespace BagSurvivor.SynergyEditor
                     "지옥불 불씨",
                     "연옥의 기어",
                     "마왕의 멸천",
-                    "종말의 지옥 불꽃 / 마왕 강림"),
+                    "마왕 강림"),
 
                 // ── 대부호 ──────────────────────────────────────────
                 Th(SynergyType.Tycoon, "대부호", 5, 7, 8, 9,
-                    "철퇴, 낫, 활, 라이플, 너클, 화염 방사기, 할버드, 몽둥이, 바주카",
-                    "플레이어가 이동 시 골드를 떨어트립니다. 떨어진 골드는 2초 뒤 폭발합니다. *코인은 가방 무기 공격력 총합에 비례합니다.",
+                    "철퇴, 채찍, 활, 라이플, 너클, 화염 방사기, 할버드, 몽둥이, 바주카",
+                    "플레이어가 이동 시 골드를 떨어트립니다. 떨어진 골드는 1.5초 뒤 폭발합니다. *코인은 가방 무기 공격력 총합에 비례합니다.",
                     "이동 거리 1칸당 3개의 골드를 뿌립니다.",
                     "이동 거리 1칸당 5개의 골드를 뿌립니다.",
                     "이동 거리 1칸당 7개의 골드를 뿌립니다.",
@@ -418,7 +425,7 @@ namespace BagSurvivor.SynergyEditor
 
                 // ── 과부하 ──────────────────────────────────────────
                 Th(SynergyType.Overload, "과부하", 4, 5, 6, 8,
-                    "쇠뇌, 장궁, 부메랑, 지팡이, 마도서, 번개 반지, 수리검, 레일건",
+                    "쇠뇌, 장궁, 부메랑, 지팡이, 마도서, 번개 구슬, 수리검, 레일건",
                     "당신이 마지막에 도달한다면... *스킬 피해는 가방 무기 공격력 평균에 비례합니다.",
                     "10초마다 1초동안 발동합니다. / 1초간 이동속도 50% 감소 / 1초간 피해량 감소 50%",
                     "아무 효과도 없습니다.",
@@ -449,8 +456,9 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Assassin,    SynergyGrade.Bronze, "SK_ASS_1"),
                 (SynergyType.Assassin,    SynergyGrade.Silver, "SK_ASS_2"),
                 (SynergyType.Assassin,    SynergyGrade.Gold,   "SK_ASS_3"),
-                (SynergyType.Electro,     SynergyGrade.Bronze, "SK_ELEC_1"),
-                (SynergyType.Electro,     SynergyGrade.Silver, "SK_ELEC_2"),
+                // 일렉트로: 2종=실버(낙뢰1) / 3종=골드(낙뢰3) — 임계값 2/2/3에 맞춘 바인딩
+                (SynergyType.Electro,     SynergyGrade.Silver, "SK_ELEC_1"),
+                (SynergyType.Electro,     SynergyGrade.Gold,   "SK_ELEC_2"),
                 (SynergyType.Executioner, SynergyGrade.Bronze, "SK_SCYTHE_1"),
                 (SynergyType.Executioner, SynergyGrade.Silver, "SK_SCYTHE_2"),
                 (SynergyType.Executioner, SynergyGrade.Gold,   "SK_SCYTHE_3"),
@@ -811,6 +819,7 @@ namespace BagSurvivor.SynergyEditor
             var nodeSheetMap = new Dictionary<string, string>
             {
                 { "SK_OVERLOAD_CHAIN", "OVERLOAD2.1_Pr" },
+                { "SK_SPIRIT_NOVA",    "Elemental_Explosion2_SpriteSheet" }, // 광역 강타 폭발 이펙트
             };
             foreach (var kvp in nodeSheetMap)
             {

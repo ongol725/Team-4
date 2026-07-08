@@ -18,7 +18,7 @@ MonoBehaviour:
   skillType: 2
   targetType: 8
   scalingStat: 1
-  dmgMultiplier: 1.3
+  dmgMultiplier: 2.6
   hitCount: 2
   hitInterval: 0.15
   extraCount: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   - {fileID: -1932667270, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
   animFps: 12
   vfxLingerTime: 0.1
-  visualSize: 4.8
+  visualSize: 7.2
   visualStretchY: 2
   vfxFollowPlayer: 0
   vfxSortingOrder: 30

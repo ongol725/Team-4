@@ -54,6 +54,18 @@ MonoBehaviour:
   vfxFollowPlayer: 0
   vfxSortingOrder: 30
   vfxAnchorBottom: 0
-  nodeFrames: []
+  nodeFrames:
+  - {fileID: -8754820340592291366, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 9150469363533371322, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -9190735152465639029, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 2924011424695997350, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -3590220390625878130, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -3183912136500244262, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -4795391920926922227, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -3335718561745146702, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -2760320090512540314, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 7338489377263590223, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 8488412066879571135, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 7701761211337252911, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
   dropFrames: []
   dropFps: 8

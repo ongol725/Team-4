@@ -36,6 +36,12 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>받는 피해 감소율 (0~1). 난공불락 시너지가 설정한다.</summary>
     [HideInInspector] public float DamageReductionPct = 0f;
 
+    /// <summary>구역(성역) 피해 감소율 (0~1). 성역 위에 있는 동안 SummonController가 설정. 난공불락과 곱연산 중첩.</summary>
+    [HideInInspector] public float ZoneDamageReductionPct = 0f;
+
+    /// <summary>체력 재생 배율 (1 = 기본). 성역 위에 있는 동안 SummonController가 설정.</summary>
+    [HideInInspector] public float RegenRateMultiplier = 1f;
+
     private int currentHP;
     private bool isDead;
     private bool _invincible;            // true면 데미지 무시 (방 진입 무적 등)
@@ -137,13 +143,14 @@ public class PlayerHealth : MonoBehaviour
     }
 
     // 10초마다 _currentRegen만큼 회복 (재생량은 OnLoadoutReady에서 갱신)
+    // 성역 위에 있으면 RegenRateMultiplier(2~4배)가 곱해진다.
     private IEnumerator RegenLoop()
     {
         var wait = new WaitForSeconds(10f);
         while (!isDead && _currentRegen > 0)
         {
             yield return wait;
-            if (_inCombat) Heal(_currentRegen); // 전투 상태에서만 재생
+            if (_inCombat) Heal(Mathf.Max(1, Mathf.RoundToInt(_currentRegen * RegenRateMultiplier))); // 전투 상태에서만 재생
         }
         _regenCoroutine = null;
     }
@@ -176,11 +183,10 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isDead || _invincible || amount <= 0) return;
 
-        if (DamageReductionPct > 0f)
-        {
-            float clampedReduction = Mathf.Clamp01(DamageReductionPct);
-            amount = Mathf.Max(1, Mathf.RoundToInt(amount * (1f - clampedReduction)));
-        }
+        // 난공불락(상시) + 성역(구역) 피해 감소 — 곱연산으로 중첩
+        float dmgMult = (1f - Mathf.Clamp01(DamageReductionPct)) * (1f - Mathf.Clamp01(ZoneDamageReductionPct));
+        if (dmgMult < 1f)
+            amount = Mathf.Max(1, Mathf.RoundToInt(amount * dmgMult));
 
         currentHP = Mathf.Max(0, currentHP - amount);
 

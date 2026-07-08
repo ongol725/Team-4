@@ -22,29 +22,26 @@ MonoBehaviour:
     prismThreshold: 0
     triggerCondition: "\uB2E8\uAC80, \uAD8C\uCD1D, \uC218\uB9AC\uAC80, \uCE74\uD0C0\uB098,
       \uB108\uD074"
-    description: "\uC801\uC744 \uAD00\uD1B5\uD574\uC11C \uB0A0\uC544\uAC00\uB294
-      \uAC70\uB300\uD55C \uC218\uB9AC\uAC80\uC744 \uB358\uC9D1\uB2C8\uB2E4. (\uCFE8\uD0C0\uC784
-      3\uCD08) *\uC218\uB9AC\uAC80 \uACF5\uACA9\uB825\uC740 \uAC00\uBC29 \uBB34\uAE30
-      \uACF5\uACA9\uB825 \uD3C9\uADE0\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
+    description: "적을 관통해서 날아가는 거대한 수리검을 던집니다. (기본 쿨타임 3초, 실버부터 2초) *수리검 공격력은 가방 무기 공격력 평균에 비례합니다."
     bronzeEffect: "\uC218\uB9AC\uAC80\uC744 \uB358\uC9D1\uB2C8\uB2E4."
-    silverEffect: "\uC218\uB9AC\uAC80\uC758 \uC18D\uB3C4\uAC00 \uBE68\uB77C\uC9D1\uB2C8\uB2E4."
+    silverEffect: "\uC218\uB9AC\uAC80\uC758 \uACF5\uACA9 \uC18D\uB3C4\uAC00 \uBE68\uB77C\uC9D1\uB2C8\uB2E4."
     goldEffect: "\uC218\uB9AC\uAC80\uC774 \uB354 \uCEE4\uC9D1\uB2C8\uB2E4."
     prismEffect: 
   - type: 12
     displayName: "\uC77C\uB809\uD2B8\uB85C"
     icon: {fileID: 21300000, guid: 5284c6d03c1de4a48859ac9751079be6, type: 3}
     bronzeThreshold: 2
-    silverThreshold: 3
+    silverThreshold: 2
     goldThreshold: 3
     prismThreshold: 0
-    triggerCondition: "\uC9C0\uD321\uC774, \uB9C8\uB3C4\uC11C, \uBC88\uAC1C \uAD6C\uC2AC"
+    triggerCondition: "\uBC88\uAC1C \uAD6C\uC2AC, \uC9C0\uD321\uC774, \uB9C8\uB3C4\uC11C"
     description: "\uB099\uB8B0\uB97C \uC18C\uD658\uD558\uC5EC \uBB34\uC791\uC704
       \uC801\uC744 \uACF5\uACA9\uD569\uB2C8\uB2E4. \uB099\uB8B0\uAC00 \uC801\uC744
       \uCC98\uCE58\uD558\uBA74 \uCFE8\uD0C0\uC784\uC774 50% \uAC10\uC18C\uD569\uB2C8\uB2E4.
       (\uCFE8\uD0C0\uC784 2\uCD08) *\uB099\uB8B0\uC758 \uB300\uBBF8\uC9C0\uB294 \uAC00\uBC29
       \uBB34\uAE30 \uACF5\uACA9\uB825 \uCD1D\uD569\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uB9C8\uBC95 \uB099\uB8B0 1\uAC1C \uD22C\uD558"
-    silverEffect: 
+    bronzeEffect: 
+    silverEffect: "마법 낙뢰 1개 투하"
     goldEffect: "\uB9C8\uBC95 \uB099\uB8B0 3\uAC1C \uD22C\uD558"
     prismEffect: 
   - type: 10
@@ -54,7 +51,7 @@ MonoBehaviour:
     silverThreshold: 3
     goldThreshold: 3
     prismThreshold: 0
-    triggerCondition: "\uC1E0\uB1CC, \uBD80\uBA54\uB791, \uC218\uB9AC\uAC80"
+    triggerCondition: "\uBD80\uBA54\uB791, \uC1E0\uB1CC, \uC218\uB9AC\uAC80"
     description: "\uB9F5 \uC804\uCCB4\uB97C \uB3CC\uC544\uB2E4\uB2C8\uB294 \uAD6C\uCCB4\uB97C
       \uC0DD\uC131\uD569\uB2C8\uB2E4. \uC0DD\uC131\uB41C \uAD6C\uCCB4\uB294 \uD53C\uACA9\uB41C
       \uC801\uC5D0\uAC8C \uB300\uBBF8\uC9C0\uB97C \uC785\uD799\uB2C8\uB2E4. *\uD540\uBCFC
@@ -71,7 +68,7 @@ MonoBehaviour:
     silverThreshold: 4
     goldThreshold: 5
     prismThreshold: 0
-    triggerCondition: "\uB0AB, \uB3C4\uB07C, \uC2DC\uD074, \uD560\uBC84\uB4DC, \uC0AC\uC774\uB4DC"
+    triggerCondition: "\uD50C\uB808\uC77C, \uCC44\uCC0D, \uB3C4\uB07C, \uD560\uBC84\uB4DC, \uC0AC\uC774\uB4DC"
     description: "\uCE90\uB9AD\uD130 \uC88C\uC6B0\uC5D0 \uAC70\uB300\uD55C \uC0AC\uC2E0\uC758
       \uB0AB \uD22C\uC0AC\uCCB4\uB97C \uBC88\uAC08\uC544 \uBC1C\uC0AC\uD569\uB2C8\uB2E4.
       \uC0AC\uC2E0\uC758 \uB0AB\uC740 \uB2FF\uC740 \uC77C\uBC18 \uBAAC\uC2A4\uD130\uC758
@@ -85,22 +82,15 @@ MonoBehaviour:
   - type: 3
     displayName: "\uC131\uAE30\uC0AC\uB2E8"
     icon: {fileID: 21300000, guid: 18981dcc423faae4492cd568cafdf113, type: 3}
-    bronzeThreshold: 2
+    bronzeThreshold: 3
     silverThreshold: 4
     goldThreshold: 5
     prismThreshold: 0
-    triggerCondition: "\uBB34\uAE30: \uC7A5\uAC80, \uBA54\uC774\uC2A4 / \uBC29\uC5B4\uAD6C:
-      \uBB38\uC7A5, \uBC29\uD328"
-    description: "20\uCD08\uB9C8\uB2E4 \uC77C\uC815 \uC2DC\uAC04 \uC720\uC9C0\uB418\uB294
-      \uC131\uC5ED\uC744 \uC0DD\uC131\uD569\uB2C8\uB2E4. \uC131\uC5ED \uB0B4\uBD80\uC5D0
-      \uC788\uB294 \uC801\uC740 \uC9C0\uC18D \uD53C\uD574\uB97C \uC785\uACE0, \uD50C\uB808\uC774\uC5B4\uB294
-      \uCCB4\uB825\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4. *\uC7A5\uD310 \uD53C\uD574\uB294
-      \uAC00\uBC29 \uBB34\uAE30 \uACF5\uACA9\uB825 \uCD1D\uD569\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4.
-      *\uCCB4\uB825 \uD68C\uBCF5\uC740 \uAC00\uBC29 \uBC29\uC5B4\uAD6C \uCCB4\uB825
-      \uCD1D\uD569\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
-    bronzeEffect: "\uC7A5\uD310 5\uCD08 \uC720\uC9C0"
-    silverEffect: "\uC7A5\uD310 8\uCD08 \uC720\uC9C0"
-    goldEffect: "\uC7A5\uD310 11\uCD08 \uC720\uC9C0"
+    triggerCondition: "무기: 장검, 메이스, 워해머 / 방어구: 문장, 방패"
+    description: "랜덤한 위치에 성역을 생성합니다. 성역 위에서는 체력 재생이 빨라집니다. 또한 받는 대미지가 20% 감소합니다."
+    bronzeEffect: "체력 재생 2배"
+    silverEffect: "체력 재생 2.5배"
+    goldEffect: "체력 재생 4배"
     prismEffect: 
   - type: 2
     displayName: "\uC18C\uB4DC\uB9C8\uC2A4\uD130"
@@ -109,8 +99,7 @@ MonoBehaviour:
     silverThreshold: 4
     goldThreshold: 5
     prismThreshold: 0
-    triggerCondition: "\uB2E8\uAC80, \uC7A5\uAC80, \uB300\uAC80, \uCE74\uD0C0\uB098,
-      \uC2DC\uD074"
+    triggerCondition: "단검, 장검, 대검, 카타나, 플레일"
     description: "\uCE90\uB9AD\uD130\uAC00 \uBCF4\uB294 \uBC29\uD5A5\uC73C\uB85C
       \uAC80\uAE30\uB97C \uBC1C\uC0AC\uD569\uB2C8\uB2E4. *\uAC80\uAE30 \uACF5\uACA9\uB825\uC740
       \uAC00\uBC29 \uBB34\uAE30 \uACF5\uACA9\uB825 \uD3C9\uADE0\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
@@ -142,8 +131,7 @@ MonoBehaviour:
     silverThreshold: 4
     goldThreshold: 6
     prismThreshold: 0
-    triggerCondition: "\uB3C4\uB07C, \uAD8C\uCD1D, \uD65C, \uCE74\uD0C0\uB098, \uC2DC\uD074,
-      \uB108\uD074"
+    triggerCondition: "권총, 도끼, 활, 카타나, 플레일, 너클"
     description: "\uD50C\uB808\uC774\uC5B4 \uC8FC\uBCC0\uC744 \uD68C\uC804\uD558\uBA70
       \uB300\uBBF8\uC9C0\uB97C \uC8FC\uB294 \uC694\uC815\uC744 \uC18C\uD658\uD569\uB2C8\uB2E4.
       *\uC694\uC815 \uD53C\uD574\uB294 \uAC00\uBC29 \uBB34\uAE30 \uACF5\uACA9\uB825
@@ -168,8 +156,7 @@ MonoBehaviour:
       \uB300\uBBF8\uC9C0\uB294 \uAC00\uBC29 \uBC29\uC5B4\uAD6C \uCCB4\uB825 \uCD1D\uD569\uC5D0
       \uBE44\uB840\uD569\uB2C8\uB2E4."
     bronzeEffect: "\uD53C\uD574\uB7C9 \uAC10\uC18C 10%"
-    silverEffect: "\uCDA9\uACA9\uD30C\uC758 \uD06C\uAE30 100% \uC99D\uAC00,
-      \uD53C\uD574\uB7C9 \uAC10\uC18C 20%"
+    silverEffect: "충격파의 크기 50% 증가, 피해량 감소 20%"
     goldEffect: "\uCDA9\uACA9\uD30C \uB300\uBBF8\uC9C0 \uC99D\uAC00,
       \uD53C\uD574\uB7C9 35% \uAC10\uC18C"
     prismEffect: "\uADF8 \uB204\uAD6C\uB3C4 \uB6AB\uC744 \uC218
@@ -181,9 +168,7 @@ MonoBehaviour:
     silverThreshold: 5
     goldThreshold: 7
     prismThreshold: 9
-    triggerCondition: "\uCC44\uCC0D, \uC9C0\uD321\uC774, \uB9C8\uB3C4\uC11C, \uBC88\uAC1C
-      \uAD6C\uC2AC, \uC7A5\uAD81, \uB808\uC77C\uAC74, \uC2A4\uD53C\uC5B4, \uBA54\uC774\uC2A4,
-      \uD654\uC5FC \uBC29\uC0AC\uAE30"
+    triggerCondition: "번개 구슬, 채찍, 지팡이, 마도서, 장궁, 레일건, 스피어, 메이스, 화염 방사기"
     description: "\uB3D9\uD589\uD558\uB294 \uC815\uB839 \uACE8\uB818\uC774 \uAC19\uC774
       \uC804\uD22C\uB97C \uC9C4\uD589\uD569\uB2C8\uB2E4. \uC2DC\uB108\uC9C0 \uB808\uBCA8\uC5D0
       \uB530\uB77C \uB2E4\uC591\uD55C \uD6A8\uACFC\uAC00 \uBC1C\uB3D9\uB429\uB2C8\uB2E4.
@@ -191,7 +176,7 @@ MonoBehaviour:
       \uD3C9\uADE0\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
     bronzeEffect: "\uC815\uB839 \uACE8\uB818 1\uAE30 \uC18C\uD658"
     silverEffect: "\uC815\uB839 \uACE8\uB818 2\uAE30 \uC18C\uD658"
-    goldEffect: "\uC815\uB839 \uACE8\uB818 4\uAE30 \uC18C\uD658"
+    goldEffect: "정령 골렘 3기 소환"
     prismEffect: "\uACE0\uB300 \uC815\uB839\uC774 \uC18C\uD658\uB429\uB2C8\uB2E4."
   - type: 4
     displayName: "\uB9C8\uC655"
@@ -209,8 +194,7 @@ MonoBehaviour:
     bronzeEffect: "\uC9C0\uC625\uBD88 \uBD88\uC528"
     silverEffect: "\uC5F0\uC625\uC758 \uAE30\uC5B4"
     goldEffect: "\uB9C8\uC655\uC758 \uBA78\uCC9C"
-    prismEffect: "\uC885\uB9D0\uC758 \uC9C0\uC625 \uBD88\uAF43
-      / \uB9C8\uC655 \uAC15\uB9BC"
+    prismEffect: "마왕 강림"
   - type: 6
     displayName: "\uB300\uBD80\uD638"
     icon: {fileID: 21300000, guid: 668d65730ab30d143876029d1adae41d, type: 3}
@@ -218,12 +202,8 @@ MonoBehaviour:
     silverThreshold: 7
     goldThreshold: 8
     prismThreshold: 9
-    triggerCondition: "\uCCA0\uD1F4, \uB0AB, \uD65C, \uB77C\uC774\uD50C, \uB108\uD074,
-      \uD654\uC5FC \uBC29\uC0AC\uAE30, \uD560\uBC84\uB4DC, \uBABD\uB465\uC774, \uBC14\uC8FC\uCE74"
-    description: "\uD50C\uB808\uC774\uC5B4\uAC00 \uC774\uB3D9 \uC2DC \uACE8\uB4DC\uB97C
-      \uB5A8\uC5B4\uD2B8\uB9BD\uB2C8\uB2E4. \uB5A8\uC5B4\uC9C4 \uACE8\uB4DC\uB294
-      2\uCD08 \uB4A4 \uD3ED\uBC1C\uD569\uB2C8\uB2E4. *\uCF54\uC778\uC740 \uAC00\uBC29
-      \uBB34\uAE30 \uACF5\uACA9\uB825 \uCD1D\uD569\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."
+    triggerCondition: "철퇴, 채찍, 활, 라이플, 너클, 화염 방사기, 할버드, 몽둥이, 바주카"
+    description: "플레이어가 이동 시 골드를 떨어트립니다. 떨어진 골드는 1.5초 뒤 폭발합니다. *코인은 가방 무기 공격력 총합에 비례합니다."
     bronzeEffect: "\uC774\uB3D9 \uAC70\uB9AC 1\uCE78\uB2F9 3\uAC1C\uC758
       \uACE8\uB4DC\uB97C \uBFCC\uB9BD\uB2C8\uB2E4."
     silverEffect: "\uC774\uB3D9 \uAC70\uB9AC 1\uCE78\uB2F9 5\uAC1C\uC758
@@ -238,8 +218,7 @@ MonoBehaviour:
     silverThreshold: 5
     goldThreshold: 6
     prismThreshold: 8
-    triggerCondition: "\uC1E0\uB1CC, \uC7A5\uAD81, \uBD80\uBA54\uB791, \uC9C0\uD321\uC774,
-      \uB9C8\uB3C4\uC11C, \uBC88\uAC1C \uBC18\uC9C0, \uC218\uB9AC\uAC80, \uB808\uC77C\uAC74"
+    triggerCondition: "쇠뇌, 장궁, 부메랑, 지팡이, 마도서, 번개 구슬, 수리검, 레일건"
     description: "\uB2F9\uC2E0\uC774 \uB9C8\uC9C0\uB9C9\uC5D0 \uB3C4\uB2EC\uD55C\uB2E4\uBA74...
       *\uC2A4\uD0AC \uD53C\uD574\uB294 \uAC00\uBC29 \uBB34\uAE30 \uACF5\uACA9\uB825
       \uD3C9\uADE0\uC5D0 \uBE44\uB840\uD569\uB2C8\uB2E4."

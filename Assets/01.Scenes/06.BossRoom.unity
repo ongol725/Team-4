@@ -21135,10 +21135,10 @@ MonoBehaviour:
     grade: 2
     skill: {fileID: 11400000, guid: cb5944a0e2ba70347b0bdb9ba1142b61, type: 2}
   - synergyType: 12
-    grade: 0
+    grade: 1
     skill: {fileID: 11400000, guid: 32c1b2518d9165c4aa38030e9819537b, type: 2}
   - synergyType: 12
-    grade: 1
+    grade: 2
     skill: {fileID: 11400000, guid: 5697fd3c6b3aa28458460c41fab787b3, type: 2}
   - synergyType: 7
     grade: 0
