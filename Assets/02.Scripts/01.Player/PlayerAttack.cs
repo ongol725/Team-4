@@ -436,9 +436,11 @@ public class PlayerAttack : MonoBehaviour
                 else if (id == "WPN_013")
                 {
                     // 번개구슬: 가장 가까운 적 머리 위에 낙뢰 이펙트 생성 + 범위 피해(마도서 방식)
+                    // 공격 대상은 '플레이어 화면 안'에 보이는 적으로 제한(범위가 너무 넓던 문제)
                     int   targetCnt = g5 ? 3 : 1; // 5단계 낙뢰 +2 (총 3)
                     float explodeR  = 1.5f;
-                    var enemies = GetEnemiesInRange(8f);
+                    var enemies = GetEnemiesInRange(30f); // 넓게 잡은 뒤 화면 밖은 제외
+                    enemies.RemoveAll(mc => mc == null || !IsOnScreen(mc.transform.position));
                     enemies.Sort((a, b) =>
                         Vector2.Distance(transform.position, a.transform.position)
                             .CompareTo(Vector2.Distance(transform.position, b.transform.position)));
@@ -1182,6 +1184,15 @@ public class PlayerAttack : MonoBehaviour
             if (mc != null && !mc.IsDead) result.Add(mc);
         }
         return result;
+    }
+
+    /// <summary>월드 좌표가 메인 카메라 화면(뷰포트 0~1) 안에 있는지. 번개구슬이 화면 안 적만 노리게 하는 용도.</summary>
+    private static bool IsOnScreen(Vector3 world)
+    {
+        var cam = Camera.main;
+        if (cam == null) return true; // 카메라 없으면 제한 안 함
+        Vector3 vp = cam.WorldToViewportPoint(world);
+        return vp.z > 0f && vp.x >= 0f && vp.x <= 1f && vp.y >= 0f && vp.y <= 1f;
     }
 
     private Vector2 FacingDir(float range)

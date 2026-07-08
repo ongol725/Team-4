@@ -71,6 +71,7 @@ namespace BagSurvivor.Monster
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
         private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
+        private Coroutine _hitCo;               // 피격 플래시 코루틴(연타 시 겹쳐 빨강 고정되는 것 방지)
 
         // ── 몬스터 간 겹침 방지(separation) ─────────────────────────
         // 활성 몬스터 전역 목록. 이미지(스프라이트) 크기 기준으로 서로 밀어내 90% 이상 보이게 유지.
@@ -136,6 +137,9 @@ namespace BagSurvivor.Monster
 
         // 방어력 런타임 오버라이드 (음수=미사용, SO값 사용). 층별 중간보스 방어력 고정 등에 사용.
         private int runtimeDefenseOverride = -1;
+
+        // 골드 드랍 런타임 오버라이드 (음수=미사용, SO dropItemValue 사용). 층별 특수방 골드 지정용.
+        private int runtimeGoldOverride = -1;
 
         // ==========================================
         // 프로퍼티 (외부 접근용)
@@ -206,6 +210,7 @@ namespace BagSurvivor.Monster
         private void OnEnable()
         {
             // 오브젝트 풀에서 재활성화될 때마다 초기화
+            runtimeGoldOverride = -1; // 풀 재사용 시 골드 오버라이드 해제(SpawnOne이 필요 시 다시 주입)
             InitializeMonster();
             ShowHpBar();
             if (!Active.Contains(this)) Active.Add(this); // 몬스터 간 겹침 방지(separation)용 등록
@@ -289,6 +294,9 @@ namespace BagSurvivor.Monster
 
         /// <summary>방어력을 런타임에 고정값으로 오버라이드합니다(음수=SO값 사용). 활성화 전 주입.</summary>
         public void SetDefenseOverride(int defense) => runtimeDefenseOverride = defense;
+
+        /// <summary>골드 드랍을 런타임에 고정값으로 오버라이드합니다(음수=SO dropItemValue 사용). 스폰 직후 주입.</summary>
+        public void SetGoldOverride(int gold) => runtimeGoldOverride = gold;
 
         /// <summary>체력을 회복합니다(최대 체력 한도). </summary>
         public void Heal(int amount)
@@ -539,8 +547,9 @@ namespace BagSurvivor.Monster
             // 데미지 숫자 띄우기 (모든 데미지 소스가 이 메서드로 모임)
             DamagePopup.Show(transform.position, finalDamage);
 
-            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음)
-            StartCoroutine(HitEffectCoroutine());
+            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음). 이전 플래시를 멈추고 새로 시작(연타 시 빨강 고정 방지)
+            if (_hitCo != null) StopCoroutine(_hitCo);
+            _hitCo = StartCoroutine(HitEffectCoroutine());
 
             // HP 확인
             if (currentHP <= 0)
@@ -565,16 +574,15 @@ namespace BagSurvivor.Monster
             // 피격 시 깜빡임 효과
             if (spriteRenderer != null)
             {
-                Color originalColor = spriteRenderer.color;
                 spriteRenderer.color = Color.red;
                 yield return new WaitForSeconds(0.1f);
 
-                // 사망하지 않았으면 색상 복구
+                // 사망하지 않았으면 기준색(baseColor)으로 복구.
+                // (현재 색을 캡처해 복구하면 연타 시 이미 빨간 상태를 원본으로 잡아 빨강이 고정됨)
                 if (!isDying && spriteRenderer != null)
-                {
-                    spriteRenderer.color = originalColor;
-                }
+                    spriteRenderer.color = baseColor;
             }
+            _hitCo = null;
         }
 
         // ==========================================
@@ -617,8 +625,20 @@ namespace BagSurvivor.Monster
             float speed = distance / KNOCKBACK_DURATION;
             float timer = 0f;
 
+            // 넉백으로 방 밖(복도/맵밖)이나 벽으로 밀려나지 않도록 이 방의 경계를 확보
+            var spawner = RoomMonsterSpawner.Instance;
+            Rect roomRect = default;
+            bool haveRoom = spawner != null && spawner.TryGetRoomWorldRect(transform.position, out roomRect);
+
             while (timer < KNOCKBACK_DURATION)
             {
+                // 다음 스텝 위치가 방 경계를 벗어나거나(복도/맵밖) 벽 타일이면 그 자리에서 정지
+                if (spawner != null)
+                {
+                    Vector2 nextPos = (Vector2)transform.position + direction * speed * Time.fixedDeltaTime;
+                    if ((haveRoom && !roomRect.Contains(nextPos)) || spawner.IsWallAt(nextPos))
+                        break;
+                }
                 rb.linearVelocity = direction * speed;
                 timer += Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
@@ -713,12 +733,14 @@ namespace BagSurvivor.Monster
         private void SpawnDropItem()
         {
             if (suppressGoldDrop) return; // 분열 중간 세대 등: 드롭 억제
-            if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
-            // dropItemValue = 떨어뜨릴 총 골드. 동전 1개로 정확한 총액 드롭.
+            // 골드 = 런타임 오버라이드(>=0) 우선, 없으면 SO dropItemValue. 총 골드를 동전 1개로 드롭.
+            int gold = runtimeGoldOverride >= 0 ? runtimeGoldOverride
+                     : (monsterData != null ? monsterData.dropItemValue : 0);
+            if (gold <= 0) return;
+
             if (BagSurvivor.Items.GoldDropManager.Instance != null)
-                BagSurvivor.Items.GoldDropManager.Instance.DropGold(
-                    transform.position, monsterData.dropItemValue);
+                BagSurvivor.Items.GoldDropManager.Instance.DropGold(transform.position, gold);
         }
 
         // ==========================================

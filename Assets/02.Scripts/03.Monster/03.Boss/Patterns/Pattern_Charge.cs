@@ -38,6 +38,9 @@ namespace BagSurvivor.Monster
         [Tooltip("2페이즈 2번째 돌진의 짧은 경고선 시간(초). 플레이어 향해 재돌진")]
         public float phase2SecondDashTelegraph = 0.5f;
 
+        [Tooltip("2페이즈 돌진 속도 배율(기본 1.5배)")]
+        public float phase2SpeedMultiplier = 1.5f;
+
         [Header("연출 프리팹(선택)")]
         public GameObject telegraphPrefab;
         [Tooltip("충돌 시 임팩트 이펙트(광역 피해 없음, 연출용)")]
@@ -99,6 +102,7 @@ namespace BagSurvivor.Monster
 
             float traveled = 0f;
             bool collided = false;
+            float speed = dashSpeed * (phase2Mode ? phase2SpeedMultiplier : 1f); // 2페이즈 돌진 속도 강화
 
             while (traveled < dashDistance)
             {
@@ -111,7 +115,7 @@ namespace BagSurvivor.Monster
                     break;
                 }
 
-                controller.SetVelocity(dir * dashSpeed);
+                controller.SetVelocity(dir * speed);
 
                 // 유저 충돌 → 1회 피해 후 즉시 종료
                 if (TryHitPlayer(transform.position, bodyHitRadius))
@@ -120,7 +124,7 @@ namespace BagSurvivor.Monster
                     break;
                 }
 
-                traveled += dashSpeed * Time.fixedDeltaTime;
+                traveled += speed * Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
             }
 

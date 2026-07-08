@@ -675,28 +675,18 @@ public static class BossAnimApply
         // StatuePng(보스몬스터_석상.png, 이미 슬라이스됨)에서 루프 클립을 직접 생성해 항상 애니되게 한다.
         if (idleClip == null) idleClip = BuildStatueIdleClip();
 
-        // 석상 컨트롤러: 소환(1회) → 석상(루프) 자동전환. (소환 클립 없으면 석상만 루프)
+        // 석상 컨트롤러: 석상(보스몬스터_석상) idle만 루프. 소환 모션은 토템에 넣지 않는다
+        // (토템 위치에는 석상 소환 모션이 아니라 '보스몬스터_석상'이 보여야 함).
         AnimatorController totemCtrl = null;
-        if (summonClip != null || idleClip != null)
+        if (idleClip != null)
         {
-            if (idleClip != null) SetClipLoop(idleClip, true);
-            if (summonClip != null) SetClipLoop(summonClip, false);
+            SetClipLoop(idleClip, true);
             string cpath = AnimDir + "/Totem.controller";
             AssetDatabase.DeleteAsset(cpath);
             totemCtrl = AnimatorController.CreateAnimatorControllerAtPath(cpath);
-            var sm = totemCtrl.layers[0].stateMachine;
-            if (summonClip != null && idleClip != null)
-            {
-                var summonSt = sm.AddState("Summon"); summonSt.motion = summonClip;
-                var idleSt = sm.AddState("Idle"); idleSt.motion = idleClip;
-                sm.defaultState = summonSt;
-                var tr = summonSt.AddTransition(idleSt); tr.hasExitTime = true; tr.exitTime = 1f; tr.duration = 0f;
-            }
-            else
-            {
-                var ts = sm.AddState("Totem"); ts.motion = idleClip ?? summonClip;
-                sm.defaultState = ts;
-            }
+            var idleSt = totemCtrl.layers[0].stateMachine.AddState("Idle");
+            idleSt.motion = idleClip;
+            totemCtrl.layers[0].stateMachine.defaultState = idleSt;
         }
 
         if (totemCtrl == null)

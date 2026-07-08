@@ -61,6 +61,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private int        _shopRefundCost;
 
     private readonly List<GameObject> _cellOutlines = new();
+    private readonly List<GameObject> _synergyHi = new(); // 시너지 hover 시 흰색 강조 외곽선
 
     // 희귀도별 테두리 색상 (무기용)
     private static readonly Color[] RarityColors =
@@ -337,23 +338,17 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
         if (_grid.TryPlace(_instance, origin))
         {
-            // 배치 성공: 첫 번째는 임시칸으로, 나머지는 마우스로
-            var tempSlot  = _gridUI.TempSlot;
-            bool tempUsed = false;
+            // 배치 성공: 밀려난 아이템은 '전부' 임시칸으로 보낸다.
+            // (예전엔 첫 개만 임시칸, 나머지가 마우스에 여러 개 들려 서로 겹치던 버그)
+            var tempSlot = _gridUI.TempSlot;
             for (int i = 0; i < displaced.Count; i++)
             {
                 var blockUI = savedBlocks[i];
                 if (blockUI == null) continue;
-                if (!tempUsed && tempSlot != null
-                    && !(blockUI.Instance.data is SO_InventoryBlockData))
-                {
+                if (tempSlot != null && !(blockUI.Instance.data is SO_InventoryBlockData))
                     tempSlot.ReceiveBlock(blockUI);
-                    tempUsed = true;
-                }
                 else
-                {
-                    blockUI.ResumeFollowing();
-                }
+                    blockUI.ResumeFollowing(); // 임시칸이 없거나 확장블록일 때만 폴백
             }
             SnapToGrid(origin);
         }
@@ -585,6 +580,7 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     private void BuildVisuals()
     {
         _cellOutlines.Clear();
+        _synergyHi.Clear(); // 비주얼 재빌드 시 하이라이트 오브젝트도 함께 파괴되므로 참조 정리
 
         var cells         = InventoryGrid.GetCells(_instance.data);
         bool isWeapon     = _instance.data is SO_WeaponData;
@@ -791,6 +787,58 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         var img = go.GetComponent<Image>();
         img.color         = col;
         img.raycastTarget = false;
+    }
+
+    // ── 시너지 hover 강조: 흰색 외곽선 ─────────────────────────────
+    /// <summary>이 아이템이 해당 시너지를 켜는지(SO_ItemData.synergies 확인).</summary>
+    public bool HasSynergy(SynergyType type)
+    {
+        if (_instance?.data?.synergies == null) return false;
+        foreach (var s in _instance.data.synergies) if (s == type) return true;
+        return false;
+    }
+
+    /// <summary>시너지 hover 시 흰색 외곽선 표시/숨김.</summary>
+    public void SetSynergyHighlight(bool on)
+    {
+        if (on && _synergyHi.Count == 0) BuildSynergyHighlight();
+        foreach (var g in _synergyHi) if (g != null) g.SetActive(on);
+    }
+
+    private void BuildSynergyHighlight()
+    {
+        if (_instance?.data == null) return;
+        const float thick = 3f;
+        Color white = Color.white; // 색 겹침 없는 흰색 강조
+
+        // 무기 전체(셀 바운딩 박스) 기준 외곽선 1개만 그린다. (셀마다 그리면 2칸+ 무기에 테두리가 여러 개)
+        int minR = int.MaxValue, minC = int.MaxValue, maxR = int.MinValue, maxC = int.MinValue;
+        foreach (var c in InventoryGrid.GetCells(_instance.data))
+        {
+            if (c.x < minR) minR = c.x; if (c.x > maxR) maxR = c.x;
+            if (c.y < minC) minC = c.y; if (c.y > maxC) maxC = c.y;
+        }
+        if (maxR < minR) return; // 셀 없음
+
+        float w = (maxC - minC + 1) * _cellSize;
+        float h = (maxR - minR + 1) * _cellSize;
+
+        var container = new GameObject("syn_hi", typeof(RectTransform));
+        container.transform.SetParent(_rt, false);
+        container.transform.SetAsLastSibling(); // 아이템 위에 렌더
+        var cRt = container.GetComponent<RectTransform>();
+        cRt.anchorMin = cRt.anchorMax = new Vector2(0f, 1f);
+        cRt.pivot = new Vector2(0f, 1f);
+        cRt.sizeDelta = new Vector2(w, h);
+        cRt.anchoredPosition = new Vector2(minC * _cellSize, -minR * _cellSize);
+
+        OutlineStrip(container, new Vector2(0,         0            ), new Vector2(w,     thick),          white); // 상
+        OutlineStrip(container, new Vector2(0,         -(h - thick) ), new Vector2(w,     thick),          white); // 하
+        OutlineStrip(container, new Vector2(0,         -thick       ), new Vector2(thick, h - thick * 2f), white); // 좌
+        OutlineStrip(container, new Vector2(w - thick, -thick       ), new Vector2(thick, h - thick * 2f), white); // 우
+
+        container.SetActive(false);
+        _synergyHi.Add(container);
     }
 
     private static Font GetDefaultFont() =>

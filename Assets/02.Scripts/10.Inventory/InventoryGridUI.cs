@@ -284,6 +284,20 @@ public class InventoryGridUI : MonoBehaviour
     public ItemBlockUI FindItemBlock(ItemInstance inst) =>
         _instanceToBlock.TryGetValue(inst, out var block) ? block : null;
 
+    /// <summary>해당 시너지를 켜는 배치 아이템에 흰색 외곽선 강조. (시너지 UI hover 시 호출)</summary>
+    public void HighlightSynergy(SynergyType type)
+    {
+        foreach (var block in _instanceToBlock.Values)
+            if (block != null) block.SetSynergyHighlight(block.HasSynergy(type));
+    }
+
+    /// <summary>시너지 강조 전부 해제.</summary>
+    public void ClearSynergyHighlight()
+    {
+        foreach (var block in _instanceToBlock.Values)
+            if (block != null) block.SetSynergyHighlight(false);
+    }
+
     // ─────────────────────────────────────────────────────────────
     // 인벤토리 확장 연동
 
