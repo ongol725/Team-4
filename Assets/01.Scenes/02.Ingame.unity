@@ -251,6 +251,7 @@ MonoBehaviour:
     hpMultiplier: 1
     attackMultiplier: 1
     defenseOverride: -1
+    goldOverride: -1
     minCount: 1
     maxCount: 1
   - roomType: 3
@@ -261,6 +262,7 @@ MonoBehaviour:
     hpMultiplier: 1
     attackMultiplier: 1
     defenseOverride: -1
+    goldOverride: 615
     minCount: 1
     maxCount: 1
   - roomType: 4
@@ -273,6 +275,7 @@ MonoBehaviour:
     hpMultiplier: 1.5
     attackMultiplier: 1
     defenseOverride: 30
+    goldOverride: 500
     minCount: 1
     maxCount: 1
   - roomType: 4
@@ -285,6 +288,7 @@ MonoBehaviour:
     hpMultiplier: 2.5
     attackMultiplier: 2
     defenseOverride: -1
+    goldOverride: 750
     minCount: 1
     maxCount: 1
   nearRingFactor: 1.5

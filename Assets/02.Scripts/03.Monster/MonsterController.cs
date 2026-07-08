@@ -137,6 +137,9 @@ namespace BagSurvivor.Monster
         // 방어력 런타임 오버라이드 (음수=미사용, SO값 사용). 층별 중간보스 방어력 고정 등에 사용.
         private int runtimeDefenseOverride = -1;
 
+        // 골드 드랍 런타임 오버라이드 (음수=미사용, SO dropItemValue 사용). 층별 특수방 골드 지정용.
+        private int runtimeGoldOverride = -1;
+
         // ==========================================
         // 프로퍼티 (외부 접근용)
         // ==========================================
@@ -206,6 +209,7 @@ namespace BagSurvivor.Monster
         private void OnEnable()
         {
             // 오브젝트 풀에서 재활성화될 때마다 초기화
+            runtimeGoldOverride = -1; // 풀 재사용 시 골드 오버라이드 해제(SpawnOne이 필요 시 다시 주입)
             InitializeMonster();
             ShowHpBar();
             if (!Active.Contains(this)) Active.Add(this); // 몬스터 간 겹침 방지(separation)용 등록
@@ -289,6 +293,9 @@ namespace BagSurvivor.Monster
 
         /// <summary>방어력을 런타임에 고정값으로 오버라이드합니다(음수=SO값 사용). 활성화 전 주입.</summary>
         public void SetDefenseOverride(int defense) => runtimeDefenseOverride = defense;
+
+        /// <summary>골드 드랍을 런타임에 고정값으로 오버라이드합니다(음수=SO dropItemValue 사용). 스폰 직후 주입.</summary>
+        public void SetGoldOverride(int gold) => runtimeGoldOverride = gold;
 
         /// <summary>체력을 회복합니다(최대 체력 한도). </summary>
         public void Heal(int amount)
@@ -713,12 +720,14 @@ namespace BagSurvivor.Monster
         private void SpawnDropItem()
         {
             if (suppressGoldDrop) return; // 분열 중간 세대 등: 드롭 억제
-            if (monsterData == null || monsterData.dropItemValue <= 0) return;
 
-            // dropItemValue = 떨어뜨릴 총 골드. 동전 1개로 정확한 총액 드롭.
+            // 골드 = 런타임 오버라이드(>=0) 우선, 없으면 SO dropItemValue. 총 골드를 동전 1개로 드롭.
+            int gold = runtimeGoldOverride >= 0 ? runtimeGoldOverride
+                     : (monsterData != null ? monsterData.dropItemValue : 0);
+            if (gold <= 0) return;
+
             if (BagSurvivor.Items.GoldDropManager.Instance != null)
-                BagSurvivor.Items.GoldDropManager.Instance.DropGold(
-                    transform.position, monsterData.dropItemValue);
+                BagSurvivor.Items.GoldDropManager.Instance.DropGold(transform.position, gold);
         }
 
         // ==========================================
