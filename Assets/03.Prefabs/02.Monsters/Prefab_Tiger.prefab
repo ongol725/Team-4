@@ -232,7 +232,7 @@ MonoBehaviour:
   specialGap: 10
   decisionInterval: 0.2
   debugManualMode: 0
-  debugShowLegend: 1
+  debugShowLegend: 0
 --- !u!114 &1629201517106060078
 MonoBehaviour:
   m_ObjectHideFlags: 0

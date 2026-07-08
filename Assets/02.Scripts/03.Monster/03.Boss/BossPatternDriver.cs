@@ -42,8 +42,8 @@ namespace BagSurvivor.Monster
         [Tooltip("수동(연습) 모드: 자동 선택을 멈추고 숫자키(1~N)로 패턴 직접 발동. 게임 중 화면 버튼으로 토글 가능.")]
         public bool debugManualMode = false;
 
-        [Tooltip("화면 좌상단에 모드 전환 버튼/범례 표시(끄면 버튼도 숨김)")]
-        public bool debugShowLegend = true;
+        [Tooltip("화면 좌상단에 모드 전환 버튼/범례 표시(끄면 버튼도 숨김). 기본 꺼짐 — 검증 시에만 켠다")]
+        public bool debugShowLegend = false;
 
         private MonsterController controller;
         private readonly List<BossPatternBase> basics = new List<BossPatternBase>();
