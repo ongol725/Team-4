@@ -16,7 +16,7 @@ MonoBehaviour:
   summonName: "\uC9C0\uC625 \uAE30\uC5B4"
   aiType: 4
   scalingStat: 2
-  atkMultiplier: 0.5
+  atkMultiplier: 0.4
   moveSpeed: 120
   atkCooldown: 1
   atkRange: 6

@@ -18,14 +18,14 @@ MonoBehaviour:
   skillType: 1
   targetType: 1
   scalingStat: 2
-  dmgMultiplier: 1
+  dmgMultiplier: 0.8
   hitCount: 1
   hitInterval: 0.1
   extraCount: 1
   damageDelay: 0
   rangeRadius: 6
   duration: 0
-  cooldown: 2
+  cooldown: 3
   fixedEffect: 7
   fixedEffectValue: 50
   statusEffect: 0

@@ -18,7 +18,7 @@ MonoBehaviour:
   scalingStat: 2
   atkMultiplier: 1
   moveSpeed: 90
-  atkCooldown: 0.2
+  atkCooldown: 0.5
   atkRange: 0.75
   duration: -1
   fixedEffect: 0

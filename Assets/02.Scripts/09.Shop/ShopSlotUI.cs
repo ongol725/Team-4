@@ -413,6 +413,34 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
+    private void Awake()
+    {
+        // 픽셀 폰트 선명화: 슬롯이 부모 스케일(약 ×2 확대 × 0.85 축소 ≈ ×1.7)로 커져 있어
+        // 폰트 래스터가 그대로 늘어나 흐리게 보인다. 표시 크기는 유지한 채
+        // fontSize를 누적 배율만큼 키우고 로컬 스케일로 되돌려 화면 1:1 픽셀로 렌더링한다.
+        SharpenText(_nameText);
+        SharpenText(_costText);
+        SharpenText(_rarityText);
+        SharpenText(_synergiesText);
+    }
+
+    /// <summary>부모 스케일로 확대 표시되는 픽셀 폰트를 1:1 래스터로 보정한다.
+    /// 고정 앵커(anchorMin==anchorMax) 텍스트 전용. 보정 후 배율이 1이 되므로 재호출해도 무해.</summary>
+    private static void SharpenText(Text t)
+    {
+        if (t == null || t.canvas == null) return;
+        float canvasScale = t.canvas.transform.lossyScale.x;
+        if (canvasScale <= 0f) return;
+
+        float s = t.transform.lossyScale.x / canvasScale; // 캔버스 기준 누적 확대 배율
+        if (s <= 0f || Mathf.Approximately(s, 1f)) return;
+
+        t.fontSize = Mathf.Max(1, Mathf.RoundToInt(t.fontSize * s));
+        var rt = t.rectTransform;
+        rt.sizeDelta  *= s;       // 박스를 키우고
+        rt.localScale /= s;       // 같은 비율로 되돌려 시각 크기 유지 (래스터만 1:1)
+    }
+
     /// <summary>시너지 슬롯 1/2/3을 항상 표시한다 — 값이 없으면 번호만 남기고 빈 칸으로 둔다.</summary>
     private void RefreshSynergies(SO_ItemData item)
     {
@@ -454,6 +482,7 @@ public class ShopSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         rt.anchorMax        = template.anchorMax;
         rt.pivot            = template.pivot;
         rt.sizeDelta        = template.sizeDelta;
+        rt.localScale       = template.localScale; // 픽셀 폰트 보정(SharpenText) 스케일 승계
         rt.anchoredPosition = template.anchoredPosition + new Vector2(0f, -index * spacing);
 
         var src = template.GetComponent<Text>();

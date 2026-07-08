@@ -33,9 +33,10 @@ public class ShortcutHelpUI : MonoBehaviour
         _instance = go.AddComponent<ShortcutHelpUI>();
     }
 
-    private const float PanelW  = 340f;
+    private const float PanelW  = 430f; // 본문 18px 기준 최장 줄이 줄바꿈 없이 들어가는 폭
     private const float PadX    = 20f;
     private const float PadY    = 14f;
+    private const float PadBottom = 24f; // 하단 여백 — 프레임 테두리에 글자가 붙지 않도록
     private const float TitleH  = 28f;
     private const float Gap     = 10f; // 인벤토리와의 간격
 
@@ -186,7 +187,7 @@ public class ShortcutHelpUI : MonoBehaviour
         }
 
         // ── 타이틀 ──────────────────────────────────────────────────
-        var titleGo = MakeText(_panel, "[ 단축키 도움말 ]", 13, FontStyle.Bold,
+        var titleGo = MakeText(_panel, "[ 단축키 도움말 ]", 22, FontStyle.Bold,
                                new Color(1f, 0.85f, 0.4f), TextAnchor.MiddleCenter);
         var titleRt = titleGo.GetComponent<RectTransform>();
         titleRt.anchorMin        = new Vector2(0f, 1f);
@@ -196,7 +197,7 @@ public class ShortcutHelpUI : MonoBehaviour
         titleRt.sizeDelta        = new Vector2(0f, TitleH);
 
         // ── 본문 ────────────────────────────────────────────────────
-        var bodyGo = MakeText(_panel, BuildBody(), 11, FontStyle.Normal,
+        var bodyGo = MakeText(_panel, BuildBody(), 18, FontStyle.Normal,
                               new Color(0.88f, 0.88f, 0.88f), TextAnchor.UpperLeft);
         var bodyRt  = bodyGo.GetComponent<RectTransform>();
         var bodyTxt = bodyGo.GetComponent<Text>();
@@ -212,7 +213,7 @@ public class ShortcutHelpUI : MonoBehaviour
         // ── 텍스트 높이 측정 후 패널 크기 확정 ──────────────────────
         Canvas.ForceUpdateCanvases();
         float bodyH   = bodyTxt.preferredHeight;
-        float panelH  = PadY + TitleH + 6f + bodyH + PadY;
+        float panelH  = PadY + TitleH + 6f + bodyH + PadBottom;
         panelRt.sizeDelta = new Vector2(PanelW, panelH);
 
         // ── 단축키 정보 버튼 위에 배치 (버튼이 없으면 시너지 우측 폴백) ──
@@ -289,23 +290,17 @@ public class ShortcutHelpUI : MonoBehaviour
 
     private static string BuildBody() =>
         "<color=#99aaff>■ 인벤토리</color>\n" +
-        "  L              자동 합성\n" +
-        "  O              자동 배치\n" +
-        "  T + 좌클릭     아이템 즉시 판매\n" +
+        "  L           자동 합성\n" +
+        "  O           자동 배치\n" +
+        "  T + 좌클릭   아이템 즉시 판매\n" +
         "\n" +
         "<color=#99aaff>■ 아이템 드래그 중</color>\n" +
-        "  우클릭         원위치 복원 / 구매 취소\n" +
-        "\n" +
-        "<color=#99aaff>■ 임시칸</color>\n" +
-        "  드래그 놓기    합성 가능 시 합성, 아니면 보관\n" +
-        "  우클릭         그리드 자동 배치 (합성 우선)\n" +
+        "  우클릭       원위치 복원 / 구매 취소\n" +
         "\n" +
         "<color=#99aaff>■ 상점</color>\n" +
-        "  R              리롤\n" +
-        "  좌클릭         구매 후 배치\n" +
-        "  우클릭         스마트 구매\n" +
-        "\n" +
-        "<color=#555566>Q — 열기 / 닫기</color>";
+        "  R           리롤\n" +
+        "  좌클릭       구매 후 배치\n" +
+        "  우클릭       스마트 구매";
 
     // ─────────────────────────────────────────────────────────────
 
