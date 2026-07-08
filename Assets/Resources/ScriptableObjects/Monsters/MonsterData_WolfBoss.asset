@@ -22,7 +22,7 @@ MonoBehaviour:
   defense: 250
   attackStyle: 0
   attackPattern: 0
-  moveSpeed: 5
+  moveSpeed: 4.8
   movePattern: 0
   kbResist: 1
   kbCooldown: 0
