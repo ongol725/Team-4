@@ -53,6 +53,9 @@ namespace BagSurvivor.UI
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void ApplySavedScreenModeOnce()
         {
+#if UNITY_WEBGL
+            return; // 브라우저(WebGL)에선 캔버스 크기를 페이지가 관리 — 해상도/전체화면 강제 안 함
+#endif
             if (!PlayerPrefs.HasKey("screenModeIdx")) return; // 저장값 없으면 빌드 기본값 유지
             ApplyScreenMode(PlayerPrefs.GetInt("screenModeIdx", 0));
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoadedReapply; // 중복 방지
@@ -84,6 +87,13 @@ namespace BagSurvivor.UI
             UpdateScreenModeText();
             if (screenModeLeft != null) screenModeLeft.onClick.AddListener(delegate { CycleMode(-1); });
             if (screenModeRight != null) screenModeRight.onClick.AddListener(delegate { CycleMode(1); });
+#if UNITY_WEBGL
+            // 브라우저에선 화면 모드 개념이 없음(전체화면은 브라우저/itch 버튼 사용) → 줄 전체 숨김
+            if (screenModeLabel != null) screenModeLabel.gameObject.SetActive(false);
+            if (screenModeValue != null) screenModeValue.gameObject.SetActive(false);
+            if (screenModeLeft != null)  screenModeLeft.gameObject.SetActive(false);
+            if (screenModeRight != null) screenModeRight.gameObject.SetActive(false);
+#endif
 
             // 볼륨
             if (bgmToggle != null) { bgmToggle.isOn = PlayerPrefs.GetInt("bgmOn", 1) == 1; bgmToggle.onValueChanged.AddListener(delegate { ApplyAudio(); Save(); }); }

@@ -69,6 +69,10 @@ namespace BagSurvivor.UI
             if (settingButton != null) settingButton.onClick.AddListener(OpenSetting);
             if (lobbyButton != null) lobbyButton.onClick.AddListener(OnLobby);
             if (quitButton != null) quitButton.onClick.AddListener(OnQuitRequest);
+#if UNITY_WEBGL
+            // 브라우저(WebGL)에선 Application.Quit이 동작하지 않으므로 게임 종료 버튼 숨김
+            if (quitButton != null) quitButton.gameObject.SetActive(false);
+#endif
             if (lobbyConfirmYesButton != null) lobbyConfirmYesButton.onClick.AddListener(OnConfirmYes);
             if (lobbyConfirmNoButton != null) lobbyConfirmNoButton.onClick.AddListener(OnLobbyCancel);
 
