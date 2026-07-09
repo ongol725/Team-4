@@ -228,7 +228,7 @@ public class SynergyManager : MonoBehaviour
                         break;
 
                     case SynergyTriggerType.Penalty:
-                        _skillRoutines.Add(StartCoroutine(PenaltyLoop(skill, entry.grade, dmgBase)));
+                        _skillRoutines.Add(StartCoroutine(PenaltyLoop(skill, dmgBase)));
                         Debug.Log($"[SynergyManager] Penalty: {entry.type} {entry.grade} — {skill.skillName}");
                         break;
 
@@ -365,11 +365,13 @@ public class SynergyManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────────
     // Penalty 루프 (과부하)
 
-    private IEnumerator PenaltyLoop(SO_SkillData skill, SynergyGrade grade, int damage)
+    private IEnumerator PenaltyLoop(SO_SkillData skill, int damage)
     {
-        if (grade == SynergyGrade.Prism)
+        // 등급이 아니라 스킬 종류로 분기한다.
+        //  · SpeedPenalty 고정효과 = 과부하 디버프 → 모든 등급에서 상시 유지(브론즈~프리즘 공통 비용)
+        //  · 그 외(각성 스킬: 체인·버블 등) = 무한 발동
+        if (skill.fixedEffect != FixedEffectType.SpeedPenalty)
         {
-            // 프리즘: 초강력 스킬 무한 발동
             var wait = new WaitForSeconds(skill.cooldown > 0f ? skill.cooldown : 0.33f);
             while (true)
             {
@@ -377,22 +379,20 @@ public class SynergyManager : MonoBehaviour
                 yield return wait;
             }
         }
-        else
-        {
-            // 브론즈: 10초마다 1초간 이동속도(fixedEffectValue%)·피해량(effectValue%) 감소
-            var waitCycle   = new WaitForSeconds(10f);
-            var waitPenalty = new WaitForSeconds(1f);
-            float moveRate = skill.fixedEffectValue > 0f ? 1f - skill.fixedEffectValue / 100f : 0.5f;
-            // 피해량 감소율은 effectValue 사용 — 미지정(0)이면 이동속도와 동일 비율
-            float atkRate  = skill.effectValue     > 0f ? 1f - skill.effectValue     / 100f : moveRate;
 
-            while (true)
-            {
-                yield return waitCycle;
-                ApplyOverloadPenalty(moveRate, atkRate);
-                yield return waitPenalty;
-                RemoveOverloadPenalty();
-            }
+        // 디버프: 10초마다 1초간 이동속도(fixedEffectValue%)·피해량(effectValue%) 감소
+        var waitCycle   = new WaitForSeconds(10f);
+        var waitPenalty = new WaitForSeconds(1f);
+        float moveRate = skill.fixedEffectValue > 0f ? 1f - skill.fixedEffectValue / 100f : 0.5f;
+        // 피해량 감소율은 effectValue 사용 — 미지정(0)이면 이동속도와 동일 비율
+        float atkRate  = skill.effectValue     > 0f ? 1f - skill.effectValue     / 100f : moveRate;
+
+        while (true)
+        {
+            yield return waitCycle;
+            ApplyOverloadPenalty(moveRate, atkRate);
+            yield return waitPenalty;
+            RemoveOverloadPenalty();
         }
     }
 
@@ -1023,9 +1023,10 @@ public class SynergyManager : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            // 고정형(성역)은 화면 내 랜덤 지점에 설치, 그 외 소환수는 플레이어 주변에 생성
+            // 고정형(성역)·일반 소환수 모두 플레이어 주변(맵 안)에 생성.
+            // 성역은 조금 더 넓은 고리(2~5)에 뿌려 매번 다른 위치에 나타나되 맵 밖으로 벗어나지 않게 한다.
             Vector3 pos = data.aiType == SummonAIType.Stationary
-                ? RandomScreenPos()
+                ? RandomGroundNearPlayer(2f, 5f)
                 : _player.position + (Vector3)(Random.insideUnitCircle.normalized * 1.5f);
             var go = new GameObject($"Summon_{data.summonID}_{i}");
             go.transform.SetParent(_summonRoot);
@@ -1037,15 +1038,15 @@ public class SynergyManager : MonoBehaviour
         }
     }
 
-    /// <summary>메인 카메라 화면 안의 랜덤 지점(가장자리 margin 제외). 카메라 부재 시 플레이어 위치 폴백.</summary>
-    private Vector3 RandomScreenPos(float margin = 1.5f)
+    /// <summary>플레이어 주변 고리(minR~maxR) 안의 랜덤 지점을 반환한다.
+    /// 플레이어는 항상 맵 안 유효 지면에 있으므로, 카메라 뷰 기준으로 뽑던 기존 방식과 달리
+    /// 성역이 벽·맵 밖(void)에 생성되지 않는다.</summary>
+    private Vector3 RandomGroundNearPlayer(float minR, float maxR)
     {
-        var cam = Camera.main;
-        if (cam == null) return _player != null ? _player.position : Vector3.zero;
-        float halfH = Mathf.Max(1f, cam.orthographicSize - margin);
-        float halfW = Mathf.Max(1f, cam.orthographicSize * cam.aspect - margin);
-        var c = cam.transform.position;
-        return new Vector3(c.x + Random.Range(-halfW, halfW), c.y + Random.Range(-halfH, halfH), 0f);
+        if (_player == null) return Vector3.zero;
+        Vector2 dir = Random.insideUnitCircle.normalized;
+        if (dir == Vector2.zero) dir = Vector2.right;
+        return _player.position + (Vector3)(dir * Random.Range(minR, maxR));
     }
 
     // ─────────────────────────────────────────────────────────────

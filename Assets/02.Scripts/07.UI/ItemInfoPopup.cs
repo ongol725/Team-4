@@ -280,18 +280,21 @@ public class ItemInfoPopup : MonoBehaviour
         csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
         csf.verticalFit   = ContentSizeFitter.FitMode.PreferredSize;
 
-        // ── 헤더: 아이콘 + 이름 ──
+        // ── 헤더: 아이콘 + (이름 / 등급 세로 스택) ──
         var header = MakeHGroup(panelGO.transform, "Header", 8);
+        var headerHlg = header.GetComponent<HorizontalLayoutGroup>();
+        if (headerHlg != null) headerHlg.childAlignment = TextAnchor.MiddleLeft; // 이름 스택을 아이콘 높이에 맞춰 세로 중앙
         var iconGO = MakeGO("Icon", header.transform);
         _itemIcon  = iconGO.AddComponent<Image>();
         _itemIcon.preserveAspect = true;
         var iconLE = iconGO.AddComponent<LayoutElement>();
         iconLE.preferredWidth  = iconLE.minWidth  = 44;
         iconLE.preferredHeight = iconLE.minHeight = 44;
-        _nameText = MakeText(header.transform, "Name", font, 14, Color.white, FontStyle.Bold);
 
-        // ── 희귀도 / 등급 ──
-        _rarityGradeText = MakeText(panelGO.transform, "RarityGrade", font, 11, Color.gray);
+        // 아이콘 오른쪽에 이름과 등급을 세로로 쌓아 "이름 밑에 등급"이 노출되도록 한다.
+        var nameCol      = MakeSection(header.transform, "NameColumn");
+        _nameText        = MakeText(nameCol.transform, "Name", font, 14, Color.white, FontStyle.Bold);
+        _rarityGradeText = MakeText(nameCol.transform, "RarityGrade", font, 11, Color.gray);
 
         // ── 구분선 ──
         MakeDivider(panelGO.transform);

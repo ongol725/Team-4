@@ -26,6 +26,7 @@ public class ProjectileBase : MonoBehaviour
     private float     _liveTime; // 생성 후 경과 시간
     private Sprite[]  _explosionFrames; // 폭발 이펙트 프레임(폭발 반경에 맞춰 1회 재생)
     private float     _explosionFps = 30f;
+    private bool      _fizzleOnTimeout; // true면 수명 종료(미명중)로 소멸할 때 폭발하지 않고 그냥 사라짐 (바주카 유도 미사일)
 
     // 반지 인접 기믹(피격 시): 뼈=스턴 확률, 나무=슬로우 지속. 일반몹 여부·쿨다운은 MonsterController가 판정.
     private float _ringStunChance;
@@ -35,8 +36,9 @@ public class ProjectileBase : MonoBehaviour
         float knockbackForce = 0f, float explosionRadius = 0f, bool homing = false,
         bool boomerang = false, Transform owner = null, float spinSpeed = 0f, float rotationOffset = 0f,
         float armTime = 0f, Sprite[] explosionFrames = null, float explosionFps = 30f,
-        float ringStunChance = 0f, float ringSlowSec = 0f)
+        float ringStunChance = 0f, float ringSlowSec = 0f, bool fizzleOnTimeout = false)
     {
+        _fizzleOnTimeout = fizzleOnTimeout;
         _ringStunChance  = ringStunChance;
         _ringSlowSec     = ringSlowSec;
         _armTime         = armTime;
@@ -111,8 +113,9 @@ public class ProjectileBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        // lifetime 종료 시에도 폭발 범위 피해 적용
-        if (_explosionRadius > 0f && !_exploded && Application.isPlaying)
+        // lifetime 종료 시에도 폭발 범위 피해 적용.
+        // 단, fizzleOnTimeout(바주카 유도 미사일)은 적을 못 맞히고 수명이 끝나면 폭발 없이 조용히 사라진다.
+        if (_explosionRadius > 0f && !_exploded && !_fizzleOnTimeout && Application.isPlaying)
             Explode();
     }
 

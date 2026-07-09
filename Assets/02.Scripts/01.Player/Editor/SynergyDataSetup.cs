@@ -92,15 +92,16 @@ namespace BagSurvivor.SynergyEditor
 
             // ── 일렉트로 (Electro) — AutoTimer / WPN_ATK_SUM / RandomEnemy (기획서: 무작위 낙뢰 1/3개) ──
             // 번개: 가로:세로 = 1:1.5 비율 유지(stretchY 1.5), 전체 크기 vSize 2.4
-            // 낙뢰: 캐릭터 주변 일정 반경(range=6) 내 랜덤 적 타격, 애니 4배속(fps 48)
+            // 낙뢰: 캐릭터 주변 일정 반경(range=6) 내 랜덤 적 타격.
+            // 연출 시간 2배(fps 48→24, linger 0.1→0.2)로 낙뢰가 눈에 확실히 보이게 함
             d["SK_ELEC_1"] = Sk("SK_ELEC_1", "마법 낙뢰 1개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
                 ScalingStatType.WPN_ATK_SUM, dmg:0.8f, cd:3f, range:6f, extra:1,
-                fx:FixedEffectType.KillCooldownReduction, fxVal:50f, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
+                fx:FixedEffectType.KillCooldownReduction, fxVal:50f, vSize:2.4f, stretchY:1.5f, fps:24f, linger:0.2f, anchorBottom:true);
             d["SK_ELEC_2"] = Sk("SK_ELEC_2", "마법 낙뢰 3개",
                 SynergyTriggerType.AutoTimer, SkillType.AoE, SkillTargetType.RandomEnemy,
                 ScalingStatType.WPN_ATK_SUM, dmg:0.8f, cd:3f, range:6f, extra:3,
-                fx:FixedEffectType.KillCooldownReduction, fxVal:50f, vSize:2.4f, stretchY:1.5f, fps:48f, anchorBottom:true);
+                fx:FixedEffectType.KillCooldownReduction, fxVal:50f, vSize:2.4f, stretchY:1.5f, fps:24f, linger:0.2f, anchorBottom:true);
 
             // ── 처형자 (Executioner) — AutoTimer / WPN_ATK_SUM / ForwardDual + InstantDeath ──
             // 낫: 투사체 크기 ×1.5(1.6→2.4), 이동속도 -50%(15→7.5), 애니 2.5배속(12→30)
@@ -286,15 +287,15 @@ namespace BagSurvivor.SynergyEditor
             d["SUM_SANCTUARY_1"] = Sum("SUM_SANCTUARY_1", "성역 장판 (브론즈)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0f, spd:0f, atkCd:1.0f, atkRange:5f, dur:15f,
-                fx:FixedEffectType.ZoneRegenBuff, fxVal:2.0f, scale:1.8f, sortOrder:1);
+                fx:FixedEffectType.ZoneRegenBuff, fxVal:2.0f, scale:1.8f, sortOrder:3);
             d["SUM_SANCTUARY_2"] = Sum("SUM_SANCTUARY_2", "성역 장판 (실버)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0f, spd:0f, atkCd:1.0f, atkRange:5f, dur:15f,
-                fx:FixedEffectType.ZoneRegenBuff, fxVal:2.5f, scale:1.8f, sortOrder:1);
+                fx:FixedEffectType.ZoneRegenBuff, fxVal:2.5f, scale:1.8f, sortOrder:3);
             d["SUM_SANCTUARY_3"] = Sum("SUM_SANCTUARY_3", "성역 장판 (골드)",
                 SummonAIType.Stationary, ScalingStatType.ARM_HP_SUM,
                 atk:0f, spd:0f, atkCd:1.0f, atkRange:5f, dur:15f,
-                fx:FixedEffectType.ZoneRegenBuff, fxVal:4.0f, scale:1.8f, sortOrder:1);
+                fx:FixedEffectType.ZoneRegenBuff, fxVal:4.0f, scale:1.8f, sortOrder:3);
 
             return d;
         }
@@ -484,9 +485,12 @@ namespace BagSurvivor.SynergyEditor
                 (SynergyType.Tycoon,      SynergyGrade.Silver, "SK_GOLD_BOMB_2"),
                 (SynergyType.Tycoon,      SynergyGrade.Gold,   "SK_GOLD_BOMB_3"),
                 (SynergyType.Tycoon,      SynergyGrade.Prism,  "SK_GOLD_FAST"),
-                // 브론즈만 디버프, 실버·골드는 무효과(바인딩 없음) — 프리즘 도달 시 각성
+                // 과부하 디버프(SpeedPenalty)는 모든 등급에서 상시 유지 — 브론즈~프리즘 전부 바인딩
                 (SynergyType.Overload,    SynergyGrade.Bronze, "SK_OVERLOAD_PENALTY"),
-                // 프리즘: 레이저 + 체인라이트닝 + 비눗방울 3종 동시 발동
+                (SynergyType.Overload,    SynergyGrade.Silver, "SK_OVERLOAD_PENALTY"),
+                (SynergyType.Overload,    SynergyGrade.Gold,   "SK_OVERLOAD_PENALTY"),
+                (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_PENALTY"),
+                // 프리즘: 레이저 + 체인라이트닝 + 비눗방울 3종 동시 발동(디버프 위에 각성)
                 (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_LASER"),
                 (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_CHAIN"),
                 (SynergyType.Overload,    SynergyGrade.Prism,  "SK_OVERLOAD_BUBBLE"),
