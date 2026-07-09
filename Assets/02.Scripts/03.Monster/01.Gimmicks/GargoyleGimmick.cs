@@ -19,6 +19,10 @@ namespace BagSurvivor.Monster
         [Range(10f, 180f)]
         public float visionAngle = 80f;
 
+        [Header("방향별 방어력")]
+        [Tooltip("가고일 정면(바라보는 쪽)에서 맞을 때 방어력. 뒤에서 맞으면 0.")]
+        public int frontDefense = 200;
+
         // ==========================================
         // 내부 변수
         // ==========================================
@@ -35,23 +39,21 @@ namespace BagSurvivor.Monster
             if (controller == null || controller.IsDead) return;
             if (controller.PlayerTransform == null) return;
 
-            // 현재 넉백 상태면 시야각 체크하지 않음
+            // 플레이어가 가고일을 바라보고 있는가(시야각 안) — 이 상태면 정지 + 방어력 0
+            bool watched = IsInPlayerVision();
+
+            // 방어력: 바라볼 때 0(풀뎀), 안 볼 때 frontDefense(200)
+            controller.SetDefenseOverride(watched ? 0 : frontDefense);
+
+            // 현재 넉백 상태면 이동 정지/재개 제어는 건너뜀(방어력은 위에서 이미 반영)
             if (controller.CurrentState == MonsterState.Knockback) return;
 
-            bool wasWatched = isBeingWatched;
-            isBeingWatched = IsInPlayerVision();
-
             // 상태 변화가 있을 때만 이동 제어 호출 (매 프레임 호출 방지)
-            if (isBeingWatched && !wasWatched)
-            {
-                // 시야각에 들어옴 → 이동 정지
-                controller.PauseMovement();
-            }
-            else if (!isBeingWatched && wasWatched)
-            {
-                // 시야각에서 벗어남 → 즉시 이동 재개
-                controller.ResumeMovement();
-            }
+            if (watched && !isBeingWatched)
+                controller.PauseMovement();   // 시야각에 들어옴 → 이동 정지
+            else if (!watched && isBeingWatched)
+                controller.ResumeMovement();  // 시야각에서 벗어남 → 즉시 이동 재개
+            isBeingWatched = watched;
         }
 
         /// <summary>
