@@ -39,10 +39,10 @@ namespace BagSurvivor.UI
         public string bgmParam = "BGMVol";
         public string sfxParam = "SFXVol";
 
+        // 창모드(Windowed)는 씬 전환 시 화면이 튀는 문제로 제거. 전체화면 계열만 유지.
         private static readonly FullScreenMode[] modes =
         {
             FullScreenMode.ExclusiveFullScreen, // 전체화면
-            FullScreenMode.Windowed,            // 창모드
             FullScreenMode.FullScreenWindow     // 테두리 없는 창 모드
         };
 
@@ -54,7 +54,7 @@ namespace BagSurvivor.UI
         private static void ApplySavedScreenModeOnce()
         {
             if (!PlayerPrefs.HasKey("screenModeIdx")) return; // 저장값 없으면 빌드 기본값 유지
-            ApplyScreenMode(PlayerPrefs.GetInt("screenModeIdx", 1));
+            ApplyScreenMode(PlayerPrefs.GetInt("screenModeIdx", 0));
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoadedReapply; // 중복 방지
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoadedReapply;
         }
@@ -63,12 +63,12 @@ namespace BagSurvivor.UI
                                                  UnityEngine.SceneManagement.LoadSceneMode m)
         {
             if (!PlayerPrefs.HasKey("screenModeIdx")) return;
-            int idx = PlayerPrefs.GetInt("screenModeIdx", 1);
+            int idx = PlayerPrefs.GetInt("screenModeIdx", 0);
             FullScreenMode want = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
             if (Screen.fullScreenMode != want) // 씬 로드로 모드가 리셋됐을 때만 되돌림
                 ApplyScreenMode(idx);
         }
-        private readonly int[] modeCodes = { 143002, 143003, 143004 };
+        private readonly int[] modeCodes = { 143002, 143004 }; // 전체화면 / 테두리없는창 (창모드 제거)
         private int modeIndex;
 
         private void Awake()
@@ -109,7 +109,7 @@ namespace BagSurvivor.UI
         {
             for (int i = 0; i < modes.Length; i++)
                 if (modes[i] == Screen.fullScreenMode) return i;
-            return 1; // 기본 창모드
+            return 0; // 기본 전체화면
         }
 
         private void CycleMode(int dir)
@@ -120,16 +120,13 @@ namespace BagSurvivor.UI
             Save();
         }
 
-        /// <summary>화면 모드 실제 적용. 창모드=1280x720, 전체/테두리없음=1920x1080 고정.
+        /// <summary>화면 모드 실제 적용. 전체화면/테두리없음 모두 1920x1080 고정.
         /// (노트북마다 네이티브 해상도가 달라 화면이 깨지던 문제 방지 — 백버퍼를 1920x1080으로 고정하고
         ///  GPU가 모니터에 맞춰 스케일링)</summary>
         private static void ApplyScreenMode(int idx)
         {
             FullScreenMode mode = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
-            if (mode == FullScreenMode.Windowed)
-                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
-            else
-                Screen.SetResolution(1920, 1080, mode);
+            Screen.SetResolution(1920, 1080, mode);
         }
 
         private void UpdateScreenModeText()
