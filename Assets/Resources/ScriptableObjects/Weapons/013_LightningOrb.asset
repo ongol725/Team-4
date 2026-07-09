@@ -49,13 +49,13 @@ MonoBehaviour:
   meleeReach: 1.6
   meleeMotionDuration: 0.2
   gradeStats:
-  - attackPower: 12
+  - attackPower: 8
     attackSpeed: 0.6
-  - attackPower: 16
+  - attackPower: 11
     attackSpeed: 0.55
-  - attackPower: 20
+  - attackPower: 14
     attackSpeed: 0.5
-  - attackPower: 24
+  - attackPower: 17
     attackSpeed: 0.45
-  - attackPower: 29
+  - attackPower: 20
     attackSpeed: 0.4
