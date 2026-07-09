@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_DEMON_2
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_DEMON_2
+  skillName: "\uC5F0\uC625 \uC18C\uC6A9\uB3CC\uC774"
+  triggerType: 0
+  skillType: 1
+  targetType: 2
+  scalingStat: 2
+  dmgMultiplier: 0.45
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 0
+  damageDelay: 0
+  rangeRadius: 1.5
+  duration: 0
+  cooldown: 1
+  fixedEffect: 0
+  fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  pierceCount: 1
+  animFrames:
+  - {fileID: -4257615418030669444, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  - {fileID: 2814912209324530095, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  - {fileID: -7685724708168353781, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  - {fileID: -3419287085064350176, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  - {fileID: -8921877823096807266, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  - {fileID: 800002239513750488, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  - {fileID: 810463415749099518, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  - {fileID: -4690268724481635917, guid: c303cce1e7fa9114dbfb3c2aba8c05cb, type: 3}
+  animFps: 12
+  vfxLingerTime: 0.1
+  visualSize: 3
+  visualStretchY: 1
+  vfxFollowPlayer: 1
+  vfxSortingOrder: 30
+  vfxAnchorBottom: 0
+  nodeFrames: []
+  dropFrames: []
+  dropFps: 8

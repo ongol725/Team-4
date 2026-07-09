@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_SWORD_1
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_SWORD_1
+  skillName: "\uAC80\uAE30 (\uBE0C\uB860\uC988)"
+  triggerType: 0
+  skillType: 2
+  targetType: 8
+  scalingStat: 1
+  dmgMultiplier: 2
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 0
+  damageDelay: 0
+  rangeRadius: 15
+  duration: 0
+  cooldown: 2
+  fixedEffect: 0
+  fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  pierceCount: 1
+  animFrames:
+  - {fileID: 109942617, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1301186219, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -562498353, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 502116684, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -381104040, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1707099930, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 1109029539, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1932667270, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  animFps: 12
+  vfxLingerTime: 0.1
+  visualSize: 4.8
+  visualStretchY: 2
+  vfxFollowPlayer: 0
+  vfxSortingOrder: 30
+  vfxAnchorBottom: 0
+  nodeFrames: []
+  dropFrames: []
+  dropFps: 8

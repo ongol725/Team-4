@@ -1,0 +1,664 @@
+fileFormatVersion: 2
+guid: 806e1ae09acf0d944833922231d13330
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5673821159913208439
+    second: RichCoin_BOMB4.prefab_0
+  - first:
+      213: -6630941999774280897
+    second: RichCoin_BOMB4.prefab_1
+  - first:
+      213: 4025984600309568130
+    second: RichCoin_BOMB4.prefab_2
+  - first:
+      213: -2966097624401776905
+    second: RichCoin_BOMB4.prefab_3
+  - first:
+      213: 44733927691199138
+    second: RichCoin_BOMB4.prefab_4
+  - first:
+      213: 1518060757582558880
+    second: RichCoin_BOMB4.prefab_5
+  - first:
+      213: -8399763390024200838
+    second: RichCoin_BOMB4.prefab_6
+  - first:
+      213: 5078523104096342660
+    second: RichCoin_BOMB4.prefab_7
+  - first:
+      213: -7112120742886680263
+    second: RichCoin_BOMB4.prefab_8
+  - first:
+      213: -286128142896059575
+    second: RichCoin_BOMB4.prefab_9
+  - first:
+      213: -175165698378073582
+    second: RichCoin_BOMB4.prefab_10
+  - first:
+      213: 3157798745330193106
+    second: RichCoin_BOMB4.prefab_11
+  - first:
+      213: -5999038057117402876
+    second: RichCoin_BOMB4.prefab_12
+  - first:
+      213: -7231587990907632381
+    second: RichCoin_BOMB4.prefab_13
+  - first:
+      213: 4296540193750964239
+    second: RichCoin_BOMB4.prefab_14
+  - first:
+      213: 8195651438514085618
+    second: RichCoin_BOMB4.prefab_15
+  - first:
+      213: -13037042152429674
+    second: RichCoin_BOMB4.prefab_16
+  - first:
+      213: -7528161572948353833
+    second: RichCoin_BOMB4.prefab_17
+  - first:
+      213: 6454355179217286574
+    second: RichCoin_BOMB4.prefab_18
+  - first:
+      213: -2515260534653661315
+    second: RichCoin_BOMB4.prefab_19
+  - first:
+      213: -783536962494960303
+    second: RichCoin_BOMB4.prefab_20
+  - first:
+      213: -5557585984543432155
+    second: RichCoin_BOMB4.prefab_21
+  - first:
+      213: -8203532771818467180
+    second: RichCoin_BOMB4.prefab_22
+  - first:
+      213: 5623348477715599805
+    second: RichCoin_BOMB4.prefab_23
+  - first:
+      213: 4023389737208933735
+    second: RichCoin_BOMB4.prefab_24
+  - first:
+      213: 6271886555597666094
+    second: RichCoin_BOMB4.prefab_25
+  - first:
+      213: 560290412168587263
+    second: RichCoin_BOMB4.prefab_26
+  - first:
+      213: 2125516961122399011
+    second: RichCoin_BOMB4.prefab_27
+  - first:
+      213: 245748835337822076
+    second: RichCoin_BOMB4.prefab_28
+  - first:
+      213: 662907726639121344
+    second: RichCoin_BOMB4.prefab_29
+  - first:
+      213: -4846538020743219005
+    second: RichCoin_BOMB4.prefab_30
+  - first:
+      213: -2309563997810880772
+    second: RichCoin_BOMB4.prefab_31
+  - first:
+      213: 7577069515494019091
+    second: RichCoin_BOMB4.prefab_32
+  - first:
+      213: 3283517124913943485
+    second: RichCoin_BOMB4.prefab_33
+  - first:
+      213: 892112996631360563
+    second: RichCoin_BOMB4.prefab_34
+  - first:
+      213: 3353602506078379001
+    second: RichCoin_BOMB4.prefab_35
+  - first:
+      213: 2042421128096802222
+    second: RichCoin_BOMB4.prefab_36
+  - first:
+      213: -6093558222920076687
+    second: RichCoin_BOMB4.prefab_37
+  - first:
+      213: -4077009811389198648
+    second: RichCoin_BOMB4.prefab_38
+  - first:
+      213: -1879567349280337781
+    second: RichCoin_BOMB4.prefab_39
+  - first:
+      213: 7726961319783257122
+    second: RichCoin_BOMB4.prefab_40
+  - first:
+      213: 7259632006600325458
+    second: RichCoin_BOMB4.prefab_41
+  - first:
+      213: -2728247166657001204
+    second: RichCoin_BOMB4.prefab_42
+  - first:
+      213: 5825082681273721496
+    second: RichCoin_BOMB4.prefab_43
+  - first:
+      213: -3572482843664970249
+    second: RichCoin_BOMB4.prefab_44
+  - first:
+      213: -4128845113179716880
+    second: RichCoin_BOMB4.prefab_45
+  - first:
+      213: 6499663297975339015
+    second: RichCoin_BOMB4.prefab_46
+  - first:
+      213: 146465038265197119
+    second: RichCoin_BOMB4.prefab_47
+  - first:
+      213: -8058073811697390754
+    second: RichCoin_BOMB4.prefab_48
+  - first:
+      213: -6151210550708182079
+    second: RichCoin_BOMB4.prefab_49
+  - first:
+      213: -5756851288137893029
+    second: RichCoin_BOMB4.prefab_50
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 750
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2880
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8538a4235d1693f4694f6fb166b50f83
+      internalID: 1250466109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_1
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 2880
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12795a3e0a6cc5c4fb464e0ef76d6f32
+      internalID: -798805911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_2
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 2880
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74791c476819f5f4cb8321f8045b3955
+      internalID: -1225041799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_3
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 2880
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b217d1caf7421d438fb1898be9d1c1b
+      internalID: 633670346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1920
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7076d63b7e5ed046858989b4c843e45
+      internalID: -2036668565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 1920
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f880196daef761446abd42ccb979c9c6
+      internalID: -1468965002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_6
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1920
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 971c7cfc573381f449c9ce3683555005
+      internalID: -213456758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_7
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 1920
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26b0c437c310e824aa7c7ba44360f1a2
+      internalID: 1475606540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 960
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e623e778cbd56b445a03080d74b4be3b
+      internalID: 746770615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_9
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 960
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b7dc51f8a6762f42bd0b2a0ed9be0a6
+      internalID: 31897087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_10
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 960
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28218a1a5541ded479976614bd820a01
+      internalID: 1883757731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_11
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 960
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dea0d684cfcbbc4e84f658802793120
+      internalID: -831444393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e4323776d871aa40b0fe192a644deb4
+      internalID: 1843245317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_13
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89f64c995858cf14bb2a77c90b68f4d1
+      internalID: -235429371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_14
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38dd0025e1378864ebb214a817038699
+      internalID: -786466577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RichCoin_BOMB4_15
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 0
+        width: 960
+        height: 960
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a622137d2d7a9f14cb2c4a233c7593a3
+      internalID: -1686630079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 3702b8c7e13c3bf4b8a86f14c8f8316b
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      RichCoin_BOMB4_0: 1250466109
+      RichCoin_BOMB4_1: -798805911
+      RichCoin_BOMB4_10: 1883757731
+      RichCoin_BOMB4_11: -831444393
+      RichCoin_BOMB4_12: 1843245317
+      RichCoin_BOMB4_13: -235429371
+      RichCoin_BOMB4_14: -786466577
+      RichCoin_BOMB4_15: -1686630079
+      RichCoin_BOMB4_2: -1225041799
+      RichCoin_BOMB4_3: 633670346
+      RichCoin_BOMB4_4: -2036668565
+      RichCoin_BOMB4_5: -1468965002
+      RichCoin_BOMB4_6: -213456758
+      RichCoin_BOMB4_7: 1475606540
+      RichCoin_BOMB4_8: 746770615
+      RichCoin_BOMB4_9: 31897087
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

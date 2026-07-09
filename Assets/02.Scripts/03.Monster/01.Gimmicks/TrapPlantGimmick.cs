@@ -34,6 +34,9 @@ namespace BagSurvivor.Monster
         [Tooltip("장판 데미지 판정 간격 (초)")]
         public float damageTickInterval = 0.5f;
 
+        [Tooltip("틱당 데미지. 몬스터 attack이 0일 때 이 값을 사용 (함정식물은 attack=0이라 이 값으로 동작)")]
+        public int areaDamage = 8;
+
         // ==========================================
         // 내부 변수
         // ==========================================
@@ -104,10 +107,13 @@ namespace BagSurvivor.Monster
                 damageArea = area.AddComponent<DamageArea>();
             }
 
+            // attack이 0이면(함정식물 기본값) areaDamage 사용
+            int tickDamage = controller.monsterData.attack > 0 ? controller.monsterData.attack : areaDamage;
             damageArea.Initialize(
-                controller.monsterData.attack,
+                tickDamage,
                 areaDuration,
-                damageTickInterval
+                damageTickInterval,
+                areaRadius
             );
         }
 
@@ -119,49 +125,50 @@ namespace BagSurvivor.Monster
             GameObject area = new GameObject("DamageArea_TrapPlant");
             area.transform.position = transform.position;
 
-            // 시각적 표시 (반투명 빨간 원)
+            // 시각적 표시 (반투명 보라색 뭉게구름 바닥)
             SpriteRenderer sr = area.AddComponent<SpriteRenderer>();
-            sr.sprite = CreateCircleSprite();
-            sr.color = new Color(1f, 0f, 0f, 0.3f);
-            sr.sortingOrder = -1;
+            sr.sprite = GetCloudSprite();
+            sr.color = new Color(0.6f, 0.15f, 0.85f, 0.5f); // 보라
+            sr.sortingOrder = 10;                            // 바닥(0)·벽(1) 위로 보이게
             area.transform.localScale = Vector3.one * areaRadius * 2f;
 
-            // 트리거 콜라이더
-            CircleCollider2D col = area.AddComponent<CircleCollider2D>();
-            col.isTrigger = true;
-            col.radius = 0.5f; // localScale로 크기 조절되므로 기본 0.5
-
+            // 데미지는 DamageArea가 반경으로 직접 판정(폴링)하므로 콜라이더 불필요
             return area;
         }
 
         /// <summary>
-        /// 간단한 원형 스프라이트를 런타임에 생성합니다.
+        /// 뭉게구름 형태의 부드러운 원형 스프라이트(흰색)를 1회만 생성해 캐싱합니다.
+        /// 색은 SpriteRenderer.color로 입히므로 흰색으로 만듭니다.
         /// </summary>
-        private Sprite CreateCircleSprite()
+        private static Sprite _cloudSprite;
+        private static Sprite GetCloudSprite()
         {
-            int size = 32;
+            if (_cloudSprite != null) return _cloudSprite;
+
+            int size = 128;
             Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
-            float center = size / 2f;
-            float radius = size / 2f;
+            tex.wrapMode = TextureWrapMode.Clamp;
+            float c = size / 2f;
 
             for (int x = 0; x < size; x++)
             {
                 for (int y = 0; y < size; y++)
                 {
-                    float dist = Vector2.Distance(new Vector2(x, y), new Vector2(center, center));
-                    if (dist <= radius)
-                    {
-                        tex.SetPixel(x, y, Color.white);
-                    }
-                    else
-                    {
-                        tex.SetPixel(x, y, Color.clear);
-                    }
+                    float dx = x - c, dy = y - c;
+                    float dist = Mathf.Sqrt(dx * dx + dy * dy) / c; // 0(중심)~1(가장자리)
+                    // 각도별로 반경을 울퉁불퉁하게 → 뭉게구름 윤곽
+                    float ang = Mathf.Atan2(dy, dx);
+                    float lobe = 0.09f * Mathf.Sin(ang * 5f) + 0.06f * Mathf.Sin(ang * 8f + 1.3f);
+                    float edge = 0.9f + lobe;
+                    // 중심은 진하고 가장자리로 갈수록 부드럽게 사라짐
+                    float a = 1f - Mathf.SmoothStep(edge * 0.45f, edge, dist);
+                    tex.SetPixel(x, y, new Color(1f, 1f, 1f, Mathf.Clamp01(a)));
                 }
             }
             tex.Apply();
 
-            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
+            _cloudSprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
+            return _cloudSprite;
         }
     }
 
@@ -178,6 +185,7 @@ namespace BagSurvivor.Monster
         private int damage;
         private float duration;
         private float tickInterval;
+        private float radius;
         private bool isInitialized = false;
 
         /// <summary>
@@ -186,55 +194,46 @@ namespace BagSurvivor.Monster
         /// <param name="damage">틱당 데미지</param>
         /// <param name="duration">지속 시간 (초)</param>
         /// <param name="tickInterval">데미지 판정 간격 (초)</param>
-        public void Initialize(int damage, float duration, float tickInterval)
+        /// <param name="radius">데미지 판정 반경 (월드 유닛)</param>
+        public void Initialize(int damage, float duration, float tickInterval, float radius)
         {
             this.damage = damage;
             this.duration = duration;
             this.tickInterval = tickInterval;
+            this.radius = radius;
             this.isInitialized = true;
+
+            StartCoroutine(DamageRoutine());
 
             // 지속 시간 후 자동 파괴
             // TODO: 오브젝트 풀링으로 교체
             Destroy(gameObject, duration);
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (!isInitialized) return;
-
-            if (other.CompareTag("Player"))
-            {
-                StartCoroutine(DamageTickCoroutine(other));
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                // 장판에서 나가면 해당 코루틴은 자동으로 다음 체크에서 종료됨
-            }
-        }
-
         /// <summary>
-        /// 장판 위에 있는 동안 주기적으로 데미지를 줍니다.
+        /// 지속 시간 동안 주기적으로, 반경 안에 있는 플레이어에게 데미지를 줍니다.
+        /// 트리거가 아니라 반경 직접 판정 → 시각 범위와 정확히 일치.
         /// </summary>
-        private IEnumerator DamageTickCoroutine(Collider2D playerCollider)
+        private IEnumerator DamageRoutine()
         {
-            while (playerCollider != null && isInitialized)
+            float elapsed = 0f;
+            while (elapsed < duration && isInitialized)
             {
-                // 플레이어가 아직 장판 위에 있는지 간이 체크
-                float dist = Vector2.Distance(transform.position, playerCollider.transform.position);
-                float areaSize = transform.localScale.x / 2f;
-
-                if (dist > areaSize) yield break;
-
-                // TODO: 플레이어 데미지 시스템과 연동
-                // 예시: playerCollider.GetComponent<PlayerHealth>()?.TakeDamage(damage);
-                Debug.Log($"[DamageArea] 장판 데미지: {damage}");
+                PlayerHealth ph = FindPlayerInRadius();
+                if (ph != null && !ph.IsDead) ph.TakeDamage(damage);
 
                 yield return new WaitForSeconds(tickInterval);
+                elapsed += tickInterval;
             }
+        }
+
+        /// <summary>태그로 플레이어를 찾아 반경 안에 있으면 PlayerHealth 반환(없으면 null).</summary>
+        private PlayerHealth FindPlayerInRadius()
+        {
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p == null) return null;
+            if (Vector2.Distance(p.transform.position, transform.position) > radius) return null;
+            return p.GetComponentInParent<PlayerHealth>() ?? p.GetComponent<PlayerHealth>();
         }
     }
 }

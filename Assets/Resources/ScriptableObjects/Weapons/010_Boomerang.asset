@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 010_Boomerang
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_010
+  itemName: "\uBD80\uBA54\uB791"
+  itemDescription: "\uBC18\uBCF5 \uD22C\uCC99"
+  itemImage: {fileID: -39249568129014587, guid: 03dd8f7a4630b584faf2c945f654f21a, type: 3}
+  rarity: 1
+  grade: 1
+  cost: 2
+  synergies: 0a0000000b00000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 1, y: 0}
+  attackStyleType: 8
+  attackStyle: "\uBC18\uBCF5 \uD22C\uCC99"
+  lv5AttackStyle: "\uC18D\uB3C4 \uC99D\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 12
+  range: 15
+  maxTargets: 0
+  attackFrames:
+  - {fileID: -39249568129014587, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  - {fileID: 3675701520952132881, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  - {fileID: 2165258503072422419, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  - {fileID: 6444734027200063135, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  - {fileID: 8941416125046343875, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  - {fileID: -8672849909724920422, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  - {fileID: 7745471415881055504, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  - {fileID: 6810173710773208013, guid: 7824af54d41cbd6449481a105bc93023, type: 3}
+  attackFps: 12
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 22
+    attackSpeed: 1.2
+  - attackPower: 29
+    attackSpeed: 1.1
+  - attackPower: 36
+    attackSpeed: 1
+  - attackPower: 44
+    attackSpeed: 0.9
+  - attackPower: 53
+    attackSpeed: 0.8

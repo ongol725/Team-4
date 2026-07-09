@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5063307457329041168}
   - component: {fileID: 698957191270943192}
   - component: {fileID: 6850902750091413693}
+  - component: {fileID: 8276652572855676953}
   m_Layer: 8
   m_Name: Prefab_Slime
   m_TagString: Monster
@@ -171,3 +172,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: 504143406a3344c40a572326110af9c7, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  sortingOrder: 10
+  stopDistance: 0
+  approachOverlap: 0.4
+--- !u!114 &8276652572855676953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439714262228731463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814d077f51909d34d81838fed902ba75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.SlimeSplitGimmick
+  splitCount: 4
+  splitPrefab: {fileID: 8503639987653096166, guid: a8b1e8348165dc84c9035d323c683ad5, type: 3}
+  scatterRadius: 0.8

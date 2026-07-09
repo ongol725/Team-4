@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_SPIRIT_NOVA
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_SPIRIT_NOVA
+  skillName: "\uB300\uC815\uB839 \uAD11\uC5ED \uAC15\uD0C0"
+  triggerType: 0
+  skillType: 1
+  targetType: 3
+  scalingStat: 1
+  dmgMultiplier: 5
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 0
+  damageDelay: 0
+  rangeRadius: 1.5
+  duration: 0
+  cooldown: 0
+  fixedEffect: 0
+  fixedEffectValue: 0
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  pierceCount: 1
+  animFrames:
+  - {fileID: -870172473, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 1935560912, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 775155163, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: -1951039476, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 128767272, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 623683165, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 478662497, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: -541071719, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 1950537486, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 328261890, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 816300311, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  - {fileID: 8495549, guid: 2751b9e55cb8f794fa9f1386dc010745, type: 3}
+  animFps: 12
+  vfxLingerTime: 0.1
+  visualSize: 3
+  visualStretchY: 1
+  vfxFollowPlayer: 0
+  vfxSortingOrder: 30
+  vfxAnchorBottom: 0
+  nodeFrames:
+  - {fileID: -8754820340592291366, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 9150469363533371322, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -9190735152465639029, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 2924011424695997350, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -3590220390625878130, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -3183912136500244262, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -4795391920926922227, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -3335718561745146702, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: -2760320090512540314, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 7338489377263590223, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 8488412066879571135, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  - {fileID: 7701761211337252911, guid: f6856443c2fcb2543a4340d13cd29fa9, type: 3}
+  dropFrames: []
+  dropFps: 8

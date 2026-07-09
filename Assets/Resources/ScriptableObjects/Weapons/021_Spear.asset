@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 021_Spear
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_021
+  itemName: "\uC2A4\uD53C\uC5B4"
+  itemDescription: "\uC9C1\uC120 \uCC0C\uB974\uAE30"
+  itemImage: {fileID: 9125765898052600260, guid: 13a9965113d4424439fe1cdffc9ddfa9, type: 3}
+  rarity: 1
+  grade: 1
+  cost: 2
+  synergies: 0d0000000800000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackStyleType: 2
+  attackStyle: "\uC9C1\uC120 \uCC0C\uB974\uAE30"
+  lv5AttackStyle: "\uAD00\uD1B5\xB7\uC0AC\uAC70\uB9AC 1.5\uBC30"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 20
+  range: 3
+  maxTargets: 0
+  attackFrames:
+  - {fileID: 9125765898052600260, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 3580868461300293157, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 1967298386148559448, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 5810492157068194621, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 4463175394604954203, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: -2379392859722537828, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: -8938477231262207154, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  - {fileID: 3439166741069129841, guid: cc8520cd196c6eb43b49845ac8e5e3d3, type: 3}
+  attackFps: 12
+  meleeMotion: 1
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 32
+    attackSpeed: 1.1
+  - attackPower: 42
+    attackSpeed: 1
+  - attackPower: 53
+    attackSpeed: 0.95
+  - attackPower: 64
+    attackSpeed: 0.9
+  - attackPower: 77
+    attackSpeed: 0.85

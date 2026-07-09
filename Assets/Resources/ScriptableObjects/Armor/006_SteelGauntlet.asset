@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 3}
+  m_Name: 006_SteelGauntlet
+  m_EditorClassIdentifier: Assembly-CSharp::SO_ArmorData
+  itemID: ARM_006
+  itemName: "강철 건틀릿"
+  itemDescription:
+  itemImage: {fileID: 6839820221605333440, guid: 510a4fcfa63a189408af76279e211cc4, type: 3}
+  rarity: 1
+  grade: 1
+  cost: 4
+  synergies: 0d0000000000000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  gradeStats:
+  - hpBonus: 180
+    hpRegen: 6
+  - hpBonus: 270
+    hpRegen: 10
+  - hpBonus: 405
+    hpRegen: 16
+  - hpBonus: 270
+    hpRegen: 24
+  - hpBonus: 405
+    hpRegen: 36

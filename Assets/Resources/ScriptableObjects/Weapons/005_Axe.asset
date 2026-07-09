@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 005_Axe
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_005
+  itemName: "\uB3C4\uB07C"
+  itemDescription: "\uB2E8\uC77C \uACF5\uACA9"
+  itemImage: {fileID: -7156945422860306331, guid: 38c45cb411f29ea48a92ec5ceaca94fd, type: 3}
+  rarity: 2
+  grade: 1
+  cost: 3
+  synergies: 070000000e0000000f000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 1, y: 0}
+  attackStyleType: 2
+  attackStyle: "\uB2E8\uC77C \uACF5\uACA9"
+  lv5AttackStyle: "\uC2A4\uD50C\uB798\uC2DC \uCD94\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  range: 1
+  maxTargets: 0
+  attackFrames:
+  - {fileID: -7156945422860306331, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: 5945261542180003890, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: 650432702452714548, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -2038237721781246502, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -981652405298280681, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -2956879311264668118, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: 2316176496178997561, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  - {fileID: -133217212311399295, guid: 65bee9cd122916b468bd0593d3f48624, type: 3}
+  attackFps: 12
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 40
+    attackSpeed: 1.3
+  - attackPower: 52
+    attackSpeed: 1.2
+  - attackPower: 66
+    attackSpeed: 1.1
+  - attackPower: 80
+    attackSpeed: 1
+  - attackPower: 96
+    attackSpeed: 0.95

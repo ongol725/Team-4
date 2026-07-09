@@ -1,0 +1,1365 @@
+fileFormatVersion: 2
+guid: a19f73856c8cbcb4fa75472b99f55652
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2219049677635825480
+    second: Bazooka_effect_0
+  - first:
+      213: 1894178580989301207
+    second: Bazooka_effect_1
+  - first:
+      213: -8707964464796294998
+    second: Bazooka_effect_2
+  - first:
+      213: 7985736110580609631
+    second: Bazooka_effect_3
+  - first:
+      213: -2072673332480664413
+    second: Bazooka_effect_4
+  - first:
+      213: 2326177539916978542
+    second: Bazooka_effect_5
+  - first:
+      213: -4161348438095505307
+    second: Bazooka_effect_6
+  - first:
+      213: -7472973457014527352
+    second: Bazooka_effect_7
+  - first:
+      213: 1552579391382215524
+    second: Bazooka_effect_8
+  - first:
+      213: 7183350055421558706
+    second: Bazooka_effect_9
+  - first:
+      213: -3080932148834595983
+    second: Bazooka_effect_10
+  - first:
+      213: 4862009785012172048
+    second: Bazooka_effect_11
+  - first:
+      213: 7671036487527049027
+    second: Bazooka_effect_12
+  - first:
+      213: -3911373629116754323
+    second: Bazooka_effect_13
+  - first:
+      213: -2361839266209463632
+    second: Bazooka_effect_14
+  - first:
+      213: -8235127846907762609
+    second: Bazooka_effect_15
+  - first:
+      213: -4425588520975590619
+    second: Bazooka_effect_16
+  - first:
+      213: -8727670823114945890
+    second: Bazooka_effect_17
+  - first:
+      213: 8264312500728442411
+    second: Bazooka_effect_18
+  - first:
+      213: 3504902202986429257
+    second: Bazooka_effect_19
+  - first:
+      213: -6847530927954010779
+    second: Bazooka_effect_20
+  - first:
+      213: 962146966219672632
+    second: Bazooka_effect_21
+  - first:
+      213: -1074041482554236279
+    second: Bazooka_effect_22
+  - first:
+      213: -4935955402930809657
+    second: Bazooka_effect_23
+  - first:
+      213: -8638607250556703283
+    second: Bazooka_effect_24
+  - first:
+      213: 44762153181468381
+    second: Bazooka_effect_25
+  - first:
+      213: -2715182309330961732
+    second: Bazooka_effect_26
+  - first:
+      213: 812596687693823632
+    second: Bazooka_effect_27
+  - first:
+      213: 4908886023684653249
+    second: Bazooka_effect_28
+  - first:
+      213: 9087992705540188929
+    second: Bazooka_effect_29
+  - first:
+      213: -2644054200270618835
+    second: Bazooka_effect_30
+  - first:
+      213: 5766225168885897499
+    second: Bazooka_effect_31
+  - first:
+      213: 5382627930817865581
+    second: Bazooka_effect_32
+  - first:
+      213: 814005672158587490
+    second: Bazooka_effect_33
+  - first:
+      213: -449066736484282356
+    second: Bazooka_effect_34
+  - first:
+      213: -2744277361823040722
+    second: Bazooka_effect_35
+  - first:
+      213: -1538677001323624946
+    second: Bazooka_effect_36
+  - first:
+      213: -9180429399746694678
+    second: Bazooka_effect_37
+  - first:
+      213: -3392742006155071673
+    second: Bazooka_effect_38
+  - first:
+      213: 6612816852137947227
+    second: Bazooka_effect_39
+  - first:
+      213: 4993243753976009314
+    second: Bazooka_effect_40
+  - first:
+      213: 2047373973683185604
+    second: Bazooka_effect_41
+  - first:
+      213: -18095413788825351
+    second: Bazooka_effect_42
+  - first:
+      213: 722159264400725273
+    second: Bazooka_effect_43
+  - first:
+      213: -329759862882242365
+    second: Bazooka_effect_44
+  - first:
+      213: -2597954093334404475
+    second: Bazooka_effect_45
+  - first:
+      213: -6565437009381361579
+    second: Bazooka_effect_46
+  - first:
+      213: 3809197602829680385
+    second: Bazooka_effect_47
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Bazooka_effect_0
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 35
+        width: 166
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84fad6ebce5abce10800000000000000
+      internalID: 2219049677635825480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_1
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 3
+        width: 230
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d155053269794a10800000000000000
+      internalID: 1894178580989301207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_2
+      rect:
+        serializedVersion: 2
+        x: 1059
+        y: 23
+        width: 190
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa0a71fb478172780800000000000000
+      internalID: -8707964464796294998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_3
+      rect:
+        serializedVersion: 2
+        x: 1303
+        y: 11
+        width: 214
+        height: 214
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f52ba2daea803de60800000000000000
+      internalID: 7985736110580609631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_4
+      rect:
+        serializedVersion: 2
+        x: 1535
+        y: 0
+        width: 258
+        height: 249
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ac901ae5926c33e0800000000000000
+      internalID: -2072673332480664413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_5
+      rect:
+        serializedVersion: 2
+        x: 2667
+        y: 175
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e695e3fd52e384020800000000000000
+      internalID: 2326177539916978542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_6
+      rect:
+        serializedVersion: 2
+        x: 2923
+        y: 179
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 568d0b0b4abef36c0800000000000000
+      internalID: -4161348438095505307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_7
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 63
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88ae9befb3aaa4890800000000000000
+      internalID: -7472973457014527352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_8
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 67
+        width: 102
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46bdde40bbedb8510800000000000000
+      internalID: 1552579391382215524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_9
+      rect:
+        serializedVersion: 2
+        x: 1855
+        y: 147
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bf3faef0d260b360800000000000000
+      internalID: 7183350055421558706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_10
+      rect:
+        serializedVersion: 2
+        x: 1859
+        y: 59
+        width: 126
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17b02abb8845e35d0800000000000000
+      internalID: -3080932148834595983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_11
+      rect:
+        serializedVersion: 2
+        x: 2099
+        y: 151
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 015bf12b324597340800000000000000
+      internalID: 4862009785012172048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_12
+      rect:
+        serializedVersion: 2
+        x: 2123
+        y: 59
+        width: 110
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3472c12ea0ff47a60800000000000000
+      internalID: 7671036487527049027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_13
+      rect:
+        serializedVersion: 2
+        x: 2343
+        y: 151
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d665aac586208b9c0800000000000000
+      internalID: -3911373629116754323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_14
+      rect:
+        serializedVersion: 2
+        x: 2379
+        y: 67
+        width: 110
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b2040173bf093fd0800000000000000
+      internalID: -2361839266209463632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_15
+      rect:
+        serializedVersion: 2
+        x: 2643
+        y: 71
+        width: 98
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f48a225dad2f6bd80800000000000000
+      internalID: -8235127846907762609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_16
+      rect:
+        serializedVersion: 2
+        x: 2907
+        y: 99
+        width: 74
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52b143d10b62592c0800000000000000
+      internalID: -4425588520975590619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_17
+      rect:
+        serializedVersion: 2
+        x: 3163
+        y: 99
+        width: 74
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9a41b7a0a511e680800000000000000
+      internalID: -8727670823114945890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_18
+      rect:
+        serializedVersion: 2
+        x: 3423
+        y: 103
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2e2db6ee6cb0b270800000000000000
+      internalID: 8264312500728442411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_19
+      rect:
+        serializedVersion: 2
+        x: 3679
+        y: 103
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94b7d7ddbf9e3a030800000000000000
+      internalID: 3504902202986429257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_20
+      rect:
+        serializedVersion: 2
+        x: 3935
+        y: 103
+        width: 70
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56ddcca96eea8f0a0800000000000000
+      internalID: -6847530927954010779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_21
+      rect:
+        serializedVersion: 2
+        x: 2991
+        y: 127
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83c4e3f619b3a5d00800000000000000
+      internalID: 962146966219672632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_22
+      rect:
+        serializedVersion: 2
+        x: 3255
+        y: 123
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 982225e46fc3811f0800000000000000
+      internalID: -1074041482554236279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_23
+      rect:
+        serializedVersion: 2
+        x: 3519
+        y: 119
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c4932d76b6ff7bb0800000000000000
+      internalID: -4935955402930809657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_24
+      rect:
+        serializedVersion: 2
+        x: 2891
+        y: 107
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcd247499708d1880800000000000000
+      internalID: -8638607250556703283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_25
+      rect:
+        serializedVersion: 2
+        x: 3783
+        y: 115
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd653cfe0f60f9000800000000000000
+      internalID: 44762153181468381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_26
+      rect:
+        serializedVersion: 2
+        x: 2735
+        y: 99
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cba37e7431cb15ad0800000000000000
+      internalID: -2715182309330961732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_27
+      rect:
+        serializedVersion: 2
+        x: 2975
+        y: 103
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09e36a3d16ce64b00800000000000000
+      internalID: 812596687693823632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_28
+      rect:
+        serializedVersion: 2
+        x: 2999
+        y: 91
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c08a9484dddf1440800000000000000
+      internalID: 4908886023684653249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_29
+      rect:
+        serializedVersion: 2
+        x: 3155
+        y: 103
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10b601727390f1e70800000000000000
+      internalID: 9087992705540188929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_30
+      rect:
+        serializedVersion: 2
+        x: 3235
+        y: 95
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2f7df1b6be6e4bd0800000000000000
+      internalID: -2644054200270618835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_31
+      rect:
+        serializedVersion: 2
+        x: 3407
+        y: 95
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b195c568d3fb50050800000000000000
+      internalID: 5766225168885897499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_32
+      rect:
+        serializedVersion: 2
+        x: 3495
+        y: 87
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d67ae7ea59fe2ba40800000000000000
+      internalID: 5382627930817865581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_33
+      rect:
+        serializedVersion: 2
+        x: 3659
+        y: 87
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26a6a2698ddeb4b00800000000000000
+      internalID: 814005672158587490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_34
+      rect:
+        serializedVersion: 2
+        x: 3759
+        y: 79
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c001963be2894c9f0800000000000000
+      internalID: -449066736484282356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_35
+      rect:
+        serializedVersion: 2
+        x: 3907
+        y: 75
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2b346b774e5ae9d0800000000000000
+      internalID: -2744277361823040722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_36
+      rect:
+        serializedVersion: 2
+        x: 1851
+        y: 67
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e06ca086b6585aae0800000000000000
+      internalID: -1538677001323624946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_37
+      rect:
+        serializedVersion: 2
+        x: 2091
+        y: 55
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae1bb86d910989080800000000000000
+      internalID: -9180429399746694678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_38
+      rect:
+        serializedVersion: 2
+        x: 2139
+        y: 55
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74fa494fe1f8ae0d0800000000000000
+      internalID: -3392742006155071673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_39
+      rect:
+        serializedVersion: 2
+        x: 2203
+        y: 55
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b50366c04e175cb50800000000000000
+      internalID: 6612816852137947227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_40
+      rect:
+        serializedVersion: 2
+        x: 2395
+        y: 51
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2629da82db09b4540800000000000000
+      internalID: 4993243753976009314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_41
+      rect:
+        serializedVersion: 2
+        x: 1931
+        y: 47
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c724c718cbb96c10800000000000000
+      internalID: 2047373973683185604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_42
+      rect:
+        serializedVersion: 2
+        x: 2235
+        y: 47
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f8ad092156bfbff0800000000000000
+      internalID: -18095413788825351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_43
+      rect:
+        serializedVersion: 2
+        x: 2335
+        y: 39
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 915dcd95600a50a00800000000000000
+      internalID: 722159264400725273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_44
+      rect:
+        serializedVersion: 2
+        x: 2387
+        y: 35
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c0f8bfd6257c6bf0800000000000000
+      internalID: -329759862882242365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_45
+      rect:
+        serializedVersion: 2
+        x: 2647
+        y: 35
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 582e704448632fbd0800000000000000
+      internalID: -2597954093334404475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_46
+      rect:
+        serializedVersion: 2
+        x: 2191
+        y: 27
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 558fe9c33d1e2e4a0800000000000000
+      internalID: -6565437009381361579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bazooka_effect_47
+      rect:
+        serializedVersion: 2
+        x: 2635
+        y: 19
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10fbeeba90dfcd430800000000000000
+      internalID: 3809197602829680385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Bazooka_effect_0: 2219049677635825480
+      Bazooka_effect_1: 1894178580989301207
+      Bazooka_effect_10: -3080932148834595983
+      Bazooka_effect_11: 4862009785012172048
+      Bazooka_effect_12: 7671036487527049027
+      Bazooka_effect_13: -3911373629116754323
+      Bazooka_effect_14: -2361839266209463632
+      Bazooka_effect_15: -8235127846907762609
+      Bazooka_effect_16: -4425588520975590619
+      Bazooka_effect_17: -8727670823114945890
+      Bazooka_effect_18: 8264312500728442411
+      Bazooka_effect_19: 3504902202986429257
+      Bazooka_effect_2: -8707964464796294998
+      Bazooka_effect_20: -6847530927954010779
+      Bazooka_effect_21: 962146966219672632
+      Bazooka_effect_22: -1074041482554236279
+      Bazooka_effect_23: -4935955402930809657
+      Bazooka_effect_24: -8638607250556703283
+      Bazooka_effect_25: 44762153181468381
+      Bazooka_effect_26: -2715182309330961732
+      Bazooka_effect_27: 812596687693823632
+      Bazooka_effect_28: 4908886023684653249
+      Bazooka_effect_29: 9087992705540188929
+      Bazooka_effect_3: 7985736110580609631
+      Bazooka_effect_30: -2644054200270618835
+      Bazooka_effect_31: 5766225168885897499
+      Bazooka_effect_32: 5382627930817865581
+      Bazooka_effect_33: 814005672158587490
+      Bazooka_effect_34: -449066736484282356
+      Bazooka_effect_35: -2744277361823040722
+      Bazooka_effect_36: -1538677001323624946
+      Bazooka_effect_37: -9180429399746694678
+      Bazooka_effect_38: -3392742006155071673
+      Bazooka_effect_39: 6612816852137947227
+      Bazooka_effect_4: -2072673332480664413
+      Bazooka_effect_40: 4993243753976009314
+      Bazooka_effect_41: 2047373973683185604
+      Bazooka_effect_42: -18095413788825351
+      Bazooka_effect_43: 722159264400725273
+      Bazooka_effect_44: -329759862882242365
+      Bazooka_effect_45: -2597954093334404475
+      Bazooka_effect_46: -6565437009381361579
+      Bazooka_effect_47: 3809197602829680385
+      Bazooka_effect_5: 2326177539916978542
+      Bazooka_effect_6: -4161348438095505307
+      Bazooka_effect_7: -7472973457014527352
+      Bazooka_effect_8: 1552579391382215524
+      Bazooka_effect_9: 7183350055421558706
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

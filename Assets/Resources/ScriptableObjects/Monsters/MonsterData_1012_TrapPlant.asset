@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b67114c1ce0f79438995e960a7b26c9, type: 3}
+  m_Name: MonsterData_1012_TrapPlant
+  m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterData
+  index: 1012
+  monsterName: "\uD568\uC815\uC2DD\uBB3C"
+  englishName: TrapPlant
+  grade: 0
+  maxHP: 100
+  attack: 0
+  defense: 10
+  attackStyle: 1
+  attackPattern: 3
+  moveSpeed: 0
+  movePattern: 2
+  kbResist: 1
+  kbCooldown: 0
+  spawnType: 1
+  spawnInterval: 6
+  spawnCount: 4
+  dropItemID: Item_002
+  dropItemValue: 0
+  prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_TrapPlant.prefab

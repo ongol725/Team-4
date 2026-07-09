@@ -6,14 +6,18 @@ using UnityEngine;
 
 namespace BagSurvivor.UI
 {
-    public enum SynergyGrade { Bronze, Silver, Gold }
+    public enum SynergyGrade { Bronze, Silver, Gold, Prism }
 
     [System.Serializable]
     public class SynergyInfo
     {
-        public string synergyName;     // 121001/122001
+        public SynergyType  type;          // 전투 데이터 전달용 enum 값
+        public string synergyName;         // 121001/122001
         public int count;
+        public int nextThreshold;          // 다음 단계까지 필요한 수 (Gold 최대치 포함)
         public SynergyGrade grade;
+        public bool isActive = true;       // false = 조건 미달(아이템은 보유) — 회색 패널로 표시
+        [TextArea] public string condition;    // 발동 조건 (구성 아이템 목록)
         [TextArea] public string description; // 122002
         [TextArea] public string effect;      // 122003
         public Sprite icon;

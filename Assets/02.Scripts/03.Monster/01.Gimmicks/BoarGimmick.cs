@@ -31,15 +31,28 @@ namespace BagSurvivor.Monster
         [Tooltip("돌진 후 휴식 시간 (초)")]
         public float restDuration = 3f;
 
+        [Header("돌진 경고선(에셋, 선택)")]
+        [Tooltip("DashWarn 같은 경고선 프리팹. 없으면 기존 빨간 LineRenderer로 폴백(에셋 미보유 팀원 대응)")]
+        public GameObject chargeWarnPrefab;
+
         // ==========================================
         // 내부 변수
         // ==========================================
+        // 돌진 정지 판정 시 진행 방향 앞쪽을 살피는 거리(월드 유닛) — 멧돼지 앞코가 벽에 닿는 느낌
+        private const float WallStopLookAhead = 0.7f;
+
         private MonsterController controller;
         private bool isCharging = false;
         private bool isInChargeSequence = false;
 
+        // 보스 소환 팬텀 멧돼지: 자체 돌진 AI를 끄고 PhantomWolfDash가 제어(체력 없는 1회성 돌진).
+        // 풀 재사용 시 OnDisable에서 false로 리셋된다.
+        [System.NonSerialized] public bool phantomMode = false;
+
         // 돌진 시각 효과용 (빨간 집중선)
         private LineRenderer chargeLine;
+        // 돌진 경고선 프리팹 인스턴스(1회 생성 후 재사용 — 풀링 대용)
+        private GameObject warnInstance;
 
         private void Awake()
         {
@@ -48,6 +61,7 @@ namespace BagSurvivor.Monster
 
         private void Update()
         {
+            if (phantomMode) return; // 팬텀(보스 소환) 모드: 자체 돌진 AI 비활성 — PhantomWolfDash가 제어
             if (controller == null || controller.IsDead) return;
             if (controller.PlayerTransform == null) return;
 
@@ -72,12 +86,20 @@ namespace BagSurvivor.Monster
         {
             isInChargeSequence = true;
 
-            // 1. 정지
-            controller.PauseMovement();
+            // 1. 이동 제어를 위임받아 정지 (PauseMovement는 매 스텝 속도를 0으로 덮어써 돌진을
+            //    막으므로, 보스 돌진과 동일하게 BeginExternalMovement로 직접 제어한다)
+            controller.BeginExternalMovement();
+            controller.SetVelocity(Vector2.zero);
 
             // 2. 돌진 방향 결정 (준비 시작 시점의 플레이어 위치)
             Vector2 chargeDirection = controller.GetDirectionToPlayer();
             Vector2 startPosition = transform.position;
+
+            // 돌진이 방을 벗어나지 못하도록 이 방의 경계를 미리 확보(벽·복도 입구에서 정지용).
+            // 방을 못 찾으면(haveRoom=false) 기존처럼 최대 거리까지 돌진.
+            Rect roomRect = default;
+            bool haveRoom = RoomMonsterSpawner.Instance != null &&
+                            RoomMonsterSpawner.Instance.TryGetRoomWorldRect(startPosition, out roomRect);
 
             // 빨간 집중선 표시
             ShowChargeLine(chargeDirection);
@@ -94,11 +116,20 @@ namespace BagSurvivor.Monster
 
             float chargeSpeed = controller.monsterData.moveSpeed * chargeSpeedMultiplier;
             float distanceTraveled = 0f;
-            bool hitPlayer = false;
 
-            while (distanceTraveled < chargeMaxDistance && !hitPlayer)
+            // isCharging이 false가 되면(플레이어 충돌) 즉시 중단
+            while (distanceTraveled < chargeMaxDistance && isCharging)
             {
-                if (controller.IsDead) yield break;
+                if (controller.IsDead) break;
+
+                // 진행 방향 앞쪽을 살펴 벽 타일이 있거나(정확) 방을 벗어나면(복도 입구) 정지
+                var spawner = RoomMonsterSpawner.Instance;
+                if (spawner != null)
+                {
+                    Vector2 probe = (Vector2)transform.position + chargeDirection * WallStopLookAhead;
+                    if (spawner.IsWallAt(probe)) break;                    // 벽에 막힘(주목적)
+                    if (haveRoom && !roomRect.Contains(probe)) break;      // 복도로 나가려 하면 방 끝에서 막힘
+                }
 
                 controller.SetVelocity(chargeDirection * chargeSpeed);
                 distanceTraveled = Vector2.Distance(startPosition, transform.position);
@@ -111,11 +142,18 @@ namespace BagSurvivor.Monster
             controller.SetKnockbackImmune(false);
             controller.SetVelocity(Vector2.zero);
 
-            // 6. 휴식 (3초)
+            // 6. 휴식 (3초, 제자리 정지 유지)
             yield return new WaitForSeconds(restDuration);
 
-            // 7. 이동 재개
-            controller.ResumeMovement();
+            // 휴식 중 사망했으면 이동 제어 반환 없이 종료
+            if (controller == null || controller.IsDead)
+            {
+                isInChargeSequence = false;
+                yield break;
+            }
+
+            // 7. 이동 제어 반환 → 추적 재개
+            controller.EndExternalMovement();
             isInChargeSequence = false;
         }
 
@@ -140,6 +178,24 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void ShowChargeLine(Vector2 direction)
         {
+            // 경고선 프리팹이 있으면 그걸 사용(돌진 방향 회전 + 길이만큼 타일)
+            if (chargeWarnPrefab != null)
+            {
+                if (warnInstance == null)
+                    warnInstance = Instantiate(chargeWarnPrefab, transform);
+                warnInstance.transform.position = transform.position;
+                float ang = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                warnInstance.transform.rotation = Quaternion.Euler(0f, 0f, ang);
+                var wsr = warnInstance.GetComponentInChildren<SpriteRenderer>();
+                if (wsr != null && wsr.drawMode != SpriteDrawMode.Simple)
+                {
+                    wsr.size = new Vector2(chargeMaxDistance, wsr.size.y);
+                    wsr.transform.localPosition = new Vector3(chargeMaxDistance * 0.5f, 0f, 0f);
+                }
+                warnInstance.SetActive(true);
+                return;
+            }
+
             if (chargeLine == null)
             {
                 GameObject lineObj = new GameObject("ChargeLine");
@@ -164,10 +220,8 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void HideChargeLine()
         {
-            if (chargeLine != null)
-            {
-                chargeLine.enabled = false;
-            }
+            if (warnInstance != null) warnInstance.SetActive(false);
+            if (chargeLine != null) chargeLine.enabled = false;
         }
 
         private void OnDisable()
@@ -175,6 +229,7 @@ namespace BagSurvivor.Monster
             // 오브젝트 풀 반환 시 초기화
             isCharging = false;
             isInChargeSequence = false;
+            phantomMode = false;   // 재사용 시 일반 멧돼지 AI 복구
             HideChargeLine();
             StopAllCoroutines();
         }

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 002_Longsword
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_002
+  itemName: "\uC7A5\uAC80"
+  itemDescription: "90\uB3C4 \uBD80\uCC44\uAF34 \uACF5\uACA9"
+  itemImage: {fileID: -3360699213129254669, guid: 9c24649930f0a7d44afe96d4e6127cf6, type: 3}
+  rarity: 1
+  grade: 1
+  cost: 2
+  synergies: 030000000200000004000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackStyleType: 2
+  attackStyle: "90\uB3C4 \uBD80\uCC44\uAF34 \uACF5\uACA9"
+  lv5AttackStyle: "135\uB3C4 \uBD80\uCC44\uAF34 \uACF5\uACA9"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  range: 1
+  maxTargets: 0
+  attackFrames:
+  - {fileID: -3360699213129254669, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: -452594913912277528, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: 1024546654312431638, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: -3822324611467793771, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: -2651409171213789685, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: -4643018301327575683, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: 1540281680224924603, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: 9098904071171887218, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: -4375682244328861793, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: 4628515158219481680, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: 4882555462087629392, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  - {fileID: 7804233092201623736, guid: 089c864cccdd9c842959cdb7d14e4138, type: 3}
+  attackFps: 12
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 25
+    attackSpeed: 1
+  - attackPower: 32
+    attackSpeed: 0.91
+  - attackPower: 40
+    attackSpeed: 0.84
+  - attackPower: 50
+    attackSpeed: 0.8
+  - attackPower: 60
+    attackSpeed: 0.75

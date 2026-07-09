@@ -1,0 +1,387 @@
+fileFormatVersion: 2
+guid: 96ea068cb7a5a2c40915e5c691bb7dd7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8648652656248321043
+    second: SwordWave.prefab_0
+  - first:
+      213: -6396920090767046450
+    second: SwordWave.prefab_1
+  - first:
+      213: -1140119825554999357
+    second: SwordWave.prefab_2
+  - first:
+      213: -3775535705050807342
+    second: SwordWave.prefab_3
+  - first:
+      213: 8929010601875691418
+    second: SwordWave.prefab_4
+  - first:
+      213: -5415449223971354714
+    second: SwordWave.prefab_5
+  - first:
+      213: -5404966592449014432
+    second: SwordWave.prefab_6
+  - first:
+      213: 4429619745803587987
+    second: SwordWave.prefab_7
+  - first:
+      213: -4518314169681718716
+    second: SwordWave.prefab_8
+  - first:
+      213: 6353097320420299145
+    second: SwordWave.prefab_9
+  - first:
+      213: 5205797594410604231
+    second: SwordWave.prefab_10
+  - first:
+      213: 1850009166319848077
+    second: SwordWave.prefab_11
+  - first:
+      213: 1616396795186941992
+    second: SwordWave.prefab_12
+  - first:
+      213: 8868141487039550297
+    second: SwordWave.prefab_13
+  - first:
+      213: 5528597359183025346
+    second: SwordWave.prefab_14
+  - first:
+      213: 2630557302548655914
+    second: SwordWave.prefab_15
+  - first:
+      213: -1045935456595090405
+    second: SwordWave.prefab_16
+  - first:
+      213: -2965455852859209428
+    second: SwordWave.prefab_17
+  - first:
+      213: 50924733264574085
+    second: SwordWave.prefab_18
+  - first:
+      213: -8605106446409138031
+    second: SwordWave.prefab_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 267
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SwordWave_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b28263f6726dd34ea999751ebdd86bf
+      internalID: 109942617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SwordWave_1
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 214199fe429a14748a4011909e082ca1
+      internalID: -1301186219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SwordWave_2
+      rect:
+        serializedVersion: 2
+        x: 1546
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88213e2be7192d14790d41f5e071ae51
+      internalID: -562498353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SwordWave_3
+      rect:
+        serializedVersion: 2
+        x: 2319
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff77858fcd1e90a479b3452b29b8f8e1
+      internalID: 502116684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SwordWave_4
+      rect:
+        serializedVersion: 2
+        x: 3092
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd1e44248a203f741b1d7226a51d36ec
+      internalID: -381104040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SwordWave_5
+      rect:
+        serializedVersion: 2
+        x: 3865
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e51ef3d525858a74ba68e14ed33f4467
+      internalID: -1707099930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SwordWave_6
+      rect:
+        serializedVersion: 2
+        x: 4638
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d1dd6b4edd757140b518137596201fc
+      internalID: 1109029539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SwordWave_7
+      rect:
+        serializedVersion: 2
+        x: 5411
+        y: 0
+        width: 773
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c90e01370d11b974ebb419239b57ce85
+      internalID: -1932667270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 27a918bd10bbb9244be5414396253d23
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      SwordWave_0: 109942617
+      SwordWave_1: -1301186219
+      SwordWave_2: -562498353
+      SwordWave_3: 502116684
+      SwordWave_4: -381104040
+      SwordWave_5: -1707099930
+      SwordWave_6: 1109029539
+      SwordWave_7: -1932667270
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

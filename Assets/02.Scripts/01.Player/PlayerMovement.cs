@@ -14,9 +14,44 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     private bool isStunned = false;
 
-    void Start()
+    /// <summary>현재 이동 입력(-1~1). 방향 애니메이션 등에서 참조.</summary>
+    public Vector2 MoveInput => moveInput;
+    private bool _inventoryOpen = false;
+    private Vector2 _prevPosition;
+
+    /// <summary>이동 거리(m)를 인자로 발행. SynergyManager 대부호 트리거 구독용.</summary>
+    public event System.Action<float> onDistanceMoved;
+
+    /// <summary>이동속도 배율. 과부하 패널티 등에서 일시 변경.</summary>
+    public float speedMultiplier = 1f;
+
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
+        if (rb != null)
+        {
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+            _prevPosition = rb.position;
+        }
+    }
+
+    void Start()
+    {
+        if (moveAction != null) moveAction.action.Enable();
+
+        InventoryPopupToggle.onPopupToggled += OnInventoryToggled;
+    }
+
+    void OnDestroy()
+    {
+        InventoryPopupToggle.onPopupToggled -= OnInventoryToggled;
+    }
+
+    private void OnInventoryToggled(bool isOpen)
+    {
+        _inventoryOpen = isOpen;
+        if (isOpen) rb.linearVelocity = Vector2.zero;
     }
 
     void Update()
@@ -30,14 +65,25 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        //스턴시 이속 0으로
-        if (isStunned)
+        if (isStunned || _inventoryOpen)
         {
             rb.linearVelocity = Vector2.zero;
+            _prevPosition = rb.position;
             return;
         }
 
-        rb.linearVelocity = moveInput * moveSpeed;
+        rb.linearVelocity = moveInput * moveSpeed * speedMultiplier;
+
+        float dist = ((Vector2)rb.position - _prevPosition).magnitude;
+        // 한 물리 스텝의 정상 보행 한계(여유 4배). 이를 넘는 변위는 층 전환 등 순간이동으로 간주하여
+        // 이동 거리 이벤트에서 제외한다(대부호 코인이 한꺼번에 쏟아지는 버그 방지).
+        float maxWalkStep = moveSpeed * speedMultiplier * Time.fixedDeltaTime * 4f;
+        if (dist > 0f && dist <= maxWalkStep)
+        {
+            onDistanceMoved?.Invoke(dist);
+            RunStatsLogger.Instance?.AddDistance(dist);   // 런 통계 이동거리 누적
+        }
+        _prevPosition = rb.position;
     }
 
         // 스턴시 얼마동안 이동불가 / 시간이 끝나면 다시

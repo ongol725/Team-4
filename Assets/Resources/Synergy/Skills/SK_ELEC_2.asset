@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549b1bf1d052bc4a87a523819693e44, type: 3}
+  m_Name: SK_ELEC_2
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SkillData
+  skillID: SK_ELEC_2
+  skillName: "\uB9C8\uBC95 \uB099\uB8B0 3\uAC1C"
+  triggerType: 0
+  skillType: 1
+  targetType: 1
+  scalingStat: 2
+  dmgMultiplier: 0.8
+  hitCount: 1
+  hitInterval: 0.1
+  extraCount: 3
+  damageDelay: 0
+  rangeRadius: 6
+  duration: 0
+  cooldown: 3
+  fixedEffect: 7
+  fixedEffectValue: 50
+  statusEffect: 0
+  effectValue: 0
+  vfxPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 15
+  pierceCount: 1
+  animFrames:
+  - {fileID: 114886176, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -763380930, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1264151998, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -2089584348, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -3579798, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1755044947, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: 603464056, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: 1359859732, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1776054465, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  - {fileID: -1292816762, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
+  animFps: 24
+  vfxLingerTime: 0.2
+  visualSize: 2.4
+  visualStretchY: 1.5
+  vfxFollowPlayer: 0
+  vfxSortingOrder: 30
+  vfxAnchorBottom: 1
+  nodeFrames: []
+  dropFrames: []
+  dropFps: 8

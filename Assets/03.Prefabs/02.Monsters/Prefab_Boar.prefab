@@ -172,6 +172,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterController
   monsterData: {fileID: 11400000, guid: a924078a66787bb488759fcdbec97717, type: 2}
   hpBarPrefab: {fileID: 147989866033617955, guid: 659aadf95c48f5b40a940b05bd4e140b, type: 3}
+  shadowWidthMul: 1
+  shadowFixedLocalY: 0
+  shadowLocalY: 0
+  sortingOrder: 10
+  stopDistance: 0
+  approachOverlap: 0.4
+  deathDelay: 0.1
+  damageReductionVfxPrefab: {fileID: 0}
 --- !u!114 &5409243780121177183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,3 +197,4 @@ MonoBehaviour:
   chargeMaxDistance: 10
   chargeSpeedMultiplier: 3
   restDuration: 3
+  chargeWarnPrefab: {fileID: 3479124979689236717, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}

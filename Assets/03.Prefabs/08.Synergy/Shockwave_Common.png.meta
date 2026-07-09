@@ -1,0 +1,556 @@
+fileFormatVersion: 2
+guid: d05e11ea1caeccf4ead6f441bf8873d4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -554125210310083391
+    second: Shockwave_Common.prefab_0
+  - first:
+      213: 8010534911690718414
+    second: Shockwave_Common.prefab_1
+  - first:
+      213: -7665309821659965822
+    second: Shockwave_Common.prefab_2
+  - first:
+      213: -4398785660453423327
+    second: Shockwave_Common.prefab_3
+  - first:
+      213: -5353216174772445155
+    second: Shockwave_Common.prefab_4
+  - first:
+      213: -1219179695940014719
+    second: Shockwave_Common.prefab_5
+  - first:
+      213: 6133939947003129352
+    second: Shockwave_Common.prefab_6
+  - first:
+      213: -7003278361801739674
+    second: Shockwave_Common.prefab_7
+  - first:
+      213: -7839868015602172723
+    second: Shockwave_Common.prefab_8
+  - first:
+      213: -7563700338825739097
+    second: Shockwave_Common.prefab_9
+  - first:
+      213: -913195227716871412
+    second: Shockwave_Common.prefab_10
+  - first:
+      213: 4770757976808068661
+    second: Shockwave_Common.prefab_11
+  - first:
+      213: 8928153464017660681
+    second: Shockwave_Common.prefab_12
+  - first:
+      213: -7957365137282632203
+    second: Shockwave_Common.prefab_13
+  - first:
+      213: 6925824740605897286
+    second: Shockwave_Common.prefab_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 398
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Shockwave_Common_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5529
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91935799c12d11143a2de973eb1156e4
+      internalID: 383101348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_1
+      rect:
+        serializedVersion: 2
+        x: 1843
+        y: 5529
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc12583f187bef744bbe56ba31afc1da
+      internalID: -743830844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_2
+      rect:
+        serializedVersion: 2
+        x: 3686
+        y: 5529
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaac6daf63e063348ba1738bea32a29d
+      internalID: -574327139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_3
+      rect:
+        serializedVersion: 2
+        x: 5529
+        y: 5529
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27d8a3df569344740b950f5088cc1d3c
+      internalID: 1249580211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3686
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5f3a85648c01774e87c50395dedb456
+      internalID: -573093438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_5
+      rect:
+        serializedVersion: 2
+        x: 1843
+        y: 3686
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82c313c6591e21d41974c6e1223eb02b
+      internalID: -99057292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_6
+      rect:
+        serializedVersion: 2
+        x: 3686
+        y: 3686
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eed94e4fe57502448888a2990f022dc9
+      internalID: 178006262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_7
+      rect:
+        serializedVersion: 2
+        x: 5529
+        y: 3686
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31fa2b654a9363f46a2fafea96b7e636
+      internalID: 1561111809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1843
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61ee73bf4c6f36c4eaea609d5a9daac5
+      internalID: -1433602590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_9
+      rect:
+        serializedVersion: 2
+        x: 1843
+        y: 1843
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a85857d16051a5043a0a91b716faa200
+      internalID: 1342834228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_10
+      rect:
+        serializedVersion: 2
+        x: 3686
+        y: 1843
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efb524df3a53a9e4b966acf1e46ab836
+      internalID: 763951079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_11
+      rect:
+        serializedVersion: 2
+        x: 5529
+        y: 1843
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f481e784aa19f504b8d45659a0cb75b2
+      internalID: -961672228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbaf5fc85bbe0b4438057573767f4214
+      internalID: -930948599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_13
+      rect:
+        serializedVersion: 2
+        x: 1843
+        y: 0
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edc570d33b61ce045b7a240c099dd404
+      internalID: -794514964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_14
+      rect:
+        serializedVersion: 2
+        x: 3686
+        y: 0
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ed097feaa969cc45a59b9e3531bde55
+      internalID: 2076208189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shockwave_Common_15
+      rect:
+        serializedVersion: 2
+        x: 5529
+        y: 0
+        width: 1843
+        height: 1843
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2dbf2994b3246f44aab1de925219b727
+      internalID: -1192444763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 1e667feac05581e4fb24eb9efa6bc1d7
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Shockwave_Common_0: 383101348
+      Shockwave_Common_1: -743830844
+      Shockwave_Common_10: 763951079
+      Shockwave_Common_11: -961672228
+      Shockwave_Common_12: -930948599
+      Shockwave_Common_13: -794514964
+      Shockwave_Common_14: 2076208189
+      Shockwave_Common_15: -1192444763
+      Shockwave_Common_2: -574327139
+      Shockwave_Common_3: 1249580211
+      Shockwave_Common_4: -573093438
+      Shockwave_Common_5: -99057292
+      Shockwave_Common_6: 178006262
+      Shockwave_Common_7: 1561111809
+      Shockwave_Common_8: -1433602590
+      Shockwave_Common_9: 1342834228
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

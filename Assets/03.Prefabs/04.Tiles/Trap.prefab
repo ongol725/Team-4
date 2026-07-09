@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 475365390744515645}
   - component: {fileID: 8397584122991347861}
   - component: {fileID: -8819917772192764368}
+  - component: {fileID: 5216967081863569505}
   m_Layer: 0
   m_Name: Trap
   m_TagString: Untagged
@@ -48,7 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 306873f2f16d2a24db141b258548de37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrapController
-  isOneTimeUse: 1
 --- !u!114 &2588702782579408768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,8 +111,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 14c3ddda7af08084b98bb9564ce5f4d5, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: -621170967, guid: 4c103bf3f72ad9c43b9afbd6e4867231, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -182,3 +182,18 @@ MonoBehaviour:
   blindDuration: 2
   fadeTime: 0.5
   blindIntensity: 0.8
+--- !u!114 &5216967081863569505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716971916740650628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b328f5a72b456428843c2f374d3045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Trap_MonsterSpawn
+  monsterPrefab: {fileID: 3035114335971447583, guid: 407540e90f1693349a5219fa72781b23, type: 3}
+  spawnCount: 1
+  spawnRadius: 0.3

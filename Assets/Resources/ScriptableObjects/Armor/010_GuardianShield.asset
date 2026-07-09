@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 3}
+  m_Name: 010_GuardianShield
+  m_EditorClassIdentifier: Assembly-CSharp::SO_ArmorData
+  itemID: ARM_010
+  itemName: "수호석 방패"
+  itemDescription:
+  itemImage: {fileID: -672445290821627355, guid: 20888fe9fd08ce34287c59de89eaf33a, type: 3}
+  rarity: 2
+  grade: 1
+  cost: 6
+  synergies: 0d0000000300000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  gradeStats:
+  - hpBonus: 280
+    hpRegen: 10
+  - hpBonus: 420
+    hpRegen: 18
+  - hpBonus: 630
+    hpRegen: 30
+  - hpBonus: 420
+    hpRegen: 46
+  - hpBonus: 630
+    hpRegen: 70

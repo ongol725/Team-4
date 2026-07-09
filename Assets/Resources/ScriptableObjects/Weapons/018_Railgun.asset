@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 018_Railgun
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_018
+  itemName: "\uB808\uC77C\uAC74"
+  itemDescription: "5\uBC1C \uBC1C\uC0AC"
+  itemImage: {fileID: 5959002752949396074, guid: 7c9cb0e941a044246a73f4d3e24e5fc4, type: 3}
+  rarity: 3
+  grade: 1
+  cost: 4
+  synergies: 080000000b00000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  - {x: 1, y: 2}
+  attackStyleType: 5
+  attackStyle: "5\uBC1C \uBC1C\uC0AC"
+  lv5AttackStyle: "8\uBC1C \uBC1C\uC0AC"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  projectileScale: 1
+  range: 5
+  maxTargets: 0
+  attackFrames:
+  - {fileID: 5959002752949396074, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  - {fileID: 4061131543236871000, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  - {fileID: -6748991355232911663, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  - {fileID: 4629754307602522129, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  - {fileID: -360011438628847714, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  - {fileID: 922347963696509953, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  - {fileID: -7277433483222995781, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  - {fileID: 4705384168554214117, guid: c6e694d957681e24e9d8e0993527c513, type: 3}
+  attackFps: 12
+  auxProjectileFrames: []
+  explosionFrames: []
+  explosionFps: 30
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 70
+    attackSpeed: 2
+  - attackPower: 91
+    attackSpeed: 1.85
+  - attackPower: 115
+    attackSpeed: 1.7
+  - attackPower: 140
+    attackSpeed: 1.6
+  - attackPower: 168
+    attackSpeed: 1.5

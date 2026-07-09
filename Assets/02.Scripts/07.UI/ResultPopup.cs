@@ -7,6 +7,7 @@
 // ============================================================
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace BagSurvivor.UI
 {
@@ -38,11 +39,28 @@ namespace BagSurvivor.UI
         public Color clearColor = new Color(0.16f, 0.38f, 0.62f, 0.98f);
         public Color failColor = new Color(0.45f, 0.14f, 0.14f, 0.98f);
 
+        [Header("클리어/실패 제목 텍스트 색")]
+        public Color clearTextColor = new Color(0.35f, 0.65f, 1f, 1f);
+        public Color failTextColor  = new Color(1f, 0.35f, 0.35f, 1f);
+
+        [Header("씬 이름 (Build Settings 등록 필요)")]
+        [Tooltip("다시하기 시 로드할 인게임 시작 씬 (층마다 다른 씬이라 항상 첫 인게임 씬으로 재시작)")]
+        public string ingameSceneName = "02.Ingame";
+        [Tooltip("로비 이동 시 로드할 씬")]
+        public string lobbySceneName = "01.Lobby";
+
         private void Awake()
         {
             if (panel != null) panel.SetActive(false);
             if (lobbyButton != null) lobbyButton.onClick.AddListener(OnLobby);
             if (retryButton != null) retryButton.onClick.AddListener(OnRetry);
+        }
+
+        private void OnDestroy()
+        {
+            // 씬 전환 등 외부 경로로 오브젝트가 파괴될 때 timeScale 복구
+            if (panel != null && panel.activeSelf)
+                Time.timeScale = 1f;
         }
 
         /// <summary>결과 화면 표시. isClear=true 클리어, false 실패.</summary>
@@ -51,7 +69,11 @@ namespace BagSurvivor.UI
             if (panel != null) panel.SetActive(true);
             Time.timeScale = 0f;
 
-            if (titleText != null) titleText.text = isClear ? "클리어!" : "실패...";
+            if (titleText != null)
+            {
+                titleText.text  = isClear ? "클리어!" : "실패...";
+                titleText.color = isClear ? clearTextColor : failTextColor;
+            }
             if (frameImage != null) frameImage.color = isClear ? clearColor : failColor;
 
             if (s != null)
@@ -79,16 +101,27 @@ namespace BagSurvivor.UI
 
         private void OnLobby()
         {
-            // TODO: 로딩 후 메인(로비) 씬 로드
             Time.timeScale = 1f;
-            Debug.Log("[ResultPopup] 로비 이동 (씬 로드 미구현)");
+            GameManager.Instance?.ClearLoadout();
+            SceneManager.LoadScene(lobbySceneName);
         }
 
         private void OnRetry()
         {
-            // TODO: 현재 스테이지 재시작
+            // 층마다 씬이 다르므로, 다시하기는 항상 첫 인게임 씬(02.Ingame)부터 = 1층 새 런으로 재시작
             Time.timeScale = 1f;
-            Debug.Log("[ResultPopup] 다시하기 (재시작 미구현)");
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ClearLoadout(); // 이전 런의 시너지·무기 루프 즉시 적용 방지
+                GameManager.Instance.currentFloor = 1;
+                GameManager.Instance.ResetGold();
+            }
+
+            // 시간 비례 난이도 타이머 초기화 (DontDestroyOnLoad로 유지되므로 명시적 리셋)
+            if (BagSurvivor.Monster.DifficultyScaler.Instance != null)
+                BagSurvivor.Monster.DifficultyScaler.Instance.ResetTimer();
+
+            SceneManager.LoadScene(ingameSceneName);
         }
     }
 }

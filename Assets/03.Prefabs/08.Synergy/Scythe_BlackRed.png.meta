@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 98da75eed8a704f439c61185104545a6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8754867915087685011
+    second: Scythe_BlackRed.prefab_0
+  - first:
+      213: 8679542853494697340
+    second: Scythe_BlackRed.prefab_1
+  - first:
+      213: 6366917469315340877
+    second: Scythe_BlackRed.prefab_2
+  - first:
+      213: 242848130262823738
+    second: Scythe_BlackRed.prefab_3
+  - first:
+      213: 6881369859824921196
+    second: Scythe_BlackRed.prefab_4
+  - first:
+      213: 1255622092432382496
+    second: Scythe_BlackRed.prefab_5
+  - first:
+      213: -5454437971888522140
+    second: Scythe_BlackRed.prefab_6
+  - first:
+      213: 419736884663942202
+    second: Scythe_BlackRed.prefab_7
+  - first:
+      213: -3178720267876325065
+    second: Scythe_BlackRed.prefab_8
+  - first:
+      213: 6685651074201436903
+    second: Scythe_BlackRed.prefab_9
+  - first:
+      213: 4959334719234670812
+    second: Scythe_BlackRed.prefab_10
+  - first:
+      213: -5672818014027213603
+    second: Scythe_BlackRed.prefab_11
+  - first:
+      213: -3881794552604655563
+    second: Scythe_BlackRed.prefab_12
+  - first:
+      213: -4231670396659074079
+    second: Scythe_BlackRed.prefab_13
+  - first:
+      213: -7897053593728127965
+    second: Scythe_BlackRed.prefab_14
+  - first:
+      213: -4009304207767384383
+    second: Scythe_BlackRed.prefab_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 830
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Scythe_BlackRed_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5505
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adbc4823285d5a744a124b8df179cb7d
+      internalID: -794989471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_1
+      rect:
+        serializedVersion: 2
+        x: 1835
+        y: 5505
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f0583be0fb35ad419d7d66b85ee8986
+      internalID: 636883807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_2
+      rect:
+        serializedVersion: 2
+        x: 3670
+        y: 5505
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5a38df3788b4a94d9d29639603981dc
+      internalID: 1242754944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_3
+      rect:
+        serializedVersion: 2
+        x: 5505
+        y: 5505
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ccd4ca202af74e4fad49987ce533857
+      internalID: 626094241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3670
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c91dba2ba88fc8428edd5327f4a39f5
+      internalID: 308340129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_5
+      rect:
+        serializedVersion: 2
+        x: 1835
+        y: 3670
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28c0ba0a855e2764f94cf035aaea7ddf
+      internalID: -1445305603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_6
+      rect:
+        serializedVersion: 2
+        x: 3670
+        y: 3670
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e12a3d403ddbce546ac5cc74dd6d5b54
+      internalID: -265865825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_7
+      rect:
+        serializedVersion: 2
+        x: 5505
+        y: 3670
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2736131500f3cfa42b5d318c4db21e0b
+      internalID: -448592041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1835
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4587556bf4c185e4189e2c057902b9e6
+      internalID: 1179239074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_9
+      rect:
+        serializedVersion: 2
+        x: 1835
+        y: 1835
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb956bdaee162fa4e81e2633304595c6
+      internalID: -905337685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_10
+      rect:
+        serializedVersion: 2
+        x: 3670
+        y: 1835
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73f983d696e42664cba8d10c24b73392
+      internalID: -411919716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_11
+      rect:
+        serializedVersion: 2
+        x: 5505
+        y: 1835
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5272eff82765b5d47bb0a73d958a6e79
+      internalID: -266313130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d3cbda7ecb64244ca91d89160df7d30
+      internalID: 93602816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_13
+      rect:
+        serializedVersion: 2
+        x: 1835
+        y: 0
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab4fef947bb7ee5498bc43bd03b1b675
+      internalID: -693005756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_14
+      rect:
+        serializedVersion: 2
+        x: 3670
+        y: 0
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94a8fabb131e81e48830db7a4ed673a6
+      internalID: -379721359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scythe_BlackRed_15
+      rect:
+        serializedVersion: 2
+        x: 5505
+        y: 0
+        width: 1835
+        height: 1835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4906ad7f30c9e0e4fa165bea13cfa590
+      internalID: -1213615547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 1feb52c6005f19242ac6360ed349c500
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Scythe_BlackRed_0: -794989471
+      Scythe_BlackRed_1: 636883807
+      Scythe_BlackRed_10: -411919716
+      Scythe_BlackRed_11: -266313130
+      Scythe_BlackRed_12: 93602816
+      Scythe_BlackRed_13: -693005756
+      Scythe_BlackRed_14: -379721359
+      Scythe_BlackRed_15: -1213615547
+      Scythe_BlackRed_2: 1242754944
+      Scythe_BlackRed_3: 626094241
+      Scythe_BlackRed_4: 308340129
+      Scythe_BlackRed_5: -1445305603
+      Scythe_BlackRed_6: -265865825
+      Scythe_BlackRed_7: -448592041
+      Scythe_BlackRed_8: 1179239074
+      Scythe_BlackRed_9: -905337685
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

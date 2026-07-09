@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 023_Mace
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_023
+  itemName: "\uBA54\uC774\uC2A4"
+  itemDescription: "\uBD80\uCC44\uAF34 \uB0B4\uB9AC\uCE58\uAE30"
+  itemImage: {fileID: -6048527297939073128, guid: 3b25a34ddb3968a499cd559fe730949a, type: 3}
+  rarity: 0
+  grade: 1
+  cost: 1
+  synergies: 030000000800000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  attackStyleType: 2
+  attackStyle: "\uBD80\uCC44\uAF34 \uB0B4\uB9AC\uCE58\uAE30"
+  lv5AttackStyle: "\uAE30\uC808 1\uCD08"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  range: 2
+  maxTargets: 0
+  attackFrames:
+  - {fileID: -6048527297939073128, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: -4702139360669961854, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: 3064455897811920166, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: -4374122614238834473, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: -6232807180168939506, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: -5505865068731912802, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: 3785769061877428910, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: 9191767136266892883, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: 2778718580371384412, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: -2727600917866285329, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  - {fileID: -8842802338491783973, guid: bc04b039f22bd044c943e8354f91e876, type: 3}
+  attackFps: 12
+  meleeMotion: 2
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 38
+    attackSpeed: 1.2
+  - attackPower: 49
+    attackSpeed: 1.1
+  - attackPower: 63
+    attackSpeed: 1
+  - attackPower: 76
+    attackSpeed: 0.9
+  - attackPower: 91
+    attackSpeed: 0.85

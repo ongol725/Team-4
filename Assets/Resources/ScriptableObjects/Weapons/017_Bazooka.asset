@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 017_Bazooka
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_017
+  itemName: "\uBC14\uC8FC\uCE74"
+  itemDescription: "\uBC94\uC704 \uD3ED\uBC1C"
+  itemImage: {fileID: 1323871535956428201, guid: 5d1477f8b6ee6c84797cc2eef519ecdd, type: 3}
+  rarity: 3
+  grade: 1
+  cost: 4
+  synergies: 040000000600000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackStyleType: 7
+  attackStyle: "\uBC94\uC704 \uD3ED\uBC1C"
+  lv5AttackStyle: "\uD3ED\uBC1C \uBC94\uC704 \uC99D\uAC00"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 5
+  range: 50
+  maxTargets: 0
+  attackFrames:
+  - {fileID: 1323871535956428201, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  - {fileID: -1649029097856808614, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  - {fileID: 4318691376548172758, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  - {fileID: -1173345755804151600, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  - {fileID: 3058419956323443989, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  - {fileID: -588013249313468396, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  - {fileID: -591190847018776982, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  - {fileID: -1292164317645965962, guid: 01680d245ca213544adff3c069ed3cd6, type: 3}
+  attackFps: 12
+  explosionFrames:
+  - {fileID: 2219049677635825480, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 1894178580989301207, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -8707964464796294998, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 7985736110580609631, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -2072673332480664413, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 2326177539916978542, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -4161348438095505307, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -7472973457014527352, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 1552579391382215524, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 7183350055421558706, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -3080932148834595983, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 4862009785012172048, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 7671036487527049027, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -3911373629116754323, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -2361839266209463632, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -8235127846907762609, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -4425588520975590619, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -8727670823114945890, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 8264312500728442411, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 3504902202986429257, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -6847530927954010779, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 962146966219672632, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -1074041482554236279, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -4935955402930809657, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -8638607250556703283, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 44762153181468381, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -2715182309330961732, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 812596687693823632, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 4908886023684653249, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 9087992705540188929, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -2644054200270618835, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 5766225168885897499, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 5382627930817865581, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 814005672158587490, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -449066736484282356, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -2744277361823040722, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -1538677001323624946, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -9180429399746694678, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -3392742006155071673, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 6612816852137947227, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 4993243753976009314, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 2047373973683185604, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -18095413788825351, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 722159264400725273, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -329759862882242365, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -2597954093334404475, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: -6565437009381361579, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  - {fileID: 3809197602829680385, guid: a19f73856c8cbcb4fa75472b99f55652, type: 3}
+  explosionFps: 70
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 80
+    attackSpeed: 0.7
+  - attackPower: 104
+    attackSpeed: 0.7
+  - attackPower: 132
+    attackSpeed: 0.7
+  - attackPower: 160
+    attackSpeed: 0.7
+  - attackPower: 192
+    attackSpeed: 0.7

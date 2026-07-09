@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 027_Halberd
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_027
+  itemName: "\uD560\uBC84\uB4DC"
+  itemDescription: "\uBD80\uCC44\uAF34+\uCC0C\uB974\uAE30"
+  itemImage: {fileID: -4118626695368416123, guid: f986595eefdfe8e4294851b094431af5, type: 3}
+  rarity: 2
+  grade: 1
+  cost: 3
+  synergies: 070000000600000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackStyleType: 2
+  attackStyle: "\uBD80\uCC44\uAF34+\uCC0C\uB974\uAE30"
+  lv5AttackStyle: "\uAC80\uAE30 \uBC29\uCD9C"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 0
+  range: 7
+  maxTargets: 0
+  attackFrames:
+  - {fileID: -4118626695368416123, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 7246525197602246760, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 9126006670254555997, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -4547122804974036929, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -3164077087821106265, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -8831809237624612613, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -8057383706712646792, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -531066565132456180, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 2322575701197904371, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 7262011049666077151, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 9088712988053076728, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 2693695219864508308, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 8968309488815380087, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 970766158776490963, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 3160691316483695458, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -4317296395902707505, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 1289717252428208554, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 7889558931718447650, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: -6700393083800365136, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  - {fileID: 8852837105975090037, guid: ede1b334c86ef7e418dc9f3a1b1e45ca, type: 3}
+  attackFps: 12
+  auxProjectileFrames:
+  - {fileID: 109942617, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1301186219, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -562498353, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 502116684, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -381104040, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1707099930, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: 1109029539, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  - {fileID: -1932667270, guid: 96ea068cb7a5a2c40915e5c691bb7dd7, type: 3}
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 50
+    attackSpeed: 1.5
+  - attackPower: 65
+    attackSpeed: 1.4
+  - attackPower: 82
+    attackSpeed: 1.3
+  - attackPower: 100
+    attackSpeed: 1.2
+  - attackPower: 120
+    attackSpeed: 1.1

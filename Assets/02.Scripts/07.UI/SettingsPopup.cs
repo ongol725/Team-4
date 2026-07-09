@@ -39,13 +39,36 @@ namespace BagSurvivor.UI
         public string bgmParam = "BGMVol";
         public string sfxParam = "SFXVol";
 
-        private readonly FullScreenMode[] modes =
+        // 창모드(Windowed)는 씬 전환 시 화면이 튀는 문제로 제거. 전체화면 계열만 유지.
+        private static readonly FullScreenMode[] modes =
         {
             FullScreenMode.ExclusiveFullScreen, // 전체화면
-            FullScreenMode.Windowed,            // 창모드
             FullScreenMode.FullScreenWindow     // 테두리 없는 창 모드
         };
-        private readonly int[] modeCodes = { 143002, 143003, 143004 };
+
+        // 저장된 화면 모드를 게임 시작 시 '1회만' 적용하고, 이후 씬 로드 때는
+        // 실제 모드가 저장값과 '다를 때만' 재적용한다. (일부 씬(보스룸) 로드 시 Unity가
+        // Player Settings 기본 fullscreenMode로 되돌려 창모드→전체화면으로 튀는 것 보정.
+        // 정상 유지된 씬에선 재적용 안 하므로 불필요한 번쩍임이 없다.)
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void ApplySavedScreenModeOnce()
+        {
+            if (!PlayerPrefs.HasKey("screenModeIdx")) return; // 저장값 없으면 빌드 기본값 유지
+            ApplyScreenMode(PlayerPrefs.GetInt("screenModeIdx", 0));
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoadedReapply; // 중복 방지
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoadedReapply;
+        }
+
+        private static void OnSceneLoadedReapply(UnityEngine.SceneManagement.Scene s,
+                                                 UnityEngine.SceneManagement.LoadSceneMode m)
+        {
+            if (!PlayerPrefs.HasKey("screenModeIdx")) return;
+            int idx = PlayerPrefs.GetInt("screenModeIdx", 0);
+            FullScreenMode want = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
+            if (Screen.fullScreenMode != want) // 씬 로드로 모드가 리셋됐을 때만 되돌림
+                ApplyScreenMode(idx);
+        }
+        private readonly int[] modeCodes = { 143002, 143004 }; // 전체화면 / 테두리없는창 (창모드 제거)
         private int modeIndex;
 
         private void Awake()
@@ -55,7 +78,8 @@ namespace BagSurvivor.UI
             if (sfxLabel != null) sfxLabel.text = StringTable.Get(143021);
             SetOkLabel();
 
-            // 화면 모드
+            // 화면 모드 — 현재 상태를 UI에 표시만 한다(실제 적용은 시작 시 1회 + 사용자가 바꿀 때만).
+            // 씬 로드마다 재적용하면 화면이 번쩍이므로 여기선 SetResolution을 호출하지 않는다.
             modeIndex = PlayerPrefs.GetInt("screenModeIdx", CurrentModeIndex());
             UpdateScreenModeText();
             if (screenModeLeft != null) screenModeLeft.onClick.AddListener(delegate { CycleMode(-1); });
@@ -85,15 +109,24 @@ namespace BagSurvivor.UI
         {
             for (int i = 0; i < modes.Length; i++)
                 if (modes[i] == Screen.fullScreenMode) return i;
-            return 1; // 기본 창모드
+            return 0; // 기본 전체화면
         }
 
         private void CycleMode(int dir)
         {
             modeIndex = (modeIndex + dir + modes.Length) % modes.Length;
-            Screen.fullScreenMode = modes[modeIndex];
+            ApplyScreenMode(modeIndex);
             UpdateScreenModeText();
             Save();
+        }
+
+        /// <summary>화면 모드 실제 적용. 전체화면/테두리없음 모두 1920x1080 고정.
+        /// (노트북마다 네이티브 해상도가 달라 화면이 깨지던 문제 방지 — 백버퍼를 1920x1080으로 고정하고
+        ///  GPU가 모니터에 맞춰 스케일링)</summary>
+        private static void ApplyScreenMode(int idx)
+        {
+            FullScreenMode mode = modes[Mathf.Clamp(idx, 0, modes.Length - 1)];
+            Screen.SetResolution(1920, 1080, mode);
         }
 
         private void UpdateScreenModeText()
@@ -114,7 +147,9 @@ namespace BagSurvivor.UI
                 mixer.SetFloat(bgmParam, ToDb(bgmOn ? bgmV : 0f));
                 mixer.SetFloat(sfxParam, ToDb(sfxOn ? sfxV : 0f));
             }
-            // 믹서가 없으면 PlayerPrefs 저장만 (실제 오디오 시스템 연결 시 사용)
+            // BGM은 BgmManager가 PlayerPrefs를 읽어 재생 — 저장 후 즉시 반영
+            Save();
+            BgmManager.Instance?.ApplyVolume();
         }
 
         private float ToDb(float linear)

@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5cbe33e3a919e429ca178123b7de13, type: 3}
+  m_Name: SUM_FAIRY_1
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SummonData
+  summonID: SUM_FAIRY_1
+  summonName: "\uC694\uC815 (\uBE0C\uB860\uC988)"
+  aiType: 1
+  scalingStat: 2
+  atkMultiplier: 1
+  moveSpeed: 90
+  atkCooldown: 0.5
+  atkRange: 0.75
+  duration: -1
+  fixedEffect: 0
+  fixedEffectValue: 0
+  uniqueSkill: {fileID: 0}
+  uniqueSkillCooldown: 8
+  displayScale: 0.8
+  sortingOrder: 5
+  modelPrefab: {fileID: 0}
+  icon: {fileID: -80967579, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  animFrames:
+  - {fileID: -80967579, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  - {fileID: 861703070, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  - {fileID: 1391837025, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  - {fileID: 1307097488, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  - {fileID: 66102138, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  - {fileID: 1690685717, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  - {fileID: -240947322, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  - {fileID: -1454418011, guid: 2704b7fa91d35da47a22dc79d435193a, type: 3}
+  animFps: 10
+  hp: 0
+  attackEffectFrames: []
+  attackEffectFps: 12
+  attackEffectScale: 0.5

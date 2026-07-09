@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8, type: 3}
+  m_Name: 001_NamuRing
+  m_EditorClassIdentifier: Assembly-CSharp::SO_AccessoryData
+  itemID: ACC_001
+  itemName: "나무 반지"
+  itemDescription: "인접 무기에 맞은 적 이동속도 감소"
+  itemImage: {fileID: -619568880229648131, guid: 1923c7b60c2facc4a835f0bf467677a2, type: 3}
+  rarity: 3
+  grade: 1
+  cost: 10
+  synergies: []
+  cells:
+  - {x: 0, y: 0}
+  adjacentGimmick: "주변 무기에 맞은 적 이동속도 1/4로 3초간 감소 (일반 몬스터 한정)"
+  lv5Gimmick:

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
+  m_Name: 008_Shotgun
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  itemID: WPN_008
+  itemName: "\uC0B0\uD0C4\uCD1D"
+  itemDescription: "3\uBC1C 55\uB3C4 \uBC1C\uC0AC"
+  itemImage: {fileID: -2412293161114017349, guid: 1d22e03f43768c3449f86fe2b17d3a85, type: 3}
+  rarity: 1
+  grade: 1
+  cost: 2
+  synergies: 0e0000000400000000000000
+  cells:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  attackStyleType: 4
+  attackStyle: "3\uBC1C 55\uB3C4 \uBC1C\uC0AC"
+  lv5AttackStyle: "4\uBC1C 60\uB3C4 \uBC1C\uC0AC"
+  projectile: {fileID: 0}
+  projectileData: {fileID: 11400000, guid: d40233cd1f2b409299656c0725cf13e7, type: 2}
+  projectileSpeed: 18
+  range: 5
+  maxTargets: 0
+  attackFrames:
+  - {fileID: -2412293161114017349, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: -4632620484592363726, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: -8332353929877221218, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: -1430070394828282155, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: 2978406539162778263, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: 448472665463903216, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: -8245354535961984253, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: -2054610771143969148, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: -1289057117231556429, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: 4226476232738490406, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: -4178465640205480768, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  - {fileID: 5626148045454936871, guid: 9311479add52a83468d4d39d97da05ac, type: 3}
+  attackFps: 12
+  meleeMotion: 0
+  meleeSwingAngle: 90
+  meleeReach: 1.6
+  meleeMotionDuration: 0.2
+  gradeStats:
+  - attackPower: 35
+    attackSpeed: 1.5
+  - attackPower: 46
+    attackSpeed: 1.41
+  - attackPower: 58
+    attackSpeed: 1.31
+  - attackPower: 73
+    attackSpeed: 1.25
+  - attackPower: 89
+    attackSpeed: 1.2

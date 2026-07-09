@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5cbe33e3a919e429ca178123b7de13, type: 3}
+  m_Name: SUM_GIANT_GOLEM
+  m_EditorClassIdentifier: Assembly-CSharp::SO_SummonData
+  summonID: SUM_GIANT_GOLEM
+  summonName: "\uACE0\uB300 \uC815\uB839 (\uD504\uB9AC\uC998)"
+  aiType: 4
+  spriteFacesLeft: 0
+  scalingStat: 1
+  atkMultiplier: 4.5
+  moveSpeed: 0
+  atkCooldown: 2
+  atkRange: 6
+  maxTargets: 4
+  duration: -1
+  fixedEffect: 0
+  fixedEffectValue: 0
+  uniqueSkill: {fileID: 11400000, guid: 051477e475db18a438c630a941a01f9c, type: 2}
+  uniqueSkillCooldown: 8
+  displayScale: 0.3
+  sortingOrder: 5
+  modelPrefab: {fileID: 0}
+  icon: {fileID: 777626916781001291, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  animFrames:
+  - {fileID: 777626916781001291, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: 317282527511180478, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -2488149590371059966, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -8816856637925587110, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -3551725715108243773, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -1469208271595097488, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: -1174986234766995750, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  - {fileID: 3976079370377909804, guid: 7fae31259d5dda748b256e2d47e878d1, type: 3}
+  animFps: 10
+  hp: 0
+  attackEffectFrames:
+  - {fileID: -184641871342154793, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  - {fileID: -8742472287189703952, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  - {fileID: 2806559668037297498, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  - {fileID: -8053906365491120563, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  - {fileID: 5475096787876996251, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  - {fileID: 255303537319830160, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  - {fileID: -6393355577095011176, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  - {fileID: 5436928999108654435, guid: 855ad606ecce7654db4c01214c8c82e2, type: 3}
+  attackEffectFps: 16
+  attackEffectScale: 3

@@ -6,6 +6,7 @@
 // ============================================================
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace BagSurvivor.Monster
 {
@@ -24,6 +25,30 @@ namespace BagSurvivor.Monster
         [Tooltip("이 몬스터 위에 표시할 추적형 HP바 프리팹 (Monster_HpBar)")]
         public GameObject hpBarPrefab;
 
+        [Header("그림자")]
+        [Tooltip("발밑 그림자 폭 배수 (1=기본, 작을수록 작아짐). 스프라이트 여백이 큰 몬스터용")]
+        [Range(0.1f, 2f)] public float shadowWidthMul = 1f;
+
+        [Tooltip("그림자를 스프라이트 하단이 아닌 루트 기준 고정 Y에 둔다(보스: 모션마다 캔버스 높이가 달라 그림자가 튀는 것 방지)")]
+        public bool shadowFixedLocalY = false;
+        [Tooltip("shadowFixedLocalY가 켜졌을 때 루트 기준 그림자 Y (음수=아래). 발밑에 오도록 조정)")]
+        public float shadowLocalY = 0f;
+
+        [Header("사운드")]
+        [Tooltip("사망 시 재생할 효과음. 여러 개 넣으면 매번 랜덤 1개(배리에이션)")]
+        public AudioClip[] deathSfx;
+
+        [Header("렌더 정렬")]
+        [Tooltip("타일맵(바닥=0/벽=1) 위에 보이도록 하는 스프라이트 정렬 순서")]
+        public int sortingOrder = 10;
+
+        [Header("추적 정지")]
+        [Tooltip("0이면 콜라이더 크기에 맞춰 자동 접근(아래 '접근 겹침' 사용). 0보다 크면 이 중심거리에서 정지(원거리 몬스터 등 수동 지정)")]
+        public float stopDistance = 0f;
+
+        [Tooltip("자동 접근 시 플레이어와 겹치는 정도(월드 단위). 클수록 더 바짝 붙음")]
+        public float approachOverlap = 0.4f;
+
         [Header("충돌 데미지 설정")]
         [Tooltip("접촉 데미지 판정 간격 (초)")]
         private const float CONTACT_DAMAGE_INTERVAL = 0.5f;
@@ -33,8 +58,8 @@ namespace BagSurvivor.Monster
         private const float KNOCKBACK_DURATION = 0.3f;
 
         [Header("사망 설정")]
-        [Tooltip("사망 이펙트 후 풀 반환까지 대기 시간 (초)")]
-        private const float DEATH_DELAY = 0.1f;
+        [Tooltip("사망 모션/이펙트 재생 후 풀 반환까지 대기 시간 (초). 보스는 길게(예: 5)")]
+        public float deathDelay = 0.1f;
 
         // ==========================================
         // 런타임 변수
@@ -45,6 +70,17 @@ namespace BagSurvivor.Monster
         private Rigidbody2D rb;
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
+        private Color baseColor = Color.white; // 풀 재사용 시 사망 페이드/피격 색 복구용
+        private Coroutine _hitCo;               // 피격 플래시 코루틴(연타 시 겹쳐 빨강 고정되는 것 방지)
+
+        // ── 몬스터 간 겹침 방지(separation) ─────────────────────────
+        // 활성 몬스터 전역 목록. 이미지(스프라이트) 크기 기준으로 서로 밀어내 90% 이상 보이게 유지.
+        private static readonly List<MonsterController> Active = new List<MonsterController>();
+        [Header("겹침 방지")]
+        [Tooltip("이미지 폭 기준 허용 근접 비율. 0.9면 서로 최대 10%만 겹침(90% 보임). 0으로 두면 분리 안 함")]
+        [Range(0f, 1f)] public float separationVisible = 0.9f;
+        [Tooltip("밀어내는 강도(초당). 클수록 빨리 벌어짐")]
+        public float separationStrength = 12f;
 
         // 넉백 관련
         private float kbCooldownTimer = 0f;
@@ -57,12 +93,53 @@ namespace BagSurvivor.Monster
         // 사망 처리 중 플래그
         private bool isDying = false;
 
+        // 콜라이더 크기 기반 자동 정지 거리(중심간). InitializeMonster에서 계산.
+        private float autoStopDistance = 0.3f;
+
         // HP바 (오브젝트 풀링 대응: 인스턴스 1개를 생성 후 재사용)
         private GameObject hpBarInstance;
         private BagSurvivor.UI.MonsterHpBar hpBar;
 
         // 특수 기믹에서 이동을 제어하기 위한 플래그
         private bool isMovementPaused = false;
+
+        // 상태이상 관련
+        private float     _speedMultiplier = 1f;
+        private Coroutine _stunCo;
+        private float     _stunReadyTime; // 스턴 적별 재적용 쿨다운 해제 시각(Time.time 기준)
+        private Coroutine _slowCo;
+        private Coroutine _burnCo;
+
+        // 보스 패턴 등에서 Rigidbody 이동을 직접 제어하기 위해 컨트롤러 기본 이동을 위임받는 플래그.
+        // true인 동안 FixedUpdate의 HandleMovement(추적/정지 처리)를 건너뛴다.
+        private bool externalMovementControl = false;
+
+        // 무적 플래그(보스 페이즈 전환 연출 등). true인 동안 TakeDamage가 피해를 무시한다.
+        private bool isInvincible = false;
+
+        // 받는 피해 배율(1=기본). 보스 강화 버프 등에서 일시적으로 낮춘다.
+        private float damageTakenMultiplier = 1f;
+        private Coroutine damageReductionCo;
+
+        // 사망 통지 콜백 (스폰 주체가 주입: 방 클리어 통지·풀 반환 위임). null이면 자체 비활성화.
+        private System.Action<MonsterController> deathCallback;
+
+        /// <summary>사망 시 발생하는 이벤트(분열 등 기믹용). 풀 반환 직전 1회 호출. OnDisable에서 정리.</summary>
+        public event System.Action<MonsterController> OnDeath;
+
+        // 난이도(층/시간) 스탯 배율. 스폰 시 주입되며, 베이스 스탯에 곱해 런타임 스탯을 산출.
+        private float hpMultiplier = 1f;
+        private float attackMultiplier = 1f;
+
+        // 배율이 적용된 런타임 스탯 (SO 원본은 수정하지 않음)
+        private int runtimeMaxHP;
+        private int runtimeAttack;
+
+        // 방어력 런타임 오버라이드 (음수=미사용, SO값 사용). 층별 중간보스 방어력 고정 등에 사용.
+        private int runtimeDefenseOverride = -1;
+
+        // 골드 드랍 런타임 오버라이드 (음수=미사용, SO dropItemValue 사용). 층별 특수방 골드 지정용.
+        private int runtimeGoldOverride = -1;
 
         // ==========================================
         // 프로퍼티 (외부 접근용)
@@ -72,6 +149,23 @@ namespace BagSurvivor.Monster
         /// 현재 HP (읽기 전용)
         /// </summary>
         public int CurrentHP => currentHP;
+
+        /// <summary>
+        /// 배율이 적용된 최대 HP (HP바·비율 계산용)
+        /// </summary>
+        public int MaxHP => runtimeMaxHP;
+
+        /// <summary>현재 적용된 HP/공격 배율 (분열체가 부모 기준으로 자기 배율을 산출할 때 사용).</summary>
+        public float HpMul => hpMultiplier;
+        public float AtkMul => attackMultiplier;
+
+        /// <summary>true면 사망 시 골드를 드롭하지 않음 (엘리트 슬라임 분열 중간 세대 등). 기믹이 설정.</summary>
+        [System.NonSerialized] public bool suppressGoldDrop = false;
+
+        /// <summary>
+        /// 배율이 적용된 공격력 (접촉/투사체 데미지용)
+        /// </summary>
+        public int Attack => runtimeAttack;
 
         /// <summary>
         /// 현재 FSM 상태 (읽기 전용)
@@ -96,17 +190,35 @@ namespace BagSurvivor.Monster
             rb = GetComponent<Rigidbody2D>();
             col = GetComponent<Collider2D>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null) baseColor = spriteRenderer.color;
+
+            // 발밑 그림자 자동 부착 (모든 몬스터 공통, 풀링 안전)
+            var blobShadow = GetComponent<BlobShadow>();
+            if (blobShadow == null) blobShadow = gameObject.AddComponent<BlobShadow>();
+            blobShadow.SetWidthMul(shadowWidthMul);
+            if (shadowFixedLocalY) blobShadow.SetFixedLocalY(shadowLocalY);
+
+            // 카메라 추적 시 떨림(지터) 방지: 물리 스텝 사이를 부드럽게 보간
+            // + 빠른 넉백에도 벽을 통과(터널링)하지 않도록 연속 충돌 감지
+            if (rb != null)
+            {
+                rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+                rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            }
         }
 
         private void OnEnable()
         {
             // 오브젝트 풀에서 재활성화될 때마다 초기화
+            runtimeGoldOverride = -1; // 풀 재사용 시 골드 오버라이드 해제(SpawnOne이 필요 시 다시 주입)
             InitializeMonster();
             ShowHpBar();
+            if (!Active.Contains(this)) Active.Add(this); // 몬스터 간 겹침 방지(separation)용 등록
         }
 
         private void OnDisable()
         {
+            Active.Remove(this);
             // 오브젝트 풀 반환 시 모든 코루틴 정지 및 상태 초기화
             StopAllCoroutines();
             knockbackCoroutine = null;
@@ -114,6 +226,18 @@ namespace BagSurvivor.Monster
             isPlayerInContact = false;
             isDying = false;
             isMovementPaused = false;
+            externalMovementControl = false;
+            isInvincible = false;
+            damageTakenMultiplier = 1f;
+            damageReductionCo = null;
+            _speedMultiplier = 1f;
+            _stunCo = null;
+            _slowCo = null;
+            _burnCo = null;
+            deathCallback = null;
+            OnDeath = null; // 풀 재사용 시 이전 구독자 잔존 방지(기믹은 OnEnable에서 재구독)
+            hpMultiplier = 1f;
+            attackMultiplier = 1f;
             HideHpBar();
         }
 
@@ -143,10 +267,50 @@ namespace BagSurvivor.Monster
             if (hpBar != null) hpBar.SetTarget(this);
         }
 
-        /// <summary>풀 반환 시 HP바를 숨깁니다 (인스턴스는 재사용 위해 유지).</summary>
-        private void HideHpBar()
+        /// <summary>HP바를 숨깁니다 (인스턴스는 재사용 위해 유지). 풀 반환 시, 또는 소환 팬텀처럼 체력바가 필요없을 때 호출.</summary>
+        public void HideHpBar()
         {
             if (hpBarInstance != null) hpBarInstance.SetActive(false);
+        }
+
+        /// <summary>
+        /// 스폰 주체가 사망 처리 콜백을 주입합니다(방 클리어 통지·풀 반환 위임).
+        /// 스폰할 때마다 새로 설정하며, 풀 반환(OnDisable) 시 자동 해제됩니다.
+        /// </summary>
+        public void SetDeathCallback(System.Action<MonsterController> callback)
+        {
+            deathCallback = callback;
+        }
+
+        /// <summary>
+        /// 난이도(층·경과시간) 스탯 배율을 주입합니다.
+        /// 반드시 활성화(SetActive(true)) 전에 호출해야 OnEnable의 초기화에 반영됩니다.
+        /// </summary>
+        public void SetStatMultiplier(float hpMul, float attackMul)
+        {
+            hpMultiplier = hpMul <= 0f ? 1f : hpMul;
+            attackMultiplier = attackMul <= 0f ? 1f : attackMul;
+        }
+
+        /// <summary>방어력을 런타임에 고정값으로 오버라이드합니다(음수=SO값 사용). 활성화 전 주입.</summary>
+        public void SetDefenseOverride(int defense) => runtimeDefenseOverride = defense;
+
+        /// <summary>골드 드랍을 런타임에 고정값으로 오버라이드합니다(음수=SO dropItemValue 사용). 스폰 직후 주입.</summary>
+        public void SetGoldOverride(int gold) => runtimeGoldOverride = gold;
+
+        /// <summary>체력을 회복합니다(최대 체력 한도). </summary>
+        public void Heal(int amount)
+        {
+            if (isDying || amount <= 0) return;
+            currentHP = Mathf.Min(runtimeMaxHP, currentHP + amount);
+        }
+
+        /// <summary>최대 체력을 늘립니다(현재 체력도 같이 증가). 보스가 시간에 따라 강해지는 용도.</summary>
+        public void IncreaseMaxHP(int amount)
+        {
+            if (isDying || amount == 0) return;
+            runtimeMaxHP = Mathf.Max(1, runtimeMaxHP + amount);
+            currentHP = Mathf.Clamp(currentHP + amount, 0, runtimeMaxHP);
         }
 
         /// <summary>
@@ -157,7 +321,11 @@ namespace BagSurvivor.Monster
         {
             if (monsterData == null) return;
 
-            currentHP = monsterData.maxHP;
+            // 배율 적용 런타임 스탯 산출 (SO 원본 불변)
+            runtimeMaxHP = Mathf.Max(1, Mathf.RoundToInt(monsterData.maxHP * hpMultiplier));
+            runtimeAttack = Mathf.Max(0, Mathf.RoundToInt(monsterData.attack * attackMultiplier));
+
+            currentHP = runtimeMaxHP;
             currentState = MonsterState.Tracking;
             kbCooldownTimer = 0f;
             isDying = false;
@@ -166,9 +334,42 @@ namespace BagSurvivor.Monster
             // 콜라이더 활성화
             if (col != null) col.enabled = true;
 
+            // 타일맵 위에 보이도록 정렬 순서 적용 + 색 복구(풀 재사용 시 사망 페이드/피격 잔색 제거)
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sortingOrder = sortingOrder;
+                spriteRenderer.color = baseColor;
+            }
+
             // 플레이어 찾기 (태그 기반)
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null) playerTransform = player.transform;
+
+            ComputeAutoStopDistance();
+        }
+
+        /// <summary>몬스터·플레이어 콜라이더 크기에서 자동 정지 거리를 계산합니다(겹침만큼 더 가까이).</summary>
+        private void ComputeAutoStopDistance()
+        {
+            float monsterR = 0.25f;
+            if (col != null)
+            {
+                Vector3 e = col.bounds.extents;
+                monsterR = (e.x + e.y) * 0.5f;
+            }
+
+            float playerR = 0.25f;
+            if (playerTransform != null)
+            {
+                Collider2D pc = playerTransform.GetComponent<Collider2D>();
+                if (pc != null)
+                {
+                    Vector3 e = pc.bounds.extents;
+                    playerR = (e.x + e.y) * 0.5f;
+                }
+            }
+
+            autoStopDistance = Mathf.Max(0.05f, monsterR + playerR - approachOverlap);
         }
 
         // ==========================================
@@ -183,6 +384,9 @@ namespace BagSurvivor.Monster
             {
                 kbCooldownTimer -= Time.fixedDeltaTime;
             }
+
+            // 보스 패턴이 이동을 위임받은 동안에는 컨트롤러 기본 이동을 건너뛴다(패턴이 Rigidbody 직접 제어).
+            if (externalMovementControl) return;
 
             // Tracking 상태에서만 이동 처리
             if (currentState == MonsterState.Tracking)
@@ -230,14 +434,92 @@ namespace BagSurvivor.Monster
         {
             if (playerTransform == null) return;
 
-            Vector2 direction = ((Vector2)playerTransform.position - (Vector2)transform.position).normalized;
-            rb.linearVelocity = direction * monsterData.moveSpeed;
+            Vector2 toPlayer = (Vector2)playerTransform.position - (Vector2)transform.position;
+            float dist = toPlayer.magnitude;
 
-            // 이동 방향에 따른 스프라이트 좌우 반전
-            if (spriteRenderer != null && direction.x != 0)
+            // 바라보는 방향에 따른 좌우 반전 (멈춰 있어도 방향 유지)
+            if (spriteRenderer != null && toPlayer.x != 0f)
             {
-                spriteRenderer.flipX = direction.x < 0;
+                spriteRenderer.flipX = toPlayer.x < 0f;
             }
+
+            // 정지 거리 안이면 더 파고들지 않고 정지.
+            // stopDistance>0이면 수동 지정값, 아니면 콜라이더 기반 자동값(approachOverlap만큼 겹쳐 접근).
+            // 플레이어 중심까지 추적하며 방향이 매 프레임 뒤집혀 떨리는 현상을 방지한다.
+            float stop = stopDistance > 0f ? stopDistance : autoStopDistance;
+            Vector2 chaseVel = (dist <= Mathf.Max(stop, 0.0001f))
+                ? Vector2.zero
+                : AvoidPillar(toPlayer / dist) * monsterData.moveSpeed * _speedMultiplier;
+
+            // 겹침 방지: 정지 상태(플레이어에 몰림)에서도 서로 밀어내 이미지가 겹치지 않게 한다.
+            rb.linearVelocity = chaseVel + ComputeSeparation();
+        }
+
+        /// <summary>주변 몬스터와 이미지 기준 최소 간격을 유지하도록 밀어내는 속도를 계산한다.
+        /// separationVisible(0.9)이면 서로 최대 10%만 겹치도록(90% 보이게) 밀어낸다.</summary>
+        private Vector2 ComputeSeparation()
+        {
+            if (separationVisible <= 0f || spriteRenderer == null) return Vector2.zero;
+
+            float rSelf = spriteRenderer.bounds.extents.x; // 스프라이트(이미지) 반폭
+            Vector2 selfPos = transform.position;
+            Vector2 push = Vector2.zero;
+
+            // ponytail: O(n²) 전수 순회. 현재 몬스터 수 규모에선 충분. 폭증하면 공간 분할로 교체.
+            for (int i = 0; i < Active.Count; i++)
+            {
+                var o = Active[i];
+                if (o == null || o == this || o.isDying || o.spriteRenderer == null) continue;
+
+                Vector2 d = selfPos - (Vector2)o.transform.position;
+                float desired = (rSelf + o.spriteRenderer.bounds.extents.x) * separationVisible;
+                float sq = d.sqrMagnitude;
+                if (sq < desired * desired && sq > 0.000001f)
+                {
+                    float dist = Mathf.Sqrt(sq);
+                    push += (d / dist) * (desired - dist); // 파고든 만큼 비례해 밀어냄
+                }
+            }
+            return push * separationStrength;
+        }
+
+        /// <summary>스프라이트를 좌우 방향(dirX)에 맞춰 뒤집습니다. 돌진 등 외부제어 패턴 중 방향 고정용
+        /// (외부제어 동안엔 ChasePlayer가 안 돌아 flipX가 자동 갱신되지 않으므로 패턴이 직접 호출).</summary>
+        public void FaceDirection(float dirX)
+        {
+            if (spriteRenderer != null && Mathf.Abs(dirX) > 0.01f)
+                spriteRenderer.flipX = dirX < 0f;
+        }
+
+        // 기둥 받침(PillarBlock 트리거)을 '돌아서' 가는 국소 회피. 물리 충돌이 아니라 레이캐스트 감지 +
+        // 한 방향으로 커밋(경로가 뚫릴 때까지 유지)해 매끄럽게 우회 → 비비적댐/떨림 없음.
+        private static int pillarMaskCache = -1; // -1=미초기화, 0=레이어없음, 그외=레이어마스크
+        private int avoidSide;                    // 0=비회피, +1=좌측 접선, -1=우측 접선(커밋)
+
+        private Vector2 AvoidPillar(Vector2 dir)
+        {
+            if (pillarMaskCache < 0)
+            {
+                int l = LayerMask.NameToLayer("PillarBlock");
+                pillarMaskCache = l < 0 ? 0 : (1 << l);
+            }
+            if (pillarMaskCache == 0) return dir;
+
+            const float look = 2.5f;
+            Vector2 pos = transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(pos, dir, look, pillarMaskCache);
+            if (!hit) { avoidSide = 0; return dir; }   // 경로 깨끗 → 회피 해제(직진)
+
+            Vector2 left = new Vector2(-dir.y, dir.x);
+            if (avoidSide == 0)
+            {
+                // 받침이 왼쪽이면 오른쪽으로, 오른쪽이면 왼쪽으로 돈다(한 번 정하면 통과까지 유지)
+                Vector2 toHit = hit.point - pos;
+                avoidSide = Vector2.Dot(left, toHit) > 0f ? -1 : 1;
+            }
+            Vector2 tangent = avoidSide > 0 ? left : -left;
+            float t = Mathf.Clamp01(hit.distance / look);   // 0=코앞(접선 위주) … 1=멀리(전진 위주)
+            return (tangent * (1f - t) + dir * t).normalized;
         }
 
         // ==========================================
@@ -253,14 +535,21 @@ namespace BagSurvivor.Monster
         /// <param name="knockbackDirection">넉백 방향 (정규화된 벡터)</param>
         public void TakeDamage(int rawDamage, float knockbackForce = 0f, Vector2 knockbackDirection = default)
         {
-            if (isDying) return;
+            if (isDying || isInvincible) return;
 
-            // 방어력 적용
-            int finalDamage = monsterData.CalculateDamageTaken(rawDamage);
-            currentHP -= finalDamage;
+            // 방어력 + 받는 피해 배율 적용 (defense 오버라이드 시 SO값 대신 고정값 사용)
+            int def = runtimeDefenseOverride >= 0 ? runtimeDefenseOverride : monsterData.defense;
+            int finalDamage = Mathf.Max(1, rawDamage - def);
+            if (damageTakenMultiplier != 1f)
+                finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * damageTakenMultiplier));
+            currentHP = Mathf.Max(0, currentHP - finalDamage); // 0 미만으로 내려가지 않게(표기 -1 방지)
 
-            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음)
-            StartCoroutine(HitEffectCoroutine());
+            // 데미지 숫자 띄우기 (모든 데미지 소스가 이 메서드로 모임)
+            DamagePopup.Show(transform.position, finalDamage);
+
+            // 피격 이펙트 (Hit 상태 - 이동을 방해하지 않음). 이전 플래시를 멈추고 새로 시작(연타 시 빨강 고정 방지)
+            if (_hitCo != null) StopCoroutine(_hitCo);
+            _hitCo = StartCoroutine(HitEffectCoroutine());
 
             // HP 확인
             if (currentHP <= 0)
@@ -285,16 +574,15 @@ namespace BagSurvivor.Monster
             // 피격 시 깜빡임 효과
             if (spriteRenderer != null)
             {
-                Color originalColor = spriteRenderer.color;
                 spriteRenderer.color = Color.red;
                 yield return new WaitForSeconds(0.1f);
 
-                // 사망하지 않았으면 색상 복구
+                // 사망하지 않았으면 기준색(baseColor)으로 복구.
+                // (현재 색을 캡처해 복구하면 연타 시 이미 빨간 상태를 원본으로 잡아 빨강이 고정됨)
                 if (!isDying && spriteRenderer != null)
-                {
-                    spriteRenderer.color = originalColor;
-                }
+                    spriteRenderer.color = baseColor;
             }
+            _hitCo = null;
         }
 
         // ==========================================
@@ -337,8 +625,20 @@ namespace BagSurvivor.Monster
             float speed = distance / KNOCKBACK_DURATION;
             float timer = 0f;
 
+            // 넉백으로 방 밖(복도/맵밖)이나 벽으로 밀려나지 않도록 이 방의 경계를 확보
+            var spawner = RoomMonsterSpawner.Instance;
+            Rect roomRect = default;
+            bool haveRoom = spawner != null && spawner.TryGetRoomWorldRect(transform.position, out roomRect);
+
             while (timer < KNOCKBACK_DURATION)
             {
+                // 다음 스텝 위치가 방 경계를 벗어나거나(복도/맵밖) 벽 타일이면 그 자리에서 정지
+                if (spawner != null)
+                {
+                    Vector2 nextPos = (Vector2)transform.position + direction * speed * Time.fixedDeltaTime;
+                    if ((haveRoom && !roomRect.Contains(nextPos)) || spawner.IsWallAt(nextPos))
+                        break;
+                }
                 rb.linearVelocity = direction * speed;
                 timer += Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
@@ -357,30 +657,74 @@ namespace BagSurvivor.Monster
         // ==========================================
         // 사망 처리
         // ==========================================
+        /// <summary>사망 효과음 재생 — 여러 클립이면 랜덤 1개(배리에이션). AudioUtil이 2D 재생/설정 볼륨/중첩 방지 처리.</summary>
+        private void PlayDeathSfx()
+        {
+            if (deathSfx == null || deathSfx.Length == 0) return;
+            AudioUtil.PlaySfx(deathSfx[Random.Range(0, deathSfx.Length)]);
+        }
+
         private IEnumerator DieCoroutine()
         {
             isDying = true;
             currentState = MonsterState.Die;
 
+            PlayDeathSfx();
+
+            GameManager.Instance?.AddKill();   // 결과창 '처치 몬스터' 누적
+
+            if (RunStatsLogger.Instance != null)
+            {
+                int floor = GameManager.Instance != null ? GameManager.Instance.currentFloor : 1;
+                string mName = monsterData != null ? monsterData.name : gameObject.name;
+                // 슬라임은 본체(루트)만 층별 처치수에 집계 — 분열체는 제외
+                var eliteSlime = GetComponent<EliteSlimeSplitGimmick>();
+                bool countForFloor = eliteSlime == null || eliteSlime.generation == eliteSlime.rootGeneration;
+                RunStatsLogger.Instance.MonsterKilled(mName, floor, countForFloor);
+                // 엘리트/중간보스/최종보스 = '층 보스'로 기록
+                if (GetComponent<EliteMonster>() != null || GetComponent<BossPatternDriver>() != null)
+                    RunStatsLogger.Instance.BossKilled(floor);
+
+                // 최종 보스(5층 패턴 보스) 처치 → 런 클리어 처리 + 통계 전송
+                if (GetComponent<BossPatternDriver>() != null && floor >= 5)
+                {
+                    var ph = UnityEngine.Object.FindFirstObjectByType<PlayerHealth>();
+                    if (ph != null) ph.ReportRunClear();
+                }
+            }
+
             // 1. 즉시 충돌체 비활성화
             if (col != null) col.enabled = false;
             rb.linearVelocity = Vector2.zero;
 
-            // 2. 사망 이펙트 (0.1초)
-            // TODO: 폭발 파티클 등 사망 이펙트 추가
-            if (spriteRenderer != null)
+            // 2. 사망 모션/이펙트 시작 — 대기 '전'에 호출해 deathDelay 동안 사망 애니가 보이게.
+            //    (분열 등 기믹도 여기서 반응. OnDeath → deathCallback 순서는 방 클리어 카운트에 중요)
+            try
             {
-                spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+                OnDeath?.Invoke(this);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[MonsterController] OnDeath 핸들러 예외: {e}");
             }
 
-            yield return new WaitForSeconds(DEATH_DELAY);
+            // 3. 사망 연출 시간(보스는 길게) — 이 동안 Death 애니/이펙트 표시
+            yield return new WaitForSeconds(deathDelay);
 
-            // 3. 드롭 아이템 스폰
+            // 최종 보스(달빛의 도살자) 처치 → 사망 연출이 끝난 뒤 클리어 결과 화면 표시.
+            // (팝업이 timeScale=0으로 멈추므로 연출 후에 호출해야 죽는 모습이 보인다)
+            if (monsterData != null && monsterData.isFinalBoss)
+            {
+                var clearPh = UnityEngine.Object.FindFirstObjectByType<PlayerHealth>();
+                if (clearPh != null) clearPh.ShowClearResult();
+            }
+
+            // 4. 드롭 + 사망 통지 / 풀 반환
             SpawnDropItem();
-
-            // 4. 오브젝트 풀 반환 (현재는 비활성화로 대체)
-            // TODO: ObjectPool.Return(gameObject) 로 교체
-            gameObject.SetActive(false);
+            if (deathCallback != null)
+                deathCallback.Invoke(this);
+            else
+                gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -388,12 +732,15 @@ namespace BagSurvivor.Monster
         /// </summary>
         private void SpawnDropItem()
         {
-            if (monsterData == null) return;
-            if (string.IsNullOrEmpty(monsterData.dropItemID) || monsterData.dropItemValue <= 0) return;
+            if (suppressGoldDrop) return; // 분열 중간 세대 등: 드롭 억제
 
-            // TODO: 드롭 아이템 시스템과 연동
-            // 예시: DropManager.Instance.SpawnDrop(monsterData.dropItemID, monsterData.dropItemValue, transform.position);
-            Debug.Log($"[Monster] {monsterData.monsterName} 사망 - 드롭: {monsterData.dropItemID} x{monsterData.dropItemValue}");
+            // 골드 = 런타임 오버라이드(>=0) 우선, 없으면 SO dropItemValue. 총 골드를 동전 1개로 드롭.
+            int gold = runtimeGoldOverride >= 0 ? runtimeGoldOverride
+                     : (monsterData != null ? monsterData.dropItemValue : 0);
+            if (gold <= 0) return;
+
+            if (BagSurvivor.Items.GoldDropManager.Instance != null)
+                BagSurvivor.Items.GoldDropManager.Instance.DropGold(transform.position, gold);
         }
 
         // ==========================================
@@ -428,11 +775,16 @@ namespace BagSurvivor.Monster
         /// </summary>
         private IEnumerator ContactDamageCoroutine(Collider2D playerCollider)
         {
+            PlayerHealth playerHealth = playerCollider != null ? playerCollider.GetComponentInParent<PlayerHealth>() : null;
+
             while (isPlayerInContact && !isDying)
             {
-                // TODO: 플레이어 데미지 시스템과 연동
-                // 예시: playerCollider.GetComponent<PlayerHealth>()?.TakeDamage(monsterData.attack);
-                Debug.Log($"[Monster] {monsterData.monsterName}이(가) 플레이어에게 {monsterData.attack} 데미지!");
+                // 시간 배율이 적용된 공격력으로 플레이어에게 접촉 데미지
+                if (playerHealth != null && !playerHealth.IsDead)
+                {
+                    playerHealth.LastAttacker = monsterData != null ? monsterData.name : gameObject.name; // 킬러 통계
+                    playerHealth.TakeDamage(runtimeAttack);
+                }
 
                 yield return new WaitForSeconds(CONTACT_DAMAGE_INTERVAL);
             }
@@ -460,6 +812,62 @@ namespace BagSurvivor.Monster
         }
 
         /// <summary>
+        /// 컨트롤러 기본 이동(추적/정지)을 일시 위임받습니다. 보스 패턴이 Rigidbody를 직접 제어할 때 호출.
+        /// 호출 후 SetVelocity로 이동을 제어하고, 끝나면 반드시 EndExternalMovement()로 복귀시킵니다.
+        /// </summary>
+        public void BeginExternalMovement()
+        {
+            externalMovementControl = true;
+        }
+
+        /// <summary>
+        /// 위임받은 이동 제어를 컨트롤러에 되돌립니다(추적 복귀). 속도는 0으로 정리합니다.
+        /// </summary>
+        public void EndExternalMovement()
+        {
+            externalMovementControl = false;
+            if (rb != null) rb.linearVelocity = Vector2.zero;
+        }
+
+        /// <summary>무적 상태를 설정합니다. true인 동안 TakeDamage가 무시됩니다(페이즈 전환 연출 등).</summary>
+        public void SetInvincible(bool value)
+        {
+            isInvincible = value;
+        }
+
+        /// <summary>현재 무적 여부.</summary>
+        public bool IsInvincible => isInvincible;
+
+        /// <summary>일정 시간 동안 받는 피해를 reductionPercent(0~1)만큼 감소시킵니다(보스 강화 버프 등).</summary>
+        [Tooltip("데미지 감소 버프 동안 보스 위에 표시할 이펙트(선택). 반투명 권장)")]
+        public GameObject damageReductionVfxPrefab;
+        private GameObject damageReductionVfx;
+
+        public void ApplyDamageReduction(float reductionPercent, float duration)
+        {
+            if (damageReductionCo != null) StopCoroutine(damageReductionCo);
+            if (damageReductionVfx != null) Destroy(damageReductionVfx); // 중복 적용 시 이전 이펙트 정리
+            damageReductionCo = StartCoroutine(DamageReductionRoutine(Mathf.Clamp01(reductionPercent), duration));
+        }
+
+        private IEnumerator DamageReductionRoutine(float reduction, float duration)
+        {
+            damageTakenMultiplier = 1f - reduction;
+            if (damageReductionVfxPrefab != null)
+            {
+                damageReductionVfx = Instantiate(damageReductionVfxPrefab, transform); // 자식 → 보스 따라다님
+                damageReductionVfx.transform.localPosition = Vector3.zero;
+            }
+            yield return new WaitForSeconds(duration);
+            damageTakenMultiplier = 1f;
+            if (damageReductionVfx != null) { Destroy(damageReductionVfx); damageReductionVfx = null; }
+            damageReductionCo = null;
+        }
+
+        /// <summary>현재 체력 비율(0~1).</summary>
+        public float HpRatio => runtimeMaxHP > 0 ? (float)currentHP / runtimeMaxHP : 0f;
+
+        /// <summary>
         /// 넉백 면역 상태를 설정합니다. 돌진 등 특수 상태에서 사용합니다.
         /// </summary>
         /// <param name="immune">true면 넉백 면역</param>
@@ -473,6 +881,65 @@ namespace BagSurvivor.Monster
             {
                 kbCooldownTimer = 0f;
             }
+        }
+
+        // ==========================================
+        // 상태이상 API
+        // ==========================================
+
+        /// <summary>duration 초 동안 이동을 멈춥니다. 중복 적용 시 남은 시간을 갱신합니다.</summary>
+        public void ApplyStun(float duration)
+        {
+            if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 스턴 면역
+            if (Time.time < _stunReadyTime) return;   // 적별 재적용 쿨다운(연사 무기 영구기절 방지)
+            _stunReadyTime = Time.time + 2f;
+            if (_stunCo != null) StopCoroutine(_stunCo);
+            _stunCo = StartCoroutine(StunRoutine(duration));
+        }
+
+        private IEnumerator StunRoutine(float duration)
+        {
+            isMovementPaused = true;
+            rb.linearVelocity = Vector2.zero;
+            yield return new WaitForSeconds(duration);
+            isMovementPaused = false;
+            _stunCo = null;
+        }
+
+        /// <summary>duration 초 동안 이동 속도에 multiplier(0~1)를 곱합니다. 중복 시 갱신.</summary>
+        public void ApplySlow(float multiplier, float duration)
+        {
+            if (isDying) return;
+            if (monsterData != null && monsterData.grade != MonsterGrade.Normal) return; // 보스·엘리트 슬로우 면역
+            if (_slowCo != null) StopCoroutine(_slowCo);
+            _slowCo = StartCoroutine(SlowRoutine(Mathf.Clamp01(multiplier), duration));
+        }
+
+        private IEnumerator SlowRoutine(float multiplier, float duration)
+        {
+            _speedMultiplier = multiplier;
+            yield return new WaitForSeconds(duration);
+            _speedMultiplier = 1f;
+            _slowCo = null;
+        }
+
+        /// <summary>tickInterval마다 damagePerTick 피해를 ticks회 입힙니다. 중복 시 갱신(재점화).</summary>
+        public void ApplyBurn(int damagePerTick, float tickInterval, int ticks)
+        {
+            if (isDying) return;
+            if (_burnCo != null) StopCoroutine(_burnCo);
+            _burnCo = StartCoroutine(BurnRoutine(damagePerTick, tickInterval, ticks));
+        }
+
+        private IEnumerator BurnRoutine(int dmg, float interval, int ticks)
+        {
+            for (int i = 0; i < ticks && !isDying; i++)
+            {
+                yield return new WaitForSeconds(interval);
+                if (!isDying) TakeDamage(dmg);
+            }
+            _burnCo = null;
         }
 
         /// <summary>
