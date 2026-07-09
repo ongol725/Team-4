@@ -28,6 +28,10 @@ public class ItemBlockUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         get
         {
             if (_silhouetteMat != null) return _silhouetteMat;
+            // 셰이더를 머티리얼 에셋으로 참조 → 빌드에 항상 포함(Shader.Find는 빌드에서 스트립되기 쉬움).
+            _silhouetteMat = Resources.Load<Material>("UISilhouette");
+            if (_silhouetteMat != null) return _silhouetteMat;
+            // 폴백: 에셋이 없을 때만 런타임 생성
             var shader = Shader.Find("Custom/UISilhouette");
             if (shader == null) return null;
             _silhouetteMat = new Material(shader) { name = "UISilhouette_Shared" };
