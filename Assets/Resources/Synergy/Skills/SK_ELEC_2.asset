@@ -45,8 +45,8 @@ MonoBehaviour:
   - {fileID: 1359859732, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
   - {fileID: -1776054465, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
   - {fileID: -1292816762, guid: 4f7b0ff0e4323664b8780f7a000d05aa, type: 3}
-  animFps: 48
-  vfxLingerTime: 0.1
+  animFps: 24
+  vfxLingerTime: 0.2
   visualSize: 2.4
   visualStretchY: 1.5
   vfxFollowPlayer: 0

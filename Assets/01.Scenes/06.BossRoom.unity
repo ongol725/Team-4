@@ -21221,6 +21221,15 @@ MonoBehaviour:
   - synergyType: 11
     grade: 3
     skill: {fileID: 11400000, guid: 074d93efc5bd7dd48be3c7c3aded92c0, type: 2}
+  - synergyType: 11
+    grade: 1
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 2
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
+  - synergyType: 11
+    grade: 3
+    skill: {fileID: 11400000, guid: f9c4d0fdfbce1ca4994f0ec25041cd3b, type: 2}
   _summonBindings:
   - synergyType: 10
     grade: 0

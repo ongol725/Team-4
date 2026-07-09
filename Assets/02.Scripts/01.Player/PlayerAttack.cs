@@ -487,8 +487,10 @@ public class PlayerAttack : MonoBehaviour
                 {
                     Vector2 v = count > 1 ? Rotate(toTarget, (i - count / 2) * 20f) : toTarget;
                     if (id == "WPN_017")
-                        // 바주카: 애니 투사체가 적을 유도 추적해 명중 시 소규모 폭발(전방 생성)
-                        SpawnProjectile(entry, v.normalized, explosionRadius: explodeR, homing: true);
+                        // 바주카: 유도 미사일이 명중 시 소규모 폭발. 3초 내 미명중이면 폭발 없이 소멸
+                        // (적 없을 때 화면을 떠돌며 대기하다 스폰 즉시 명중하는 사기 방지)
+                        SpawnProjectile(entry, v.normalized, explosionRadius: explodeR, homing: true,
+                                        lifetimeOverride: 3f, fizzleOnTimeout: true);
                     else if (animated)
                         // 수류탄 등: 대상 지점에 폭발 애니 1회 재생 + 범위 피해(날아가며 사라지지 않게)
                         SpawnTargetedExplosion(entry, (Vector3)((Vector2)transform.position + v), explodeR);
@@ -800,7 +802,8 @@ public class PlayerAttack : MonoBehaviour
     private void SpawnProjectile(WeaponLoadoutEntry entry, Vector2 dir,
         float dmgMult = 1f, float spdMult = 1f, float scaleMult = 1f,
         int pierce = 0, float knockbackForce = 0f, bool homing = false, bool boomerang = false,
-        float explosionRadius = 0f, Sprite[] overrideFrames = null)
+        float explosionRadius = 0f, Sprite[] overrideFrames = null,
+        float lifetimeOverride = -1f, bool fizzleOnTimeout = false)
     {
         var   wd       = entry.data;
         // 강철 반지: 인접 무기 투사체 크기·속도 배율(크기는 피격범위 동반)
@@ -811,7 +814,10 @@ public class PlayerAttack : MonoBehaviour
         float rawSpeed = wd.projectileSpeed > 0f ? wd.projectileSpeed : 10f;
         float speed    = rawSpeed * spdMult;
         // 강철 반지 속도감소(ringProjSpeed)는 사거리에 영향 없이 '느려지기만' 하도록 lifetime을 보정
-        float lifetime = wd.range > 0 ? (float)wd.range / rawSpeed / entry.ringProjSpeed : 3f;
+        // lifetimeOverride > 0 이면 사거리 대신 고정 수명 사용 (바주카 유도 미사일 3초 제한 등)
+        float lifetime = lifetimeOverride > 0f
+            ? lifetimeOverride
+            : (wd.range > 0 ? (float)wd.range / rawSpeed / entry.ringProjSpeed : 3f);
         int   damage   = ScaleDamage(entry.attackPower, dmgMult);
         int   maxHits  = wd.maxTargets > 0 ? wd.maxTargets : 1; // 0 = 기본 1타
         if (wd.projectileData != null) maxHits += wd.projectileData.pierceCount;
@@ -853,7 +859,8 @@ public class PlayerAttack : MonoBehaviour
                   homing: homing, boomerang: boomerang, owner: boomerang ? transform : null,
                   spinSpeed: spin, rotationOffset: rotOff, armTime: armTime,
                   explosionFrames: wd.explosionFrames, explosionFps: wd.explosionFps,
-                  ringStunChance: entry.ringStunChance, ringSlowSec: entry.ringSlowSec);
+                  ringStunChance: entry.ringStunChance, ringSlowSec: entry.ringSlowSec,
+                  fizzleOnTimeout: fizzleOnTimeout);
     }
 
     private void SpawnExplosive(WeaponLoadoutEntry entry, Vector2 dir,

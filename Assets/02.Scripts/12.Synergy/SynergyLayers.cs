@@ -7,9 +7,14 @@
 /// </summary>
 public static class SynergyLayers
 {
-    /// <summary>바닥 깔개 — 성역·난공불락 충격파·대부호 골드코인.
-    /// 바닥 타일맵(Default/order 0) 바로 위, 캐릭터 아래. (-20이면 바닥 타일에 가려짐)</summary>
-    public const int Ground    = 1;
+    /// <summary>난공불락 충격파 — 모든 시너지 이펙트 중 가장 아래(바닥 타일 바로 위).
+    /// 성역·골드코인 등 다른 바닥 효과보다 항상 아래에 깔린다.</summary>
+    public const int Impregnable = 1;
+    /// <summary>바닥 깔개 — 대부호 골드코인 등. 난공불락 충격파보다 위, 캐릭터 아래.
+    /// 바닥 타일맵(Default/order 0) 위. (-20이면 바닥 타일에 가려짐)</summary>
+    public const int Ground    = 2;
+    /// <summary>성기사단 성역 — 바닥 효과 중 최상단(난공불락보다 항상 위), 캐릭터보다는 아래.</summary>
+    public const int Sanctuary = 3;
     /// <summary>캐릭터 뒤 — 소환수 전반(골렘·페어리·핀볼·대정령·기어)·마왕 소용돌이</summary>
     public const int BelowChar = 5;
     /// <summary>캐릭터 평면 — 플레이어·몬스터</summary>
