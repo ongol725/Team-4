@@ -54,10 +54,9 @@ namespace BagSurvivor.UI
         private static void ApplySavedScreenModeOnce()
         {
 #if UNITY_WEBGL
-            // 브라우저(WebGL): 캔버스 '표시' 크기는 페이지(itch 뷰포트)가 관리하지만,
-            // '렌더 버퍼'는 데스크톱과 동일하게 1920x1080으로 고정해 저해상도 뷰포트(1280x720 등)에서
-            // 화면이 깨지지 않게 한다. (브라우저가 표시 크기에 맞춰 축소 스케일링)
-            Screen.SetResolution(1920, 1080, false);
+            // 브라우저(WebGL): 캔버스 크기는 페이지가 관리 — 해상도를 강제하면
+            // 캔버스≠1080p일 때 좌하단 구석에만 렌더되는 문제가 생겨 아무것도 강제하지 않는다.
+            // (UI는 CanvasScaler(1920x1080 기준)가 화면 크기에 맞춰 스케일)
             return;
 #endif
             if (!PlayerPrefs.HasKey("screenModeIdx")) return; // 저장값 없으면 빌드 기본값 유지
