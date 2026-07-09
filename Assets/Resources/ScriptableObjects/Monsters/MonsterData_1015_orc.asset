@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 4
   spawnCount: 2
   dropItemID: Item_003
-  dropItemValue: 50
+  dropItemValue: 35
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Orc.prefab
