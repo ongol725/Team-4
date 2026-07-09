@@ -188,10 +188,13 @@ MonoBehaviour:
   shadowWidthMul: 1
   shadowFixedLocalY: 1
   shadowLocalY: -1.4
+  deathSfx: []
   sortingOrder: 10
   stopDistance: 0
   approachOverlap: 0.4
   deathDelay: 5
+  separationVisible: 0.9
+  separationStrength: 12
   damageReductionVfxPrefab: {fileID: 7951395187713337824, guid: 460a0c475bcf0dc4991286fea6957060, type: 3}
 --- !u!114 &1839172850203504646
 MonoBehaviour:
@@ -252,6 +255,7 @@ MonoBehaviour:
   wallProbe: 0.8
   stopOnHit: 0.3
   phase2SecondDashTelegraph: 0.5
+  phase2SpeedMultiplier: 1.5
   telegraphPrefab: {fileID: 8621140538416912394, guid: 0423ed5c6cd5e9446ac928ac24247946, type: 3}
   impactEffectPrefab: {fileID: 3774408115409620830, guid: bd31730943a8b14499c94f4943fd1c8d, type: 3}
 --- !u!114 &8148719600609751913
@@ -283,7 +287,7 @@ MonoBehaviour:
   projectileSpeed: 2.3703706
   phase2BurstDuration: 3
   phase2BurstGap: 0.5
-  projectilePrefab: {fileID: 1044820649197100113, guid: 176e1107f92ad4946865a622eebf5daf, type: 3}
+  projectilePrefab: {fileID: 8829683915837699511, guid: ddd1182ac78359145836a20da69533a0, type: 3}
   telegraphPrefab: {fileID: 0}
 --- !u!114 &4556135943655275093
 MonoBehaviour:
@@ -315,7 +319,7 @@ MonoBehaviour:
   roarOutroTime: 0.6
   phase2DamageReduction: 0.3
   phase2BuffDuration: 10
-  projectilePrefab: {fileID: 1044820649197100113, guid: 176e1107f92ad4946865a622eebf5daf, type: 3}
+  projectilePrefab: {fileID: 8829683915837699511, guid: ddd1182ac78359145836a20da69533a0, type: 3}
   telegraphPrefab: {fileID: 0}
 --- !u!114 &1489519259286567960
 MonoBehaviour:
@@ -436,7 +440,7 @@ MonoBehaviour:
   dashCount: 6
   dashTelegraph: 1.5
   dashSpeed: 9.777779
-  dashDistance: 5.3333337
+  dashDistance: 5.3333335
   dashRestTime: 1
   bodyHitRadius: 0.35555562
   stoneBreakRadius: 0.44444448
