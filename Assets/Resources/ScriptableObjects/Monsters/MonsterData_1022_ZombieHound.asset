@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b67114c1ce0f79438995e960a7b26c9, type: 3}
-  m_Name: MonsterData_1007_Kobold
+  m_Name: MonsterData_1022_ZombieHound
   m_EditorClassIdentifier: Assembly-CSharp::BagSurvivor.Monster.MonsterData
-  index: 1007
-  monsterName: "\uCF54\uBCFC\uD2B8"
-  englishName: Kobold
+  index: 1022
+  monsterName: "\uC880\uBE44 \uB4E4\uAC1C"
+  englishName: Zombie_Hound
   grade: 0
-  maxHP: 150
-  attack: 25
-  defense: 5
-  attackStyle: 1
-  attackPattern: 1
-  moveSpeed: 3
+  maxHP: 160
+  attack: 23
+  defense: 8
+  attackStyle: 0
+  attackPattern: 0
+  moveSpeed: 4.5
   movePattern: 0
-  kbResist: 0
+  kbResist: 0.2
   kbCooldown: 0
-  spawnType: 1
-  spawnInterval: 6
-  spawnCount: 1
+  spawnType: 0
+  spawnInterval: 5
+  spawnCount: 3
   dropItemID: Item_002
-  dropItemValue: 23
-  prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Kobold.prefab
+  dropItemValue: 22
+  prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Zombie_Hound.prefab

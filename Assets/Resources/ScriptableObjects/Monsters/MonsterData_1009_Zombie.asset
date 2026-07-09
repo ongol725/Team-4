@@ -16,7 +16,7 @@ MonoBehaviour:
   monsterName: "\uC880\uBE44"
   englishName: Zombie
   grade: 0
-  maxHP: 200
+  maxHP: 180
   attack: 22
   defense: 10
   attackStyle: 0
@@ -29,5 +29,5 @@ MonoBehaviour:
   spawnInterval: 5
   spawnCount: 3
   dropItemID: Item_002
-  dropItemValue: 27
+  dropItemValue: 20
   prefabPath: Assets/03.Prefabs/02.Monsters/Prefab_Zombie.prefab

@@ -195,6 +195,7 @@ MonoBehaviour:
     farMonsters:
     - {fileID: 8745983391889185140, guid: 0d9ee40eacf141b4a9c71f335f3bb522, type: 3}
     - {fileID: 6703318431440199771, guid: ca72c7c52032dcc408019e20c5921fd7, type: 3}
+    - {fileID: 6427610672282125992, guid: 3ba080278912b774da7c2534d0587717, type: 3}
     maxAlive: 6
     nearMaxAlive: 0
     midMaxAlive: 0
@@ -203,9 +204,10 @@ MonoBehaviour:
   - floor: 3
     nearMonsters:
     - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
+    - {fileID: 6427610672282125992, guid: 3ba080278912b774da7c2534d0587717, type: 3}
+    - {fileID: 1036162356454921042, guid: 8da02ae111f7498b8bf74808711c557b, type: 3}
     midMonsters:
     - {fileID: 2823377373297771252, guid: a5f1aecd5d02d5146b5ed7b3f44e64d9, type: 3}
-    - {fileID: 6427610672282125992, guid: 3ba080278912b774da7c2534d0587717, type: 3}
     farMonsters:
     - {fileID: 2122078588672271730, guid: b8ca1903eb5a33c43a55f2759551c795, type: 3}
     maxAlive: 15
@@ -216,11 +218,13 @@ MonoBehaviour:
   - floor: 4
     nearMonsters:
     - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    - {fileID: 7878504994168186160, guid: e6c5f6d2e136c4348afa675d9cb36a80, type: 3}
     midMonsters:
     - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
     - {fileID: 7878504994168186160, guid: e6c5f6d2e136c4348afa675d9cb36a80, type: 3}
+    - {fileID: 3051456863515954885, guid: 40c0ec4db1209684794719d9ed4263d6, type: 3}
     farMonsters:
-    - {fileID: 222955099670361689, guid: e6f679ef34c3a974cb5e436e0db7a638, type: 3}
+    - {fileID: 1071622943208925043, guid: 81cd25f279ae19e42abf49a6b9c76da9, type: 3}
     - {fileID: 7878504994168186160, guid: e6c5f6d2e136c4348afa675d9cb36a80, type: 3}
     - {fileID: 7970580902981092378, guid: 38b080fa7dcc1c049a5829d1e948476e, type: 3}
     maxAlive: 8
